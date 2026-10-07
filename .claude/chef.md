@@ -6,6 +6,7 @@ Claude Code indépendants, chacun dans son worktree et sur sa branche `agent/<no
 tu délègues, tu relis, tu rends compte à l'utilisateur (en français, simplement, en commençant par la réponse).
 
 ## Déléguer
+- Les missions décidées par l'utilisateur sont dans `docs/MISSIONS.md` : lis-les et envoie-les telles quelles aux agents.
 - `scripts/equipe.sh send <agent> "<tâche>"` : une tâche claire, avec le périmètre (fichiers), le critère de fin
   (tests à passer, mesure attendue) et le rappel des règles de `CLAUDE.md` qui comptent pour cette tâche.
   Pour un long message : `scripts/equipe.sh send <agent> - <<'EOF' ... EOF`.
