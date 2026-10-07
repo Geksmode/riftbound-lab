@@ -312,5 +312,29 @@ def flip_no_target_still_moves():
     assert m.loc == 0
 
 
+@T.test
+def piercing_light_second_part_applies_when_first_target_is_gone():
+    g, _ = new()
+    rich(g)
+    a, b = put(g, 1, "Pouty Poro", 1), put(g, 1, "Glasc Mixologist", 1)
+    hand(g, 0, "Piercing Light")
+    g.apply(opt(g, 0, "Piercing Light", lambda ch: ch["tg"] == (a.uid, b.uid) and not ch.get("rep")))
+    g.kill([a], 1)                                     # the first target dies before resolution
+    settle(g)
+    assert b.damage == 2                               # "then deal 2 to up to one other unit" still happens
+
+
+@T.test
+def singularity_one_target_gone_other_still_hit():
+    g, _ = new()
+    rich(g)
+    a, b = put(g, 1, "Pouty Poro", 1), put(g, 1, "Glasc Mixologist", 1)
+    hand(g, 0, "Singularity")
+    g.apply(opt(g, 0, "Singularity", lambda ch: set(ch["tg"]) == {a.uid, b.uid}))
+    g.kill([a], 1)
+    settle(g)
+    assert b.zone == "trash"
+
+
 if __name__ == "__main__":
     T.main()
