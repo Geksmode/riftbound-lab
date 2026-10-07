@@ -1,0 +1,11 @@
+moteur figé (7daf3a6f86) dans /mnt/attach/project-files/riftbound/manager/results/engine_session_012, plans.py 8b2147fcef
+REF stock plan Gorica (Sigil) vs Hook tempo Windswept    50.7% ±0.025 n=400 graines 204800+ err=0 (733s)
+stock plan Gorica, Void Gate forcé vs Hook tempo Windswept  43.8% ±0.025 n=400 graines 204800+ err=0 (893s)
+stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept  41.2% ±0.025 n=400 graines 204800+ err=0 (905s)
+stock plan Gorica (choix du plan) vs Hook tempo          56.5% ±0.025 n=400 graines 204800+ err=0 (813s)
+stock plan Gorica, Sigil forcé vs Hook tempo             56.0% ±0.025 n=400 graines 204800+ err=0 (720s)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica, Void Gate forcé vs Hook tempo Windswept: -7.0 ± 3.3 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept: -9.5 ± 3.3 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica (choix du plan) vs Hook tempo: +5.8 ± 2.3 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica, Sigil forcé vs Hook tempo: +5.2 ± 2.3 pts (n=400)
+SESSION 12 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_012.json

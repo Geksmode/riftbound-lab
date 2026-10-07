@@ -1,0 +1,1392 @@
+{
+ "base": 0.29875,
+ "games": 800,
+ "swaps": [
+  {
+   "out": "Defy",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.38625,
+   "delta": 0.08749999999999997
+  },
+  {
+   "out": "Defy",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.37875,
+   "delta": 0.07999999999999996
+  },
+  {
+   "out": "Defy",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.375,
+   "delta": 0.07624999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.3725,
+   "delta": 0.07374999999999998
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.37,
+   "delta": 0.07124999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.36875,
+   "delta": 0.07
+  },
+  {
+   "out": "Charm",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.36875,
+   "delta": 0.07
+  },
+  {
+   "out": "Defy",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.3675,
+   "delta": 0.06874999999999998
+  },
+  {
+   "out": "Charm",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.3675,
+   "delta": 0.06874999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.3625,
+   "delta": 0.06374999999999997
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.36125,
+   "delta": 0.0625
+  },
+  {
+   "out": "Charm",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.36,
+   "delta": 0.06124999999999997
+  },
+  {
+   "out": "Charm",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.35875,
+   "delta": 0.06
+  },
+  {
+   "out": "Defy",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.3525,
+   "delta": 0.053749999999999964
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.3525,
+   "delta": 0.053749999999999964
+  },
+  {
+   "out": "Charm",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.35,
+   "delta": 0.05124999999999996
+  },
+  {
+   "out": "Charm",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.35,
+   "delta": 0.05124999999999996
+  },
+  {
+   "out": "Defy",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.34875,
+   "delta": 0.04999999999999999
+  },
+  {
+   "out": "Defy",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.34875,
+   "delta": 0.04999999999999999
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.34875,
+   "delta": 0.04999999999999999
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.3475,
+   "delta": 0.04874999999999996
+  },
+  {
+   "out": "Defy",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.34625,
+   "delta": 0.04749999999999999
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.34375,
+   "delta": 0.044999999999999984
+  },
+  {
+   "out": "Charm",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.34375,
+   "delta": 0.044999999999999984
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.3425,
+   "delta": 0.04375000000000001
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.3425,
+   "delta": 0.04375000000000001
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.3425,
+   "delta": 0.04375000000000001
+  },
+  {
+   "out": "Charm",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.34125,
+   "delta": 0.04249999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Defy",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Defy",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Charm",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.34,
+   "delta": 0.04125000000000001
+  },
+  {
+   "out": "Defy",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.33875,
+   "delta": 0.03999999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.3375,
+   "delta": 0.03875000000000001
+  },
+  {
+   "out": "Defy",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.33625,
+   "delta": 0.03749999999999998
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Ferrous Forerunner",
+   "q": 2,
+   "wr": 0.335,
+   "delta": 0.036250000000000004
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.335,
+   "delta": 0.036250000000000004
+  },
+  {
+   "out": "Charm",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.335,
+   "delta": 0.036250000000000004
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.335,
+   "delta": 0.036250000000000004
+  },
+  {
+   "out": "Defy",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.33375,
+   "delta": 0.034999999999999976
+  },
+  {
+   "out": "Charm",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.33375,
+   "delta": 0.034999999999999976
+  },
+  {
+   "out": "Defy",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.3325,
+   "delta": 0.03375
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.33125,
+   "delta": 0.03249999999999997
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.33,
+   "delta": 0.03125
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.33,
+   "delta": 0.03125
+  },
+  {
+   "out": "Charm",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.33,
+   "delta": 0.03125
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Charm",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.32875,
+   "delta": 0.02999999999999997
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Charm",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Charm",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Charm",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.3275,
+   "delta": 0.028749999999999998
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.32625,
+   "delta": 0.02749999999999997
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.32625,
+   "delta": 0.02749999999999997
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Charm",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.325,
+   "delta": 0.026249999999999996
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Defy",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Charm",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Darius, Trifarian",
+   "q": 2,
+   "wr": 0.32375,
+   "delta": 0.024999999999999967
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.3225,
+   "delta": 0.023749999999999993
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.3225,
+   "delta": 0.023749999999999993
+  },
+  {
+   "out": "Defy",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.3225,
+   "delta": 0.023749999999999993
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.3225,
+   "delta": 0.023749999999999993
+  },
+  {
+   "out": "Charm",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.3225,
+   "delta": 0.023749999999999993
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.32125,
+   "delta": 0.022499999999999964
+  },
+  {
+   "out": "Charm",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.32125,
+   "delta": 0.022499999999999964
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.32125,
+   "delta": 0.022499999999999964
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Defy",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Defy",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Irelia, Fervent",
+   "q": 2,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Lonely Poro",
+   "q": 2,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Akali, Silent",
+   "q": 2,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.32,
+   "delta": 0.02124999999999999
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.31875,
+   "delta": 0.019999999999999962
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.31875,
+   "delta": 0.019999999999999962
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Tomb-Raider Barbara",
+   "q": 2,
+   "wr": 0.31875,
+   "delta": 0.019999999999999962
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.31875,
+   "delta": 0.019999999999999962
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Blitzcrank, Impassive",
+   "q": 2,
+   "wr": 0.3175,
+   "delta": 0.01874999999999999
+  },
+  {
+   "out": "Defy",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.3175,
+   "delta": 0.01874999999999999
+  },
+  {
+   "out": "Charm",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.3175,
+   "delta": 0.01874999999999999
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.3175,
+   "delta": 0.01874999999999999
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.31625,
+   "delta": 0.01749999999999996
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.31625,
+   "delta": 0.01749999999999996
+  },
+  {
+   "out": "Defy",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.315,
+   "delta": 0.016249999999999987
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Mournful Witness",
+   "q": 2,
+   "wr": 0.315,
+   "delta": 0.016249999999999987
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Block",
+   "q": 2,
+   "wr": 0.315,
+   "delta": 0.016249999999999987
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.315,
+   "delta": 0.016249999999999987
+  },
+  {
+   "out": "Charm",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.31375,
+   "delta": 0.014999999999999958
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.31375,
+   "delta": 0.014999999999999958
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.31375,
+   "delta": 0.014999999999999958
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.3125,
+   "delta": 0.013749999999999984
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.3125,
+   "delta": 0.013749999999999984
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.31125,
+   "delta": 0.012500000000000011
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.31125,
+   "delta": 0.012500000000000011
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.31125,
+   "delta": 0.012500000000000011
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.31125,
+   "delta": 0.012500000000000011
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.31125,
+   "delta": 0.012500000000000011
+  },
+  {
+   "out": "Charm",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.31,
+   "delta": 0.011249999999999982
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.31,
+   "delta": 0.011249999999999982
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.31,
+   "delta": 0.011249999999999982
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.30875,
+   "delta": 0.010000000000000009
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.30875,
+   "delta": 0.010000000000000009
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.30875,
+   "delta": 0.010000000000000009
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.30875,
+   "delta": 0.010000000000000009
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.30875,
+   "delta": 0.010000000000000009
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.3075,
+   "delta": 0.00874999999999998
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.3075,
+   "delta": 0.00874999999999998
+  },
+  {
+   "out": "Defy",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.30625,
+   "delta": 0.007500000000000007
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.30625,
+   "delta": 0.007500000000000007
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.30625,
+   "delta": 0.007500000000000007
+  },
+  {
+   "out": "Charm",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.30625,
+   "delta": 0.007500000000000007
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Charm",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.305,
+   "delta": 0.006249999999999978
+  },
+  {
+   "out": "Charm",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.30375,
+   "delta": 0.0050000000000000044
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.30375,
+   "delta": 0.0050000000000000044
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.30375,
+   "delta": 0.0050000000000000044
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.30375,
+   "delta": 0.0050000000000000044
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.3025,
+   "delta": 0.0037499999999999756
+  },
+  {
+   "out": "Defy",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.3025,
+   "delta": 0.0037499999999999756
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.3025,
+   "delta": 0.0037499999999999756
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.3025,
+   "delta": 0.0037499999999999756
+  },
+  {
+   "out": "En Garde",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.2975,
+   "delta": -0.0012500000000000289
+  },
+  {
+   "out": "Defy",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.2975,
+   "delta": -0.0012500000000000289
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.2975,
+   "delta": -0.0012500000000000289
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Tomb-Raider Barbara",
+   "q": 1,
+   "wr": 0.29625,
+   "delta": -0.0025000000000000022
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.29625,
+   "delta": -0.0025000000000000022
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.295,
+   "delta": -0.003750000000000031
+  },
+  {
+   "out": "En Garde",
+   "inn": "Block",
+   "q": 1,
+   "wr": 0.29375,
+   "delta": -0.0050000000000000044
+  },
+  {
+   "out": "En Garde",
+   "inn": "Darius, Trifarian",
+   "q": 1,
+   "wr": 0.29375,
+   "delta": -0.0050000000000000044
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.29375,
+   "delta": -0.0050000000000000044
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Sky Splitter",
+   "q": 2,
+   "wr": 0.29375,
+   "delta": -0.0050000000000000044
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.29375,
+   "delta": -0.0050000000000000044
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.2925,
+   "delta": -0.006250000000000033
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.2925,
+   "delta": -0.006250000000000033
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.2925,
+   "delta": -0.006250000000000033
+  },
+  {
+   "out": "En Garde",
+   "inn": "Ferrous Forerunner",
+   "q": 1,
+   "wr": 0.29125,
+   "delta": -0.007500000000000007
+  },
+  {
+   "out": "En Garde",
+   "inn": "Back Off",
+   "q": 1,
+   "wr": 0.29125,
+   "delta": -0.007500000000000007
+  },
+  {
+   "out": "En Garde",
+   "inn": "Lonely Poro",
+   "q": 1,
+   "wr": 0.29125,
+   "delta": -0.007500000000000007
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.29125,
+   "delta": -0.007500000000000007
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.29125,
+   "delta": -0.007500000000000007
+  },
+  {
+   "out": "Charm",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.29,
+   "delta": -0.008750000000000036
+  },
+  {
+   "out": "En Garde",
+   "inn": "Blitzcrank, Impassive",
+   "q": 1,
+   "wr": 0.28875,
+   "delta": -0.010000000000000009
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.28875,
+   "delta": -0.010000000000000009
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.28625,
+   "delta": -0.012500000000000011
+  },
+  {
+   "out": "En Garde",
+   "inn": "Mournful Witness",
+   "q": 1,
+   "wr": 0.28625,
+   "delta": -0.012500000000000011
+  },
+  {
+   "out": "En Garde",
+   "inn": "Irelia, Fervent",
+   "q": 1,
+   "wr": 0.28375,
+   "delta": -0.015000000000000013
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.28375,
+   "delta": -0.015000000000000013
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.2825,
+   "delta": -0.016250000000000042
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.2825,
+   "delta": -0.016250000000000042
+  },
+  {
+   "out": "En Garde",
+   "inn": "Sky Splitter",
+   "q": 1,
+   "wr": 0.28,
+   "delta": -0.01874999999999999
+  },
+  {
+   "out": "Adaptatron",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.28,
+   "delta": -0.01874999999999999
+  },
+  {
+   "out": "En Garde",
+   "inn": "Mischievous Marai",
+   "q": 1,
+   "wr": 0.27875,
+   "delta": -0.020000000000000018
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.2775,
+   "delta": -0.02124999999999999
+  },
+  {
+   "out": "En Garde",
+   "inn": "Akali, Silent",
+   "q": 1,
+   "wr": 0.2775,
+   "delta": -0.02124999999999999
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.275,
+   "delta": -0.023749999999999993
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.275,
+   "delta": -0.023749999999999993
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.27375,
+   "delta": -0.025000000000000022
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Not So Fast",
+   "q": 2,
+   "wr": 0.2725,
+   "delta": -0.026249999999999996
+  },
+  {
+   "out": "Falling Star",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.2725,
+   "delta": -0.026249999999999996
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Disarming Rake",
+   "q": 2,
+   "wr": 0.27125,
+   "delta": -0.027500000000000024
+  },
+  {
+   "out": "En Garde",
+   "inn": "Not So Fast",
+   "q": 1,
+   "wr": 0.27,
+   "delta": -0.028749999999999998
+  },
+  {
+   "out": "Charm",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.27,
+   "delta": -0.028749999999999998
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.27,
+   "delta": -0.028749999999999998
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.26875,
+   "delta": -0.030000000000000027
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.2675,
+   "delta": -0.03125
+  },
+  {
+   "out": "En Garde",
+   "inn": "Disarming Rake",
+   "q": 1,
+   "wr": 0.2625,
+   "delta": -0.036250000000000004
+  },
+  {
+   "out": "Scuttle Crab",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.25875,
+   "delta": -0.040000000000000036
+  },
+  {
+   "out": "En Garde",
+   "inn": "Brittle Steel",
+   "q": 1,
+   "wr": 0.255,
+   "delta": -0.04375000000000001
+  },
+  {
+   "out": "Astral Heron",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.25,
+   "delta": -0.048750000000000016
+  },
+  {
+   "out": "Long Sword",
+   "inn": "Brittle Steel",
+   "q": 2,
+   "wr": 0.2475,
+   "delta": -0.05125000000000002
+  }
+ ]
+}

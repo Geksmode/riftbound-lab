@@ -1,0 +1,158 @@
+[
+ {
+  "build": "Stock (Wuhan)",
+  "plan": "tuer tout (plan naif)",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.297,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 703,
+   "Akali": 297
+  },
+  "games": 1000
+ },
+ {
+  "build": "Stock (Wuhan)",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.301,
+  "avg_turns": 13.4,
+  "results": {
+   "LeBlanc": 699,
+   "Akali": 301
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "tuer tout (plan naif)",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.232,
+  "avg_turns": 13.2,
+  "results": {
+   "LeBlanc": 768,
+   "Akali": 232
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.259,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 741,
+   "Akali": 259
+  },
+  "games": 1000
+ },
+ {
+  "build": "Tempo",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.234,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 766,
+   "Akali": 234
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Targon's Peak",
+  "akali_wr": 0.288,
+  "avg_turns": 13.4,
+  "results": {
+   "LeBlanc": 712,
+   "Akali": 288
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Forgotten Monument",
+  "akali_wr": 0.245,
+  "avg_turns": 14.0,
+  "results": {
+   "LeBlanc": 755,
+   "Akali": 245
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Sigil of the Storm",
+  "akali_wr": 0.237,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 763,
+   "Akali": 237
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Threshold of the Gray",
+  "akali_wr": 0.317,
+  "avg_turns": 13.2,
+  "results": {
+   "LeBlanc": 683,
+   "Akali": 317
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc mull. agressif",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.272,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 728,
+   "Akali": 272
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc prudent (Vi)",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.183,
+  "avg_turns": 13.2,
+  "results": {
+   "LeBlanc": 817,
+   "Akali": 183
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc sans reserve",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.293,
+  "avg_turns": 13.3,
+  "results": {
+   "LeBlanc": 707,
+   "Akali": 293
+  },
+  "games": 1000
+ },
+ {
+  "build": "Anti-LeBlanc vs LB side",
+  "plan": "plan anti-LeBlanc",
+  "battlefield": "Void Gate",
+  "akali_wr": 0.198,
+  "avg_turns": 13.2,
+  "results": {
+   "LeBlanc": 802,
+   "Akali": 198
+  },
+  "games": 1000
+ }
+]

@@ -1,0 +1,41 @@
+# legend: Leblanc, Deceiver
+# player: Blank
+# event: Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc)
+# date: 2026-09
+# placement:
+# url: https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-281234
+# note: liste « contrôle » atypique (Cull the Weak, sorts) ; résumé partiel (~33 cartes)
+[legend]
+1 LeBlanc, Deceiver
+[champion]
+1 LeBlanc, Fragmented
+[main]
+2 Honest Broker
+3 Karthus, Eternal
+2 Thousand-Tailed Watcher
+3 Ruined Rex
+3 Glasc Mixologist
+1 Vi, Peacekeeper
+1 Kennen, Keeper of Balance
+1 Chakram Dancer
+3 Cull the Weak
+3 Deathgrip
+3 Hidden Blade
+1 Stupefy
+1 Sacrifice
+3 Mirror Image
+1 Ki Barrier
+[runes]
+4 Mind Rune
+8 Order Rune
+[battlefields]
+1 Windswept Hillock
+1 Dusk Rose Lab
+1 Star Spring
+[sideboard]
+2 Salvage
+2 Decree of Insight
+3 Decree of Unity
+1 Time Warp
+1 LeBlanc, Everywhere At Once
+1 Black Rose Dignitary

@@ -1,0 +1,424 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puzzles Akali vs Yi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: playmat like an online card simulator. Opponent half on top, two battlefields across the middle,
+   your half below with runes, legend and a fanned hand; side panel on the right with card preview, objective,
+   actions, chain and journal. Single dark "table" look on purpose. */
+:root{
+  color-scheme:dark;
+  --room:#0b1114; --mat:#13241f; --mat2:#0f1b19; --matop:#22191a; --line:rgba(255,255,255,.10); --zone:rgba(255,255,255,.04);
+  --ink:#e8efe9; --muted:#9fb1a8; --panel:#121a1d; --panel2:#18232a;
+  --calm:#3fbf95; --fury:#e0574b; --body:#e3964f; --gold:#e3c06a; --sel:#7aa7ff; --good:#62d082; --bad:#f07a6f;
+  --cw:84px; --ch:117px;
+  --display:"Archivo",system-ui,sans-serif; --text:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{background:var(--room);color:var(--ink);margin:0;font:14px/1.45 var(--text)}
+.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);background:#0e1619}
+.top h1{font:800 1.05rem var(--display);margin:0 10px 0 0;letter-spacing:.01em}
+.tab{font:600 .8rem var(--text);border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:6px;padding:5px 10px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tab[aria-current="true"]{border-color:var(--gold);color:var(--gold)}
+.dot{width:7px;height:7px;border-radius:50%;background:#55636a} .dot.ok{background:var(--good)} .dot.ko{background:var(--bad)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:0;min-height:calc(100vh - 52px)}
+@media (max-width:980px){.layout{grid-template-columns:1fr}}
+.mat{padding:12px 16px;background:radial-gradient(120% 70% at 50% 100%,var(--mat) 0%,var(--mat2) 60%,#0c1514 100%);display:flex;flex-direction:column;gap:10px;min-width:0;overflow-x:auto}
+.half{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:stretch}
+.half.op{background:linear-gradient(180deg,var(--matop),transparent);border-radius:12px;padding:8px}
+.half.me{padding:8px}
+.col{display:flex;flex-direction:column;gap:6px;align-items:center}
+.lbl{font:600 .62rem var(--text);text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.zone{border:1px dashed var(--line);border-radius:10px;background:var(--zone);padding:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:calc(var(--ch) + 18px);position:relative}
+.zone .zl{position:absolute;left:8px;top:4px}
+.zone.drop{border-color:var(--sel);background:rgba(122,167,255,.10);cursor:pointer}
+.zone.over{background:rgba(122,167,255,.22)}
+.base{flex:1;padding-top:18px}
+/* cards */
+.card{width:var(--cw);height:var(--ch);border-radius:7px;position:relative;flex:none;background:#26343a;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 6px rgba(0,0,0,.45);transition:transform .18s ease,box-shadow .18s ease;color:var(--ink);padding:0;font:inherit;text-align:left}
+.card img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block;pointer-events:none}
+.card .ph{position:absolute;inset:0;padding:6px;font:700 .72rem var(--text);display:flex;align-items:flex-end}
+.card.exh{transform:rotate(90deg) scale(.86)}
+.card.exh .might,.card.exh .dmg,.card.exh .chips{transform:rotate(-90deg)}
+.card.can{cursor:pointer;box-shadow:0 0 0 2px var(--calm),0 4px 10px rgba(0,0,0,.5)}
+.card.can:hover{transform:translateY(-3px)}
+.card.exh.can:hover{transform:rotate(90deg) scale(.95)}
+.card.sel{box-shadow:0 0 0 3px var(--sel),0 0 14px rgba(122,167,255,.6)}
+.card .might{position:absolute;right:-6px;bottom:-6px;min-width:28px;height:28px;border-radius:50%;background:#0d1417;border:2px solid var(--gold);font:700 .9rem/24px var(--mono);text-align:center;color:var(--gold);font-variant-numeric:tabular-nums;padding:0 3px}
+.card .might.up{border-color:var(--good);color:var(--good)}
+.card .dmg{position:absolute;left:-6px;bottom:-6px;min-width:26px;height:26px;border-radius:50%;background:var(--fury);font:700 .8rem/26px var(--mono);text-align:center;color:#fff}
+.card .chips{position:absolute;left:3px;top:3px;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.chip{font:700 .55rem var(--text);text-transform:uppercase;letter-spacing:.04em;background:rgba(10,14,16,.85);color:var(--ink);border-radius:3px;padding:1px 4px}
+.chip.st{color:var(--fury)} .chip.tk{color:var(--gold)} .chip.em{color:var(--calm)} .chip.att{color:var(--fury)} .chip.def{color:var(--sel)}
+.card.op{outline:2px solid rgba(227,150,79,.55);outline-offset:-2px}
+.card.me{outline:2px solid rgba(63,191,149,.55);outline-offset:-2px}
+.back{background:repeating-linear-gradient(45deg,#2a2033 0 6px,#231b2c 6px 12px);border:2px solid #6c5a2f}
+.back::after{content:"";position:absolute;inset:18%;border-radius:50%;border:2px solid #b89a4a;opacity:.6}
+.back.hiddencard{background:repeating-linear-gradient(45deg,#163a31 0 6px,#122f28 6px 12px);border-color:var(--calm)}
+.pile{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pile .card{width:54px;height:75px}
+.piles{display:flex;gap:8px}
+.pile .n{font:600 .7rem var(--mono);color:var(--muted)}
+/* legend */
+.legend.card{width:92px;height:128px}
+.legend.emp{box-shadow:0 0 0 2px var(--gold),0 0 16px rgba(227,192,106,.55)}
+/* runes */
+.runes{display:flex;gap:4px;flex-wrap:wrap;max-width:240px;justify-content:center}
+.rune{width:36px;height:50px;border-radius:5px;overflow:hidden;border:1px solid rgba(255,255,255,.2);transition:transform .18s;flex:none}
+.rune img{width:100%;height:100%;object-fit:cover;display:block}
+.rune.x{transform:rotate(90deg) scale(.82);opacity:.55}
+.rcount{font:600 .72rem var(--mono);color:var(--muted)}
+/* battlefields */
+.bfs{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch}
+@media (max-width:700px){.bfs{grid-template-columns:1fr}}
+.bf{border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.18);padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bf.me{box-shadow:inset 0 0 0 2px rgba(63,191,149,.6)} .bf.op{box-shadow:inset 0 0 0 2px rgba(227,150,79,.6)}
+.bf.fight{box-shadow:inset 0 0 0 2px var(--gold),0 0 18px rgba(227,192,106,.25)}
+.bf-mid{display:flex;align-items:center;gap:8px}
+.bf-img{width:132px;height:95px;border-radius:7px;overflow:hidden;flex:none;border:1px solid rgba(255,255,255,.2)}
+.bf-img img{width:100%;height:100%;object-fit:cover;display:block}
+.bf-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bf-name{font:700 .85rem var(--display)}
+.ctrl{font:700 .65rem var(--text);text-transform:uppercase;letter-spacing:.08em}
+.ctrl.me{color:var(--calm)} .ctrl.op{color:var(--body)} .ctrl.none{color:var(--muted)}
+.fightlbl{font:700 .65rem var(--text);color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+.bf .zone{min-height:calc(var(--ch) + 14px)}
+.score{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.track{display:flex;flex-direction:column-reverse;gap:2px}
+.track span{width:20px;height:10px;border-radius:3px;background:rgba(255,255,255,.07);font:600 .5rem/10px var(--mono);text-align:center;color:var(--muted)}
+.track.op span.on{background:var(--body);color:#1b120b} .track.me span.on{background:var(--calm);color:#0b1b15}
+.score .who{font:700 .62rem var(--text);text-transform:uppercase;letter-spacing:.08em}
+/* hand */
+.handrow{display:flex;justify-content:center;padding:4px 0;min-height:110px}
+.handrow.mine{min-height:156px}
+.hand{display:flex;justify-content:center;align-items:flex-end}
+.hand .card{--cw:104px;--ch:145px;margin:0 -10px;transform-origin:50% 120%}
+.hand .card:hover,.hand .card.can:hover{transform:translateY(-16px) scale(1.06)!important;z-index:5}
+.hand.op .card{--cw:70px;--ch:98px;margin:0 -6px}
+.cost{position:absolute;left:4px;top:4px;font:700 .68rem var(--mono);background:rgba(10,14,16,.85);border-radius:4px;padding:1px 4px}
+/* side panel */
+.side{background:var(--panel);border-left:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.preview{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:start;min-height:168px}
+.preview img{width:120px;border-radius:7px;display:block}
+.preview .pt{font-size:.82rem;color:var(--muted)}
+.preview .pn{font:700 .95rem var(--display);color:var(--ink);margin-bottom:4px}
+.box{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.box h3{font:600 .66rem var(--text);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+.obj b{color:var(--gold)}
+.prompt{font-weight:600}
+.prompt.wait{color:var(--muted)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+button.b{font:600 .82rem var(--text);border-radius:7px;padding:7px 11px;cursor:pointer;border:1px solid var(--line);background:#22303a;color:var(--ink)}
+button.b.primary{background:var(--gold);color:#1a1405;border-color:var(--gold)}
+button.b:hover{filter:brightness(1.12)}
+button:focus-visible,.card:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.choices{display:flex;flex-direction:column;gap:5px}
+.choices button{text-align:left}
+.chain .it{border:1px solid var(--gold);border-radius:6px;padding:4px 8px;font-size:.82rem}
+.log{max-height:260px;overflow:auto;font-size:.8rem;display:flex;flex-direction:column;gap:1px}
+.log .turn{font-weight:700;color:var(--gold);margin-top:3px}
+.result{border-radius:10px;padding:12px;border:1px solid var(--line);display:flex;flex-direction:column;gap:8px;background:var(--panel2)}
+.result.ok{border-color:var(--good)} .result.ko{border-color:var(--bad)}
+.result h3{font:800 1rem var(--display);margin:0;text-transform:none;letter-spacing:0}
+.result.ok h3{color:var(--good)} .result.ko h3{color:var(--bad)}
+.result p{margin:0}
+.help{font-size:.76rem;color:var(--muted)}
+/* zoom (tap a card) */
+.zoom{position:fixed;inset:0;z-index:50;background:rgba(4,8,10,.86);display:flex;align-items:center;justify-content:center;padding:16px}
+.zoom[hidden]{display:none}
+.zoom .zc{max-width:360px;width:100%;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.zoom img{width:min(260px,70vw);border-radius:10px}
+.zoom .pn{font:700 1.05rem var(--display)} .zoom .pt{color:var(--muted);font-size:.9rem}
+.objm{display:none}
+/* téléphone */
+@media (max-width:700px){
+  .top{padding:8px 12px;flex-wrap:nowrap;overflow-x:auto}
+  .top h1{font-size:.9rem;white-space:nowrap}
+  #tabs{flex-wrap:nowrap!important}
+  .tab{white-space:nowrap}
+  .mat{padding:8px 8px;gap:8px;--cw:56px;--ch:78px;overflow:visible}
+  .objm{display:block;font-size:.85rem;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+  .objm b{color:var(--gold)}
+  .half{grid-template-columns:auto minmax(0,1fr);gap:6px;padding:6px}
+  .half>.col:last-child{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;width:100%}
+  .half .col .lbl{font-size:.55rem}
+  .legend.card{width:56px;height:78px}
+  .zone{gap:6px;padding:4px;min-height:calc(var(--ch) + 10px)}
+  .base{padding-top:16px}
+  .rune{width:28px;height:39px}
+  .runes{max-width:none;justify-content:flex-start}
+  .pile .card{width:40px;height:56px}
+  .card .might{min-width:22px;height:22px;font-size:.75rem;line-height:18px;right:-4px;bottom:-4px}
+  .card .dmg{min-width:20px;height:20px;font-size:.7rem;line-height:20px}
+  .chip{font-size:.48rem;padding:0 3px}
+  .bf{padding:6px;gap:4px}
+  .bf-img.card{width:92px!important;height:66px!important}
+  .bf-name{font-size:.8rem}
+  .bfs{grid-template-columns:1fr 1fr;gap:6px}
+  .score{flex-direction:row;flex-wrap:wrap;gap:6px;grid-column:1/-1;order:-1}
+  .bf-mid{flex-direction:column;align-items:flex-start;gap:4px}
+  .bf-img.card{width:84px!important;height:60px!important}
+  .bf .zone{min-height:calc(var(--ch) + 10px);justify-content:center}
+  .handrow{min-height:70px}
+  .track{flex-direction:row}
+  .track span{width:14px;height:12px;font-size:.45rem;line-height:12px}
+  .handrow{min-height:76px}
+  .handrow.mine{min-height:118px}
+  .hand .card{--cw:76px;--ch:106px;margin:0 -6px}
+  .hand.op .card{--cw:46px;--ch:64px;margin:0 -4px}
+  .side{border-left:0;padding:8px}
+  .side .preview{display:none}
+  .side>.obj{display:none}
+  .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:46vh;overflow:auto;background:var(--panel);border-top:1px solid var(--gold);padding:8px;display:flex;flex-direction:column;gap:8px;box-shadow:0 -6px 18px rgba(0,0,0,.5)}
+  .dock .box{padding:8px;gap:6px}
+  .dock h3{display:none}
+  .dock .choices h3,.dock .result h3{display:block}
+  button.b{padding:9px 12px}
+}
+@media (prefers-reduced-motion:reduce){.card,.rune{transition:none}}
+</style>
+
+<div class="top"><h1>Riftbound LAB · Puzzles Yi</h1><nav id="tabs" style="display:flex;gap:6px;flex-wrap:wrap" aria-label="Puzzles"></nav></div>
+<div class="layout">
+  <main class="mat" id="mat"></main>
+  <aside class="side">
+    <div class="preview" id="preview"></div>
+    <div class="box obj" id="obj"></div>
+    <div class="dock" id="dock"><div class="box" id="bar"></div><div id="result"></div></div>
+    <div class="box"><h3>Journal</h3><div class="log" id="log"></div></div>
+    <p class="help">Glisse une unité vers un champ de bataille pour la déplacer, ou glisse une unité de ta main vers ta base ou un champ de bataille que tu contrôles. Tu peux aussi cliquer : une unité, puis la zone. Clique une carte pour la jouer et choisir sa cible. Survole une carte pour la voir en grand ; sur téléphone, touche une carte non jouable pour l'agrandir. Toutes les actions légales sont permises ; le paiement des runes est automatique.</p>
+  </aside>
+</div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-label="Carte en grand"><div class="zc" id="zoomc"></div></div>
+
+<script>/*ENGINE*/</script>
+<script>/*PUZZLES*/</script>
+<script>
+const {C}=RB;
+const IMG=/*IMGMAP*/{};
+const TIM={main:"ton tour",action:"Action",reaction:"Réaction"};
+let state=null, cur=0, sel=[], picking=null, busy=false, gen=0, hist=[], hover=null, drag=null;
+let prog={}; try{prog=JSON.parse(localStorage.getItem('pz-board-yi')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('pz-board-yi',JSON.stringify(prog))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+
+function start(i){
+  cur=i; sel=[]; picking=null; busy=false; gen++; hist=[]; hover=null;
+  const p=PUZZLES[i];
+  state=RB.newState(p); state.mine0=state.units.filter(u=>u.owner==='me').map(u=>u.id);
+  state.log=[]; if(p.startOp) state.log.unshift('— Tour de Yi —');
+  $('result').innerHTML='';
+  step();
+}
+function decision(){ return state.stage==='done'?null:RB.advance(state); }
+function step(){
+  const d=decision();
+  render(d);
+  if(!d){ finish(); return; }
+  if(d.who==='me'&&d.opts.length===1&&d.opts[0].t==='assign'){ RB.apply(state,'me',d.opts[0]); step(); return; }
+  if(d.who==='op'){
+    busy=true; render(d);
+    const g=gen;
+    setTimeout(()=>{ if(g!==gen) return; const d2=decision(); if(!d2||d2.who!=='op'){busy=false;step();return;}
+      const o=RB.aiChoose(state,PUZZLES[cur].goal); RB.apply(state,'op',o); busy=false; step(); },700);
+  }
+}
+function act(o){ if(busy||!o) return; hist.push(RB.clone(state)); sel=[]; picking=null; RB.apply(state,'me',o); step(); }
+function undo(){ if(!hist.length) return; gen++; busy=false; state=hist.pop(); sel=[]; picking=null; $('result').innerHTML=''; step(); }
+function finish(){
+  const p=PUZZLES[cur], ok=p.goal(state)>=1000;
+  prog[p.id]=ok?'ok':(prog[p.id]==='ok'?'ok':'ko'); save(); renderTabs();
+  $('result').innerHTML=`<div class="result ${ok?'ok':'ko'}"><h3>${ok?'Objectif atteint':'Objectif manqué'}</h3>
+   ${ok?`<p>${esc(p.lesson)}</p>`:`<p id="sol" hidden><b>Solution.</b> ${esc(p.solution)}<br><br>${esc(p.lesson)}</p>`}
+   <div class="btns"><button class="b primary" type="button" id="retry">${ok?'Rejouer':'Réessayer'}</button>
+   ${hist.length?'<button class="b" type="button" id="undo2">Annuler mon dernier coup</button>':''}
+   ${ok?'':'<button class="b" type="button" id="showsol">Voir la solution</button>'}
+   ${cur<PUZZLES.length-1?'<button class="b" type="button" id="next">Puzzle suivant</button>':''}</div></div>`;
+  $('retry').onclick=()=>start(cur);
+  if($('undo2')) $('undo2').onclick=undo;
+  if($('showsol')) $('showsol').onclick=()=>{$('sol').hidden=false;$('showsol').remove()};
+  if($('next')) $('next').onclick=()=>start(cur+1);
+  fitDock();
+}
+function renderTabs(){
+  $('tabs').innerHTML=PUZZLES.map((p,i)=>`<button class="tab" type="button" aria-current="${i===cur}" data-i="${i}"><span class="dot ${prog[p.id]||''}"></span>${i+1}. ${esc(p.title)}</button>`).join('');
+  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>start(+b.dataset.i));
+}
+const myOpts=d=>d&&d.who==='me'&&!busy?d.opts:[];
+function img(name,cls){ const src=IMG[name]; return src?`<img src="${src}" alt="${esc(C[name]?C[name].fr:name)}" loading="lazy">`:`<span class="ph">${esc(C[name]?C[name].fr:name)}</span>`; }
+function costTxt(c){ return `${c.e}${c.p?'+'+c.p:''}`; }
+
+// ------------------------------------------------------------------ rendu
+function unitHtml(u,d){
+  const opts=myOpts(d);
+  const canMove=opts.some(o=>o.t==='move'&&o.ids.includes(u.id));
+  const m=RB.might(state,u), base=C[u.name].might;
+  const chips=[];
+  if(u.desig) chips.push(`<span class="chip ${u.desig}">${u.desig==='att'?'attaque':'défend'}</span>`);
+  if(u.stun) chips.push('<span class="chip st">étourdie</span>');
+  if(u.tank) chips.push('<span class="chip tk">Tank</span>');
+  if(u.emp) chips.push('<span class="chip em">Empowered</span>');
+  return `<button type="button" class="card unit ${u.owner} ${canMove?'can':''} ${sel.includes(u.id)?'sel':''} ${u.ready?'':'exh'}" data-u="${u.id}" data-name="${esc(u.name)}" ${canMove?'draggable="true"':'tabindex="-1"'} aria-label="${esc(C[u.name].fr)}, puissance ${m}">
+    ${img(u.name)}<span class="chips">${chips.join('')}</span>${u.dmg?`<span class="dmg">${u.dmg}</span>`:''}<span class="might ${m>base?'up':''}">${m}</span></button>`;
+}
+function dropOk(loc,d){
+  const opts=myOpts(d);
+  if(sel.length) return opts.some(o=>o.t==='move'&&o.to===loc&&same(o.ids,sel));
+  if(drag&&drag.kind==='unit') return opts.some(o=>o.t==='move'&&o.to===loc&&same(o.ids,drag.ids));
+  if(drag&&drag.kind==='hand') return opts.some(o=>o.t==='play'&&!o.flow&&o.hi===drag.hi&&C[o.name].type==='unit'&&o.ch.loc===loc);
+  return false;
+}
+function zone(loc,owner,d,label,extra){
+  const us=state.units.filter(u=>u.loc===loc&&u.owner===owner);
+  const drop=owner==='me'&&dropOk(loc,d);
+  return `<div class="zone ${extra||''} ${drop?'drop':''}" data-loc="${loc}" data-owner="${owner}" ${drop?'role="button" tabindex="0" aria-label="Déplacer ici"':''}>${label?`<span class="lbl zl">${label}</span>`:''}${us.map(u=>unitHtml(u,d)).join('')}</div>`;
+}
+function bfHtml(b,d){
+  const bf=state.bfs[b], sd=state.sd, opts=myOpts(d);
+  const hid=state.hidden.filter(h=>h.bf===b);
+  const hidHtml=hid.map(h=>{const k=state.hidden.indexOf(h);const can=opts.some(o=>o.t==='play'&&o.hid===k);const mine=h.owner==='me';
+    return `<button type="button" class="card back hiddencard ${can?'can':''}" data-hid="${k}" data-name="${mine?esc(h.name):''}" title="${mine?'Face cachée : '+esc(C[h.name].fr):'Carte cachée de Yi'}" ${can?'':'tabindex="-1"'}><span class="chips"><span class="chip em">${mine?esc(C[h.name].fr):'cachée'}</span></span></button>`}).join('');
+  return `<div class="bf ${bf.ctrl||''} ${sd&&sd.bf===b?'fight':''}">
+    ${zone(b,'op',d,'')}
+    <div class="bf-mid"><div class="bf-img card" data-name="${esc(bf.name)}" style="width:132px;height:95px">${img(bf.name)}</div>
+      <div class="bf-info"><span class="bf-name">${esc(bf.name)}</span><span class="ctrl ${bf.ctrl||'none'}">${bf.ctrl==='me'?'contrôlé par toi':bf.ctrl==='op'?'contrôlé par Yi':'libre'}</span>
+      ${sd&&sd.bf===b?`<span class="fightlbl">${sd.combat?'Combat en cours':'Showdown en cours'}</span>`:''}</div>${hidHtml}</div>
+    ${zone(b,'me',d,'')}
+  </div>`;
+}
+function track(pid){ let h=''; for(let i=1;i<=8;i++) h+=`<span class="${state.pts[pid]>=i?'on':''}">${i}</span>`; return `<div class="track ${pid}">${h}</div>`; }
+function runesHtml(pid){
+  const rs=state.runes[pid];
+  return `<div class="col"><span class="lbl">Runes · ${rs.filter(r=>r.r).length}/${rs.length} prêtes</span><div class="runes">${rs.map(r=>`<div class="rune ${r.r?'':'x'}" title="${r.d} Rune${r.r?' (prête)':' (épuisée)'}">${img(r.d+' Rune')}</div>`).join('')||'<span class="rcount">aucune</span>'}</div></div>`;
+}
+function handCard(name,i,d,opp){
+  const c=C[name], opts=myOpts(d);
+  const can=!opp&&opts.some(o=>(o.t==='play'&&!o.flow&&o.hi===i)||(o.t==='hide'&&o.hi===i));
+  const n=opp?state.hand.op.length:state.hand.me.length, rot=(i-(n-1)/2)*4;
+  return `<button type="button" class="card ${can?'can':''}" data-h="${opp?'':i}" data-name="${esc(name)}" ${can&&c.type==='unit'?'draggable="true"':''} ${can?'':'tabindex="-1"'} style="transform:rotate(${rot}deg) translateY(${Math.abs(rot)*1.5}px)" aria-label="${esc(c.fr)}">${img(name)}<span class="cost">${costTxt(c)}</span></button>`;
+}
+function legendHtml(pid,d){
+  const name=pid==='me'?'Akali, Rogue Assassin':'Master Yi, Wuju Bladesman';
+  const L=state.legendState[pid]; const can=pid==='me'&&myOpts(d).some(o=>o.t==='act');
+  return `<div class="col"><span class="lbl">Légende</span><button type="button" class="card legend ${pid} ${can?'can':''} ${L.emp?'emp':''} ${L.exh?'exh':''}" id="${pid==='me'?'legend':''}" data-name="${esc(name)}" ${can?'':'tabindex="-1"'}>${img(name)}</button>${pid==='me'?`<span class="rcount">${L.emp?'Empowered':''}${L.exh?' · épuisée':''}</span>`:''}</div>`;
+}
+function piles(pid,d){
+  const t=state.trash[pid], opts=myOpts(d);
+  const top=t.length?t[t.length-1]:null;
+  const flowCan=pid==='me'&&opts.some(o=>o.t==='play'&&o.flow);
+  return `<div class="piles"><div class="pile"><div class="card back"></div><span class="n">Deck</span></div>
+    <div class="pile"><button type="button" class="card ${flowCan?'can':''}" id="${pid==='me'?'trash':''}" data-name="${top?esc(top):''}" ${flowCan?'':'tabindex="-1"'}>${top?img(top):''}</button><span class="n">Défausse · ${t.length}</span></div></div>`;
+}
+function render(d){
+  renderTabs();
+  const p=PUZZLES[cur];
+  $('obj').innerHTML=`<h3>${esc(p.title)}</h3><div>${esc(p.brief)}</div><div><b>Objectif :</b> ${esc(p.goalText)}</div>`;
+  $('mat').innerHTML=`<div class="objm"><b>Objectif :</b> ${esc(p.goalText)} <details style="display:inline"><summary style="display:inline;cursor:pointer;color:var(--muted)">contexte</summary>${esc(p.brief)}</details></div>
+   <div class="handrow" style="align-items:center;gap:10px"><span class="lbl">Main de Yi<br>(connue)</span><div class="hand op">${state.hand.op.map((n,i)=>handCard(n,i,d,true)).join('')||'<span class="lbl">Main de Yi (connue) : vide</span>'}</div></div>
+   <div class="half op">${legendHtml('op',d)}${zone('base','op',d,'Base de Yi','base')}<div class="col">${runesHtml('op')}${piles('op',d)}</div></div>
+   <div class="bfs">${bfHtml(0,d)}<div class="score"><span class="who" style="color:var(--body)">Yi ${state.pts.op}</span>${track('op')}${track('me')}<span class="who" style="color:var(--calm)">Toi ${state.pts.me}</span></div>${bfHtml(1,d)}</div>
+   <div class="half me">${legendHtml('me',d)}${zone('base','me',d,'Ta base','base')}<div class="col">${runesHtml('me')}${piles('me',d)}</div></div>
+   <div class="handrow mine"><div class="hand me">${state.hand.me.map((n,i)=>handCard(n,i,d,false)).join('')||'<span class="lbl">Ta main est vide</span>'}</div></div>`;
+  renderPreview();
+  renderBar(d);
+  fitDock();
+  $('log').innerHTML=state.log.map(l=>`<div class="${/^—/.test(l)?'turn':''}">${esc(l)}</div>`).join('');
+  $('log').scrollTop=$('log').scrollHeight;
+  wire(d);
+}
+function renderPreview(){
+  const name=hover||(sel.length?RB.byId(state,sel[0])&&RB.byId(state,sel[0]).name:null)||(picking&&picking.name)||(picking&&picking.legend?'Akali, Rogue Assassin':null);
+  if(!name||!C[name]&&!IMG[name]){ $('preview').innerHTML=`<div class="pt" style="grid-column:1/3">Survole une carte pour la voir en grand.</div>`; return; }
+  const i=cardInfo(name);
+  $('preview').innerHTML=`${i.src?`<img src="${i.src}" alt="">`:'<div></div>'}<div><div class="pn">${esc(i.title)}</div><div class="pt">${esc(i.txt)}</div></div>`;
+}
+function zoomCard(name){ const i=cardInfo(name); $('zoomc').innerHTML=`${i.src?`<img src="${i.src}" alt="">`:''}<div class="pn">${esc(i.title)}</div><div class="pt">${esc(i.txt)}</div><button class="b primary" type="button">Fermer</button>`; $('zoom').hidden=false; $('zoom').querySelector('button').focus(); }
+function cardInfo(name){
+  const c=C[name];
+  const legTxt={'Akali, Rogue Assassin':'Empower : 3 énergie + 1 rune. Action, l\'épuiser : à ton tour, ramène une de tes unités d\'un combat en base ; si Akali est Empowered, la redresse aussi.','Master Yi, Wuju Bladesman':'Une unité alliée qui défend seule a +2 de puissance.'};
+  const txt=c?(c.type==='unit'?`Unité · puissance ${c.might} · coût ${c.e}${c.p?' + '+c.p+' rune':''}. ${c.text||''}`:`${TIM[c.timing]||''} · coût ${c.e} énergie${c.p?' + '+c.p+' rune(s) '+c.dom.join('/'):''}. ${c.text||''}`):(legTxt[name]||'Champ de bataille.');
+  return {src:IMG[name],title:c?c.fr:name,txt};
+}
+function choiceLabel(o){
+  if(o.t==='play'&&o.flow) return 'Flow : '+C[o.name].label(state,o.ch);
+  if(o.t==='hide') return `Cacher face cachée sur ${state.bfs[o.bf].name} (1 rune, jouable au tour suivant)`;
+  if(o.t==='assign') return 'Ordre : '+o.order.map(id=>RB.nm(state,id)).join(' puis ');
+  if(o.t==='act') return C[o.name].label(state,o.ch);
+  const c=C[o.name]; if(c.type==='unit') return (o.ch.loc==='base'?'Jouer dans ta base':`Jouer sur ${state.bfs[o.ch.loc].name}`)+(o.ch.acc?' avec Accelerate (+1 énergie +1 rune Fury, arrive prête)':'');
+  return c.label(state,o.ch);
+}
+function renderBar(d){
+  const sd=state.sd, opts=myOpts(d);
+  let prompt, cls='';
+  if(!d){ prompt='Puzzle terminé.'; cls='wait'; }
+  else if(d.who==='op'){ prompt='Yi réfléchit…'; cls='wait'; }
+  else if(d.kind==='assign') prompt='Dégâts de combat : choisis l\'ordre de répartition (dégâts mortels sur une unité avant la suivante, Tank d\'abord).';
+  else if(state.chain.length){ const top=state.chain[state.chain.length-1]; prompt=top.owner==='me'?`Tu gardes la priorité après ${C[top.name].fr} : ajoute une Réaction, ou passe pour laisser Yi répondre.`:`Yi joue ${C[top.name].fr}. Réponds avec une Réaction, ou passe pour qu'il se résolve.`; }
+  else if(sd) prompt=`${sd.combat?'Combat':'Showdown'} sur ${state.bfs[sd.bf].name} : à toi (Action ou Réaction), ou passe.${sd.passes===1?' Si tu passes aussi, '+(sd.combat?'les dégâts sont infligés.':'le showdown se termine.'):''}`;
+  else prompt=state.turn==='me'?'Ton tour : déplace, joue, puis « Fin du tour ».':'Tour de Yi.';
+  let choices='';
+  if(d&&d.kind==='assign'&&d.who==='me'&&!busy){ picking={assign:true,list:opts}; }
+  else if(picking&&picking.assign) picking=null;
+  if(picking){
+    const list=picking.assign?opts:picking.legend?opts.filter(o=>o.t==='act'):picking.trash?opts.filter(o=>o.t==='play'&&o.flow):
+      opts.filter(o=>(o.t==='play'&&!o.flow&&(picking.hid!=null?o.hid===picking.hid:o.hi===picking.hi))||(o.t==='hide'&&picking.hi!=null&&o.hi===picking.hi)||(picking.loc!=null&&false));
+    const fl=picking.loc!=null?list.filter(o=>o.ch&&o.ch.loc===picking.loc):list;
+    picking.list=fl;
+    choices=`<div class="choices"><h3>${esc(picking.assign?'Répartition':picking.legend?'Akali (légende)':picking.trash?'Défausse (Flow)':C[picking.name].fr)} : choisis</h3>${fl.map((o,j)=>`<button class="b" type="button" data-c="${j}">${esc(choiceLabel(o))}</button>`).join('')}${picking.assign?'':'<button class="b" type="button" id="cancel">Annuler</button>'}</div>`;
+  }
+  const chain=state.chain.length?`<div class="chain"><h3>Chaîne (le haut se résout d'abord)</h3>${state.chain.slice().reverse().map(x=>`<div class="it">${x.owner==='op'?'Yi':'Toi'} : ${esc(C[x.name].fr)} · ${esc(C[x.name].label(state,x.ch))}</div>`).join('')}</div>`:'';
+  const hasPass=opts.some(o=>o.t==='pass'), hasEnd=opts.some(o=>o.t==='end');
+  $('bar').innerHTML=`<h3>À toi de jouer</h3><div class="prompt ${cls}">${esc(prompt)}</div>${chain}${choices}
+   <div class="btns">${hasPass?'<button class="b primary" type="button" id="pass">Passer</button>':''}${hasEnd?'<button class="b primary" type="button" id="end">Fin du tour</button>':''}
+   ${sel.length?'<button class="b" type="button" id="clr">Désélectionner</button>':''}${hist.length?'<button class="b" type="button" id="undo">Annuler</button>':''}<button class="b" type="button" id="reset">Recommencer</button></div>`;
+}
+
+// ------------------------------------------------------------------ interactions
+function wire(d){
+  const opts=myOpts(d);
+  const mat=$('mat');
+  mat.querySelectorAll('[data-name]').forEach(el=>{ if(!el.classList.contains('can')&&el.dataset.name) el.addEventListener('click',()=>zoomCard(el.dataset.name)); el.addEventListener('mouseenter',()=>{ if(el.dataset.name){hover=el.dataset.name; renderPreview();} }); el.addEventListener('mouseleave',()=>{ hover=null; renderPreview(); }); });
+  mat.querySelectorAll('.unit.can').forEach(b=>{
+    b.onclick=()=>{ const id=b.dataset.u, u=RB.byId(state,id);
+      if(sel.includes(id)) sel=sel.filter(x=>x!==id);
+      else { const loc0=sel.length?RB.byId(state,sel[0]).loc:u.loc; sel=loc0===u.loc?sel.concat(id):[id]; }
+      picking=null; render(d); };
+    b.ondragstart=e=>{ const id=b.dataset.u; const ids=sel.includes(id)?sel.slice():[id]; drag={kind:'unit',ids}; sel=[]; e.dataTransfer.setData('text/plain',id); e.dataTransfer.effectAllowed='move'; setTimeout(()=>markDrops(d),0); };
+    b.ondragend=()=>{ drag=null; setTimeout(()=>render(d),0); };
+  });
+  mat.querySelectorAll('.hand.me .card.can').forEach(b=>{
+    b.onclick=()=>{ const hi=+b.dataset.h; picking={hi,name:state.hand.me[hi]}; sel=[]; render(d); };
+    b.ondragstart=e=>{ drag={kind:'hand',hi:+b.dataset.h}; e.dataTransfer.setData('text/plain','h'); setTimeout(()=>markDrops(d),0); };
+    b.ondragend=()=>{ drag=null; setTimeout(()=>render(d),0); };
+  });
+  mat.querySelectorAll('.hiddencard.can').forEach(b=>b.onclick=()=>{ const k=+b.dataset.hid; picking={hid:k,name:state.hidden[k].name}; sel=[]; render(d); });
+  if($('legend')&&$('legend').classList.contains('can')) $('legend').onclick=()=>{ picking={legend:true}; sel=[]; render(d); };
+  if($('trash')&&$('trash').classList.contains('can')) $('trash').onclick=()=>{ picking={trash:true}; sel=[]; render(d); };
+  mat.querySelectorAll('.zone[data-owner="me"]').forEach(z=>{
+    const loc=z.dataset.loc==='base'?'base':+z.dataset.loc;
+    const go=()=>{ if(!sel.length) return; act(opts.find(o=>o.t==='move'&&o.to===loc&&same(o.ids,sel))); };
+    if(z.classList.contains('drop')){ z.onclick=e=>{ if(e.target.closest('.card')) return; go(); }; z.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}; }
+    z.ondragover=e=>{ if(dropOk(loc,d)){ e.preventDefault(); z.classList.add('over'); } };
+    z.ondragleave=()=>z.classList.remove('over');
+    z.ondrop=e=>{ e.preventDefault(); const dr=drag; drag=null; if(!dr) return;
+      if(dr.kind==='unit') return act(opts.find(o=>o.t==='move'&&o.to===loc&&same(o.ids,dr.ids)));
+      const list=opts.filter(o=>o.t==='play'&&!o.flow&&o.hi===dr.hi&&o.ch.loc===loc);
+      if(list.length===1) return act(list[0]);
+      picking={hi:dr.hi,name:state.hand.me[dr.hi],loc}; render(d); };
+  });
+  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>act(picking.list[+b.dataset.c]));
+  if($('cancel')) $('cancel').onclick=()=>{picking=null;render(d)};
+  if($('pass')) $('pass').onclick=()=>act(opts.find(o=>o.t==='pass'));
+  if($('end')) $('end').onclick=()=>act(opts.find(o=>o.t==='end'));
+  if($('clr')) $('clr').onclick=()=>{sel=[];render(d)};
+  if($('undo')) $('undo').onclick=undo;
+  $('reset').onclick=()=>start(cur);
+}
+function markDrops(d){ document.querySelectorAll('.zone[data-owner="me"]').forEach(z=>{ const loc=z.dataset.loc==='base'?'base':+z.dataset.loc; z.classList.toggle('drop',dropOk(loc,d)); }); }
+function fitDock(){ const m=matchMedia('(max-width:700px)').matches; document.body.style.paddingBottom=m?($('dock').offsetHeight+12)+'px':''; }
+addEventListener('resize',fitDock);
+$('zoom').onclick=()=>{$('zoom').hidden=true};
+addEventListener('keydown',e=>{ if(e.key==='Escape') $('zoom').hidden=true; });
+start(0);
+</script>

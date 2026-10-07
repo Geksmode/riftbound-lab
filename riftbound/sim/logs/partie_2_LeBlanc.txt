@@ -1,0 +1,105 @@
+Seed 2 | Akali C5 (Targon's Peak) vs LeBlanc (Dusk Rose Lab) | vainqueur LeBlanc
+T1 Akali score 0-0 runes 0 main ['Shuriken Flip', 'Scuttle Crab', 'Lonely Poro', 'Mournful Witness']
+  Akali joue Scuttle Crab -> base
+T2 LeBlanc score 0-0 runes 0 main ['Watchful Sentry', 'Honest Broker', 'Honest Broker', 'Soaring Scout']
+  LeBlanc joue Watchful Sentry -> base
+T3 Akali score 0-0 runes 2 main ['Shuriken Flip', 'Lonely Poro', 'Mournful Witness', 'Astral Heron', 'Mournful Witness']
+  Akali joue Akali, Deadly Weapon -> base
+  combat @Dusk Rose Lab: [Scuttle Crab(0)] vs []
+  +1 Akali (conquer Dusk Rose Lab) -> 1
+T4 LeBlanc score 0-1 runes 3 main ['Honest Broker', 'Honest Broker', 'Soaring Scout', 'Sacrifice']
+  LeBlanc joue Honest Broker -> base
+  LeBlanc joue Honest Broker -> base
+  combat @Dusk Rose Lab: [Watchful Sentry(1)] vs [Scuttle Crab(0)]
+  meurt: Scuttle Crab (Akali)
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 1
+  LeBlanc joue Watchful Sentry -> 0
+  LeBlanc copie Watchful Sentry
+T5 Akali score 1-1 runes 4 main ['Shuriken Flip', 'Lonely Poro', 'Mournful Witness', 'Astral Heron', 'Mournful Witness', 'Discipline']
+  Akali joue Stellacorn Herder -> base
+  Akali joue Lonely Poro -> base
+  meurt: Watchful Sentry (LeBlanc)
+  combat @Dusk Rose Lab: [Akali, Deadly Weapon(3)] vs [Watchful Sentry(1)]
+  meurt: Watchful Sentry (LeBlanc)
+  +1 Akali (conquer Dusk Rose Lab) -> 2
+T6 LeBlanc score 1-2 runes 5 main ['Sacrifice', 'Ruined Rex', 'Karthus, Eternal', 'Mirror Image']
+  LeBlanc joue Karthus, Eternal -> base
+  LeBlanc joue LeBlanc, Fragmented -> base
+  combat @Dusk Rose Lab: [Honest Broker(2), Honest Broker(2)] vs [Akali, Deadly Weapon(3)]
+  meurt: Honest Broker (LeBlanc)
+  meurt: Akali, Deadly Weapon (Akali)
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 2
+  LeBlanc joue Honest Broker -> 0
+  LeBlanc copie Honest Broker
+T7 Akali score 2-2 runes 6 main ['Shuriken Flip', 'Mournful Witness', 'Astral Heron', 'Mournful Witness', 'Discipline']
+  Akali joue Astral Heron -> base
+  combat @Dusk Rose Lab: [Stellacorn Herder(3), Lonely Poro(2)] vs [Honest Broker(2), Honest Broker(2)]
+  meurt: Lonely Poro (Akali)
+  meurt: Honest Broker (LeBlanc)
+  meurt: Honest Broker (LeBlanc)
+  +1 Akali (conquer Dusk Rose Lab) -> 3
+T8 LeBlanc score 2-3 runes 5 main ['Ruined Rex', 'Mirror Image', 'Rift Herald']
+  LeBlanc joue Rift Herald -> base
+  LeBlanc joue Soaring Scout -> base
+  LeBlanc lance Mirror Image
+  LeBlanc joue Rift Herald -> base
+  combat @Dusk Rose Lab: [Rift Herald(7)] vs [Stellacorn Herder(3)]
+  meurt: Stellacorn Herder (Akali)
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 3
+  combat @Targon's Peak: [LeBlanc, Fragmented(3)] vs []
+  +1 LeBlanc (conquer Targon's Peak) -> 4
+  LeBlanc joue LeBlanc, Fragmented -> 1
+  LeBlanc copie LeBlanc, Fragmented
+T9 Akali score 3-4 runes 8 main ['Shuriken Flip', 'Mournful Witness', 'Mournful Witness', 'Discipline', 'Scuttle Crab', 'Shuriken Flip']
+  Akali joue Mournful Witness -> base
+  Akali joue Mournful Witness -> base
+  Akali joue Scuttle Crab -> base
+  combat @Targon's Peak: [Astral Heron(7)] vs [LeBlanc, Fragmented(3), LeBlanc, Fragmented(3)]
+  meurt: LeBlanc, Fragmented (LeBlanc)
+  meurt: LeBlanc, Fragmented (LeBlanc)
+  +1 Akali (conquer Targon's Peak) -> 4
+  Akali joue Kai'Sa, Survivor -> base
+T10 LeBlanc score 4-4 runes 4 main ['Thousand-Tailed Watcher', 'Glasc Mixologist', 'Watchful Sentry', 'Black Rose Dignitary', 'Mirror Image']
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Thousand-Tailed Watcher -> base
+  LeBlanc joue Glasc Mixologist -> base
+  +1 LeBlanc (hold Dusk Rose Lab) -> 5
+  LeBlanc joue LeBlanc, Everywhere At Once -> base
+  combat @Targon's Peak: [Rift Herald(7)] vs [Astral Heron(4)]
+  Akali lance Discipline
+  meurt: Astral Heron (Akali)
+  +1 LeBlanc (conquer Targon's Peak) -> 6
+  LeBlanc joue Rift Herald -> 1
+  LeBlanc copie Rift Herald
+T11 Akali score 4-6 runes 10 main ['Shuriken Flip', 'Shuriken Flip', 'Discipline', 'Falling Star']
+  Akali lance Falling Star
+  meurt: Karthus, Eternal (LeBlanc)
+  Akali joue Kai'Sa, Survivor -> base
+  combat @Dusk Rose Lab: [Scuttle Crab(0)] vs []
+  +1 Akali (conquer Dusk Rose Lab) -> 5
+T12 LeBlanc score 6-5 runes 4 main ['Black Rose Dignitary', 'Mirror Image', 'Rift Herald']
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Rift Herald -> base
+  +1 LeBlanc (hold Targon's Peak) -> 7
+  LeBlanc joue Rift Herald -> 1
+  LeBlanc copie Rift Herald
+  LeBlanc lance Mirror Image
+  LeBlanc joue Rift Herald -> base
+  combat @Dusk Rose Lab: [Thousand-Tailed Watcher(7)] vs [Scuttle Crab(0)]
+  Akali lance Discipline
+  meurt: Scuttle Crab (Akali)
+  dernier point par conquete refuse -> pioche
+T13 Akali score 5-7 runes 8 main ['Shuriken Flip', 'Shuriken Flip', 'Discipline']
+  Akali joue Mischievous Marai -> base
+  combat @Dusk Rose Lab: [Kai'Sa, Survivor(4), Kai'Sa, Survivor(4)] vs [Thousand-Tailed Watcher(7)]
+  meurt: Kai'Sa, Survivor (Akali)
+  meurt: Thousand-Tailed Watcher (LeBlanc)
+  +1 Akali (conquer Dusk Rose Lab) -> 6
+T14 LeBlanc score 7-6 runes 3 main ['Harnessed Dragon', 'Glasc Mixologist']
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Harnessed Dragon -> base
+  Dragon tue Kai'Sa, Survivor(4)
+  meurt: Kai'Sa, Survivor (Akali)
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Glasc Mixologist -> base
+  +1 LeBlanc (hold Targon's Peak) -> 8

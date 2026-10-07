@@ -1,0 +1,726 @@
+{
+  "bf": null,
+  "bfs": [
+    "Void Gate",
+    "Void Gate"
+  ],
+  "first": null,
+  "id": "muxxnpae-938140",
+  "level": 3,
+  "log": [
+    "Tour 1, à Akali (IA) de jouer (score 0-0)",
+    "  Akali (IA) pioche une carte",
+    "Tour 2, à Akali de jouer (score 0-0)",
+    "  Tu pioches Shuriken Flip",
+    "Akali joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 3, à Akali (IA) de jouer (score 0-0)",
+    "  Akali (IA) pioche une carte",
+    "Akali (IA) joue Shuriken Flip",
+    "Résolution : Shuriken Flip",
+    "Akali (IA) joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 4, à Akali de jouer (score 0-0)",
+    "  Tu pioches Darius, Trifarian",
+    "Akali déplace Akali, Deadly Weapon vers Void Gate",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 1",
+    "Akali joue Lonely Poro — à la base",
+    "Akali joue Zhonya's Hourglass — à la base",
+    "Tour 5, à Akali (IA) de jouer (score 1-0)",
+    "  Akali (IA) pioche une carte",
+    "Akali (IA) déplace Akali, Deadly Weapon vers Void Gate",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Akali, Deadly Weapon subit 2 dégât(s) (might 3)",
+    "Showdown à Void Gate, initiative Akali (IA)",
+    "  Akali (IA) prend le contrôle de Void Gate",
+    "Akali (IA) +1 point (conquête de Void Gate) → 1",
+    "Akali (IA) cache une carte à Void Gate",
+    "Akali (IA) joue Kai'Sa, Survivor — à la base, acc=True",
+    "Tour 6, à Akali de jouer (score 1-1)",
+    "Akali +1 point (tenue de Void Gate) → 2",
+    "  Tu pioches Kai'Sa, Survivor",
+    "Akali joue Astral Heron — à Void Gate",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Akali (IA) joue Zhonya's Hourglass (carte cachée révélée) — à Void Gate",
+    "Résolution : Astral Heron",
+    "Akali joue Shuriken Flip — cible Akali, Deadly Weapon, vers Void Gate",
+    "Résolution : Shuriken Flip",
+    "  Akali, Deadly Weapon subit 3 dégât(s) (might 3)",
+    "  Astral Heron va de Void Gate à Void Gate",
+    "  Zhonya's Hourglass sauve Akali, Deadly Weapon",
+    "  Zhonya's Hourglass meurt",
+    "  Akali (IA) perd le contrôle de Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 3",
+    "Tour 7, à Akali (IA) de jouer (score 3-1)",
+    "  Akali (IA) pioche une carte",
+    "Akali (IA) déplace Akali, Deadly Weapon vers Void Gate",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Akali (IA) joue Long Sword — à la base",
+    "  Déclenchement sur la chaîne : Quick-Draw Long Sword",
+    "Résolution : Quick-Draw Long Sword",
+    "  Long Sword est attaché(e) à Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Akali, Deadly Weapon subit 2 dégât(s) (might 3)",
+    "COMBAT à Void Gate, attaquant Akali (IA)",
+    "  Dégâts de combat : attaquants 5 contre défenseurs 3",
+    "  Zhonya's Hourglass sauve Akali, Deadly Weapon",
+    "  Zhonya's Hourglass meurt",
+    "  Akali (IA) prend le contrôle de Void Gate",
+    "Akali (IA) +1 point (conquête de Void Gate) → 2",
+    "Akali (IA) joue Shuriken Flip depuis la défausse — cible Astral Heron, vers Void Gate, flow=True",
+    "Résolution : Shuriken Flip",
+    "  Astral Heron subit 3 dégât(s) (might 7)",
+    "  Akali, Deadly Weapon va de Void Gate à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Astral Heron subit 2 dégât(s) (might 7)",
+    "  Akali (IA) perd le contrôle de Void Gate",
+    "COMBAT à Void Gate, attaquant Akali (IA)",
+    "Akali (IA) active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Astral Heron subit 2 dégât(s) (might 7)",
+    "  Astral Heron meurt",
+    "Akali (IA) déplace Kai'Sa, Survivor vers Void Gate",
+    "  Kai'Sa, Survivor va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali (IA)",
+    "  Akali (IA) prend le contrôle de Void Gate",
+    "Akali (IA) +1 point (conquête de Void Gate) → 3",
+    "  Déclenchement sur la chaîne : Kai'Sa",
+    "Résolution : Kai'Sa",
+    "  Akali (IA) pioche une carte",
+    "Tour 8, à Akali de jouer (score 3-3)",
+    "  Tu pioches Ferrous Forerunner",
+    "Akali déplace Akali, Deadly Weapon vers Void Gate",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Kai'Sa, Survivor subit 2 dégât(s) (might 4)",
+    "COMBAT à Void Gate, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Kai'Sa, Survivor subit 2 dégât(s) (might 4)",
+    "  Kai'Sa, Survivor meurt",
+    "Akali déplace Lonely Poro vers Void Gate",
+    "  Lonely Poro va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 4",
+    "Akali joue Ferrous Forerunner — à Void Gate",
+    "Tour 9, à Akali (IA) de jouer (score 4-3)",
+    "  Akali (IA) pioche une carte",
+    "Akali (IA) joue Shuriken Flip — cible Lonely Poro, vers Void Gate",
+    "Résolution : Shuriken Flip",
+    "  Lonely Poro subit 3 dégât(s) (might 2)",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "  Lonely Poro meurt",
+    "  Déclenchement sur la chaîne : Deathknell Lonely Poro",
+    "Résolution : Deathknell Lonely Poro",
+    "Résolution : Akali, Deadly Weapon",
+    "  Akali, Deadly Weapon subit 2 dégât(s) (might 5)",
+    "Showdown à Void Gate, initiative Akali (IA)",
+    "  Akali (IA) prend le contrôle de Void Gate",
+    "Akali (IA) +1 point (conquête de Void Gate) → 4",
+    "Akali (IA) joue Kai'Sa, Survivor — à Void Gate",
+    "Akali (IA) active Long Sword: Equip — cible Kai'Sa, Survivor",
+    "Résolution : Long Sword: Equip",
+    "  Long Sword est attaché(e) à Kai'Sa, Survivor",
+    "Tour 10, à Akali de jouer (score 4-4)",
+    "Akali +1 point (tenue de Void Gate) → 5",
+    "  Tu pioches Mournful Witness",
+    "Akali active Akali, Deadly Weapon: Empower",
+    "Résolution : Akali, Deadly Weapon: Empower",
+    "Akali déplace Akali, Deadly Weapon vers Void Gate",
+    "  Akali, Deadly Weapon va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Kai'Sa, Survivor subit 3 dégât(s) (might 6)",
+    "COMBAT à Void Gate, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Kai'Sa, Survivor subit 3 dégât(s) (might 6)",
+    "  Kai'Sa, Survivor meurt",
+    "Akali joue Blitzcrank, Impassive — à Void Gate",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Akali, Deadly Weapon va de Void Gate à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Ferrous Forerunner subit 2 dégât(s) (might 6)",
+    "  Akali (IA) perd le contrôle de Void Gate",
+    "COMBAT à Void Gate, attaquant Akali (IA)",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 11",
+    "  Akali, Deadly Weapon meurt",
+    "Akali joue Mournful Witness — à la base",
+    "Tour 11, à Akali (IA) de jouer (score 5-4)",
+    "  Akali (IA) pioche une carte",
+    "Akali (IA) joue Stellacorn Herder — à la base",
+    "Tour 12, à Akali de jouer (score 5-4)",
+    "Akali +1 point (tenue de Void Gate) → 6",
+    "  Déclenchement sur la chaîne : Blitzcrank (hold)",
+    "Résolution : Blitzcrank (hold)",
+    "  Tu pioches Falling Star",
+    "Akali joue Falling Star — cible Stellacorn Herder et Stellacorn Herder",
+    "Résolution : Falling Star",
+    "  Stellacorn Herder subit 3 dégât(s) (might 3)",
+    "  Stellacorn Herder subit 3 dégât(s) (might 3)",
+    "  Stellacorn Herder meurt",
+    "Akali joue Kai'Sa, Survivor — à la base",
+    "Akali déplace Mournful Witness vers Void Gate",
+    "  Mournful Witness va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 7",
+    "Tour 13, à Akali (IA) de jouer (score 7-4)",
+    "  Akali (IA) pioche une carte",
+    "Tour 14, à Akali de jouer (score 7-4)",
+    "Akali +1 point (tenue de Void Gate) → 8",
+    "Akali +1 point (tenue de Void Gate) → 9",
+    "VICTOIRE de Akali"
+  ],
+  "mine": "akali-g2",
+  "moves": [
+    [
+      "ans",
+      [
+        0,
+        1
+      ],
+      "mulligan : Mischievous Marai, Mournful Witness",
+      0
+    ],
+    [
+      "act",
+      4,
+      "joue Akali, Deadly Weapon (à la base)",
+      2
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      2
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      10,
+      "déplace Akali, Deadly Weapon vers Void Gate",
+      4
+    ],
+    [
+      "ans",
+      1,
+      "may : non",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      2,
+      "joue Lonely Poro (à la base)",
+      4
+    ],
+    [
+      "act",
+      1,
+      "joue Zhonya's Hourglass (à la base)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      2,
+      "joue Astral Heron (à Void Gate)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      1,
+      "joue Shuriken Flip (cible Akali, Deadly Weapon, vers Void Gate)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      18,
+      "déplace Akali, Deadly Weapon vers Void Gate",
+      8
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      8
+    ],
+    [
+      "ans",
+      0,
+      "target : Kai'Sa, Survivor adverse (Void Gate)",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Akali, Deadly Weapon)",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      13,
+      "déplace Lonely Poro vers Void Gate",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      10,
+      "joue Ferrous Forerunner (à Void Gate)",
+      8
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      20,
+      "Empower : Akali, Rogue Assassin (3 énergie + 1 rune au choix)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      19,
+      "Empower : Akali, Deadly Weapon (2 énergie + 1 Fury)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      21,
+      "déplace Akali, Deadly Weapon vers Void Gate",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "target : Kai'Sa, Survivor adverse (Void Gate)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Akali, Deadly Weapon)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "target : Kai'Sa, Survivor adverse (Void Gate)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      2,
+      "joue Blitzcrank, Impassive (à Void Gate)",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      1,
+      "joue Mournful Witness (à la base)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      9,
+      "joue Falling Star (cible Stellacorn Herder et Stellacorn Herder)",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      3,
+      "joue Kai'Sa, Survivor (à la base)",
+      12
+    ],
+    [
+      "act",
+      11,
+      "déplace Mournful Witness vers Void Gate",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      12
+    ]
+  ],
+  "names": [
+    "Akali",
+    "Akali (IA)"
+  ],
+  "opp": "akali_dongdong_wuhan-open_5th",
+  "pts": [
+    9,
+    4
+  ],
+  "result": {
+    "pts": [
+      9,
+      4
+    ],
+    "turn": 14,
+    "winner": 0
+  },
+  "seed": 938140,
+  "started": "2026-10-07T09:56:37.190Z",
+  "turn": 14,
+  "updated": "2026-10-07T10:01:21.755Z",
+  "ver": "v11",
+  "whoFirst": 1
+}

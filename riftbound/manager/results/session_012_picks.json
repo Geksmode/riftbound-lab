@@ -1,0 +1,123 @@
+[
+ {
+  "id": "s012-1",
+  "seed": 205091,
+  "title": "Plan Gorica avec Sigil : victoire 9-2",
+  "note": "Même donne que la partie suivante (Akali commence). LeBlanc ouvre 0-2 au tour 4, puis Akali reprend Windswept au tour 5 et Sigil au tour 7 et ne lâche plus les deux battlefields jusqu'à 9-2 au tour 13.",
+  "job": {
+   "label": "REF stock plan Gorica (Sigil) vs Hook tempo Windswept",
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "n": 400,
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 12,
+  "plans_snapshot": "results/plans_session_012/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s012-2",
+  "seed": 205091,
+  "title": "Même donne avec Forgotten Monument : défaite 7-8",
+  "note": "Même déroulé jusqu'à 7-2 au tour 11 (Akali tient les deux battlefields), mais elle ne trouve pas le dernier point : LeBlanc reprend les deux battlefields au tour 12, garde Forgotten Monument et revient à 7-8 au tour 16. Avec Sigil, la même donne finissait au tour 13.",
+  "job": {
+   "label": "stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept",
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "n": 400,
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept",
+   "akali_bfs": [
+    "Forgotten Monument"
+   ]
+  },
+  "session": 12,
+  "plans_snapshot": "results/plans_session_012/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s012-3",
+  "seed": 205048,
+  "title": "Void Gate forcé : défaite 6-8 (la référence gagne)",
+  "note": "LeBlanc commence. Akali mène 5-3 au tour 8 en tenant Void Gate, mais LeBlanc reprend Void Gate au tour 9 et la garde jusqu'au bout : 6-8 au tour 13. Avec Sigil, cette donne est gagnée.",
+  "job": {
+   "label": "stock plan Gorica, Void Gate forcé vs Hook tempo Windswept",
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "n": 400,
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept",
+   "akali_bfs": [
+    "Void Gate"
+   ]
+  },
+  "session": 12,
+  "plans_snapshot": "results/plans_session_012/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s012-4",
+  "seed": 204939,
+  "title": "Plan Gorica : défaite typique 7-8",
+  "note": "Défaite de référence (Akali commence). LeBlanc mène 6-1 au tour 8 en tenant les deux battlefields ; Akali les reprend, revient à 7-7 au tour 13, puis LeBlanc reprend tout au tour 14 pour le dernier point.",
+  "job": {
+   "label": "REF stock plan Gorica (Sigil) vs Hook tempo Windswept",
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "n": 400,
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 12,
+  "plans_snapshot": "results/plans_session_012/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s012-5",
+  "seed": 204802,
+  "title": "Contre Hook tempo : Void Gate face à Star Spring, victoire 8-5",
+  "note": "LeBlanc présente Star Spring, le plan Gorica répond Void Gate (son choix habituel). Akali tient Void Gate presque toute la partie et gagne 8-5 au tour 13. Sur la session, Void Gate face à Star Spring ne coûte rien (Sigil forcé −1,0 ± 4,7) : le problème de Void Gate se limite à Windswept.",
+  "job": {
+   "label": "stock plan Gorica (choix du plan) vs Hook tempo",
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "n": 400,
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo"
+  },
+  "session": 12,
+  "plans_snapshot": "results/plans_session_012/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]

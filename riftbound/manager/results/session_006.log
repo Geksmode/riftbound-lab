@@ -1,0 +1,9 @@
+moteur figé (44d6a1b695) dans /mnt/attach/project-files/riftbound/manager/results/engine_session_006, plans.py 8b2147fcef
+REF GL vs Hook tempo Windswept                           43.8% ±0.025 n=400 graines 202400+ err=0 (766s)
+GD vs Hook tempo Windswept                               50.5% ±0.025 n=400 graines 202400+ err=0 (821s)
+Gorica stock vs Hook tempo Windswept                     47.8% ±0.025 n=400 graines 202400+ err=0 (778s)
+G2 vs Hook tempo Windswept                               49.8% ±0.025 n=400 graines 202400+ err=0 (809s)
+  apparié vs 'REF GL vs Hook tempo Windswept': GD vs Hook tempo Windswept: +6.8 ± 3.3 pts (n=400)
+  apparié vs 'REF GL vs Hook tempo Windswept': Gorica stock vs Hook tempo Windswept: +4.0 ± 3.3 pts (n=400)
+  apparié vs 'REF GL vs Hook tempo Windswept': G2 vs Hook tempo Windswept: +6.0 ± 3.3 pts (n=400)
+SESSION 6 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_006.json

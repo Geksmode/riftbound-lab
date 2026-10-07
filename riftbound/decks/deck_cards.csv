@@ -1,0 +1,369 @@
+deck,legend,player,event,date,placement,section,qty,name,card_id,type,domain,energy_cost,power_cost,might
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Lonely Poro,sfd-036,Unit,Calm,2,0,2
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,"Irelia, Fervent",sfd-057,Unit,Calm,5,0,4
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,2,En Garde,ogn-046,Spell,Calm,1,0,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,3,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,main,2,Sky Splitter,ogn-014,Spell,Fury,8,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,runes,5,Calm Rune,ogn-042,Rune,Calm,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,runes,7,Fury Rune,ogn-007,Rune,Fury,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,battlefields,1,Back-Alley Bar,ogn-277,Battlefield,Colorless,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,battlefields,1,Targon's Peak,ogn-289,Battlefield,Colorless,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,2,Charm,ogn-043,Spell,Calm,1,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,1,Against the Odds,sfd-001,Spell,Fury,2,0,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,2,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,1,Adaptatron,ogn-056,Unit,Calm,4,0,3
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,1,"Akali, Silent",ven-038,Unit,Calm,4,1,4
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,1,Tomb-Raider Barbara,ven-037,Unit,Calm,4,0,4
+akali_asc-harukaze_rq-barcelona_10th,"Akali, Rogue Assassin",ASC HaruKaze,Riftbound Regional Qualifier - Barcelona (Best-Of Akali),2026-08-23,10,sideboard,2,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,2,Mischievous Marai,unl-003,Unit,Fury,2,0,2
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,"Kai'Sa, Survivor",ogn-039,Unit,Fury,4,0,4
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,2,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,2,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,2,Charm,ogn-043,Spell,Calm,1,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,1,En Garde,ogn-046,Spell,Calm,1,0,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,3,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,runes,5,Calm Rune,ogn-042,Rune,Calm,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,runes,7,Fury Rune,ogn-007,Rune,Fury,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,battlefields,1,Forgotten Monument,sfd-209,Battlefield,Colorless,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,battlefields,1,Threshold of the Gray,ven-166,Battlefield,Colorless,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,1,Crumbling Sands,ven-039,Spell,Calm,1,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,2,Decree of Focus,ven-040,Spell,Calm,1,0,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,2,Brittle Steel,ven-003,Spell,Fury,2,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,1,"Akali, Silent",ven-038,Unit,Calm,4,1,4
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,2,"Irelia, Fervent",sfd-057,Unit,Calm,5,0,4
+akali_collin-kaiser_ccs-iq5_6th,"Akali, Rogue Assassin",Collin Kaiser (CTCG),"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,6,sideboard,1,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,2,Mischievous Marai,unl-003,Unit,Fury,2,0,2
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,1,Adaptatron,ogn-056,Unit,Calm,4,0,3
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,"Kai'Sa, Survivor",ogn-039,Unit,Fury,4,0,4
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,1,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,2,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Charm,ogn-043,Spell,Calm,1,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,1,En Garde,ogn-046,Spell,Calm,1,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,3,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,runes,6,Fury Rune,ogn-007,Rune,Fury,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,runes,6,Calm Rune,ogn-042,Rune,Calm,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,battlefields,1,Forgotten Monument,sfd-209,Battlefield,Colorless,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,battlefields,1,Targon's Peak,ogn-289,Battlefield,Colorless,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Crumbling Sands,ven-039,Spell,Calm,1,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,2,Decree of Focus,ven-040,Spell,Calm,1,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Decree of Rage,ven-015,Spell,Fury,1,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Disarming Rake,sfd-032,Unit,Calm,3,1,2
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Pendulum Blade,ven-011,Gear,Fury,3,0,
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Adaptatron,ogn-056,Unit,Calm,4,0,3
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,"Akali, Silent",ven-038,Unit,Calm,4,1,4
+akali_dongdong_wuhan-open_5th,"Akali, Rogue Assassin",东东卡牌妙妙屋,S4 Regional Open Wuhan,2026-08,5,sideboard,1,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,2,Mischievous Marai,unl-003,Unit,Fury,2,0,2
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Mournful Witness,ven-028,Unit,Calm,2,0,2
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,"Kai'Sa, Survivor",ogn-039,Unit,Fury,4,0,4
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,1,Noxus Hopeful,ogn-012,Unit,Fury,4,0,4
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,2,"Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,5
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,1,"Darius, Trifarian",ogn-027,Unit,Fury,5,1,5
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,2,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,1,Sterak's Gage,sfd-056,Gear,Calm,3,2,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,1,Block,ogn-057,Spell,Calm,2,0,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,main,2,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,runes,6,Calm Rune,ogn-042,Rune,Calm,,,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,runes,6,Fury Rune,ogn-007,Rune,Fury,,,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,battlefields,1,Forgotten Monument,sfd-209,Battlefield,Colorless,,,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,battlefields,1,Sigil of the Storm,ogn-287,Battlefield,Colorless,,,
+akali_gorica_rq-singapore,"Akali, Rogue Assassin",Gorica,Riftbound Regional Qualifier - Singapore,2026-09,,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,2,Mischievous Marai,unl-003,Unit,Fury,2,0,2
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,Mournful Witness,ven-028,Unit,Calm,2,0,2
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,2,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,"Kai'Sa, Survivor",ogn-039,Unit,Fury,4,0,4
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,"Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,5
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,"Darius, Trifarian",ogn-027,Unit,Fury,5,1,5
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,2,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,Sterak's Gage,sfd-056,Gear,Calm,3,2,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,Block,ogn-057,Spell,Calm,2,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,3,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,runes,6,Calm Rune,ogn-042,Rune,Calm,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,runes,6,Fury Rune,ogn-007,Rune,Fury,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,battlefields,1,Sigil of the Storm,ogn-287,Battlefield,Colorless,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,battlefields,1,Forgotten Monument,sfd-209,Battlefield,Colorless,,,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,1,Decree of Focus,ven-040,Spell,Calm,1,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,1,Against the Odds,sfd-001,Spell,Fury,2,0,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,2,Disarming Rake,sfd-032,Unit,Calm,3,1,2
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,1,"Akali, Silent",ven-038,Unit,Calm,4,1,4
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,2,"Irelia, Fervent",sfd-057,Unit,Calm,5,0,4
+akali_hxn-tempete_rq-la_7th,"Akali, Rogue Assassin",HXN TEMPETE一些雪,Riftbound Regional Qualifier - Los Angeles,2026-09-26,7,sideboard,2,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,legend,1,"Akali, Rogue Assassin",ven-139,Legend,Fury|Calm,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,champion,1,"Akali, Deadly Weapon",ven-021,Unit,Fury,3,0,3
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Mournful Witness,ven-028,Unit,Calm,2,0,2
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,2,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,"Kai'Sa, Survivor",ogn-039,Unit,Fury,4,0,4
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Stellacorn Herder,sfd-048,Unit,Calm,4,0,3
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,1,"Darius, Trifarian",ogn-027,Unit,Fury,5,1,5
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,2,Ferrous Forerunner,sfd-021,Unit,Fury,6,1,6
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Astral Heron,ven-044,Unit,Calm,7,0,7
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,2,Long Sword,sfd-022,Gear,Fury,2,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,2,Charm,ogn-043,Spell,Calm,1,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Defy,ogn-045,Spell,Calm,1,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Shuriken Flip,ven-140,Spell,Fury|Calm,1,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,1,Block,ogn-057,Spell,Calm,2,0,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,3,Falling Star,ogn-029,Spell,Fury,2,2,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,main,2,Back Off,unl-042,Spell,Calm,3,0,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,runes,6,Calm Rune,ogn-042,Rune,Calm,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,runes,6,Fury Rune,ogn-007,Rune,Fury,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,battlefields,1,Targon's Peak,ogn-289,Battlefield,Colorless,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,battlefields,1,Void Gate,ogn-296,Battlefield,Colorless,,,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,Crumbling Sands,ven-039,Spell,Calm,1,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,Decree of Focus,ven-040,Spell,Calm,1,0,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,"Akali, Silent",ven-038,Unit,Calm,4,1,4
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,Tomb-Raider Barbara,ven-037,Unit,Calm,4,0,4
+akali_khavai_skirmish-carfurle_41st,"Akali, Rogue Assassin",Khavai,Carfurle & Univers Parallèle Skirmish,2026-09-13,41,sideboard,1,"Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,5
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Honest Broker,sfd-155,Unit,Order,2,0,2
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Soaring Scout,ogn-216,Unit,Order,2,0,1
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,2,Watchful Sentry,ogn-096,Unit,Mind,2,0,1
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Harnessed Dragon,ogn-234,Unit,Order,8,2,6
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Rift Herald,unl-179,Unit,Order,8,1,7
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Baited Hook,ogn-242,Gear,Order,3,0,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,3,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,2,Deathgrip,sfd-163,Spell,Order,2,0,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,main,1,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,battlefields,1,Dusk Rose Lab,unl-209,Battlefield,Colorless,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,2,Bellows Breath,sfd-080,Spell,Mind,1,1,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,1,Decree of Insight,ven-061,Spell,Mind,1,0,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,2,Decree of Unity,ven-131,Spell,Order,2,1,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,2,Salvage,ogn-224,Spell,Order,2,1,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,1,Turn to Dust,unl-070,Spell,Mind,2,0,
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,1,"LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,0,4
+leblanc_aurazera_rebound-la_9th,"Leblanc, Deceiver",aurazera,Secretlab Regional Rebound - RQ Los Angeles Sunday,2026-09-27,9,sideboard,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,2,Honest Broker,sfd-155,Unit,Order,2,0,2
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,2,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,"Kennen, Keeper of Balance",ven-135,Unit,Order,3,0,2
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,Chakram Dancer,unl-071,Unit,Mind,3,0,3
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Cull the Weak,ogn-209,Spell,Order,2,1,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Deathgrip,sfd-163,Spell,Order,2,0,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Hidden Blade,ogn-213,Spell,Order,2,1,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,Stupefy,ogn-095,Spell,Mind,1,0,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,3,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,main,1,Ki Barrier,ven-126,Spell,Order,2,1,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,battlefields,1,Dusk Rose Lab,unl-209,Battlefield,Colorless,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,2,Salvage,ogn-224,Spell,Order,2,1,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,2,Decree of Insight,ven-061,Spell,Mind,1,0,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,3,Decree of Unity,ven-131,Spell,Order,2,1,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,1,Time Warp,ogn-122,Spell,Mind,10,4,
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,1,"LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,0,4
+leblanc_blank_rq-singapore-bestof,"Leblanc, Deceiver",Blank,Riftbound Regional Qualifier - Singapore (Best-Of LeBlanc),2026-09,,sideboard,1,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,2,Honest Broker,sfd-155,Unit,Order,2,0,2
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Soaring Scout,ogn-216,Unit,Order,2,0,1
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,2,Watchful Sentry,ogn-096,Unit,Mind,2,0,1
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,1,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Harnessed Dragon,ogn-234,Unit,Order,8,2,6
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Rift Herald,unl-179,Unit,Order,8,1,7
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Baited Hook,ogn-242,Gear,Order,3,0,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,3,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,1,Deathgrip,sfd-163,Spell,Order,2,0,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,2,Hidden Blade,ogn-213,Spell,Order,2,1,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,2,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,main,1,"LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,0,4
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,battlefields,1,Dusk Rose Lab,unl-209,Battlefield,Colorless,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,2,Decree of Insight,ven-061,Spell,Mind,1,0,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,2,Decree of Unity,ven-131,Spell,Order,2,1,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,2,Salvage,ogn-224,Spell,Order,2,1,
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,1,"LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,0,4
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,2,Safety Inspector,unl-164,Unit,Order,5,1,3
+leblanc_gyatarina_ccs-iq5_1st,"Leblanc, Deceiver",GYATarina,"CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5",2026-09-19,1,sideboard,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,2,Honest Broker,sfd-155,Unit,Order,2,0,2
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Soaring Scout,ogn-216,Unit,Order,2,0,1
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,2,Watchful Sentry,ogn-096,Unit,Mind,2,0,1
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Harnessed Dragon,ogn-234,Unit,Order,8,2,6
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Rift Herald,unl-179,Unit,Order,8,1,7
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Baited Hook,ogn-242,Gear,Order,3,0,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,3,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,1,Deathgrip,sfd-163,Spell,Order,2,0,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,1,Hidden Blade,ogn-213,Spell,Order,2,1,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,main,2,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,battlefields,1,Dusk Rose Lab,unl-209,Battlefield,Colorless,,,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_mill-twistedtcg_rq-la_12th,"Leblanc, Deceiver",MILL TwistedTCG,Riftbound Regional Qualifier - Los Angeles,2026-09-26,12,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Soaring Scout,ogn-216,Unit,Order,2,0,1
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Watchful Sentry,ogn-096,Unit,Mind,2,0,1
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Harnessed Dragon,ogn-234,Unit,Order,8,2,6
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,2,Rift Herald,unl-179,Unit,Order,8,1,7
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,1,Atakhan,unl-170,Unit,Order,10,3,7
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Baited Hook,ogn-242,Gear,Order,3,0,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,2,Hidden Blade,ogn-213,Spell,Order,2,1,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,main,3,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,battlefields,1,Aspirant's Climb,ogn-276,Battlefield,Colorless,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,sideboard,1,Turn to Dust,unl-070,Spell,Mind,2,0,
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,sideboard,1,"LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,0,4
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,sideboard,3,"Ashe, Focused",unl-169,Unit,Order,5,1,4
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,sideboard,2,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_riuzake_rq-vancouver_21st,"Leblanc, Deceiver",Riuzake,"Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)",2026 (avant le ban du 2026-07-24 : Aspirant's Climb),21,sideboard,1,Atakhan,unl-170,Unit,Order,10,3,7
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,legend,1,"LeBlanc, Deceiver",unl-199,Legend,Mind|Order,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,champion,1,"LeBlanc, Fragmented",unl-172,Unit,Order,3,1,3
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Honest Broker,sfd-155,Unit,Order,2,0,2
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Soaring Scout,ogn-216,Unit,Order,2,0,1
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,2,Watchful Sentry,ogn-096,Unit,Mind,2,0,1
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Black Rose Dignitary,unl-152,Unit,Order,3,0,2
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,"Karthus, Eternal",ogn-236,Unit,Order,3,1,3
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Glasc Mixologist,sfd-165,Unit,Order,5,1,5
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,"Vi, Peacekeeper",unl-176,Unit,Order,5,1,5
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Ruined Rex,unl-067,Unit,Mind,6,1,6
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,1,Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,7
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Harnessed Dragon,ogn-234,Unit,Order,8,2,6
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Rift Herald,unl-179,Unit,Order,8,1,7
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Baited Hook,ogn-242,Gear,Order,3,0,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,3,Sacrifice,unl-173,Spell,Order,1,0,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,1,Hidden Blade,ogn-213,Spell,Order,2,1,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,main,2,Mirror Image,unl-200,Spell,Mind|Order,3,2,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,runes,4,Mind Rune,ogn-089,Rune,Mind,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,runes,8,Order Rune,ogn-214,Rune,Order,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,battlefields,1,Forbidding Waste,unl-210,Battlefield,Colorless,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,battlefields,1,Windswept Hillock,ogn-297,Battlefield,Colorless,,,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,sideboard,1,Bellows Breath,sfd-080,Spell,Mind,1,1,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,sideboard,1,Decree of Insight,ven-061,Spell,Mind,1,0,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,sideboard,2,Decree of Unity,ven-131,Spell,Order,2,1,
+leblanc_zidenberg_ccs-sunday5_7th,"Leblanc, Deceiver",CTCG Daniel Zidenberg,"CCS Sunday $5,000 Riftbound Event #5",2026-09-20,7,sideboard,3,Salvage,ogn-224,Spell,Order,2,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,legend,1,"Master Yi, Wuju Bladesman",ogs-019,Legend,Calm|Body,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,champion,1,"Master Yi, Tempered",unl-113,Unit,Body,4,0,4
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Lonely Poro,sfd-036,Unit,Calm,2,0,2
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Pit Rookie,ogn-136,Unit,Body,2,0,2
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Scuttle Crab,unl-053,Unit,Calm,2,0,0
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,First Mate,ogn-132,Unit,Body,3,0,3
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,"Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,6
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,2,Ruin Runner,sfd-105,Unit,Body,6,0,5
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,2,Zhonya's Hourglass,ogn-077,Gear,Calm,2,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Charm,ogn-043,Spell,Calm,1,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Defy,ogn-045,Spell,Calm,1,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,2,En Garde,ogn-046,Spell,Calm,1,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Punch First,sfd-097,Spell,Body,1,2,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,1,Sabotage,ogn-156,Spell,Body,1,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,3,Discipline,ogn-058,Spell,Calm,2,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,1,Not So Fast,sfd-045,Spell,Calm,2,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,1,Alpha Strike,unl-192,Spell,Calm|Body,3,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,2,Rampage,ven-083,Spell,Body,3,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,main,1,Onslaught,ven-081,Spell,Body,4,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,runes,7,Body Rune,ogn-126,Rune,Body,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,runes,5,Calm Rune,ogn-042,Rune,Calm,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,battlefields,1,Emperor's Dais,sfd-207,Battlefield,Colorless,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,battlefields,1,Grove of the God-Willow,ogn-280,Battlefield,Colorless,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,battlefields,1,Star Spring,unl-215,Battlefield,Colorless,,,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,sideboard,2,Decree of Focus,ven-040,Spell,Calm,1,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,sideboard,2,Decree of Strength,ven-085,Spell,Body,1,0,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,sideboard,2,Not So Fast,sfd-045,Spell,Calm,2,1,
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,sideboard,2,Disarming Rake,sfd-032,Unit,Calm,3,1,2
+yi-bladesman_ekpilot_rq-singapore_3rd,"Master Yi, Wuju Bladesman",Ekpilot,Riftbound Regional Qualifier - Singapore,2026-09-05,3rd,sideboard,2,Rampage,ven-083,Spell,Body,3,0,

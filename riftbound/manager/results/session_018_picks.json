@@ -1,0 +1,97 @@
+[
+ {
+  "id": "s018-1",
+  "seed": 207209,
+  "title": "Plan Gorica avec Sigil : victoire 8-5",
+  "note": "Akali commence. Même donne que les deux parties suivantes. Akali prend les deux battlefields au tour 5 (3-0), les reprend au tour 9 (6-2) et garde Windswept jusqu'à la fin pour gagner 8-5 au tour 13.",
+  "job": {
+   "label": "REF stock plan Gorica (Sigil) vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 18,
+  "plans_snapshot": "results/plans_session_018/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s018-2",
+  "seed": 207209,
+  "title": "Même donne sans plan, même Sigil : défaite 3-8",
+  "note": "Sans plan, l'IA présente aussi Sigil : seule la conduite de la partie change. LeBlanc prend les deux battlefields dès le tour 4 et ne les lâche qu'au tour 7 ; défaite 3-8 au tour 10. Sur la session, le plan vaut +13,5 ± 3,3 (cumul nouvelle version +13,0 ± 2,4).",
+  "job": {
+   "label": "stock sans plan vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": null,
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 18,
+  "plans_snapshot": "results/plans_session_018/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s018-3",
+  "seed": 207209,
+  "title": "Même donne avec Forgotten Monument : défaite 2-8",
+  "note": "Avec Forgotten Monument au lieu de Sigil, LeBlanc tient son battlefield presque toute la partie et Akali ne marque que 2 points ; défaite 2-8 au tour 14. Sur la session, Forgotten Monument coûte −9,0 ± 3,2 points.",
+  "job": {
+   "label": "stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept",
+   "akali_bfs": [
+    "Forgotten Monument"
+   ]
+  },
+  "session": 18,
+  "plans_snapshot": "results/plans_session_018/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s018-4",
+  "seed": 207201,
+  "title": "Défaite type de la référence : retour à 5-4 puis 5-8",
+  "note": "Akali commence mais LeBlanc mène 0-4 au tour 6. Akali reprend les deux battlefields au tour 7 et passe devant 5-4 au tour 11, puis LeBlanc les reprend au tour 12 et gagne 5-8 au tour 14.",
+  "job": {
+   "label": "REF stock plan Gorica (Sigil) vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 18,
+  "plans_snapshot": "results/plans_session_018/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]

@@ -1,0 +1,9 @@
+moteur figé (44d6a1b695) dans /mnt/attach/project-files/riftbound/manager/results/engine_session_007, plans.py 8b2147fcef
+REF stock plan Gorica vs Hook tempo Windswept            45.5% ±0.025 n=400 graines 202800+ err=0 (966s)
+stock sans plan vs Hook tempo Windswept                  38.5% ±0.024 n=400 graines 202800+ err=0 (858s)
+stock plan Gorica agressif vs Hook tempo Windswept       39.5% ±0.024 n=400 graines 202800+ err=0 (920s)
+stock plan Gorica vs Hook tempo                          48.2% ±0.025 n=400 graines 202800+ err=0 (1064s)
+  apparié vs 'REF stock plan Gorica vs Hook tempo Windswept': stock sans plan vs Hook tempo Windswept: -7.0 ± 3.1 pts (n=400)
+  apparié vs 'REF stock plan Gorica vs Hook tempo Windswept': stock plan Gorica agressif vs Hook tempo Windswept: -6.0 ± 3.0 pts (n=400)
+  apparié vs 'REF stock plan Gorica vs Hook tempo Windswept': stock plan Gorica vs Hook tempo: +2.8 ± 2.3 pts (n=400)
+SESSION 7 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_007.json

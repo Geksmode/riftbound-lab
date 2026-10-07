@@ -1,0 +1,46 @@
+# legend: Akali, Rogue Assassin
+# player: HXN TEMPETE一些雪
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-26
+# placement: 7
+# url: https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-314752
+# note: deux résumés de recherche divergent sur quelques quantités (Scuttle Crab, Mournful Witness, Long Sword, Sterak's Gage) ; version retenue = celle qui fait 40 cartes
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+2 Mischievous Marai
+1 Mournful Witness
+2 Scuttle Crab
+3 Kai'Sa, Survivor
+3 Stellacorn Herder
+1 Blitzcrank, Impassive
+1 Darius, Trifarian
+1 Ferrous Forerunner
+3 Astral Heron
+2 Long Sword
+3 Zhonya's Hourglass
+1 Sterak's Gage
+3 Defy
+3 Shuriken Flip
+1 Block
+3 Discipline
+3 Falling Star
+1 Not So Fast
+2 Back Off
+[runes]
+6 Calm Rune
+6 Fury Rune
+[battlefields]
+1 Sigil of the Storm
+1 Void Gate
+1 Forgotten Monument
+[sideboard]
+1 Decree of Focus
+1 Against the Odds
+1 Not So Fast
+2 Disarming Rake
+1 Akali, Silent
+2 Irelia, Fervent
+2 Ferrous Forerunner

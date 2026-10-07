@@ -1,0 +1,170 @@
+[
+ {
+  "id": "s006-1",
+  "seed": 202729,
+  "title": "GL face à Windswept : remontée de 2-7 à 8-7",
+  "note": "Référence de la session (GL, LeBlanc commence). LeBlanc mène 7-2 au tour 11 en tenant Sigil et en reprenant Windswept ; Akali reprend les deux battlefields au tour 12, les tient aux tours 14 et 16 et gagne 8-7 sur le point final de Windswept.",
+  "job": {
+   "label": "REF GL vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 6,
+  "plans_snapshot": "results/plans_session_006/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s006-2",
+  "seed": 202448,
+  "title": "Même donne, GL : défaite 4-8",
+  "note": "Même donne que la partie suivante (Akali commence). LeBlanc prend les deux battlefields au tour 4 et tient Sigil presque toute la partie ; Akali ne garde que Windswept par moments et perd 4-8 au tour 12.",
+  "job": {
+   "label": "REF GL vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 6,
+  "plans_snapshot": "results/plans_session_006/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s006-3",
+  "seed": 202448,
+  "title": "Même donne, GD (−3 Defy) : victoire 8-7",
+  "note": "Même donne. Même départ 0-2 au tour 4, mais Akali reprend Windswept au tour 5 puis Sigil au tour 7 ; les deux camps s'échangent les battlefields jusqu'au tour 12 et Akali gagne 8-7 au tour 13. La question fixée à l'avance (GL − GD) donne −6,8 ± 3,3 : la piste de la session 5 est réfutée.",
+  "job": {
+   "label": "GD vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 6,
+  "plans_snapshot": "results/plans_session_006/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s006-4",
+  "seed": 202641,
+  "title": "G2 face à Windswept : victoire 8-7 en 17 tours",
+  "note": "Donne où GL perd et G2 gagne. Partie longue où chacun tient un battlefield : Akali garde Windswept, LeBlanc garde Sigil ; à 7-7 au tour 17, Akali tient Windswept et prend Sigil pour le point final. Sur trois sessions, G2 − stock vaut +0,4 ± 1,9 : les listes se valent.",
+  "job": {
+   "label": "G2 vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 6,
+  "plans_snapshot": "results/plans_session_006/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]

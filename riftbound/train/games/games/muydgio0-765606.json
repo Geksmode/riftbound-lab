@@ -1,0 +1,964 @@
+{
+  "bf": null,
+  "bfs": [
+    "Forbidding Waste",
+    "Star Spring"
+  ],
+  "first": null,
+  "id": "muydgio0-765606",
+  "level": 3,
+  "log": [
+    "Tour 1, à Viktor de jouer (score 0-0)",
+    "  Tu pioches Imperial Decree",
+    "Viktor active Viktor, Herald of the Arcane: Recruit",
+    "Résolution : Viktor, Herald of the Arcane: Recruit",
+    "Tour 2, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à la base",
+    "Tour 3, à Viktor de jouer (score 0-0)",
+    "  Tu pioches Dragon Form",
+    "Viktor joue Escaped Grayback — à la base",
+    "Viktor déplace Recruit vers Star Spring",
+    "  Recruit va de la base à Star Spring",
+    "Showdown à Star Spring, initiative Viktor",
+    "  Viktor prend le contrôle de Star Spring",
+    "Viktor +1 point (conquête de Star Spring) → 1",
+    "Tour 4, à LeBlanc de jouer (score 1-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace LeBlanc, Fragmented vers Star Spring",
+    "  LeBlanc, Fragmented va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 4 contre défenseurs 1",
+    "  Recruit meurt",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "LeBlanc joue Deathgrip — cible LeBlanc, Fragmented",
+    "Résolution : Deathgrip",
+    "  LeBlanc pioche une carte",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Star Spring",
+    "LeBlanc joue Watchful Sentry — à la base",
+    "Tour 5, à Viktor de jouer (score 1-1)",
+    "  Tu pioches Grand Strategem",
+    "Viktor active Viktor, Herald of the Arcane: Recruit",
+    "Résolution : Viktor, Herald of the Arcane: Recruit",
+    "  Recruit meurt",
+    "Viktor active Escaped Grayback: Empower — victim=264",
+    "Résolution : Escaped Grayback: Empower",
+    "  Escaped Grayback is empowered",
+    "Viktor joue Eclipse — cible LeBlanc, Fragmented",
+    "Résolution : Eclipse",
+    "  P0 predicts 1: recycles 1",
+    "Viktor déplace Escaped Grayback vers Star Spring",
+    "  Escaped Grayback va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant Viktor",
+    "  Dégâts de combat : attaquants 5 contre défenseurs 3",
+    "  LeBlanc, Fragmented meurt",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  Viktor prend le contrôle de Star Spring",
+    "Viktor +1 point (conquête de Star Spring) → 2",
+    "Tour 6, à LeBlanc de jouer (score 2-1)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Hidden Blade — cible Escaped Grayback",
+    "Résolution : Hidden Blade",
+    "  Escaped Grayback meurt",
+    "  Tu pioches Wages of Pain",
+    "  Tu pioches Singularity",
+    "  Viktor perd le contrôle de Star Spring",
+    "LeBlanc déplace Watchful Sentry vers Star Spring",
+    "  Watchful Sentry va de la base à Star Spring",
+    "Showdown à Star Spring, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 2",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Watchful Sentry à Star Spring",
+    "LeBlanc joue Honest Broker — à la base",
+    "Tour 7, à Viktor de jouer (score 2-2)",
+    "  Tu pioches Cull the Weak",
+    "Viktor joue Cull the Weak",
+    "Résolution : Cull the Weak",
+    "  Watchful Sentry meurt",
+    "  Déclenchement sur la chaîne : Deathknell Watchful Sentry",
+    "Résolution : Deathknell Watchful Sentry",
+    "  LeBlanc pioche une carte",
+    "Viktor active Viktor, Herald of the Arcane: Recruit",
+    "Résolution : Viktor, Herald of the Arcane: Recruit",
+    "Viktor joue Wages of Pain — cible Watchful Sentry",
+    "Résolution : Wages of Pain",
+    "  Watchful Sentry subit 3 dégât(s) (might 1)",
+    "  P0 plays a Gold token at base",
+    "  Watchful Sentry meurt",
+    "  LeBlanc perd le contrôle de Star Spring",
+    "  Déclenchement sur la chaîne : Deathknell Watchful Sentry",
+    "Résolution : Deathknell Watchful Sentry",
+    "  LeBlanc pioche une carte",
+    "Tour 8, à LeBlanc de jouer (score 2-2)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Honest Broker vers Star Spring",
+    "  Honest Broker va de la base à Star Spring",
+    "Showdown à Star Spring, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 3",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Honest Broker à Star Spring",
+    "LeBlanc joue Black Rose Dignitary — à la base",
+    "Tour 9, à Viktor de jouer (score 2-3)",
+    "  Tu pioches Wages of Pain",
+    "Viktor joue Thousand-Tailed Watcher — à la base, acc=True",
+    "  Déclenchement sur la chaîne : Thousand-Tailed Watcher",
+    "Résolution : Thousand-Tailed Watcher",
+    "Viktor déplace Thousand-Tailed Watcher vers Star Spring",
+    "  Thousand-Tailed Watcher va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant Viktor",
+    "  Dégâts de combat : attaquants 7 contre défenseurs 2",
+    "  Honest Broker meurt",
+    "  Honest Broker meurt",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "  Viktor prend le contrôle de Star Spring",
+    "Viktor +1 point (conquête de Star Spring) → 3",
+    "Viktor déplace Recruit vers Forbidding Waste",
+    "  Recruit va de la base à Forbidding Waste",
+    "Showdown à Forbidding Waste, initiative Viktor",
+    "  Viktor prend le contrôle de Forbidding Waste",
+    "Viktor +1 point (conquête de Forbidding Waste) → 4",
+    "Viktor cache une carte à Star Spring",
+    "Tour 10, à LeBlanc de jouer (score 4-3)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Harnessed Dragon — à la base",
+    "  Déclenchement sur la chaîne : Harnessed Dragon",
+    "Viktor joue Temporal Breach (carte cachée révélée) — cible Thousand-Tailed Watcher",
+    "Résolution : Temporal Breach",
+    "P0 plays Thousand-Tailed Watcher from banish (loc=1 free=True)",
+    "  Déclenchement sur la chaîne : Thousand-Tailed Watcher",
+    "Résolution : Thousand-Tailed Watcher",
+    "Résolution : Harnessed Dragon",
+    "LeBlanc déplace Black Rose Dignitary vers Forbidding Waste",
+    "  Black Rose Dignitary va de la base à Forbidding Waste",
+    "COMBAT à Forbidding Waste, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 2 contre défenseurs 0",
+    "  Recruit meurt",
+    "  LeBlanc prend le contrôle de Forbidding Waste",
+    "LeBlanc +1 point (conquête de Forbidding Waste) → 4",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Black Rose Dignitary à Forbidding Waste",
+    "Tour 11, à Viktor de jouer (score 4-4)",
+    "Viktor +1 point (tenue de Star Spring) → 5",
+    "  Tu pioches Sprite Fountain",
+    "Viktor joue Viktor, Leader (zone champion) — à la base",
+    "Viktor joue Sprite Fountain — à la base",
+    "  Déclenchement sur la chaîne : Sprite Fountain",
+    "Résolution : Sprite Fountain",
+    "  P0 plays a Sprite token at base ready",
+    "Viktor active Viktor, Herald of the Arcane: Recruit",
+    "Résolution : Viktor, Herald of the Arcane: Recruit",
+    "Viktor déplace Sprite vers Forbidding Waste",
+    "  Sprite va de la base à Forbidding Waste",
+    "COMBAT à Forbidding Waste, attaquant Viktor",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 4",
+    "  Black Rose Dignitary meurt",
+    "  Sprite meurt",
+    "  Déclenchement sur la chaîne : Viktor, Leader",
+    "  Déclenchement sur la chaîne : Deathknell Black Rose Dignitary",
+    "Résolution : Deathknell Black Rose Dignitary",
+    "Résolution : Viktor, Leader",
+    "Tour 12, à LeBlanc de jouer (score 5-4)",
+    "  Déclenchement sur la chaîne : Temporary Black Rose Dignitary",
+    "Résolution : Temporary Black Rose Dignitary",
+    "  Black Rose Dignitary meurt",
+    "  Déclenchement sur la chaîne : Deathknell Black Rose Dignitary",
+    "Résolution : Deathknell Black Rose Dignitary",
+    "  LeBlanc perd le contrôle de Forbidding Waste",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Harnessed Dragon — à la base",
+    "  Déclenchement sur la chaîne : Harnessed Dragon",
+    "Résolution : Harnessed Dragon",
+    "  Thousand-Tailed Watcher meurt",
+    "  Déclenchement sur la chaîne : Viktor, Leader",
+    "Résolution : Viktor, Leader",
+    "  Viktor perd le contrôle de Star Spring",
+    "LeBlanc déplace Harnessed Dragon vers Forbidding Waste",
+    "  Harnessed Dragon va de la base à Forbidding Waste",
+    "Showdown à Forbidding Waste, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Forbidding Waste",
+    "LeBlanc +1 point (conquête de Forbidding Waste) → 5",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Harnessed Dragon à Forbidding Waste",
+    "LeBlanc joue Soaring Scout — à Forbidding Waste",
+    "Tour 13, à Viktor de jouer (score 5-5)",
+    "  Déclenchement sur la chaîne : Temporary Sprite Fountain",
+    "Résolution : Temporary Sprite Fountain",
+    "  Sprite Fountain meurt",
+    "  Déclenchement sur la chaîne : Deathknell Sprite Fountain",
+    "Résolution : Deathknell Sprite Fountain",
+    "  P0 plays a Sprite token at base ready",
+    "  Tu pioches Hidden Blade",
+    "Viktor joue Singularity — cible Harnessed Dragon et Harnessed Dragon",
+    "Résolution : Singularity",
+    "  Harnessed Dragon subit 6 dégât(s) (might 6)",
+    "  Harnessed Dragon subit 6 dégât(s) (might 6)",
+    "  Harnessed Dragon meurt",
+    "  Harnessed Dragon meurt",
+    "Viktor déplace Recruit vers Star Spring",
+    "  Recruit va de la base à Star Spring",
+    "Showdown à Star Spring, initiative Viktor",
+    "  Viktor prend le contrôle de Star Spring",
+    "Viktor +1 point (conquête de Star Spring) → 6",
+    "Viktor déplace Recruit vers Star Spring",
+    "  Recruit va de la base à Star Spring",
+    "Viktor déplace Recruit vers Star Spring",
+    "  Recruit va de la base à Star Spring",
+    "Viktor active Viktor, Herald of the Arcane: Recruit",
+    "Résolution : Viktor, Herald of the Arcane: Recruit",
+    "Viktor cache une carte à Star Spring",
+    "Tour 14, à LeBlanc de jouer (score 6-5)",
+    "  Déclenchement sur la chaîne : Temporary Harnessed Dragon",
+    "Résolution : Temporary Harnessed Dragon",
+    "  Harnessed Dragon meurt",
+    "LeBlanc +1 point (tenue de Forbidding Waste) → 6",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Soaring Scout à Forbidding Waste",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Glasc Mixologist — à Forbidding Waste",
+    "LeBlanc déplace Soaring Scout, Soaring Scout vers la base",
+    "  Soaring Scout va de Forbidding Waste à la base",
+    "  Soaring Scout va de Forbidding Waste à la base",
+    "LeBlanc joue Soaring Scout — à Forbidding Waste",
+    "Tour 15, à Viktor de jouer (score 6-6)",
+    "  Déclenchement sur la chaîne : Temporary Sprite",
+    "Résolution : Temporary Sprite",
+    "  Sprite meurt",
+    "  Déclenchement sur la chaîne : Viktor, Leader",
+    "Résolution : Viktor, Leader",
+    "Viktor +1 point (tenue de Star Spring) → 7",
+    "  Tu pioches Stupefy",
+    "Viktor joue Stupefy — cible Soaring Scout",
+    "Résolution : Stupefy",
+    "  Tu pioches Cull the Weak",
+    "Viktor joue Wages of Pain — cible Glasc Mixologist",
+    "Résolution : Wages of Pain",
+    "  Glasc Mixologist subit 3 dégât(s) (might 5)",
+    "  P0 plays a Gold token at base",
+    "Viktor joue Cull the Weak",
+    "Résolution : Cull the Weak",
+    "  Recruit meurt",
+    "  Soaring Scout meurt",
+    "  Déclenchement sur la chaîne : Deathknell Soaring Scout",
+    "Résolution : Deathknell Soaring Scout",
+    "Viktor déplace Viktor, Leader vers Forbidding Waste",
+    "  Viktor, Leader va de la base à Forbidding Waste",
+    "COMBAT à Forbidding Waste, attaquant Viktor",
+    "  Dégâts de combat : attaquants 4 contre défenseurs 6",
+    "  Viktor, Leader meurt",
+    "  Glasc Mixologist meurt",
+    "  Soaring Scout meurt",
+    "  Déclenchement sur la chaîne : Deathknell Glasc Mixologist",
+    "  Déclenchement sur la chaîne : Deathknell Soaring Scout",
+    "Résolution : Deathknell Soaring Scout",
+    "Résolution : Deathknell Glasc Mixologist",
+    "LeBlanc joue LeBlanc, Fragmented depuis la défausse — à la base, free=True",
+    "Viktor déplace Recruit vers Forbidding Waste",
+    "  Recruit va de la base à Forbidding Waste",
+    "Showdown à Forbidding Waste, initiative Viktor",
+    "  Viktor prend le contrôle de Forbidding Waste",
+    "Viktor +1 point (conquête de Forbidding Waste (final point)) → 8",
+    "VICTOIRE de Viktor"
+  ],
+  "mine": "{\"name\":\"Viktor\",\"legend\":\"Viktor, Herald of the Arcane\",\"champion\":\"Viktor, Leader\",\"main\":[\"Dragon Form\",\"Thousand-Tailed Watcher\",\"Thousand-Tailed Watcher\",\"Bellows Breath\",\"Bellows Breath\",\"Eclipse\",\"Eclipse\",\"Eclipse\",\"Escaped Grayback\",\"Escaped Grayback\",\"Singularity\",\"Singularity\",\"Vi, Peacekeeper\",\"Vi, Peacekeeper\",\"Carrion Dredger\",\"Carrion Dredger\",\"Carrion Dredger\",\"Cull the Weak\",\"Cull the Weak\",\"Cull the Weak\",\"Hidden Blade\",\"Hidden Blade\",\"Hidden Blade\",\"Honest Broker\",\"Honest Broker\",\"Honest Broker\",\"Imperial Decree\",\"Imperial Decree\",\"Imperial Decree\",\"Sprite Fountain\",\"Sprite Fountain\",\"Sprite Fountain\",\"Stupefy\",\"Stupefy\",\"Stupefy\",\"Wages of Pain\",\"Wages of Pain\",\"Wages of Pain\",\"Xin Zhao, Vigilant\",\"Xin Zhao, Vigilant\",\"Xin Zhao, Vigilant\",\"Decree of Insight\",\"Decree of Unity\",\"Grand Strategem\",\"Temporal Breach\",\"Temporal Breach\",\"Salvage\",\"Salvage\",\"Salvage\"],\"runes\":[\"Mind Rune\",\"Mind Rune\",\"Mind Rune\",\"Mind Rune\",\"Mind Rune\",\"Mind Rune\",\"Order Rune\",\"Order Rune\",\"Order Rune\",\"Order Rune\",\"Order Rune\",\"Order Rune\"],\"battlefields\":[\"Forbidding Waste\",\"Treasure Hoard\",\"Abandoned Hall\"]}",
+  "moves": [
+    [
+      "ans",
+      [
+        3,
+        2
+      ],
+      "mulligan : Decree of Insight, Salvage",
+      0
+    ],
+    [
+      "act",
+      1,
+      "Recruit : Viktor, Herald of the Arcane (1 énergie, épuise)",
+      1
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      1
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      1
+    ],
+    [
+      "act",
+      5,
+      "joue Escaped Grayback (à la base)",
+      3
+    ],
+    [
+      "act",
+      4,
+      "déplace Recruit vers Star Spring",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      15,
+      "Recruit : Viktor, Herald of the Arcane (1 énergie, épuise)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      18,
+      "Empower : Escaped Grayback (gratuit)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      1,
+      "joue Eclipse (cible LeBlanc, Fragmented)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "ans",
+      1,
+      "predict_recycle : oui",
+      5
+    ],
+    [
+      "act",
+      6,
+      "déplace Escaped Grayback vers Star Spring",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      19,
+      "joue Cull the Weak",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      12,
+      "Recruit : Viktor, Herald of the Arcane (1 énergie, épuise)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      8,
+      "joue Wages of Pain (cible Watchful Sentry)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      6,
+      "joue Thousand-Tailed Watcher (à la base)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      5,
+      "déplace Thousand-Tailed Watcher vers Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      4,
+      "déplace Recruit vers Forbidding Waste",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      3,
+      "cache Temporal Breach à Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      1,
+      "joue Temporal Breach (cible Thousand-Tailed Watcher)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      16,
+      "joue Viktor, Leader (à la base)",
+      11
+    ],
+    [
+      "act",
+      8,
+      "joue Sprite Fountain (à la base)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      1,
+      "Recruit : Viktor, Herald of the Arcane (1 énergie, épuise)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      3,
+      "déplace Sprite vers Forbidding Waste",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      11,
+      "joue Singularity (cible Harnessed Dragon et Harnessed Dragon)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      14,
+      "déplace Recruit vers Star Spring",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      15,
+      "déplace Recruit vers Star Spring",
+      13
+    ],
+    [
+      "act",
+      14,
+      "déplace Recruit vers Star Spring",
+      13
+    ],
+    [
+      "act",
+      3,
+      "Recruit : Viktor, Herald of the Arcane (1 énergie, épuise)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      5,
+      "déplace Sprite vers Forbidding Waste",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      2,
+      "cache Hidden Blade à Star Spring",
+      13
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      16,
+      "joue Stupefy (cible Soaring Scout)",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      11,
+      "joue Wages of Pain (cible Glasc Mixologist)",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      9,
+      "joue Cull the Weak",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "ans",
+      4,
+      "sacrifice : Recruit (base)",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      7,
+      "déplace Viktor, Leader vers Forbidding Waste",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ],
+    [
+      "act",
+      7,
+      "déplace Recruit vers Forbidding Waste",
+      15
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ]
+  ],
+  "names": [
+    "Viktor",
+    "LeBlanc"
+  ],
+  "opp": "leblanc_gyatarina_ccs-iq5_1st",
+  "pts": [
+    8,
+    6
+  ],
+  "result": {
+    "pts": [
+      8,
+      6
+    ],
+    "turn": 15,
+    "winner": 0
+  },
+  "seed": 765606,
+  "started": "2026-10-07T17:18:55.872Z",
+  "turn": 15,
+  "updated": "2026-10-07T17:29:30.772Z",
+  "ver": "v11",
+  "whoFirst": 0
+}

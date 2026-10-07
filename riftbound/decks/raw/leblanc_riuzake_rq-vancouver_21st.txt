@@ -1,0 +1,39 @@
+# legend: Leblanc, Deceiver
+# player: Riuzake
+# event: Riftbound Regional Qualifier - Vancouver (Best-Of LeBlanc, 10-2-1)
+# date: 2026 (avant le ban du 2026-07-24 : Aspirant's Climb)
+# placement: 21
+# url: https://mobalytics.gg/riftbound/decks/leblanc-deceiver-vancouver-regional-qualifier-best-of-riuzake
+[legend]
+1 LeBlanc, Deceiver
+[champion]
+1 LeBlanc, Fragmented
+[main]
+3 Soaring Scout
+3 Watchful Sentry
+3 Black Rose Dignitary
+3 Karthus, Eternal
+3 Glasc Mixologist
+3 Vi, Peacekeeper
+3 Ruined Rex
+1 Thousand-Tailed Watcher
+3 Harnessed Dragon
+2 Rift Herald
+1 Atakhan
+3 Baited Hook
+3 Sacrifice
+2 Hidden Blade
+3 Mirror Image
+[runes]
+4 Mind Rune
+8 Order Rune
+[battlefields]
+1 Aspirant's Climb
+1 Star Spring
+1 Windswept Hillock
+[sideboard]
+1 Turn to Dust
+1 LeBlanc, Everywhere At Once
+3 Ashe, Focused
+2 Thousand-Tailed Watcher
+1 Atakhan

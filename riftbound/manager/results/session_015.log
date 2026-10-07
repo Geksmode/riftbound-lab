@@ -1,0 +1,7 @@
+moteur figé (867f1dd6b0) dans /mnt/attach/project-files/riftbound/manager/results/engine_session_015, plans.py 8b2147fcef
+REF stock plan Gorica vs Deathknell                      49.2% ±0.025 n=400 graines 206000+ err=0 (1013s)
+stock plan Gorica agressif vs Deathknell                 44.5% ±0.025 n=400 graines 206000+ err=0 (956s)
+stock sans plan vs Deathknell                            37.5% ±0.024 n=400 graines 206000+ err=0 (900s)
+  apparié vs 'REF stock plan Gorica vs Deathknell': stock plan Gorica agressif vs Deathknell: -4.8 ± 3.0 pts (n=400)
+  apparié vs 'REF stock plan Gorica vs Deathknell': stock sans plan vs Deathknell: -11.8 ± 3.3 pts (n=400)
+SESSION 15 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_015.json

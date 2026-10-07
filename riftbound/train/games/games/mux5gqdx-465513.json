@@ -1,0 +1,984 @@
+{
+  "bf": null,
+  "bfs": [
+    "Void Gate",
+    "Star Spring"
+  ],
+  "first": null,
+  "id": "mux5gqdx-465513",
+  "level": 3,
+  "log": [
+    "Tour 1, à Akali de jouer (score 0-0)",
+    "  Tu pioches Sterak's Gage",
+    "Akali joue Mischievous Marai — à la base",
+    "Tour 2, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à la base",
+    "Tour 3, à Akali de jouer (score 0-0)",
+    "  Tu pioches Mournful Witness",
+    "Akali joue Akali, Silent — à la base",
+    "Tour 4, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "LeBlanc déplace LeBlanc, Fragmented vers Void Gate",
+    "  LeBlanc, Fragmented va de la base à Void Gate",
+    "Showdown à Void Gate, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Void Gate",
+    "LeBlanc +1 point (conquête de Void Gate) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Void Gate",
+    "LeBlanc cache une carte à Void Gate",
+    "Tour 5, à Akali de jouer (score 0-1)",
+    "  Tu pioches Stellacorn Herder",
+    "Akali joue Stellacorn Herder — à la base",
+    "Akali déplace Mischievous Marai vers Star Spring",
+    "  Mischievous Marai va de la base à Star Spring",
+    "Showdown à Star Spring, initiative Akali",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali +1 point (conquête de Star Spring) → 1",
+    "Tour 6, à LeBlanc de jouer (score 1-1)",
+    "  Déclenchement sur la chaîne : Temporary LeBlanc, Fragmented",
+    "Résolution : Temporary LeBlanc, Fragmented",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "LeBlanc +1 point (tenue de Void Gate) → 2",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Void Gate",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace LeBlanc, Fragmented vers la base",
+    "  LeBlanc, Fragmented va de Void Gate à la base",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "LeBlanc déplace Karthus, Eternal vers Star Spring",
+    "  Karthus, Eternal va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 2",
+    "  Mischievous Marai meurt",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 3",
+    "Tour 7, à Akali de jouer (score 1-3)",
+    "  Tu pioches Discipline",
+    "Akali déplace Akali, Silent vers Star Spring",
+    "  Akali, Silent va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Akali, Silent",
+    "Résolution : Akali, Silent",
+    "COMBAT à Star Spring, attaquant Akali",
+    "  Dégâts de combat : attaquants 6 contre défenseurs 3",
+    "  Karthus, Eternal meurt",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali +1 point (conquête de Star Spring) → 2",
+    "Akali joue Shuriken Flip — cible LeBlanc, Fragmented, vers la base",
+    "Résolution : Shuriken Flip",
+    "  LeBlanc, Fragmented subit 3 dégât(s) (might 3)",
+    "  Akali, Silent va de Star Spring à la base",
+    "  LeBlanc, Fragmented meurt",
+    "  LeBlanc perd le contrôle de Void Gate",
+    "  Akali perd le contrôle de Star Spring",
+    "  La carte cachée Hidden Blade à Void Gate part à la défausse",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Akali déplace Stellacorn Herder vers Void Gate",
+    "  Stellacorn Herder va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Lonely Poro",
+    "Showdown à Void Gate, initiative Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Back Off",
+    "Akali joue Lonely Poro — à la base",
+    "Akali joue Mournful Witness — à la base",
+    "Tour 8, à LeBlanc de jouer (score 2-3)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Karthus, Eternal, LeBlanc, Fragmented vers Star Spring",
+    "  Karthus, Eternal va de la base à Star Spring",
+    "  LeBlanc, Fragmented va de la base à Star Spring",
+    "Showdown à Star Spring, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 4",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "LeBlanc joue Deathgrip",
+    "Résolution : Deathgrip",
+    "  LeBlanc pioche une carte",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Star Spring",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "Tour 9, à Akali de jouer (score 2-4)",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali déplace Stellacorn Herder vers Star Spring",
+    "  Stellacorn Herder va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Kai'Sa, Survivor",
+    "COMBAT à Star Spring, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Star Spring à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Kai'Sa, Survivor",
+    "Akali déplace Akali, Silent vers Star Spring",
+    "  Akali, Silent va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Akali, Silent",
+    "Résolution : Akali, Silent",
+    "COMBAT à Star Spring, attaquant Akali",
+    "Akali joue Discipline — cible Akali, Silent",
+    "Résolution : Discipline",
+    "  Tu pioches Astral Heron",
+    "Akali joue Sterak's Gage — à la base",
+    "  Déclenchement sur la chaîne : Quick-Draw Sterak's Gage",
+    "Résolution : Quick-Draw Sterak's Gage",
+    "  Sterak's Gage est attaché(e) à Akali, Silent",
+    "  Dégâts de combat : attaquants 11 contre défenseurs 9",
+    "  LeBlanc, Fragmented meurt",
+    "  Karthus, Eternal meurt",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali +1 point (conquête de Star Spring) → 3",
+    "Akali déplace Mournful Witness, Lonely Poro vers Void Gate",
+    "  Mournful Witness va de la base à Void Gate",
+    "  Lonely Poro va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 4",
+    "Tour 10, à LeBlanc de jouer (score 4-4)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Karthus, Eternal vers Void Gate",
+    "  Karthus, Eternal va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "LeBlanc joue Vi, Peacekeeper — à Void Gate",
+    "  Déclenchement sur la chaîne : Vi",
+    "Résolution : Vi",
+    "  Lonely Poro est étourdi(e)",
+    "Akali joue Back Off — cible Vi, Peacekeeper",
+    "Résolution : Back Off",
+    "  Vi, Peacekeeper est étourdi(e)",
+    "  Tu pioches Blitzcrank, Impassive",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 2",
+    "  Lonely Poro meurt",
+    "  Déclenchement sur la chaîne : Deathknell Lonely Poro",
+    "Résolution : Deathknell Lonely Poro",
+    "  Déclenchement sur la chaîne : Mournful Witness",
+    "Résolution : Mournful Witness",
+    "Tour 11, à Akali de jouer (score 4-4)",
+    "Akali +1 point (tenue de Void Gate) → 5",
+    "Akali +1 point (tenue de Star Spring) → 6",
+    "  Tu pioches Stellacorn Herder",
+    "Akali déplace Mournful Witness vers la base",
+    "  Mournful Witness va de Void Gate à la base",
+    "  Akali perd le contrôle de Void Gate",
+    "Akali déplace Stellacorn Herder vers Void Gate",
+    "  Stellacorn Herder va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Falling Star",
+    "Showdown à Void Gate, initiative Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Shuriken Flip",
+    "Akali joue Astral Heron — à Star Spring",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Star Spring",
+    "Résolution : Star Spring",
+    "  Akali, Silent va de Star Spring à la base",
+    "Résolution : Astral Heron",
+    "Akali joue Falling Star — cible Karthus, Eternal et Karthus, Eternal",
+    "Résolution : Falling Star",
+    "  Karthus, Eternal subit 3 dégât(s) (might 3)",
+    "  Karthus, Eternal subit 3 dégât(s) (might 3)",
+    "  Karthus, Eternal meurt",
+    "Akali cache une carte à Star Spring",
+    "Tour 12, à LeBlanc de jouer (score 6-4)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Vi, Peacekeeper vers Void Gate",
+    "  Vi, Peacekeeper va de la base à Void Gate",
+    "Showdown à Void Gate, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Void Gate",
+    "LeBlanc +1 point (conquête de Void Gate) → 5",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Vi, Peacekeeper à Void Gate",
+    "LeBlanc joue Thousand-Tailed Watcher — à Void Gate",
+    "  Déclenchement sur la chaîne : Thousand-Tailed Watcher",
+    "Résolution : Thousand-Tailed Watcher",
+    "Tour 13, à Akali de jouer (score 6-5)",
+    "Akali +1 point (tenue de Star Spring) → 7",
+    "  Tu pioches Astral Heron",
+    "Akali joue Blitzcrank, Impassive — à Star Spring",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Thousand-Tailed Watcher va de Void Gate à Star Spring",
+    "Résolution : Astral Heron",
+    "COMBAT à Star Spring, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 7 contre défenseurs 12",
+    "  Thousand-Tailed Watcher meurt",
+    "  Blitzcrank, Impassive meurt",
+    "Akali déplace Akali, Silent vers Star Spring",
+    "  Akali, Silent va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Akali, Silent",
+    "Résolution : Akali, Silent",
+    "Akali joue Shuriken Flip — cible Vi, Peacekeeper, vers Void Gate",
+    "Résolution : Shuriken Flip",
+    "  Vi, Peacekeeper subit 3 dégât(s) (might 5)",
+    "  Akali, Silent va de Star Spring à Void Gate",
+    "  Déclenchement sur la chaîne : Akali, Silent",
+    "Résolution : Akali, Silent",
+    "COMBAT à Void Gate, attaquant Akali",
+    "  Dégâts de combat : attaquants 11 contre défenseurs 10",
+    "  Vi, Peacekeeper meurt",
+    "  Vi, Peacekeeper meurt",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate (final point)) → 8",
+    "VICTOIRE de Akali"
+  ],
+  "moves": [
+    [
+      "ans",
+      [
+        2,
+        0
+      ],
+      "mulligan : Darius, Trifarian, Not So Fast",
+      0
+    ],
+    [
+      "act",
+      1,
+      "joue Mischievous Marai (à la base)",
+      1
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      1
+    ],
+    [
+      "act",
+      3,
+      "joue Akali, Silent (à la base)",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      12,
+      "joue Stellacorn Herder (à la base)",
+      5
+    ],
+    [
+      "act",
+      12,
+      "déplace Mischievous Marai vers Star Spring",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      21,
+      "déplace Akali, Silent vers Star Spring",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      6,
+      "joue Shuriken Flip (cible LeBlanc, Fragmented, vers la base)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      12,
+      "déplace Stellacorn Herder vers Void Gate",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      4,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      6,
+      "joue Lonely Poro (à la base)",
+      7
+    ],
+    [
+      "act",
+      3,
+      "joue Mournful Witness (à la base)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      31,
+      "déplace Stellacorn Herder vers Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      10,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      32,
+      "déplace Akali, Silent vers Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      2,
+      "joue Discipline (cible Akali, Silent)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      1,
+      "joue Sterak's Gage (à la base)",
+      9
+    ],
+    [
+      "ans",
+      0,
+      "equip_target : Akali, Silent (Star Spring)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      24,
+      "déplace Lonely Poro vers Void Gate",
+      9
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      23,
+      "déplace Mournful Witness, Lonely Poro vers Void Gate",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      2,
+      "joue Back Off (cible Vi, Peacekeeper)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      36,
+      "déplace Mournful Witness vers la base",
+      11
+    ],
+    [
+      "act",
+      28,
+      "déplace Stellacorn Herder vers Void Gate",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      9,
+      "joue Astral Heron (à Star Spring)",
+      11
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      11
+    ],
+    [
+      "ans",
+      0,
+      "star_spring : Akali, Silent (Star Spring)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      6,
+      "joue Falling Star (cible Karthus, Eternal et Karthus, Eternal)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      13,
+      "cache Zhonya's Hourglass à Star Spring",
+      11
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      8,
+      "joue Blitzcrank, Impassive (à Star Spring)",
+      13
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      13
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      8,
+      "joue Blitzcrank, Impassive (à Star Spring)",
+      13
+    ],
+    [
+      "ans",
+      1,
+      "may : non",
+      13
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      13
+    ],
+    [
+      "ans",
+      0,
+      "target : Thousand-Tailed Watcher adverse (Void Gate)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      37,
+      "déplace Akali, Silent vers Void Gate",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      42,
+      "déplace Akali, Silent vers Star Spring",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      9,
+      "joue Shuriken Flip (cible Vi, Peacekeeper, vers Void Gate)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ]
+  ],
+  "pts": [
+    8,
+    5
+  ],
+  "result": {
+    "pts": [
+      8,
+      5
+    ],
+    "turn": 13,
+    "winner": 0
+  },
+  "seed": 465513,
+  "started": "2026-10-06T20:47:22.773Z",
+  "turn": 13,
+  "updated": "2026-10-06T20:53:51.227Z",
+  "ver": "v10",
+  "whoFirst": 0
+}

@@ -1,0 +1,174 @@
+[
+ {
+  "id": "s003-1",
+  "seed": 201313,
+  "title": "G2 contre Windswept, Akali commence : gagnée 8-5",
+  "note": "Marai cachée sur Windswept au tour 3, puis Marai révélée et Deadly Weapon prennent Sigil au tour 5 (3-1). Au tour 6, Mirror Image copie Kai'Sa et LeBlanc reprend Windswept, mais Akali garde l'avance et finit 8-5.",
+  "job": {
+   "label": "REF G2 vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 3,
+  "plans_snapshot": "results/plans_session_003/plans.py",
+  "tempo": true
+ },
+ {
+  "id": "s003-2",
+  "seed": 201494,
+  "title": "G2 contre Windswept, LeBlanc commence : perdue 7-8",
+  "note": "Soaring Scout fait double conquête au tour 3 (0-2). Deadly Weapon meurt dans l'échange avec Karthus au tour 4. Scuttle Crab et Astral Heron reprennent Windswept, mais Vi et Sacrifice tiennent Sigil, et LeBlanc gagne la course d'un point.",
+  "job": {
+   "label": "REF G2 vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 3,
+  "plans_snapshot": "results/plans_session_003/plans.py",
+  "tempo": true
+ },
+ {
+  "id": "s003-3",
+  "seed": 201504,
+  "title": "Sans les Defy (GD), même donne : perdue 6-8",
+  "note": "La référence G2 gagne cette donne. Ici Akali commence, Witness prend Sigil, mais LeBlanc, Fragmented reprend les deux battlefields au tour 4. Hidden Blade tue Witness au tour 5 et LeBlanc mène 4-1 au tour 6.",
+  "job": {
+   "label": "GD (-3 Defy) vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 3,
+  "plans_snapshot": "results/plans_session_003/plans.py",
+  "tempo": true
+ },
+ {
+  "id": "s003-4",
+  "seed": 201334,
+  "title": "GL (on garde les Defy), même donne que GD perd : gagnée 8-4",
+  "note": "Mené 0-3 au tour 6 après les conquêtes de Honest Broker et Glasc. Au tour 7, Kai'Sa, Noxus Hopeful et Stellacorn Herder attaquent Windswept, Block protège Hopeful et Glasc meurt. Akali reprend le terrain et gagne 8-4.",
+  "job": {
+   "label": "GL (-2 Long Sword) vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 3,
+  "plans_snapshot": "results/plans_session_003/plans.py",
+  "tempo": true
+ }
+]

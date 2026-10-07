@@ -1,0 +1,42 @@
+# legend: Akali, Rogue Assassin
+# player: Collin Kaiser (CTCG)
+# event: CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5
+# date: 2026-09-19
+# placement: 6
+# url: https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-307617
+# note: résumé incomplet (39 cartes listées, il en manque 1) ; quantités du sideboard partielles
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+2 Mischievous Marai
+3 Scuttle Crab
+3 Kai'Sa, Survivor
+3 Stellacorn Herder
+2 Ferrous Forerunner
+3 Astral Heron
+2 Long Sword
+3 Zhonya's Hourglass
+2 Charm
+3 Defy
+1 En Garde
+3 Shuriken Flip
+3 Discipline
+3 Falling Star
+2 Back Off
+[runes]
+5 Calm Rune
+7 Fury Rune
+[battlefields]
+1 Forgotten Monument
+1 Threshold of the Gray
+1 Void Gate
+[sideboard]
+1 Crumbling Sands
+2 Decree of Focus
+2 Brittle Steel
+1 Not So Fast
+1 Akali, Silent
+2 Irelia, Fervent
+1 Ferrous Forerunner

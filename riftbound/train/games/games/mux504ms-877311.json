@@ -1,0 +1,760 @@
+{
+  "bf": null,
+  "bfs": [
+    "Void Gate",
+    "Star Spring"
+  ],
+  "first": null,
+  "id": "mux504ms-877311",
+  "level": 3,
+  "log": [
+    "Tour 1, à Akali de jouer (score 0-0)",
+    "  Tu pioches Darius, Trifarian",
+    "Tour 2, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à la base",
+    "Tour 3, à Akali de jouer (score 0-0)",
+    "  Tu pioches Astral Heron",
+    "Akali joue Kai'Sa, Survivor — à la base",
+    "Tour 4, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Mirror Image — cible Kai'Sa, Survivor",
+    "Résolution : Mirror Image",
+    "  Reflet de Kai'Sa, Survivor à la base",
+    "LeBlanc déplace LeBlanc, Fragmented vers Star Spring",
+    "  LeBlanc, Fragmented va de la base à Star Spring",
+    "Showdown à Star Spring, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Star Spring",
+    "LeBlanc déplace Kai'Sa, Survivor vers Void Gate",
+    "  Kai'Sa, Survivor va de la base à Void Gate",
+    "Showdown à Void Gate, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Void Gate",
+    "LeBlanc +1 point (conquête de Void Gate) → 2",
+    "  Déclenchement sur la chaîne : Kai'Sa",
+    "Résolution : Kai'Sa",
+    "  LeBlanc pioche une carte",
+    "Tour 5, à Akali de jouer (score 0-2)",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali joue Falling Star — cible Kai'Sa, Survivor et LeBlanc, Fragmented",
+    "Résolution : Falling Star",
+    "  Kai'Sa, Survivor subit 4 dégât(s) (might 4)",
+    "  LeBlanc, Fragmented subit 3 dégât(s) (might 3)",
+    "  LeBlanc, Fragmented meurt",
+    "  Kai'Sa, Survivor meurt",
+    "  LeBlanc perd le contrôle de Void Gate",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Akali déplace Kai'Sa, Survivor vers Star Spring",
+    "  Kai'Sa, Survivor va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant Akali",
+    "  Dégâts de combat : attaquants 4 contre défenseurs 3",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali +1 point (conquête de Star Spring) → 1",
+    "  Déclenchement sur la chaîne : Kai'Sa",
+    "Résolution : Kai'Sa",
+    "  Tu pioches Discipline",
+    "Akali joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 6, à LeBlanc de jouer (score 1-2)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "Tour 7, à Akali de jouer (score 1-2)",
+    "Akali +1 point (tenue de Star Spring) → 2",
+    "  Tu pioches Mournful Witness",
+    "Akali joue Blitzcrank, Impassive — à Star Spring",
+    "  Déclenchement sur la chaîne : Star Spring",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Karthus, Eternal va de la base à Star Spring",
+    "Résolution : Star Spring",
+    "  Kai'Sa, Survivor va de Star Spring à la base",
+    "COMBAT à Star Spring, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 5",
+    "  Karthus, Eternal meurt",
+    "Akali déplace Kai'Sa, Survivor vers Void Gate",
+    "  Kai'Sa, Survivor va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 3",
+    "  Déclenchement sur la chaîne : Kai'Sa",
+    "Résolution : Kai'Sa",
+    "  Tu pioches Not So Fast",
+    "Tour 8, à LeBlanc de jouer (score 3-2)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Watchful Sentry — à la base",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "Tour 9, à Akali de jouer (score 3-2)",
+    "Akali +1 point (tenue de Void Gate) → 4",
+    "Akali +1 point (tenue de Star Spring) → 5",
+    "  Déclenchement sur la chaîne : Blitzcrank (hold)",
+    "Résolution : Blitzcrank (hold)",
+    "  Akali perd le contrôle de Star Spring",
+    "  Tu pioches Blitzcrank, Impassive",
+    "Akali joue Blitzcrank, Impassive — à Void Gate",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Karthus, Eternal va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Kai'Sa, Survivor",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Kai'Sa, Survivor va de Void Gate à la base",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 5",
+    "  Karthus, Eternal meurt",
+    "Akali déplace Kai'Sa, Survivor vers Star Spring",
+    "  Kai'Sa, Survivor va de la base à Star Spring",
+    "Showdown à Star Spring, initiative Akali",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali joue Mournful Witness — à Star Spring",
+    "  Déclenchement sur la chaîne : Star Spring",
+    "Résolution : Star Spring",
+    "  Kai'Sa, Survivor va de Star Spring à la base",
+    "Tour 10, à LeBlanc de jouer (score 5-2)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Watchful Sentry vers Star Spring",
+    "  Watchful Sentry va de la base à Star Spring",
+    "COMBAT à Star Spring, attaquant LeBlanc",
+    "LeBlanc joue Vi, Peacekeeper — à Star Spring",
+    "  Déclenchement sur la chaîne : Vi",
+    "Résolution : Vi",
+    "  Mournful Witness est étourdi(e)",
+    "  Dégâts de combat : attaquants 6 contre défenseurs 0",
+    "  Mournful Witness meurt",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 3",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Vi, Peacekeeper à Star Spring",
+    "Tour 11, à Akali de jouer (score 5-3)",
+    "Akali +1 point (tenue de Void Gate) → 6",
+    "  Déclenchement sur la chaîne : Blitzcrank (hold)",
+    "Résolution : Blitzcrank (hold)",
+    "  Akali perd le contrôle de Void Gate",
+    "  Tu pioches Scuttle Crab",
+    "Akali déplace Kai'Sa, Survivor vers Void Gate",
+    "  Kai'Sa, Survivor va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali joue Astral Heron — à Void Gate",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali cache une carte à Void Gate",
+    "Akali joue Scuttle Crab — à la base",
+    "  Déclenchement sur la chaîne : Scuttle Crab",
+    "Résolution : Scuttle Crab",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali déplace Akali, Deadly Weapon vers Star Spring",
+    "  Akali, Deadly Weapon va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Watchful Sentry subit 1 dégât(s) (might 1)",
+    "  Watchful Sentry meurt",
+    "  Déclenchement sur la chaîne : Deathknell Watchful Sentry",
+    "Résolution : Deathknell Watchful Sentry",
+    "  LeBlanc pioche une carte",
+    "COMBAT à Star Spring, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Star Spring à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Vi, Peacekeeper subit 1 dégât(s) (might 5)",
+    "Tour 12, à LeBlanc de jouer (score 6-3)",
+    "  Déclenchement sur la chaîne : Temporary Vi, Peacekeeper",
+    "Résolution : Temporary Vi, Peacekeeper",
+    "  Vi, Peacekeeper meurt",
+    "LeBlanc +1 point (tenue de Star Spring) → 4",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Vi, Peacekeeper à Star Spring",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "LeBlanc déplace Vi, Peacekeeper vers la base",
+    "  Vi, Peacekeeper va de Star Spring à la base",
+    "LeBlanc joue Soaring Scout — à la base",
+    "LeBlanc joue Honest Broker — à la base",
+    "Tour 13, à Akali de jouer (score 6-4)",
+    "Akali +1 point (tenue de Void Gate) → 7",
+    "  Tu pioches Stellacorn Herder",
+    "Akali joue Stellacorn Herder — à la base",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Blitzcrank, Impassive — à Void Gate",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Karthus, Eternal va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 16",
+    "  Karthus, Eternal meurt",
+    "Tour 14, à LeBlanc de jouer (score 7-4)",
+    "  Déclenchement sur la chaîne : Temporary Vi, Peacekeeper",
+    "Résolution : Temporary Vi, Peacekeeper",
+    "  Vi, Peacekeeper meurt",
+    "  LeBlanc perd le contrôle de Star Spring",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Honest Broker vers Void Gate",
+    "  Honest Broker va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 2 contre défenseurs 16",
+    "  Honest Broker meurt",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "LeBlanc déplace Soaring Scout vers Void Gate",
+    "  Soaring Scout va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 1 contre défenseurs 16",
+    "  Soaring Scout meurt",
+    "  Déclenchement sur la chaîne : Deathknell Soaring Scout",
+    "Résolution : Deathknell Soaring Scout",
+    "LeBlanc déplace Vi, Peacekeeper vers Void Gate",
+    "  Vi, Peacekeeper va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Déclenchement sur la chaîne : Vi",
+    "Résolution : Vi",
+    "  Astral Heron est étourdi(e)",
+    "  Dégâts de combat : attaquants 5 contre défenseurs 9",
+    "  Vi, Peacekeeper meurt",
+    "  Blitzcrank, Impassive meurt",
+    "Tour 15, à Akali de jouer (score 7-4)",
+    "Akali +1 point (tenue de Void Gate) → 8",
+    "VICTOIRE de Akali"
+  ],
+  "moves": [
+    [
+      "ans",
+      [
+        0,
+        1
+      ],
+      "mulligan : Noxus Hopeful, Block",
+      0
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      1
+    ],
+    [
+      "act",
+      1,
+      "joue Kai'Sa, Survivor (à la base)",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "hint",
+      5
+    ],
+    [
+      "act",
+      3,
+      "joue Falling Star (cible Kai'Sa, Survivor et LeBlanc, Fragmented)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      5,
+      "déplace Kai'Sa, Survivor vers Star Spring",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      3,
+      "joue Akali, Deadly Weapon (à la base)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      5
+    ],
+    [
+      "act",
+      2,
+      "joue Blitzcrank, Impassive (à Star Spring)",
+      7
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      7
+    ],
+    [
+      "ans",
+      0,
+      "star_spring : Kai'Sa, Survivor (Star Spring)",
+      7
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      2,
+      "déplace Kai'Sa, Survivor vers Void Gate",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      11,
+      "joue Blitzcrank, Impassive (à Void Gate)",
+      9
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      9
+    ],
+    [
+      "ans",
+      0,
+      "target : Karthus, Eternal adverse (base)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      5,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Kai'Sa, Survivor)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      12,
+      "déplace Kai'Sa, Survivor vers Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      7,
+      "joue Mournful Witness (à Star Spring)",
+      9
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      9
+    ],
+    [
+      "ans",
+      0,
+      "star_spring : Kai'Sa, Survivor (Star Spring)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      10,
+      "déplace Kai'Sa, Survivor vers Void Gate",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      2,
+      "joue Astral Heron (à Void Gate)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      7,
+      "cache Zhonya's Hourglass à Void Gate",
+      11
+    ],
+    [
+      "act",
+      4,
+      "joue Scuttle Crab (à la base)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      2,
+      "déplace Akali, Deadly Weapon vers Star Spring",
+      11
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      11
+    ],
+    [
+      "ans",
+      2,
+      "target : Watchful Sentry adverse (Star Spring)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Akali, Deadly Weapon)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      11
+    ],
+    [
+      "ans",
+      0,
+      "target : Vi, Peacekeeper adverse (Star Spring)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      12,
+      "joue Stellacorn Herder (à la base)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      11,
+      "joue Blitzcrank, Impassive (à Void Gate)",
+      13
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      13
+    ],
+    [
+      "ans",
+      0,
+      "target : Karthus, Eternal adverse (base)",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      14
+    ]
+  ],
+  "pts": [
+    8,
+    4
+  ],
+  "result": {
+    "pts": [
+      8,
+      4
+    ],
+    "turn": 15,
+    "winner": 0
+  },
+  "seed": 877311,
+  "started": "2026-10-06T20:34:28.084Z",
+  "turn": 15,
+  "updated": "2026-10-06T20:38:02.140Z",
+  "ver": "v10",
+  "whoFirst": 0
+}

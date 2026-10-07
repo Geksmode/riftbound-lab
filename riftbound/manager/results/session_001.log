@@ -1,0 +1,10 @@
+REF G2 plan Gorica vs LeBlanc IQ5 Deathknell             59.5% ±0.025 n=400 graines 200000+ err=0 (343s)
+Gorica stock plan Gorica vs LeBlanc IQ5 Deathknell       54.5% ±0.025 n=400 graines 200000+ err=0 (339s)
+G2 plan Gorica vs LeBlanc LA (12e) Deathknell            55.8% ±0.025 n=400 graines 200000+ err=0 (340s)
+G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock  52.5% ±0.025 n=400 graines 200000+ err=0 (325s)
+G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Star Spring  60.5% ±0.024 n=400 graines 200000+ err=0 (376s)
+  apparié vs 'REF G2 plan Gorica vs LeBlanc IQ5 Deathknell': Gorica stock plan Gorica vs LeBlanc IQ5 Deathknell: -5.0 ± 3.3 pts (n=400)
+  apparié vs 'REF G2 plan Gorica vs LeBlanc IQ5 Deathknell': G2 plan Gorica vs LeBlanc LA (12e) Deathknell: -3.8 ± 3.4 pts (n=400)
+  apparié vs 'REF G2 plan Gorica vs LeBlanc IQ5 Deathknell': G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock: -7.0 ± 2.4 pts (n=400)
+  apparié vs 'REF G2 plan Gorica vs LeBlanc IQ5 Deathknell': G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Star Spring: +1.0 ± 2.3 pts (n=400)
+SESSION 1 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_001.json

@@ -1,0 +1,13 @@
+akali_asc-harukaze_rq-barcelona_10th: OK 
+akali_collin-kaiser_ccs-iq5_6th: A VERIFIER main_deck(champion+main)=39 (attendu 40)
+akali_dongdong_wuhan-open_5th: OK 
+akali_gorica_rq-singapore: OK 
+akali_hxn-tempete_rq-la_7th: OK 
+akali_khavai_skirmish-carfurle_41st: OK 
+leblanc_aurazera_rebound-la_9th: OK 
+leblanc_blank_rq-singapore-bestof: A VERIFIER main_deck(champion+main)=32 (attendu 40)
+leblanc_gyatarina_ccs-iq5_1st: OK 
+leblanc_mill-twistedtcg_rq-la_12th: OK 
+leblanc_riuzake_rq-vancouver_21st: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
+leblanc_zidenberg_ccs-sunday5_7th: OK 
+yi-bladesman_ekpilot_rq-singapore_3rd: OK 

@@ -1,0 +1,97 @@
+[
+ {
+  "id": "s009-1",
+  "seed": 203601,
+  "title": "Plan Gorica face à Windswept : victoire 8-7",
+  "note": "Akali commence et suit le plan Gorica (Sigil). Les deux camps s'échangent les battlefields presque à chaque tour ; Akali reprend les deux au tour 9 et finit 8-7. Sans plan, avec ou sans Sigil forcé, la même donne est perdue.",
+  "job": {
+   "label": "REF stock plan Gorica vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 9,
+  "plans_snapshot": "results/plans_session_009/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s009-2",
+  "seed": 203906,
+  "title": "Plan Gorica : défaite typique 3-8",
+  "note": "LeBlanc commence et prend les deux battlefields au tour 3. Akali les reprend au tour 6 (3-3), mais LeBlanc reprend Windswept au tour 7 puis Sigil au tour 9 et les tient jusqu'à 3-8 au tour 11.",
+  "job": {
+   "label": "REF stock plan Gorica vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 9,
+  "plans_snapshot": "results/plans_session_009/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s009-3",
+  "seed": 203616,
+  "title": "Sans plan mais Sigil forcé : victoire 8-2",
+  "note": "Même donne que la partie suivante. Akali joue sans plan mais présente Sigil : elle reprend Sigil au tour 4 et la tient à chaque tour, ajoute Windswept au tour 6 et gagne 8-2 au tour 12. Sur la session, Sigil seul ne vaut que +3,2 ± 2,6 pts : le gain du plan vient surtout des décisions en partie.",
+  "job": {
+   "label": "stock sans plan, Sigil forcé vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": null,
+   "opp_plan": "Hook tempo Windswept",
+   "akali_bfs": [
+    "Sigil of the Storm"
+   ]
+  },
+  "session": 9,
+  "plans_snapshot": "results/plans_session_009/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s009-4",
+  "seed": 203616,
+  "title": "Même donne, sans plan (Void Gate) : défaite 7-8",
+  "note": "Même donne, Akali sans plan présente Void Gate. Elle mène 7-3 au tour 12 en tenant Void Gate, puis LeBlanc reprend les deux battlefields au tour 13 et les tient jusqu'à 8-7 au tour 15.",
+  "job": {
+   "label": "stock sans plan vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": null,
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 9,
+  "plans_snapshot": "results/plans_session_009/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]

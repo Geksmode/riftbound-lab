@@ -1,0 +1,173 @@
+[
+ {
+  "id": "s002-1",
+  "seed": 200433,
+  "title": "Contre Windswept, LeBlanc commence : gagnée 8-3",
+  "note": "LeBlanc présente Windswept et Akali répond avec Sigil. Deadly Weapon prend Windswept au tour 4, Falling Star tue LeBlanc et Dignitary au tour 6, Witness prend Sigil : 5-0 au tour 8. Le plan Hook tempo reste passif.",
+  "job": {
+   "label": "REF G2 plan Gorica vs IQ5 Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 2,
+  "plans_snapshot": "results/plans_session_002/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s002-2",
+  "seed": 200443,
+  "title": "Contre Windswept, Akali commence : perdue 5-9",
+  "note": "Akali prend Windswept dès le tour 3 avec Lonely Poro et mène 4-2 au tour 7 après une attaque à trois sur Sigil. LeBlanc recycle Karthus et ses Deathknell et repasse devant : l'avance du début ne suffit pas quand LeBlanc tient Windswept.",
+  "job": {
+   "label": "REF G2 plan Gorica vs IQ5 Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 2,
+  "plans_snapshot": "results/plans_session_002/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s002-3",
+  "seed": 200436,
+  "title": "G2, Akali présente toujours Void Gate : perd là où la référence gagne",
+  "note": "Même donne que la référence. Écart apparié sur la session : -4.0 ± 3.4 pts.",
+  "job": {
+   "label": "G2, Akali présente toujours Void Gate",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept",
+   "akali_bfs": [
+    "Void Gate"
+   ]
+  },
+  "session": 2,
+  "plans_snapshot": "results/plans_session_002/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s002-4",
+  "seed": 200595,
+  "title": "Liste stock là où G2 perd : gagnée 8-4",
+  "note": "Même donne que la défaite G2 de la session. Falling Star tue Karthus et LeBlanc au tour 5, puis Back Off, Shuriken Flip et Stellacorn Herder prennent les deux battlefields au tour 7. Dans ce cas, les sorts de la liste stock font mieux que les unités de G2.",
+  "job": {
+   "label": "Gorica stock plan Gorica vs IQ5 Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 2,
+  "plans_snapshot": "results/plans_session_002/plans.py",
+  "tempo": false
+ }
+]

@@ -1,0 +1,392 @@
+[
+ {
+  "label": "build: stock Wuhan",
+  "n": 160,
+  "wr": 0.3312,
+  "se": 0.0372,
+  "turns": 17.9,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.351,
+   "leblanc_first": 0.314
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C1 -2 Defy +2 Witness",
+  "n": 160,
+  "wr": 0.3187,
+  "se": 0.0368,
+  "turns": 15.9,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.365,
+   "leblanc_first": 0.279
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C3 +Silent +Forerunner",
+  "n": 160,
+  "wr": 0.45,
+  "se": 0.0393,
+  "turns": 15.5,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.554,
+   "leblanc_first": 0.36
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C5 -3 Defy +Poro",
+  "n": 160,
+  "wr": 0.4,
+  "se": 0.0387,
+  "turns": 15.5,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.514,
+   "leblanc_first": 0.302
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C5 +Not So Fast",
+  "n": 160,
+  "wr": 0.4062,
+  "se": 0.0388,
+  "turns": 15.8,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.514,
+   "leblanc_first": 0.314
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C5 +Brittle Steel",
+  "n": 160,
+  "wr": 0.3625,
+  "se": 0.038,
+  "turns": 16.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.392,
+   "leblanc_first": 0.337
+  },
+  "games": 160
+ },
+ {
+  "label": "build: C5 +2e Silent -Heron",
+  "n": 160,
+  "wr": 0.3625,
+  "se": 0.038,
+  "turns": 15.7,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.446,
+   "leblanc_first": 0.291
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Void Gate",
+  "n": 160,
+  "wr": 0.4125,
+  "se": 0.0389,
+  "turns": 15.8,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.5,
+   "leblanc_first": 0.325
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Targon's Peak",
+  "n": 160,
+  "wr": 0.3875,
+  "se": 0.0385,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.512,
+   "leblanc_first": 0.263
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Forgotten Monument",
+  "n": 160,
+  "wr": 0.4688,
+  "se": 0.0395,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.562,
+   "leblanc_first": 0.375
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Sigil of the Storm",
+  "n": 160,
+  "wr": 0.3812,
+  "se": 0.0384,
+  "turns": 16.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.45,
+   "leblanc_first": 0.312
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield LeBlanc: Dusk Rose Lab",
+  "n": 160,
+  "wr": 0.4437,
+  "se": 0.0393,
+  "turns": 16.2,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.56,
+   "leblanc_first": 0.316
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield LeBlanc: Star Spring",
+  "n": 160,
+  "wr": 0.4875,
+  "se": 0.0395,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.5,
+   "leblanc_first": 0.474
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield LeBlanc: Windswept Hillock",
+  "n": 160,
+  "wr": 0.3063,
+  "se": 0.0364,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.393,
+   "leblanc_first": 0.211
+  },
+  "games": 160
+ },
+ {
+  "label": "plan: mulligan agressif",
+  "n": 160,
+  "wr": 0.425,
+  "se": 0.0391,
+  "turns": 16.1,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.514,
+   "leblanc_first": 0.349
+  },
+  "games": 160
+ },
+ {
+  "label": "plan: jamais de mulligan",
+  "n": 160,
+  "wr": 0.4375,
+  "se": 0.0392,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.5,
+   "leblanc_first": 0.384
+  },
+  "games": 160
+ },
+ {
+  "label": "plan: prudent face a Vi",
+  "n": 160,
+  "wr": 0.45,
+  "se": 0.0393,
+  "turns": 16.2,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.459,
+   "leblanc_first": 0.442
+  },
+  "games": 160
+ },
+ {
+  "label": "ordre: Akali commence",
+  "n": 160,
+  "wr": 0.45,
+  "se": 0.0393,
+  "turns": 15.7,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.45
+  },
+  "games": 160
+ },
+ {
+  "label": "ordre: LeBlanc commence",
+  "n": 160,
+  "wr": 0.375,
+  "se": 0.0383,
+  "turns": 16.2,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "leblanc_first": 0.375
+  },
+  "games": 160
+ },
+ {
+  "label": "sideboard: C5 vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.35,
+  "se": 0.0377,
+  "turns": 15.7,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.392,
+   "leblanc_first": 0.314
+  },
+  "games": 160
+ },
+ {
+  "label": "sideboard: stock vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.2812,
+  "se": 0.0355,
+  "turns": 16.1,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.297,
+   "leblanc_first": 0.267
+  },
+  "games": 160
+ },
+ {
+  "label": "combo: C5 + Targon + mulligan agressif",
+  "n": 160,
+  "wr": 0.4437,
+  "se": 0.0393,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.562,
+   "leblanc_first": 0.325
+  },
+  "games": 160
+ },
+ {
+  "label": "combo: C5 + Targon + mull. agr. vs sidee",
+  "n": 160,
+  "wr": 0.4375,
+  "se": 0.0392,
+  "turns": 15.9,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.55,
+   "leblanc_first": 0.325
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm: C3 + Forgotten Monument",
+  "n": 160,
+  "wr": 0.375,
+  "se": 0.0383,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.463,
+   "leblanc_first": 0.287
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm: C3 + Void Gate",
+  "n": 160,
+  "wr": 0.3625,
+  "se": 0.038,
+  "turns": 15.7,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.4,
+   "leblanc_first": 0.325
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm: C3 vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.3875,
+  "se": 0.0385,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.419,
+   "leblanc_first": 0.36
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm: C3 + Forgotten vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.3937,
+  "se": 0.0386,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.512,
+   "leblanc_first": 0.275
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm: stock + Forgotten Monument",
+  "n": 160,
+  "wr": 0.3,
+  "se": 0.0362,
+  "turns": 16.8,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.375,
+   "leblanc_first": 0.225
+  },
+  "games": 160
+ }
+]

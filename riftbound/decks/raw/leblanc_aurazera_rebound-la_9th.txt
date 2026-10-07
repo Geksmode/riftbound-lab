@@ -1,0 +1,42 @@
+# legend: Leblanc, Deceiver
+# player: aurazera
+# event: Secretlab Regional Rebound - RQ Los Angeles Sunday
+# date: 2026-09-27
+# placement: 9
+# url: https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-318673
+# note: runes mal extraites par le résumé (8 Mind / 1 Order) ; 4 Mind / 8 Order supposé comme les autres listes
+[legend]
+1 LeBlanc, Deceiver
+[champion]
+1 LeBlanc, Fragmented
+[main]
+3 Honest Broker
+3 Soaring Scout
+2 Watchful Sentry
+3 Black Rose Dignitary
+3 Karthus, Eternal
+3 Glasc Mixologist
+3 Vi, Peacekeeper
+3 Ruined Rex
+1 Thousand-Tailed Watcher
+3 Harnessed Dragon
+3 Rift Herald
+3 Baited Hook
+3 Sacrifice
+2 Deathgrip
+1 Mirror Image
+[runes]
+4 Mind Rune
+8 Order Rune
+[battlefields]
+1 Dusk Rose Lab
+1 Star Spring
+1 Windswept Hillock
+[sideboard]
+2 Bellows Breath
+1 Decree of Insight
+2 Decree of Unity
+2 Salvage
+1 Turn to Dust
+1 LeBlanc, Everywhere At Once
+1 Thousand-Tailed Watcher

@@ -1,0 +1,2320 @@
+[
+ {
+  "id": "s003-1",
+  "file": "s003-1.json",
+  "group": "Agent manager : session 3 (REF G2 vs Hook tempo Windswept)",
+  "session": 3,
+  "seed": 201313,
+  "title": "G2 contre Windswept, Akali commence : gagnée 8-5",
+  "note": "Marai cachée sur Windswept au tour 3, puis Marai révélée et Deadly Weapon prennent Sigil au tour 5 (3-1). Au tour 6, Mirror Image copie Kai'Sa et LeBlanc reprend Windswept, mais Akali garde l'avance et finit 8-5.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s003-2",
+  "file": "s003-2.json",
+  "group": "Agent manager : session 3 (REF G2 vs Hook tempo Windswept)",
+  "session": 3,
+  "seed": 201494,
+  "title": "G2 contre Windswept, LeBlanc commence : perdue 7-8",
+  "note": "Soaring Scout fait double conquête au tour 3 (0-2). Deadly Weapon meurt dans l'échange avec Karthus au tour 4. Scuttle Crab et Astral Heron reprennent Windswept, mais Vi et Sacrifice tiennent Sigil, et LeBlanc gagne la course d'un point.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 17,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s003-3",
+  "file": "s003-3.json",
+  "group": "Agent manager : session 3 (GD (-3 Defy) vs Hook tempo Windswept)",
+  "session": 3,
+  "seed": 201504,
+  "title": "Sans les Defy (GD), même donne : perdue 6-8",
+  "note": "La référence G2 gagne cette donne. Ici Akali commence, Witness prend Sigil, mais LeBlanc, Fragmented reprend les deux battlefields au tour 4. Hidden Blade tue Witness au tour 5 et LeBlanc mène 4-1 au tour 6.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s003-4",
+  "file": "s003-4.json",
+  "group": "Agent manager : session 3 (GL (-2 Long Sword) vs Hook tempo Windswept)",
+  "session": 3,
+  "seed": 201334,
+  "title": "GL (on garde les Defy), même donne que GD perd : gagnée 8-4",
+  "note": "Mené 0-3 au tour 6 après les conquêtes de Honest Broker et Glasc. Au tour 7, Kai'Sa, Noxus Hopeful et Stellacorn Herder attaquent Windswept, Block protège Hopeful et Glasc meurt. Akali reprend le terrain et gagne 8-4.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s002-1",
+  "file": "s002-1.json",
+  "group": "Agent manager : session 2 (REF G2 plan Gorica vs IQ5 Hook tempo Windswept)",
+  "session": 2,
+  "seed": 200433,
+  "title": "Contre Windswept, LeBlanc commence : gagnée 8-3",
+  "note": "LeBlanc présente Windswept et Akali répond avec Sigil. Deadly Weapon prend Windswept au tour 4, Falling Star tue LeBlanc et Dignitary au tour 6, Witness prend Sigil : 5-0 au tour 8. Le plan Hook tempo reste passif.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   3
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "s002-2",
+  "file": "s002-2.json",
+  "group": "Agent manager : session 2 (REF G2 plan Gorica vs IQ5 Hook tempo Windswept)",
+  "session": 2,
+  "seed": 200443,
+  "title": "Contre Windswept, Akali commence : perdue 5-9",
+  "note": "Akali prend Windswept dès le tour 3 avec Lonely Poro et mène 4-2 au tour 7 après une attaque à trois sur Sigil. LeBlanc recycle Karthus et ses Deathknell et repasse devant : l'avance du début ne suffit pas quand LeBlanc tient Windswept.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   9
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "s002-3",
+  "file": "s002-3.json",
+  "group": "Agent manager : session 2 (G2, Akali présente toujours Void Gate)",
+  "session": 2,
+  "seed": 200436,
+  "title": "G2, Akali présente toujours Void Gate : perd là où la référence gagne",
+  "note": "Même donne que la référence. Écart apparié sur la session : -4.0 ± 3.4 pts.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 18,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "s002-4",
+  "file": "s002-4.json",
+  "group": "Agent manager : session 2 (Gorica stock plan Gorica vs IQ5 Hook tempo Windswept)",
+  "session": 2,
+  "seed": 200595,
+  "title": "Liste stock là où G2 perd : gagnée 8-4",
+  "note": "Même donne que la défaite G2 de la session. Falling Star tue Karthus et LeBlanc au tour 5, puis Back Off, Shuriken Flip et Stellacorn Herder prennent les deux battlefields au tour 7. Dans ce cas, les sorts de la liste stock font mieux que les unités de G2.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "s001-1",
+  "file": "s001-1.json",
+  "group": "Agent manager : session 1 (REF G2 plan Gorica vs LeBlanc IQ5 Deathknell)",
+  "session": 1,
+  "seed": 200060,
+  "title": "Plan Gorica, Akali commence : gagnée 9-2",
+  "note": "Marai cachée sur Star Spring dès le tour 3, puis Zhonya révélée pour protéger Akali. Darius prend Void Gate au tour 5 en tuant les deux LeBlanc. Avec Star Spring présenté, Akali commence et garde l'initiative (69,5 % de victoires dans ce cas sur la session).",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 0,
+  "pts": [
+   9,
+   2
+  ],
+  "first": 0,
+  "turns": 11,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ]
+ },
+ {
+  "id": "s001-2",
+  "file": "s001-2.json",
+  "group": "Agent manager : session 1 (REF G2 plan Gorica vs LeBlanc IQ5 Deathknell)",
+  "session": 1,
+  "seed": 200348,
+  "title": "Plan Gorica, Akali commence : perdue 6-8",
+  "note": "Même départ (Witness prend Star Spring), mais Akali passe deux tours sans rien poser. Au tour 8, Vi en embuscade tue Zhonya et Witness sur Star Spring : LeBlanc reprend le battlefield et gagne la course à la tenue.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ]
+ },
+ {
+  "id": "s001-3",
+  "file": "s001-3.json",
+  "group": "Agent manager : session 1 (G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock)",
+  "session": 1,
+  "seed": 200361,
+  "title": "G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock : perd là où la référence gagne",
+  "note": "Même donne que la référence. Écart apparié sur la session : -7.0 ± 2.4 pts.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   9
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "s001-4",
+  "file": "s001-4.json",
+  "group": "Agent manager : session 1 (Gorica stock plan Gorica vs LeBlanc IQ5 Deathknell)",
+  "session": 1,
+  "seed": 200027,
+  "title": "Liste stock là où G2 gagne : perdue 1-8",
+  "note": "Même donne que la référence (gagnée en G2). LeBlanc commence sur Windswept : Soaring Scout fait double conquête au tour 3, puis Vi et Sacrifice tuent Deadly Weapon au tour 5 (1-4). La liste stock n'a pas d'unité pour reprendre le terrain.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   1,
+   8
+  ],
+  "first": 1,
+  "turns": 9,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "plan-moteur-gagne",
+  "file": "plan-moteur-gagne.json",
+  "group": "Simulation des plans de jeu (3 oct., graines 80000+)",
+  "seed": 80002,
+  "title": "Même donne 1/3 : plan Gorica, gagnée 8-3",
+  "note": "Akali garde sa main (Marai, Witness, Heron, Zhonya), pose Deadly Weapon au tour 2 et laisse Marai et Witness à la base au tour 4. Quand Hidden Blade tue Akali, elle reprend les deux battlefields au tour 6 et tient Windswept jusqu'au bout.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   3
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "plan-aucun-perd",
+  "file": "plan-aucun-perd.json",
+  "group": "Simulation des plans de jeu (3 oct., graines 80000+)",
+  "seed": 80002,
+  "title": "Même donne 2/3 : sans plan, perdue 7-8",
+  "note": "Même main de départ, mais l'IA sans plan renvoie Astral Heron au mulligan et joue Marai au tour 2 au lieu de Deadly Weapon. LeBlanc reprend Windswept avec Vi, puis Glasc et Karthus recyclent les Deathknell jusqu'au point final.",
+  "plans": [
+   "aucun",
+   "Hook tempo"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 17,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "plan-agressif-perd",
+  "file": "plan-agressif-perd.json",
+  "group": "Simulation des plans de jeu (3 oct., graines 80000+)",
+  "seed": 80002,
+  "title": "Même donne 3/3 : plan agressif, perdue 5-8",
+  "note": "Le plan agressif renvoie Zhonya's Hourglass et joue Sterak's Gage au tour 4 au lieu de deux unités. Hidden Blade tue Deadly Weapon, seule sur Windswept, et LeBlanc fait double conquête au tour 5 (1-4). Akali ne rattrape jamais.",
+  "plans": [
+   "Gorica agressif",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 1,
+  "turns": 15,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ]
+ },
+ {
+  "id": "plan-moteur-dernier-point",
+  "file": "plan-moteur-dernier-point.json",
+  "group": "Simulation des plans de jeu (3 oct., graines 80000+)",
+  "seed": 80000,
+  "title": "Défaite type du plan Gorica : bloquée à 7, perdue 7-8",
+  "note": "Akali commence et déroule le moteur (deux Herder, Darius, Shuriken Flip) jusqu'à 7-4. Karthus meurt deux fois mais revient de la défausse, Glasc et Sacrifice recyclent les Deathknell, et LeBlanc remonte par la tenue de Star Spring pendant qu'Akali cherche le point final.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ]
+ },
+ {
+  "id": "tempo",
+  "file": "tempo.json",
+  "seed": 60044,
+  "title": "Akali commence, 9-1",
+  "note": "Initiative : Mournful Witness prend Star Spring au tour 3, Shuriken Flip tue Karthus et ouvre Sigil. LeBlanc ne reprend jamais la main.",
+  "winner": 0,
+  "pts": [
+   9,
+   1
+  ],
+  "first": 0,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Star Spring"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "etouffee",
+  "file": "etouffee.json",
+  "seed": 60139,
+  "title": "LeBlanc commence, 1-8",
+  "note": "La défaite type en jouant second : Watchful Sentry prend les deux battlefields au tour 3, Sacrifice ramène Karthus, Windswept Hillock lui laisse reprendre le terrain.",
+  "winner": 1,
+  "pts": [
+   1,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "second",
+  "file": "second.json",
+  "seed": 60234,
+  "title": "Akali joue second, 8-1",
+  "note": "Réponse au départ de LeBlanc : Akali reprend Dusk Rose Lab, enchaîne Shuriken Flip vers Void Gate et cache une carte. L'IA LeBlanc reste ensuite passive.",
+  "winner": 0,
+  "pts": [
+   8,
+   1
+  ],
+  "first": 1,
+  "turns": 10,
+  "bf": [
+   "Void Gate",
+   "Dusk Rose Lab"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "comeback",
+  "file": "comeback.json",
+  "seed": 60099,
+  "title": "Retournement de 0-5 à 9-6",
+  "note": "Menée 0-5 face à LeBlanc, Everywhere At Once, Akali reconstruit avec Scuttle Crab, Lonely Poro et Ferrous Forerunner et gagne trois combats d'affilée au tour 10.",
+  "winner": 0,
+  "pts": [
+   9,
+   6
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "dernier-point",
+  "file": "dernier-point.json",
+  "seed": 60029,
+  "title": "Bloquée à 7, perdue 7-8",
+  "note": "Akali mène 7-3, mais le dernier point par conquête exige d'avoir scoré les deux battlefields dans le tour. Elle pioche à la place pendant que LeBlanc remonte par la tenue de Star Spring.",
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 20,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "bras-de-fer",
+  "file": "bras-de-fer.json",
+  "seed": 60037,
+  "title": "Bras de fer gagné 8-7",
+  "note": "Chacune tient un battlefield de la mi-partie à la fin. Marai cachée et le Mech de Forerunner gardent Dusk Rose Lab, et Akali gagne la course à la tenue d'un point.",
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 18,
+  "bf": [
+   "Sigil of the Storm",
+   "Dusk Rose Lab"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "side-plan-perdu",
+  "file": "side-plan-perdu.json",
+  "seed": 60020,
+  "title": "Tout le side plan en jeu, perdue 7-8",
+  "note": "Silent, Forerunner, Poro et Crab sortent tous, mais deux Hidden Blade tuent Akali puis Forerunner. LeBlanc a commencé et garde un point d'avance dans la course.",
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 17,
+  "bf": [
+   "Void Gate",
+   "Dusk Rose Lab"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "side-plan-gagne",
+  "file": "side-plan-gagne.json",
+  "seed": 60068,
+  "title": "Silent et Forerunner, 8-2",
+  "note": "Akali joue second et perd Deadly Weapon tôt, puis déborde LeBlanc avec un board large : Akali, Silent, Forerunner, Kai'Sa et Noxus Hopeful.",
+  "winner": 0,
+  "pts": [
+   8,
+   2
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Forgotten Monument",
+   "Star Spring"
+  ],
+  "group": "Premières parties commentées (G2 sans plan, graines 60000+)",
+  "plans": [
+   "aucun",
+   "aucun"
+  ]
+ },
+ {
+  "id": "tempo-90003-avant",
+  "file": "tempo-90003-avant.json",
+  "group": "IA « gagner à tout prix » (3 oct., graines 90000+)",
+  "session": null,
+  "seed": 90003,
+  "title": "Même donne, ancienne IA : Akali gagne 9-1",
+  "note": "Akali tient les deux battlefields dès le tour 9. LeBlanc à 1 point ne fait qu'une attaque perdue de Glasc au tour 10 et finit ses tours sans contester.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   9,
+   1
+  ],
+  "first": 0,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "ancienne"
+ },
+ {
+  "id": "tempo-90003-apres",
+  "file": "tempo-90003-apres.json",
+  "group": "IA « gagner à tout prix » (3 oct., graines 90000+)",
+  "session": null,
+  "seed": 90003,
+  "title": "Même donne, nouvelle IA : LeBlanc gagne 8-7",
+  "note": "LeBlanc conteste à chaque tour et prend Sigil au tour 12. Akali, bloquée à 7, ne reprend jamais un battlefield et LeBlanc gagne en tenant Sigil au tour 16. Le défaut passe de LeBlanc à Akali : à 7 points elle finit ses tours sans attaquer.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "tempo-200433-t13",
+  "file": "tempo-200433-t13.json",
+  "group": "IA « gagner à tout prix » (3 oct., graines 90000+)",
+  "session": null,
+  "seed": 200433,
+  "title": "Partie Windswept, nouvelle IA à partir du tour 13 : LeBlanc attaque le Mech",
+  "note": "Même partie que « Contre Windswept, LeBlanc commence » jusqu'au tour 12, puis la nouvelle IA prend la main. Au tour 13 LeBlanc joue Thousand-Tailed Watcher accéléré, attaque le Mech de Windswept avec Watcher et un Mech, puis prend Sigil : 7-4 au lieu de perdre au tour 14. Akali reste à 7 et gagne au tour 16 en conquérant les deux battlefields.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "ancienne puis tempo"
+ },
+ {
+  "id": "tempo-80002-t9",
+  "file": "tempo-80002-t9.json",
+  "group": "IA « gagner à tout prix » (3 oct., graines 90000+)",
+  "session": null,
+  "seed": 80002,
+  "title": "Plan moteur, nouvelle IA à partir du tour 9 : Karthus conteste enfin",
+  "note": "Même partie que « Même donne 1/3 : plan Gorica » jusqu'au tour 8. LeBlanc passe encore au tour 9 (Akali n'est qu'à 5), mais au tour 11, Akali à 6, Karthus attaque le Scuttle Crab de Windswept, Vi suit et Karthus prend Sigil : 6-5. Falling Star tue les deux Karthus et Akali gagne au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "ancienne puis tempo"
+ },
+ {
+  "id": "reflet-91008-avant",
+  "file": "reflet-91008-avant.json",
+  "group": "LeBlanc comme les vrais joueurs (3 oct., graines 91000+)",
+  "session": null,
+  "seed": 91008,
+  "title": "Même donne, LeBlanc rappelle ses unités : Akali gagne 8-5",
+  "note": "Aux tours 3 et 5, LeBlanc ramène Soaring Scout à la base après la conquête de Sigil, et au tour 7 Karthus rentre aussi à la base après avoir pris Windswept. Akali reprend Sigil au tour 6 puis les deux battlefields au tour 10, et LeBlanc passe son tour 11.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "reflet-91008-apres",
+  "file": "reflet-91008-apres.json",
+  "group": "LeBlanc comme les vrais joueurs (3 oct., graines 91000+)",
+  "session": null,
+  "seed": 91008,
+  "title": "Même donne, LeBlanc reste sur les battlefields : LeBlanc gagne 8-7",
+  "note": "Scout reste sur Sigil au tour 5. Au tour 7, Karthus prend Windswept puis enchaîne sur Sigil au lieu de rentrer : 3-4. LeBlanc mène 6-3 au tour 9 ; Akali revient à 7-6, mais au tour 13 Scout et Ruined Rex reprennent Windswept et Vi prend Sigil pour le point final.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "video-91015-avant",
+  "file": "video-91015-avant.json",
+  "group": "LeBlanc comme les vrais joueurs (3 oct., graines 91000+)",
+  "session": null,
+  "seed": 91015,
+  "title": "Même donne, sans les règles des vidéos : Akali gagne 8-4",
+  "note": "LeBlanc mène 4-1 au tour 8 grâce à Mirror Image sur Noxus Hopeful, puis passe ses tours 10, 12 et 14. Akali reprend Star Spring et Void Gate et gagne en tenant les deux.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "video-91015-apres",
+  "file": "video-91015-apres.json",
+  "group": "LeBlanc comme les vrais joueurs (3 oct., graines 91000+)",
+  "session": null,
+  "seed": 91015,
+  "title": "Même donne, avec les règles des vidéos : LeBlanc gagne 9-3",
+  "note": "LeBlanc, Everywhere At Once arrive au tour 4. Au tour 6, Mirror Image la copie : elle prend Void Gate puis Star Spring (3-1). LeBlanc tient Void Gate tous les tours et reprend Star Spring à chaque fois, puis gagne en tenant les deux au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   9
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s004-1",
+  "file": "s004-1.json",
+  "group": "Agent manager : session 4 (REF GL vs Hook tempo Windswept)",
+  "session": 4,
+  "seed": 201726,
+  "title": "GL face à Windswept : victoire 8-1",
+  "note": "Référence de la session (GL contre LeBlanc qui présente Windswept Hillock, LeBlanc commence). Akali prend Windswept au tour 4, le tient, puis conquiert Sigil au tour 10 et tient les deux jusqu'à 8-1. LeBlanc ne marque qu'une conquête de Sigil au tour 5.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   1
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s004-2",
+  "file": "s004-2.json",
+  "group": "Agent manager : session 4 (REF GL vs Hook tempo Windswept)",
+  "session": 4,
+  "seed": 201604,
+  "title": "GL face à Windswept : défaite 5-8",
+  "note": "Même donne que la partie suivante. LeBlanc commence et conquiert les deux battlefields au tour 3 ; Akali égalise à 2-2 au tour 4 et mène 4-3 au tour 8, puis LeBlanc reprend les deux battlefields aux tours 9 et 11 (4-7) et finit sur une tenue de Sigil au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s004-3",
+  "file": "s004-3.json",
+  "group": "Agent manager : session 4 (Gorica stock vs Hook tempo Windswept)",
+  "session": 4,
+  "seed": 201604,
+  "title": "Liste stock face à Windswept : gagne la donne que GL perd (8-5)",
+  "note": "Même donne que la défaite GL. Même départ (0-2 au tour 3), mais Akali tient Windswept puis prend Sigil au tour 6 et mène 5-2 au tour 8 ; elle garde l'avance malgré le retour de LeBlanc au tour 9 (5-4) et finit 8-5 au tour 12. Sur la session, GL et stock sont à égalité (−2,0 ± 3,4) : ce genre d'écart va dans les deux sens.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s004-4",
+  "file": "s004-4.json",
+  "group": "Agent manager : session 4 (GL vs Hook tempo)",
+  "session": 4,
+  "seed": 201998,
+  "title": "GL sans Windswept forcé : victoire 8-4",
+  "note": "Même graine que la référence mais LeBlanc présente Star Spring (Akali : Void Gate) et Akali commence. Menée 0-3 au tour 6, Akali prend Void Gate au tour 7 puis tient les deux battlefields à partir du tour 9 et gagne 8-4. Sur la session, ne pas forcer Windswept vaut +3,2 ± 2,3 pts, dans le bruit.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s005-1",
+  "file": "s005-1.json",
+  "group": "Agent manager : session 5 (REF Gorica stock vs Hook tempo Windswept)",
+  "session": 5,
+  "seed": 202329,
+  "title": "Liste stock face à Windswept : victoire 8-6",
+  "note": "Référence de la session (liste stock, LeBlanc présente Windswept et commence). Partie serrée : LeBlanc mène 4-2 au tour 7 ; Akali équipe deux Long Sword au tour 8, prend les deux battlefields au tour 10 et finit en tenant Windswept jusqu'à 8-6.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   6
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s005-2",
+  "file": "s005-2.json",
+  "group": "Agent manager : session 5 (REF Gorica stock vs Hook tempo Windswept)",
+  "session": 5,
+  "seed": 202001,
+  "title": "Même donne, liste stock : défaite 4-8",
+  "note": "Même donne que les deux parties suivantes. LeBlanc prend les deux battlefields au tour 3, Akali les reprend au tour 4, mais LeBlanc reconquiert Windswept dès le tour 5 et mène 5-2 au tour 7. Les Long Sword du tour 8 arrivent trop tard : 4-8 au tour 11.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   4,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s005-3",
+  "file": "s005-3.json",
+  "group": "Agent manager : session 5 (GL vs Hook tempo Windswept)",
+  "session": 5,
+  "seed": 202001,
+  "title": "Même donne, GL (−2 Long Sword) : victoire 8-3",
+  "note": "Même donne. Même début (0-2 puis 2-2 au tour 4), mais cette fois LeBlanc ne reprend que Sigil au tour 5 : Akali garde Windswept du tour 4 à la fin, reprend Sigil au tour 8 et gagne 8-3 au tour 12. Sur la session, GL − GD vaut +7,5 ± 3,4 pts (piste à confirmer).",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   3
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s005-4",
+  "file": "s005-4.json",
+  "group": "Agent manager : session 5 (GD vs Hook tempo Windswept)",
+  "session": 5,
+  "seed": 202001,
+  "title": "Même donne, GD (−3 Defy) : défaite 6-8",
+  "note": "Même donne. Akali égalise 2-2 au tour 4, puis LeBlanc reprend Windswept au tour 5 et mène 5-2 au tour 7. Akali revient à 6-6 au tour 12 mais LeBlanc tient Sigil et reprend Windswept au tour 13 pour finir 8-6.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s006-1",
+  "file": "s006-1.json",
+  "group": "Agent manager : session 6 (REF GL vs Hook tempo Windswept)",
+  "session": 6,
+  "seed": 202729,
+  "title": "GL face à Windswept : remontée de 2-7 à 8-7",
+  "note": "Référence de la session (GL, LeBlanc commence). LeBlanc mène 7-2 au tour 11 en tenant Sigil et en reprenant Windswept ; Akali reprend les deux battlefields au tour 12, les tient aux tours 14 et 16 et gagne 8-7 sur le point final de Windswept.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s006-2",
+  "file": "s006-2.json",
+  "group": "Agent manager : session 6 (REF GL vs Hook tempo Windswept)",
+  "session": 6,
+  "seed": 202448,
+  "title": "Même donne, GL : défaite 4-8",
+  "note": "Même donne que la partie suivante (Akali commence). LeBlanc prend les deux battlefields au tour 4 et tient Sigil presque toute la partie ; Akali ne garde que Windswept par moments et perd 4-8 au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   4,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s006-3",
+  "file": "s006-3.json",
+  "group": "Agent manager : session 6 (GD vs Hook tempo Windswept)",
+  "session": 6,
+  "seed": 202448,
+  "title": "Même donne, GD (−3 Defy) : victoire 8-7",
+  "note": "Même donne. Même départ 0-2 au tour 4, mais Akali reprend Windswept au tour 5 puis Sigil au tour 7 ; les deux camps s'échangent les battlefields jusqu'au tour 12 et Akali gagne 8-7 au tour 13. La question fixée à l'avance (GL − GD) donne −6,8 ± 3,3 : la piste de la session 5 est réfutée.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s006-4",
+  "file": "s006-4.json",
+  "group": "Agent manager : session 6 (G2 vs Hook tempo Windswept)",
+  "session": 6,
+  "seed": 202641,
+  "title": "G2 face à Windswept : victoire 8-7 en 17 tours",
+  "note": "Donne où GL perd et G2 gagne. Partie longue où chacun tient un battlefield : Akali garde Windswept, LeBlanc garde Sigil ; à 7-7 au tour 17, Akali tient Windswept et prend Sigil pour le point final. Sur trois sessions, G2 − stock vaut +0,4 ± 1,9 : les listes se valent.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 0,
+  "turns": 17,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s007-1",
+  "file": "s007-1.json",
+  "group": "Agent manager : session 7 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 7,
+  "seed": 202802,
+  "title": "Plan Gorica face à Windswept : victoire 8-6",
+  "note": "Même donne que les deux dernières parties (Akali commence, plan Gorica, Sigil of the Storm). Menée 0-2 au tour 4, Akali reprend Windswept au tour 5 et la tient presque toute la partie ; elle reprend Sigil au tour 13 et gagne 8-6 au tour 15 en tenant les deux.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   6
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s007-2",
+  "file": "s007-2.json",
+  "group": "Agent manager : session 7 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 7,
+  "seed": 202867,
+  "title": "Plan Gorica : défaite typique 5-8",
+  "note": "Défaite de référence (LeBlanc commence). 2-2 au tour 4, mais LeBlanc reprend Sigil au tour 7 et la tient jusqu'à la fin ; Akali n'a que Windswept et perd 5-8 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s007-3",
+  "file": "s007-3.json",
+  "group": "Agent manager : session 7 (stock sans plan vs Hook tempo Windswept)",
+  "session": 7,
+  "seed": 202802,
+  "title": "Même donne, sans plan : défaite 3-8",
+  "note": "Même donne, Akali joue sans plan : elle présente Forgotten Monument au lieu de Sigil et ne marque son premier point qu'au tour 9, LeBlanc tenant déjà les deux battlefields (0-4 au tour 8). Défaite 3-8 au tour 14. Sur la session, le plan Gorica vaut +7,0 ± 3,1 pts.",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s007-4",
+  "file": "s007-4.json",
+  "group": "Agent manager : session 7 (stock plan Gorica agressif vs Hook tempo Windswept)",
+  "session": 7,
+  "seed": 202802,
+  "title": "Même donne, plan agressif : défaite 7-8",
+  "note": "Même donne, plan Gorica agressif. Début identique jusqu'au tour 9 (4-3 pour Akali), puis les deux camps s'échangent les battlefields ; à 7-7 LeBlanc tient Sigil et gagne 8-7. Sur la session, jouer agressif coûte 6,0 ± 3,0 pts.",
+  "plans": [
+   "Gorica agressif",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s008-1",
+  "file": "s008-1.json",
+  "group": "Agent manager : session 8 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 8,
+  "seed": 203208,
+  "title": "Plan Gorica face à Windswept : victoire 8-4",
+  "note": "Même donne que la partie sans plan. LeBlanc commence ; Akali tient Windswept dès le tour 4, prend Sigil au tour 6, perd les deux au tour 7 puis les reprend toutes les deux au tour 8 et les tient jusqu'à 8-4 au tour 14.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s008-2",
+  "file": "s008-2.json",
+  "group": "Agent manager : session 8 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 8,
+  "seed": 203207,
+  "title": "Plan Gorica face à Windswept : défaite 3-8",
+  "note": "Même donne que la dernière partie, mais LeBlanc présente Windswept. Akali commence et mène 3-1 au tour 5 avec les deux battlefields ; LeBlanc les reprend toutes les deux au tour 6 et ne les lâche plus (3-8 au tour 12).",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s008-3",
+  "file": "s008-3.json",
+  "group": "Agent manager : session 8 (stock sans plan vs Hook tempo Windswept)",
+  "session": 8,
+  "seed": 203208,
+  "title": "Même donne, sans plan : défaite 6-8",
+  "note": "Même donne que la victoire 8-4, Akali sans plan : elle présente Forgotten Monument au lieu de Sigil. Elle mène 6-3 au tour 10 mais LeBlanc reprend les deux battlefields au tour 11 et les tient jusqu'à 8-6. Le plan vaut +7,7 ± 2,3 pts sur deux sessions (acquis).",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 1,
+  "turns": 15,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s008-4",
+  "file": "s008-4.json",
+  "group": "Agent manager : session 8 (stock plan Gorica vs Hook tempo)",
+  "session": 8,
+  "seed": 203207,
+  "title": "Même donne, LeBlanc sans Windswept : victoire 8-4",
+  "note": "Même donne que la défaite 3-8, mais LeBlanc présente Star Spring (Akali : Void Gate). Akali reprend les deux battlefields au tour 5, les tient aux tours 7 et 9 et gagne 8-4 au tour 13. Windswept coûte ~4 pts à Akali sur trois sessions (acquis).",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s009-1",
+  "file": "s009-1.json",
+  "group": "Agent manager : session 9 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 9,
+  "seed": 203601,
+  "title": "Plan Gorica face à Windswept : victoire 8-7",
+  "note": "Akali commence et suit le plan Gorica (Sigil). Les deux camps s'échangent les battlefields presque à chaque tour ; Akali reprend les deux au tour 9 et finit 8-7. Sans plan, avec ou sans Sigil forcé, la même donne est perdue.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s009-2",
+  "file": "s009-2.json",
+  "group": "Agent manager : session 9 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 9,
+  "seed": 203906,
+  "title": "Plan Gorica : défaite typique 3-8",
+  "note": "LeBlanc commence et prend les deux battlefields au tour 3. Akali les reprend au tour 6 (3-3), mais LeBlanc reprend Windswept au tour 7 puis Sigil au tour 9 et les tient jusqu'à 3-8 au tour 11.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s009-3",
+  "file": "s009-3.json",
+  "group": "Agent manager : session 9 (stock sans plan, Sigil forcé vs Hook tempo Windswept)",
+  "session": 9,
+  "seed": 203616,
+  "title": "Sans plan mais Sigil forcé : victoire 8-2",
+  "note": "Même donne que la partie suivante. Akali joue sans plan mais présente Sigil : elle reprend Sigil au tour 4 et la tient à chaque tour, ajoute Windswept au tour 6 et gagne 8-2 au tour 12. Sur la session, Sigil seul ne vaut que +3,2 ± 2,6 pts : le gain du plan vient surtout des décisions en partie.",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   2
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s009-4",
+  "file": "s009-4.json",
+  "group": "Agent manager : session 9 (stock sans plan vs Hook tempo Windswept)",
+  "session": 9,
+  "seed": 203616,
+  "title": "Même donne, sans plan (Void Gate) : défaite 7-8",
+  "note": "Même donne, Akali sans plan présente Void Gate. Elle mène 7-3 au tour 12 en tenant Void Gate, puis LeBlanc reprend les deux battlefields au tour 13 et les tient jusqu'à 8-7 au tour 15.",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 17,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s010-1",
+  "file": "s010-1.json",
+  "group": "Agent manager : session 10 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 10,
+  "seed": 204002,
+  "title": "Plan Gorica avec Sigil : victoire 8-5",
+  "note": "Même donne que les deux parties suivantes (Akali commence, plan Gorica, Sigil of the Storm). Après un 0-2 au tour 4, Akali reprend Windswept puis prend Sigil au tour 9, reprend les deux au tour 11 et les tient jusqu'à 8-5 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s010-2",
+  "file": "s010-2.json",
+  "group": "Agent manager : session 10 (REF stock plan Gorica vs Hook tempo Windswept)",
+  "session": 10,
+  "seed": 204018,
+  "title": "Plan Gorica : défaite typique 3-8",
+  "note": "Défaite de référence. LeBlanc prend les deux battlefields au tour 4, reprend Sigil au tour 6 et la tient jusqu'à la fin ; Akali n'a que Windswept par moments et perd 3-8 au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s010-3",
+  "file": "s010-3.json",
+  "group": "Agent manager : session 10 (stock sans plan, Sigil forcé vs Hook tempo Windswept)",
+  "session": 10,
+  "seed": 204002,
+  "title": "Même donne, sans plan mais Sigil forcé : défaite 4-8",
+  "note": "Même donne, Akali sans plan mais avec Sigil : elle égalise 2-2 au tour 5, puis LeBlanc reprend Windswept au tour 6 et Sigil au tour 8 et finit 8-4 au tour 12. À battlefield égal, le plan vaut +10,7 ± 2,3 pts sur deux sessions (acquis).",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   4,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s010-4",
+  "file": "s010-4.json",
+  "group": "Agent manager : session 10 (stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept)",
+  "session": 10,
+  "seed": 204002,
+  "title": "Même donne, plan Gorica mais Forgotten Monument forcé : défaite 5-8",
+  "note": "Même donne, plan Gorica mais on force Forgotten Monument au lieu de Sigil. Akali tient Windswept du tour 5 au tour 13 (5-3) mais ne prend jamais Forgotten Monument ; LeBlanc la tient toute la partie et gagne 8-5 au tour 16. Avec le plan, changer de battlefield coûte 10,2 ± 3,4 pts (piste).",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s011-1",
+  "file": "s011-1.json",
+  "group": "Agent manager : session 11 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 11,
+  "seed": 204778,
+  "title": "Plan Gorica avec Sigil : victoire 8-4 (LeBlanc commence)",
+  "note": "Même donne que la partie suivante. Akali prend Windswept dès son premier tour et mène 2-0 ; LeBlanc reprend les deux battlefields au tour 5, mais Akali s'installe sur Sigil du tour 8 au tour 10 (6-2) et reprend Sigil au tour 12 pour finir 8-4.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   4
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s011-2",
+  "file": "s011-2.json",
+  "group": "Agent manager : session 11 (stock plan Gorica, Void Gate forcé vs Hook tempo Windswept)",
+  "session": 11,
+  "seed": 204778,
+  "title": "Même donne avec Void Gate forcé : défaite 4-8",
+  "note": "Même départ (3-0 au tour 4, Akali tient Void Gate et Windswept), mais LeBlanc reprend Void Gate au tour 5 et ne la lâche plus jusqu'à la fin ; Akali ne marque plus qu'un point et perd 4-8 au tour 13. Illustration des ~9 points que coûte Void Gate face à Windswept.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   4,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s011-3",
+  "file": "s011-3.json",
+  "group": "Agent manager : session 11 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 11,
+  "seed": 204659,
+  "title": "Plan Gorica : défaite typique 5-8",
+  "note": "Défaite de référence (Akali commence). Akali mène 5-2 au tour 7 en tenant les deux battlefields, puis LeBlanc reprend Sigil au tour 8 et ne la rend plus : 5-8 au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s011-4",
+  "file": "s011-4.json",
+  "group": "Agent manager : session 11 (stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept)",
+  "session": 11,
+  "seed": 204675,
+  "title": "Forgotten Monument forcé : défaite 3-8 (la référence gagne)",
+  "note": "Avec Sigil, cette donne est gagnée ; avec Forgotten Monument, Akali ne tient que Windswept en début de partie, LeBlanc prend Forgotten Monument au tour 6 et l'occupe presque jusqu'au bout. Partie longue (16 tours) perdue 3-8. Sur toute la session, Forgotten Monument ne coûte que 1,8 ± 3,3 pts : cette donne est un cas défavorable, pas la règle.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s012-1",
+  "file": "s012-1.json",
+  "group": "Agent manager : session 12 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 12,
+  "seed": 205091,
+  "title": "Plan Gorica avec Sigil : victoire 9-2",
+  "note": "Même donne que la partie suivante (Akali commence). LeBlanc ouvre 0-2 au tour 4, puis Akali reprend Windswept au tour 5 et Sigil au tour 7 et ne lâche plus les deux battlefields jusqu'à 9-2 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   9,
+   2
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s012-2",
+  "file": "s012-2.json",
+  "group": "Agent manager : session 12 (stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept)",
+  "session": 12,
+  "seed": 205091,
+  "title": "Même donne avec Forgotten Monument : défaite 7-8",
+  "note": "Même déroulé jusqu'à 7-2 au tour 11 (Akali tient les deux battlefields), mais elle ne trouve pas le dernier point : LeBlanc reprend les deux battlefields au tour 12, garde Forgotten Monument et revient à 7-8 au tour 16. Avec Sigil, la même donne finissait au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s012-3",
+  "file": "s012-3.json",
+  "group": "Agent manager : session 12 (stock plan Gorica, Void Gate forcé vs Hook tempo Windswept)",
+  "session": 12,
+  "seed": 205048,
+  "title": "Void Gate forcé : défaite 6-8 (la référence gagne)",
+  "note": "LeBlanc commence. Akali mène 5-3 au tour 8 en tenant Void Gate, mais LeBlanc reprend Void Gate au tour 9 et la garde jusqu'au bout : 6-8 au tour 13. Avec Sigil, cette donne est gagnée.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s012-4",
+  "file": "s012-4.json",
+  "group": "Agent manager : session 12 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 12,
+  "seed": 204939,
+  "title": "Plan Gorica : défaite typique 7-8",
+  "note": "Défaite de référence (Akali commence). LeBlanc mène 6-1 au tour 8 en tenant les deux battlefields ; Akali les reprend, revient à 7-7 au tour 13, puis LeBlanc reprend tout au tour 14 pour le dernier point.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s012-5",
+  "file": "s012-5.json",
+  "group": "Agent manager : session 12 (stock plan Gorica (choix du plan) vs Hook tempo)",
+  "session": 12,
+  "seed": 204802,
+  "title": "Contre Hook tempo : Void Gate face à Star Spring, victoire 8-5",
+  "note": "LeBlanc présente Star Spring, le plan Gorica répond Void Gate (son choix habituel). Akali tient Void Gate presque toute la partie et gagne 8-5 au tour 13. Sur la session, Void Gate face à Star Spring ne coûte rien (Sigil forcé −1,0 ± 4,7) : le problème de Void Gate se limite à Windswept.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Void Gate",
+   "Star Spring"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s013-1",
+  "file": "s013-1.json",
+  "group": "Agent manager : session 13 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 13,
+  "seed": 205202,
+  "title": "Plan Gorica avec Sigil : victoire 9-3",
+  "note": "Même donne que la partie suivante (Akali commence). LeBlanc ouvre 0-2 ; Akali reprend Windswept au tour 5 puis Sigil au tour 7 et tient les deux battlefields jusqu'à 9-3 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   9,
+   3
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s013-2",
+  "file": "s013-2.json",
+  "group": "Agent manager : session 13 (stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept)",
+  "session": 13,
+  "seed": 205202,
+  "title": "Même donne avec Forgotten Monument : défaite 6-8",
+  "note": "Akali mène 6-3 au tour 11 en tenant les deux battlefields, mais LeBlanc reprend tout au tour 12, garde Forgotten Monument et gagne 6-8 au tour 16. Troisième session de suite où Forgotten Monument coûte des points (−5,5 ± 3,3).",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s013-3",
+  "file": "s013-3.json",
+  "group": "Agent manager : session 13 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 13,
+  "seed": 205344,
+  "title": "Plan Gorica : défaite typique 7-8",
+  "note": "Défaite de référence (Akali commence). Akali mène 3-0 au tour 5, LeBlanc reprend les deux battlefields au tour 6 ; la partie reste serrée jusqu'à 7-6, puis LeBlanc reprend Sigil et Windswept au tour 14 pour le dernier point.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s013-4",
+  "file": "s013-4.json",
+  "group": "Agent manager : session 13 (stock plan Gorica vs Deathknell)",
+  "session": 13,
+  "seed": 205200,
+  "title": "Contre LeBlanc Deathknell : victoire 8-5",
+  "note": "LeBlanc commence sur Windswept avec le plan Deathknell. Après 1-3, Akali reprend Sigil au tour 8 et tient les deux battlefields jusqu'à 6-3, puis gagne 8-5 au tour 12.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s013-5",
+  "file": "s013-5.json",
+  "group": "Agent manager : session 13 (stock plan Gorica vs Deathknell)",
+  "session": 13,
+  "seed": 205201,
+  "title": "Contre LeBlanc Deathknell : défaite 7-8",
+  "note": "Partie serrée : Akali tient Sigil du tour 6 au tour 10 (5-4), LeBlanc reprend tout au tour 11, Akali revient à 7-6 au tour 12 puis LeBlanc reprend les deux battlefields au tour 13.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s014-1",
+  "file": "s014-1.json",
+  "group": "Agent manager : session 14 (REF stock plan Gorica vs Deathknell)",
+  "session": 14,
+  "seed": 205600,
+  "title": "Contre Deathknell, plan Gorica : victoire 8-6",
+  "note": "Même donne que la partie suivante (LeBlanc commence). Akali reprend Windswept au tour 4 puis Sigil au tour 6 et mène 5-2 ; LeBlanc revient à 6-6 au tour 11, Akali reprend Sigil au tour 12 pour finir 8-6.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   6
+  ],
+  "first": 1,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s014-2",
+  "file": "s014-2.json",
+  "group": "Agent manager : session 14 (stock plan Gorica agressif vs Deathknell)",
+  "session": 14,
+  "seed": 205600,
+  "title": "Même donne en jouant agressif : défaite 1-8",
+  "note": "Avec le plan agressif, Akali ne prend aucun battlefield avant le tour 8 ; LeBlanc tient Sigil et Windswept presque toute la partie et gagne 1-8 au tour 11. Sur la session, jouer agressif contre Deathknell coûte −3,0 ± 3,2 : on ne sait pas encore.",
+  "plans": [
+   "Gorica agressif",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   1,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s014-3",
+  "file": "s014-3.json",
+  "group": "Agent manager : session 14 (REF stock plan Gorica vs Deathknell)",
+  "session": 14,
+  "seed": 205917,
+  "title": "Contre Deathknell : défaite typique 7-8",
+  "note": "Défaite de référence (LeBlanc commence). Partie au coude à coude : 3-2, 4-5, 6-5, 7-6 pour Akali, puis LeBlanc reprend les deux battlefields au tour 13 pour le dernier point.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s014-4",
+  "file": "s014-4.json",
+  "group": "Agent manager : session 14 (stock plan Gorica vs Hook tempo)",
+  "session": 14,
+  "seed": 205606,
+  "title": "Contre Hook tempo : remontée de 0-5 à 8-7",
+  "note": "LeBlanc mène 0-5 au tour 7 en tenant les deux battlefields. Akali reprend Sigil au tour 8 et ne la lâche plus, reprend Windswept au tour 12 et gagne 8-7 au tour 16. Sur la même donne, contre Deathknell, Akali perdait.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s015-1",
+  "file": "s015-1.json",
+  "group": "Agent manager : session 15 (REF stock plan Gorica vs Deathknell)",
+  "session": 15,
+  "seed": 206000,
+  "title": "Contre Deathknell, plan Gorica : victoire 8-7",
+  "note": "Même donne que les deux parties suivantes (LeBlanc commence). Akali tient les deux battlefields du tour 6 au tour 10 (7-3), LeBlanc revient à 7-7 au tour 13, puis Akali reprend Windswept au tour 14 et marque le dernier point au tour 16.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s015-2",
+  "file": "s015-2.json",
+  "group": "Agent manager : session 15 (stock sans plan vs Deathknell)",
+  "session": 15,
+  "seed": 206000,
+  "title": "Même donne sans plan : défaite 5-8",
+  "note": "Même début (3-3 au tour 6), mais sans plan Akali laisse LeBlanc reprendre Windswept au tour 7 puis Sigil au tour 9 ; LeBlanc gagne 5-8 au tour 11. Sur la session, le plan vaut +11,8 ± 3,3 contre Deathknell.",
+  "plans": [
+   "aucun",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s015-3",
+  "file": "s015-3.json",
+  "group": "Agent manager : session 15 (stock plan Gorica agressif vs Deathknell)",
+  "session": 15,
+  "seed": 206000,
+  "title": "Même donne en jouant agressif : défaite 7-8",
+  "note": "En agressif, Akali mène même plus vite (7-3 au tour 10), mais perd les deux battlefields au tour 11 et ne les reprend plus : 7-8 au tour 15. Jouer agressif coûte ~5 pts sur l'ensemble des sessions.",
+  "plans": [
+   "Gorica agressif",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 15,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s015-4",
+  "file": "s015-4.json",
+  "group": "Agent manager : session 15 (REF stock plan Gorica vs Deathknell)",
+  "session": 15,
+  "seed": 206005,
+  "title": "Contre Deathknell : défaite typique 5-8",
+  "note": "Défaite de référence (LeBlanc commence). LeBlanc mène dès le tour 3 et tient Sigil presque toute la partie ; Akali ne fait que des allers-retours sur Windswept et perd 5-8 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Deathknell"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 1,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s016-1",
+  "file": "s016-1.json",
+  "group": "Agent manager : session 16 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 16,
+  "seed": 206403,
+  "title": "Nouveau moteur, plan Gorica avec Sigil : victoire 8-2",
+  "note": "Première session avec les nouvelles règles de rune. Même donne que les deux parties suivantes (Akali commence) : Akali prend les deux battlefields au tour 5, garde Sigil du tour 7 au tour 11 et gagne 8-2.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   2
+  ],
+  "first": 0,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s016-2",
+  "file": "s016-2.json",
+  "group": "Agent manager : session 16 (stock sans plan vs Hook tempo Windswept)",
+  "session": 16,
+  "seed": 206403,
+  "title": "Même donne sans plan : défaite 7-8",
+  "note": "Sans plan, Akali présente Forgotten Monument. LeBlanc mène 1-5 au tour 8 ; Akali revient à 7-6 au tour 13 mais LeBlanc reprend les deux battlefields au tour 14. Sur la session, le plan vaut +12,5 ± 3,4.",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s016-3",
+  "file": "s016-3.json",
+  "group": "Agent manager : session 16 (stock plan Gorica, Void Gate forcé vs Hook tempo Windswept)",
+  "session": 16,
+  "seed": 206403,
+  "title": "Même donne avec Void Gate forcé : défaite 2-8",
+  "note": "Avec Void Gate au lieu de Sigil, Akali ne tient Void Gate qu'aux tours 3 et 5 ; LeBlanc la garde ensuite jusqu'au bout et gagne 2-8. Sur la session, Void Gate coûte −9,0 ± 3,2 face à Windswept.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   2,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s016-4",
+  "file": "s016-4.json",
+  "group": "Agent manager : session 16 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 16,
+  "seed": 206618,
+  "title": "Nouveau moteur, plan Gorica : défaite typique 5-8",
+  "note": "Défaite de référence (Akali commence). Akali ouvre 2-0, mais LeBlanc tient Sigil du tour 4 à la fin ; Akali n'a que des allers-retours sur Windswept et perd 5-8 au tour 12.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 0,
+  "turns": 12,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s017-1",
+  "file": "s017-1.json",
+  "group": "Agent manager : session 17 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 17,
+  "seed": 206820,
+  "title": "Plan Gorica avec Sigil : victoire 8-7 au finish",
+  "note": "LeBlanc commence. Même donne que les deux parties suivantes. Akali mène 3-0 au tour 4, LeBlanc reprend la main au milieu de partie, mais Akali tient Windswept par moments, revient à 6-6 au tour 12 et finit 8-7 au tour 14 en reprenant Sigil.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s017-2",
+  "file": "s017-2.json",
+  "group": "Agent manager : session 17 (stock plan Gorica agressif vs Hook tempo Windswept)",
+  "session": 17,
+  "seed": 206820,
+  "title": "Même donne avec le plan agressif : défaite 3-8",
+  "note": "Akali n'a que 2 points au tour 4 au lieu de 3, puis LeBlanc contrôle les deux battlefields à partir du tour 9 et gagne 3-8 au tour 11. Sur la session, l'agressif coûte −8,8 ± 3,0 points (cumul nouvelle version −7,3 ± 2,2).",
+  "plans": [
+   "Gorica agressif",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s017-3",
+  "file": "s017-3.json",
+  "group": "Agent manager : session 17 (stock plan Gorica, Void Gate forcé vs Hook tempo Windswept)",
+  "session": 17,
+  "seed": 206820,
+  "title": "Même donne avec Void Gate au lieu de Sigil : défaite 4-8",
+  "note": "Même début que la référence (3-0 au tour 4), mais à 4-4 au tour 9 LeBlanc tient les deux battlefields et gagne 4-8 au tour 11. Sur la session, Void Gate coûte −9,5 ± 3,1 points (cumul nouvelle version −9,3 ± 2,2).",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   4,
+   8
+  ],
+  "first": 1,
+  "turns": 11,
+  "bf": [
+   "Void Gate",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s017-4",
+  "file": "s017-4.json",
+  "group": "Agent manager : session 17 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 17,
+  "seed": 207005,
+  "title": "Défaite type de la référence : 5-2 puis 5-8",
+  "note": "Akali commence et mène 5-2 au tour 9 en tenant les deux battlefields, puis LeBlanc reprend les deux au tour 10 et ne les lâche plus : Akali ne marque plus rien et perd 5-8 au tour 16.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 0,
+  "turns": 16,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s018-1",
+  "file": "s018-1.json",
+  "group": "Agent manager : session 18 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 18,
+  "seed": 207209,
+  "title": "Plan Gorica avec Sigil : victoire 8-5",
+  "note": "Akali commence. Même donne que les deux parties suivantes. Akali prend les deux battlefields au tour 5 (3-0), les reprend au tour 9 (6-2) et garde Windswept jusqu'à la fin pour gagner 8-5 au tour 13.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 0,
+  "turns": 13,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s018-2",
+  "file": "s018-2.json",
+  "group": "Agent manager : session 18 (stock sans plan vs Hook tempo Windswept)",
+  "session": 18,
+  "seed": 207209,
+  "title": "Même donne sans plan, même Sigil : défaite 3-8",
+  "note": "Sans plan, l'IA présente aussi Sigil : seule la conduite de la partie change. LeBlanc prend les deux battlefields dès le tour 4 et ne les lâche qu'au tour 7 ; défaite 3-8 au tour 10. Sur la session, le plan vaut +13,5 ± 3,3 (cumul nouvelle version +13,0 ± 2,4).",
+  "plans": [
+   "aucun",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   3,
+   8
+  ],
+  "first": 0,
+  "turns": 10,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s018-3",
+  "file": "s018-3.json",
+  "group": "Agent manager : session 18 (stock plan Gorica, Forgotten Monument forcé vs Hook tempo Windswept)",
+  "session": 18,
+  "seed": 207209,
+  "title": "Même donne avec Forgotten Monument : défaite 2-8",
+  "note": "Avec Forgotten Monument au lieu de Sigil, LeBlanc tient son battlefield presque toute la partie et Akali ne marque que 2 points ; défaite 2-8 au tour 14. Sur la session, Forgotten Monument coûte −9,0 ± 3,2 points.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   2,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Forgotten Monument",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ },
+ {
+  "id": "s018-4",
+  "file": "s018-4.json",
+  "group": "Agent manager : session 18 (REF stock plan Gorica (Sigil) vs Hook tempo Windswept)",
+  "session": 18,
+  "seed": 207201,
+  "title": "Défaite type de la référence : retour à 5-4 puis 5-8",
+  "note": "Akali commence mais LeBlanc mène 0-4 au tour 6. Akali reprend les deux battlefields au tour 7 et passe devant 5-4 au tour 11, puis LeBlanc les reprend au tour 12 et gagne 5-8 au tour 14.",
+  "plans": [
+   "Gorica",
+   "Hook tempo Windswept"
+  ],
+  "winner": 1,
+  "pts": [
+   5,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo"
+ }
+]

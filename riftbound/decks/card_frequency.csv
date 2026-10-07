@@ -1,0 +1,90 @@
+legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_played,sideboard_pct
+"Akali, Rogue Assassin","Akali, Deadly Weapon",ven-021,Unit,Fury,3,6,100,1.0,0
+"Akali, Rogue Assassin",Astral Heron,ven-044,Unit,Calm,7,6,100,3.0,0
+"Akali, Rogue Assassin",Back Off,unl-042,Spell,Calm,3,6,100,2.0,0
+"Akali, Rogue Assassin",Defy,ogn-045,Spell,Calm,1,6,100,3.0,0
+"Akali, Rogue Assassin",Discipline,ogn-058,Spell,Calm,2,6,100,3.0,0
+"Akali, Rogue Assassin",Falling Star,ogn-029,Spell,Fury,2,6,100,2.8,0
+"Akali, Rogue Assassin",Long Sword,sfd-022,Gear,Fury,2,6,100,2.2,0
+"Akali, Rogue Assassin",Shuriken Flip,ven-140,Spell,Fury|Calm,1,6,100,3.0,0
+"Akali, Rogue Assassin",Stellacorn Herder,sfd-048,Unit,Calm,4,6,100,3.0,0
+"Akali, Rogue Assassin",Zhonya's Hourglass,ogn-077,Gear,Calm,2,6,100,3.0,0
+"Akali, Rogue Assassin","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,6,83,3.0,0
+"Akali, Rogue Assassin",Scuttle Crab,unl-053,Unit,Calm,2,6,83,2.6,0
+"Akali, Rogue Assassin",Ferrous Forerunner,sfd-021,Unit,Fury,6,6,67,1.5,67
+"Akali, Rogue Assassin",Mischievous Marai,unl-003,Unit,Fury,2,6,67,2.0,0
+"Akali, Rogue Assassin",Charm,ogn-043,Spell,Calm,1,6,50,2.3,17
+"Akali, Rogue Assassin",Block,ogn-057,Spell,Calm,2,6,50,1.0,0
+"Akali, Rogue Assassin","Darius, Trifarian",ogn-027,Unit,Fury,5,6,50,1.0,0
+"Akali, Rogue Assassin",En Garde,ogn-046,Spell,Calm,1,6,50,1.3,0
+"Akali, Rogue Assassin",Mournful Witness,ven-028,Unit,Calm,2,6,50,2.3,0
+"Akali, Rogue Assassin",Not So Fast,sfd-045,Spell,Calm,2,6,33,1.0,83
+"Akali, Rogue Assassin","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,6,33,1.5,17
+"Akali, Rogue Assassin",Sterak's Gage,sfd-056,Gear,Calm,3,6,33,1.0,0
+"Akali, Rogue Assassin",Adaptatron,ogn-056,Unit,Calm,4,6,17,1.0,33
+"Akali, Rogue Assassin","Irelia, Fervent",sfd-057,Unit,Calm,5,6,17,3.0,33
+"Akali, Rogue Assassin",Lonely Poro,sfd-036,Unit,Calm,2,6,17,3.0,0
+"Akali, Rogue Assassin",Noxus Hopeful,ogn-012,Unit,Fury,4,6,17,1.0,0
+"Akali, Rogue Assassin",Sky Splitter,ogn-014,Spell,Fury,8,6,17,2.0,0
+"Akali, Rogue Assassin","Akali, Silent",ven-038,Unit,Calm,4,6,0,,83
+"Akali, Rogue Assassin",Decree of Focus,ven-040,Spell,Calm,1,6,0,,67
+"Akali, Rogue Assassin",Crumbling Sands,ven-039,Spell,Calm,1,6,0,,50
+"Akali, Rogue Assassin",Against the Odds,sfd-001,Spell,Fury,2,6,0,,33
+"Akali, Rogue Assassin",Disarming Rake,sfd-032,Unit,Calm,3,6,0,,33
+"Akali, Rogue Assassin",Tomb-Raider Barbara,ven-037,Unit,Calm,4,6,0,,33
+"Akali, Rogue Assassin",Brittle Steel,ven-003,Spell,Fury,2,6,0,,17
+"Akali, Rogue Assassin",Decree of Rage,ven-015,Spell,Fury,1,6,0,,17
+"Akali, Rogue Assassin",Pendulum Blade,ven-011,Gear,Fury,3,6,0,,17
+"Leblanc, Deceiver",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,6,100,1.2,50
+"Leblanc, Deceiver",Glasc Mixologist,sfd-165,Unit,Order,5,6,100,3.0,0
+"Leblanc, Deceiver","Karthus, Eternal",ogn-236,Unit,Order,3,6,100,3.0,0
+"Leblanc, Deceiver","LeBlanc, Fragmented",unl-172,Unit,Order,3,6,100,1.0,0
+"Leblanc, Deceiver",Mirror Image,unl-200,Spell,Mind|Order,3,6,100,2.2,0
+"Leblanc, Deceiver",Ruined Rex,unl-067,Unit,Mind,6,6,100,2.7,0
+"Leblanc, Deceiver",Sacrifice,unl-173,Spell,Order,1,6,100,2.7,0
+"Leblanc, Deceiver","Vi, Peacekeeper",unl-176,Unit,Order,5,6,100,2.7,0
+"Leblanc, Deceiver",Black Rose Dignitary,unl-152,Unit,Order,3,6,83,3.0,17
+"Leblanc, Deceiver",Baited Hook,ogn-242,Gear,Order,3,6,83,3.0,0
+"Leblanc, Deceiver",Harnessed Dragon,ogn-234,Unit,Order,8,6,83,3.0,0
+"Leblanc, Deceiver",Hidden Blade,ogn-213,Spell,Order,2,6,83,1.8,0
+"Leblanc, Deceiver",Honest Broker,sfd-155,Unit,Order,2,6,83,2.4,0
+"Leblanc, Deceiver",Rift Herald,unl-179,Unit,Order,8,6,83,2.8,0
+"Leblanc, Deceiver",Soaring Scout,ogn-216,Unit,Order,2,6,83,3.0,0
+"Leblanc, Deceiver",Watchful Sentry,ogn-096,Unit,Mind,2,6,83,2.2,0
+"Leblanc, Deceiver",Deathgrip,sfd-163,Spell,Order,2,6,67,1.8,0
+"Leblanc, Deceiver","LeBlanc, Everywhere At Once",unl-090,Unit,Mind,4,6,17,1.0,67
+"Leblanc, Deceiver",Atakhan,unl-170,Unit,Order,10,6,17,1.0,17
+"Leblanc, Deceiver",Chakram Dancer,unl-071,Unit,Mind,3,6,17,1.0,0
+"Leblanc, Deceiver",Cull the Weak,ogn-209,Spell,Order,2,6,17,3.0,0
+"Leblanc, Deceiver","Kennen, Keeper of Balance",ven-135,Unit,Order,3,6,17,1.0,0
+"Leblanc, Deceiver",Ki Barrier,ven-126,Spell,Order,2,6,17,1.0,0
+"Leblanc, Deceiver",Stupefy,ogn-095,Spell,Mind,1,6,17,1.0,0
+"Leblanc, Deceiver",Decree of Insight,ven-061,Spell,Mind,1,6,0,,67
+"Leblanc, Deceiver",Decree of Unity,ven-131,Spell,Order,2,6,0,,67
+"Leblanc, Deceiver",Salvage,ogn-224,Spell,Order,2,6,0,,67
+"Leblanc, Deceiver",Bellows Breath,sfd-080,Spell,Mind,1,6,0,,33
+"Leblanc, Deceiver",Turn to Dust,unl-070,Spell,Mind,2,6,0,,33
+"Leblanc, Deceiver","Ashe, Focused",unl-169,Unit,Order,5,6,0,,17
+"Leblanc, Deceiver",Safety Inspector,unl-164,Unit,Order,5,6,0,,17
+"Leblanc, Deceiver",Time Warp,ogn-122,Spell,Mind,10,6,0,,17
+"Master Yi, Wuju Bladesman",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,100
+"Master Yi, Wuju Bladesman",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
+"Master Yi, Wuju Bladesman",Alpha Strike,unl-192,Spell,Calm|Body,3,1,100,1.0,0
+"Master Yi, Wuju Bladesman",Charm,ogn-043,Spell,Calm,1,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Bladesman",En Garde,ogn-046,Spell,Calm,1,1,100,2.0,0
+"Master Yi, Wuju Bladesman",First Mate,ogn-132,Unit,Body,3,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Lonely Poro,sfd-036,Unit,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Bladesman","Master Yi, Tempered",unl-113,Unit,Body,4,1,100,1.0,0
+"Master Yi, Wuju Bladesman",Onslaught,ven-081,Spell,Body,4,1,100,1.0,0
+"Master Yi, Wuju Bladesman",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Master Yi, Wuju Bladesman","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Ruin Runner,sfd-105,Unit,Body,6,1,100,2.0,0
+"Master Yi, Wuju Bladesman",Sabotage,ogn-156,Spell,Body,1,1,100,1.0,0
+"Master Yi, Wuju Bladesman",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Bladesman",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,2.0,0
+"Master Yi, Wuju Bladesman",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Master Yi, Wuju Bladesman",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Master Yi, Wuju Bladesman",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+riftbound/train/build/
+riftbound/train/pyodide-cache/
+riftbound/train/thumbs/
+riftbound/puzzles/build_table/

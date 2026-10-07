@@ -1,0 +1,11 @@
+(log perdu au redémarrage du conteneur vers 00:20 ; 2 jobs déjà dans session_016.json)
+moteur figé (014259caa8) dans /mnt/attach/project-files/riftbound/manager/results/engine_session_016, plans.py 8b2147fcef
+reprise de la session 16 : 2 job(s) déjà joué(s), graines 206400+
+stock plan Gorica agressif vs Hook tempo Windswept       41.8% ±0.025 n=400 graines 206400+ err=0 (493s)
+stock plan Gorica, Void Gate forcé vs Hook tempo Windswept  38.2% ±0.024 n=400 graines 206400+ err=0 (593s)
+stock plan Gorica vs Hook tempo                          49.8% ±0.025 n=400 graines 206400+ err=0 (574s)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock sans plan vs Hook tempo Windswept: -12.5 ± 3.4 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica agressif vs Hook tempo Windswept: -5.5 ± 3.3 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica, Void Gate forcé vs Hook tempo Windswept: -9.0 ± 3.2 pts (n=400)
+  apparié vs 'REF stock plan Gorica (Sigil) vs Hook tempo Windswept': stock plan Gorica vs Hook tempo: +2.5 ± 2.3 pts (n=400)
+SESSION 16 TERMINÉE -> /mnt/attach/project-files/riftbound/manager/results/session_016.json

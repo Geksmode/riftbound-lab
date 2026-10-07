@@ -1,0 +1,296 @@
+[
+ {
+  "label": "build: Gorica stock",
+  "n": 160,
+  "wr": 0.4,
+  "se": 0.0387,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.432,
+   "leblanc_first": 0.372
+  },
+  "games": 160
+ },
+ {
+  "label": "build: GL -2 Long Sword +Silent +Forerunner",
+  "n": 160,
+  "wr": 0.4813,
+  "se": 0.0395,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.527,
+   "leblanc_first": 0.442
+  },
+  "games": 160
+ },
+ {
+  "label": "build: GD -3 Defy +2 Forerunner +Poro",
+  "n": 160,
+  "wr": 0.475,
+  "se": 0.0395,
+  "turns": 14.8,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.554,
+   "leblanc_first": 0.407
+  },
+  "games": 160
+ },
+ {
+  "label": "build: G2 -2 Long Sword -3 Defy +5 unites",
+  "n": 160,
+  "wr": 0.575,
+  "se": 0.0391,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.716,
+   "leblanc_first": 0.453
+  },
+  "games": 160
+ },
+ {
+  "label": "build: GB G2 -Block -Not So Fast +2 Crab",
+  "n": 160,
+  "wr": 0.475,
+  "se": 0.0395,
+  "turns": 15.4,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.554,
+   "leblanc_first": 0.407
+  },
+  "games": 160
+ },
+ {
+  "label": "sideboard: Gorica stock vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.35,
+  "se": 0.0377,
+  "turns": 16.0,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.419,
+   "leblanc_first": 0.291
+  },
+  "games": 160
+ },
+ {
+  "label": "sideboard: G2 vs LeBlanc sidee",
+  "n": 160,
+  "wr": 0.4625,
+  "se": 0.0394,
+  "turns": 15.4,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.568,
+   "leblanc_first": 0.372
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Forgotten Monument (G2)",
+  "n": 160,
+  "wr": 0.4688,
+  "se": 0.0395,
+  "turns": 15.4,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.537,
+   "leblanc_first": 0.4
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Sigil of the Storm (G2)",
+  "n": 160,
+  "wr": 0.5563,
+  "se": 0.0393,
+  "turns": 15.7,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.662,
+   "leblanc_first": 0.45
+  },
+  "games": 160
+ },
+ {
+  "label": "battlefield Akali: Void Gate (G2)",
+  "n": 160,
+  "wr": 0.525,
+  "se": 0.0395,
+  "turns": 15.1,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.588,
+   "leblanc_first": 0.463
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 10000+): Gorica stock",
+  "n": 160,
+  "wr": 0.4437,
+  "se": 0.0393,
+  "turns": 15.9,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.463,
+   "leblanc_first": 0.425
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 10000+): G2",
+  "n": 160,
+  "wr": 0.475,
+  "se": 0.0395,
+  "turns": 15.3,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.5,
+   "leblanc_first": 0.45
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 10000+): GL",
+  "n": 160,
+  "wr": 0.4813,
+  "se": 0.0395,
+  "turns": 16.0,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.512,
+   "leblanc_first": 0.45
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 20000+): Gorica stock",
+  "n": 160,
+  "wr": 0.4813,
+  "se": 0.0395,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.53,
+   "leblanc_first": 0.429
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 20000+): G2",
+  "n": 160,
+  "wr": 0.5375,
+  "se": 0.0394,
+  "turns": 15.4,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.578,
+   "leblanc_first": 0.494
+  },
+  "games": 160
+ },
+ {
+  "label": "retex LA: Gorica stock vs LeBlanc LA",
+  "n": 160,
+  "wr": 0.3844,
+  "se": 0.0385,
+  "turns": 16.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.473,
+   "leblanc_first": 0.302
+  },
+  "games": 160
+ },
+ {
+  "label": "retex LA: G2 vs LeBlanc LA",
+  "n": 160,
+  "wr": 0.4875,
+  "se": 0.0395,
+  "turns": 15.8,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.541,
+   "leblanc_first": 0.442
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 30000+): Gorica stock",
+  "n": 160,
+  "wr": 0.4125,
+  "se": 0.0389,
+  "turns": 16.1,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.486,
+   "leblanc_first": 0.356
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 30000+): G2",
+  "n": 160,
+  "wr": 0.525,
+  "se": 0.0395,
+  "turns": 15.4,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.629,
+   "leblanc_first": 0.444
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 40000+): Gorica stock",
+  "n": 160,
+  "wr": 0.45,
+  "se": 0.0393,
+  "turns": 16.2,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.5,
+   "leblanc_first": 0.409
+  },
+  "games": 160
+ },
+ {
+  "label": "confirm (graines 40000+): G2",
+  "n": 160,
+  "wr": 0.5125,
+  "se": 0.0395,
+  "turns": 15.6,
+  "errors": 0,
+  "err": null,
+  "by_first": {
+   "akali_first": 0.625,
+   "leblanc_first": 0.42
+  },
+  "games": 160
+ }
+]

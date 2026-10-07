@@ -1,0 +1,37 @@
+# legend: Akali, Rogue Assassin
+# player: Gorica
+# event: Riftbound Regional Qualifier - Singapore
+# date: 2026-09
+# placement:
+# url: https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-281253
+# note: sideboard non récupéré
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+2 Mischievous Marai
+3 Mournful Witness
+3 Kai'Sa, Survivor
+1 Noxus Hopeful
+3 Stellacorn Herder
+2 Blitzcrank, Impassive
+1 Darius, Trifarian
+3 Astral Heron
+2 Long Sword
+3 Zhonya's Hourglass
+1 Sterak's Gage
+3 Defy
+3 Shuriken Flip
+1 Block
+3 Discipline
+1 Not So Fast
+2 Back Off
+2 Falling Star
+[runes]
+6 Calm Rune
+6 Fury Rune
+[battlefields]
+1 Forgotten Monument
+1 Sigil of the Storm
+1 Void Gate

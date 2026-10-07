@@ -1,0 +1,305 @@
+<title>Puzzles Akali vs Yi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: puzzle tabs, brief, then the table — Yi's side on top, two battlefields, your side below; action bar + journal */
+:root{
+  --bg:#e9eef0; --table:#f7f9fa; --surface:#ffffff; --ink:#17232b; --muted:#5b6a74; --line:#cfd8dd;
+  --calm:#1f7a63; --calm-soft:#d8eee6; --fury:#b8322b; --fury-soft:#f6dcda; --body:#b5621b; --body-soft:#f5e3d1;
+  --sel:#2a62c9; --good:#1f7a3a; --bad:#b3332a; --gold:#8a6a12;
+  --display:"Archivo",system-ui,sans-serif; --text:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f161a; --table:#151f25; --surface:#1c2830; --ink:#e3eaee; --muted:#97a7b1; --line:#2d3c46;
+  --calm:#50c4a2; --calm-soft:#163a31; --fury:#ef7d74; --fury-soft:#3d1d1b; --body:#e59a55; --body-soft:#3b2817;
+  --sel:#7aa7ff; --good:#62d082; --bad:#f07a6f; --gold:#e0bf5c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161a; --table:#151f25; --surface:#1c2830; --ink:#e3eaee; --muted:#97a7b1; --line:#2d3c46;
+  --calm:#50c4a2; --calm-soft:#163a31; --fury:#ef7d74; --fury-soft:#3d1d1b; --body:#e59a55; --body-soft:#3b2817;
+  --sel:#7aa7ff; --good:#62d082; --bad:#f07a6f; --gold:#e0bf5c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--text);margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 48px;display:flex;flex-direction:column;gap:16px}
+h1{font:800 clamp(1.4rem,3.2vw,2rem)/1.1 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:70ch}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font:600 .85rem var(--text);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tab[aria-current="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--line)} .dot.ok{background:var(--good)} .dot.ko{background:var(--bad)}
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.brief h2{font:700 1.15rem var(--display);margin:0}
+.brief .goal{font-weight:600}
+.brief .goal b{font:600 .72rem var(--text);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-right:6px}
+.game{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+@media (max-width:860px){.game{grid-template-columns:1fr}}
+.table{background:var(--table);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.side{display:flex;flex-direction:column;gap:8px;border-radius:10px;padding:10px}
+.side.op{background:var(--body-soft)} .side.me{background:var(--calm-soft)}
+.side-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.who{font:700 .78rem var(--text);text-transform:uppercase;letter-spacing:.08em}
+.op .who{color:var(--body)} .me .who{color:var(--calm)}
+.legend{font-size:.82rem;color:var(--muted)}
+.runes{display:flex;gap:4px;margin-left:auto;align-items:center}
+.rune{width:16px;height:16px;border-radius:4px;border:2px solid currentColor;font:700 .55rem/12px var(--mono);text-align:center}
+.rune.Calm{color:var(--calm)} .rune.Fury{color:var(--fury)} .rune.Body{color:var(--body)}
+.rune.r{background:currentColor} .rune.x{opacity:.45}
+.rlabel{font:500 .75rem var(--mono);color:var(--muted);margin-right:4px}
+.zone{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;min-height:62px;padding:6px;border-radius:8px;border:1px dashed transparent}
+.zone.target{border-color:var(--sel);background:color-mix(in srgb,var(--sel) 8%,transparent);cursor:pointer}
+.zlabel{font:600 .7rem var(--text);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);width:100%}
+.bfs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.bfs{grid-template-columns:1fr}}
+.bf{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bf.fight{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.bf-head{display:flex;justify-content:space-between;gap:6px;align-items:baseline;flex-wrap:wrap}
+.bf-name{font:700 .92rem var(--display)}
+.ctrl{font:600 .72rem var(--text);padding:2px 8px;border-radius:999px;background:var(--line);color:var(--muted)}
+.ctrl.me{background:var(--calm-soft);color:var(--calm)} .ctrl.op{background:var(--body-soft);color:var(--body)}
+.bf .zone{min-height:54px}
+.unit{position:relative;width:96px;border-radius:8px;border:1px solid var(--line);background:var(--surface);padding:6px 7px;display:flex;flex-direction:column;gap:2px;font-size:.78rem;line-height:1.2;text-align:left;color:var(--ink);font-family:var(--text)}
+.unit.mine{border-left:4px solid var(--calm)} .unit.theirs{border-left:4px solid var(--body)}
+.unit.can{cursor:pointer} .unit.can:hover{border-color:var(--sel)}
+.unit.sel{box-shadow:0 0 0 2px var(--sel)}
+.unit.exh{opacity:.62}
+.unit .n{font-weight:700}
+.unit .m{font:700 1.2rem/1 var(--mono);font-variant-numeric:tabular-nums}
+.unit .m small{font:500 .65rem var(--mono);color:var(--muted)}
+.unit .tags{display:flex;gap:3px;flex-wrap:wrap}
+.unit .t{font:600 .6rem var(--text);padding:1px 4px;border-radius:3px;background:var(--line);color:var(--ink)}
+.unit .t.st{background:var(--fury-soft);color:var(--fury)} .unit .t.dm{background:var(--fury);color:#fff}
+.hidden-card{width:96px;border-radius:8px;border:1px dashed var(--calm);padding:6px 7px;font-size:.75rem;color:var(--calm);font-weight:600;background:transparent;text-align:left;font-family:var(--text)}
+.hidden-card.can{cursor:pointer;background:var(--calm-soft)}
+.hand{display:flex;gap:8px;flex-wrap:wrap}
+.card{width:132px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 8px;text-align:left;font:inherit;font-size:.78rem;color:var(--ink);display:flex;flex-direction:column;gap:3px;line-height:1.25}
+.card .cn{font-weight:700;font-size:.82rem}
+.card .cc{font:500 .7rem var(--mono);color:var(--muted)}
+.card .ct{color:var(--muted)}
+.card.can{cursor:pointer;border-color:var(--calm)} .card.can:hover{box-shadow:0 0 0 2px var(--calm)}
+.card.no{opacity:.55}
+.card.known{width:120px}
+.card.dim-Fury{border-top:3px solid var(--fury)} .card.dim-Calm{border-top:3px solid var(--calm)} .card.dim-Body{border-top:3px solid var(--body)}
+.panel{display:flex;flex-direction:column;gap:12px;min-width:0}
+.bar{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.prompt{font-weight:600}
+.prompt.wait{color:var(--muted)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button.b{font:600 .88rem var(--text);border-radius:7px;padding:8px 12px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+button.b.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button.b:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.choices{display:flex;flex-direction:column;gap:6px}
+.choices button{text-align:left}
+.chain{font-size:.85rem;display:flex;flex-direction:column;gap:4px}
+.chain .it{border:1px solid var(--gold);border-radius:6px;padding:4px 8px}
+.log{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.84rem;max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.log h3,.bar h3{font:600 .72rem var(--text);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 4px}
+.log .l.turn{font-weight:700;margin-top:4px}
+.result{border-radius:10px;padding:14px 16px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.result.ok{border-color:var(--good)} .result.ko{border-color:var(--bad)}
+.result h3{font:800 1.1rem var(--display);margin:0}
+.result.ok h3{color:var(--good)} .result.ko h3{color:var(--bad)}
+.result p{margin:0;max-width:72ch}
+.note{font-size:.82rem;color:var(--muted);max-width:80ch}
+</style>
+
+<div class="wrap">
+  <div>
+    <h1>Puzzles Akali contre Yi Bladesman</h1>
+    <p class="sub">Tu joues toi-même : clique tes unités puis un champ de bataille pour les déplacer, clique une carte pour la jouer. Yi répond selon ses runes ouvertes et sa main, qui est visible. Lui ne voit pas la tienne.</p>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Puzzles"></nav>
+  <section class="brief" id="brief"></section>
+  <div class="game">
+    <div class="table" id="table"></div>
+    <div class="panel">
+      <div class="bar" id="bar"></div>
+      <div id="result"></div>
+      <div class="log" id="log"><h3>Journal</h3></div>
+    </div>
+  </div>
+  <p class="note">Les règles suivent le moteur fidèle du projet : combat (somme des puissances, Tank d'abord, rappel des attaquants si des défenseurs restent), chaîne et showdown. Toutes les actions légales sont permises : garder la priorité et empiler tes cartes, cibler n'importe quelle unité, cacher une carte (Hidden), Accelerate, Flow depuis la défausse, la légende d'Akali (Empower, repli), l'ordre de répartition de tes dégâts. Le paiement des runes est automatique et garde les runes dont tes autres cartes ont besoin. Chaque puzzle a été vérifié par un solveur qui explore toutes les lignes, et plusieurs solutions sont acceptées : seul l'objectif compte.</p>
+</div>
+
+<script>/*ENGINE*/</script>
+<script>/*PUZZLES*/</script>
+<script>
+const {C}=RB;
+const UTXT={"Kai'Sa, Survivor":"Quand elle conquiert, pioche 1.","Mournful Witness":"Après un combat, devient Empowered (+2).","Astral Heron":"Sur un champ de bataille : réduit le coût de ta 2e carte du tour.","Pit Rookie":"","First Mate":"","Master Yi, Tempered":"Hunt 2.","Ruin Runner":"Ne peut pas être choisi par tes sorts et capacités.","Lonely Poro":"","Rengar, Trophy Hunter":"Ambush."};
+const TIM={main:"ton tour",action:"Action",reaction:"Réaction"};
+let state=null, cur=0, sel=[], picking=null, busy=false, gen=0, hist=[];
+let prog={}; try{prog=JSON.parse(localStorage.getItem('pz-board-yi')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('pz-board-yi',JSON.stringify(prog))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function start(i){
+  cur=i; sel=[]; picking=null; busy=false; gen++; hist=[];
+  const p=PUZZLES[i];
+  state=RB.newState(p); state.mine0=state.units.filter(u=>u.owner==='me').map(u=>u.id);
+  state.log=[]; if(p.startOp) state.log.unshift('— Tour de Yi —');
+  $('result').innerHTML='';
+  step();
+}
+function decision(){ return state.stage==='done'?null:RB.advance(state); }
+function step(){
+  const d=decision();
+  render(d);
+  if(!d){ finish(); return; }
+  if(d.who==='me'&&d.opts.length===1&&d.opts[0].t==='assign'){ RB.apply(state,'me',d.opts[0]); step(); return; }
+  if(d.who==='op'){
+    busy=true; render(d);
+    const g=gen;
+    setTimeout(()=>{ if(g!==gen) return; const d2=decision(); if(!d2||d2.who!=='op'){busy=false;step();return;}
+      const o=RB.aiChoose(state,PUZZLES[cur].goal); RB.apply(state,'op',o); busy=false; step(); },650);
+  }
+}
+function act(o){ if(busy) return; hist.push(RB.clone(state)); sel=[]; picking=null; RB.apply(state,'me',o); step(); }
+function undo(){ if(!hist.length) return; gen++; busy=false; state=hist.pop(); sel=[]; picking=null; $('result').innerHTML=''; step(); }
+function finish(){
+  const p=PUZZLES[cur], ok=p.goal(state)>=1000;
+  prog[p.id]=ok?'ok':(prog[p.id]==='ok'?'ok':'ko'); save(); renderTabs();
+  $('result').innerHTML=`<div class="result ${ok?'ok':'ko'}"><h3>${ok?'Objectif atteint':'Objectif manqué'}</h3>
+   <p>${esc(p.goalText)}</p>
+   ${ok?`<p>${esc(p.lesson)}</p>`:`<p id="sol" hidden><b>Solution.</b> ${esc(p.solution)}<br><br>${esc(p.lesson)}</p>`}
+   <div class="btns"><button class="b primary" type="button" id="retry">${ok?'Rejouer':'Réessayer'}</button>
+   ${ok?'':'<button class="b" type="button" id="showsol">Voir la solution</button>'}
+   ${cur<PUZZLES.length-1?'<button class="b" type="button" id="next">Puzzle suivant</button>':''}</div></div>`;
+  $('retry').onclick=()=>start(cur);
+  if($('showsol')) $('showsol').onclick=()=>{$('sol').hidden=false;$('showsol').remove()};
+  if($('next')) $('next').onclick=()=>start(cur+1);
+}
+function renderTabs(){
+  $('tabs').innerHTML=PUZZLES.map((p,i)=>`<button class="tab" type="button" aria-current="${i===cur}" data-i="${i}"><span class="dot ${prog[p.id]||''}"></span>${i+1}. ${esc(p.title)}</button>`).join('');
+  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>start(+b.dataset.i));
+}
+function myOpts(d){ return d&&d.who==='me'&&!busy?d.opts:[]; }
+function runeHtml(pid){
+  const rs=state.runes[pid];
+  return `<span class="rlabel">${rs.filter(r=>r.r).length}/${rs.length} prêtes</span>`+rs.map(r=>`<span class="rune ${r.d} ${r.r?'r':'x'}" title="${r.d}${r.r?' (prête)':' (épuisée)'}"></span>`).join('');
+}
+function unitHtml(u,d){
+  const opts=myOpts(d);
+  const canMove=opts.some(o=>o.t==='move'&&o.ids.includes(u.id));
+  const m=RB.might(state,u), base=C[u.name].might;
+  const tags=[];
+  if(!u.ready) tags.push('<span class="t">épuisée</span>');
+  if(u.stun) tags.push('<span class="t st">étourdie</span>');
+  if(u.dmg) tags.push(`<span class="t dm">${u.dmg} dégâts</span>`);
+  if(u.tank) tags.push('<span class="t">Tank</span>');
+  if(u.emp) tags.push('<span class="t">Empowered</span>');
+  if(u.desig) tags.push(`<span class="t">${u.desig==='att'?'attaque':'défend'}</span>`);
+  if(C[u.name].untargetable) tags.push('<span class="t">intouchable</span>');
+  const extra = m!==base?`<small> (base ${base})</small>`:'';
+  return `<button type="button" class="unit ${u.owner==='me'?'mine':'theirs'} ${canMove?'can':''} ${sel.includes(u.id)?'sel':''} ${u.ready?'':'exh'}" data-u="${u.id}" ${canMove?'':'tabindex="-1"'} title="${esc(C[u.name].text||'')}">
+    <span class="n">${esc(C[u.name].fr)}</span><span class="m">${m}${extra}</span><span class="tags">${tags.join('')}</span></button>`;
+}
+function zoneHtml(loc,owner,d,label){
+  const us=state.units.filter(u=>u.loc===loc&&u.owner===owner);
+  const opts=myOpts(d);
+  const target=owner==='me'&&sel.length&&opts.some(o=>o.t==='move'&&o.to===loc&&same(o.ids,sel));
+  return `<div class="zone ${target?'target':''}" data-loc="${loc}" ${target?'role="button" tabindex="0" aria-label="Déplacer ici"':''}>${label?`<span class="zlabel">${label}${target?' · clique pour déplacer ici':''}</span>`:''}${us.map(u=>unitHtml(u,d)).join('')}</div>`;
+}
+const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+function cardHtml(name,i,d,known){
+  const c=C[name], opts=myOpts(d);
+  const can=!known&&opts.some(o=>(o.t==='play'&&!o.flow&&o.hi===i)||(o.t==='hide'&&o.hi===i));
+  const cost=`${c.e} énergie${c.p?` + ${c.p} rune${c.p>1?'s':''} ${c.dom.join('/')}`:''}`;
+  const txt=c.type==='unit'?`Unité ${c.might}. ${c.text||''}`:(c.text||'');
+  return `<button type="button" class="card dim-${c.dom[0]} ${can?'can':known?'known':'no'}" data-h="${i}" ${can?'':'tabindex="-1"'}>
+   <span class="cn">${esc(c.fr)}</span><span class="cc">${cost} · ${c.type==='unit'?(c.ambush?'Ambush':'Unité'):TIM[c.timing]}</span><span class="ct">${esc(txt)}</span></button>`;
+}
+function render(d){
+  renderTabs();
+  const p=PUZZLES[cur];
+  $('brief').innerHTML=`<h2>${esc(p.title)}</h2><div>${esc(p.brief)}</div><div class="goal"><b>Objectif</b>${esc(p.goalText)}</div>`;
+  const sd=state.sd;
+  const bfHtml=b=>{
+    const bf=state.bfs[b];
+    const hid=state.hidden.filter(h=>h.bf===b);
+    const opts=myOpts(d);
+    return `<div class="bf ${sd&&sd.bf===b?'fight':''}"><div class="bf-head"><span class="bf-name">${esc(bf.name)}</span><span class="ctrl ${bf.ctrl||''}">${bf.ctrl==='me'?'à toi':bf.ctrl==='op'?'à Yi':'libre'}</span></div>
+     ${zoneHtml(b,'op',d,'')}
+     ${zoneHtml(b,'me',d,'')}
+     ${hid.map(h=>{const k=state.hidden.indexOf(h);const can=opts.some(o=>o.t==='play'&&o.hid===k);return `<button type="button" class="hidden-card ${can?'can':''}" data-hid="${k}" ${can?'':'tabindex="-1"'}>Face cachée : ${esc(C[h.name].fr)}<br><span style="font-weight:400">${can?'clique pour la révéler (0 énergie)':'pas jouable maintenant'}</span></button>`}).join('')}
+     ${sd&&sd.bf===b?`<span class="zlabel">${sd.combat?'Combat en cours':'Showdown en cours'}</span>`:''}</div>`;
+  };
+  $('table').innerHTML=`
+   <div class="side op"><div class="side-head"><span class="who">Yi · Wuju Bladesman</span><span class="legend">Une unité qui défend seule a +2.</span><span class="runes">${runeHtml('op')}</span></div>
+    <div class="hand">${state.hand.op.map((n,i)=>cardHtml(n,i,d,true)).join('')||'<span class="legend">Main connue : vide</span>'}</div>
+    ${zoneHtml('base','op',d,'Base de Yi')}</div>
+   <div class="bfs">${bfHtml(0)}${bfHtml(1)}</div>
+   <div class="side me">${zoneHtml('base','me',d,'Ta base')}
+    <div class="side-head"><span class="who">Toi · Akali</span><span class="legend">Points : ${state.pts.me} · Yi : ${state.pts.op}</span><span class="runes">${runeHtml('me')}</span></div>
+    <div class="hand">${legendHtml(d)}${state.hand.me.map((n,i)=>cardHtml(n,i,d,false)).join('')||'<span class="legend">Main vide</span>'}</div>
+    ${trashHtml(d)}</div>`;
+  // bar
+  let prompt, cls='';
+  if(!d){ prompt='Puzzle terminé.'; cls='wait'; }
+  else if(d.who==='op'){ prompt='Yi réfléchit…'; cls='wait'; }
+  else if(d.kind==='assign'){ prompt='Dégâts de combat : choisis dans quel ordre tu répartis tes dégâts (une unité doit recevoir des dégâts mortels avant la suivante ; Tank d\'abord).'; }
+  else if(state.chain.length){ const top=state.chain[state.chain.length-1]; prompt=top.owner==='me'?`Tu as encore la priorité après ${C[top.name].fr} : ajoute une autre Réaction, ou passe pour laisser Yi répondre.`:`Yi joue ${C[top.name].fr}. Tu peux répondre avec une Réaction, ou passer pour qu'il se résolve.`; }
+  else if(sd){ prompt=`${sd.combat?'Combat':'Showdown'} sur ${state.bfs[sd.bf].name} : à toi d'agir (Action ou Réaction), ou passe.${sd.passes===1?' Si tu passes aussi, '+(sd.combat?'les dégâts sont infligés.':'le showdown se termine.'):''}`; }
+  else prompt=state.turn==='me'?'Ton tour : déplace des unités ou joue une carte. « Fin du tour » quand tu as fini.':'Tour de Yi.';
+  const opts=myOpts(d);
+  let choices='';
+  if(d&&d.kind==='assign'&&d.who==='me'&&!busy){
+    picking={assign:true,list:opts};
+    choices=`<h3>Répartition</h3><div class="choices">${opts.map((o,j)=>`<button class="b" type="button" data-c="${j}">${esc(choiceLabel(o))}</button>`).join('')}</div>`;
+  } else if(picking&&picking.assign) picking=null;
+  if(picking&&!picking.assign){
+    const list=picking.legend?opts.filter(o=>o.t==='act'):picking.tr!=null?opts.filter(o=>o.t==='play'&&o.flow&&o.name===picking.name):opts.filter(o=>(o.t==='play'&&!o.flow&&(picking.hid!=null?o.hid===picking.hid:o.hi===picking.hi))||(o.t==='hide'&&picking.hi!=null&&o.hi===picking.hi));
+    choices=`<h3>${esc(picking.legend?'Akali (légende)':C[picking.name].fr)} : choisis</h3><div class="choices">${list.map((o,j)=>`<button class="b" type="button" data-c="${j}">${esc(choiceLabel(o))}</button>`).join('')}<button class="b" type="button" id="cancel">Annuler</button></div>`;
+    picking.list=list;
+  }
+  const chain=state.chain.length?`<div class="chain"><h3>Chaîne (le haut se résout d'abord)</h3>${state.chain.slice().reverse().map(x=>`<div class="it">${x.owner==='op'?'Yi':'Toi'} : ${esc(C[x.name].fr)} — ${esc(C[x.name].label(state,x.ch))}</div>`).join('')}</div>`:'';
+  const hasPass=opts.some(o=>o.t==='pass'), hasEnd=opts.some(o=>o.t==='end');
+  $('bar').innerHTML=`<div class="prompt ${cls}">${esc(prompt)}</div>${chain}${choices}
+   <div class="btns">${hasPass?'<button class="b primary" type="button" id="pass">Passer</button>':''}${hasEnd?'<button class="b primary" type="button" id="end">Fin du tour</button>':''}
+   ${sel.length?'<button class="b" type="button" id="clr">Désélectionner</button>':''}${hist.length?'<button class="b" type="button" id="undo">Annuler mon dernier coup</button>':''}<button class="b" type="button" id="reset">Recommencer</button></div>`;
+  // log
+  $('log').innerHTML='<h3>Journal</h3>'+state.log.map(l=>`<div class="l ${/^—/.test(l)?'turn':''}">${esc(l)}</div>`).join('');
+  $('log').scrollTop=$('log').scrollHeight;
+  wire(d);
+}
+function legendHtml(d){
+  const L=state.legendState.me, opts=myOpts(d), can=opts.some(o=>o.t==='act');
+  return `<button type="button" class="card dim-Fury ${can?'can':'known'}" id="legend" ${can?'':'tabindex="-1"'}><span class="cn">Akali (légende)</span>
+   <span class="cc">${L.emp?'Empowered':'pas Empowered'}${L.exh?' · épuisée':''}</span>
+   <span class="ct">Empower : 3 énergie + 1 rune (ton tour). Repli (Action, l'épuiser) : pendant un combat à ton tour, ramène une de tes unités en base${L.emp?' et la redresse':' ; Empowered, la redresse aussi'}.</span></button>`;
+}
+function trashHtml(d){
+  const t=state.trash.me; if(!t.length) return '';
+  const opts=myOpts(d);
+  return `<div class="hand"><span class="zlabel">Ta défausse</span>${t.map((n,i)=>{const can=opts.some(o=>o.t==='play'&&o.flow&&o.name===n);return `<button type="button" class="card dim-${C[n].dom[0]} ${can?'can':'known'}" data-tr="${i}" ${can?'':'tabindex="-1"'}><span class="cn">${esc(C[n].fr)}</span><span class="cc">${C[n].flow?`Flow : ${C[n].flow.e} énergie + ${C[n].flow.p} rune`:'—'}</span></button>`}).join('')}</div>`;
+}
+function choiceLabel(o){
+  if(o.t==='play'&&o.flow) return 'Flow : '+C[o.name].label(state,o.ch);
+  if(o.t==='hide') return `Cacher face cachée sur ${state.bfs[o.bf].name} (1 rune, jouable au tour suivant)`;
+  if(o.t==='assign') return 'Ordre : '+o.order.map(id=>RB.nm(state,id)).join(' puis ');
+  if(o.t==='act') return C[o.name].label(state,o.ch); const c=C[o.name]; if(c.type==='unit') return (o.ch.loc==='base'?'Jouer dans ta base':`Jouer sur ${state.bfs[o.ch.loc].name}`)+(o.ch.acc?' avec Accelerate (+1 énergie +1 rune Fury, arrive prête)':''); return c.label(state,o.ch); }
+function wire(d){
+  const opts=myOpts(d);
+  document.querySelectorAll('.unit.can').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.u, u=RB.byId(state,id);
+    if(sel.includes(id)) sel=sel.filter(x=>x!==id);
+    else { const loc0=sel.length?RB.byId(state,sel[0]).loc:u.loc; sel=loc0===u.loc?sel.concat(id):[id]; }
+    picking=null; render(d);
+  });
+  document.querySelectorAll('.zone.target').forEach(z=>{
+    const go=()=>{ const loc=z.dataset.loc==='base'?'base':+z.dataset.loc; const o=opts.find(o=>o.t==='move'&&o.to===loc&&same(o.ids,sel)); if(o) act(o); };
+    z.onclick=go; z.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};
+  });
+  document.querySelectorAll('.card.can').forEach(b=>b.onclick=()=>{ const hi=+b.dataset.h; picking={hi,name:state.hand.me[hi]}; sel=[]; render(d); });
+  document.querySelectorAll('.hidden-card.can').forEach(b=>b.onclick=()=>{ const k=+b.dataset.hid; picking={hid:k,name:state.hidden[k].name}; sel=[]; render(d); });
+  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>act(picking.list[+b.dataset.c]));
+  if($('cancel')) $('cancel').onclick=()=>{picking=null;render(d)};
+  if($('pass')) $('pass').onclick=()=>act(opts.find(o=>o.t==='pass'));
+  if($('end')) $('end').onclick=()=>act(opts.find(o=>o.t==='end'));
+  if($('clr')) $('clr').onclick=()=>{sel=[];render(d)};
+  $('reset').onclick=()=>start(cur);
+  if($('undo')) $('undo').onclick=undo;
+  if($('legend')&&$('legend').classList.contains('can')) $('legend').onclick=()=>{ picking={legend:true}; sel=[]; render(d); };
+  document.querySelectorAll('[data-tr]').forEach(b=>{ if(b.classList.contains('can')) b.onclick=()=>{ const i=+b.dataset.tr; picking={tr:i,name:state.trash.me[i]}; sel=[]; render(d); }; });
+}
+// zone targets for units in a battlefield zone need data-loc of the battlefield; base zone has 'base'
+start(0);
+</script>

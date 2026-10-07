@@ -1,0 +1,173 @@
+[
+ {
+  "id": "s001-1",
+  "seed": 200060,
+  "title": "Plan Gorica, Akali commence : gagnée 9-2",
+  "note": "Marai cachée sur Star Spring dès le tour 3, puis Zhonya révélée pour protéger Akali. Darius prend Void Gate au tour 5 en tuant les deux LeBlanc. Avec Star Spring présenté, Akali commence et garde l'initiative (69,5 % de victoires dans ce cas sur la session).",
+  "job": {
+   "label": "REF G2 plan Gorica vs LeBlanc IQ5 Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  "session": 1,
+  "plans_snapshot": "results/plans_session_001/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s001-2",
+  "seed": 200348,
+  "title": "Plan Gorica, Akali commence : perdue 6-8",
+  "note": "Même départ (Witness prend Star Spring), mais Akali passe deux tours sans rien poser. Au tour 8, Vi en embuscade tue Zhonya et Witness sur Star Spring : LeBlanc reprend le battlefield et gagne la course à la tenue.",
+  "job": {
+   "label": "REF G2 plan Gorica vs LeBlanc IQ5 Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  "session": 1,
+  "plans_snapshot": "results/plans_session_001/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s001-3",
+  "seed": 200361,
+  "title": "G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock : perd là où la référence gagne",
+  "note": "Même donne que la référence. Écart apparié sur la session : -7.0 ± 2.4 pts.",
+  "job": {
+   "label": "G2 plan Gorica vs LeBlanc IQ5, LeBlanc présente Windswept Hillock",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell",
+   "opp_bfs": [
+    "Windswept Hillock"
+   ]
+  },
+  "session": 1,
+  "plans_snapshot": "results/plans_session_001/plans.py",
+  "tempo": false
+ },
+ {
+  "id": "s001-4",
+  "seed": 200027,
+  "title": "Liste stock là où G2 gagne : perdue 1-8",
+  "note": "Même donne que la référence (gagnée en G2). LeBlanc commence sur Windswept : Soaring Scout fait double conquête au tour 3, puis Vi et Sacrifice tuent Deadly Weapon au tour 5 (1-4). La liste stock n'a pas d'unité pour reprendre le terrain.",
+  "job": {
+   "label": "Gorica stock plan Gorica vs LeBlanc IQ5 Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  "session": 1,
+  "plans_snapshot": "results/plans_session_001/plans.py",
+  "tempo": false
+ }
+]

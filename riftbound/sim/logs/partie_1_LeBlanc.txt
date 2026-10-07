@@ -1,0 +1,93 @@
+Seed 1 | Akali C5 (Targon's Peak) vs LeBlanc (Dusk Rose Lab) | vainqueur LeBlanc
+T1 Akali score 0-0 runes 0 main ['Scuttle Crab', 'Stellacorn Herder', 'Mischievous Marai', 'Stellacorn Herder']
+  Akali joue Scuttle Crab -> base
+T2 LeBlanc score 0-0 runes 0 main ['Soaring Scout', 'Baited Hook', 'Honest Broker', 'Glasc Mixologist']
+  LeBlanc joue Soaring Scout -> base
+T3 Akali score 0-0 runes 2 main ['Stellacorn Herder', 'Mischievous Marai', 'Stellacorn Herder', 'Adaptatron', "Zhonya's Hourglass"]
+  Akali joue Akali, Deadly Weapon -> base
+  combat @Targon's Peak: [Scuttle Crab(0)] vs []
+  +1 Akali (conquer Targon's Peak) -> 1
+T4 LeBlanc score 0-1 runes 3 main ['Baited Hook', 'Honest Broker', 'Glasc Mixologist', 'Soaring Scout']
+  LeBlanc joue Glasc Mixologist -> base
+  combat @Dusk Rose Lab: [Soaring Scout(1)] vs []
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 1
+  LeBlanc joue Soaring Scout -> 1
+  LeBlanc copie Soaring Scout
+T5 Akali score 1-1 runes 4 main ['Stellacorn Herder', 'Mischievous Marai', 'Stellacorn Herder', 'Adaptatron', "Zhonya's Hourglass", 'Mournful Witness']
+  +1 Akali (hold Targon's Peak) -> 2
+  Akali joue Stellacorn Herder -> base
+  Akali joue Mischievous Marai -> base
+  meurt: Soaring Scout (LeBlanc)
+  combat @Dusk Rose Lab: [Akali, Deadly Weapon(3)] vs [Soaring Scout(1)]
+  meurt: Soaring Scout (LeBlanc)
+  +1 Akali (conquer Dusk Rose Lab) -> 3
+T6 LeBlanc score 1-3 runes 6 main ['Baited Hook', 'Soaring Scout', 'Rift Herald']
+  LeBlanc joue Rift Herald -> base
+  combat @Targon's Peak: [Glasc Mixologist(5)] vs [Scuttle Crab(0)]
+  meurt: Scuttle Crab (Akali)
+  +1 LeBlanc (conquer Targon's Peak) -> 2
+  LeBlanc joue Glasc Mixologist -> 0
+  LeBlanc copie Glasc Mixologist
+T7 Akali score 3-2 runes 5 main ['Stellacorn Herder', 'Adaptatron', 'Mournful Witness', 'Discipline']
+  +1 Akali (hold Dusk Rose Lab) -> 4
+  Akali joue Stellacorn Herder -> base
+  Akali joue Mournful Witness -> base
+T8 LeBlanc score 2-4 runes 7 main ['Baited Hook', 'Watchful Sentry']
+  meurt: Glasc Mixologist (LeBlanc)
+  LeBlanc joue Honest Broker -> base
+  +1 LeBlanc (hold Targon's Peak) -> 3
+  LeBlanc joue Glasc Mixologist -> 0
+  LeBlanc copie Glasc Mixologist
+  LeBlanc joue Thousand-Tailed Watcher -> base
+  combat @Dusk Rose Lab: [Rift Herald(7)] vs [Akali, Deadly Weapon(1)]
+  meurt: Akali, Deadly Weapon (Akali)
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 4
+T9 Akali score 4-4 runes 7 main ['Adaptatron', 'Discipline', 'Shuriken Flip']
+  Akali joue Adaptatron -> base
+  combat @Dusk Rose Lab: [Stellacorn Herder(3), Stellacorn Herder(3), Mischievous Marai(2)] vs [Rift Herald(7)]
+  Zhonya sauve Stellacorn Herder(3)
+  meurt: Mischievous Marai (Akali)
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Harnessed Dragon -> base
+  Dragon tue Stellacorn Herder(3)
+  meurt: Stellacorn Herder (Akali)
+  +1 Akali (conquer Dusk Rose Lab) -> 5
+T10 LeBlanc score 4-5 runes 5 main ['Baited Hook']
+  meurt: Glasc Mixologist (LeBlanc)
+  LeBlanc joue Soaring Scout -> base
+  +1 LeBlanc (hold Targon's Peak) -> 5
+  LeBlanc joue Glasc Mixologist -> 0
+  LeBlanc copie Glasc Mixologist
+  LeBlanc joue Karthus, Eternal -> base
+  LeBlanc joue LeBlanc, Fragmented -> base
+  combat @Dusk Rose Lab: [Thousand-Tailed Watcher(7)] vs [Stellacorn Herder(3)]
+  Back Off stun Thousand-Tailed Watcher(7)
+  combat @Dusk Rose Lab: [Harnessed Dragon(6)] vs [Stellacorn Herder(3)]
+  Akali lance Discipline
+  Zhonya sauve Stellacorn Herder(5)
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 6
+T11 Akali score 5-6 runes 6 main ['Shuriken Flip', 'En Garde', 'Charm']
+  Akali lance Charm
+  Charm renvoie Glasc Mixologist(5)
+  combat @Targon's Peak: [Stellacorn Herder(3), Adaptatron(3)] vs [Glasc Mixologist(5)]
+  meurt: Stellacorn Herder (Akali)
+  meurt: Glasc Mixologist (LeBlanc)
+  LeBlanc joue Soaring Scout -> base
+  LeBlanc joue Watchful Sentry -> base
+  +1 Akali (conquer Targon's Peak) -> 6
+  Akali joue Stellacorn Herder -> base
+T12 LeBlanc score 6-6 runes 5 main []
+  +1 LeBlanc (hold Dusk Rose Lab) -> 7
+  combat @Targon's Peak: [Thousand-Tailed Watcher(7)] vs [Adaptatron(3)]
+  Back Off stun Thousand-Tailed Watcher(7)
+  LeBlanc lance Hidden Blade
+  meurt: Adaptatron (Akali)
+  dernier point par conquete refuse -> pioche
+  LeBlanc joue Thousand-Tailed Watcher -> 0
+  LeBlanc copie Thousand-Tailed Watcher
+T13 Akali score 6-7 runes 6 main ['Shuriken Flip', 'En Garde', 'Discipline', 'Mournful Witness']
+  Akali joue Mournful Witness -> base
+  Akali joue Lonely Poro -> base
+T14 LeBlanc score 7-6 runes 6 main []
+  meurt: Thousand-Tailed Watcher (LeBlanc)
+  +1 LeBlanc (hold Targon's Peak) -> 8

@@ -1,0 +1,44 @@
+# legend: Akali, Rogue Assassin
+# player: 东东卡牌妙妙屋
+# event: S4 Regional Open Wuhan
+# date: 2026-08
+# placement: 5
+# url: https://riftdecks.com/riftbound-metagame/deck-zhong-ji-a-ka-li-267810
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+2 Mischievous Marai
+3 Scuttle Crab
+1 Adaptatron
+3 Kai'Sa, Survivor
+3 Stellacorn Herder
+1 Ferrous Forerunner
+3 Astral Heron
+2 Long Sword
+3 Zhonya's Hourglass
+3 Charm
+3 Defy
+1 En Garde
+3 Shuriken Flip
+3 Discipline
+3 Falling Star
+2 Back Off
+[runes]
+6 Fury Rune
+6 Calm Rune
+[battlefields]
+1 Forgotten Monument
+1 Targon's Peak
+1 Void Gate
+[sideboard]
+1 Crumbling Sands
+2 Decree of Focus
+1 Decree of Rage
+1 Not So Fast
+1 Disarming Rake
+1 Pendulum Blade
+1 Adaptatron
+1 Akali, Silent
+1 Ferrous Forerunner

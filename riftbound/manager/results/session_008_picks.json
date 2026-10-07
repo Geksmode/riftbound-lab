@@ -1,0 +1,94 @@
+[
+ {
+  "id": "s008-1",
+  "seed": 203208,
+  "title": "Plan Gorica face à Windswept : victoire 8-4",
+  "note": "Même donne que la partie sans plan. LeBlanc commence ; Akali tient Windswept dès le tour 4, prend Sigil au tour 6, perd les deux au tour 7 puis les reprend toutes les deux au tour 8 et les tient jusqu'à 8-4 au tour 14.",
+  "job": {
+   "label": "REF stock plan Gorica vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 8,
+  "plans_snapshot": "results/plans_session_008/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s008-2",
+  "seed": 203207,
+  "title": "Plan Gorica face à Windswept : défaite 3-8",
+  "note": "Même donne que la dernière partie, mais LeBlanc présente Windswept. Akali commence et mène 3-1 au tour 5 avec les deux battlefields ; LeBlanc les reprend toutes les deux au tour 6 et ne les lâche plus (3-8 au tour 12).",
+  "job": {
+   "label": "REF stock plan Gorica vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 8,
+  "plans_snapshot": "results/plans_session_008/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s008-3",
+  "seed": 203208,
+  "title": "Même donne, sans plan : défaite 6-8",
+  "note": "Même donne que la victoire 8-4, Akali sans plan : elle présente Forgotten Monument au lieu de Sigil. Elle mène 6-3 au tour 10 mais LeBlanc reprend les deux battlefields au tour 11 et les tient jusqu'à 8-6. Le plan vaut +7,7 ± 2,3 pts sur deux sessions (acquis).",
+  "job": {
+   "label": "stock sans plan vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": null,
+   "opp_plan": "Hook tempo Windswept"
+  },
+  "session": 8,
+  "plans_snapshot": "results/plans_session_008/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s008-4",
+  "seed": 203207,
+  "title": "Même donne, LeBlanc sans Windswept : victoire 8-4",
+  "note": "Même donne que la défaite 3-8, mais LeBlanc présente Star Spring (Akali : Void Gate). Akali reprend les deux battlefields au tour 5, les tient aux tours 7 et 9 et gagne 8-4 au tour 13. Windswept coûte ~4 pts à Akali sur trois sessions (acquis).",
+  "job": {
+   "label": "stock plan Gorica vs Hook tempo",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo"
+  },
+  "session": 8,
+  "plans_snapshot": "results/plans_session_008/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]

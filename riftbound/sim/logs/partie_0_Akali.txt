@@ -1,0 +1,97 @@
+Seed 0 | Akali C5 (Targon's Peak) vs LeBlanc (Star Spring) | vainqueur Akali
+T1 LeBlanc score 0-0 runes 0 main ['Watchful Sentry', 'Vi, Peacekeeper', 'Honest Broker', 'Karthus, Eternal']
+  LeBlanc joue Watchful Sentry -> base
+T2 Akali score 0-0 runes 0 main ['Mischievous Marai', 'Mournful Witness', 'Discipline', 'Akali, Silent']
+  Akali joue Akali, Deadly Weapon -> base
+T3 LeBlanc score 0-0 runes 2 main ['Vi, Peacekeeper', 'Honest Broker', 'Karthus, Eternal', 'Baited Hook']
+  LeBlanc joue Karthus, Eternal -> base
+  combat @Targon's Peak: [Watchful Sentry(1)] vs []
+  +1 LeBlanc (conquer Targon's Peak) -> 1
+  LeBlanc joue Watchful Sentry -> 0
+  LeBlanc copie Watchful Sentry
+T4 Akali score 0-1 runes 3 main ['Mischievous Marai', 'Mournful Witness', 'Discipline', 'Akali, Silent', 'Falling Star']
+  Akali joue Akali, Silent -> base
+  meurt: Watchful Sentry (LeBlanc)
+  combat @Targon's Peak: [Akali, Deadly Weapon(3)] vs [Watchful Sentry(1)]
+  meurt: Watchful Sentry (LeBlanc)
+  +1 Akali (conquer Targon's Peak) -> 1
+T5 LeBlanc score 1-1 runes 3 main ['Vi, Peacekeeper', 'Baited Hook', 'Rift Herald', 'Rift Herald', 'Harnessed Dragon', 'Honest Broker', 'Black Rose Dignitary']
+  LeBlanc lance Hidden Blade
+  meurt: Akali, Deadly Weapon (Akali)
+  LeBlanc joue Black Rose Dignitary -> base
+  combat @Targon's Peak: [Karthus, Eternal(3)] vs []
+  +1 LeBlanc (conquer Targon's Peak) -> 2
+  LeBlanc joue Karthus, Eternal -> 0
+  LeBlanc copie Karthus, Eternal
+T6 Akali score 1-2 runes 4 main ['Mischievous Marai', 'Mournful Witness', 'Discipline', 'Falling Star', 'Astral Heron', 'Astral Heron', 'Charm']
+  Akali lance Falling Star
+  meurt: Karthus, Eternal (LeBlanc)
+  meurt: Karthus, Eternal (LeBlanc)
+  Akali joue Kai'Sa, Survivor -> base
+  combat @Targon's Peak: [Akali, Silent(6)] vs []
+  +1 Akali (conquer Targon's Peak) -> 2
+T7 LeBlanc score 2-2 runes 4 main ['Vi, Peacekeeper', 'Baited Hook', 'Rift Herald', 'Rift Herald', 'Harnessed Dragon']
+  LeBlanc joue Vi, Peacekeeper -> base
+  combat @Star Spring: [Black Rose Dignitary(2)] vs []
+  +1 LeBlanc (conquer Star Spring) -> 3
+  LeBlanc joue Black Rose Dignitary -> 1
+  LeBlanc copie Black Rose Dignitary
+T8 Akali score 2-3 runes 4 main ['Mischievous Marai', 'Mournful Witness', 'Discipline', 'Astral Heron', 'Astral Heron', 'Charm']
+  +1 Akali (hold Targon's Peak) -> 3
+  Akali joue Adaptatron -> base
+  Akali joue Mischievous Marai -> base
+T9 LeBlanc score 3-3 runes 5 main ['Rift Herald', 'Rift Herald', 'Harnessed Dragon', 'Glasc Mixologist']
+  meurt: Black Rose Dignitary (LeBlanc)
+  +1 LeBlanc (hold Star Spring) -> 4
+  LeBlanc joue Black Rose Dignitary -> 1
+  LeBlanc copie Black Rose Dignitary
+  LeBlanc joue Black Rose Dignitary -> base
+  LeBlanc joue LeBlanc, Fragmented -> base
+  combat @Targon's Peak: [Vi, Peacekeeper(5)] vs [Akali, Silent(4)]
+  meurt: Akali, Silent (Akali)
+  +1 LeBlanc (conquer Targon's Peak) -> 5
+T10 Akali score 3-5 runes 6 main ['Mournful Witness', 'Discipline', 'Astral Heron', 'Astral Heron', 'Charm']
+  Akali joue Astral Heron -> base
+  Akali lance Charm
+  Charm renvoie Vi, Peacekeeper(5)
+  combat @Star Spring: [Kai'Sa, Survivor(4), Adaptatron(3)] vs [Black Rose Dignitary(2), Black Rose Dignitary(2)]
+  meurt: Adaptatron (Akali)
+  meurt: Black Rose Dignitary (LeBlanc)
+  meurt: Black Rose Dignitary (LeBlanc)
+  +1 Akali (conquer Star Spring) -> 4
+  combat @Targon's Peak: [Mischievous Marai(2)] vs []
+  +1 Akali (conquer Targon's Peak) -> 5
+T11 LeBlanc score 5-5 runes 9 main ['Rift Herald', 'Rift Herald', 'Harnessed Dragon']
+  LeBlanc joue Rift Herald -> base
+  combat @Targon's Peak: [Vi, Peacekeeper(5)] vs [Mischievous Marai(2)]
+  Akali joue Mischievous Marai -> 0
+  Akali lance Discipline
+  meurt: Vi, Peacekeeper (LeBlanc)
+  meurt: Mischievous Marai (Akali)
+  combat @Targon's Peak: [LeBlanc, Fragmented(3), Black Rose Dignitary(2)] vs [Mischievous Marai(4)]
+  meurt: Black Rose Dignitary (LeBlanc)
+  meurt: Mischievous Marai (Akali)
+  +1 LeBlanc (conquer Targon's Peak) -> 6
+  LeBlanc joue LeBlanc, Fragmented -> 0
+  LeBlanc copie LeBlanc, Fragmented
+T12 Akali score 5-6 runes 6 main ['Mournful Witness', 'Astral Heron', 'Stellacorn Herder', 'Discipline']
+  +1 Akali (hold Star Spring) -> 6
+  Akali joue Astral Heron -> base
+  combat @Targon's Peak: [Astral Heron(7)] vs [LeBlanc, Fragmented(3), LeBlanc, Fragmented(3)]
+  meurt: LeBlanc, Fragmented (LeBlanc)
+  meurt: LeBlanc, Fragmented (LeBlanc)
+  +1 Akali (conquer Targon's Peak) -> 7
+T13 LeBlanc score 6-7 runes 11 main ['Rift Herald', 'Harnessed Dragon', 'Hidden Blade', 'Watchful Sentry']
+  LeBlanc lance Hidden Blade
+  meurt: Astral Heron (Akali)
+  LeBlanc joue Rift Herald -> base
+  LeBlanc joue Watchful Sentry -> base
+  combat @Star Spring: [Rift Herald(7)] vs [Kai'Sa, Survivor(4)]
+  Akali lance Discipline
+  Akali lance En Garde
+  meurt: Rift Herald (LeBlanc)
+  LeBlanc joue Harnessed Dragon -> base
+  Dragon tue Kai'Sa, Survivor(8)
+  meurt: Kai'Sa, Survivor (Akali)
+T14 Akali score 7-6 runes 8 main ['Mournful Witness', 'Stellacorn Herder', 'Charm', 'Shuriken Flip', "Zhonya's Hourglass"]
+  +1 Akali (hold Targon's Peak) -> 8

@@ -1,0 +1,40 @@
+# legend: Akali, Rogue Assassin
+# player: ASC HaruKaze
+# event: Riftbound Regional Qualifier - Barcelona (Best-Of Akali)
+# date: 2026-08-23
+# placement: 10
+# url: https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-247097
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+3 Lonely Poro
+3 Scuttle Crab
+3 Stellacorn Herder
+3 Irelia, Fervent
+3 Astral Heron
+3 Long Sword
+3 Zhonya's Hourglass
+3 Defy
+2 En Garde
+3 Shuriken Flip
+3 Discipline
+3 Falling Star
+2 Back Off
+2 Sky Splitter
+[runes]
+5 Calm Rune
+7 Fury Rune
+[battlefields]
+1 Back-Alley Bar
+1 Targon's Peak
+1 Void Gate
+[sideboard]
+2 Charm
+1 Against the Odds
+2 Not So Fast
+1 Adaptatron
+1 Akali, Silent
+1 Tomb-Raider Barbara
+2 Ferrous Forerunner

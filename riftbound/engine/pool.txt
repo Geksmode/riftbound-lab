@@ -1,0 +1,170 @@
+## Adaptatron | Unit  | Calm | 4e 0p | might 3 | tags Mech|Piltover | kw 
+When I conquer, you may kill a gear. If you do, buff me. (If I don't have a buff, I get a +1 might buff.)
+## Against the Odds | Spell  | Fury | 2e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Give a friendly unit at a battlefield +2 might this turn for each enemy unit there.
+## Akali, Deadly Weapon | Unit Champion | Fury | 3e 0p | might 3 | tags Ionia|Akali | kw Empower|Empowered
+[Empower] 2 energy and 1 fury rune (2 energy and 1 fury rune: Empower me. Use only if not Empowered.) When I move, you may deal 1 to a unit at a battlefield I moved to or from. If I'm [Empowered], deal 2 instead. [Empowered][>] I have +1 might.
+## Akali, Rogue Assassin | Legend  | Fury|Calm | e p | might  | tags Akali | kw Empower|Action|Empowered
+[Empower] 3 energy and 1 rune of any type (3 energy and 1 rune of any type: Empower this. Use only if not Empowered.) [Action][>] exhaust: If it's your turn, move a friendly unit in a showdown to base and if I'm [Empowered], ready it.
+## Akali, Silent | Unit Champion | Calm | 4e 1p | might 4 | tags Ionia|Akali | kw 
+I can't be chosen by enemy spells and abilities unless I'm in combat. When I move to a battlefield, give me +2 might this turn.
+## Ashe, Focused | Unit Champion | Order | 5e 1p | might 4 | tags Freljord|Ashe | kw 
+When you play me, choose an opponent. They reveal their hand. Choose a card revealed this way and banish it. When they hold, return it to their hand (even if I'm no longer on the board).
+## Aspirant's Climb | Battlefield  | Colorless | e p | might  | tags  | kw 
+Increase the points needed to win the game by 1.
+## Astral Heron | Unit  | Calm | 7e 0p | might 7 | tags Bird|Mount Targon | kw 
+When you play your first card each turn, if I'm at a battlefield, your next card costs 2 energy and 2 runes of any type less.
+## Atakhan | Unit  | Order | 10e 3p | might 7 | tags Noxus|Demon | kw Ganking
+You may kill a friendly unit as an additional cost to play me. If you do, I cost 1 energy less for each Energy it costs and 1 order rune less for each Power it costs. [Ganking] (I can move from battlefield to battlefield.) When I attack, the defender must kill one of their units here.
+## Back Off | Spell  | Calm | 3e 0p | might  | tags  | kw Hidden|Action|Stun
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) [Stun] a unit. (It doesn't deal combat damage this turn.) If you played this from your hand, draw 1.
+## Back-Alley Bar | Battlefield  | Colorless | e p | might  | tags  | kw 
+When a unit moves from here, give it +1 might this turn.
+## Baited Hook | Gear  | Order | 3e 0p | might  | tags  | kw 
+1 energy and 1 order rune, exhaust: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may banish a unit from among them that has Might up to 1 more than the killed unit and play it, ignoring its cost. Then recycle the rest.
+## Bellows Breath | Spell  | Mind | 1e 1p | might  | tags  | kw Action|Repeat
+[Action] (Play on your turn or in showdowns.) [Repeat] 1 energy and 1 mind rune (You may pay the additional cost to repeat this spell's effect.) Deal 1 to up to three units at the same location.
+## Black Rose Dignitary | Unit  | Order | 3e 0p | might 2 | tags Noxus | kw Assault|Deathknell
+[Assault] (+1 might while I'm an attacker.) [Deathknell][>] Channel 1 rune exhausted. (When I die, get the effect.)
+## Blitzcrank, Impassive | Unit Champion | Calm | 5e 1p | might 5 | tags Mech|Blitzcrank|Zaun | kw Tank
+[Tank] (I must be assigned combat damage first.) When you play me to a battlefield, you may move an enemy unit to here. When I hold, return me to my owner's hand.
+## Block | Spell  | Calm | 2e 0p | might  | tags  | kw Hidden|Action|Shield|Tank
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Give a unit [Shield 3] and [Tank] this turn. (+3 might while it's a defender. It must be assigned combat damage first.)
+## Brittle Steel | Spell  | Fury | 2e 1p | might  | tags  | kw Flow
+Kill a gear. [Flow] 4 energy and 1 fury rune (You may play this from your trash for its Flow cost. Then banish it.)
+## Calm Rune | Rune Basic | Calm | e p | might  | tags  | kw 
+
+## Chakram Dancer | Unit  | Mind | 3e 0p | might 3 | tags Bilgewater | kw Ambush|Reaction|Shield
+[Ambush] (You may play me as a [Reaction] to a battlefield where you have units.) When you play me, give your other units here [Shield] this turn. (+1 might while they're defenders.)
+## Charm | Spell  | Calm | 1e 1p | might  | tags  | kw 
+Move an enemy unit.
+## Crumbling Sands | Spell  | Calm | 1e 1p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Counter a spell if an opponent has played another spell this turn.
+## Cull the Weak | Spell  | Order | 2e 1p | might  | tags  | kw 
+Each player kills one of their units.
+## Darius, Trifarian | Unit Champion | Fury | 5e 1p | might 5 | tags Trifarian|Darius|Noxus | kw 
+When you play your second card in a turn, give me +2 might this turn and ready me.
+## Deathgrip | Spell  | Order | 2e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Kill a friendly unit to give +might equal to its Might to another friendly unit this turn. Draw 1.
+## Decree of Focus | Spell  | Calm | 1e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Choose a friendly unit that's in combat with an enemy Fury (1 fury rune) unit or that's being chosen by an enemy Fury spell. Give it +4 might this turn.
+## Decree of Insight | Spell  | Mind | 1e 0p | might  | tags  | kw Reaction|Deflect
+[Reaction] (Play any time, even before spells and abilities resolve.) Ignore [Deflect] while paying this spell's cost. Give an enemy Body (1 body rune) unit -5 might this turn.
+## Decree of Rage | Spell  | Fury | 1e 1p | might  | tags  | kw Action
+[Action] (Play on your turn or in showdowns.) This can't be countered. Deal 4 to an enemy Calm (1 calm rune) unit.
+## Decree of Unity | Spell  | Order | 2e 1p | might  | tags  | kw 
+Kill an enemy Chaos (1 chaos rune) unit or gear.
+## Defy | Spell  | Calm | 1e 1p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Counter a spell that costs no more than 4 energy and no more than 1 rune of any type.
+## Disarming Rake | Unit  | Calm | 3e 1p | might 2 | tags Demacia | kw 
+When you play me, you may kill a gear.
+## Discipline | Spell  | Calm | 2e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit +2 might this turn. Draw 1.
+## Dusk Rose Lab | Battlefield  | Colorless | e p | might  | tags  | kw 
+At the start of your Beginning Phase, you may kill a unit you control here to draw 1. (This happens before scoring.)
+## En Garde | Spell  | Calm | 1e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Give a friendly unit +1 might this turn, then an additional +1 might this turn if it is the only unit you control there.
+## Falling Star | Spell  | Fury | 2e 2p | might  | tags  | kw 
+Deal 3 to a unit. Deal 3 to a unit.
+## Ferrous Forerunner | Unit  | Fury | 6e 1p | might 6 | tags Mech|Yordle|Bandle City | kw Deathknell
+[Deathknell] — Play two 3 might Mech unit tokens to your base. (When I die, get the effect.)
+## Forbidding Waste | Battlefield  | Colorless | e p | might  | tags  | kw 
+While a unit here is defending alone, it has -2 might. (It's alone if there are no other friendly units here.)
+## Forgotten Monument | Battlefield  | Colorless | e p | might  | tags  | kw 
+Players can't score here until their third turn.
+## Fury Rune | Rune Basic | Fury | e p | might  | tags  | kw 
+
+## Glasc Mixologist | Unit  | Order | 5e 1p | might 5 | tags Zaun | kw Deathknell
+[Deathknell] — You may play a unit with cost no more than 3 energy and no more than 1 rune of any type from your trash, ignoring its cost. (When I die, get the effect.)
+## Harnessed Dragon | Unit  | Order | 8e 2p | might 6 | tags Dragon|Demacia | kw 
+When you play me, kill an enemy unit.
+## Hidden Blade | Spell  | Order | 2e 1p | might  | tags  | kw Hidden|Action
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) [Action] (Play on your turn or in showdowns.) Kill a unit at a battlefield. Its controller draws 2.
+## Honest Broker | Unit  | Order | 2e 0p | might 2 | tags Ionia | kw Deathknell
+[Deathknell] — Play a Gold gear token exhausted. (When I die, get the effect.)
+## Irelia, Fervent | Unit Champion | Calm | 5e 0p | might 4 | tags Irelia|Ionia | kw Deflect
+[Deflect] (Opponents must pay 1 rune of any type to choose me with a spell or ability.) When you choose or ready me, give me +1 might this turn.
+## Kai'Sa, Survivor | Unit Champion | Fury | 4e 0p | might 4 | tags Kai'Sa|The Void | kw Accelerate
+[Accelerate] (You may pay 1 energy and 1 fury rune as an additional cost to have me enter ready.) When I conquer, draw 1.
+## Karthus, Eternal | Unit Champion | Order | 3e 1p | might 3 | tags Spirit|Karthus|Shadow Isles | kw Deathknell
+Your [Deathknell] effects trigger an additional time.
+## Kennen, Keeper of Balance | Unit Champion | Order | 3e 0p | might 2 | tags Yordle|Ionia|Kennen | kw Hidden|Stun
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me or I attack, you may pay 2 energy to [Stun] a unit. (It doesn't deal combat damage this turn.) While there's a stunned enemy unit here, I have +2 might.
+## Ki Barrier | Spell  | Order | 2e 1p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Choose a unit. Prevent the next 7 damage that would be dealt to it this turn. (Opponents can assign it extra combat damage to kill it.)
+## LeBlanc, Deceiver | Legend  | Mind|Order | e p | might  | tags LeBlanc | kw Temporary
+When you conquer or hold, you may discard 1 and exhaust me to play a ready Reflection unit token there. It becomes a copy of another unit there. Give it [Temporary].
+## LeBlanc, Everywhere At Once | Unit Champion | Mind | 4e 0p | might 4 | tags Noxus|LeBlanc | kw Backline|Temporary
+[Backline] (I must be assigned combat damage last.) Your [Temporary] effects at my battlefield don't trigger.
+## LeBlanc, Fragmented | Unit Champion | Order | 3e 1p | might 3 | tags Noxus|LeBlanc | kw Assault|Deathknell
+[Assault] (+1 might while I'm an attacker.) [Deathknell][>] Draw 1. If it's your Beginning Phase, draw 2 instead. (When I die, get the effect.)
+## Lonely Poro | Unit  | Calm | 2e 0p | might 2 | tags Poro|Freljord | kw Deathknell
+[Deathknell] — If I died alone, draw 1. (When I die, get the effect. I'm alone if there are no other friendly units here.)
+## Long Sword | Gear  | Fury | 2e 1p | might  | tags Equipment | kw Quick-Draw|Reaction|Equip
+[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 fury rune (1 fury rune: Attach this to a unit you control.)
+## Mind Rune | Rune Basic | Mind | e p | might  | tags  | kw 
+
+## Mirror Image | Spell Signature | Mind|Order | 3e 2p | might  | tags LeBlanc | kw Temporary
+Choose a unit. Play a ready Reflection unit token to your base. It becomes a copy of that unit. Give it [Temporary]. (Kill it at the start of its controller's Beginning Phase, before scoring.)
+## Mischievous Marai | Unit  | Fury | 2e 0p | might 2 | tags Bilgewater | kw Hidden
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) When you play me to a battlefield, deal 2 to an enemy unit here.
+## Mournful Witness | Unit  | Calm | 2e 0p | might 2 | tags Fae|Ionia | kw Empowered
+When a combat that I was in ends, empower me. (I become Empowered if I'm not already.) [Empowered][>] I have +2 might.
+## Not So Fast | Spell  | Calm | 2e 1p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Counter an enemy spell or ability that chooses a friendly unit or gear.
+## Noxus Hopeful | Unit  | Fury | 4e 0p | might 4 | tags Trifarian|Noxus | kw Legion
+[Legion] — I cost 2 energy less. (Get the effect if you've played another card this turn.)
+## Order Rune | Rune Basic | Order | e p | might  | tags  | kw 
+
+## Pendulum Blade | Gear  | Fury | 3e 0p | might  | tags Equipment | kw Equip
+[Equip] 1 fury rune (1 fury rune: Attach this to a unit you control.)
+## Rift Herald | Unit  | Order | 8e 1p | might 7 | tags The Void | kw Deathknell
+When I move to a battlefield, look at the top 3 cards of your Main Deck. You may reveal a unit from among them and draw it. Recycle the rest. [Deathknell][>] Play a unit from your hand to your base, ignoring its Energy cost. (When I die, get the effect. You must still pay its Power cost.)
+## Ruined Rex | Unit  | Mind | 6e 1p | might 6 | tags Bilgewater | kw Deathknell
+[Deathknell][>] Deal 4 to an enemy unit. (When I die, get the effect.)
+## Sacrifice | Spell  | Order | 1e 0p | might  | tags  | kw Reaction|Mighty
+[Reaction] (Play any time, even before spells and abilities resolve.) As an additional cost to play this, kill a friendly [Mighty] unit. (A unit is Mighty while it has 5+ might.) Draw 2 and channel 1 rune exhausted.
+## Safety Inspector | Unit  | Order | 5e 1p | might 3 | tags Yordle|Bandle City | kw 
+You may spend 3 XP as an additional cost to play me. When you play me, each player must kill one of their units. If you paid my additional cost, you don't kill a unit this way.
+## Salvage | Spell  | Order | 2e 1p | might  | tags  | kw Action
+[Action] (Play on your turn or in showdowns.) You may kill a gear. Draw 1.
+## Scuttle Crab | Unit  | Calm | 2e 0p | might 0 | tags Bilgewater | kw Deathknell
+(Units with 0 might can conquer and hold.) When you play me, draw 1. [Deathknell][>] Choose an opponent. They reveal their hand. You can look at their facedown cards this turn. Gain 1 XP. (When I die, get the effects.)
+## Shuriken Flip | Spell Signature | Fury|Calm | 1e 1p | might  | tags Akali | kw Flow
+Deal 2 to up to one enemy unit at a battlefield, then move a friendly unit. [Flow] 3 energy and 1 rune of any type (You may play this from your trash for its Flow cost. Then banish it.)
+## Sigil of the Storm | Battlefield  | Colorless | e p | might  | tags  | kw 
+When you conquer here, recycle one of your runes.
+## Sky Splitter | Spell  | Fury | 8e 1p | might  | tags  | kw Action
+[Action] (Play on your turn or in showdowns.) This spell's Energy cost is reduced by the highest Might among units you control. Deal 5 to a unit at a battlefield.
+## Soaring Scout | Unit  | Order | 2e 0p | might 1 | tags Bird|Freljord | kw Deathknell
+[Deathknell] — Channel 1 rune exhausted. (When I die, get the effect.)
+## Star Spring | Battlefield  | Colorless | e p | might  | tags  | kw 
+The first time a player plays a non-token unit here each turn, they may move another unit they control here to its base.
+## Stellacorn Herder | Unit  | Calm | 4e 0p | might 3 | tags Mount Targon | kw 
+When I move, draw 1.
+## Sterak's Gage | Gear  | Calm | 3e 2p | might  | tags Equipment | kw Quick-Draw|Reaction|Equip
+[Quick-Draw] (This has [Reaction]. When you play it, attach it to a unit you control.) [Equip] 1 calm rune (1 calm rune: Attach this to a unit you control.)
+## Stupefy | Spell  | Mind | 1e 0p | might  | tags  | kw Reaction
+[Reaction] (Play any time, even before spells and abilities resolve.) Give a unit -1 might this turn, to a minimum of 1 might. Draw 1.
+## Targon's Peak | Battlefield  | Colorless | e p | might  | tags  | kw 
+When you conquer here, ready 2 runes at the end of this turn.
+## Thousand-Tailed Watcher | Unit  | Mind | 7e 1p | might 7 | tags Ionia | kw Accelerate
+[Accelerate] (You may pay 1 energy and 1 mind rune as an additional cost to have me enter ready.) When you play me, give enemy units -3 might this turn, to a minimum of 1 might.
+## Threshold of the Gray | Battlefield  | Colorless | e p | might  | tags  | kw Add
+When combat starts here, the attacker and defender each [Add] 1 energy.
+## Time Warp | Spell  | Mind | 10e 4p | might  | tags  | kw 
+Take a turn after this one. Banish this.
+## Tomb-Raider Barbara | Unit  | Calm | 4e 0p | might 4 | tags Shurima | kw Empowered
+When you play me, if you control 7 or more runes, choose an enemy gear. If it's [Empowered], disempower it. Otherwise, kill it.
+## Turn to Dust | Spell  | Mind | 2e 0p | might  | tags  | kw Temporary
+Give a gear [Temporary]. (Kill it at the start of its controller's Beginning Phase, before scoring.)
+## Vi, Peacekeeper | Unit Champion | Order | 5e 1p | might 5 | tags Vi|Piltover | kw Ambush|Reaction|Stun
+[Ambush] (You may play me as a [Reaction] to a battlefield where you have units.) When I attack, [Stun] an enemy unit here. (It doesn't deal combat damage this turn.)
+## Void Gate | Battlefield  | Colorless | e p | might  | tags  | kw 
+Spells and abilities affecting units here each deal 1 Bonus Damage. (Each instance of damage the spell deals is increased by 1.)
+## Watchful Sentry | Unit  | Mind | 2e 0p | might 1 | tags Freljord | kw Deathknell
+[Deathknell] — Draw 1. (When I die, get the effect.)
+## Windswept Hillock | Battlefield  | Colorless | e p | might  | tags  | kw Ganking
+Units here have [Ganking]. (They can move from battlefield to battlefield.)
+## Zhonya's Hourglass | Gear  | Calm | 2e 0p | might  | tags  | kw Hidden
+[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) The next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)

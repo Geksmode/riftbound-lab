@@ -1,0 +1,59 @@
+Seed 4 | Akali C5 (Targon's Peak) vs LeBlanc (Dusk Rose Lab) | vainqueur Akali
+T1 LeBlanc score 0-0 runes 0 main ['Baited Hook', 'LeBlanc, Everywhere At Once', 'Mirror Image', 'Hidden Blade']
+T2 Akali score 0-0 runes 0 main ['Discipline', 'Shuriken Flip', 'Lonely Poro', "Zhonya's Hourglass"]
+  Akali joue Akali, Deadly Weapon -> base
+T3 LeBlanc score 0-0 runes 2 main ['Baited Hook', 'LeBlanc, Everywhere At Once', 'Mirror Image', 'Hidden Blade', 'Rift Herald']
+  LeBlanc joue LeBlanc, Everywhere At Once -> base
+T4 Akali score 0-0 runes 3 main ['Discipline', 'Shuriken Flip', 'Lonely Poro', "Zhonya's Hourglass", 'En Garde']
+  Akali joue Lonely Poro -> base
+  combat @Targon's Peak: [Akali, Deadly Weapon(3)] vs []
+  +1 Akali (conquer Targon's Peak) -> 1
+T5 LeBlanc score 0-1 runes 4 main ['Baited Hook', 'Mirror Image', 'Hidden Blade', 'Rift Herald', 'Sacrifice']
+  LeBlanc lance Hidden Blade
+  meurt: Akali, Deadly Weapon (Akali)
+  LeBlanc joue Karthus, Eternal -> base
+  combat @Targon's Peak: [LeBlanc, Everywhere At Once(4)] vs []
+  +1 LeBlanc (conquer Targon's Peak) -> 1
+  LeBlanc joue LeBlanc, Everywhere At Once -> 0
+  LeBlanc copie LeBlanc, Everywhere At Once
+T6 Akali score 1-1 runes 4 main ['Discipline', 'Shuriken Flip', "Zhonya's Hourglass", 'En Garde', 'Falling Star', 'Scuttle Crab', 'Charm']
+  Akali lance Falling Star
+  meurt: LeBlanc, Everywhere At Once (LeBlanc)
+  Akali joue Scuttle Crab -> base
+  Akali lance Charm
+  Charm renvoie LeBlanc, Everywhere At Once(4)
+  combat @Targon's Peak: [Lonely Poro(2)] vs []
+  +1 Akali (conquer Targon's Peak) -> 2
+T7 LeBlanc score 1-2 runes 4 main ['Baited Hook', 'Mirror Image', 'Rift Herald']
+  meurt: LeBlanc, Everywhere At Once (LeBlanc)
+  LeBlanc joue Soaring Scout -> base
+  LeBlanc joue LeBlanc, Fragmented -> base
+  combat @Dusk Rose Lab: [Karthus, Eternal(3)] vs []
+  +1 LeBlanc (conquer Dusk Rose Lab) -> 2
+  LeBlanc joue Karthus, Eternal -> 1
+  LeBlanc copie Karthus, Eternal
+T8 Akali score 2-2 runes 3 main ['Discipline', 'Shuriken Flip', "Zhonya's Hourglass", 'En Garde', 'Charm', 'Falling Star']
+  +1 Akali (hold Targon's Peak) -> 3
+  Akali lance Falling Star
+  meurt: Karthus, Eternal (LeBlanc)
+  meurt: Karthus, Eternal (LeBlanc)
+  combat @Dusk Rose Lab: [Scuttle Crab(0)] vs []
+  +1 Akali (conquer Dusk Rose Lab) -> 4
+T9 LeBlanc score 2-4 runes 5 main ['Mirror Image', 'Rift Herald']
+  combat @Targon's Peak: [LeBlanc, Fragmented(3)] vs [Lonely Poro(2)]
+  Akali lance Discipline
+  meurt: LeBlanc, Fragmented (LeBlanc)
+  meurt: Lonely Poro (Akali)
+  combat @Dusk Rose Lab: [Soaring Scout(1)] vs [Scuttle Crab(0)]
+  Akali lance En Garde
+  meurt: Soaring Scout (LeBlanc)
+T10 Akali score 4-2 runes 3 main ['Shuriken Flip', "Zhonya's Hourglass", 'Charm', 'Stellacorn Herder', 'Mournful Witness', 'Astral Heron']
+  +1 Akali (hold Targon's Peak) -> 5
+  +1 Akali (hold Dusk Rose Lab) -> 6
+  Akali joue Stellacorn Herder -> base
+T11 LeBlanc score 2-6 runes 8 main ['Mirror Image', 'Rift Herald', 'Rift Herald', 'Deathgrip']
+  LeBlanc joue Rift Herald -> base
+  LeBlanc joue Watchful Sentry -> base
+T12 Akali score 6-2 runes 5 main ['Shuriken Flip', "Zhonya's Hourglass", 'Charm', 'Mournful Witness', 'Astral Heron', 'Akali, Silent']
+  +1 Akali (hold Targon's Peak) -> 7
+  +1 Akali (hold Dusk Rose Lab) -> 8

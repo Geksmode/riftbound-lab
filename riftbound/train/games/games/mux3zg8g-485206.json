@@ -1,0 +1,206 @@
+{
+  "bf": null,
+  "bfs": [
+    "Sigil of the Storm",
+    "Windswept Hillock"
+  ],
+  "first": null,
+  "id": "mux3zg8g-485206",
+  "level": 1,
+  "log": [
+    "Tour 1, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Soaring Scout — à la base",
+    "Tour 2, à Akali de jouer (score 0-0)",
+    "  Tu pioches Back Off",
+    "Akali joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 3, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Soaring Scout vers Windswept Hillock",
+    "  Soaring Scout va de la base à Windswept Hillock",
+    "Showdown à Windswept Hillock, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Windswept Hillock",
+    "LeBlanc +1 point (conquête de Windswept Hillock) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Soaring Scout à Windswept Hillock",
+    "LeBlanc déplace Soaring Scout vers Sigil of the Storm",
+    "  Soaring Scout va de Windswept Hillock à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 2",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "Tour 4, à Akali de jouer (score 0-2)",
+    "  Tu pioches Discipline"
+  ],
+  "moves": [
+    [
+      "ans",
+      [
+        3,
+        1
+      ],
+      "mulligan : Shuriken Flip, Blitzcrank, Impassive",
+      0
+    ],
+    [
+      "act",
+      4,
+      "joue Akali, Deadly Weapon (à la base)",
+      2
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      2
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      12,
+      "déplace Akali, Deadly Weapon vers Windswept Hillock",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "target : Soaring Scout adverse (Windswept Hillock)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      1,
+      "joue Kai'Sa, Survivor (à la base)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "undo"
+    ],
+    [
+      "hint",
+      5
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "hint",
+      5
+    ]
+  ],
+  "pts": [
+    0,
+    2
+  ],
+  "result": null,
+  "seed": 485206,
+  "started": "2026-10-06T20:05:56.848Z",
+  "turn": 4,
+  "updated": "2026-10-06T20:06:57.670Z",
+  "ver": "v10",
+  "whoFirst": 1
+}

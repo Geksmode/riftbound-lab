@@ -1,0 +1,334 @@
+########## partie 2 : vainqueur Akali 8-6 en 13 tours
+[T1 P0] ===== turn 1: P0 (Akali, Rogue Assassin) points 0-0
+[T1 P0] P0 plays Scuttle Crab from hand (loc=base)
+[T1 P0]   trigger on chain: Scuttle Crab
+[T1 P0] resolve Scuttle Crab
+[T2 P1] ===== turn 2: P1 (LeBlanc, Deceiver) points 0-0
+[T2 P1] P1 plays Soaring Scout from hand (loc=base)
+[T3 P0] ===== turn 3: P0 (Akali, Rogue Assassin) points 0-0
+[T3 P0] P0 plays Akali, Deadly Weapon from champ (loc=base)
+[T3 P0] P0 plays Shuriken Flip from hand (tg= mover=41 mover_oid=1 dest=1)
+[T3 P0] resolve Shuriken Flip
+[T3 P0]   Akali, Deadly Weapon#41 moves base->1
+[T3 P0]   trigger on chain: Akali, Deadly Weapon
+[T3 P0] resolve Akali, Deadly Weapon
+[T3 P0]   Akali, Deadly Weapon#41 takes 1 (3 might)
+[T3 P0] showdown at Windswept Hillock, attacker P0
+[T3 P0]   P0 takes control of Windswept Hillock
+[T3 P0] P0 +1 point (conquer Windswept Hillock) -> 1
+[T3 P0] P0 moves [Scuttle Crab#6] -> 0
+[T3 P0]   Scuttle Crab#6 moves base->0
+[T3 P0] showdown at Void Gate, attacker P0
+[T3 P0]   P0 takes control of Void Gate
+[T3 P0] P0 +1 point (conquer Void Gate) -> 2
+[T3 P0] P0 hides a card at Void Gate
+[T4 P1] ===== turn 4: P1 (LeBlanc, Deceiver) points 2-0
+[T4 P1] P1 moves [Soaring Scout#58] -> 0
+[T4 P1]   Soaring Scout#58 moves base->0
+[T4 P1] COMBAT at Void Gate, attacker P1
+[T4 P1] P0 plays Back Off from facedown (tg=Soaring Scout#58)
+[T4 P1] resolve Back Off
+[T4 P1]   Soaring Scout#58 is stunned
+[T4 P1]   combat damage: attackers 0 vs defenders 0
+[T5 P0] ===== turn 5: P0 (Akali, Rogue Assassin) points 2-0
+[T5 P0] P0 +1 point (hold Void Gate) -> 3
+[T5 P0] P0 +1 point (hold Windswept Hillock) -> 4
+[T5 P0] P0 moves [Akali, Deadly Weapon#41] -> 0
+[T5 P0]   Akali, Deadly Weapon#41 moves 1->0
+[T5 P0]   trigger on chain: Akali, Deadly Weapon
+[T5 P0] resolve Akali, Deadly Weapon
+[T5 P0]   Akali, Deadly Weapon#41 takes 2 (3 might)
+[T5 P0]   P0 loses control of Windswept Hillock
+[T5 P0] P0 plays Scuttle Crab from hand (loc=0)
+[T5 P0]   trigger on chain: Scuttle Crab
+[T5 P0] P0 plays Discipline from hand (tg=Scuttle Crab#5)
+[T5 P0] resolve Discipline
+[T5 P0] resolve Scuttle Crab
+[T6 P1] ===== turn 6: P1 (LeBlanc, Deceiver) points 4-0
+[T6 P1] P1 plays Honest Broker from hand (loc=base)
+[T6 P1] P1 plays Karthus, Eternal from hand (loc=base)
+[T6 P1] P1 plays Honest Broker from hand (loc=base)
+[T6 P1] P1 moves [Soaring Scout#58] -> 1
+[T6 P1]   Soaring Scout#58 moves base->1
+[T6 P1] showdown at Windswept Hillock, attacker P1
+[T6 P1]   P1 takes control of Windswept Hillock
+[T6 P1] P1 +1 point (conquer Windswept Hillock) -> 1
+[T6 P1]   trigger on chain: LeBlanc, Deceiver
+[T6 P1] resolve LeBlanc, Deceiver
+[T6 P1]   Reflection of Soaring Scout at 1
+[T6 P1] P1 moves [Soaring Scout#297] -> base
+[T6 P1]   Soaring Scout#297 moves 1->base
+[T7 P0] ===== turn 7: P0 (Akali, Rogue Assassin) points 4-1
+[T7 P0] P0 +1 point (hold Void Gate) -> 5
+[T7 P0] P0 plays Falling Star from hand (tg=Karthus, Eternal#67,Soaring Scout#58)
+[T7 P0] P0 plays Discipline from hand (tg=Akali, Deadly Weapon#41)
+[T7 P0] resolve Discipline
+[T7 P0] resolve Falling Star
+[T7 P0]   Karthus, Eternal#67 takes 3 (3 might)
+[T7 P0]   Soaring Scout#58 takes 3 (1 might)
+[T7 P0]   Soaring Scout#58 dies
+[T7 P0]   Karthus, Eternal#67 dies
+[T7 P0]   P1 loses control of Windswept Hillock
+[T7 P0]   trigger on chain: Deathknell Soaring Scout
+[T7 P0] resolve Deathknell Soaring Scout
+[T7 P0] P0 activates Akali, Deadly Weapon: Empower 
+[T7 P0] resolve Akali, Deadly Weapon: Empower
+[T7 P0] P0 moves [Scuttle Crab#5] -> base
+[T7 P0]   Scuttle Crab#5 moves 0->base
+[T8 P1] ===== turn 8: P1 (LeBlanc, Deceiver) points 5-1
+[T8 P1]   trigger on chain: Temporary Soaring Scout#297
+[T8 P1] resolve Temporary Soaring Scout#297
+[T8 P1]   Soaring Scout#297 dies
+[T8 P1]   trigger on chain: Deathknell Soaring Scout
+[T8 P1] resolve Deathknell Soaring Scout
+[T8 P1] P1 plays Mirror Image from hand (tg=Akali, Deadly Weapon#41)
+[T8 P1] resolve Mirror Image
+[T8 P1]   Reflection of Akali, Deadly Weapon at base
+[T8 P1] P1 moves [Honest Broker#56, Akali, Deadly Weapon#621] -> 1
+[T8 P1]   Honest Broker#56 moves base->1
+[T8 P1]   Akali, Deadly Weapon#621 moves base->1
+[T8 P1]   trigger on chain: Akali, Deadly Weapon
+[T8 P1] resolve Akali, Deadly Weapon
+[T8 P1]   Akali, Deadly Weapon#621 takes 1 (3 might)
+[T8 P1] showdown at Windswept Hillock, attacker P1
+[T8 P1]   P1 takes control of Windswept Hillock
+[T8 P1] P1 +1 point (conquer Windswept Hillock) -> 2
+[T8 P1]   trigger on chain: LeBlanc, Deceiver
+[T8 P1] resolve LeBlanc, Deceiver
+[T8 P1]   Reflection of Akali, Deadly Weapon at 1
+[T8 P1] P1 plays LeBlanc, Fragmented from champ (loc=1)
+[T8 P1] P1 moves [Honest Broker#55, Akali, Deadly Weapon#672] -> 0
+[T8 P1]   Honest Broker#55 moves base->0
+[T8 P1]   Akali, Deadly Weapon#672 moves 1->0
+[T8 P1]   trigger on chain: Akali, Deadly Weapon
+[T8 P1] resolve Akali, Deadly Weapon
+[T8 P1]   Scuttle Crab#6 takes 2 (0 might)
+[T8 P1]   Scuttle Crab#6 dies
+[T8 P1]   trigger on chain: Deathknell Scuttle Crab
+[T8 P1] resolve Deathknell Scuttle Crab
+[T8 P1] COMBAT at Void Gate, attacker P1
+[T8 P1]   combat damage: attackers 5 vs defenders 4
+[T8 P1]   Akali, Deadly Weapon#41 dies
+[T8 P1]   Honest Broker#55 dies
+[T8 P1]   trigger on chain: Deathknell Honest Broker
+[T8 P1] resolve Deathknell Honest Broker
+[T8 P1]   P1 takes control of Void Gate
+[T8 P1] P1 +1 point (conquer Void Gate) -> 3
+[T9 P0] ===== turn 9: P0 (Akali, Rogue Assassin) points 5-3
+[T9 P0] P0 plays Shuriken Flip from trash (tg=Akali, Deadly Weapon#672 mover=5 mover_oid=1 dest=0 flow=True)
+[T9 P0] resolve Shuriken Flip
+[T9 P0]   Akali, Deadly Weapon#672 takes 3 (3 might)
+[T9 P0]   Scuttle Crab#5 moves base->0
+[T9 P0]   Akali, Deadly Weapon#672 dies
+[T9 P0]   P1 loses control of Void Gate
+[T9 P0] showdown at Void Gate, attacker P0
+[T9 P0]   P0 takes control of Void Gate
+[T9 P0] P0 +1 point (conquer Void Gate) -> 6
+[T9 P0] P0 moves [Scuttle Crab#5] -> base
+[T9 P0]   Scuttle Crab#5 moves 0->base
+[T9 P0]   P0 loses control of Void Gate
+[T9 P0] P0 plays Shuriken Flip from hand (tg=Honest Broker#56 mover=5 mover_oid=1 dest=1)
+[T9 P0] resolve Shuriken Flip
+[T9 P0]   Honest Broker#56 takes 2 (2 might)
+[T9 P0]   Scuttle Crab#5 moves base->1
+[T9 P0]   Honest Broker#56 dies
+[T9 P0]   trigger on chain: Deathknell Honest Broker
+[T9 P0] resolve Deathknell Honest Broker
+[T9 P0] COMBAT at Windswept Hillock, attacker P0
+[T9 P0] P0 activates Akali, Rogue Assassin: Retreat (tg=Scuttle Crab#5)
+[T9 P0] resolve Akali, Rogue Assassin: Retreat
+[T9 P0]   Scuttle Crab#5 moves 1->base
+[T10 P1] ===== turn 10: P1 (LeBlanc, Deceiver) points 6-3
+[T10 P1]   trigger on chain: Temporary Akali, Deadly Weapon#621
+[T10 P1] resolve Temporary Akali, Deadly Weapon#621
+[T10 P1]   Akali, Deadly Weapon#621 dies
+[T10 P1] P1 +1 point (hold Windswept Hillock) -> 4
+[T10 P1]   trigger on chain: LeBlanc, Deceiver
+[T10 P1] resolve LeBlanc, Deceiver
+[T10 P1]   Reflection of LeBlanc, Fragmented at 1
+[T10 P1] P1 moves [LeBlanc, Fragmented#94] -> 0
+[T10 P1]   LeBlanc, Fragmented#94 moves 1->0
+[T10 P1] showdown at Void Gate, attacker P1
+[T10 P1]   P1 takes control of Void Gate
+[T10 P1] P1 +1 point (conquer Void Gate) -> 5
+[T10 P1] P1 plays Rift Herald from hand (loc=0)
+[T11 P0] ===== turn 11: P0 (Akali, Rogue Assassin) points 6-5
+[T11 P0] P0 plays Falling Star from hand (tg=Rift Herald#81,LeBlanc, Fragmented#829)
+[T11 P0] P0 plays Discipline from hand (tg=Scuttle Crab#5)
+[T11 P0] resolve Discipline
+[T11 P0] resolve Falling Star
+[T11 P0]   Rift Herald#81 takes 4 (7 might)
+[T11 P0]   LeBlanc, Fragmented#829 takes 3 (3 might)
+[T11 P0]   LeBlanc, Fragmented#829 dies
+[T11 P0]   P1 loses control of Windswept Hillock
+[T11 P0]   trigger on chain: Deathknell LeBlanc, Fragmented
+[T11 P0] resolve Deathknell LeBlanc, Fragmented
+[T11 P0] P0 moves [Scuttle Crab#5] -> 1
+[T11 P0]   Scuttle Crab#5 moves base->1
+[T11 P0] showdown at Windswept Hillock, attacker P0
+[T11 P0]   P0 takes control of Windswept Hillock
+[T11 P0] P0 +1 point (conquer Windswept Hillock) -> 7
+[T12 P1] ===== turn 12: P1 (LeBlanc, Deceiver) points 7-5
+[T12 P1] P1 +1 point (hold Void Gate) -> 6
+[T12 P1]   trigger on chain: LeBlanc, Deceiver
+[T12 P1] resolve LeBlanc, Deceiver
+[T12 P1]   Reflection of Rift Herald at 0
+[T13 P0] ===== turn 13: P0 (Akali, Rogue Assassin) points 7-6
+[T13 P0] P0 +1 point (hold Windswept Hillock) -> 8
+[T13 P0] WINNER 0
+
+########## partie 5 : vainqueur LeBlanc 2-8 en 13 tours
+[T1 P1] ===== turn 1: P1 (LeBlanc, Deceiver) points 0-0
+[T1 P1] P1 plays Honest Broker from hand (loc=base)
+[T2 P0] ===== turn 2: P0 (Akali, Rogue Assassin) points 0-0
+[T2 P0] P0 plays Charm from hand (tg=Honest Broker#941 dest=0)
+[T2 P0] resolve Charm
+[T2 P0]   Honest Broker#941 moves base->0
+[T2 P0] showdown at Void Gate, attacker P1
+[T2 P0]   P1 takes control of Void Gate
+[T2 P0] P1 +1 point (conquer Void Gate) -> 1
+[T2 P0]   trigger on chain: LeBlanc, Deceiver
+[T2 P0] resolve LeBlanc, Deceiver
+[T2 P0]   Reflection of Honest Broker at 0
+[T2 P0] P0 plays Mournful Witness from hand (loc=base)
+[T3 P1] ===== turn 3: P1 (LeBlanc, Deceiver) points 0-1
+[T3 P1]   trigger on chain: Temporary Honest Broker#1025
+[T3 P1] resolve Temporary Honest Broker#1025
+[T3 P1]   Honest Broker#1025 dies
+[T3 P1]   trigger on chain: Deathknell Honest Broker
+[T3 P1] resolve Deathknell Honest Broker
+[T3 P1] P1 +1 point (hold Void Gate) -> 2
+[T3 P1]   trigger on chain: LeBlanc, Deceiver
+[T3 P1] resolve LeBlanc, Deceiver
+[T3 P1]   Reflection of Honest Broker at 0
+[T3 P1] P1 plays Karthus, Eternal from hand (loc=base)
+[T4 P0] ===== turn 4: P0 (Akali, Rogue Assassin) points 0-2
+[T4 P0] P0 plays Charm from hand (tg=Karthus, Eternal#952 dest=0)
+[T4 P0] resolve Charm
+[T4 P0]   Karthus, Eternal#952 moves base->0
+[T4 P0] P0 moves [Mournful Witness#922] -> 1
+[T4 P0]   Mournful Witness#922 moves base->1
+[T4 P0] showdown at Windswept Hillock, attacker P0
+[T4 P0]   P0 takes control of Windswept Hillock
+[T4 P0] P0 +1 point (conquer Windswept Hillock) -> 1
+[T4 P0] P0 plays Akali, Deadly Weapon from champ (loc=base)
+[T5 P1] ===== turn 5: P1 (LeBlanc, Deceiver) points 1-2
+[T5 P1]   trigger on chain: Temporary Honest Broker#1052
+[T5 P1] resolve Temporary Honest Broker#1052
+[T5 P1]   Honest Broker#1052 dies
+[T5 P1]   trigger on chain: Deathknell Honest Broker
+[T5 P1]   trigger on chain: Deathknell Honest Broker
+[T5 P1] resolve Deathknell Honest Broker
+[T5 P1] resolve Deathknell Honest Broker
+[T5 P1] P1 +1 point (hold Void Gate) -> 3
+[T5 P1]   trigger on chain: LeBlanc, Deceiver
+[T5 P1] resolve LeBlanc, Deceiver
+[T5 P1]   Reflection of Karthus, Eternal at 0
+[T5 P1] P1 moves [Honest Broker#941] -> base
+[T5 P1]   Honest Broker#941 moves 0->base
+[T5 P1] P1 plays Vi, Peacekeeper from hand (loc=base)
+[T6 P0] ===== turn 6: P0 (Akali, Rogue Assassin) points 1-3
+[T6 P0] P0 +1 point (hold Windswept Hillock) -> 2
+[T6 P0] P0 plays Shuriken Flip from hand (tg=Karthus, Eternal#952 mover=922 mover_oid=1 dest=0)
+[T6 P0] P0 plays En Garde from hand (tg=Akali, Deadly Weapon#926)
+[T6 P0] resolve En Garde
+[T6 P0] resolve Shuriken Flip
+[T6 P0]   Karthus, Eternal#952 takes 3 (3 might)
+[T6 P0]   Mournful Witness#922 moves 1->0
+[T6 P0]   Karthus, Eternal#952 dies
+[T6 P0]   P0 loses control of Windswept Hillock
+[T6 P0] COMBAT at Void Gate, attacker P0
+[T6 P0]   combat damage: attackers 2 vs defenders 3
+[T6 P0]   Mournful Witness#922 dies
+[T6 P0] P0 moves [Akali, Deadly Weapon#926] -> 1
+[T6 P0]   Akali, Deadly Weapon#926 moves base->1
+[T6 P0]   trigger on chain: Akali, Deadly Weapon
+[T6 P0] resolve Akali, Deadly Weapon
+[T6 P0]   Akali, Deadly Weapon#926 takes 1 (5 might)
+[T6 P0] showdown at Windswept Hillock, attacker P0
+[T6 P0]   P0 takes control of Windswept Hillock
+[T6 P0] P0 activates Akali, Rogue Assassin: Empower 
+[T6 P0] resolve Akali, Rogue Assassin: Empower
+[T7 P1] ===== turn 7: P1 (LeBlanc, Deceiver) points 2-3
+[T7 P1]   trigger on chain: Temporary Karthus, Eternal#1396
+[T7 P1]   Vi, Peacekeeper#957 dies
+[T7 P1] P1 plays Sacrifice from hand (kill=957)
+[T7 P1] resolve Sacrifice
+[T7 P1] resolve Temporary Karthus, Eternal#1396
+[T7 P1]   Karthus, Eternal#1396 dies
+[T7 P1]   P1 loses control of Void Gate
+[T7 P1] P1 moves [Honest Broker#941] -> 0
+[T7 P1]   Honest Broker#941 moves base->0
+[T7 P1] showdown at Void Gate, attacker P1
+[T7 P1]   P1 takes control of Void Gate
+[T7 P1] P1 +1 point (conquer Void Gate) -> 4
+[T7 P1]   trigger on chain: LeBlanc, Deceiver
+[T7 P1] resolve LeBlanc, Deceiver
+[T7 P1]   Reflection of Honest Broker at 0
+[T7 P1] P1 plays LeBlanc, Fragmented from champ (loc=base)
+[T7 P1] P1 moves [Honest Broker#1604] -> base
+[T7 P1]   Honest Broker#1604 moves 0->base
+[T7 P1] P1 plays Hidden Blade from hand (tg=Akali, Deadly Weapon#926)
+[T7 P1] resolve Hidden Blade
+[T7 P1]   Akali, Deadly Weapon#926 dies
+[T7 P1]   P0 loses control of Windswept Hillock
+[T8 P0] ===== turn 8: P0 (Akali, Rogue Assassin) points 2-4
+[T8 P0] P0 plays Scuttle Crab from hand (loc=base)
+[T8 P0]   trigger on chain: Scuttle Crab
+[T8 P0] resolve Scuttle Crab
+[T8 P0] P0 plays Charm from hand (tg=Honest Broker#941 dest=base)
+[T8 P0] resolve Charm
+[T8 P0]   Honest Broker#941 moves 0->base
+[T8 P0]   P1 loses control of Void Gate
+[T8 P0] P0 plays Falling Star from hand (tg=LeBlanc, Fragmented#979,Honest Broker#941)
+[T8 P0] resolve Falling Star
+[T8 P0]   LeBlanc, Fragmented#979 takes 3 (3 might)
+[T8 P0]   Honest Broker#941 takes 3 (2 might)
+[T8 P0]   Honest Broker#941 dies
+[T8 P0]   LeBlanc, Fragmented#979 dies
+[T8 P0]   trigger on chain: Deathknell Honest Broker
+[T8 P0]   trigger on chain: Deathknell LeBlanc, Fragmented
+[T8 P0] resolve Deathknell LeBlanc, Fragmented
+[T8 P0] resolve Deathknell Honest Broker
+[T9 P1] ===== turn 9: P1 (LeBlanc, Deceiver) points 2-4
+[T9 P1]   trigger on chain: Temporary Honest Broker#1604
+[T9 P1] P1 plays Deathgrip from hand (tg=)
+[T9 P1] resolve Deathgrip
+[T9 P1] resolve Temporary Honest Broker#1604
+[T9 P1]   Honest Broker#1604 dies
+[T9 P1]   trigger on chain: Deathknell Honest Broker
+[T9 P1] resolve Deathknell Honest Broker
+[T9 P1] P1 plays Glasc Mixologist from hand (loc=base)
+[T10 P0] ===== turn 10: P0 (Akali, Rogue Assassin) points 2-4
+[T11 P1] ===== turn 11: P1 (LeBlanc, Deceiver) points 2-4
+[T11 P1] P1 plays Thousand-Tailed Watcher from hand (loc=base acc=True)
+[T11 P1]   trigger on chain: Thousand-Tailed Watcher
+[T11 P1] resolve Thousand-Tailed Watcher
+[T11 P1] P1 moves [Glasc Mixologist#953] -> 0
+[T11 P1]   Glasc Mixologist#953 moves base->0
+[T11 P1] showdown at Void Gate, attacker P1
+[T11 P1]   P1 takes control of Void Gate
+[T11 P1] P1 +1 point (conquer Void Gate) -> 5
+[T11 P1]   trigger on chain: LeBlanc, Deceiver
+[T11 P1] resolve LeBlanc, Deceiver
+[T11 P1]   Reflection of Glasc Mixologist at 0
+[T11 P1] P1 moves [Glasc Mixologist#1804] -> base
+[T11 P1]   Glasc Mixologist#1804 moves 0->base
+[T11 P1] P1 moves [Thousand-Tailed Watcher#960] -> 1
+[T11 P1]   Thousand-Tailed Watcher#960 moves base->1
+[T11 P1] showdown at Windswept Hillock, attacker P1
+[T11 P1]   P1 takes control of Windswept Hillock
+[T11 P1] P1 +1 point (conquer Windswept Hillock) -> 6
+[T12 P0] ===== turn 12: P0 (Akali, Rogue Assassin) points 2-6
+[T13 P1] ===== turn 13: P1 (LeBlanc, Deceiver) points 2-6
+[T13 P1]   trigger on chain: Temporary Glasc Mixologist#1804
+[T13 P1] resolve Temporary Glasc Mixologist#1804
+[T13 P1]   Glasc Mixologist#1804 dies
+[T13 P1]   trigger on chain: Deathknell Glasc Mixologist
+[T13 P1] resolve Deathknell Glasc Mixologist
+[T13 P1] P1 plays Karthus, Eternal from trash (loc=base free=True)
+[T13 P1] P1 +1 point (hold Void Gate) -> 7
+[T13 P1] P1 +1 point (hold Windswept Hillock) -> 8
+[T13 P1]   trigger on chain: LeBlanc, Deceiver
+[T13 P1] WINNER 1
+

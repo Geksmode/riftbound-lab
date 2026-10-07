@@ -1,0 +1,42 @@
+# legend: Leblanc, Deceiver
+# player: GYATarina
+# event: CCS $25,000 Showdown Series - Riftbound Invitational Qualifier #5
+# date: 2026-09-19
+# placement: 1
+# url: https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-307612
+[legend]
+1 LeBlanc, Deceiver
+[champion]
+1 LeBlanc, Fragmented
+[main]
+2 Honest Broker
+3 Soaring Scout
+2 Watchful Sentry
+3 Black Rose Dignitary
+3 Karthus, Eternal
+3 Glasc Mixologist
+3 Vi, Peacekeeper
+1 Ruined Rex
+1 Thousand-Tailed Watcher
+3 Harnessed Dragon
+3 Rift Herald
+3 Baited Hook
+3 Sacrifice
+1 Deathgrip
+2 Hidden Blade
+2 Mirror Image
+1 LeBlanc, Everywhere At Once
+[runes]
+4 Mind Rune
+8 Order Rune
+[battlefields]
+1 Dusk Rose Lab
+1 Star Spring
+1 Windswept Hillock
+[sideboard]
+2 Decree of Insight
+2 Decree of Unity
+2 Salvage
+1 LeBlanc, Everywhere At Once
+2 Safety Inspector
+1 Thousand-Tailed Watcher

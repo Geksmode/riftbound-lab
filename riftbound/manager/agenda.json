@@ -1,0 +1,85 @@
+{
+ "session_prevue": 19,
+ "questions": [
+  "Nouvelle version, questions encore jamais rejouées : le plan de LeBlanc (Hook tempo − Deathknell, à battlefields égaux, fixé) et la liste G2 contre stock (contre Hook tempo Windswept, fixé) ; commencer lu dans la REF (4e bloc)"
+ ],
+ "note_ia": "Nouvelle version s016+ (règles de rune). s018 = moteur refondu (modules de cartes, 95452d66e0) mais parties identiques à s017 sur 800 parties rejouées : cumulable avec s016-s017. Si un .py du jeu change encore : refaire le test d'équivalence (même graines que s017) avant de cumuler.",
+ "jobs": [
+  {
+   "label": "REF stock plan Gorica (Sigil) vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  },
+  {
+   "label": "stock plan Gorica vs Hook tempo",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo"
+  },
+  {
+   "label": "stock plan Gorica vs Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  {
+   "label": "G2 plan Gorica vs Hook tempo Windswept",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore",
+    "out": [
+     [
+      "Long Sword",
+      2
+     ],
+     [
+      "Defy",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "Akali, Silent",
+      1
+     ],
+     [
+      "Ferrous Forerunner",
+      2
+     ],
+     [
+      "Lonely Poro",
+      1
+     ],
+     [
+      "Scuttle Crab",
+      1
+     ]
+    ]
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Hook tempo Windswept"
+  }
+ ]
+}

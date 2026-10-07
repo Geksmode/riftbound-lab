@@ -1,0 +1,1043 @@
+{
+  "bf": null,
+  "bfs": [
+    "Sigil of the Storm",
+    "Windswept Hillock"
+  ],
+  "first": null,
+  "id": "mux4bcf7-906371",
+  "level": 3,
+  "log": [
+    "Tour 1, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Honest Broker — à la base",
+    "Tour 2, à Akali de jouer (score 0-0)",
+    "  Tu pioches Blitzcrank, Impassive",
+    "Akali joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 3, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Honest Broker vers Windswept Hillock",
+    "  Honest Broker va de la base à Windswept Hillock",
+    "Showdown à Windswept Hillock, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Windswept Hillock",
+    "LeBlanc +1 point (conquête de Windswept Hillock) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Honest Broker à Windswept Hillock",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à Windswept Hillock",
+    "Tour 4, à Akali de jouer (score 0-1)",
+    "  Tu pioches Stellacorn Herder",
+    "Akali joue Stellacorn Herder — à la base",
+    "Akali déplace Akali, Deadly Weapon vers Windswept Hillock",
+    "  Akali, Deadly Weapon va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Honest Broker subit 1 dégât(s) (might 2)",
+    "COMBAT à Windswept Hillock, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Windswept Hillock à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Honest Broker subit 1 dégât(s) (might 2)",
+    "  Honest Broker meurt",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "Tour 5, à LeBlanc de jouer (score 0-1)",
+    "  Déclenchement sur la chaîne : Temporary Honest Broker",
+    "Résolution : Temporary Honest Broker",
+    "  Honest Broker meurt",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "LeBlanc +1 point (tenue de Windswept Hillock) → 2",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Windswept Hillock",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace LeBlanc, Fragmented vers Sigil of the Storm",
+    "  LeBlanc, Fragmented va de Windswept Hillock à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 3",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "Tour 6, à Akali de jouer (score 0-3)",
+    "  Tu pioches Not So Fast",
+    "Akali déplace Stellacorn Herder, Akali, Deadly Weapon vers Windswept Hillock",
+    "  Stellacorn Herder va de la base à Windswept Hillock",
+    "  Akali, Deadly Weapon va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  LeBlanc, Fragmented subit 1 dégât(s) (might 3)",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Astral Heron",
+    "COMBAT à Windswept Hillock, attaquant Akali",
+    "  Dégâts de combat : attaquants 6 contre défenseurs 3",
+    "  Akali, Deadly Weapon meurt",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  Akali prend le contrôle de Windswept Hillock",
+    "Akali +1 point (conquête de Windswept Hillock) → 1",
+    "Akali joue Astral Heron — à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali cache une carte à Windswept Hillock",
+    "Akali joue Mournful Witness — à la base",
+    "Tour 7, à LeBlanc de jouer (score 1-3)",
+    "  Déclenchement sur la chaîne : Temporary LeBlanc, Fragmented",
+    "Résolution : Temporary LeBlanc, Fragmented",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc perd le contrôle de Sigil of the Storm",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Glasc Mixologist — à la base",
+    "Tour 8, à Akali de jouer (score 1-3)",
+    "Akali +1 point (tenue de Windswept Hillock) → 2",
+    "  Tu pioches Discipline",
+    "Akali joue Astral Heron — à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Blitzcrank, Impassive — à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Karthus, Eternal va de la base à Windswept Hillock",
+    "COMBAT à Windswept Hillock, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 22",
+    "  Karthus, Eternal meurt",
+    "Akali déplace Stellacorn Herder vers la base",
+    "  Stellacorn Herder va de Windswept Hillock à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Falling Star",
+    "Tour 9, à LeBlanc de jouer (score 2-3)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Black Rose Dignitary — à la base",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "LeBlanc déplace Glasc Mixologist vers Sigil of the Storm",
+    "  Glasc Mixologist va de la base à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 4",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Glasc Mixologist à Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "Tour 10, à Akali de jouer (score 2-4)",
+    "Akali +1 point (tenue de Windswept Hillock) → 3",
+    "  Déclenchement sur la chaîne : Blitzcrank (hold)",
+    "Résolution : Blitzcrank (hold)",
+    "  Tu pioches Mournful Witness",
+    "Akali déplace Stellacorn Herder vers Windswept Hillock",
+    "  Stellacorn Herder va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Sterak's Gage",
+    "Akali joue Mournful Witness — à la base",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Falling Star — cible Karthus, Eternal et Black Rose Dignitary",
+    "Résolution : Falling Star",
+    "  Karthus, Eternal subit 3 dégât(s) (might 3)",
+    "  Black Rose Dignitary subit 3 dégât(s) (might 2)",
+    "  Black Rose Dignitary meurt",
+    "  Karthus, Eternal meurt",
+    "  Déclenchement sur la chaîne : Deathknell Black Rose Dignitary",
+    "Résolution : Deathknell Black Rose Dignitary",
+    "Akali joue Blitzcrank, Impassive — à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Blitzcrank",
+    "Résolution : Blitzcrank",
+    "  Glasc Mixologist va de Sigil of the Storm à Windswept Hillock",
+    "COMBAT à Windswept Hillock, attaquant LeBlanc",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Windswept Hillock à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Ferrous Forerunner",
+    "  Dégâts de combat : attaquants 5 contre défenseurs 19",
+    "  Glasc Mixologist meurt",
+    "  Blitzcrank, Impassive meurt",
+    "  Déclenchement sur la chaîne : Deathknell Glasc Mixologist",
+    "Résolution : Deathknell Glasc Mixologist",
+    "LeBlanc joue LeBlanc, Fragmented depuis la défausse — à la base, free=True",
+    "Tour 11, à LeBlanc de jouer (score 3-4)",
+    "  Déclenchement sur la chaîne : Temporary Glasc Mixologist",
+    "  Glasc Mixologist meurt",
+    "LeBlanc joue Sacrifice",
+    "  Déclenchement sur la chaîne : Deathknell Glasc Mixologist",
+    "Résolution : Deathknell Glasc Mixologist",
+    "LeBlanc joue Karthus, Eternal depuis la défausse — à la base, free=True",
+    "Résolution : Sacrifice",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Résolution : Temporary Glasc Mixologist",
+    "  LeBlanc perd le contrôle de Sigil of the Storm",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Mirror Image — cible LeBlanc, Fragmented",
+    "Résolution : Mirror Image",
+    "  Reflet de LeBlanc, Fragmented à la base",
+    "LeBlanc déplace LeBlanc, Fragmented vers Windswept Hillock",
+    "  LeBlanc, Fragmented va de la base à Windswept Hillock",
+    "COMBAT à Windswept Hillock, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 4 contre défenseurs 14",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace LeBlanc, Fragmented vers Sigil of the Storm",
+    "  LeBlanc, Fragmented va de la base à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 5",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "LeBlanc joue Mirror Image — cible Astral Heron",
+    "Résolution : Mirror Image",
+    "  Reflet de Astral Heron à la base",
+    "LeBlanc déplace LeBlanc, Fragmented vers la base",
+    "  LeBlanc, Fragmented va de Sigil of the Storm à la base",
+    "LeBlanc déplace Astral Heron vers Windswept Hillock",
+    "  Astral Heron va de la base à Windswept Hillock",
+    "COMBAT à Windswept Hillock, attaquant LeBlanc",
+    "Akali joue Zhonya's Hourglass (carte cachée révélée) — à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Sterak's Gage — à la base",
+    "  Déclenchement sur la chaîne : Quick-Draw Sterak's Gage",
+    "Résolution : Quick-Draw Sterak's Gage",
+    "  Sterak's Gage est attaché(e) à Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Discipline — cible Astral Heron",
+    "Résolution : Discipline",
+    "  Tu pioches Shuriken Flip",
+    "  Dégâts de combat : attaquants 7 contre défenseurs 19",
+    "  Astral Heron meurt",
+    "Tour 12, à Akali de jouer (score 3-5)",
+    "Akali +1 point (tenue de Windswept Hillock) → 4",
+    "  Tu pioches Back Off",
+    "Akali déplace Astral Heron vers Sigil of the Storm",
+    "  Astral Heron va de Windswept Hillock à Sigil of the Storm",
+    "COMBAT à Sigil of the Storm, attaquant Akali",
+    "  Dégâts de combat : attaquants 7 contre défenseurs 3",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  Akali prend le contrôle de Sigil of the Storm",
+    "Akali +1 point (conquête de Sigil of the Storm) → 5",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "Akali joue Ferrous Forerunner — à Sigil of the Storm",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Ferrous Forerunner — à Windswept Hillock",
+    "Akali déplace Stellacorn Herder vers Windswept Hillock",
+    "  Stellacorn Herder va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali déplace Mournful Witness vers Sigil of the Storm",
+    "  Mournful Witness va de la base à Sigil of the Storm",
+    "Akali déplace Mournful Witness vers Sigil of the Storm",
+    "  Mournful Witness va de la base à Sigil of the Storm",
+    "Tour 13, à LeBlanc de jouer (score 5-5)",
+    "  Déclenchement sur la chaîne : Temporary LeBlanc, Fragmented",
+    "Résolution : Temporary LeBlanc, Fragmented",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Tour 14, à Akali de jouer (score 5-5)",
+    "Akali +1 point (tenue de Sigil of the Storm) → 6",
+    "Akali +1 point (tenue de Windswept Hillock) → 7",
+    "  Tu pioches Shuriken Flip",
+    "Tour 15, à LeBlanc de jouer (score 7-5)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Thousand-Tailed Watcher — à la base",
+    "  Déclenchement sur la chaîne : Thousand-Tailed Watcher",
+    "Résolution : Thousand-Tailed Watcher",
+    "Tour 16, à Akali de jouer (score 7-5)",
+    "Akali +1 point (tenue de Sigil of the Storm) → 8",
+    "Akali +1 point (tenue de Windswept Hillock) → 9",
+    "VICTOIRE de Akali"
+  ],
+  "moves": [
+    [
+      "ans",
+      [
+        1
+      ],
+      "mulligan : Discipline",
+      0
+    ],
+    [
+      "act",
+      3,
+      "joue Akali, Deadly Weapon (à la base)",
+      2
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      2
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      4,
+      "joue Stellacorn Herder (à la base)",
+      4
+    ],
+    [
+      "act",
+      2,
+      "déplace Akali, Deadly Weapon vers Windswept Hillock",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      4
+    ],
+    [
+      "ans",
+      1,
+      "target : Honest Broker adverse (Windswept Hillock)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Akali, Deadly Weapon)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      4
+    ],
+    [
+      "ans",
+      1,
+      "target : Honest Broker adverse (Windswept Hillock)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      12,
+      "déplace Stellacorn Herder, Akali, Deadly Weapon vers Windswept Hillock",
+      6
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      6
+    ],
+    [
+      "ans",
+      0,
+      "target : LeBlanc, Fragmented adverse (Windswept Hillock)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      9,
+      "joue Blitzcrank, Impassive (à Windswept Hillock)",
+      6
+    ],
+    [
+      "ans",
+      1,
+      "may : non",
+      6
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      2,
+      "joue Astral Heron (à Windswept Hillock)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      4,
+      "cache Zhonya's Hourglass à Windswept Hillock",
+      6
+    ],
+    [
+      "act",
+      1,
+      "joue Mournful Witness (à la base)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      6,
+      "joue Astral Heron (à Windswept Hillock)",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      2,
+      "joue Blitzcrank, Impassive (à Windswept Hillock)",
+      8
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      8
+    ],
+    [
+      "ans",
+      0,
+      "target : Karthus, Eternal adverse (base)",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      2,
+      "déplace Stellacorn Herder vers la base",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      8
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      8
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      33,
+      "déplace Stellacorn Herder vers Windswept Hillock",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      17,
+      "joue Mournful Witness (à la base)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      8,
+      "joue Falling Star (cible Karthus, Eternal et Black Rose Dignitary)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      9,
+      "joue Blitzcrank, Impassive (à Windswept Hillock)",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      10
+    ],
+    [
+      "ans",
+      0,
+      "target : Glasc Mixologist adverse (Sigil of the Storm)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      12,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      7,
+      "joue Zhonya's Hourglass (à Windswept Hillock)",
+      11
+    ],
+    [
+      "act",
+      6,
+      "joue Sterak's Gage (à la base)",
+      11
+    ],
+    [
+      "ans",
+      3,
+      "equip_target : Astral Heron (Windswept Hillock)",
+      11
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      6,
+      "joue Sterak's Gage (à la base)",
+      11
+    ],
+    [
+      "ans",
+      3,
+      "equip_target : Astral Heron (Windswept Hillock)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      2,
+      "joue Discipline (cible Astral Heron)",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      11
+    ],
+    [
+      "act",
+      29,
+      "déplace Astral Heron vers Sigil of the Storm",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "ans",
+      0,
+      "recycle_rune : rune Fury",
+      12
+    ],
+    [
+      "act",
+      2,
+      "joue Ferrous Forerunner (à Sigil of the Storm)",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      3,
+      "joue Ferrous Forerunner (à Windswept Hillock)",
+      12
+    ],
+    [
+      "act",
+      29,
+      "déplace Stellacorn Herder vers Windswept Hillock",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      12
+    ],
+    [
+      "act",
+      24,
+      "déplace Mournful Witness vers Sigil of the Storm",
+      12
+    ],
+    [
+      "act",
+      21,
+      "déplace Mournful Witness vers Sigil of the Storm",
+      12
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      12
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      13
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      14
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      15
+    ]
+  ],
+  "pts": [
+    9,
+    5
+  ],
+  "result": {
+    "pts": [
+      9,
+      5
+    ],
+    "turn": 16,
+    "winner": 0
+  },
+  "seed": 906371,
+  "started": "2026-10-06T20:15:11.779Z",
+  "turn": 16,
+  "updated": "2026-10-06T20:21:39.913Z",
+  "ver": "v10",
+  "whoFirst": 1
+}

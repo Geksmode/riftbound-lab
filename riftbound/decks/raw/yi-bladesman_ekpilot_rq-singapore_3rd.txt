@@ -1,0 +1,42 @@
+# legend: Master Yi, Wuju Bladesman
+# player: Ekpilot
+# event: Riftbound Regional Qualifier - Singapore
+# date: 2026-09-05
+# placement: 3rd
+# url: https://riftdecks.com/riftbound-metagame/deck-master-yi-wuju-bladesman-281302
+# note: récupérée via résumé WebSearch (site bloqué), quantités à vérifier
+[legend]
+1 Master Yi, Wuju Bladesman
+[champion]
+1 Master Yi, Tempered
+[main]
+3 Lonely Poro
+3 Pit Rookie
+3 Scuttle Crab
+3 First Mate
+3 Rengar, Trophy Hunter
+2 Ruin Runner
+2 Zhonya's Hourglass
+3 Charm
+3 Defy
+2 En Garde
+3 Punch First
+1 Sabotage
+3 Discipline
+1 Not So Fast
+1 Alpha Strike
+2 Rampage
+1 Onslaught
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Emperor's Dais
+1 Grove of the God-Willow
+1 Star Spring
+[sideboard]
+2 Decree of Focus
+2 Decree of Strength
+2 Not So Fast
+2 Disarming Rake
+2 Rampage

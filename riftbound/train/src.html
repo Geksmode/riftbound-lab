@@ -1,0 +1,1395 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riftbound Entraînement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/*BASE_CSS*/
+/* Table d'entraînement : même tapis que le lecteur de replays ; à droite, le panneau d'action (ce que tu peux faire), le conseil
+   de l'IA Akali et le journal. Sur téléphone, le panneau d'action reste collé en bas de l'écran. */
+.shell { grid-template-columns: minmax(0, 1fr) 340px; }
+@media (max-width: 1180px) { .shell { grid-template-columns: minmax(0, 1fr); } .panel { display: flex; } }
+@media (min-width: 1000px) { .shell { grid-template-columns: minmax(0, 1fr) 340px; }  }
+@media (min-width: 1000px) and (max-width: 1180px) { .shell { grid-template-columns: minmax(0, 1fr) 300px; } }
+.card.can { box-shadow: 0 0 0 2px var(--akali), 0 0 12px rgba(63,195,163,.75); }
+.card.sel { box-shadow: 0 0 0 3px var(--brass), 0 0 16px rgba(214,178,94,.95); }
+.bfcard.can { box-shadow: 0 0 0 2px var(--akali); }
+.act h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.act .phase { font-family: var(--f-body); font-size: 12px; color: var(--ink-2); }
+.opts { display: flex; flex-direction: column; gap: 4px; }
+.opt { text-align: left; padding: 7px 10px; font-size: 13px; line-height: 1.3; }
+.opt.go { border-color: var(--akali); }
+.opt .k { font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-right: 6px; }
+.big { display: flex; gap: 6px; flex-wrap: wrap; }
+.big button { flex: 1 1 120px; padding: 9px 10px; font-weight: 600; }
+.big button.main { background: #2a3b38; border-color: var(--akali); color: var(--akali); }
+.grp { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin-top: 4px; }
+details.more summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 4px 0; }
+.hintrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.hintrow .v { font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); }
+.hintrow.best .v { color: var(--brass); }
+.ailine { font-size: 13px; color: var(--leblanc); min-height: 1.4em; }
+.think { color: var(--ink-2); font-size: 13px; display: flex; gap: 8px; align-items: center; }
+.think i { width: 10px; height: 10px; border-radius: 50%; background: var(--leblanc); animation: pulse 1s infinite ease-in-out; }
+@keyframes pulse { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .think i { animation: none; } }
+.setup { display: grid; gap: 8px; }
+.setup label { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
+.setup select, .setup input { background: var(--chrome); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; color: var(--ink); font: inherit; }
+.mull { display: flex; flex-wrap: wrap; gap: 6px; }
+.mull button { padding: 0; border: 0; background: none; position: relative; }
+.mull button .card { --cw: 70px; --chh: 98px; width: 70px; height: 98px; }
+.mull button[aria-pressed="true"] .card { opacity: .45; box-shadow: 0 0 0 3px var(--active); }
+.mull button[aria-pressed="true"]::after { content: "remise"; position: absolute; left: 50%; top: 40%; transform: translateX(-50%); background: var(--active); color: #fff; font-size: 10px; border-radius: 4px; padding: 0 5px; }
+.card.can { touch-action: none; user-select: none; -webkit-user-select: none; }
+.drop-ok.zone, .bf.drop-ok { outline: 2px dashed var(--akali); outline-offset: -3px; cursor: pointer; }
+.card.drop-ok { box-shadow: 0 0 0 3px var(--brass), 0 0 16px rgba(214,178,94,.95); cursor: crosshair; }
+.drop-hover.zone, .bf.drop-hover { outline: 3px solid var(--brass); background-color: rgba(214,178,94,.12); }
+.card.drop-hover { transform: scale(1.12); }
+.ghost { position: fixed; z-index: 50; pointer-events: none; opacity: .92; transform: rotate(-4deg) scale(1.15); box-shadow: 0 12px 28px rgba(0,0,0,.6); }
+svg#arrows { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; overflow: visible; }
+.flash { color: var(--active); }
+.pop { position: fixed; z-index: 46; display: flex; flex-direction: column; gap: 4px; min-width: 190px; max-width: 280px; background: var(--chrome-2); border: 1px solid var(--akali); border-radius: 10px; padding: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.pop .pt { font-family: var(--f-display); font-size: 14px; color: var(--akali); }
+.pop button { text-align: left; font-size: 12.5px; padding: 6px 9px; }
+.pop button.tg { border-color: var(--brass); color: var(--brass); }
+.pop .pg { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-top: 4px; }
+.pop button.acc { border-color: var(--akali); color: var(--akali); }
+.card.staged { outline: 2px dashed var(--brass); outline-offset: 2px; opacity: .75; }
+.card.isel { box-shadow: 0 0 0 3px var(--akali), 0 0 18px rgba(63,195,163,.95); }
+.card.picked { box-shadow: 0 0 0 3px var(--active), 0 0 14px rgba(224,80,95,.9); }
+.card.picked::after { content: attr(data-n); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--active); color: #fff; font: 600 13px/1 var(--f-mono); padding: 4px 7px; border-radius: 12px; z-index: 2; }
+.card.grp-sel { box-shadow: 0 0 0 3px var(--brass), 0 0 16px rgba(214,178,94,.95); }
+.log div.me { color: var(--akali); } .log div.opp { color: var(--leblanc); }
+.res.big { font-size: 14px; padding: 4px 10px; }
+.loading { padding: 24px; text-align: center; color: var(--ink-2); }
+.toolbar { display: flex; gap: 6px; flex-wrap: wrap; }
+.toolbar button { font-size: 12.5px; padding: 5px 9px; }
+.toolbar button:disabled { opacity: .45; cursor: default; }
+@media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
+  body { padding-block: 8px 12px; }
+  .panel { position: static; }
+  .zoom { top: 8px !important; bottom: auto; }
+  .mull button .card { --cw: 54px; --chh: 76px; width: 54px; height: 76px; }
+}
+/* v8 : table façon RiftAtlas. À gauche la piste de points, à droite le gros bouton de fin de tour et la chaîne ;
+   les questions (cibles, effets optionnels, mulligan) s'affichent dans une bulle au milieu du plateau. */
+.boardgrid { grid-template-columns: 46px minmax(0, 1fr) 176px; min-width: 1130px; }
+.track { display: flex; flex-direction: column; justify-content: space-between; padding: 10px 0 10px 8px; gap: 14px; }
+.trk { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.trk span { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--f-mono); color: var(--ink-3); background: rgba(10,16,30,.5); border: 1px solid var(--zone-line); }
+.trk span.goal { border-color: var(--brass); color: var(--brass); }
+.trk span.on { width: 32px; height: 32px; font-size: 15px; }
+.trk.p0 span.on { background: var(--akali); color: #0b1a16; border-color: var(--akali); box-shadow: 0 0 10px var(--akali); }
+.trk.p1 span.on { background: var(--leblanc); color: #170d26; border-color: var(--leblanc); box-shadow: 0 0 10px var(--leblanc); }
+.ctrlcol { display: flex; flex-direction: column; gap: 8px; padding: 8px 8px 8px 0; min-width: 0; }
+.turninfo { display: flex; flex-direction: column; gap: 2px; font-size: 13px; text-align: center; min-height: 40px; justify-content: center; }
+.turninfo b { font-family: var(--f-display); font-size: 18px; font-weight: 400; }
+.turninfo b.me, .ft .me { color: var(--akali); } .turninfo b.opp, .ft .opp { color: var(--leblanc); }
+.turninfo .tn { color: var(--ink-2); font-size: 12px; }
+.turninfo .think { justify-content: center; }
+.endbtn { padding: 14px 8px; font: 600 15px/1.2 var(--f-body); letter-spacing: .05em; text-transform: uppercase; background: #2a3b38; border: 1.5px solid var(--akali); color: var(--akali); border-radius: 10px; box-shadow: 0 0 14px rgba(63,195,163,.35); }
+.endbtn.pass { background: #2f2c22; border-color: var(--brass); color: var(--brass); box-shadow: 0 0 12px rgba(214,178,94,.3); }
+.endbtn:disabled { opacity: .55; box-shadow: none; cursor: default; background: var(--chrome); border-color: var(--line); color: var(--ink-2); }
+.ctrlrow { display: flex; gap: 6px; }
+.ctrlrow button { flex: 1; font-size: 12px; padding: 6px 4px; }
+.ctrlrow button:disabled { opacity: .45; cursor: default; }
+.ctrlcol .stackcol { margin: 0; flex: 1; }
+.piles { display: flex; gap: 8px; justify-content: center; padding: 2px 0 4px; }
+.pl { position: relative; width: 40px; height: 56px; border-radius: 5px; border: 1.5px solid rgba(0,0,0,.6); background: #142036 center / cover no-repeat; box-shadow: 0 2px 5px rgba(0,0,0,.45); }
+.pl.deck { background: repeating-linear-gradient(45deg, #34295a, #34295a 5px, #2b2249 5px, #2b2249 10px); border-color: #57489a; }
+.pl.trash { cursor: pointer; }
+.pl.trash.empty { background: rgba(10,16,30,.35); border: 1.5px dashed var(--zone-line); }
+.pl.trash:hover, .pl.trash:focus-visible { outline: 2px solid var(--brass); }
+.pl span { position: absolute; right: -7px; bottom: -6px; min-width: 20px; padding: 1px 4px; border-radius: 9px; background: #0e1220; border: 1px solid var(--line); font: 600 11px/1.3 var(--f-mono); text-align: center; color: var(--ink); }
+.pl i { position: absolute; left: 0; right: 0; top: -13px; font: normal 9px/1 var(--f-mono); color: var(--ink-3); text-align: center; text-transform: uppercase; letter-spacing: .05em; }
+.prompt { position: fixed; z-index: 47; display: flex; flex-direction: column; align-items: center; gap: 8px; max-width: min(520px, calc(100vw - 24px)); background: rgba(16,19,30,.96); border: 1px solid var(--brass); border-radius: 14px; padding: 10px 14px; box-shadow: 0 12px 34px rgba(0,0,0,.7); text-align: center; }
+.prompt .ft { font-size: 13.5px; line-height: 1.35; }
+.prompt .ft.big { font-family: var(--f-display); font-size: 24px; }
+.prow { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.prow.col { flex-direction: column; align-items: stretch; }
+.prompt button { font-weight: 600; padding: 7px 14px; }
+.prompt button.go { background: #2a3b38; border-color: var(--akali); color: var(--akali); }
+.prompt button.fight { background: #3d2329; border-color: var(--active); color: #ff8a95; }
+.prompt button:disabled { opacity: .45; cursor: default; }
+.prompt .mull { justify-content: center; }
+.prompt .mull button { padding: 0; }
+.prompt .mull button .card { --cw: 78px; --chh: 109px; width: 78px; height: 109px; }
+.prompt .mull.pick button:hover .card { box-shadow: 0 0 0 3px var(--akali); }
+.toast { position: fixed; z-index: 45; pointer-events: none; max-width: min(560px, calc(100vw - 24px)); background: rgba(16,19,30,.95); border: 1px solid var(--leblanc); color: var(--leblanc); border-radius: 20px; padding: 6px 14px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
+.toast.flash { border-color: var(--active); color: #ff8a95; }
+.modal { position: fixed; inset: 0; z-index: 60; background: rgba(5,7,12,.72); display: grid; place-items: center; padding: 16px; }
+.mbox { position: relative; background: var(--chrome-2); border: 1px solid var(--line); border-radius: 12px; padding: 16px; width: min(600px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.mbox h3 { color: var(--brass); font-size: 17px; padding-right: 30px; }
+.mclose { position: absolute; top: 10px; right: 10px; padding: 2px 9px; }
+.tgrid { display: flex; flex-wrap: wrap; gap: 8px; }
+.tgrid .card { --cw: 86px; --chh: 120px; width: 86px; height: 120px; }
+.zoom { z-index: 70; pointer-events: none; }
+.hpop { min-width: 260px; max-width: 340px; border-color: var(--brass); }
+.hpop .hintrow { text-align: left; }
+@media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
+  .boardgrid { grid-template-columns: minmax(0, 1fr); min-width: 0; }
+  .track { display: none; }
+  .ctrlcol { position: sticky; bottom: 0; z-index: 12; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px; background: #0e1220; border-top: 1px solid var(--brass); box-shadow: 0 -8px 24px rgba(0,0,0,.5); }
+  .turninfo { flex: 1 1 70px; min-height: 0; font-size: 11px; } .turninfo b { font-size: 15px; }
+  .endbtn { flex: 1 1 120px; padding: 10px 6px; font-size: 13px; }
+  .ctrlrow { flex: 0 1 auto; }
+  .ctrlcol .stackcol { flex-basis: 100%; }
+  .prompt { left: 8px !important; right: 8px; top: auto !important; bottom: calc(74px + env(safe-area-inset-bottom, 0px)); max-width: none; max-height: 60vh; overflow-y: auto; }
+  .prompt .mull button .card { --cw: 56px; --chh: 78px; width: 56px; height: 78px; }
+  .toast { left: 8px !important; right: 8px; top: 8px !important; max-width: none; text-align: center; }
+  .pl { width: 26px; height: 36px; } .pl i { display: none; } .pl span { font-size: 9px; min-width: 15px; right: -5px; }
+  .tgrid .card { --cw: 64px; --chh: 90px; width: 64px; height: 90px; }
+}
+/* v9 : look plus moderne. Plateau pleine largeur, journal dans un tiroir masqué (bouton Journal), verre dépoli pour
+   les bulles, boutons arrondis avec retour au toucher, animations courtes (coupées si l'utilisateur les réduit). */
+body { background: radial-gradient(1200px 700px at 30% 0%, #1d2540 0%, #12141c 60%); }
+.shell { grid-template-columns: minmax(0, 1fr) !important; }
+.topbar { gap: 8px 12px; }
+.topbar h1 { font-size: 21px; letter-spacing: .02em; }
+.topbar #gmeta { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 3px 10px; }
+.tbtns { margin-left: auto; display: flex; gap: 6px; }
+.tbtns button { border-radius: 20px; padding: 6px 14px; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); font-weight: 500; }
+.tbtns button b { display: inline-block; min-width: 18px; margin-left: 4px; padding: 0 5px; border-radius: 9px; background: var(--brass); color: #1b1608; font-size: 11px; }
+button { border-radius: 8px; transition: background-color .15s, border-color .15s, box-shadow .15s, transform .08s; }
+button:active:not(:disabled) { transform: scale(.97); }
+.boardgrid { background: radial-gradient(ellipse at 50% 45%, #33598f 0%, #26467a 55%, #1f3a66 100%); border: 1px solid rgba(140,180,255,.18); box-shadow: 0 18px 50px rgba(0,0,0,.45), inset 0 0 60px rgba(0,0,0,.25); border-radius: 16px; }
+.board { background: transparent; }
+.zone { background: rgba(14,28,56,.42); border-color: rgba(140,180,255,.16); border-radius: 12px; }
+.bf { background: rgba(14,28,56,.38); border-color: rgba(140,180,255,.22); border-radius: 14px; }
+.bf .mid { background: rgba(8,14,28,.55); }
+.half { border-radius: 14px; transition: border-color .2s, box-shadow .2s; }
+.half.active { box-shadow: 0 0 0 1px rgba(224,80,95,.25), 0 0 26px rgba(224,80,95,.18); }
+.card.can:hover { transform: translateY(-3px); }
+.hand .card.can:hover { transform: translateY(-14px) scale(1.12); }
+.stackcol { border-color: rgba(140,180,255,.2); border-radius: 12px; }
+.endbtn { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #e9fff8; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.endbtn:not(:disabled):not(.pass) { animation: glow 2.4s ease-in-out infinite; }
+.endbtn.pass { background: linear-gradient(180deg, #6b5a2c, #43381b); border-color: var(--brass); color: #fff4d8; }
+@keyframes glow { 50% { box-shadow: 0 0 22px rgba(79,210,178,.55); } }
+.ctrlrow button { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
+.prompt { background: rgba(14,17,28,.86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-color: rgba(214,178,94,.65); border-radius: 16px; animation: popin .16s ease-out; }
+.prompt button { border-radius: 10px; }
+.prompt button.go { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #e9fff8; }
+@keyframes popin { from { opacity: 0; transform: translateY(6px) scale(.98); } }
+.toast { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); background: rgba(14,17,28,.85); animation: popin .2s ease-out; }
+.pop { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); background: rgba(24,27,40,.92); border-radius: 12px; animation: popin .12s ease-out; }
+.pop button { border-radius: 8px; }
+.pop button.tg { font-weight: 600; }
+.modal { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.mbox { border-radius: 16px; animation: popin .16s ease-out; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.step { font-size: 12px; padding: 4px 10px 4px 4px; border-radius: 20px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.step i { font-style: normal; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.1); font: 600 11px/1 var(--f-mono); }
+.step.on { border-color: var(--brass); color: var(--ink); } .step.on i { background: var(--brass); color: #1b1608; }
+.step.ok i { background: var(--akali); color: #0b1a16; } .step b { color: var(--ink); }
+.panel.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(380px, 92vw); z-index: 55; display: flex !important; flex-direction: column; gap: 8px; padding: 12px; background: rgba(20,22,32,.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-left: 1px solid var(--line); box-shadow: -14px 0 40px rgba(0,0,0,.5); transform: translateX(105%); transition: transform .22s ease; visibility: hidden; }
+.panel.drawer.open { transform: none; visibility: visible; }
+.drawer .dh { display: flex; align-items: center; justify-content: space-between; }
+.drawer .dh h3 { color: var(--brass); font-size: 17px; }
+.drawer .log { max-height: none !important; flex: 1; min-height: 0; }
+@media (prefers-reduced-motion: reduce) { .endbtn, .prompt, .toast, .pop, .mbox { animation: none !important; } .panel.drawer { transition: none; } }
+@media (max-width: 820px) { .tbtns { margin-left: 0; width: 100%; } .tbtns button { flex: 1; } }
+.savechip { font-size: 11.5px; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,.1); color: var(--ink-2); }
+.savechip.ok { color: var(--akali); border-color: rgba(63,195,163,.4); }
+.savechip.off { color: var(--ink-3); }
+/* ---------- éditeur de deck (plein écran) */
+.deckview { position: fixed; inset: 0; z-index: 55; background: var(--chrome); display: flex; flex-direction: column; color: var(--ink); }
+body.dkopen { overflow: hidden; }
+.dkbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--chrome-2); position: relative; padding-right: 52px; }
+.dkbar h2 { font-family: var(--f-display); font-size: 18px; color: var(--brass); margin: 0 8px 0 0; }
+.dkbar select, .dkf select, .dkf input[type=search], .dkdeck input#dkName { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; color: var(--ink); font: inherit; min-width: 0; }
+.dkbody { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.dkcat { overflow-y: auto; padding: 12px 16px 24px; display: flex; flex-direction: column; gap: 10px; }
+.dkf { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.dkf input[type=search] { flex: 1 1 220px; }
+.dkdom { display: flex; flex-wrap: wrap; gap: 4px; }
+.dd { font-size: 12px; padding: 4px 9px; border-radius: 20px; border: 1px solid var(--line); background: transparent; color: var(--ink-2); }
+.dd.on { border-color: var(--c); color: var(--ink); box-shadow: inset 0 0 0 1px var(--c); background: rgba(255,255,255,.06); }
+.ck { font-size: 12.5px; color: var(--ink-2); display: inline-flex; gap: 5px; align-items: center; }
+.dkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.dkc { position: relative; padding: 0; border: 0; background: none; border-radius: 9px; cursor: pointer; aspect-ratio: 200 / 279; transition: transform .12s; }
+.dkc:hover, .dkc:focus-visible { transform: translateY(-2px); }
+.dkimg { position: absolute; inset: 0; border-radius: 9px; background-color: #151a26; background-size: cover; box-shadow: 0 2px 8px rgba(0,0,0,.5); }
+.dkc.todo .dkimg { filter: grayscale(1) brightness(.55); }
+.dkn { position: absolute; top: -6px; right: -6px; min-width: 24px; height: 24px; border-radius: 12px; background: var(--akali); color: #0b1a16; font: 700 13px/24px var(--f-mono); text-align: center; box-shadow: 0 0 8px rgba(63,195,163,.7); }
+.dktodo, .dkban { position: absolute; left: 6px; right: 6px; bottom: 8px; font: normal 10.5px/1.3 var(--f-body); text-align: center; padding: 3px 4px; border-radius: 6px; background: rgba(8,10,16,.85); color: var(--ink-2); }
+.dkban { bottom: auto; top: 8px; color: #f0a35b; }
+.dkdeck { border-left: 1px solid var(--line); background: var(--chrome-2); padding: 12px 14px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.dkst { font-weight: 600; font-size: 14px; }
+.dkst.ok { color: var(--akali); } .dkst.ko { color: #f0a35b; }
+.dkerr { margin: 0; padding-left: 18px; font-size: 12px; color: var(--ink-2); display: grid; gap: 2px; }
+.dkact { display: flex; flex-wrap: wrap; gap: 6px; }
+.dkact button.main { background: #2a3b38; border-color: var(--akali); color: var(--akali); }
+.dkh { font-family: var(--f-display); font-size: 13.5px; color: var(--brass); margin-top: 8px; display: flex; gap: 6px; align-items: baseline; }
+.dkh b { color: var(--ink); font-family: var(--f-mono); }
+.dkg { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
+.dkr { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 3px 4px; border-radius: 6px; }
+.dkr:hover { background: rgba(255,255,255,.05); }
+.dkr .q { width: 18px; text-align: right; font-family: var(--f-mono); color: var(--ink-2); }
+.dkr .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dkr .nm i { font-size: 10.5px; color: #f0a35b; font-style: normal; }
+.dkr .e { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); }
+.dkr button, .rn button { width: 24px; height: 24px; padding: 0; border-radius: 6px; font-size: 14px; line-height: 1; }
+.dkr.todo .nm { color: var(--ink-2); }
+.dkrunes { display: grid; gap: 4px; }
+.rn { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.rn .rune { width: 20px; height: 20px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 10px/1 var(--f-mono); color: #111; font-style: normal; }
+.rn b { width: 20px; text-align: center; font-family: var(--f-mono); }
+.rn button:first-of-type { margin-left: auto; }
+.dktxt { width: 100%; min-height: 260px; background: var(--chrome); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: 12.5px/1.4 var(--f-mono); }
+.linkb { background: none; border: 0; padding: 0; color: var(--akali); text-decoration: underline; cursor: pointer; font: inherit; }
+.bfcard { container-type: size; position: relative; overflow: hidden; }
+.bfrot { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(-90deg); background-size: cover; }
+.zspr { width: 100%; aspect-ratio: 200 / 279; border-radius: 10px; background-color: #151a26; }
+@media (max-width: 760px) {
+  .dkbody { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 38vh); }
+  .dkf select { flex: 1 1 40%; }
+  .dkdeck { border-left: 0; border-top: 1px solid var(--line); }
+  .dkgrid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+  .dkbar { padding: 8px 48px 8px 12px; } .dkcat { padding: 10px 12px 20px; }
+}
+</style>
+
+<div class="shell">
+  <div class="main">
+    <div class="topbar">
+      <h1>Riftbound Entraînement</h1>
+      <span class="res" id="gres" hidden></span>
+      <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
+      <span class="savechip" id="saveChip" hidden></span>
+      <div class="tbtns"><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
+    </div>
+    <div class="boardwrap"><div class="boardgrid">
+      <div class="track" id="track" aria-label="Points"></div>
+      <div class="board" id="board"><div class="loading" id="loading">Chargement du moteur de jeu…</div></div>
+      <div class="ctrlcol" id="ctrl">
+        <div class="turninfo" id="turnInfo"></div>
+        <button class="endbtn" id="bMain" disabled>…</button>
+        <div class="ctrlrow"><button id="bHint" disabled title="Ce que jouerait l'IA à ta place">Conseil</button><button id="bUndo" disabled title="Annule ton dernier coup">↶ Reprendre</button></div>
+        <div class="stackcol" id="stack" aria-label="Chaîne en cours"></div>
+      </div>
+    </div></div>
+    <p class="small" style="margin:0">Touche une carte à cadre vert pour voir ce qu'elle peut faire, ou glisse-la vers sa zone ou sa cible. Les choix (cibles, effets optionnels) se font sur la table, la question s'affiche au milieu du plateau. Touche une défausse pour voir son contenu. Flèches violettes : coups de l'IA.</p>
+  </div>
+
+  <aside class="panel drawer" id="drawer" aria-label="Journal de la partie">
+    <div class="dh"><h3>Journal</h3><button id="bJClose" aria-label="Fermer le journal">✕</button></div>
+    <div class="log" id="log"></div>
+  </aside>
+</div>
+<div class="zoom" id="zoom" hidden></div>
+<div class="pop" id="pop" hidden></div>
+<div class="pop hpop" id="hpop" hidden></div>
+<div class="prompt" id="fbar" hidden></div>
+<div class="toast" id="aiLine" aria-live="polite" hidden></div>
+<div class="deckview" id="deckView" hidden role="dialog" aria-label="Éditeur de deck"></div>
+<div class="modal" id="modal" hidden><div class="mbox" id="mbox" role="dialog" aria-modal="true"></div></div>
+
+<svg id="arrows" aria-hidden="true"><defs><marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3fc3a3"/></marker><marker id="ahL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b58cf0"/></marker></defs><g id="arrowsG"></g></svg>
+
+<script src="pyodide/pyodide.js"></script>
+<script>
+const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "chaos", Order: "order" };
+const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
+const GLYPH = { Fury: "F", Calm: "Ca", Mind: "Mi", Body: "B", Chaos: "Ch", Order: "O" };
+let PN = ["Akali", "LeBlanc"];
+const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "pool.txt"/*CARDSETS*/];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set();
+const rep = { get cards() { return CARDS; } };
+const J = s => JSON.parse(s);
+
+async function boot() {
+  IMG = await fetch("img/index.json").then(r => r.json()).catch(() => ({}));
+  ATL = await fetch("atlas/index.json").then(r => r.json()).catch(() => ({}));
+  // La bibliothèque standard de Python est publiée en base64 (les .zip ne sont pas servis). Les URL blob: sont interdites par
+  // la page claude.ai : on intercepte donc la requête de Pyodide vers stdlib.zip et on lui rend les octets décodés.
+  const b64 = await fetch("pyodide/python_stdlib.b64.txt").then(r => { if (!r.ok) throw new Error("python_stdlib"); return r.text(); });
+  const bin = atob(b64.trim()), zip = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) zip[i] = bin.charCodeAt(i);
+  const stdLibURL = new URL("pyodide/stdlib-virtuel.zip", location.href).href;
+  const realFetch = window.fetch.bind(window);
+  window.fetch = (u, o) => String(u && u.url || u) === stdLibURL ? Promise.resolve(new Response(zip, { headers: { "Content-Type": "application/zip" } })) : realFetch(u, o);
+  const py = await loadPyodide({ indexURL: new URL("pyodide/", location.href).href, stdLibURL });
+  window.fetch = realFetch;
+  for (const d of ["/rb", "/rb/cards", "/rb/decks", "/rb/engine", "/rb/engine/cardsets"]) py.FS.mkdir(d);
+  const get = async (u, dst) => py.FS.writeFile(dst, new Uint8Array(await fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); })));
+  await Promise.all([get("data/cards_unique.csv", "/rb/cards/cards_unique.csv"), get("data/decks.json", "/rb/decks/decks.json"),
+    ...PY.map(f => get("py/" + f, "/rb/engine/" + f))]);
+  py.runPython("import sys; sys.path.insert(0, '/rb/engine')");
+  T = py.pyimport("train");
+  setupForm();
+}
+
+// ------------------------------------------------------------ fenêtres : nouvelle partie, défausse
+function openModal(html, closable = true) {
+  $("mbox").innerHTML = (closable ? `<button class="mclose" id="mClose" aria-label="Fermer">✕</button>` : "") + html;
+  $("modal").hidden = false; $("modal").dataset.closable = closable ? "1" : "";
+  const c = $("mClose"); if (c) c.onclick = closeModal;
+}
+function closeModal() { $("modal").hidden = true; $("mbox").innerHTML = ""; if (V && !working) decorate(); }
+$("modal").addEventListener("click", e => { if (e.target === $("modal") && $("modal").dataset.closable) closeModal(); });
+function openTrash(pid) {
+  if (!V) return;
+  const t = V.st.p[pid].trash;
+  openModal(`<h3>Défausse ${pid ? "de l'IA (" + esc(PN[1]) + ")" : "à toi"} (${t.length})</h3>${t.length ? `<div class="tgrid">${t.slice().reverse().map(n => card(n, { raw: true })).join("")}</div><div class="small">La plus récente en premier. Touche une carte pour la lire.</div>` : `<div class="small">Vide.</div>`}`);
+}
+
+function deckOptions(selKey) {
+  const mine = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
+  const opt = (k, label, bad) => `<option value="${esc(k)}"${selKey === k ? " selected" : ""}${bad ? " disabled" : ""}>${esc(label)}${bad ? " (pas encore jouable)" : ""}</option>`;
+  return `<optgroup label="Mes decks">${mine.length ? mine.map(d => opt("my:" + d.id, d.name, !deckOK(d))).join("") : `<option disabled>aucun pour l'instant</option>`}</optgroup>
+    <optgroup label="Decks de référence">${(CAT ? CAT.presets : [{ key: "akali-g2", name: "Akali G2 (Gorica)" }, { key: "leblanc-iq5", name: "LeBlanc IQ#5 (Gyatarina)" }]).map(p => opt(p.key, p.name, CAT && !presetOK(p))).join("")}</optgroup>`;
+}
+// Ce que la page envoie au moteur : la clé d'un deck de référence, ou le deck perso en JSON.
+function deckArg(key) {
+  if (key && key.startsWith("my:")) { const d = MYDECKS[key.slice(3)]; return d ? JSON.stringify(toEngine(d)) : null; }
+  return key || null;
+}
+function deckBfs(key) {
+  if (key && key.startsWith("my:")) { const d = MYDECKS[key.slice(3)]; return d ? d.battlefields : []; }
+  const p = CAT && CAT.presets.find(x => x.key === key); return p ? p.deck.battlefields : ["Forgotten Monument", "Sigil of the Storm", "Void Gate"];
+}
+function deckLegend(key) {
+  if (key && key.startsWith("my:")) { const d = MYDECKS[key.slice(3)]; return d ? d.legend : ""; }
+  const p = CAT && CAT.presets.find(x => x.key === key); return p ? p.deck.legend : (key === "leblanc-iq5" ? "LeBlanc, Deceiver" : "Akali, Rogue Assassin");
+}
+const planTxt = lg => /^LeBlanc/.test(lg || "") ? "le plan Hook tempo" : /^Akali/.test(lg || "") ? "le plan Gorica" : "l'IA générique (sans plan propre à ce deck)";
+
+async function setupForm(msg) {
+  await loadCatalog();
+  const last = k => store.get("rbt-" + k) || "";
+  const mk = last("mine") || "akali-g2", ok = last("opp") || "leblanc-iq5";
+  openModal(`<h3>Nouvelle partie</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup">
+    <label for="sMine">Ton deck<select id="sMine">${deckOptions(mk)}</select></label>
+    <label for="sOpp">Deck de l'IA<select id="sOpp">${deckOptions(ok)}</select></label>
+    <div class="small"><button class="linkb" id="bOpenDecks">Créer ou modifier mes decks</button></div>
+    <label for="sBf">Ton battlefield<select id="sBf"></select></label>
+    <label for="sFirst">Qui commence<select id="sFirst"><option value="">Pile ou face</option><option value="0"${last("first") === "0" ? " selected" : ""}>Moi</option><option value="1"${last("first") === "1" ? " selected" : ""}>L'IA</option></select></label>
+    <label for="sLvl">Niveau de l'IA<select id="sLvl"><option value="1">Normal : celle des simulations</option><option value="3"${last("lvl") === "3" ? " selected" : ""}>Fort : 3 simulations par coup, plus lente</option></select></label>
+    <label for="sSeed">Donne (vide = au hasard, même numéro = même partie)<input id="sSeed" inputmode="numeric" placeholder="au hasard"></label>
+    <div class="big"><button class="main" id="bStart">Commencer</button></div>
+    <div class="small" id="sPlan"></div></div>`, !!V);
+  const fill = () => {
+    const mine = $("sMine").value, opp = $("sOpp").value, lb = last("bf");
+    const isG2 = mine === "akali-g2";
+    $("sBf").innerHTML = `<option value="">${isG2 ? "Choix du plan Gorica (Sigil si LeBlanc prend Windswept, sinon Void Gate)" : "Au hasard parmi tes 3"}</option>` + deckBfs(mine).map(b => `<option${lb === b ? " selected" : ""}>${esc(b)}</option>`).join("");
+    $("sPlan").textContent = `L'IA joue ${planTxt(deckLegend(opp))} avec l'IA « gagner à tout prix ». Elle ne voit pas ta main.`;
+  };
+  $("sMine").onchange = fill; $("sOpp").onchange = fill; fill();
+  if ($("sMine").selectedOptions[0] && $("sMine").selectedOptions[0].disabled) $("sMine").value = "akali-g2";
+  $("bOpenDecks").onclick = () => { closeModal(); openDecks(); };
+  $("bStart").onclick = start;
+  if (!$("board").querySelector(".half")) $("board").innerHTML = `<div class="loading">Choisis tes options et touche Commencer.</div>`;
+}
+
+async function start() {
+  const bf = $("sBf").value, first = $("sFirst").value, lvl = $("sLvl").value, seed = $("sSeed").value.trim();
+  const mk = $("sMine").value, ok = $("sOpp").value, mine = deckArg(mk), opp = deckArg(ok);
+  closeModal();
+  store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok);
+  try { META = J(T.new(seed === "" ? null : +seed, bf || null, first === "" ? null : +first, +lvl, mine, opp)); }
+  catch (err) { setupForm(String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]); return; }
+  PN = META.names;
+  CARDS = J(T.cards());
+  LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
+  recStart(META, bf, first, lvl, mine, opp);
+  $("gmeta").textContent = `Donne ${META.seed} · ${PN[0]} contre ${PN[1]} · ${META.first === 0 ? "tu commences" : PN[1] + " commence"} · ${META.bf[0]} / ${META.bf[1]} · IA ${lvl === "3" ? "forte" : "normale"}`;
+  $("gres").hidden = true;
+  await pump(J(T.step()));
+}
+
+// Fait jouer l'IA pas à pas jusqu'à ce que ce soit à toi (ou fin de partie), avec une courte pause après chacun de ses coups.
+async function pump(v) {
+  working = true;
+  try {
+    show(v);
+    while (v.busy) {
+      await sleep(v.ai ? 650 : (v.log.length ? 120 : 0));
+      v = J(T.step());
+      show(v);
+    }
+  } catch (err) {
+    // une erreur du moteur ne doit pas figer la table : on la montre et on rend la main (Reprendre reste possible)
+    console.error(err);
+    working = false;
+    toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash");
+    if (V) show(V);
+    return;
+  }
+  working = false;
+  show(v);
+}
+
+let seenLog = 0;
+function journal(open) {
+  $("drawer").classList.toggle("open", open); $("bJournal").setAttribute("aria-expanded", open);
+  store.set("rbt-journal", open ? "1" : "");
+  if (open) { seenLog = LOG.length; $("log").scrollTop = $("log").scrollHeight; }
+  badge();
+}
+function badge() { const n = $("drawer").classList.contains("open") ? 0 : LOG.length - seenLog; $("bJournal").innerHTML = "Journal" + (n > 0 ? `<b>${n > 99 ? "99+" : n}</b>` : ""); }
+$("bJournal").onclick = () => journal(!$("drawer").classList.contains("open"));
+$("bJClose").onclick = () => journal(false);
+function addLog(lines) {
+  if (LOG.length < seenLog) seenLog = LOG.length;
+  for (const [ind, t] of lines) LOG.push([ind, t]);
+  const el = $("log");
+  el.innerHTML = LOG.map(([ind, t]) => `<div class="${t.startsWith("Tour ") ? "turn" : ind ? "sub" : ""} ${t.startsWith("Tu ") || t.startsWith(PN[0] + " ") ? "me" : t.startsWith(PN[1] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
+  el.scrollTop = el.scrollHeight;
+  if ($("drawer").classList.contains("open")) seenLog = LOG.length;
+  badge();
+}
+
+// Bulle au milieu du plateau : dernier coup de LeBlanc ou message court ; elle s'efface seule.
+let toastT = 0;
+function toast(msg, cls = "") {
+  const t = $("aiLine"); clearTimeout(toastT);
+  if (!msg) { t.hidden = true; return; }
+  t.className = "toast " + cls; t.textContent = msg; t.hidden = false; placeFloat();
+  toastT = setTimeout(() => { t.hidden = true; }, cls === "flash" ? 2600 : 5000);
+}
+
+function show(v) {
+  if (v !== V) { addLog(v.log || []); if (v.ai) toast(PN[1] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
+  if (!v.dec && !v.ask) { mode = null; sel = null; }
+  if (v.ask && !(mode && mode.type === "ask" && V && V.ask === v.ask)) {
+    mode = { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
+  }
+  ALIAS = v.alias || {};
+  V = v;
+  const st = v.st;
+  const srcs = new Set();
+  if (v.dec) for (const o of v.dec.options) { if (o.src !== null) srcs.add(String(o.src)); if (o.us) o.us.forEach(u => srcs.add(String(u))); }
+  for (const [k, t] of Object.entries(v.alias || {})) if (srcs.has(String(t))) srcs.add(k);
+  $("board").innerHTML =
+    `<div class="half p1 ${st.tp === 1 ? "active" : ""}">${handHTML(st, 1, srcs)}${rowHTML(st, 1, srcs)}</div>` +
+    `<div class="bfrow">${bfHTML(st, 0, srcs)}${bfHTML(st, 1, srcs)}</div>` +
+    `<div class="half p0 ${st.tp === 0 ? "active" : ""}">${rowHTML(st, 0, srcs)}${handHTML(st, 0, srcs)}</div>`;
+  $("stack").innerHTML = st.chain.length ? st.chain.slice().reverse().map((c, j) => `<div class="sitem c${c.c} ${j ? "old" : ""}" data-ch="${st.chain.length - 1 - j}"><div class="shead"><span class="k">${c.k === "trigger" ? "Déclenchement" : "Sur la chaîne"} · ${PN[c.c]}</span></div>${card(cardFor(c.n) || c.n, { raw: true })}<div class="stgt">${esc(c.n)}</div></div>`).join("") : `<div class="empty">Chaîne vide</div>`;
+  renderTrack(st);
+  fitBoard();
+  renderCtrl(v);
+  decorate();
+}
+
+// ------------------------------------------------------------ enregistrement des parties
+// Chaque partie est gardée dans la base de la page (collection "games") : réglages, suite exacte de tes choix (le moteur
+// est déterministe, la partie se rejoue à l'identique hors de la page), journal affiché et résultat. Claude les relit
+// pour apprendre de tes parties. Sans base (hors claude.ai, déconnecté), la table marche pareil, sans enregistrer.
+const PAGE_VER = "v11";
+let REC = null, recT = 0, DBP = null;
+function dbh() { if (!DBP) DBP = (window.claude && claude.use ? claude.use("db") : Promise.resolve(null)).catch(() => null); return DBP; }
+function chip(txt, cls) { const c = $("saveChip"); c.hidden = !txt; c.textContent = txt || ""; c.className = "savechip " + (cls || ""); }
+function recStart(meta, bf, first, lvl, mine, opp) {
+  REC = { id: Date.now().toString(36) + "-" + meta.seed, ver: PAGE_VER, seed: meta.seed, bf: bf || null, first: first === "" ? null : +first,
+    mine: mine || null, opp: opp || null, names: meta.names,
+    level: +lvl, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null };
+  chip("");
+}
+function recMove(m) { if (!REC) return; REC.moves.push(m); recSave(false); }
+function recSave(now) {
+  if (!REC) return;
+  clearTimeout(recT);
+  if (!now) { recT = setTimeout(() => recSave(true), 2500); return; }
+  const body = { ...REC, updated: new Date().toISOString(), turn: V ? V.st.t : 0, pts: V ? V.st.pts : [0, 0],
+    log: LOG.map(([ind, t]) => (ind ? "  " : "") + t).slice(-2500) };
+  dbh().then(db => {
+    if (!db) { chip("Partie non enregistrée", "off"); return; }
+    return db.collection("games").doc(REC.id).set(body).then(() => chip(REC && REC.result ? "Partie enregistrée ✓" : "Enregistrement ✓", "ok"))
+      .catch(e => chip(e && e.code === "quota_exceeded" ? "Stockage plein" : "Partie non enregistrée", "off"));
+  });
+}
+function recFinish(v) {
+  if (!REC || REC.result) return;
+  REC.result = { winner: v.winner, pts: v.st.pts, turn: v.st.t };
+  recSave(true);
+}
+addEventListener("pagehide", () => { if (REC && recT) recSave(true); });
+
+function renderTrack(st) {
+  const col = pid => { const xs = []; for (let k = 0; k <= st.v; k++) xs.push(k); if (pid === 0) xs.reverse();
+    return `<div class="trk p${pid}" title="${PN[pid]} : ${st.pts[pid]} point${st.pts[pid] > 1 ? "s" : ""}">${xs.map(k => `<span class="${k === st.pts[pid] ? "on" : ""} ${k === st.v ? "goal" : ""}">${k}</span>`).join("")}</div>`; };
+  $("track").innerHTML = col(1) + col(0);
+}
+
+const KIND = { main: "phase principale", priority: "réaction", focus: "showdown" };
+// Colonne de droite du plateau : état du tour, gros bouton (fin de tour / passer), conseil, reprendre.
+function renderCtrl(v) {
+  const M = $("bMain"), I = $("turnInfo");
+  $("hpop").hidden = true;
+  $("bUndo").disabled = working || !v.undo;
+  $("bHint").disabled = working || !v.dec;
+  M.className = "endbtn"; M.onclick = null;
+  if (v.winner !== null && v.winner !== undefined) {
+    const w = v.winner === 0;
+    recFinish(v);
+    I.innerHTML = `<b class="${w ? "me" : "opp"}">${w ? "Victoire !" : v.winner === 1 ? "Défaite" : "Partie nulle"}</b> ${v.st.pts[0]}-${v.st.pts[1]}`;
+    $("gres").hidden = false; $("gres").className = "res " + (w ? "w" : "l"); $("gres").textContent = `${w ? "Victoire" : "Défaite"} ${v.st.pts[0]}-${v.st.pts[1]}`;
+    M.textContent = "Nouvelle partie"; M.disabled = false; M.id = "bMain"; M.onclick = () => setupForm();
+    return;
+  }
+  if (v.busy) {
+    I.innerHTML = `<span class="think"><i></i>${esc(PN[1])} joue…</span><span class="tn">tour ${v.st.t}</span>`;
+    M.textContent = "Attends ton tour"; M.disabled = true; return;
+  }
+  if (v.ask) {
+    I.innerHTML = `<b class="me">À toi</b><span class="tn">choix en cours</span>`;
+    M.textContent = "Réponds au choix"; M.disabled = true; return;
+  }
+  const d = v.dec, ops = d.options;
+  I.innerHTML = `<b class="me">À toi</b><span class="tn">tour ${v.st.t} · ${KIND[d.kind] || d.kind}</span>`;
+  const o = ops.find(x => x.k === "end") || ops.find(x => x.k === "pass");
+  if (!o) { M.textContent = "—"; M.disabled = true; return; }
+  M.textContent = o.k === "end" ? "Terminer le tour" : "Passer";
+  M.classList.toggle("pass", o.k === "pass");
+  M.disabled = working; M.onclick = () => choose(o.i);
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+async function choose(i) {
+  if (working || !V || !V.dec) return;
+  sel = null; mode = null; lastAI = null; toast("");
+  LOGSTACK.push(LOG.length);
+  const o = V.dec.options.find(x => x.i === i);
+  recMove(["act", i, o ? o.label : "", V.st.t]);
+  working = true;
+  await pump(J(T.act(i)));
+}
+
+$("bHint").onclick = async e => {
+  e.stopPropagation();
+  const P = $("hpop");
+  if (!P.hidden) { P.hidden = true; return; }
+  P.innerHTML = `<div class="pt">Conseil de l'IA</div><div class="think"><i style="background:var(--akali)"></i>Calcul…</div>`;
+  P.hidden = false; placeHint();
+  await sleep(30);
+  recMove(["hint", 5]);
+  const hs = J(T.hint(5));
+  P.innerHTML = `<div class="pt">Conseil de l'IA</div>` + (hs.length ? hs.map((x, j) => `<button class="hintrow ${j ? "" : "best"}" data-i="${x.i}"><span>${esc(cap(x.label))}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></button>`).join("") : `<div class="small">Rien à conseiller ici.</div>`) +
+    `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit. Touche une ligne pour la jouer.</div>`;
+  placeHint();
+};
+function placeHint() {
+  const P = $("hpop"), r = $("bHint").getBoundingClientRect(), w = P.offsetWidth, h = P.offsetHeight;
+  let x = r.left - w - 10; if (x < 8) x = Math.max(8, Math.min(innerWidth - w - 8, r.left));
+  let y = Math.max(8, Math.min(innerHeight - h - 8, r.top - 20));
+  if (x === r.left || innerWidth <= 820) y = Math.max(8, r.top - h - 10);
+  P.style.left = x + "px"; P.style.top = y + "px";
+}
+$("hpop").addEventListener("click", e => { e.stopPropagation(); const b = e.target.closest("[data-i]"); if (b) { $("hpop").hidden = true; choose(+b.dataset.i); } });
+
+async function answer(x) {
+  if (working) return;
+  const a = V && V.ask;
+  recMove(["ans", x, a ? a.kind + " : " + (Array.isArray(x) ? x.map(k => a.options[k]).join(", ") : a.options[x]) : "", V ? V.st.t : 0]);
+  working = true; mode = null;
+  await pump(J(T.answer(JSON.stringify(x))));
+}
+
+$("bUndo").onclick = () => {
+  if (working || !V || !V.undo) return;
+  const n = LOGSTACK.length ? LOGSTACK.pop() : LOG.length;
+  LOG = LOG.slice(0, n);
+  const v = J(T.undo());
+  recMove(["undo"]);
+  if (REC && REC.result) REC.result = null;   // reprendre un coup après la fin : la partie continue
+  v.log = []; addLog([]); toast("Coup repris.");
+  sel = null; mode = null; show(v);
+};
+$("bNew").onclick = () => { if (!working && T) setupForm(); };
+
+
+// ------------------------------------------------------------ rendu du plateau (repris du lecteur de replays)
+function card(name, o = {}) {
+  const img = IMG[name] || ATL[name];
+  const cls = ["card"]; if (o.p !== undefined) cls.push("c" + o.p); if (o.can) cls.push("can"); if (o.sel) cls.push("sel"); if (o.back) cls.push("back"); else if (!img) cls.push("noimg");
+  let extra = "";
+  if (o.m !== undefined && o.m !== null) { const d = o.base == null ? 0 : o.m - o.base; extra += `<span class="mt ${d > 0 ? "up" : d < 0 ? "dn" : ""}">${o.m}</span>`; }
+  if (o.d) extra += `<span class="dmg">${o.d}</span>`;
+  if (o.cost && !o.back) { const c = CARDS[name] || {}; if (c.e !== undefined) extra += `<span class="cost">${c.e}${c.p ? "+" + c.p : ""}</span>`; }
+  if (o.tags && o.tags.length) extra += `<span class="tags">${o.tags.map(t => `<b>${t}</b>`).join("")}</span>`;
+  if (o.gear && o.gear.length) extra += `<span class="gear">+ ${esc(o.gear.join(", "))}</span>`;
+  const style = (o.style || "") + (img && !o.back ? art(name) : "");
+  const label = o.back ? "Carte cachée" : name;
+  const inner = !img && !o.back ? esc(name) : "";
+  const uid = o.uid !== undefined ? ` data-uid="${o.uid}"` : "";
+  const c = `<div class="${cls.join(" ")}" tabindex="0" data-card="${o.back ? "" : esc(name)}"${uid} title="${esc(label)}" aria-label="${esc(label)}" style="${style}">${inner}${extra}</div>`;
+  return o.raw ? c : `<div class="slot ${o.x ? "x" : ""}">${c}</div>`;
+}
+const can = (srcs, u) => srcs.has(String(u));
+function unitCard(u, srcs) {
+  const tags = []; if (u.s) tags.push("ST"); if (u.k && u.k.includes("Temporary")) tags.push("TEMP"); if (u.e) tags.push("EMP"); if (u.bf) tags.push("+" + u.bf); if (u.t && u.n !== "Reflection" && u.n !== "Mech") tags.push("COPIE");
+  return card(u.n, { p: u.c, m: u.m, base: u.b, d: u.d, x: u.x, gear: u.g, tags, uid: u.u, can: can(srcs, u.u), sel: sel === String(u.u) });
+}
+function handHTML(st, pid, srcs) {
+  const p = st.p[pid], n = p.hand.length, top = pid === 1;
+  const vis = pid === 0;
+  const cards = p.hand.map(([uid, nm], i) => {
+    const off = i - (n - 1) / 2;
+    const rot = (top ? -1 : 1) * off * 4, lift = off * off * 1.6 * (top ? -1 : 1);
+    return card(nm, { p: pid, back: !vis, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
+  }).join("");
+  return `<div class="hand ${top ? "top" : ""}"><span class="who-hand">${pid ? "Main de " + esc(PN[1]) : "Ta main"} (${n})</span>${cards || `<span class="small">main vide</span>`}</div>`;
+}
+function rowHTML(st, pid, srcs) {
+  const p = st.p[pid];
+  const runes = p.runes.map(r => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"); return `<div class="runeslot ${x ? "x" : ""}"><div class="rune" title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div></div>`; }).join("");
+  const ready = p.runes.filter(r => !r.endsWith("x")).length;
+  const base = p.base.map(u => unitCard(u, srcs)).join("") + p.gear.map(g => card(g.n, { p: pid, x: g.x, uid: g.u, can: can(srcs, g.u) })).join("");
+  const champ = p.champ.map((n, k) => { const u = pid === 0 && p.champu ? p.champu[k] : undefined; return card(n, { p: pid, uid: u, can: u !== undefined && can(srcs, u), sel: u !== undefined && sel === String(u) }); }).join("");
+  const leg = champ + card(p.leg.n, { p: pid, x: p.leg.x, tags: p.leg.e ? ["EMP"] : [], uid: pid === 0 ? "legend" : undefined, can: pid === 0 && srcs.has("legend"), sel: pid === 0 && sel === "legend" });
+  return `<div class="zrow">
+    <div class="zone pile">
+      <div class="who">${pid ? esc(PN[1]) : "Toi (" + esc(PN[0]) + ")"}</div>
+      <div class="score">${st.pts[pid]}<small>/${st.v}</small></div>
+      <div class="piles"><div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div><div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
+      ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
+    </div>
+    <div class="zone">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span>${p.pe ? `<span title="Énergie flottante : gagnée en épuisant une rune avant de la recycler, utilisable jusqu'à la fin du tour">Flottante <b>${p.pe}</b></span>` : ""}</div><span class="label">Runes</span></div>
+    <div class="zone" ${pid === 0 ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    <div class="zone legend">${leg}<span class="label">Légende</span></div>
+  </div>`;
+}
+function bfHTML(st, i, srcs) {
+  const b = st.bfs[i], sd = st.sd && st.sd.bf === i;
+  const top = b.u.filter(u => u.c === 1).map(u => unitCard(u, srcs)).join("");
+  const bot = b.u.filter(u => u.c === 0).map(u => unitCard(u, srcs)).join("");
+  const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${b.c}">${PN[b.c]}</span>`;
+  let fd = "";
+  if (b.fd) { const mine = b.fd[0] === 0; fd = `<span class="fd">${card(mine ? b.fd[1] : "", { back: !mine, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
+  return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + b.c : ""} ${sd ? "sd" : ""}" data-drop="${i}">
+    <div class="side top">${top}</div>
+    <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
+      <span class="bname">${esc(b.n)}</span>${sd ? `<span class="sdtag">${st.sd.combat ? "Combat" : "Showdown"}</span>` : ""}${fd}${ctrl}</div>
+    <div class="side">${bot}</div>
+  </div>`;
+}
+const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vision|Ambush) /;
+function cardFor(n) {
+  const known = k => IMG[k] || CARDS[k] || ATL[k];
+  if (known(n)) return n;
+  const m = n.replace(TRIG_PREFIX, "");
+  if (known(m)) return m;
+  const pool = [...Object.keys(CARDS), ...Object.keys(IMG)];
+  return pool.find(k => k.startsWith(m + ",")) || pool.find(k => k.startsWith(m)) || null;
+}
+function fitBoard() {
+  const wrap = document.querySelector(".boardwrap"), bg = document.querySelector(".boardgrid");
+  if (!wrap || !bg) return;
+  if (innerWidth < 1000) { bg.style.transform = ""; return; }
+  bg.style.transform = "translateX(-50%)";
+  const w = bg.offsetWidth, h = bg.offsetHeight;
+  const sc = Math.min(1.25, wrap.clientWidth / w, wrap.clientHeight / h);
+  bg.style.transform = `translateX(-50%) scale(${sc})`;
+}
+addEventListener("resize", fitBoard);
+
+const Z = $("zoom");
+function showZoom(el) {
+  const n = el.dataset.card; if (!n) return;
+  const c = CARDS[n] || {};
+  const typ = [c.s, c.t].filter(Boolean).join(" ") + (c.d && c.d.length ? " · " + c.d.join("/") : "");
+  const cost = c.t === "Battlefield" || c.t === "Legend" || c.e === undefined ? "" : ` · coût ${c.e}${c.p ? " + " + c.p + " power" : ""}${c.m != null ? " · might " + c.m : ""}${c.eb ? " · bonus +" + c.eb : ""}`;
+  Z.innerHTML = `${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}<h4>${esc(n)}</h4><div class="small">${esc(typ)}${esc(cost)}</div><div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div>`;
+  Z.hidden = false;
+  const r = el.getBoundingClientRect(), w = 250, h = Z.offsetHeight;
+  let x = r.right + 10; if (x + w > innerWidth - 8) x = r.left - w - 10; if (x < 8) x = Math.max(8, Math.min(innerWidth - w - 8, r.left));
+  let y = Math.min(r.top - 40, innerHeight - h - 8); if (y < 8) y = 8;
+  Z.style.left = x + "px"; Z.style.top = y + "px";
+}
+const HOVER = matchMedia("(hover: hover)").matches;
+document.addEventListener("mouseover", e => { if ((drag && drag.on) || !HOVER) return; const el = e.target.closest("[data-card]"); if (el && el.dataset.card && !el.closest(".mull")) showZoom(el); else if (!e.target.closest("#zoom")) Z.hidden = true; });
+// ------------------------------------------------------------ interactions : sélection, cibles, déplacements, flèches
+// Une carte touchée ouvre un petit menu (jouer, Empower, Cibler…, Déplacer…). Les cibles se choisissent une à une puis
+// « Valider la cible ». Un déplacement se prépare (unités + destination, par glisser ou toucher) puis se lance par bouton :
+// rien n'est joué tant que le bouton n'est pas touché.
+const S = x => x === null || x === undefined ? null : String(x);
+const optsFor = src => { if (!V || !V.dec) return []; const s2 = S(ALIAS[src] ?? src); return V.dec.options.filter(o => S(o.src) === s2 || (o.us && o.us.map(String).includes(s2))); };
+const ms = xs => { const m = new Map(); xs.forEach(x => m.set(String(x), (m.get(String(x)) || 0) + 1)); return m; };
+function contains(big, small) { const B = ms(big); for (const [k, n] of ms(small)) if ((B.get(k) || 0) < n) return false; return true; }
+function rest(big, small) { const B = ms(big); small.forEach(x => B.set(String(x), B.get(String(x)) - 1)); return [...B].filter(([, n]) => n > 0).map(([k]) => k); }
+const sameSet = (a, b) => a.length === b.length && contains(a, b);
+const hasT = o => (o.t1 || []).length > 0;
+const hasMv = o => o.mover !== null && o.mover !== undefined;
+const needs = o => hasT(o) || hasMv(o);   // coup qui demande de toucher des cartes (cibles, allié à déplacer…)
+const locName = l => l === "base" || l === null || l === undefined ? "base" : (V.st.bfs[+l] || {}).n || l;
+const unitEl = u => document.querySelector(`#board .bf [data-uid="${u}"], #board .zone [data-uid="${u}"]`);
+const srcEl = u => document.querySelector(`#board [data-uid="${u}"]`);
+const zoneEl = z => document.querySelector(`#board [data-drop="${z}"]`);
+function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
+function flash(msg) { toast(msg, "flash"); }
+function reset() { sel = null; mode = null; }
+function run(m) {
+  m = uniq(m);
+  if (!m.length) { flash("Ce coup n'est pas possible."); return; }
+  if (m.length === 1) return choose(m[0].i);
+  mode = { type: "list", cands: m }; decorate();
+}
+
+// ---------- cibles
+function startTarget(cands, P = []) {
+  const src = sel;
+  cands = cands.filter(needs);
+  if (!cands.length) return;
+  mode = { type: "target", src, cands, P: [], skip: false, M: null, D: null };
+  P.forEach(u => addTarget(u, true));
+  decorate();
+}
+const targetable = () => { const u = new Set(); mode.cands.filter(o => contains(o.t1, mode.P)).forEach(o => rest(o.t1, mode.P).forEach(x => u.add(x))); return u; };
+function addTarget(u, quiet) {
+  u = String(u);
+  if (!targetable().has(u)) { if (!quiet) flash("Cette unité n'est pas une cible possible."); return; }
+  mode.P.push(u);
+  if (!quiet) decorate();
+}
+// Sorts « cible puis déplacement » (Shuriken Flip) : 1) l'ennemi (ou aucun), 2) l'allié à déplacer, 3) la zone d'arrivée.
+const mvMode = () => mode.cands.some(hasMv);
+const maxT = () => Math.max(...mode.cands.map(o => o.t1.length));
+const matchT = () => mode.cands.filter(o => o.t1.length === mode.P.length && contains(o.t1, mode.P));
+function tPhase() {
+  if (!mvMode()) return "t1";
+  if (!mode.skip && mode.P.length < maxT() && targetable().size) return "t1";
+  if (mode.M === null) return "mover";
+  if (mode.D === null) return "dest";
+  return "done";
+}
+const moverSet = () => new Set(matchT().filter(hasMv).map(o => S(o.mover)));
+const destSet = () => new Set(matchT().filter(o => S(o.mover) === mode.M).map(o => S(o.loc)));
+const exactT = () => mvMode() ? matchT().filter(o => S(o.mover) === mode.M && S(o.loc) === mode.D) : matchT();
+const cname = u => { const x = srcEl(u); return x && x.dataset.card ? x.dataset.card : "?"; };
+
+// ---------- déplacements
+function moveDests(units) { const z = new Set(); for (const u of units) for (const o of optsFor(u)) if (o.k === "move" && contains(o.us, units)) z.add(String(o.loc)); return z; }
+function moveOpt() { if (!mode || mode.type !== "move" || mode.dest === null) return null; return V.dec.options.find(o => o.k === "move" && String(o.loc) === mode.dest && sameSet(o.us.map(String), mode.units)) || null; }
+function startMove(u, dest = null) {
+  if (mode && mode.type === "move") { if (!mode.units.includes(u)) mode.units.push(u); if (dest !== null) mode.dest = dest; }
+  else mode = { type: "move", units: [u], dest };
+  sel = null; decorate();
+}
+const canMove = u => optsFor(u).some(o => o.k === "move");
+
+// ---------- menu d'une carte
+function popHTML() {
+  const ops = optsFor(sel).filter(o => o.k !== "move" || false);
+  const name = (srcEl(sel) || {}).dataset ? srcEl(sel).dataset.card : "";
+  let h = `<div class="pt">${esc(name || "Carte")}</div>`;
+  const groups = new Map();
+  for (const o of ops) {
+    if (needs(o)) {
+      const k = o.k === "act" ? o.label.split(" : ")[0] : "Jouer";
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(o);
+    }
+  }
+  for (const [k, xs] of groups) h += `<button class="tg" data-tg="${esc(k)}">${k === "Jouer" ? "Cibler" : esc(k) + " : cibler"}</button>`;
+  const plain = uniq(ops.filter(o => !needs(o))), shown = new Set();
+  for (const o of plain) {
+    if (shown.has(o.i)) continue;
+    let t = o.label;
+    const sib = o.k === "play" ? plain.filter(x => x.k === "play" && S(x.loc) === S(o.loc) && x.from_ === o.from_) : [o];
+    if (o.k === "play" && sib.length > 1) {
+      // plusieurs façons de jouer la carte au même endroit : une ligne de titre puis Accelerate / Normal (ou Repeat)
+      h += `<div class="pg">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : ""}</div>`;
+      for (const x of sib.sort((a, b) => (b.acc ? 1 : 0) - (a.acc ? 1 : 0) || (b.rep ? 1 : 0) - (a.rep ? 1 : 0))) {
+        shown.add(x.i);
+        h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || "Normal")}</button>`;
+      }
+      continue;
+    }
+    if (o.k === "play") t = `Jouer → ${locName(o.loc)}${o.acc ? " (Accelerate)" : ""}${o.rep ? " (Repeat)" : ""}${o.from_ === "trash" ? " (Flow)" : ""}`;
+    if (o.k === "hide") t = `Cacher → ${locName(o.loc)}`;
+    if (o.k === "act") t = o.label.replace(/^(\w+) : [^(]*\(/, "$1 (");
+    h += `<button data-i="${o.i}">${esc(cap(t))}</button>`;
+  }
+  if (canMove(sel)) h += `<button data-mv="1">Déplacer… (puis choisir la destination)</button>`;
+  h += `<button data-read="1">Lire la carte</button>`;
+  return h;
+}
+function placePop() {
+  const P = $("pop"), el = srcEl(sel);
+  if (!el) { P.hidden = true; return; }
+  P.hidden = false;
+  const r = el.getBoundingClientRect(), w = P.offsetWidth, h = P.offsetHeight;
+  let x = r.left + r.width / 2 - w / 2; x = Math.max(8, Math.min(innerWidth - w - 8, x));
+  let y = r.top - h - 10; if (y < 8) y = Math.min(innerHeight - h - 8, r.bottom + 10);
+  P.style.left = x + "px"; P.style.top = y + "px";
+}
+$("pop").addEventListener("click", e => {
+  e.stopPropagation();
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.i) { $("pop").hidden = true; return choose(+b.dataset.i); }
+  if (b.dataset.tg) { const k = b.dataset.tg; return startTarget(optsFor(sel).filter(o => needs(o) && (o.k === "act" ? o.label.split(" : ")[0] === k : k === "Jouer"))); }
+  if (b.dataset.mv) return startMove(sel);
+  if (b.dataset.read) { const el = srcEl(sel); if (el) showZoom(el); }
+});
+
+// ---------- bulle de décision au milieu du plateau (cibles, déplacement, précision, choix pendant un effet)
+const nm = s => String(s).replace(/ adverse.*$| \(.*\)$/, "");
+function askHTML() {
+  const a = mode.a;
+  const who = a.item ? `<b>${esc(a.item)}</b> · ` : "";
+  if (a.kind === "mulligan") {
+    const n = mode.mull.size;
+    return `<span class="ft">Mulligan : touche jusqu'à 2 cartes à remettre.</span><div class="mull">${a.options.map((c, i) => `<button data-m="${i}" aria-pressed="${mode.mull.has(i)}" title="${esc(c)}">${card(c, { raw: true, p: 0, cost: true })}</button>`).join("")}</div>
+      <div class="prow"><button class="go" id="bKeep">${n ? `Remettre ${n} carte${n > 1 ? "s" : ""}` : "Garder ma main"}</button></div>`;
+  }
+  if (a.kind === "may") return `<span class="ft">${who}Utiliser cet effet ?</span><div class="prow"><button class="go" data-a="0">Oui</button><button data-a="1">Non</button></div>`;
+  const pickable = (a.uids || []).some(u => u !== null) || (a.zs || []).some(z => z !== null);
+  const loose = a.options.map((o, i) => i).filter(i => !((a.uids || [])[i] !== null && (a.uids || [])[i] !== undefined) && !((a.zs || [])[i] !== null && (a.zs || [])[i] !== undefined));
+  if (pickable) {
+    const p = mode.pick;
+    return `<span class="ft">${who}${esc(a.title)}${p !== null ? ` <b>${esc(a.options[p])}</b>` : " Touche une carte ou une zone en surbrillance."}</span>
+      <div class="prow"><button class="go" id="fOk" ${p !== null ? "" : "disabled"}>Valider</button>${loose.map(i => `<button data-a="${i}">${esc(cap(a.options[i]))}</button>`).join("")}</div>`;
+  }
+  const asCards = a.options.every(o => CARDS[nm(o)] || IMG[nm(o)]);
+  if (asCards) return `<span class="ft">${who}${esc(a.title)}</span><div class="mull pick">${a.options.map((o, i) => `<button data-a="${i}" title="${esc(o)}">${card(nm(o), { raw: true, cost: true })}</button>`).join("")}</div>`;
+  return `<span class="ft">${who}${esc(a.title)}</span><div class="prow">${a.options.map((o, i) => `<button class="go" data-a="${i}">${esc(cap(o))}</button>`).join("")}</div>`;
+}
+// Libellé court d'un coup quand plusieurs variantes existent : Accelerate / Normal, Repeat, zone…
+function variantLabel(o, cands) {
+  const plays = cands.every(x => x.k === "play" || x.k === "hide");
+  if (!plays) return cap(o.label);
+  const locs = new Set(cands.map(x => S(x.loc)));
+  const parts = [];
+  if (locs.size > 1) parts.push((o.k === "hide" ? "Cacher → " : "") + cap(locName(o.loc)));
+  if (cands.some(x => x.acc)) parts.push(o.acc ? accTxt(o) : "Normal");
+  if (cands.some(x => x.rep)) parts.push(o.rep ? "Avec Repeat" : "Sans Repeat");
+  if (cands.some(x => x.from_ === "trash")) parts.push(o.from_ === "trash" ? "Depuis la défausse" : "Depuis la main");
+  return parts.length ? parts.join(" · ") : cap(o.label);
+}
+function accTxt(o) {
+  const n = (srcEl(S(ALIAS[o.src] ?? o.src)) || {}).dataset; const c = CARDS[n ? n.card : ""] || {};
+  return `Accelerate (+1 énergie +1 ${(c.d || ["rune"])[0]}, arrive prête)`;
+}
+function fbarHTML() {
+  if (V && V.winner !== null && V.winner !== undefined && !working) {
+    const w = V.winner === 0;
+    return `<span class="ft big ${w ? "me" : "opp"}">${w ? "Victoire !" : V.winner === 1 ? "Défaite" : "Partie nulle"} ${V.st.pts[0]}-${V.st.pts[1]}</span>
+      <div class="prow"><button class="go" id="bAgain">Nouvelle partie</button><button id="bSame">Rejouer la même donne</button></div>`;
+  }
+  if (!mode || working) return "";
+  if (mode.type === "ask") return askHTML();
+  if (mode.type === "target" && mvMode()) {
+    const ph = tPhase(), ok = exactT().length > 0;
+    const steps = [["1", "Ennemi", mode.P.length ? cname(mode.P[0]) : mode.skip ? "aucun" : null, ph === "t1"],
+      ["2", "Allié à déplacer", mode.M !== null ? cname(mode.M) : null, ph === "mover"],
+      ["3", "Vers", mode.D !== null ? locName(mode.D) : null, ph === "dest"]];
+    const help = { t1: "Touche l'ennemi qui prend les dégâts.", mover: "Touche l'allié à déplacer.", dest: "Touche la zone où il va.", done: "Tout est choisi." }[ph];
+    const canSkip = ph === "t1" && !mode.P.length && mode.cands.some(o => !hasT(o));
+    return `<span class="ft"><b>${esc(cname(mode.src))}</b> · ${help}</span>
+      <div class="steps">${steps.map(([n, t, v, on]) => `<span class="step ${on ? "on" : ""} ${v !== null ? "ok" : ""}"><i>${n}</i>${t}${v !== null ? ` : <b>${esc(v)}</b>` : ""}</span>`).join("")}</div>
+      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider</button>${canSkip ? `<button id="fSkip">Pas d'ennemi</button>` : ""}<button id="fNo">Annuler</button></div>`;
+  }
+  if (mode.type === "target") {
+    const max = Math.max(...mode.cands.map(o => o.t1.length)), ok = exactT().length > 0;
+    return `<span class="ft">Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
+      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider la cible</button><button id="fNo">Annuler</button></div>`;
+  }
+  if (mode.type === "move") {
+    const o = moveOpt(), d = mode.dest;
+    const enemy = d !== null && d !== "base" && V.st.bfs[+d].u.some(u => u.c === 1);
+    const txt = `${mode.units.length} unité${mode.units.length > 1 ? "s" : ""} → ${d === null ? "touche la destination" : locName(d)}`;
+    const why = d !== null && !o ? `<span class="ft flash">Ces unités ne peuvent pas partir ensemble vers cette zone.</span>` : "";
+    return `<span class="ft">${esc(txt)}. Touche d'autres unités pour les ajouter.</span>${why}
+      <div class="prow"><button class="${enemy ? "fight" : "go"}" id="fOk" ${o ? "" : "disabled"}>${enemy ? "⚔ Lancer le combat" : "Lancer le déplacement"}</button><button id="fNo">Annuler</button></div>`;
+  }
+  if (mode.type === "list") {
+    const nmx = (srcEl(sel) || {}).dataset;
+    return `<span class="ft">${nmx && nmx.card ? `<b>${esc(nmx.card)}</b> : ` : ""}comment le jouer ?</span><div class="prow col">${mode.cands.map(o => `<button class="go" data-i="${o.i}">${esc(variantLabel(o, mode.cands))}</button>`).join("")}<button id="fNo">Annuler</button></div>`;
+  }
+  return "";
+}
+$("fbar").addEventListener("click", e => {
+  e.stopPropagation();
+  const m = e.target.closest("[data-m]");
+  if (m && mode && mode.type === "ask") {
+    const i = +m.dataset.m;
+    if (mode.mull.has(i)) mode.mull.delete(i); else if (mode.mull.size < 2) mode.mull.add(i);
+    return decorate();
+  }
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "bAgain") return setupForm();
+  if (b.id === "bSame") { setupForm(); $("sSeed").value = META.seed; return; }
+  if (b.id === "bKeep") return answer([...mode.mull]);
+  if (b.dataset.a) return answer(+b.dataset.a);
+  if (b.id === "fOk" && mode.type === "ask") return answer(mode.pick);
+  if (b.id === "fNo") { reset(); return decorate(); }
+  if (b.id === "fSkip" && mode && mode.type === "target") { mode.skip = true; return decorate(); }
+  if (b.dataset.i) return choose(+b.dataset.i);
+  if (b.id === "fOk" && mode.type === "target") return run(exactT());
+  if (b.id === "fOk" && mode.type === "move") { const o = moveOpt(); if (o) choose(o.i); }
+});
+// La bulle se pose entre les deux battlefields (là où il n'y a pas d'unités) ; le message de LeBlanc juste au-dessus.
+function placeFloat() {
+  const row = document.querySelector("#board .bfrow"), F = $("fbar"), Tt = $("aiLine");
+  if (!row || innerWidth <= 820) { F.style.left = F.style.top = Tt.style.left = Tt.style.top = ""; return; }
+  const r = row.getBoundingClientRect(), cx = r.left + r.width / 2;
+  if (!F.hidden) {
+    // Trois places possibles : milieu des battlefields, au-dessus de la main de LeBlanc, au niveau de ta main.
+    // On prend la première qui ne cache ni une carte en surbrillance (cibles, source, unités à déplacer) ni une unité sur un battlefield.
+    const w = F.offsetWidth, h = F.offsetHeight, b = $("board").getBoundingClientRect();
+    const key = [...document.querySelectorAll("#board .drop-ok, #board .picked, #board .isel, #board .staged, #board .bf .card")].map(x => x.getBoundingClientRect());
+    const oh = document.querySelector("#board .hand.top"), mh = document.querySelector("#board .p0 .hand");
+    const spots = [[cx, r.top + r.height / 2]];
+    if (oh) { const q = oh.getBoundingClientRect(); spots.push([b.left + b.width / 2, q.top + q.height / 2]); }
+    if (mh) { const q = mh.getBoundingClientRect(); spots.push([b.left + w / 2 + 8, q.top + q.height / 2], [b.right - w / 2 - 8, q.top + q.height / 2]); }
+    const box = ([x, y]) => { const L = Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)), T = Math.max(8, Math.min(innerHeight - h - 8, y - h / 2)); return { L, T, R: L + w, B: T + h }; };
+    const hit = q => key.some(k => k.left < q.R && k.right > q.L && k.top < q.B && k.bottom > q.T);
+    const best = spots.map(box).find(q => !hit(q)) || box(spots[oh ? 1 : 0]);
+    F.style.left = best.L + "px"; F.style.top = best.T + "px";
+  }
+  if (!Tt.hidden) {
+    const w = Tt.offsetWidth;
+    Tt.style.left = Math.max(8, cx - w / 2) + "px";
+    Tt.style.top = Math.max(8, r.top - Tt.offsetHeight / 2) + "px";
+  }
+}
+
+// ---------- rendu des états
+function decorate() {
+  document.querySelectorAll("#board .drop-ok, #board .drop-hover, #board .picked, #board .staged, #board .isel").forEach(x => { x.classList.remove("drop-ok", "drop-hover", "picked", "staged", "isel"); delete x.dataset.n; });
+  const active = V && (V.dec || V.ask) && !working;
+  if (!active) { mode = null; sel = null; }
+  if (sel !== null && !mode) { const el = srcEl(sel); if (el) el.classList.add("isel"); }
+  if (mode && mode.type === "target") {
+    const ph = tPhase();
+    if (ph === "t1") targetable().forEach(u => { const x = unitEl(u); if (x) x.classList.add("drop-ok"); });
+    if (ph === "mover") moverSet().forEach(u => { const x = unitEl(u); if (x) x.classList.add("drop-ok"); });
+    if (ph === "dest" || ph === "done") destSet().forEach(z => { const x = zoneEl(z); if (x) x.classList.add(z === mode.D ? "drop-hover" : "drop-ok"); });
+    if (mode.M !== null) { const x = unitEl(mode.M); if (x) { x.classList.add("staged"); } }
+    mode.P.forEach((u, k) => { const x = unitEl(u); if (x) { x.classList.add("picked"); x.dataset.n = (x.dataset.n ? x.dataset.n + "+" : "") + (k + 1); } });
+    const se = srcEl(mode.src); if (se) se.classList.add("isel");
+  }
+  if (mode && mode.type === "ask") {
+    (mode.a.uids || []).forEach((u, i) => { if (u === null) return; const x = srcEl(u); if (x) { x.classList.add(i === mode.pick ? "picked" : "drop-ok"); if (i === mode.pick) x.dataset.n = "✓"; } });
+    (mode.a.zs || []).forEach((z, i) => { if (z === null) return; const x = zoneEl(z); if (x) x.classList.add(i === mode.pick ? "drop-hover" : "drop-ok"); });
+    const se = mode.a.src !== null && mode.a.src !== undefined ? srcEl(mode.a.src) : null; if (se) se.classList.add("isel");
+  }
+  if (mode && mode.type === "move") {
+    mode.units.forEach(u => { const x = unitEl(u); if (x) x.classList.add("staged"); });
+    moveDests(mode.units).forEach(z => { const x = zoneEl(z); if (x) x.classList.add("drop-ok"); });
+  }
+  if (sel !== null && !mode && active) { $("pop").innerHTML = popHTML(); placePop(); } else $("pop").hidden = true;
+  const fb = fbarHTML(); $("fbar").innerHTML = fb; $("fbar").hidden = !fb;
+  placeFloat();
+  drawArrows();
+}
+
+// ---------- toucher
+document.addEventListener("click", e => {
+  if (noClick) { noClick = false; return; }
+  if (e.target.closest("#pop, #fbar, #zoom, #hpop")) return;
+  if (!$("hpop").hidden && !e.target.closest("#bHint")) $("hpop").hidden = true;
+  const el = e.target.closest("[data-card]");
+  if (e.target.closest("#modal")) { if (el && el.dataset.card) showZoom(el); else Z.hidden = true; return; }
+  const tr = e.target.closest("#board [data-trash]");
+  if (tr) { Z.hidden = true; return openTrash(+tr.dataset.trash); }
+  if (V && V.ask && mode && mode.type === "ask" && !working && e.target.closest("#board")) {
+    const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
+    let i = u ? (mode.a.uids || []).findIndex(x => x !== null && String(x) === u.dataset.uid) : -1;
+    if (i < 0 && z) i = (mode.a.zs || []).findIndex(x => x !== null && x === z.dataset.drop);
+    if (i >= 0) { mode.pick = mode.pick === i ? null : i; Z.hidden = true; decorate(); return; }
+  }
+  if (V && V.dec && !working && e.target.closest("#board")) {
+    const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
+    if (mode && mode.type === "target") {
+      const ph = tPhase(), drop = id => { mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = null; mode.skip = false; decorate(); };
+      if (mode.M !== null && u && u.dataset.uid === mode.M) { mode.M = mode.D = null; decorate(); return; }
+      if (ph === "mover" && u && moverSet().has(u.dataset.uid)) { mode.M = u.dataset.uid; decorate(); return; }
+      if ((ph === "dest" || ph === "done") && z && destSet().has(z.dataset.drop)) { mode.D = z.dataset.drop; decorate(); return; }
+      if (u && mode.P.includes(u.dataset.uid) && !u.classList.contains("drop-ok")) return drop(u.dataset.uid);
+      if (ph === "t1" && u && u.classList.contains("drop-ok")) { addTarget(u.dataset.uid); return; }
+      if (u && mode.P.includes(u.dataset.uid)) return drop(u.dataset.uid);
+    } else if (mode && mode.type === "move") {
+      if (u && u.classList.contains("can") && canMove(u.dataset.uid) && !u.closest(".hand")) {
+        const id = u.dataset.uid;
+        mode.units = mode.units.includes(id) ? mode.units.filter(x => x !== id) : [...mode.units, id];
+        if (!mode.units.length) mode = null;
+        decorate(); return;
+      }
+      if (z && z.classList.contains("drop-ok")) { mode.dest = z.dataset.drop; decorate(); return; }
+    } else if (u && u.classList.contains("can")) {
+      mode = null; sel = sel === u.dataset.uid ? null : u.dataset.uid; Z.hidden = true;
+      decorate(); return;
+    } else if (sel !== null) { sel = null; decorate(); }
+  } else if (sel !== null && !e.target.closest("#ctrl")) { sel = null; if (V) decorate(); }
+  if (el && el.dataset.card && !el.closest(".mull")) showZoom(el); else Z.hidden = true;
+});
+
+// ---------- glisser
+document.addEventListener("pointerdown", e => {
+  if (!V || !V.dec || working || e.button > 0) return;
+  const c = e.target.closest("#board [data-uid].can");
+  if (!c || (mode && mode.type === "target")) return;
+  drag = { src: c.dataset.uid, el: c, x0: e.clientX, y0: e.clientY, on: false };
+});
+document.addEventListener("pointermove", e => {
+  if (!drag) return;
+  if (!drag.on) {
+    if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 8) return;
+    drag.on = true; Z.hidden = true; $("pop").hidden = true;
+    if (!(mode && mode.type === "move")) { mode = null; sel = drag.src; }
+    const r = drag.el.getBoundingClientRect(), g = drag.el.cloneNode(true);
+    g.classList.add("ghost"); g.classList.remove("isel"); g.style.width = r.width + "px"; g.style.height = r.height + "px";
+    document.body.appendChild(g); drag.g = g; drag.w = r.width; drag.h = r.height;
+    // surbrillance pendant le glisser : cibles possibles, zones de jeu ou de déplacement
+    const ops = optsFor(drag.src);
+    ops.forEach(o => { if (hasT(o)) o.t1.forEach(u => { const x = unitEl(u); if (x) x.classList.add("drop-ok"); });
+      else if (o.k === "move") { if (contains(o.us, [drag.src])) { const x = zoneEl(o.loc); if (x) x.classList.add("drop-ok"); } }
+      else if (o.loc !== null && o.loc !== undefined) { const x = zoneEl(o.loc); if (x) x.classList.add("drop-ok"); } });
+  }
+  drag.g.style.left = (e.clientX - drag.w / 2) + "px"; drag.g.style.top = (e.clientY - drag.h / 2) + "px";
+  document.querySelectorAll(".drop-hover").forEach(x => x.classList.remove("drop-hover"));
+  const over = document.elementFromPoint(e.clientX, e.clientY), t = over && over.closest(".drop-ok");
+  if (t) t.classList.add("drop-hover");
+  drawArrows(e.clientX, e.clientY);
+});
+document.addEventListener("pointerup", e => {
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (!d.on) return;
+  noClick = true; setTimeout(() => { noClick = false; }, 50);
+  d.g.remove();
+  document.querySelectorAll(".drop-hover").forEach(x => x.classList.remove("drop-hover"));
+  const over = document.elementFromPoint(e.clientX, e.clientY);
+  dropAt(d.src, over && over.closest("#board [data-uid], #board [data-drop]"));
+});
+document.addEventListener("pointercancel", () => { if (drag && drag.g) drag.g.remove(); drag = null; });
+function dropAt(src, t) {
+  if (!t || (t.dataset.uid === src)) { if (!(mode && mode.type === "move")) sel = null; return decorate(); }
+  const ops = optsFor(src), isUnit = !!(t.dataset.uid && !t.dataset.drop);
+  // 1. sort ou capacité ciblée lâchée sur une unité : on passe au choix des cibles, rien n'est joué avant « Valider »
+  if (isUnit && ops.some(o => hasT(o) && o.t1.map(String).includes(t.dataset.uid))) { sel = src; return startTarget(ops.filter(o => hasT(o) && o.t1.map(String).includes(t.dataset.uid)), [t.dataset.uid]); }
+  const z = (isUnit ? t.closest("[data-drop]") : t);
+  const zone = z ? z.dataset.drop : null;
+  if (zone === null) { sel = null; return decorate(); }
+  // 2. unité déplacée : déplacement préparé, lancé ensuite par le bouton
+  if (ops.some(o => o.k === "move")) {
+    if (mode && mode.type === "move" && mode.dest !== null && mode.dest !== zone) mode = null;
+    return startMove(src, zone);
+  }
+  // 3. carte jouée sur une zone
+  if (ops.some(hasMv)) { sel = src; return startTarget(ops.filter(needs)); }
+  const m = ops.filter(o => o.k !== "move" && (o.loc !== null && o.loc !== undefined ? String(o.loc) === zone : true));
+  if (m.some(needs)) { sel = src; return startTarget(m); }
+  sel = null; run(m);
+}
+
+// ---------- flèches : tes cibles (vert), sorts de la chaîne et dernier coup de LeBlanc (violet), déplacements préparés
+function centre(el) { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+function arrow(a, b, who, dashed) {
+  const [x1, y1] = a, [x2, y2] = b, dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
+  const ex = x2 - dx / L * 14, ey = y2 - dy / L * 14, bend = Math.min(80, L / 4);
+  const cx = (x1 + ex) / 2 - dy / L * bend, cy = (y1 + ey) / 2 + dx / L * bend;
+  const col = who === 0 ? "#3fc3a3" : "#b58cf0";
+  return `<path d="M${x1},${y1} Q${cx},${cy} ${ex},${ey}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" ${dashed ? 'stroke-dasharray="7 6"' : ""} marker-end="url(#ah${who === 0 ? "A" : "L"})" opacity=".9"/>`;
+}
+function drawArrows(px, py) {
+  let h = "";
+  if (drag && drag.on && px !== undefined) {
+    optsFor(drag.src).filter(hasT).forEach(o => o.t1.forEach(u => { const t = unitEl(u); if (t) h += arrow([px, py], centre(t), 0, true); }));
+  } else if (mode && mode.type === "target") {
+    const se = srcEl(mode.src);
+    if (se) {
+      const ph = tPhase();
+      if (ph === "t1") targetable().forEach(u => { const t = unitEl(u); if (t) h += arrow(centre(se), centre(t), 0, true); });
+      [...new Set(mode.P)].forEach(u => { const t = unitEl(u); if (t) h += arrow(centre(se), centre(t), 0, false); });
+      const me = mode.M !== null ? unitEl(mode.M) : null;
+      if (me) {
+        h += arrow(centre(se), centre(me), 0, false);
+        if (mode.D !== null) { const zt = zoneEl(mode.D); if (zt) h += arrow(centre(me), centre(zt), 0, false); }
+        else destSet().forEach(z => { const zt = zoneEl(z); if (zt) h += arrow(centre(me), centre(zt), 0, true); });
+      }
+    }
+  } else if (mode && mode.type === "ask") {
+    const fromEl = (mode.a.src !== null && mode.a.src !== undefined && srcEl(mode.a.src)) || document.querySelector("#stack .sitem .card");
+    if (fromEl) (mode.a.uids || []).forEach((u, i) => { if (u === null || String(u) === String(mode.a.src)) return; const t = srcEl(u); if (t) h += arrow(centre(fromEl), centre(t), 0, i !== mode.pick); });
+  } else if (mode && mode.type === "move" && mode.dest !== null) {
+    const zt = zoneEl(mode.dest);
+    if (zt) mode.units.forEach(u => { const x = unitEl(u); if (x) h += arrow(centre(x), centre(zt), 0, false); });
+  } else if (sel !== null) {
+    const se = srcEl(sel);
+    if (se) { const us = new Set(); optsFor(sel).filter(hasT).forEach(o => o.t1.forEach(u => us.add(String(u)))); us.forEach(u => { const t = unitEl(u); if (t) h += arrow(centre(se), centre(t), 0, true); }); }
+  }
+  const seen = new Set();
+  if (V) (V.st.chain || []).forEach((c, k) => {
+    const it = document.querySelector(`#stack [data-ch="${k}"] .card`); if (!it || !c.tg) return;
+    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(centre(it), centre(t), c.c, false); seen.add(c.c + ":" + u); } });
+  });
+  if (lastAI && V) {
+    const tg = [...(lastAI.t1 || []), ...(lastAI.t2 || [])];
+    const fromEl = document.querySelector("#stack .sitem.c1 .card") || document.querySelector("#board .hand.top");
+    if (fromEl) tg.forEach(u => { const t = unitEl(u); if (t && !seen.has("1:" + u)) h += arrow(centre(fromEl), centre(t), 1, false); });
+  }
+  $("arrowsG").innerHTML = h;
+}
+let rafA = 0;
+const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(() => { drawArrows(); placeFloat(); if (!$("pop").hidden) placePop(); if (!$("hpop").hidden) placeHint(); }); };
+addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
+  if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal();
+  if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } } });
+
+
+if (store.get("rbt-journal")) journal(true); else badge();
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
+boot().catch(err => { $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
+// ------------------------------------------------------------ images : fichier propre (cartes du pool) ou planche de 60 cartes
+function art(n) {
+  if (IMG[n]) return `background-image:url('${IMG[n]}');`;
+  const a = ATL[n]; if (!a) return "";
+  const k = a[1];
+  return `background-image:url('atlas/a${a[0]}.jpg');background-size:1000% 600%;background-position:${(k % 10) / 9 * 100}% ${Math.floor(k / 10) / 5 * 100}%;`;
+}
+
+// ------------------------------------------------------------ éditeur de deck
+// Un deck : { id, name, legend, champion, main: {nom: qté}, runes: {domaine: qté}, battlefields: [3] }.
+// Stocké dans la table (collection « decks ») et en copie locale ; seules les cartes modélisées sont jouables.
+let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", only: false, mine: true, lim: 120 }, DKERR = [];
+const RUNES = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"];
+async function loadCatalog() {
+  if (CAT || !T) return;
+  CAT = J(T.catalog());
+  CAT.by = {}; for (const c of CAT.cards) CAT.by[c.n] = c;
+  try { Object.assign(MYDECKS, JSON.parse(store.get("rbt-decks") || "{}")); } catch (e) {}
+  const db = await dbh();
+  if (db) {
+    try { const qs = await db.collection("decks").get(); qs.docs.forEach(d => { const x = d.data(); if (x && x.id) MYDECKS[x.id] = x; }); } catch (e) {}
+  }
+}
+const cnt = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+function toEngine(d) {
+  const main = []; for (const [n, q] of Object.entries(d.main)) for (let i = 0; i < q; i++) main.push(n);
+  const runes = []; for (const [r, q] of Object.entries(d.runes)) for (let i = 0; i < q; i++) runes.push(r + " Rune");
+  return { name: d.name, legend: d.legend, champion: d.champion, main, runes, battlefields: d.battlefields };
+}
+function fromEngine(x, name) {
+  const d = { id: slug(name), name, legend: x.legend, champion: x.champion, main: {}, runes: {}, battlefields: [...(x.battlefields || [])].slice(0, 3) };
+  for (const n of x.main) d.main[n] = (d.main[n] || 0) + 1;
+  for (const r of x.runes) { const k = r.replace(" Rune", ""); d.runes[k] = (d.runes[k] || 0) + 1; }
+  return d;
+}
+const slug = s => (String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "deck").slice(0, 60);
+const check = d => J(T.check(JSON.stringify(toEngine(d))));
+const deckOK = d => { try { return !check(d).some(e => !e.startsWith("⚠")); } catch (e) { return false; } };
+const presetOK = p => !J(T.check(JSON.stringify(p.deck))).some(e => !e.startsWith("⚠"));
+function persist() { store.set("rbt-decks", JSON.stringify(MYDECKS)); }
+async function saveDeck() {
+  const d = DK; d.name = ($("dkName").value || "").trim() || "Mon deck";
+  const old = d.id; d.id = slug(d.name); d.updated = new Date().toISOString();
+  if (old && old !== d.id && MYDECKS[old] && MYDECKS[old] === d) delete MYDECKS[old];
+  MYDECKS[d.id] = JSON.parse(JSON.stringify(d)); persist();
+  const db = await dbh();
+  if (!db) { toast("Deck gardé sur cet appareil (table indisponible)."); return dkRender(); }
+  try { await db.collection("decks").doc(d.id).set(MYDECKS[d.id]); toast("Deck enregistré."); }
+  catch (e) { toast("Deck gardé sur cet appareil seulement."); }
+  dkRender();
+}
+async function deleteDeck() {
+  const d = DK; if (!d.id || !MYDECKS[d.id]) return;
+  if (!confirm(`Supprimer le deck « ${d.name} » ?`)) return;
+  delete MYDECKS[d.id]; persist();
+  const db = await dbh(); if (db) { try { await db.collection("decks").doc(d.id).delete(); } catch (e) {} }
+  DK = blankDeck(); dkRender(); toast("Deck supprimé.");
+}
+const blankDeck = () => ({ id: "", name: "", legend: "", champion: "", main: {}, runes: {}, battlefields: [] });
+
+async function openDecks() {
+  await loadCatalog();
+  if (!DK) { const k = store.get("rbt-dk"); DK = k && MYDECKS[k] ? JSON.parse(JSON.stringify(MYDECKS[k])) : blankDeck(); }
+  $("deckView").hidden = false; document.body.classList.add("dkopen");
+  dkRender();
+}
+function closeDecks() { $("deckView").hidden = true; document.body.classList.remove("dkopen"); if (DK && DK.id) store.set("rbt-dk", DK.id); }
+
+function ident() { const L = CAT.by[DK.legend]; return L ? L.d : []; }
+function ltags() { const L = CAT.by[DK.legend]; return L ? L.tg : []; }
+function canChamp(c) { return c && c.t === "Unit" && c.s === "Champion" && c.tg.some(t => ltags().includes(t)); }
+function copies(n) { return (DK.main[n] || 0) + (DK.champion === n ? 1 : 0); }
+function addCard(n) {
+  const c = CAT.by[n]; if (!c) return;
+  if (c.t === "Legend") {
+    DK.legend = n;
+    if (!cnt(DK.runes)) { DK.runes = {}; DK.runes[c.d[0]] = 6; DK.runes[c.d[1] || c.d[0]] = (DK.runes[c.d[1] || c.d[0]] || 0) + 6; }
+    if (DK.champion && !canChamp(CAT.by[DK.champion])) { DK.main[DK.champion] = (DK.main[DK.champion] || 0) + 1; DK.champion = ""; }
+  } else if (c.t === "Battlefield") {
+    const i = DK.battlefields.indexOf(n);
+    if (i >= 0) DK.battlefields.splice(i, 1); else if (DK.battlefields.length < 3) DK.battlefields.push(n); else return toast("Déjà 3 battlefields : retire-en un d'abord.");
+  } else if (c.t === "Rune") {
+    const d = c.d[0]; if (cnt(DK.runes) >= 12) return toast("Déjà 12 runes."); DK.runes[d] = (DK.runes[d] || 0) + 1;
+  } else {
+    if (copies(n) >= 3) return toast("3 exemplaires au plus.");
+    if (!DK.champion && canChamp(c)) DK.champion = n; else DK.main[n] = (DK.main[n] || 0) + 1;
+  }
+  if (!c.m) toast(`${n} n'est pas encore modélisée : tu peux préparer le deck, mais pas encore le jouer.`);
+  dkRender();
+}
+function subCard(n) {
+  if (DK.main[n]) { DK.main[n]--; if (!DK.main[n]) delete DK.main[n]; }
+  else if (DK.champion === n) DK.champion = "";
+  dkRender();
+}
+function makeChamp(n) {
+  if (!DK.main[n]) return;
+  if (DK.champion) DK.main[DK.champion] = (DK.main[DK.champion] || 0) + 1;
+  DK.main[n]--; if (!DK.main[n]) delete DK.main[n];
+  DK.champion = n; dkRender();
+}
+
+const TRANK = c => c.t === "Legend" ? 0 : c.t === "Unit" ? (c.s === "Champion" ? 1 : 2) : c.t === "Spell" ? 3 : c.t === "Gear" ? 4 : c.t === "Battlefield" ? 5 : 6;
+function dkFiltered() {
+  const q = DKF.q.trim().toLowerCase(), id = ident();
+  return CAT.cards.filter(c => {
+    if (DKF.only && !c.m) return false;
+    if (DKF.type === "Champion" ? !(c.t === "Unit" && c.s === "Champion") : DKF.type && c.t !== DKF.type) return false;
+    if (DKF.set && c.set !== DKF.set) return false;
+    if (DKF.dom.length && !c.d.some(d => DKF.dom.includes(d))) return false;
+    if (DKF.mine && DK.legend && !["Legend", "Battlefield"].includes(c.t) && c.d.length && !c.d.every(d => id.includes(d))) return false;
+    if (DKF.mine && DK.legend && c.s === "Signature" && !c.tg.some(t => ltags().includes(t))) return false;
+    if (q && !(c.n.toLowerCase().includes(q) || c.tx.toLowerCase().includes(q) || c.tg.join(" ").toLowerCase().includes(q) || c.k.toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a, b) => (TRANK(a) - TRANK(b)) || ((+a.e || 0) - (+b.e || 0)) || a.n.localeCompare(b.n));
+}
+function dkCard(c) {
+  const n = copies(c.n) + (DK.legend === c.n ? 1 : 0) + (DK.battlefields.includes(c.n) ? 1 : 0) + (c.t === "Rune" ? DK.runes[c.d[0]] || 0 : 0);
+  return `<button class="dkc ${c.m ? "" : "todo"} ${c.ban ? "ban" : ""}" data-add="${esc(c.n)}" data-card="${esc(c.n)}" title="${esc(c.n)}${c.m ? "" : " (pas encore modélisée)"}">
+    <span class="dkimg" style="${art(c.n)}"></span>${n ? `<b class="dkn">${n}</b>` : ""}${c.m ? "" : `<i class="dktodo">à modéliser</i>`}${c.ban ? `<i class="dkban">bannie</i>` : ""}</button>`;
+}
+function dkList() {
+  const row = (n, q, extra = "") => { const c = CAT.by[n] || {}; return `<div class="dkr ${c.m ? "" : "todo"}" data-card="${esc(n)}"><span class="q">${q}</span><span class="nm">${esc(n)}${c.m ? "" : " <i>à modéliser</i>"}</span><span class="e">${c.e || ""}${+c.p ? "+" + c.p : ""}</span>${extra}</div>`; };
+  const pm = n => `<button data-sub="${esc(n)}" aria-label="Retirer ${esc(n)}">−</button><button data-add="${esc(n)}" aria-label="Ajouter ${esc(n)}">+</button>`;
+  const groups = { Unit: [], Spell: [], Gear: [] };
+  for (const [n, q] of Object.entries(DK.main)) (groups[(CAT.by[n] || {}).t] || (groups.Other = groups.Other || [])).push([n, q]);
+  const gl = { Unit: "Unités", Spell: "Sorts", Gear: "Équipements", Other: "Autres" };
+  let h = `<div class="dkh">Légende</div>${DK.legend ? row(DK.legend, "", `<button data-unleg="1" aria-label="Retirer la légende">−</button>`) : `<div class="small">Touche une légende dans la liste.</div>`}`;
+  h += `<div class="dkh">Champion choisi</div>${DK.champion ? row(DK.champion, 1, `<button data-sub="${esc(DK.champion)}" aria-label="Retirer">−</button>`) : `<div class="small">${DK.legend ? "Touche une unité Champion de ta légende." : "Choisis d'abord la légende."}</div>`}`;
+  h += `<div class="dkh">Deck principal <b>${cnt(DK.main) + (DK.champion ? 1 : 0)}</b>/40</div>`;
+  for (const k of ["Unit", "Spell", "Gear", "Other"]) {
+    const g = (groups[k] || []).sort((a, b) => ((+CAT.by[a[0]].e || 0) - (+CAT.by[b[0]].e || 0)) || a[0].localeCompare(b[0]));
+    if (g.length) h += `<div class="dkg">${gl[k]} (${g.reduce((a, x) => a + x[1], 0)})</div>` + g.map(([n, q]) => row(n, q, (canChamp(CAT.by[n]) ? `<button data-champ="${esc(n)}" title="En faire le champion choisi">★</button>` : "") + pm(n))).join("");
+  }
+  h += `<div class="dkh">Runes <b>${cnt(DK.runes)}</b>/12</div><div class="dkrunes">${(ident().length ? ident() : RUNES).map(d => `<span class="rn"><i class="rune" style="background:var(--${DOMC[d]})">${GLYPH[d]}</i>${d} <button data-rsub="${d}" aria-label="Retirer une rune ${d}">−</button><b>${DK.runes[d] || 0}</b><button data-radd="${d}" aria-label="Ajouter une rune ${d}">+</button></span>`).join("")}</div>`;
+  h += `<div class="dkh">Battlefields <b>${DK.battlefields.length}</b>/3</div>` + (DK.battlefields.map(n => row(n, "", `<button data-add="${esc(n)}" aria-label="Retirer">−</button>`)).join("") || `<div class="small">Touche 3 battlefields dans la liste.</div>`);
+  return h;
+}
+function dkRender() {
+  const V_ = $("deckView");
+  if (V_.hidden) return;
+  Z.hidden = true;
+  const sc = V_.querySelector(".dkcat"), st0 = sc ? sc.scrollTop : 0, sd = V_.querySelector(".dkdeck"), st1 = sd ? sd.scrollTop : 0;
+  try { DKERR = check(DK); } catch (e) { DKERR = ["erreur de vérification"]; }
+  const sets = [...new Set(CAT.cards.map(c => c.set))].sort();
+  const res = dkFiltered(), shown = res.slice(0, DKF.lim);
+  const nm = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
+  const ok = !DKERR.some(e => !e.startsWith("⚠"));
+  const modeled = CAT.cards.filter(c => c.m).length;
+  V_.innerHTML = `<div class="dkbar"><h2>Mes decks</h2>
+      <select id="dkLoad" aria-label="Ouvrir un deck"><option value="">Ouvrir…</option><optgroup label="Mes decks">${nm.map(d => `<option value="my:${esc(d.id)}">${esc(d.name)}</option>`).join("")}</optgroup><optgroup label="Copier un deck de référence">${CAT.presets.map(p => `<option value="${esc(p.key)}">${esc(p.name)}</option>`).join("")}</optgroup></select>
+      <button id="dkNew">Nouveau</button><button id="dkImp">Importer</button><button id="dkExp">Exporter</button>
+      <span class="small">${modeled} cartes jouables sur ${CAT.cards.length}</span>
+      <button class="mclose" id="dkClose" aria-label="Fermer">✕</button></div>
+    <div class="dkbody">
+      <section class="dkcat">
+        <div class="dkf">
+          <input id="dkQ" type="search" placeholder="Chercher (nom, texte, tag, mot-clé)" value="${esc(DKF.q)}">
+          <select id="dkType"><option value="">Tous les types</option>${[["Legend", "Légendes"], ["Champion", "Champions"], ["Unit", "Unités"], ["Spell", "Sorts"], ["Gear", "Équipements"], ["Battlefield", "Battlefields"], ["Rune", "Runes"]].map(([v, l]) => `<option value="${v}"${DKF.type === v ? " selected" : ""}>${l}</option>`).join("")}</select>
+          <select id="dkSet"><option value="">Toutes les extensions</option>${sets.map(x => `<option${DKF.set === x ? " selected" : ""}>${x}</option>`).join("")}</select>
+          <div class="dkdom">${RUNES.map(d => `<button class="dd ${DKF.dom.includes(d) ? "on" : ""}" data-dom="${d}" aria-pressed="${DKF.dom.includes(d)}" style="--c:var(--${DOMC[d]})">${d}</button>`).join("")}</div>
+          <label class="ck"><input type="checkbox" id="dkMine"${DKF.mine ? " checked" : ""}> Domaines de ma légende</label>
+          <label class="ck"><input type="checkbox" id="dkOnly"${DKF.only ? " checked" : ""}> Jouables seulement</label>
+        </div>
+        <div class="small">${res.length} carte${res.length > 1 ? "s" : ""}. Touche une carte pour l'ajouter ; les cartes grisées ne sont pas encore modélisées.</div>
+        <div class="dkgrid">${shown.map(dkCard).join("")}</div>
+        ${res.length > shown.length ? `<button id="dkMore">Afficher ${Math.min(120, res.length - shown.length)} de plus</button>` : ""}
+      </section>
+      <aside class="dkdeck">
+        <input id="dkName" placeholder="Nom du deck" value="${esc(DK.name)}">
+        <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
+        ${DKERR.length ? `<ul class="dkerr">${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>` : ""}
+        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}</div>
+        <div class="dklist">${dkList()}</div>
+      </aside>
+    </div>`;
+  V_.querySelector(".dkcat").scrollTop = st0; V_.querySelector(".dkdeck").scrollTop = st1;
+  V_.querySelector(".dkcat").addEventListener("scroll", () => { Z.hidden = true; }, { passive: true });
+  const q = $("dkQ"); q.oninput = () => { DKF.q = q.value; DKF.lim = 120; const pos = q.selectionStart; dkRender(); const q2 = $("dkQ"); q2.focus(); q2.setSelectionRange(pos, pos); };
+  $("dkType").onchange = e => { DKF.type = e.target.value; DKF.lim = 120; dkRender(); };
+  $("dkSet").onchange = e => { DKF.set = e.target.value; DKF.lim = 120; dkRender(); };
+  $("dkMine").onchange = e => { DKF.mine = e.target.checked; dkRender(); };
+  $("dkOnly").onchange = e => { DKF.only = e.target.checked; dkRender(); };
+  $("dkName").oninput = e => { DK.name = e.target.value; };
+  if ($("dkMore")) $("dkMore").onclick = () => { DKF.lim += 120; dkRender(); };
+  $("dkClose").onclick = closeDecks;
+  $("dkNew").onclick = () => { DK = blankDeck(); dkRender(); };
+  $("dkSave").onclick = saveDeck;
+  if ($("dkDel")) $("dkDel").onclick = deleteDeck;
+  $("dkPlay").onclick = async () => { await saveDeck(); store.set("rbt-mine", "my:" + DK.id); closeDecks(); setupForm(); };
+  $("dkLoad").onchange = e => {
+    const v = e.target.value; if (!v) return;
+    if (v.startsWith("my:")) DK = JSON.parse(JSON.stringify(MYDECKS[v.slice(3)]));
+    else { const p = CAT.presets.find(x => x.key === v); DK = fromEngine(p.deck, p.name + " (copie)"); DK.id = ""; }
+    dkRender();
+  };
+  $("dkExp").onclick = () => {
+    const txt = exportText(DK);
+    openModal(`<h3>Exporter « ${esc(DK.name || "deck")} »</h3><textarea id="dkTxt" class="dktxt" readonly>${esc(txt)}</textarea><div class="big"><button class="main" id="dkCopy">Copier</button></div>`);
+    $("dkCopy").onclick = () => { const t = $("dkTxt"); t.select(); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => toast("Copié."), () => { document.execCommand && document.execCommand("copy"); toast("Copié."); }); };
+  };
+  $("dkImp").onclick = () => {
+    openModal(`<h3>Importer un deck</h3><div class="small">Colle une liste, une ligne par carte : « 3 Nom de la carte ». Les runes s'écrivent « 6 Fury Rune ». La légende, les battlefields et le champion sont reconnus tout seuls.</div><textarea id="dkTxt" class="dktxt" placeholder="1 Akali, Rogue Assassin&#10;1 Akali, Deadly Weapon&#10;3 Falling Star&#10;…"></textarea><div class="big"><button class="main" id="dkGo">Importer</button></div>`);
+    $("dkGo").onclick = () => { const r = importText($("dkTxt").value); closeModal(); if (r.miss.length) toast("Cartes inconnues : " + r.miss.slice(0, 4).join(", ") + (r.miss.length > 4 ? "…" : "")); else toast("Deck importé."); DK = r.deck; dkRender(); };
+  };
+}
+function exportText(d) {
+  const L = [];
+  if (d.legend) L.push("Légende :", "1 " + d.legend);
+  if (d.champion) L.push("Champion :", "1 " + d.champion);
+  L.push("Deck principal :"); for (const [n, q] of Object.entries(d.main).sort()) L.push(q + " " + n);
+  L.push("Battlefields :"); for (const b of d.battlefields) L.push("1 " + b);
+  L.push("Runes :"); for (const [r, q] of Object.entries(d.runes)) if (q) L.push(q + " " + r + " Rune");
+  return L.join("\n");
+}
+function importText(txt) {
+  const by = {}; for (const c of CAT.cards) by[c.n.toLowerCase()] = c;
+  const d = blankDeck(); d.name = "Deck importé"; const miss = [], champs = [];
+  let sec = "";
+  for (let line of txt.split(/\r?\n/)) {
+    line = line.trim(); if (!line) continue;
+    if (/^(champion|chosen champion)\s*:?$/i.test(line)) { sec = "champ"; continue; }
+    if (/:$/.test(line) || /^#/.test(line)) { sec = ""; continue; }
+    const m = line.match(/^(\d+)\s*x?\s+(.+)$/i); const q = m ? +m[1] : 1; let n = (m ? m[2] : line).trim();
+    const c = by[n.toLowerCase()] || by[(n + " rune").toLowerCase()];
+    if (!c) { miss.push(n); continue; }
+    if (c.t === "Legend") d.legend = c.n;
+    else if (c.t === "Battlefield") { if (!d.battlefields.includes(c.n) && d.battlefields.length < 3) d.battlefields.push(c.n); }
+    else if (c.t === "Rune") d.runes[c.d[0]] = (d.runes[c.d[0]] || 0) + q;
+    else if (sec === "champ") d.champion = c.n;
+    else { d.main[c.n] = (d.main[c.n] || 0) + q; if (c.s === "Champion") champs.push(c.n); }
+  }
+  if (!d.champion && d.legend) {
+    const lt = (CAT.by[d.legend] || {}).tg || [];
+    const c = champs.find(n => CAT.by[n].tg.some(t => lt.includes(t)));
+    if (c) { d.champion = c; d.main[c]--; if (!d.main[c]) delete d.main[c]; }
+  }
+  return { deck: d, miss };
+}
+document.addEventListener("click", e => {
+  if ($("deckView").hidden) return;
+  const t = e.target.closest("[data-add],[data-sub],[data-champ],[data-radd],[data-rsub],[data-dom],[data-unleg]");
+  if (!t || !$("deckView").contains(t)) return;
+  if (t.dataset.add) addCard(t.dataset.add);
+  else if (t.dataset.sub) subCard(t.dataset.sub);
+  else if (t.dataset.champ) makeChamp(t.dataset.champ);
+  else if (t.dataset.radd) { if (cnt(DK.runes) >= 12) return toast("Déjà 12 runes."); DK.runes[t.dataset.radd] = (DK.runes[t.dataset.radd] || 0) + 1; dkRender(); }
+  else if (t.dataset.rsub) { if (DK.runes[t.dataset.rsub]) DK.runes[t.dataset.rsub]--; dkRender(); }
+  else if (t.dataset.unleg) { DK.legend = ""; dkRender(); }
+  else if (t.dataset.dom) { const d = t.dataset.dom; DKF.dom = DKF.dom.includes(d) ? DKF.dom.filter(x => x !== d) : [...DKF.dom, d]; DKF.lim = 120; dkRender(); }
+});
+$("bDecks").onclick = () => { if (T && !working) openDecks(); };
+</script>

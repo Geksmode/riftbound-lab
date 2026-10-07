@@ -1,0 +1,39 @@
+{
+  "battlefields": [
+    "Forbidding Waste",
+    "Treasure Hoard",
+    "Abandoned Hall"
+  ],
+  "champion": "Viktor, Leader",
+  "id": "viktor",
+  "legend": "Viktor, Herald of the Arcane",
+  "main": {
+    "Bellows Breath": 2,
+    "Carrion Dredger": 3,
+    "Cull the Weak": 3,
+    "Decree of Insight": 1,
+    "Decree of Unity": 1,
+    "Dragon Form": 1,
+    "Eclipse": 3,
+    "Escaped Grayback": 2,
+    "Grand Strategem": 1,
+    "Hidden Blade": 3,
+    "Honest Broker": 3,
+    "Imperial Decree": 3,
+    "Salvage": 3,
+    "Singularity": 2,
+    "Sprite Fountain": 3,
+    "Stupefy": 3,
+    "Temporal Breach": 2,
+    "Thousand-Tailed Watcher": 2,
+    "Vi, Peacekeeper": 2,
+    "Wages of Pain": 3,
+    "Xin Zhao, Vigilant": 3
+  },
+  "name": "Viktor",
+  "runes": {
+    "Mind": 6,
+    "Order": 6
+  },
+  "updated": "2026-10-07T17:18:50.876Z"
+}

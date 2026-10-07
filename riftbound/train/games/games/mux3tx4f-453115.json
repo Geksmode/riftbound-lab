@@ -1,0 +1,311 @@
+{
+  "bf": null,
+  "bfs": [
+    "Sigil of the Storm",
+    "Windswept Hillock"
+  ],
+  "first": null,
+  "id": "mux3tx4f-453115",
+  "level": 1,
+  "log": [
+    "Tour 1, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Soaring Scout — à la base",
+    "Tour 2, à Akali de jouer (score 0-0)",
+    "  Tu pioches Block",
+    "Akali joue Akali, Deadly Weapon (zone champion) — à la base",
+    "Tour 3, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace Soaring Scout vers Windswept Hillock",
+    "  Soaring Scout va de la base à Windswept Hillock",
+    "Showdown à Windswept Hillock, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Windswept Hillock",
+    "LeBlanc +1 point (conquête de Windswept Hillock) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de Soaring Scout à Windswept Hillock",
+    "LeBlanc déplace Soaring Scout vers Sigil of the Storm",
+    "  Soaring Scout va de Windswept Hillock à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 2",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à Windswept Hillock",
+    "Tour 4, à Akali de jouer (score 0-2)",
+    "  Tu pioches Stellacorn Herder",
+    "Akali joue Stellacorn Herder — à la base",
+    "Akali déplace Akali, Deadly Weapon vers Windswept Hillock",
+    "  Akali, Deadly Weapon va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  Soaring Scout subit 1 dégât(s) (might 1)",
+    "  Soaring Scout meurt",
+    "  Déclenchement sur la chaîne : Deathknell Soaring Scout",
+    "Résolution : Deathknell Soaring Scout",
+    "COMBAT à Windswept Hillock, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Akali, Deadly Weapon",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Akali, Deadly Weapon va de Windswept Hillock à la base",
+    "  Déclenchement sur la chaîne : Akali, Deadly Weapon",
+    "Résolution : Akali, Deadly Weapon",
+    "  LeBlanc, Fragmented subit 1 dégât(s) (might 3)",
+    "Tour 5, à LeBlanc de jouer (score 0-2)",
+    "  Déclenchement sur la chaîne : Temporary Soaring Scout",
+    "Résolution : Temporary Soaring Scout",
+    "  Soaring Scout meurt",
+    "  Déclenchement sur la chaîne : Deathknell Soaring Scout",
+    "Résolution : Deathknell Soaring Scout",
+    "  LeBlanc perd le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (tenue de Windswept Hillock) → 3",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Windswept Hillock",
+    "  LeBlanc pioche une carte",
+    "LeBlanc déplace LeBlanc, Fragmented vers Sigil of the Storm",
+    "  LeBlanc, Fragmented va de Windswept Hillock à Sigil of the Storm",
+    "Showdown à Sigil of the Storm, initiative LeBlanc",
+    "LeBlanc joue Vi, Peacekeeper — à Windswept Hillock",
+    "  LeBlanc prend le contrôle de Sigil of the Storm",
+    "LeBlanc +1 point (conquête de Sigil of the Storm) → 4",
+    "  Déclenchement sur la chaîne : Sigil of the Storm",
+    "Résolution : Sigil of the Storm",
+    "Tour 6, à Akali de jouer (score 0-4)",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali déplace Stellacorn Herder vers Windswept Hillock",
+    "  Stellacorn Herder va de la base à Windswept Hillock",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Lonely Poro",
+    "COMBAT à Windswept Hillock, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Windswept Hillock à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Mischievous Marai"
+  ],
+  "moves": [
+    [
+      "ans",
+      [
+        2,
+        1
+      ],
+      "mulligan : Not So Fast, Shuriken Flip",
+      0
+    ],
+    [
+      "act",
+      2,
+      "joue Akali, Deadly Weapon (à la base)",
+      2
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      2
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      3
+    ],
+    [
+      "act",
+      6,
+      "joue Stellacorn Herder (à la base)",
+      4
+    ],
+    [
+      "act",
+      2,
+      "déplace Akali, Deadly Weapon vers Windswept Hillock",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      4
+    ],
+    [
+      "ans",
+      1,
+      "target : Soaring Scout adverse (Windswept Hillock)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Akali, Deadly Weapon)",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      14,
+      "déplace Stellacorn Herder vers Windswept Hillock",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      5,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      8,
+      "joue Zhonya's Hourglass (à la base)",
+      6
+    ],
+    [
+      "act",
+      9,
+      "Empower : Akali, Deadly Weapon (2 énergie + 1 Fury)",
+      6
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ]
+  ],
+  "pts": [
+    0,
+    4
+  ],
+  "result": null,
+  "seed": 453115,
+  "started": "2026-10-06T20:01:38.800Z",
+  "turn": 6,
+  "updated": "2026-10-06T20:03:19.868Z",
+  "ver": "v10",
+  "whoFirst": 1
+}

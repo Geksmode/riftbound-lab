@@ -1,0 +1,42 @@
+# legend: Akali, Rogue Assassin
+# player: Khavai
+# event: Carfurle & Univers Parallèle Skirmish
+# date: 2026-09-13
+# placement: 41
+# url: https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-298938
+# note: sideboard partiel
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+3 Mournful Witness
+2 Scuttle Crab
+3 Kai'Sa, Survivor
+3 Stellacorn Herder
+1 Darius, Trifarian
+2 Ferrous Forerunner
+3 Astral Heron
+2 Long Sword
+3 Zhonya's Hourglass
+2 Charm
+3 Defy
+3 Shuriken Flip
+1 Block
+3 Discipline
+3 Falling Star
+2 Back Off
+[runes]
+6 Calm Rune
+6 Fury Rune
+[battlefields]
+1 Star Spring
+1 Targon's Peak
+1 Void Gate
+[sideboard]
+1 Crumbling Sands
+1 Decree of Focus
+1 Not So Fast
+1 Akali, Silent
+1 Tomb-Raider Barbara
+1 Blitzcrank, Impassive

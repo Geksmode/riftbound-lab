@@ -1,0 +1,39 @@
+# legend: Leblanc, Deceiver
+# player: CTCG Daniel Zidenberg
+# event: CCS Sunday $5,000 Riftbound Event #5
+# date: 2026-09-20
+# placement: 7
+# url: https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-308360
+# note: sideboard partiel
+[legend]
+1 LeBlanc, Deceiver
+[champion]
+1 LeBlanc, Fragmented
+[main]
+3 Honest Broker
+3 Soaring Scout
+2 Watchful Sentry
+3 Black Rose Dignitary
+3 Karthus, Eternal
+3 Glasc Mixologist
+3 Vi, Peacekeeper
+3 Ruined Rex
+1 Thousand-Tailed Watcher
+3 Harnessed Dragon
+3 Rift Herald
+3 Baited Hook
+3 Sacrifice
+1 Hidden Blade
+2 Mirror Image
+[runes]
+4 Mind Rune
+8 Order Rune
+[battlefields]
+1 Forbidding Waste
+1 Star Spring
+1 Windswept Hillock
+[sideboard]
+1 Bellows Breath
+1 Decree of Insight
+2 Decree of Unity
+3 Salvage

@@ -1,0 +1,762 @@
+{
+  "bf": null,
+  "bfs": [
+    "Void Gate",
+    "Star Spring"
+  ],
+  "first": null,
+  "id": "muxvq59l-402584",
+  "level": 3,
+  "log": [
+    "Tour 1, à Akali de jouer (score 0-0)",
+    "  Tu pioches Blitzcrank, Impassive",
+    "Akali joue Zhonya's Hourglass — à la base",
+    "Tour 2, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue LeBlanc, Fragmented (zone champion) — à la base",
+    "Tour 3, à Akali de jouer (score 0-0)",
+    "  Tu pioches Astral Heron",
+    "Akali joue Stellacorn Herder — à la base",
+    "Tour 4, à LeBlanc de jouer (score 0-0)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Mirror Image — cible Stellacorn Herder",
+    "Résolution : Mirror Image",
+    "  Reflet de Stellacorn Herder à la base",
+    "LeBlanc déplace LeBlanc, Fragmented vers Void Gate",
+    "  LeBlanc, Fragmented va de la base à Void Gate",
+    "Showdown à Void Gate, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Void Gate",
+    "LeBlanc +1 point (conquête de Void Gate) → 1",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Void Gate",
+    "LeBlanc déplace Stellacorn Herder vers Star Spring",
+    "  Stellacorn Herder va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  LeBlanc pioche une carte",
+    "Showdown à Star Spring, initiative LeBlanc",
+    "  LeBlanc prend le contrôle de Star Spring",
+    "LeBlanc +1 point (conquête de Star Spring) → 2",
+    "Tour 5, à Akali de jouer (score 0-2)",
+    "  Tu pioches Lonely Poro",
+    "Akali déplace Stellacorn Herder vers Star Spring",
+    "  Stellacorn Herder va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Astral Heron",
+    "COMBAT à Star Spring, attaquant Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Star Spring à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Darius, Trifarian",
+    "Akali joue Stellacorn Herder — à la base",
+    "Akali joue Lonely Poro — à la base",
+    "Tour 6, à LeBlanc de jouer (score 0-2)",
+    "  Déclenchement sur la chaîne : Temporary Stellacorn Herder",
+    "  Déclenchement sur la chaîne : Temporary LeBlanc, Fragmented",
+    "Résolution : Temporary LeBlanc, Fragmented",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "  LeBlanc pioche une carte",
+    "Résolution : Temporary Stellacorn Herder",
+    "  Stellacorn Herder meurt",
+    "  LeBlanc perd le contrôle de Star Spring",
+    "LeBlanc +1 point (tenue de Void Gate) → 3",
+    "  Déclenchement sur la chaîne : LeBlanc, Deceiver",
+    "Résolution : LeBlanc, Deceiver",
+    "  Reflet de LeBlanc, Fragmented à Void Gate",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Watchful Sentry — à la base",
+    "LeBlanc joue Honest Broker — à Void Gate",
+    "LeBlanc déplace LeBlanc, Fragmented vers la base",
+    "  LeBlanc, Fragmented va de Void Gate à la base",
+    "Tour 7, à Akali de jouer (score 0-3)",
+    "  Tu pioches Falling Star",
+    "Akali déplace Stellacorn Herder vers Star Spring",
+    "  Stellacorn Herder va de la base à Star Spring",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Stellacorn Herder",
+    "Showdown à Star Spring, initiative Akali",
+    "  Akali prend le contrôle de Star Spring",
+    "Akali +1 point (conquête de Star Spring) → 1",
+    "Akali joue Astral Heron — à Star Spring",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Star Spring",
+    "Résolution : Star Spring",
+    "  Stellacorn Herder va de Star Spring à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Not So Fast",
+    "Résolution : Astral Heron",
+    "Akali joue Falling Star — cible LeBlanc, Fragmented et Watchful Sentry",
+    "Résolution : Falling Star",
+    "  LeBlanc, Fragmented subit 3 dégât(s) (might 3)",
+    "  Watchful Sentry subit 3 dégât(s) (might 1)",
+    "  LeBlanc, Fragmented meurt",
+    "  Watchful Sentry meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "  Déclenchement sur la chaîne : Deathknell Watchful Sentry",
+    "Résolution : Deathknell Watchful Sentry",
+    "  LeBlanc pioche une carte",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Akali joue Shuriken Flip — cible LeBlanc, Fragmented, vers Void Gate",
+    "Résolution : Shuriken Flip",
+    "  LeBlanc, Fragmented subit 3 dégât(s) (might 3)",
+    "  Stellacorn Herder va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "  LeBlanc, Fragmented meurt",
+    "  Déclenchement sur la chaîne : Deathknell LeBlanc, Fragmented",
+    "Résolution : Deathknell LeBlanc, Fragmented",
+    "  LeBlanc pioche une carte",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Scuttle Crab",
+    "COMBAT à Void Gate, attaquant Akali",
+    "  Dégâts de combat : attaquants 3 contre défenseurs 2",
+    "  Honest Broker meurt",
+    "  Déclenchement sur la chaîne : Deathknell Honest Broker",
+    "Résolution : Deathknell Honest Broker",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali +1 point (conquête de Void Gate) → 2",
+    "Akali déplace Stellacorn Herder vers la base",
+    "  Stellacorn Herder va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Discipline",
+    "  Akali perd le contrôle de Void Gate",
+    "Akali déplace Lonely Poro vers Void Gate",
+    "  Lonely Poro va de la base à Void Gate",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Tour 8, à LeBlanc de jouer (score 2-3)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Ruined Rex — à la base",
+    "Tour 9, à Akali de jouer (score 2-3)",
+    "Akali +1 point (tenue de Void Gate) → 3",
+    "Akali +1 point (tenue de Star Spring) → 4",
+    "  Tu pioches Zhonya's Hourglass",
+    "Akali déplace Lonely Poro vers la base",
+    "  Lonely Poro va de Void Gate à la base",
+    "  Akali perd le contrôle de Void Gate",
+    "Akali déplace Stellacorn Herder vers Void Gate",
+    "  Stellacorn Herder va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Akali, Silent",
+    "Showdown à Void Gate, initiative Akali",
+    "Akali active Akali, Rogue Assassin: Retreat — cible Stellacorn Herder",
+    "Résolution : Akali, Rogue Assassin: Retreat",
+    "  Stellacorn Herder va de Void Gate à la base",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Noxus Hopeful",
+    "Akali déplace Stellacorn Herder vers Void Gate",
+    "  Stellacorn Herder va de la base à Void Gate",
+    "  Déclenchement sur la chaîne : Stellacorn Herder",
+    "Résolution : Stellacorn Herder",
+    "  Tu pioches Astral Heron",
+    "Showdown à Void Gate, initiative Akali",
+    "  Akali prend le contrôle de Void Gate",
+    "Akali joue Astral Heron — à Void Gate",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Astral Heron",
+    "Akali joue Akali, Silent — à la base",
+    "Akali joue Scuttle Crab — à Star Spring",
+    "  Déclenchement sur la chaîne : Scuttle Crab",
+    "Résolution : Scuttle Crab",
+    "  Tu pioches Falling Star",
+    "Akali cache une carte à Star Spring",
+    "Tour 10, à LeBlanc de jouer (score 4-3)",
+    "  LeBlanc pioche une carte",
+    "LeBlanc joue Mirror Image — cible Ruined Rex",
+    "Résolution : Mirror Image",
+    "  Reflet de Ruined Rex à la base",
+    "LeBlanc joue Karthus, Eternal — à la base",
+    "LeBlanc déplace Ruined Rex vers Void Gate",
+    "  Ruined Rex va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 6 contre défenseurs 10",
+    "  Zhonya's Hourglass sauve Stellacorn Herder",
+    "  Zhonya's Hourglass meurt",
+    "  Ruined Rex meurt",
+    "  Déclenchement sur la chaîne : Deathknell Ruined Rex",
+    "  Déclenchement sur la chaîne : Deathknell Ruined Rex",
+    "Résolution : Deathknell Ruined Rex",
+    "  Astral Heron subit 4 dégât(s) (might 7)",
+    "Akali joue Zhonya's Hourglass (carte cachée révélée) — à Star Spring",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "  Déclenchement sur la chaîne : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Astral Heron",
+    "Résolution : Deathknell Ruined Rex",
+    "  Astral Heron subit 4 dégât(s) (might 7)",
+    "  Zhonya's Hourglass sauve Astral Heron",
+    "  Zhonya's Hourglass meurt",
+    "LeBlanc déplace Ruined Rex vers Void Gate",
+    "  Ruined Rex va de la base à Void Gate",
+    "COMBAT à Void Gate, attaquant LeBlanc",
+    "  Dégâts de combat : attaquants 6 contre défenseurs 7",
+    "  Ruined Rex meurt",
+    "  Déclenchement sur la chaîne : Deathknell Ruined Rex",
+    "  Déclenchement sur la chaîne : Deathknell Ruined Rex",
+    "Résolution : Deathknell Ruined Rex",
+    "  Astral Heron subit 4 dégât(s) (might 7)",
+    "Résolution : Deathknell Ruined Rex",
+    "  Astral Heron subit 4 dégât(s) (might 7)",
+    "  Astral Heron meurt",
+    "Tour 11, à Akali de jouer (score 4-3)",
+    "Akali +1 point (tenue de Void Gate) → 5",
+    "Akali +1 point (tenue de Star Spring) → 6",
+    "  Tu pioches Zhonya's Hourglass",
+    "Tour 12, à LeBlanc de jouer (score 6-3)",
+    "  LeBlanc pioche une carte",
+    "Tour 13, à Akali de jouer (score 6-3)",
+    "Akali +1 point (tenue de Void Gate) → 7",
+    "Akali +1 point (tenue de Star Spring) → 8",
+    "VICTOIRE de Akali"
+  ],
+  "mine": "akali-g2",
+  "moves": [
+    [
+      "ans",
+      [
+        0,
+        3
+      ],
+      "mulligan : Sterak's Gage, Discipline",
+      0
+    ],
+    [
+      "act",
+      1,
+      "joue Zhonya's Hourglass (à la base)",
+      1
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      1
+    ],
+    [
+      "act",
+      2,
+      "joue Stellacorn Herder (à la base)",
+      3
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      3
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      4
+    ],
+    [
+      "act",
+      15,
+      "déplace Stellacorn Herder vers Star Spring",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      1,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      5
+    ],
+    [
+      "act",
+      13,
+      "joue Akali, Deadly Weapon (à la base)",
+      5
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      9,
+      "joue Stellacorn Herder (à la base)",
+      5
+    ],
+    [
+      "act",
+      9,
+      "joue Lonely Poro (à la base)",
+      5
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      5
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      6
+    ],
+    [
+      "act",
+      30,
+      "déplace Stellacorn Herder vers Star Spring",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      12,
+      "joue Astral Heron (à Star Spring)",
+      7
+    ],
+    [
+      "ans",
+      0,
+      "may : oui",
+      7
+    ],
+    [
+      "ans",
+      0,
+      "star_spring : Stellacorn Herder (Star Spring)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      12,
+      "joue Falling Star (cible LeBlanc, Fragmented et Watchful Sentry)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      6,
+      "joue Shuriken Flip (cible LeBlanc, Fragmented, vers Void Gate)",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      1,
+      "déplace Stellacorn Herder vers la base",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      1,
+      "déplace Lonely Poro vers Void Gate",
+      7
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      7
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      7
+    ],
+    [
+      "act",
+      37,
+      "déplace Lonely Poro vers la base",
+      9
+    ],
+    [
+      "act",
+      31,
+      "déplace Stellacorn Herder vers Void Gate",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      5,
+      "Retreat : Akali, Rogue Assassin (gratuit, épuise, cible Stellacorn Herder)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      33,
+      "déplace Stellacorn Herder vers Void Gate",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      5,
+      "joue Astral Heron (à Void Gate)",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      19,
+      "joue Akali, Silent (à la base)",
+      9
+    ],
+    [
+      "act",
+      3,
+      "joue Scuttle Crab (à Star Spring)",
+      9
+    ],
+    [
+      "ans",
+      1,
+      "may : non",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      9
+    ],
+    [
+      "act",
+      2,
+      "cache Zhonya's Hourglass à Star Spring",
+      9
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      9
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "undo"
+    ],
+    [
+      "act",
+      1,
+      "joue Zhonya's Hourglass (à Star Spring)",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "passe",
+      10
+    ],
+    [
+      "act",
+      0,
+      "termine son tour",
+      11
+    ]
+  ],
+  "names": [
+    "Akali",
+    "LeBlanc"
+  ],
+  "opp": "leblanc-iq5",
+  "pts": [
+    8,
+    3
+  ],
+  "result": {
+    "pts": [
+      8,
+      3
+    ],
+    "turn": 13,
+    "winner": 0
+  },
+  "seed": 402584,
+  "started": "2026-10-07T09:02:31.977Z",
+  "turn": 13,
+  "updated": "2026-10-07T09:48:45.520Z",
+  "ver": "v11",
+  "whoFirst": 0
+}

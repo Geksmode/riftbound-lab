@@ -1,0 +1,653 @@
+{
+ "games": 2000,
+ "builds": {
+  "Stock (Wuhan)": {
+   "vs_leblanc": 0.308,
+   "vs_leblanc_sided": 0.265,
+   "turns": 13.4,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     3
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     1
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Long Sword",
+     2
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C1 -2 Defy +2 Witness": {
+   "vs_leblanc": 0.366,
+   "vs_leblanc_sided": 0.297,
+   "turns": 13.3,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     1
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Long Sword",
+     2
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C2 +Silent": {
+   "vs_leblanc": 0.376,
+   "vs_leblanc_sided": 0.287,
+   "turns": 13.3,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     1
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Long Sword",
+     1
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C3 +Forerunner": {
+   "vs_leblanc": 0.386,
+   "vs_leblanc_sided": 0.303,
+   "turns": 13.3,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     2
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C4 +NSF": {
+   "vs_leblanc": 0.333,
+   "vs_leblanc_sided": 0.267,
+   "turns": 13.3,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     2
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Not So Fast",
+     1
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C5 -Defy +Poro": {
+   "vs_leblanc": 0.4,
+   "vs_leblanc_sided": 0.334,
+   "turns": 13.2,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     2
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Lonely Poro",
+     1
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C6 -Charm +NSF": {
+   "vs_leblanc": 0.356,
+   "vs_leblanc_sided": 0.301,
+   "turns": 13.3,
+   "main": [
+    [
+     "Adaptatron",
+     1
+    ],
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     1
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     2
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "En Garde",
+     1
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     2
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Mischievous Marai",
+     2
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Not So Fast",
+     1
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  },
+  "C7 +2e Silent +Marai": {
+   "vs_leblanc": 0.36,
+   "vs_leblanc_sided": 0.289,
+   "turns": 13.2,
+   "main": [
+    [
+     "Akali, Deadly Weapon",
+     1
+    ],
+    [
+     "Akali, Silent",
+     2
+    ],
+    [
+     "Astral Heron",
+     3
+    ],
+    [
+     "Back Off",
+     2
+    ],
+    [
+     "Charm",
+     3
+    ],
+    [
+     "Defy",
+     1
+    ],
+    [
+     "Discipline",
+     3
+    ],
+    [
+     "Falling Star",
+     3
+    ],
+    [
+     "Ferrous Forerunner",
+     2
+    ],
+    [
+     "Kai'Sa, Survivor",
+     3
+    ],
+    [
+     "Mischievous Marai",
+     3
+    ],
+    [
+     "Mournful Witness",
+     2
+    ],
+    [
+     "Scuttle Crab",
+     3
+    ],
+    [
+     "Shuriken Flip",
+     3
+    ],
+    [
+     "Stellacorn Herder",
+     3
+    ],
+    [
+     "Zhonya's Hourglass",
+     3
+    ]
+   ]
+  }
+ },
+ "conditions": {
+  "bf Void Gate": 0.4,
+  "bf Targon's Peak": 0.46,
+  "bf Forgotten Monument": 0.402,
+  "bf Back-Alley Bar": 0.39,
+  "bf Threshold of the Gray": 0.461,
+  "LB bf Dusk Rose Lab": 0.427,
+  "LB bf Star Spring": 0.428,
+  "LB bf Windswept Hillock": 0.339,
+  "mulligan agressif (unites <=4)": 0.422,
+  "prudent face a Vi": 0.31,
+  "garder mana pour NSF/Defy": 0.4,
+  "ne jamais garder de mana": 0.4,
+  "plan naif (tuer tout)": 0.371,
+  "Zhonya sur tout (>=3)": 0.401,
+  "legende Akali non empower": 0.408,
+  "Akali joue en premier": 0.442,
+  "Akali joue en second": 0.358
+ },
+ "best": "C5 -Defy +Poro"
+}

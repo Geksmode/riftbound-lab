@@ -1,0 +1,94 @@
+[
+ {
+  "id": "s015-1",
+  "seed": 206000,
+  "title": "Contre Deathknell, plan Gorica : victoire 8-7",
+  "note": "Même donne que les deux parties suivantes (LeBlanc commence). Akali tient les deux battlefields du tour 6 au tour 10 (7-3), LeBlanc revient à 7-7 au tour 13, puis Akali reprend Windswept au tour 14 et marque le dernier point au tour 16.",
+  "job": {
+   "label": "REF stock plan Gorica vs Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  "session": 15,
+  "plans_snapshot": "results/plans_session_015/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s015-2",
+  "seed": 206000,
+  "title": "Même donne sans plan : défaite 5-8",
+  "note": "Même début (3-3 au tour 6), mais sans plan Akali laisse LeBlanc reprendre Windswept au tour 7 puis Sigil au tour 9 ; LeBlanc gagne 5-8 au tour 11. Sur la session, le plan vaut +11,8 ± 3,3 contre Deathknell.",
+  "job": {
+   "label": "stock sans plan vs Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": null,
+   "opp_plan": "Deathknell"
+  },
+  "session": 15,
+  "plans_snapshot": "results/plans_session_015/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s015-3",
+  "seed": 206000,
+  "title": "Même donne en jouant agressif : défaite 7-8",
+  "note": "En agressif, Akali mène même plus vite (7-3 au tour 10), mais perd les deux battlefields au tour 11 et ne les reprend plus : 7-8 au tour 15. Jouer agressif coûte ~5 pts sur l'ensemble des sessions.",
+  "job": {
+   "label": "stock plan Gorica agressif vs Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica agressif",
+   "opp_plan": "Deathknell"
+  },
+  "session": 15,
+  "plans_snapshot": "results/plans_session_015/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ },
+ {
+  "id": "s015-4",
+  "seed": 206005,
+  "title": "Contre Deathknell : défaite typique 5-8",
+  "note": "Défaite de référence (LeBlanc commence). LeBlanc mène dès le tour 3 et tient Sigil presque toute la partie ; Akali ne fait que des allers-retours sur Windswept et perd 5-8 au tour 13.",
+  "job": {
+   "label": "REF stock plan Gorica vs Deathknell",
+   "n": 400,
+   "akali": {
+    "base": "akali_gorica_rq-singapore"
+   },
+   "opp": {
+    "base": "leblanc_gyatarina_ccs-iq5_1st"
+   },
+   "akali_plan": "Gorica",
+   "opp_plan": "Deathknell"
+  },
+  "session": 15,
+  "plans_snapshot": "results/plans_session_015/plans.py",
+  "tempo": true,
+  "refl": true,
+  "video": true
+ }
+]
