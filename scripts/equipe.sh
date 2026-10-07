@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Équipe d'agents Riftbound : une session tmux « rift », une fenêtre « chef » et une fenêtre par agent
-# (moteur, simulation, ia-leblanc, retex), chacun dans son worktree git et sur sa branche agent/<nom>.
+# (cartes, design, ia, simulation, retex), chacun dans son worktree git et sur sa branche agent/<nom>.
 #
 #   scripts/equipe.sh start              crée les worktrees, la session tmux et lance claude dans chaque fenêtre
 #   scripts/equipe.sh send <agent> <msg> envoie une tâche à un agent (message en argument, ou sur l'entrée standard avec -)
@@ -9,12 +9,12 @@
 #   scripts/equipe.sh attach             ouvre la session tmux (Ctrl-b n / p pour changer de fenêtre, Ctrl-b d pour sortir)
 #   scripts/equipe.sh stop               ferme la session tmux (les worktrees et branches restent)
 #
-# Variables : CLAUDE_CMD (défaut : claude), RB_AGENTS (défaut : moteur simulation ia-leblanc retex),
+# Variables : CLAUDE_CMD (défaut : claude), RB_AGENTS (défaut : cartes design ia simulation retex),
 #             RB_WORK (dossier des worktrees, défaut : le dossier parent du dépôt), RB_BASE (branche de départ, défaut : origin/main).
 set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 S=rift
-AGENTS="${RB_AGENTS:-moteur simulation ia-leblanc retex}"
+AGENTS="${RB_AGENTS:-cartes design ia simulation retex}"
 WORK="${RB_WORK:-$(dirname "$REPO")}"
 BASE="${RB_BASE:-origin/main}"
 CLAUDE_CMD="${CLAUDE_CMD:-claude}"

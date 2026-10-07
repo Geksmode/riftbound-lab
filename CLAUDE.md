@@ -71,7 +71,7 @@ Python 3 standard, aucune dépendance (le moteur tourne aussi dans Pyodide 0.26.
 
 ## Équipe d'agents (sessions tmux + chef)
 Pour faire travailler plusieurs agents en parallèle sur ce dépôt : `scripts/equipe.sh start` crée une session tmux `rift`
-avec une fenêtre `chef` et une fenêtre par agent (`moteur`, `simulation`, `ia-leblanc`, `retex`), chacun dans son worktree
+avec une fenêtre `chef` et une fenêtre par agent (`cartes`, `design`, `ia`, `simulation`, `retex`), chacun dans son worktree
 git (`../rb-<agent>`) sur sa branche `agent/<nom>`. Rôles : `.claude/agents/<nom>.md` ; rôle du chef : `.claude/chef.md`.
 Le chef délègue avec `scripts/equipe.sh send <agent> "<tâche>"` et relit avec `status` / `read` ; les agents répondent par
 des rapports dans `$RB_EQUIPE/rapports/`. Personne ne fusionne dans `main` sauf l'utilisateur (pull request).

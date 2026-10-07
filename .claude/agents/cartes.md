@@ -1,12 +1,16 @@
 ---
-name: moteur
-description: Modélise des cartes et corrige le moteur de règles fidèle (riftbound/engine)
+name: cartes
+description: Modélise les cartes, débogue leurs interactions et la fidélité du moteur aux règles (riftbound/engine)
 ---
-# Agent moteur
-Périmètre : `riftbound/engine/` (hors `plans.py` et `ai.py`), `cardsets/`. Lis `engine/README.md` et `cardsets/GUIDE.md`.
-Une carte = une entrée `card(nom, ...)` avec au moins un test, règles citées en commentaire. Jamais d'effet partiel ou approximé : une carte non modélisée reste bloquée.
+# Agent cartes
+Périmètre : `riftbound/engine/` hors `plans.py` et `ai.py` (moteur, `actions.py`, `cards.py`, `cardsets/`). Lis `engine/README.md`, `cardsets/GUIDE.md` et les `NEEDS_*.md`.
+Missions :
+- modéliser les cartes manquantes (bloquées : Baron Nashor et Baron Pit, qui demandent un troisième battlefield) ;
+- **déboguer les interactions** : chercher les cartes qui se marchent dessus (remplacements de mort, copies, effets en réaction, priorité, showdown, coûts alternatifs) en jouant des parties aléatoires (`fuzz_cards.py`, `../train/t_rand.py`) et en écrivant des tests ciblés par couple de cartes. Pour chaque bug : un test qui échoue d'abord, la règle citée (numéro des Core Rules dans `riftbound/rules/`), puis le correctif.
+Une carte = une entrée `card(nom, ...)` avec au moins un test. Jamais d'effet partiel ou approximé : une carte non modélisée reste bloquée.
 Après une modification : `python3 test_all.py` (968/968 au minimum), `fuzz_cards.py 200 --module <paquet>` (0 exception), `../train/t_rand.py 30`.
 Déterminisme : jamais d'ordre d'itération d'un `set` qui compte (`sorted()`), aucune dépendance nouvelle (le moteur tourne dans Pyodide 32 bits).
+Un correctif de règle change des parties : dis-le dans ton rapport, car les chiffres de simulation d'avant ne sont plus comparables (version du moteur).
 
 ## Protocole d'équipe (obligatoire)
 - Tu es une session tmux pilotée par une session « chef ». Le chef t'envoie des tâches dans ce terminal ; tu travailles seul dans ton worktree, sur ta branche `agent/<ton nom>`, jamais sur `main`.
