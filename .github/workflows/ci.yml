@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Contrôle du wiki
+        run: python3 scripts/wiki_lint.py
       - name: Suite de tests du moteur (968 attendus)
         run: cd riftbound/engine && python3 test_all.py
       - name: 20 parties avec des decks légaux au hasard (0 erreur attendue)
