@@ -1,0 +1,66 @@
+name: Tests et table d'entraînement
+
+# Les tests et la construction de la table tournent en parallèle ; la publication sur GitHub Pages
+# n'a lieu (branche main uniquement) que si les deux ont réussi.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Suite de tests du moteur (968 attendus)
+        run: cd riftbound/engine && python3 test_all.py
+      - name: 20 parties avec des decks légaux au hasard (0 erreur attendue)
+        run: |
+          cd riftbound/engine
+          python3 ../train/t_rand.py 20 | tee /tmp/t_rand.txt
+          grep -q "erreurs 0" /tmp/t_rand.txt
+
+  build-table:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Pyodide 0.26.4 (paquet npm)
+        run: bash riftbound/train/fetch_pyodide.sh
+      - name: Construction de la table
+        run: |
+          bash riftbound/train/build.sh
+          cp riftbound/train/build/train.html riftbound/train/build/index.html
+          touch riftbound/train/build/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: riftbound/train/build
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [tests, build-table]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
