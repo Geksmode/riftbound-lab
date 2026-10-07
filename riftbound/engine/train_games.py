@@ -69,7 +69,7 @@ def replay(game, coach=False):
                     mine.pop()
             continue
         rec = dict(k=k, x=m[1], label=m[2] if len(m) > 2 else "", state=_state(v))
-        if k == "act" and v.get("dec"):
+        if k == "act" and v.get("dec") and m[1] < len(v["dec"]["options"]):
             o = v["dec"]["options"][m[1]]
             rec.update(kind=o["k"], phase=v["dec"]["kind"], n_opts=len(v["dec"]["options"]), label=o["label"])
             if coach:
