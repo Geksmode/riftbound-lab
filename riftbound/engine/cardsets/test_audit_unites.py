@@ -359,5 +359,19 @@ def baited_hook_might_limit():
     assert "Mountain Drake" not in offered and offered, offered
 
 
+# Fae Dragon: the up-to-four friendly units are chosen as targets (rule 355.10): "chosen" is emitted for each
+# (Spirit Wheel, Irelia...), not at resolution without choosing
+@T.test
+def fae_dragon_buffed_units_are_chosen_as_targets():
+    g, _ = new()
+    rich(g)
+    us = [put(g, 0, "Legion Rearguard") for _ in range(2)]
+    seen = []
+    g.effects.append(dict(on="chosen", fn=lambda g_, e, info: seen.append(info["obj"])))
+    play_unit(g, "Fae Dragon")
+    assert all(u in seen for u in us if u.buff), seen
+    assert len([u for u in seen]) == sum(1 for u in us + named(g, 0, "Fae Dragon") if u.buff)
+
+
 if __name__ == "__main__":
     T.main()
