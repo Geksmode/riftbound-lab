@@ -1327,7 +1327,7 @@ def _bellows_choices(g, pid, ctx):
                     ch = dict(tg=tuple(u.uid for u in grp))
                     if ch not in out:
                         out.append(ch)
-    return out
+    return out + [dict(tg=())]                     # "up to three" includes zero (rule 355.13)
 
 
 card("Bellows Breath", timing="action", repeat=(1, ("Mind",), 1), preds=[P_unit], resolve=_bellows,

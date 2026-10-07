@@ -1248,15 +1248,16 @@ def _disposal_choices(g, pid, ctx):
     out = [dict(mode="draw")]
     tr = sorted(g.p[1 - pid].trash, key=lambda c: (g.impl(c) is None or not g.impl(c).flow,
                                                    -(c.spec["e"] + 2 * c.spec["p"]), c.uid))
+    zero = [dict(mode="recycle", cards=())]        # "up to 3 cards" includes zero (rule 355.13)
     if tr and full_choices(g, pid):                # a human: every set of up to 3 cards
         from itertools import combinations
         return out + [dict(mode="recycle", cards=tuple(c.uid for c in grp)) for n in range(1, min(3, len(tr)) + 1)
-                      for grp in combinations(tr, n)]
+                      for grp in combinations(tr, n)] + zero
     if tr:
         out.append(dict(mode="recycle", cards=tuple(c.uid for c in tr[:3])))
         if len(tr) > 1:
             out.append(dict(mode="recycle", cards=(tr[0].uid,)))
-    return out
+    return out + zero
 
 
 card("Disposal Order", timing="reaction", resolve=_disposal, choices=_disposal_choices)
