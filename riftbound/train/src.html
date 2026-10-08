@@ -103,6 +103,8 @@ svg#arrows { position: fixed; inset: 0; width: 100%; height: 100%; pointer-event
 .pl.trash:hover, .pl.trash:focus-visible { outline: 2px solid var(--brass); }
 .pl span { position: absolute; right: -7px; bottom: -6px; min-width: 20px; padding: 1px 4px; border-radius: 9px; background: #0e1220; border: 1px solid var(--line); font: 600 11px/1.3 var(--f-mono); text-align: center; color: var(--ink); }
 .pl i { position: absolute; left: 0; right: 0; top: -13px; font: normal 9px/1 var(--f-mono); color: var(--ink-3); text-align: center; text-transform: uppercase; letter-spacing: .05em; }
+details.diag { margin: 6px 0; } details.diag summary { cursor: pointer; min-height: 32px; }
+details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow: auto; font-size: 11px; background: #0e1220; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
 .floatpool { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-top: 4px; }
 .floatpool > span { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-family: var(--f-mono); }
 .floatpool .fl-e { background: #3a3110; border: 1px solid #e3b341; color: #ffd76a; box-shadow: 0 0 10px rgba(227,179,65,.35); }
@@ -1787,6 +1789,16 @@ const errTxt = err => String(err && err.message || err).split("\n").filter(Boole
 const oppName = () => (DU && DU.names[1 - DU.place]) || "ton ami";
 const duelScore = () => `toi ${DU.st.wins[DU.place]} – ${DU.st.wins[1 - DU.place]} ${oppName()}`;
 const roomLink = code => location.origin + location.pathname + location.search + "#room=" + code;
+// Journal de connexion (affiché dans « Jouer avec un ami », copiable pour diagnostiquer un blocage réel)
+const DIAG = [];
+function diag(t) {
+  DIAG.push(new Date().toLocaleTimeString() + " " + t); if (DIAG.length > 80) DIAG.shift();
+  const e = $("duelDiag"); if (e) e.textContent = DIAG.join("\n");
+}
+function diagText() {
+  return ["Riftbound LAB · duel · " + new Date().toISOString(), "page : " + location.href.split("#")[0], "build : " + JSON.stringify(BUILD),
+    "navigateur : " + navigator.userAgent, "rôle : " + (DU ? DU.role + " · room " + DU.code : "aucun"), ...DIAG].join("\n");
+}
 function duelSend(m) { try { if (DU && DU.conn && DU.conn.open) { DU.conn.send(m); return true; } } catch (e) { console.warn(e); } return false; }
 function duelStat(txt, cls = "") { if (DU) DU.stat = [txt, cls]; const e = $("duelStat"); if (e) { e.className = "mstat " + cls; e.textContent = txt; } }
 function netChip() {
@@ -1814,6 +1826,8 @@ function friendHTML(back) {
       <label class="fl" for="dDeck">Ton deck<select id="dDeck">${deckOptions(dk)}</select></label></div>
     ${room}
     <div class="mstat ${st[1]}" id="duelStat" aria-live="polite">${esc(st[0])}</div>
+    <details class="small diag"><summary>Journal de connexion</summary><pre id="duelDiag">${esc(DIAG.join("\n"))}</pre>
+      <button id="bDiag">Copier le diagnostic</button></details>
     <div class="fgrid"${room ? " hidden" : ""}>
       <div class="mcard"><div class="t">Créer une room</div>
         <div class="seg" role="radiogroup" aria-label="Format du match"><button role="radio" id="dBo1" data-dmode="bo1" aria-checked="${DMODE === "bo1"}">BO1<small>une manche</small></button><button role="radio" id="dBo3" data-dmode="bo3" aria-checked="${DMODE === "bo3"}">BO3<small>2 manches gagnantes</small></button></div>
@@ -1825,6 +1839,8 @@ function friendHTML(back) {
 }
 function friendWire() {
   if (!CAT && T) { loadCatalog().then(() => { if (MENUV === "friend" && !$("menu").hidden) { const v = $("dName") && $("dName").value, c = $("dCode") && $("dCode").value; menuRender("friend"); if (v && $("dName")) $("dName").value = v; if (c && $("dCode")) $("dCode").value = c; } }); }
+  const bd = $("bDiag");
+  if (bd) bd.onclick = () => { const t = diagText(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("Diagnostic copié : colle-le à Claude."), () => { const pre = $("duelDiag"); if (pre) { pre.textContent = t; const r = document.createRange(); r.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast("Copie refusée : le texte est sélectionné, copie-le à la main."); }); };
   const nm = $("dName"), dk = $("dDeck");
   if (dk && dk.selectedOptions[0] && dk.selectedOptions[0].disabled) dk.value = "akali-g2";
   if (nm) nm.onchange = () => store.set("rbt-pseudo", nm.value.trim());
@@ -1874,18 +1890,27 @@ async function duelCreate() {
 }
 function hostPeer(tries) {
   const d = DU, p = new Peer("rbl-" + d.code, peerOpts()); d.peer = p;
-  p.on("open", () => { if (DU !== d) return; duelStat("Room ouverte : en attente de ton ami…", "ok"); if (MENUV === "friend" && !$("menu").hidden) menuRender("friend"); });
-  p.on("connection", c => { if (DU !== d) return c.close(); c.on("data", m => duelRecv(m, c)); c.on("close", () => { if (DU === d && d.conn === c) { d.conn = null; duelLost(); } }); });
+  p.on("open", id => { if (DU !== d) return; diag("hôte : room ouverte (" + id + ")"); duelStat("Room ouverte : en attente de ton ami…", "ok"); if (MENUV === "friend" && !$("menu").hidden) menuRender("friend"); });
+  p.on("connection", c => {
+    if (DU !== d) return c.close();
+    diag("hôte : connexion entrante (encodage " + c.serialization + ")");
+    if (!d.st) duelStat("Ton ami se connecte…", "ok");
+    c.on("open", () => diag("hôte : canal ouvert avec l'invité"));
+    c.on("error", e => diag("hôte : erreur du canal : " + errTxt(e)));
+    c.on("data", m => duelRecv(m, c));
+    c.on("close", () => { diag("hôte : canal fermé"); if (DU === d && d.conn === c) { d.conn = null; duelLost(); } });
+  });
   p.on("disconnected", () => { if (DU === d && !p.destroyed) try { p.reconnect(); } catch (e) {} });
   p.on("error", e => {
     if (DU !== d) return;
+    diag("hôte : erreur PeerJS " + (e.type || errTxt(e)));
     if (e.type === "unavailable-id" && tries < 4) { p.destroy(); d.code = newCode(); return hostPeer(tries + 1); }
     duelStat("Erreur de connexion (" + (e.type || errTxt(e)) + "). Vérifie ta connexion et recommence.", "err");
     if (!d.st) { DU = null; try { p.destroy(); } catch (x) {} if (MENUV === "friend") menuRender("friend"); }
   });
 }
 function duelHello(m, c) {
-  const refuse = why => { try { c.send({ t: "refuse", why }); } catch (e) {} setTimeout(() => c.close(), 300); };
+  const refuse = why => { diag("hôte : refus : " + why); try { c.send({ t: "refuse", why }); } catch (e) {} setTimeout(() => c.close(), 300); };
   if (DU.st) {   // match en cours : seul l'invité d'origine revient (même jeton), et reprend où il en était
     if (m.token !== DU.token) return refuse("Cette room est déjà occupée.");
     if (DU.conn && DU.conn !== c) try { DU.conn.close(); } catch (e) {}
@@ -1903,6 +1928,7 @@ function duelHello(m, c) {
   DU.st = J(T.match_new(DU.mode, null, JSON.stringify(DU.decks[0]), JSON.stringify(DU.decks[1])));
   DU.mid = Date.now().toString(36) + "-d" + DU.st.seed;
   c.send({ t: "match", st: DU.st, decks: DU.decks, names: DU.names, mode: DU.mode, mid: DU.mid, code: DU.code });
+  diag("hôte : match envoyé à " + nm);
   duelBegin();
 }
 const duelResumeMsg = () => ({ t: "resume", st: DU.st, decks: DU.decks, names: DU.names, mode: DU.mode, mid: DU.mid, code: DU.code, prep: DU.prep,
@@ -1921,13 +1947,29 @@ function duelJoin(code, name, deck, token) {
   const p = new Peer(peerOpts()); d.peer = p;
   p.on("open", () => {
     if (DU !== d) return;
-    const c = p.connect("rbl-" + code, { reliable: true });
-    c.on("open", () => { if (DU !== d) return; d.conn = c; netChip(); c.send({ t: "hello", name, deck, token, commit: BUILD.commit, engine: BUILD.engine }); duelStat("Connecté : l'hôte prépare le match…", "ok"); });
+    diag("invité : connecté au serveur, appel de la room " + code);
+    // encodage JSON : l'encodage binaire par défaut de PeerJS pose des problèmes entre navigateurs (Safari / iOS)
+    const c = p.connect("rbl-" + code, { reliable: true, serialization: "json" });
+    c.on("error", e => diag("invité : erreur du canal : " + errTxt(e)));
+    c.on("open", () => {
+      if (DU !== d) return; d.conn = c; netChip(); diag("invité : canal ouvert, envoi du hello");
+      const hello = { t: "hello", name, deck, token, commit: BUILD.commit, engine: BUILD.engine };
+      c.send(hello); duelStat("Connecté : l'hôte prépare le match…", "ok");
+      let tries = 0;   // pas de réponse de l'hôte : on renvoie le hello (l'hôte le traite une seule fois, puis « resume »)
+      const retry = () => {
+        if (DU !== d || d.st || d.conn !== c) return;
+        if (++tries > 3) { diag("invité : l'hôte ne répond pas"); return duelStat("L'hôte ne répond pas. Ouvre « Journal de connexion », touche « Copier le diagnostic » et envoie-le à Claude.", "err"); }
+        diag("invité : pas de réponse de l'hôte, nouvel envoi du hello (" + tries + ")"); try { c.send(hello); } catch (e) { diag("invité : envoi impossible : " + errTxt(e)); }
+        setTimeout(retry, 6000);
+      };
+      setTimeout(retry, 6000);
+    });
     c.on("data", m => duelRecv(m, c));
     c.on("close", () => { if (DU === d && d.conn === c) { d.conn = null; duelLost(); } });
   });
   p.on("error", e => {
     if (DU !== d) return;
+    diag("invité : erreur PeerJS " + (e.type || errTxt(e)));
     const why = e.type === "peer-unavailable" ? `Room ${code} introuvable : vérifie le code ; l'hôte doit garder sa page ouverte.` : "Erreur de connexion (" + (e.type || errTxt(e)) + ").";
     duelStat(why, "err"); toast(why, "flash");
     if (!d.st) { DU = null; sess.del("rbt-duel"); try { p.destroy(); } catch (x) {} }
@@ -1953,7 +1995,8 @@ function duelLost() {
 function duelRecv(m, c) {
   if (!DU || !m || typeof m !== "object") return;
   const d = DU;
-  d.q = d.q.then(() => DU === d ? duelHandle(m, c) : null).catch(err => { console.error(err); toast("Erreur du duel : " + errTxt(err), "flash"); });
+  if (["hello", "match", "refuse", "resume", "sync"].includes(m.t)) diag((d.role === "host" ? "hôte" : "invité") + " : reçu « " + m.t + " »");
+  d.q = d.q.then(() => DU === d ? duelHandle(m, c) : null).catch(err => { console.error(err); diag("erreur : " + errTxt(err)); toast("Erreur du duel : " + errTxt(err), "flash"); });
 }
 async function duelHandle(m, c) {
   const P = DU.prep, other = 1 - DU.place, here = P && m.game === P.game;

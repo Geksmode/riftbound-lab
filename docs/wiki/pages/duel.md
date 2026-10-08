@@ -31,3 +31,9 @@ et reprise ; 39 contrôles, 2 graines par l'agent et 1 relance par le chef, tous
 la page comme artefact claude.ai ; BO1 en duel ; manche nulle ; fin d'un BO3 complet ; refus de version ou de deck ; room introuvable ; lien `#room=` ;
 rechargement pendant la préparation ; changement de champion au sideboard. Si l'**hôte** recharge, la room est perdue (documenté dans l'aide).
 Les parties de duel ne sont pas rejouées par `train_games.py` (pas de clé `moves`) : à faire si utile.
+**Correctif du 2026-10-08 (bug réel signalé par l'utilisateur)** : l'invité était « Connecté : l'hôte prépare le match… » mais l'hôte restait
+« en attente de ton ami ». Non reproduit en local (5 variantes OK : BO1, deck perso, lien, même deck). Cause la plus probable : encodage
+binaire par défaut de PeerJS entre navigateurs différents. Changements : encodage JSON (`serialization: "json"`), l'invité renvoie le hello
+toutes les 6 s (3 fois), l'hôte affiche « Ton ami se connecte… », journal de connexion avec « Copier le diagnostic » (à demander à
+l'utilisateur si le blocage revient). Vérifié en local : robot du duel vert, hello perdu volontairement puis renvoyé, match démarré.
+
