@@ -1,0 +1,23 @@
+OK  pas de défilement horizontal (menu) [1400,1400]
+OK  cibles >= 44px (menu) []
+OK  entrée « Nouvelle partie » 
+OK  entrée « Créer / modifier un deck » 
+OK  entrée « Mes decks » 
+OK  entrée « Mes parties » 
+OK  entrée « Aide » 
+OK  Replays masqué (viewer absent du build) 
+OK  pas de défilement horizontal (aide) [1400,1400]
+OK  pas de défilement horizontal (parties) [1400,1400]
+OK  pas de défilement horizontal (setup) [1400,1400]
+OK  pas de défilement horizontal (table) [1400,1400]
+OK  coups joués (parcours 1) 45 coups, tour 13
+OK  pas de défilement horizontal (table milieu) [1400,1400]
+OK  reprise de la partie 
+OK  pas de défilement horizontal (éditeur) [1400,1400]
+OK  deck enregistré 
+OK  pas de défilement horizontal (mes decks) [1400,1400]
+OK  cibles >= 44px (mes decks) []
+OK  deck présélectionné 
+OK  coups joués (parcours 2) 26 coups, tour 9, noms ["LeBlanc","LeBlanc (IA)"]
+OK  pas de défilement horizontal (parties après) [1400,1400]
+OK  aucune erreur JS []
