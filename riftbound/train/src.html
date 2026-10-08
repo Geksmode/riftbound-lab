@@ -402,6 +402,72 @@ body.dkopen { overflow: hidden; }
   .topbar .savechip { flex: none; white-space: nowrap; }
   .topbar .tbtns { flex: none; margin-left: auto; display: flex; gap: 6px; }
 }
+/* Téléphone (portrait, ou paysage bas) : plateau plein écran, SANS défilement et à taille FIXE pendant la partie, sur le
+   modèle des tables en ligne. Mise en page de largeur fixe (360 à 520 px) mise à l'échelle de la largeur de l'écran ;
+   la hauteur remplit l'écran, les champs de bataille prennent la place restante. Haut : main adverse, ses zones,
+   ses runes ; milieu : les deux champs de bataille ; bas : tes runes, tes zones, ta main ; barre de commande fixe. */
+@media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
+  html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  body { padding: 0 !important; margin: 0 !important; }
+  .shell { display: block; height: 100dvh; }
+  .shell > .main { height: 100dvh; display: flex; flex-direction: column; gap: 0; }
+  #boardHelp { display: none; }
+  .topbar { flex: none; flex-wrap: nowrap; height: 44px; padding: 4px 8px; gap: 6px; overflow: hidden; }
+  .topbar h1 { font-size: 0 !important; flex: none; width: 26px; overflow: hidden; }
+  .topbar h1::before { width: 26px !important; height: 26px !important; margin: 0 !important; }
+  .toast { top: 50px !important; }
+  .main > .ctrlcol .turninfo { display: none; }
+  .main > .ctrlcol .ctrlrow button { white-space: nowrap; font-size: 13px; }
+  .topbar #gmeta, .topbar .savechip, .topbar .mchip { display: none !important; }
+  .topbar .tbtns { margin-left: auto; display: flex; gap: 4px; flex: none; width: auto; }
+  .topbar .tbtns button { flex: none; width: auto; padding: 6px 12px; font-size: 13px; min-height: 36px; }
+  .main > .ctrlcol .turninfo { max-height: 46px; overflow: hidden; font-size: 11px; line-height: 1.2; }
+  .topbar #bDecks, .topbar #bNew { display: none; }
+  .boardwrap { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; border-radius: 0; touch-action: none; }
+  .boardgrid { position: absolute; left: 0; top: 0; transform-origin: top left; display: block; min-width: 0; border-radius: 0 !important; border: 0 !important; }
+  .board { height: 100%; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 4px; border-radius: 0; }
+  .board, .zone, .bf { --cw: 44px; --chh: 62px; }
+  .half { flex: none; display: grid; gap: 3px; padding: 3px; grid-template-columns: 62px minmax(0, 1fr) auto; }
+  .half .zrow { display: contents; }
+  .half.p1 { grid-template-rows: 36px 82px 34px; grid-template-areas: "ohand ohand ohand" "pile base leg" "runes runes runes"; }
+  .half.p0 { grid-template-rows: 34px 82px 96px; grid-template-areas: "runes runes runes" "pile base leg" "hand hand hand"; }
+  .half.p1 .hand { grid-area: ohand; } .half.p0 .hand { grid-area: hand; }
+  .zrow > .zone { min-height: 0; overflow: hidden; }
+  .zrow > .zone.pile { grid-area: pile; padding: 3px; gap: 2px; justify-content: space-between; }
+  .zrow > .zone:nth-child(2) { grid-area: runes; flex-wrap: nowrap; align-items: center; gap: 3px; padding: 3px 6px; --rw: 22px; --rh: 30px; }
+  .zrow > .zone:nth-child(3) { grid-area: base; flex-wrap: nowrap; align-items: center; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; gap: 4px; --cw: 50px; --chh: 70px; }
+  .rune, .runeslot { width: var(--rw); height: var(--rh); font-size: 9px; }
+  .runeslot.x { width: var(--rh); height: var(--rw); }
+  .res-line { margin-left: auto; font-size: 10px; white-space: nowrap; }
+  .floatpool { display: none; }
+  .zone.pile .who { display: none; }
+  .zone.pile .score { font-size: 17px; padding: 1px 0; }
+  .zone.pile .piles { gap: 6px; padding: 0; }
+  .zone.pile .pl { width: 22px; height: 31px; }
+  .bfrow { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .bf { min-height: 0; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .bf .side { flex-wrap: wrap; align-content: center; justify-content: center; overflow: hidden; }
+  .bf .mid { flex-wrap: nowrap; padding: 3px 4px; }
+  .bf .bname { font-size: 11px; flex-basis: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bfcard { width: 44px; height: 25px; }
+  .hand { min-height: 0; padding: 0; flex-wrap: nowrap; overflow: hidden; }
+  .hand .who-hand { display: none; }
+  .hand.top { align-items: center; }
+  .hand.top .card { --cw: 22px; --chh: 31px; width: 22px; height: 31px; margin-inline: -3px; }
+  .p0 .hand { align-items: flex-end; padding-bottom: 2px; }
+  .p0 .hand .card { --cw: 58px; --chh: 81px; width: 58px; height: 81px; margin-inline: -4px; }
+  .p0 .hand .card:hover, .p0 .hand .card.can:hover, .p0 .hand .card:focus-visible { transform: translateY(-8px) scale(1.1); }
+  /* barre de commande hors du plateau (fitBoard l'y déplace), hauteur fixe ; la chaîne s'affiche au-dessus, sans rien pousser */
+  .main > .ctrlcol { flex: none; position: relative; height: calc(58px + env(safe-area-inset-bottom, 0px)); flex-wrap: nowrap; align-items: center;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important; gap: 6px; contain: none; z-index: 14; overflow: visible !important; }
+  .main > .ctrlcol .turninfo { flex: 0 1 auto; min-width: 0; }
+  .main > .ctrlcol .endbtn { flex: 1 1 auto; min-height: 44px; }
+  .main > .ctrlcol .ctrlrow { flex: none; }
+  .main > .ctrlcol .ctrlrow button { min-height: 44px; padding: 6px 10px; }
+  .main > .ctrlcol .stackcol { position: fixed; left: 8px; right: 8px; top: 92px; bottom: auto; margin: 0; max-height: 30vh; overflow-y: auto;
+    flex-direction: column; flex-wrap: nowrap; background: rgba(21,26,62,.96) !important; }
+}
 /*DA_CSS*/
 </style>
 
@@ -1046,10 +1112,22 @@ function cardFor(n) {
   const pool = [...Object.keys(CARDS), ...Object.keys(IMG)];
   return pool.find(k => k.startsWith(m + ",")) || pool.find(k => k.startsWith(m)) || null;
 }
+const MOBILE = matchMedia("(max-width: 820px), (max-height: 520px) and (max-width: 999px)");
 function fitBoard() {
-  const wrap = document.querySelector(".boardwrap"), bg = document.querySelector(".boardgrid");
+  const wrap = document.querySelector(".boardwrap"), bg = document.querySelector(".boardgrid"), ctrl = $("ctrl");
   if (!wrap || !bg) return;
-  if (innerWidth < 1000) { bg.style.transform = ""; return; }
+  if (MOBILE.matches) {
+    // téléphone : la barre de commande sort du plateau (sous lui), le plateau a une largeur de maquette fixe mise à
+    // l'échelle de l'écran et une hauteur qui remplit l'écran ; rien ne dépend du contenu, donc rien ne bouge en partie.
+    if (ctrl && ctrl.parentElement === bg) document.querySelector(".shell > .main").appendChild(ctrl);
+    const W = Math.max(360, Math.min(wrap.clientWidth, 520)), sc = wrap.clientWidth / W;
+    bg.style.width = W + "px"; bg.style.height = (wrap.clientHeight / sc) + "px";
+    bg.style.transform = `scale(${sc})`;
+    return;
+  }
+  if (ctrl && ctrl.parentElement !== bg) bg.appendChild(ctrl);
+  bg.style.height = "";
+  if (innerWidth < 1000) { bg.style.transform = ""; bg.style.width = ""; return; }
   bg.style.transform = "translateX(-50%)";
   // Écran large : le plateau prend toute la largeur au lieu de laisser des bandes vides (la hauteur fixe l'échelle) ;
   // deux passes, car l'élargir peut changer sa hauteur.
