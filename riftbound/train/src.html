@@ -528,13 +528,17 @@ function show(v) {
 // est déterministe, la partie se rejoue à l'identique hors de la page), journal affiché et résultat. Claude les relit
 // pour apprendre de tes parties. Sans base (hors claude.ai, déconnecté), la table marche pareil, sans enregistrer.
 const PAGE_VER = "v11";
+// Construction de la page (build.sh) : commit du dépôt et version du moteur. train_games.py rejoue chaque partie avec
+// exactement ce moteur (git archive de ce commit), même après des changements du moteur.
+const BUILD = /*BUILD*/{ commit: null, engine: null };
 let REC = null, recT = 0, DBP = null;
 function dbh() { if (!DBP) DBP = (window.claude && claude.use ? claude.use("db") : Promise.resolve(null)).catch(() => null); return DBP; }
 function chip(txt, cls) { const c = $("saveChip"); c.hidden = !txt; c.textContent = txt || ""; c.className = "savechip " + (cls || ""); }
 function recStart(meta, bf, first, lvl, mine, opp) {
   REC = { id: Date.now().toString(36) + "-" + meta.seed, ver: PAGE_VER, seed: meta.seed, bf: bf || null, first: first === "" ? null : +first,
     mine: mine || null, opp: opp || null, names: meta.names,
-    level: +lvl, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null };
+    level: +lvl, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null,
+    commit: BUILD.commit, engine: BUILD.engine };
   chip("");
 }
 function recMove(m) { if (!REC) return; REC.moves.push(m); recSave(false); }
@@ -546,10 +550,30 @@ function recSave(now) {
   const body = { ...REC, updated: new Date().toISOString(), turn: V ? V.st.t : 0, pts: V ? V.st.pts : [0, 0],
     log: LOG.map(([ind, t]) => (ind ? "  " : "") + t).slice(-2500) };
   dbh().then(db => {
-    if (!db) { chip("Partie non enregistrée", "off"); return; }
+    if (!db) { chip(localSave(body) ? "Partie gardée dans ce navigateur" : "Partie non enregistrée", localSave.ok ? "ok" : "off"); return; }
     return db.collection("games").doc(rec.id).set(body).then(() => REC === rec && chip(rec.result ? "Partie enregistrée ✓" : "Enregistrement ✓", "ok"))
       .catch(e => REC === rec && chip(e && e.code === "quota_exceeded" ? "Stockage plein" : "Partie non enregistrée", "off"));
   });
+}
+// Hors claude.ai (GitHub Pages) : les parties sont gardées dans le navigateur (localStorage, sans le journal pour tenir
+// dans la place : le rejeu se vérifie par le résultat), puis téléchargées depuis « Mes parties » pour être déposées
+// dans le dépôt (riftbound/train/games/games/), où le workflow « Apprentissage » les analyse.
+const LOCAL_GAMES = "rbt-games", LOCAL_MAX = 60;
+function localGames() { try { return JSON.parse(store.get(LOCAL_GAMES) || "{}"); } catch (e) { return {}; } }
+function localSave(body) {
+  const all = localGames(), g = { ...body }; delete g.log;
+  all[g.id] = g;
+  const ids = Object.keys(all).sort((a, b) => String(all[b].updated || "").localeCompare(String(all[a].updated || "")));
+  for (const id of ids.slice(LOCAL_MAX)) delete all[id];
+  store.set(LOCAL_GAMES, JSON.stringify(all));
+  localSave.ok = !!localGames()[g.id];
+  return localSave.ok;
+}
+function downloadGames(gs) {
+  const a = document.createElement("a"), d = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
+  a.href = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gs, null, 1));
+  a.download = `parties-riftbound-${d}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
 }
 function recFinish(v) {
   if (!REC || REC.result) return;
@@ -1515,17 +1539,23 @@ function menuRender(view) {
 async function loadGames() {
   const box = $("gamesBox"); if (!box) return;
   const db = await dbh();
-  if (!db) { box.className = "mcard warn"; box.innerHTML = `<div class="t">Enregistrement indisponible hors claude.ai</div><div class="small">Cette copie de la table fonctionne, mais tes parties n'y sont pas gardées (« Partie non enregistrée »). Ouvre la table depuis claude.ai pour les retrouver ici.</div>`; return; }
-  let gs = [];
-  try { const qs = await db.collection("games").get(); gs = qs.docs.map(d => d.data()).filter(x => x && x.id); }
-  catch (e) { box.className = "mcard warn"; box.textContent = "Lecture des parties impossible pour l'instant."; return; }
+  let gs = [], local = !db;
+  if (db) {
+    try { const qs = await db.collection("games").get(); gs = qs.docs.map(d => d.data()).filter(x => x && x.id); }
+    catch (e) { box.className = "mcard warn"; box.textContent = "Lecture des parties impossible pour l'instant."; return; }
+  } else gs = Object.values(localGames());
+  window.__GAMES = gs;
   if (MENUV !== "games" || !$("gamesBox")) return;
   gs.sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
   const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
     const res = r ? (r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle") + " " + (r.pts || []).join("-") : "en cours";
     return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)} · tour ${esc(r ? r.turn : g.turn || "?")} · IA ${g.level === 3 ? "forte" : "normale"}</div></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
-  $("gamesBox").outerHTML = html;
+  const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
+    <div class="small">Télécharge-les puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
+    <button class="go" id="bDlGames">Télécharger mes parties</button></div>` : "";
+  $("gamesBox").outerHTML = head + html;
+  const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
   const t = e.target.closest("[data-m],[data-edit],[data-play]"); if (!t || t.disabled) return;

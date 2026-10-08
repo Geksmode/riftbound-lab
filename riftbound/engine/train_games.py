@@ -17,7 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.environ.get("RB_ENGINE") or HERE)
 import train
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "train", "analyses")
+OUT = os.environ.get("RB_ANALYSES") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "train", "analyses")
 
 
 def load_games(paths):
@@ -138,6 +138,28 @@ def frozen_engine(ver, tmp):
     return dst
 
 
+def commit_engine(commit, tmp):
+    """Le moteur exact d'un commit (git archive de riftbound/engine), chemins de données pointés vers ce dépôt."""
+    dst = os.path.join(tmp, "commit-" + commit)
+    if os.path.isdir(dst):
+        return os.path.join(dst, "riftbound", "engine")
+    os.makedirs(dst)
+    root = os.path.abspath(os.path.join(HERE, "..", ".."))
+    arc = subprocess.run(["git", "-C", root, "archive", commit, "riftbound/engine"], capture_output=True)
+    if arc.returncode:
+        return None
+    subprocess.run(["tar", "-x", "-C", dst], input=arc.stdout, check=True)
+    eng = os.path.join(dst, "riftbound", "engine")
+    rb = os.path.abspath(os.path.join(HERE, ".."))
+    for dp, _, fs in os.walk(eng):
+        for f in fs:
+            if f.endswith(".py"):
+                q = os.path.join(dp, f)
+                t = open(q, encoding="utf-8").read()
+                open(q, "w", encoding="utf-8").write(t.replace("Path(__file__).resolve().parents[1]", f"Path({rb!r})"))
+    return eng
+
+
 def analyse(games, coach, emit, engine_label):
     rows = []
     for g in games:
@@ -176,12 +198,22 @@ def main(args):
         best = {}                                        # id -> (lignes de choix, résumé) du rejeu retenu
         with tempfile.TemporaryDirectory() as tmp:
             engines = {v: frozen_engine(v, tmp) for v in vers}
-            for step in vers + [None]:
-                todo = [g for g in left.values() if step is None or (g.get("ver") or "") <= step]
+            # d'abord le moteur exact du commit noté par la page (GitHub Pages, depuis le 2026-10-08)
+            commits = sorted({g["commit"] for g in games if g.get("commit")})
+            for c in commits:
+                e = commit_engine(c, tmp)
+                if e:
+                    engines["commit " + c] = e
+            steps = ["commit " + c for c in commits if "commit " + c in engines] + vers + [None]
+            for step in steps:
+                if step and step.startswith("commit "):
+                    todo = [g for g in left.values() if g.get("commit") == step[7:]]
+                else:
+                    todo = [g for g in left.values() if step is None or (g.get("ver") or "") <= step]
                 if not todo:
                     continue
-                sheets = os.path.join(tmp, "fiches-" + (step or "actuel")); os.makedirs(sheets, exist_ok=True)
-                env = dict(os.environ, RB_ENGINE=engines[step], RB_ENGINE_LABEL="figé " + step, RB_SHEETS=sheets) if step \
+                sheets = os.path.join(tmp, "fiches-" + (step or "actuel").replace(" ", "-")); os.makedirs(sheets, exist_ok=True)
+                env = dict(os.environ, RB_ENGINE=engines[step], RB_ENGINE_LABEL=(step if step.startswith("commit") else "figé " + step), RB_SHEETS=sheets) if step \
                     else dict(os.environ, RB_ENGINE_LABEL="actuel", RB_SHEETS=sheets)
                 env.pop("RB_ENGINE", None) if step is None else None
                 out = subprocess.run([sys.executable, os.path.abspath(__file__), "--emit"] + (["--coach"] if coach else [])

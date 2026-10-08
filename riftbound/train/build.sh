@@ -22,6 +22,10 @@ mods = [m for m in sys.argv[1].split() if m]
 files = ["cardsets/__init__.py"] + [f"cardsets/{m}.py" for m in mods]
 s = open('src.html').read().replace('/*BASE_CSS*/', open('base.css').read())
 s = s.replace('/*CARDSETS*/', "".join(", " + json.dumps(f) for f in files))
+import subprocess, sys as _s
+commit = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], capture_output=True, text=True).stdout.strip() or None
+_s.path.insert(0, "../engine"); import version
+s = s.replace("/*BUILD*/{ commit: null, engine: null }", json.dumps(dict(commit=commit, engine=version.engine_md5())))
 open('build/train.html', 'w').write(s)
 print("modules de cartes :", len(mods))
 P

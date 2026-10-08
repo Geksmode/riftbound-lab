@@ -46,3 +46,6 @@ Nouvelle règle permanente 6 de `CLAUDE.md` : en cas de doute, la lecture la plu
 
 ## [2026-10-08] ingest | Assignation des dégâts de combat par le joueur
 `game.assign_by_hand` : question « damage_pick » dans la table ; règles 465.2.c, 815, 826.
+
+## [2026-10-08] ingest | Boucle des parties
+Parties gardées dans le navigateur et téléchargeables, commit noté, rejeu par moteur exact (17/17 fidèles), `bilan_parties.py`, workflow « Apprentissage ». Page `pages/parties.md`.
