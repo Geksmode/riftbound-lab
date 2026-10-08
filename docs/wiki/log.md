@@ -58,3 +58,6 @@ Agent design : éditeur (sideboard), mode de match, robot `verif_match.mjs` ajou
 
 ## [2026-10-08] ingest | Deflect sur les répétitions
 Les cibles d'une répétition (Repeat imprimé ou accordé) ne payaient pas le Deflect (809.1.c) : corrigé dans `actions.deflect_total` ; contrôle de tous les sorts `cardsets/test_deflect_auto.py` ; coût affiché dans le libellé du coup et le journal.
+
+## [2026-10-08] decision | Duel entre amis : moteur fait, interface en attente
+PeerJS, BO1 / BO3 ; `train.duel_new`, `match_duel_next`, test à deux processus ; spécification de l'interface dans `pages/duel.md`. Reprise à la session suivante.

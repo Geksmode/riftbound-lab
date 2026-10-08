@@ -24,6 +24,8 @@ sources: docs/REPRISE.md, git log, CI
 
 **Décision en attente** : branchement de `plans_general` dans `train.py`.
 
+**Prochaine session (2026-10-08, l'utilisateur a demandé d'attendre)** : finir l'interface du duel entre amis selon [duel.md](duel.md) ; ouvrir la PR de la branche (Deflect sur les répétitions + moteur du duel, non fusionnés dans `main`).
+
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
 1. ~~Porte d'intégration~~ **fait le 2026-10-08** : [porte.md](porte.md).
 2. ~~Chiffres versionnés~~ **fait le 2026-10-08** : [resultats.md](resultats.md).
