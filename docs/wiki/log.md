@@ -23,3 +23,5 @@ Porte d'intégration, chiffres versionnés, tests générés depuis le texte des
 ## [2026-10-08] ingest | Première itération des agents et retex
 Intégration de `agent/cartes`, `agent/ia`, `agent/design` ; 1034 tests ; retex écrit. Voir `pages/etat.md` et `riftbound/retex/retex-equipe-iteration1.md`.
 
+## [2026-10-08] decision | Gemdragon et Hwei : « ready up to 2 runes »
+Le maximum possible jusqu'à 2, rien si toutes les runes sont prêtes (décision de l'utilisateur) ; tests des cas limites ajoutés.

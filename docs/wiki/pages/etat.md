@@ -13,9 +13,10 @@ sources: docs/REPRISE.md, git log, CI
 - `cartes` : 7 cartes corrigées pour le choix « zéro cible » (355.13), 66 tests ajoutés, `AUDIT_TEXTE.md` ; `test_all.py` = 1034/1034, `t_rand.py 30` = 0 erreur (relancés par le chef).
 - `design` : menu d'accueil responsive dans `train/src.html` (captures dans `train/captures-menu/`). Non testé sur Pages ni avec la vraie base claude.ai.
 - `ia` : banc d'essai `engine/exp_general.py`, plan général `plans_general.py` (drapeau `RB_GENERAL`, non branché dans `train.py`). Gain : **on ne sait pas** (51,9 % ± 3,0, 79 paires).
+- Gemdragon / Hwei : « ready up to 2 runes » = le maximum possible jusqu'à 2, rien si tout est prêt (décision de l'utilisateur, 2026-10-08, testé).
 - Retex : `riftbound/retex/retex-equipe-iteration1.md`. Les chiffres de simulation d'avant 1034 tests ne sont plus comparables.
 
-**Décisions en attente** : Gemdragon / Hwei (approximation, contraire à la règle 4) ; branchement de `plans_general` dans `train.py` ; bug `tg2` dans `game.py::repeat_resolution`.
+**Décisions en attente** : branchement de `plans_general` dans `train.py` ; bug `tg2` dans `game.py::repeat_resolution`.
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
 1. Porte d'intégration `scripts/verifier.sh` (tests, 30 parties aléatoires, lint du wiki, build de la table), appliquée en CI aux branches `agent/*`.

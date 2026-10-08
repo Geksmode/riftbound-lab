@@ -37,8 +37,8 @@ ajouté ; **à vérifier** = limite connue, détaillée dans la dernière colonn
 | Kraken Hunter | spend any number of buffs as additional cost; −1 body rune each | 0, 1, 2 renforts offerts, réduction exacte | `kraken_hunter_spend_zero_one_two` | ok |
 | Commander Ledros | kill any number of friendly units as additional cost; −1 order rune each | 0 à n unités sacrifiées, réduction exacte | `ledros_kill_zero_and_n` | ok |
 | Forge of the Future | Kill this: Recycle up to 4 cards from trashes | zéro, max 4, les deux défausses | `forge_recycle_zero`, `forge_recycle_max_four` | ok |
-| Gentle Gemdragon | ready up to 2 runes | au plus 2 | `gemdragon_ready_at_most_two_runes` | ok, avec une nuance : l'effet prépare toujours le maximum de runes (jamais moins) et les runes ne sont pas « choisies » comme cibles (355.10) ; aucune carte ne réagit au choix d'une rune, et préparer plus ne peut pas nuire → équivalent, laissé tel quel |
-| Hwei, Brooding Painter | Gear — Ready up to 2 runes | au plus 2 | `hwei_discard_spell_draws_gear_readies` (existant, test_mind) | ok (même nuance que Gemdragon) |
+| Gentle Gemdragon | ready up to 2 runes | le maximum possible jusqu'à 2 ; rien si toutes les runes sont prêtes (décision de l'utilisateur, 2026-10-08) | `gemdragon_ready_at_most_two_runes`, `gemdragon_ready_runes_edge_cases`, `gemdragon_triggers_on_another_dragon` | ok |
+| Hwei, Brooding Painter | Gear — Ready up to 2 runes | même règle que Gemdragon (décision de l'utilisateur, 2026-10-08) | `hwei_discard_spell_draws_gear_readies` (test_mind) | ok |
 | Nasus, Curator of the Sands | you may exhaust me to ready up to 2 runes | zéro rune permis | `nasus_may_ready_zero_runes` | ok |
 | Baited Hook | Might up to 1 more than the killed unit | borne ≤ tuée + 1 | `baited_hook_might_limit` | ok |
 | Lee Sin, Ascetic | I can have any number of buffs | plusieurs renforts | `lee_sin_ascetic_stacks_buffs` | ok |

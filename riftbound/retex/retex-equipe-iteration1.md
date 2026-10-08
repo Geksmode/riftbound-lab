@@ -12,7 +12,7 @@ Revue autocritique, par le chef. Source : rapports de `cartes` et `ia`, `riftbou
 - **IA générale** : 51,9 % ± 3,0 sur 79 paires = « on ne sait pas » (0,6 écart-type). Deux séries identiques ont donné 58,8 % et 47,5 % : la résolution du banc est de ±3-4 points à 40-80 paires. Aucun gain n'existe.
 - **Ressources de l'IA** : WebFetch bloqué par le proxy, 10 sources repérées par extraits, aucune lue en entier. Les « principes » sont des hypothèses de confiance basse, pas des connaissances.
 - **« Testé » pour le design** : le robot pilote Chromium par DevTools, les coups sont injectés (pas de clic sur les cartes), la base claude.ai est simulée en mémoire, rien sur GitHub Pages. Au sens de la règle 6, le menu n'est **pas testé de bout en bout**.
-- **Règle 4 violée par `cartes`** : Gentle Gemdragon et Hwei restent avec une approximation assumée (« ready up to 2 runes » prépare toujours le maximum). La règle dit : jamais d'effet approximé, une carte bloquée vaut mieux. À trancher (modéliser, ou bloquer).
+- **Gentle Gemdragon et Hwei** : l'audit les signalait comme approximation (« ready up to 2 runes » prépare toujours le maximum). L'utilisateur a tranché le 2026-10-08 : c'est le bon comportement (le maximum possible jusqu'à 2, rien si tout est prêt). Ce n'était donc pas une violation de la règle 4 ; cas limites testés.
 - **Chiffres de simulation** : le moteur a changé (listes de choix, Fae Dragon). Aucun chiffre d'avant n'est comparable ; effet sur le niveau de l'IA non mesuré.
 
 ## Biais et erreurs du chef

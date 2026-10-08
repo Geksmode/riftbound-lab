@@ -137,6 +137,30 @@ def gemdragon_ready_at_most_two_runes():
     assert ex == max(0, spec["e"] + spec["p"] - 2), (ex, spec["e"], spec["p"])
 
 
+
+# Décision de l'utilisateur (2026-10-08) pour Gentle Gemdragon et Hwei : « ready up to 2 runes » = on prépare le maximum
+# possible jusqu'à 2 ; si toutes les runes sont déjà prêtes, on ne prépare rien (et la partie continue).
+@T.test
+def gemdragon_ready_runes_edge_cases():
+    from cardsets.body import _ready_runes
+    for exhausted, expected in ((0, 0), (1, 1), (3, 2)):
+        g, _ = new()
+        runes(g, 0, ["Body"] * 6)
+        for r in g.p[0].runes[:exhausted]:
+            r.exhausted = True
+        assert _ready_runes(g, 0, 2) == expected, (exhausted, expected)
+        assert sum(1 for r in g.p[0].runes if r.exhausted) == exhausted - expected
+
+
+@T.test
+def gemdragon_triggers_on_another_dragon():
+    g, _ = new()
+    runes(g, 0, ["Body"] * 12)
+    put(g, 0, "Gentle Gemdragon")
+    play_unit(g, "Dune Drake")
+    spec = SPEC["Dune Drake"]
+    assert sum(1 for r in g.p[0].runes if r.exhausted) == max(0, spec["e"] + spec["p"] - 2)
+
 # Albus Ferros (order): "spend any number of buffs. For each buff spent, channel 1 rune exhausted."
 @T.test
 def albus_zero_buffs():
