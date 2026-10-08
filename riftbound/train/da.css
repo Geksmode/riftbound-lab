@@ -1,0 +1,175 @@
+/* Direction artistique « Riftbound Lab — DA » (maquette Claude Design, 2026-10-08) : papier clair, encre marine,
+   un accent néon, couleurs de domaine franches + douces, contours encre de 1,5 px et ombre pleine qui s'écrase à la
+   pression. Bricolage Grotesque (titres, chiffres), Instrument Sans (texte), Geist Mono (journal, compteurs).
+   Couche appliquée APRÈS base.css et le style de la table : elle ne change que l'apparence. */
+:root {
+  color-scheme: light;
+  --paper: #F1F3F6; --surface: #FFFFFF; --trait: #DADDE5; --ink: #15172B; --ink-2: #3A3D5C; --ink-3: #5A5E78;
+  --neon: #CFF26E; --focus: #2F7BF5; --mute: #A9ADC4; --felt-da: #E7EAF0;
+  --chrome: var(--paper); --chrome-2: var(--surface); --line: var(--trait);
+  --felt: var(--felt-da); --zone: var(--surface); --zone-line: var(--trait);
+  --brass: var(--focus); --active: #F0533A;
+  --akali: #1FA97A; --akali-bg: #D6F4E7; --leblanc: #8A55F0; --leblanc-bg: #EBDFFF;
+  --fury: #F0533A; --calm: #1FA97A; --mind: #2F7BF5; --body: #F28A1E; --chaos: #8A55F0; --order: #D9A90F;
+  --fury-s: #FFE1DA; --calm-s: #D6F4E7; --mind-s: #DCE9FF; --body-s: #FFE9D1; --chaos-s: #EBDFFF; --order-s: #FFF3C4;
+  --warn: #9A6A00;
+  --f-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Geist Mono", ui-monospace, Consolas, monospace;
+  --press: 0 3px 0 var(--ink);
+}
+body, .menu { background: var(--paper) !important; color: var(--ink); }
+h1, h3, h4, .pt, .ft.big { font-family: var(--f-display); font-weight: 700; letter-spacing: -.01em; }
+.small, .label, .grp { color: var(--ink-3); }
+
+/* ---------- boutons : contour encre, ombre pleine, enfoncement à la pression */
+button { background: var(--surface); border: 1.5px solid var(--ink); border-radius: 12px; box-shadow: var(--press); color: var(--ink);
+  transition: transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow .16s; }
+button:hover { border-color: var(--ink); background: #F7F8FA; }
+button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
+button:disabled { box-shadow: none; border-style: dashed; border-color: var(--mute); color: var(--ink-3); background: var(--paper); }
+button:focus-visible, select:focus-visible, input:focus-visible, .card:focus-visible, [data-card]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.mull button, .mull.pick button, .hand button, button.card { box-shadow: none; border: 0; background: none; }
+select, input, .setup select, .setup input { background: var(--surface) !important; border: 1.5px solid var(--ink) !important; border-radius: 12px !important; color: var(--ink) !important; min-height: 40px; }
+
+/* boutons d'action principaux : néon */
+.endbtn, .big button.main, .prompt button.go, .mcard button.go, .dkact button.main, .mitem.hot, .prompt button.go:hover {
+  background: var(--neon) !important; border: 1.5px solid var(--ink) !important; color: var(--ink) !important; text-shadow: none !important;
+  box-shadow: var(--press) !important; animation: none !important; }
+.endbtn { font: 700 16px/1.2 var(--f-display); letter-spacing: 0; text-transform: none; border-radius: 14px; }
+.endbtn.pass, .endbtn:disabled { background: var(--surface) !important; color: var(--ink) !important; }
+.endbtn:disabled { box-shadow: none !important; border-style: dashed !important; border-color: var(--mute) !important; color: var(--ink-3) !important; }
+.prompt button.fight { background: var(--fury-s); border-color: var(--ink); color: var(--ink); }
+
+/* ---------- barre du haut, rail, panneau */
+.topbar #gmeta, .savechip, .step { background: var(--surface); border: 1.5px solid var(--trait); color: var(--ink-2); border-radius: 999px; }
+.tbtns button { background: var(--surface); border: 1.5px solid var(--ink); border-radius: 999px; box-shadow: 0 2px 0 var(--ink); font-weight: 600; }
+.tbtns button b { background: var(--neon); color: var(--ink); border: 1px solid var(--ink); }
+.savechip.ok { color: var(--akali); border-color: var(--akali); }
+.netchip.off, .mstat.err, .dkst.ko, .sbstat.ko, .dkban, .dkr .nm i { color: #C2412D !important; }
+.mchip { border: 1.5px solid var(--ink); color: var(--ink); background: var(--neon); }
+.rail { background: var(--surface); border: 0; border-radius: 18px; }
+.box, .panel .box, .act, .zoom, .ctrlcol { background: var(--surface); border: 0; border-radius: 18px; color: var(--ink); }
+.panel.drawer { background: var(--surface) !important; -webkit-backdrop-filter: none; backdrop-filter: none; border-left: 1.5px solid var(--ink); box-shadow: -8px 0 0 rgba(21,23,43,.08); }
+.zoom { border: 1.5px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+.log div:hover, .log div.cur, .chain div { background: var(--paper); }
+.log div.cur { color: var(--ink); box-shadow: inset 3px 0 0 var(--focus); }
+.log, .chain, .events, .hintrow .v { font-family: var(--f-mono); }
+.shead .st { background: var(--paper); color: var(--ink-2); }
+.shead .st.on, .sdtag { background: var(--ink); color: var(--neon); border-radius: 999px; padding: 1px 8px; }
+.step i { background: var(--paper); color: var(--ink); }
+.step.on { border-color: var(--ink); color: var(--ink); } .step.on i { background: var(--neon); color: var(--ink); }
+.step.ok i { background: var(--akali); color: #fff; }
+.ailine { color: var(--leblanc); }
+.think i { background: var(--leblanc); }
+details.diag pre { background: var(--paper); border: 1px solid var(--trait); color: var(--ink); }
+.hintrow.best .v { color: var(--akali); font-weight: 600; }
+
+/* ---------- plateau : tapis gris clair, zones blanches, champs de bataille arrondis */
+.boardgrid { background: var(--felt-da) !important; border: 0 !important; border-radius: 22px; box-shadow: none !important; }
+.zone { background: var(--surface) !important; border: 1.5px solid var(--trait) !important; border-radius: 16px !important; }
+.bf { background: var(--surface) !important; border: 1.5px solid var(--trait) !important; border-radius: 22px !important; overflow: hidden; }
+.bf.c0 { border-color: var(--akali) !important; background: var(--calm-s) !important; }
+.bf.c1 { border-color: var(--leblanc) !important; background: var(--chaos-s) !important; }
+.bf .mid { background: var(--paper) !important; border-block: 1.5px solid var(--trait); }
+.bf .bname { font-family: var(--f-display); font-weight: 700; color: var(--ink); }
+.bf.sd { border-color: var(--ink) !important; box-shadow: 0 0 0 3px var(--neon), 0 4px 0 var(--ink) !important; }
+.bfcard { border: 1.5px solid var(--ink); border-radius: 8px; }
+.ctrl { border-radius: 999px; padding: 1px 9px; font-weight: 600; }
+.ctrl.n { background: var(--paper); color: var(--ink-3); }
+.ctrl.c0 { background: var(--akali); color: #fff; } .ctrl.c1 { background: var(--leblanc); color: #fff; }
+.half.active { box-shadow: 0 0 0 2px var(--ink), 0 0 0 5px var(--neon) !important; border-radius: 18px; }
+.stackcol { border: 1.5px dashed var(--mute) !important; background: var(--surface) !important; border-radius: 18px !important; }
+.score { background: var(--paper); color: var(--ink); font-family: var(--f-display); font-weight: 800; border-radius: 12px; }
+.who-hand { color: var(--ink-2); font-weight: 600; }
+.hand.rv .rvtag { color: var(--warn); }
+.hand.top.rv { outline: 2px dashed var(--order); outline-offset: 3px; border-radius: 14px; background: var(--order-s); }
+
+/* piste des points */
+.trk span { background: var(--surface); border: 1.5px solid var(--trait); color: var(--ink-3); font-family: var(--f-display); font-weight: 700; }
+.trk.p0 span.on { background: var(--neon); color: var(--ink); border-color: var(--ink); box-shadow: 0 2px 0 var(--ink); }
+.trk.p1 span.on { background: var(--leblanc); color: #fff; border-color: var(--ink); box-shadow: 0 2px 0 var(--ink); }
+
+/* ---------- cartes */
+.card { border: 1.5px solid var(--ink); border-radius: 7px; box-shadow: 0 2px 0 var(--ink); background-color: var(--mind-s); }
+.card.noimg { background: var(--surface); color: var(--ink); }
+.card.back { background: repeating-linear-gradient(45deg, var(--ink), var(--ink) 5px, #2A2D4A 5px, #2A2D4A 10px); border-color: var(--ink); }
+.card.can { box-shadow: 0 0 0 2px var(--ink), 0 0 0 5px var(--neon) !important; }
+.card.sel, .card.isel, .card.grp-sel, .card.hl { box-shadow: 0 0 0 3px var(--focus), 0 6px 0 -1px var(--ink) !important; }
+.card.drop-ok { box-shadow: 0 0 0 3px var(--focus), 0 0 0 7px rgba(47,123,245,.25) !important; }
+.card.picked { box-shadow: 0 0 0 3px var(--active), 0 4px 0 var(--ink) !important; }
+.mt, .cost { background: var(--surface); border: 1.5px solid var(--ink); color: var(--ink); font-family: var(--f-display); font-weight: 800; border-radius: 8px; }
+.mt.up { background: var(--neon); color: var(--ink); } .mt.dn { background: var(--fury-s); color: #9A3A28; }
+.dmg { background: var(--fury); color: #fff; border: 1.5px solid var(--ink); font-weight: 600; }
+.tags b { background: var(--ink); color: var(--neon); border-radius: 4px; }
+.gear { background: rgba(255,255,255,.94); color: var(--ink); border: 1px solid var(--ink); }
+.sitem.c0 .card { border-color: var(--ink); box-shadow: 0 0 0 3px var(--akali), 0 4px 0 var(--ink); }
+.sitem.c1 .card { border-color: var(--ink); box-shadow: 0 0 0 3px var(--leblanc), 0 4px 0 var(--ink); }
+.ghost { box-shadow: 0 10px 0 -2px var(--ink) !important; }
+.pl { border: 1.5px solid var(--ink); border-radius: 7px; box-shadow: 0 2px 0 var(--ink); background-color: var(--surface); }
+.pl.deck { background: repeating-linear-gradient(45deg, var(--ink), var(--ink) 5px, #2A2D4A 5px, #2A2D4A 10px); border-color: var(--ink); }
+.pl.trash.empty { background: var(--paper); border: 1.5px dashed var(--mute); box-shadow: none; }
+.pl span { background: var(--surface); border: 1.5px solid var(--ink); color: var(--ink); font-family: var(--f-display); font-weight: 700; }
+
+/* runes : teinte douce + contour franc du domaine (classe posée par le rendu via la variable de couleur) */
+.rune { border: 1.5px solid var(--ink); border-radius: 9px; font-family: var(--f-display); font-weight: 800; color: #fff; box-shadow: 0 2px 0 var(--ink); }
+.runeslot.x .rune { opacity: .4; box-shadow: none; border-style: dashed; }
+.floatpool .fl-e { background: var(--order-s); border: 1.5px solid var(--order); color: var(--ink); box-shadow: none; }
+.floatpool .fl-pw { background: var(--surface); border: 1.5px solid var(--trait); color: var(--ink); }
+
+/* ---------- bulles, menus, modales : surfaces blanches, plus de verre ni de flou */
+.prompt, .pop, .toast { background: var(--surface) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  border: 1.5px solid var(--ink) !important; border-radius: 18px !important; box-shadow: 0 4px 0 var(--ink) !important; color: var(--ink); }
+.toast.flash { border-color: var(--active) !important; color: #9A3A28; }
+.pop button, .prompt button { min-height: 44px; }
+.modal { background: rgba(21,23,43,.45); }
+.mitem { background: var(--surface); border: 1.5px solid var(--ink); border-radius: 18px; box-shadow: var(--press); color: var(--ink); }
+.mitem:hover, .mitem:focus-visible { background: #F7F8FA; border-color: var(--ink); }
+.mitem span.d, .mitem.hot span.d { color: var(--ink-2) !important; }
+.mcard, .prep { background: var(--surface); border: 1.5px solid var(--trait); border-radius: 18px; color: var(--ink); }
+.mcard.warn { border-color: var(--order); background: var(--order-s); color: var(--ink); }
+.seg button[aria-checked="true"], .choices button[aria-pressed="true"], .dkto button[aria-pressed="true"] { background: var(--neon); border-color: var(--ink); color: var(--ink); box-shadow: var(--press); }
+.ctrlrow button { background: var(--surface); border-color: var(--ink); }
+
+/* ---------- éditeur de deck */
+.dkimg, .zspr, .bfth { background-color: #E3E5EC; box-shadow: none; border: 1.5px solid var(--ink); }
+.dkn { background: var(--neon); color: var(--ink); border: 1.5px solid var(--ink); }
+.dkst.ok, .sbstat.ok { color: var(--akali); }
+.dkr:hover, .sbr.on { background: var(--paper); }
+.dd.on { background: var(--surface); box-shadow: inset 0 0 0 2px var(--c); }
+.sbbar { background: var(--surface); border-top: 1.5px solid var(--trait); }
+
+@media (max-width: 999px) {
+  .ctrlcol { background: var(--surface) !important; border-top: 1.5px solid var(--ink) !important; box-shadow: 0 -4px 0 rgba(21,23,43,.06); }
+}
+@media (prefers-reduced-motion: reduce) { button { transition: none; } }
+
+/* ---------- titres en encre, logo de la DA, entrées du menu avec pastille de couleur */
+.topbar h1, .mhead h1, .mbox h3, .pop .pt { color: var(--ink) !important; font-weight: 800; letter-spacing: -.02em; }
+.mhead h1 { font-size: clamp(30px, 7vw, 48px); }
+.topbar h1::before, .mhead h1::before { content: ""; display: inline-block; width: 1.1em; height: 1.1em; margin-right: .35em; vertical-align: -.2em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='4' y='10' width='30' height='34' rx='9' fill='%2315172B'/%3E%3Crect x='18' y='6' width='30' height='34' rx='9' fill='%23CFF26E' stroke='%2315172B' stroke-width='2.5'/%3E%3Cpath d='M28 14 L36 23 L30 23 L36 32' fill='none' stroke='%2315172B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+.mitem b { font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+.mitem .ic { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; background: var(--mind-s); color: var(--mind); }
+.mitem:nth-of-type(2) .ic { background: var(--fury-s); color: var(--fury); }
+.mitem:nth-of-type(3) .ic { background: var(--chaos-s); color: var(--chaos); }
+.mitem:nth-of-type(4) .ic { background: var(--order-s); color: #8A6A00; }
+.mitem:nth-of-type(5) .ic { background: var(--calm-s); color: var(--calm); }
+.mitem:nth-of-type(6) .ic { background: var(--body-s); color: #A85A0F; }
+.mitem.hot .ic { background: var(--surface); color: var(--ink); border: 1.5px solid var(--ink); }
+.mbox { background: var(--surface) !important; border: 1.5px solid var(--ink) !important; border-radius: 22px !important; box-shadow: 0 6px 0 var(--ink); }
+.modal { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.linkb { background: none !important; border: 0 !important; box-shadow: none !important; padding: 4px 0; color: var(--ink) !important; text-decoration: underline; text-underline-offset: 4px; font-weight: 600; }
+.linkb:active { transform: none; }
+.roomlink { background: var(--paper); border: 1.5px solid var(--trait); color: var(--ink-2); }
+.half { border-color: transparent !important; }
+.half.active { border-color: var(--ink) !important; box-shadow: 0 0 0 3px var(--neon) !important; }
+
+/* titres et repères en encre (l'ancien laiton servait de couleur de titre) */
+.drawer .dh h3, .dkbar h2, .dkh, .msub h2, .mhelp b, .mscore, .sbr .q i { color: var(--ink) !important; font-weight: 700; }
+.dkh { border-bottom: 1.5px solid var(--trait); padding-bottom: 2px; }
+.pop button.tg { border-color: var(--ink); color: var(--ink); background: var(--mind-s); }
+.hpop, .roombox { border-color: var(--ink) !important; }
+.trk span.goal { border-color: var(--ink); color: var(--ink); background: var(--neon); }
+.dd { border: 1.5px solid var(--trait); box-shadow: none; }
+.dd.on { border-color: var(--ink); box-shadow: 0 2px 0 var(--ink), inset 0 -4px 0 var(--c); }

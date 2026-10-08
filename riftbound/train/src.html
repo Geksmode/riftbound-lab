@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Riftbound Entraînement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /*BASE_CSS*/
 /* Table d'entraînement : même tapis que le lecteur de replays ; à droite, le panneau d'action (ce que tu peux faire), le conseil
@@ -355,6 +355,7 @@ body.dkopen { overflow: hidden; }
 #pReady { text-align: left; }
 .sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
 @media (max-width: 820px) { .mchip { order: 3; } }
+/*DA_CSS*/
 </style>
 
 <div class="shell">
@@ -1425,7 +1426,7 @@ function arrow(a, b, who, dashed) {
   const [x1, y1] = a, [x2, y2] = b, dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
   const ex = x2 - dx / L * 14, ey = y2 - dy / L * 14, bend = Math.min(80, L / 4);
   const cx = (x1 + ex) / 2 - dy / L * bend, cy = (y1 + ey) / 2 + dx / L * bend;
-  const col = who === 0 ? "#3fc3a3" : "#b58cf0";
+  const col = who === 0 ? "#1FA97A" : "#8A55F0";   // couleurs joueur de la DA (da.css)
   return `<path d="M${x1},${y1} Q${cx},${cy} ${ex},${ey}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" ${dashed ? 'stroke-dasharray="7 6"' : ""} marker-end="url(#ah${who === 0 ? "A" : "L"})" opacity=".9"/>`;
 }
 function drawArrows(px, py) {
