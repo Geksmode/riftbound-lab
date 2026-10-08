@@ -177,7 +177,8 @@ def snap(g):
             deck=len(p.deck), trash=[c.cname for c in p.trash],
             runes=[(r.domain[:2] + ("x" if r.exhausted else "")) for r in p.runes], rdeck=len(p.rune_deck),
             leg=dict(n=p.legend_name, x=1 if p.legend.exhausted else 0, e=1 if p.legend.empowered else 0),
-            base=locs["base"][i], gear=loose_gear[i], xp=p.xp, pe=p.pool_e))
+            base=locs["base"][i], gear=loose_gear[i], xp=p.xp, pe=p.pool_e,
+            pp={d: n for d, n in sorted(p.pool_p.items()) if n}))   # Rune Pool : énergie et puissance flottantes
     st["p"] = pl
     st["bfs"] = [dict(n=b.name, c=b.ctrl, fd=(None if b.facedown is None else [b.facedown.owner, b.facedown.cname]),
                       u=locs[b.idx]) for b in g.bfs]

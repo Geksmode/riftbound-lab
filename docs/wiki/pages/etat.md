@@ -18,6 +18,8 @@ sources: docs/REPRISE.md, git log, CI
 
 **Corrigé le 2026-10-08** : bug `tg2` du Repeat accordé (test `granted_repeat_never_reuses_printed_repeat_variant`) ; lien Replays du menu (`build.sh` publie `replays.html` + `games/`) ; bulle de fin de partie au-dessus de la barre à 360 px ; boutons ± de l'éditeur à 44 px. Vérifié par `train/verif_mobile.mjs` (Chromium, 360×740, partie jouée jusqu'au bout, coups injectés).
 
+**Énergie flottante (2026-10-08)** : le moteur épuise une rune prête avant de la recycler (Punch First en 1re carte : 1 énergie flotte, test `cardsets/test_energie_flottante.py`) ; la table affiche un badge « ⚡ N énergie flottante » et la puissance flottante par domaine dans la zone des runes. Vérifié dans Chromium 360×740 sur une partie réelle (graine 0, deck Sivir avec Punch First, coups injectés).
+
 **Décision en attente** : branchement de `plans_general` dans `train.py`.
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**

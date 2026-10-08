@@ -37,3 +37,6 @@ Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons
 
 ## [2026-10-08] ingest | Tests générés depuis le texte des cartes
 `cardsets/test_texte_auto.py` : 233 sorts et 15 unités contrôlés automatiquement ; 8 faux positifs du classement expliqués ; Deathgrip à trancher.
+
+## [2026-10-08] ingest | Indicateur d'énergie flottante
+Badge dans la zone des runes de la table, puissance flottante exportée (`replay.snap` : `pp`) ; test Punch First.
