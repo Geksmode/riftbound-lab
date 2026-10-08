@@ -7,6 +7,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 |---|---|
 | savoir où en est le projet | [pages/etat.md](pages/etat.md) |
 | trouver un fichier, lancer tests ou build | [pages/depot.md](pages/depot.md) |
+| intégrer une branche, vérifier avant de pousser | [pages/porte.md](pages/porte.md) |
 | modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md) |
 | travailler sur l'IA ou les plans | [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [replays après chaque sim](../memoire/replays-after-every-sim.md), [manager](../memoire/riftbound-manager.md) |
@@ -20,6 +21,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Carte du dépôt et commandes](pages/depot.md) : dossiers, tests, build
 - [Équipe d'agents](pages/equipe.md) : chef, agents tmux, intégration
 - [Publication de la table](pages/publication.md) : Pages, artefact, pièges
+- [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI
 
 ## Mémoire des agents (`docs/memoire/`, index [MEMORY.md](../memoire/MEMORY.md))
 Un fait par fichier : sources, objectif, Akali vs LeBlanc et Yi, moteur, decklists, plans, retex, manager, replays, table, éditeur de deck.

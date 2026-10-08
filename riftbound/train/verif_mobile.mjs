@@ -1,8 +1,11 @@
-import { chromium } from "/opt/node22/lib/node_modules/playwright/index.mjs";
+import { existsSync } from "node:fs";
+// Playwright : celui de l'environnement cloud Claude, sinon le paquet npm « playwright » (CI).
+const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
+const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
 // Robot de vérification de la table au format téléphone (Playwright, Chromium de /opt/pw-browsers).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_mobile.mjs <dossier des captures> [port]
 const OUT = process.argv[2] || ".", PORT = process.argv[3] || "8771", W = 360, H = 740;
-const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
+const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHROME) ? { executablePath: process.env.CHROME_PATH || LOCAL_CHROME } : {});
 const ctx = await b.newContext({ viewport: { width: W, height: H }, isMobile: true, hasTouch: true });
 const pg = await ctx.newPage(); const errs = []; pg.on("pageerror", e => errs.push(String(e)));
 const ok = (n, v) => console.log((v ? "OK   " : "ÉCHEC") + " " + n);
@@ -48,3 +51,4 @@ ok("éditeur : pas de défilement horizontal", hs);
 await pg.screenshot({ path: OUT + "/editeur-360.png" });
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
 await b.close();
+process.exitCode = errs.length ? 1 : 0;

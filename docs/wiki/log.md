@@ -28,3 +28,6 @@ Le maximum possible jusqu'à 2, rien si toutes les runes sont prêtes (décision
 
 ## [2026-10-08] ingest | Problèmes connus corrigés
 Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons ± de l'éditeur ; robot `train/verif_mobile.mjs`.
+
+## [2026-10-08] ingest | Porte d'intégration
+`scripts/verifier.sh` (wiki, tests, fuzz, parties aléatoires, build, robot navigateur), branchée dans la CI. Page `pages/porte.md`.

@@ -34,7 +34,7 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
   d'itération d'un `set` qui compte (`sorted()`) : même graine = même partie. Une carte = une entrée `card(nom, ...)`
   avec au moins un test ; les numéros de règle sont cités en commentaire.
-- Après une modification du moteur : `test_all.py`, `fuzz_cards.py` sur les paquets touchés, 30 parties `t_rand.py`,
-  puis la table dans un navigateur avant de publier (commandes et carte du dépôt : `docs/wiki/pages/depot.md`).
+- Avant d'intégrer ou de publier : `scripts/verifier.sh` doit être vert (tests, fuzz de chaque paquet, parties aléatoires,
+  build et partie jouée dans un navigateur ; `docs/wiki/pages/porte.md`). Commandes et carte du dépôt : `docs/wiki/pages/depot.md`.
 - Les résultats de simulation d'avant le 2026-10-06 sont périmés (énergie flottante) : les remesurer avant de les citer.
 - Travail en équipe (chef + agents tmux) : `docs/wiki/pages/equipe.md`, missions : `docs/MISSIONS.md`.
