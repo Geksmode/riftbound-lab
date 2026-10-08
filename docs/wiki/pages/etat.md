@@ -20,6 +20,8 @@ sources: docs/REPRISE.md, git log, CI
 
 **Énergie flottante (2026-10-08)** : le moteur épuise une rune prête avant de la recycler (Punch First en 1re carte : 1 énergie flotte, test `cardsets/test_energie_flottante.py`) ; la table affiche un badge « ⚡ N énergie flottante » et la puissance flottante par domaine dans la zone des runes. Vérifié dans Chromium 360×740 sur une partie réelle (graine 0, deck Sivir avec Punch First, coups injectés).
 
+**Dégâts de combat (2026-10-08)** : à la fin d'un showdown de combat, le joueur humain choisit une à une l'unité qui reçoit ses dégâts mortels (465.2.c.3), parmi celles que les règles permettent (Tank d'abord 815, Backline en dernier 826), excédent sur la dernière (465.2.c.4) ; l'IA garde son ordre. Tests `cardsets/test_degats_combat.py` ; vérifié dans Chromium 1400×900 sur une partie réelle (graine 0) : clic sur l'unité puis Valider.
+
 **Décision en attente** : branchement de `plans_general` dans `train.py`.
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**

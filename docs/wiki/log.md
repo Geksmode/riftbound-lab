@@ -43,3 +43,6 @@ Badge dans la zone des runes de la table, puissance flottante exportée (`replay
 
 ## [2026-10-08] decision | Règles au plus près ; Deathgrip
 Nouvelle règle permanente 6 de `CLAUDE.md` : en cas de doute, la lecture la plus fidèle aux Core Rules. Deathgrip : deux cibles alliées obligatoires (355.8).
+
+## [2026-10-08] ingest | Assignation des dégâts de combat par le joueur
+`game.assign_by_hand` : question « damage_pick » dans la table ; règles 465.2.c, 815, 826.
