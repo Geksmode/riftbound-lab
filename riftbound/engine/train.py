@@ -121,10 +121,10 @@ def _deck(x, default):
         raise ValueError("Deck invalide : " + " ; ".join(err))
     return dict(legend=d["legend"], champion=d["champion"], main=list(d["main"]),
                 runes=[r.replace(" Rune", "") for r in d["runes"]], battlefields=list(d["battlefields"]),
-                battlefield=d["battlefields"][0], sideboard=[], key=d.get("name") or "perso")
+                battlefield=d["battlefields"][0], sideboard=list(d.get("sideboard") or []), key=d.get("name") or "perso")
 
 
-def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None):
+def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     seed = random.randrange(10 ** 6) if seed is None else int(seed)
     Obj._n = 0
     Item._n = 0
@@ -132,7 +132,7 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None):
     f = r.randrange(2) if first is None else int(first)
     MD, OD = _deck(mine, G2), _deck(opp, L)
     pa, pl = _plan_for(MD), _plan_for(OD)
-    lbf = pl.battlefield(OD, f == 1) or r.choice(OD["battlefields"])
+    lbf = obf if obf in OD["battlefields"] else (pl.battlefield(OD, f == 1) or r.choice(OD["battlefields"]))
     abf = bf if bf in MD["battlefields"] else (pa.battlefield(MD, f == 0, lbf) or r.choice(MD["battlefields"]))
     A, B = with_bf(MD, abf), with_bf(OD, lbf)
     names = [_short(A), _short(B)]
@@ -148,6 +148,50 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None):
     return json.dumps(dict(seed=seed, first=f, bf=[abf, lbf], battlefields=MD["battlefields"], names=names,
                            decks=[dict(legend=x["legend"], champion=x.get("champion"), main=sorted(set(x["main"])))
                                   for x in (A, B)]))
+
+
+# ------------------------------------------------------------------ match BO1 / BO3 (voir match.py)
+def match_new(mode, seed=None, mine=None, opp=None):
+    """Nouveau match : état JSON à garder par la page et à repasser aux fonctions suivantes."""
+    import match as _m
+    seed = random.randrange(10 ** 6) if seed in (None, "") else int(seed)
+    MD, OD = _deck(mine, G2), _deck(opp, L)
+    st = _m.new(mode, seed, [MD["battlefields"], OD["battlefields"]])
+    return json.dumps(st)
+
+
+def match_next(state, mine=None, opp=None, human_bf=None):
+    """Prépare la manche suivante : qui choisit le premier joueur, choix de l'IA, battlefields permis, sideboard permis.
+    Le battlefield de l'IA est choisi sans connaître celui du joueur ; la page ne l'affiche qu'au lancement."""
+    import match as _m
+    st = json.loads(state)
+    MD, OD = _deck(mine, G2), _deck(opp, L)
+    ch = _m.chooser(st)
+    first = _m.forced_first(st)
+    if first is None and ch == _m.AI:
+        first = _m.ai_first(st)
+    pl = _plan_for(OD)
+    bfs = _m.pick_bfs(st, lambda ok: (lambda b: b if b in ok else None)(pl.battlefield(dict(OD, battlefields=ok), first == 1)),
+                      human_bf)
+    return json.dumps(dict(game=_m.game_no(st), chooser=ch, first=first, roll=st["roll"] if _m.game_no(st) == 1 else None,
+                           allowed=_m.allowed_bfs(st, 0), ai_bf=bfs[1], human_bf=bfs[0] if st["mode"] == "bo1" else None,
+                           sideboard=_m.can_sideboard(st), seed=_m.seed_of(st), wins=st["wins"], over=_m.over(st)))
+
+
+def match_record(state, first, bfs, win):
+    import match as _m
+    st = _m.record(json.loads(state), int(first), json.loads(bfs) if isinstance(bfs, str) else bfs, int(win))
+    return json.dumps(dict(st, over=_m.over(st), winner=_m.winner(st)))
+
+
+def match_swap(deck, out_cards, in_cards, champion=None):
+    """Sideboarding entre deux manches (403.4, 601.1.c.4) ; renvoie le deck modifié, validé."""
+    import match as _m
+    d = _m.sideboard_swap(json.loads(deck), json.loads(out_cards), json.loads(in_cards), champion or None)
+    err = [e for e in validate(d) if not e.startswith("⚠")]
+    if err:
+        raise ValueError("Deck invalide après sideboard : " + " ; ".join(err))
+    return json.dumps(d)
 
 
 # ------------------------------------------------------------------ éditeur de deck
@@ -177,7 +221,8 @@ def catalog():
 
 def _export(d):
     return dict(legend=d["legend"], champion=d.get("champion"), main=list(d["main"]),
-                runes=[r if r.endswith(" Rune") else r + " Rune" for r in d["runes"]], battlefields=list(d["battlefields"]))
+                runes=[r if r.endswith(" Rune") else r + " Rune" for r in d["runes"]], battlefields=list(d["battlefields"]),
+                sideboard=list(d.get("sideboard") or []))
 
 
 def validate(d):
@@ -188,6 +233,7 @@ def validate(d):
     err = []
     lg, ch = d.get("legend"), d.get("champion")
     main, runes, bfs = list(d.get("main") or []), list(d.get("runes") or []), list(d.get("battlefields") or [])
+    side = list(d.get("sideboard") or [])
     if not lg or S.get(lg, {}).get("type") != "Legend":
         err.append("choisis une légende")
         ident = set()
@@ -201,21 +247,26 @@ def validate(d):
     if len(main) + (1 if ch else 0) < 40:
         err.append(f"deck principal : {len(main) + (1 if ch else 0)}/40 cartes (champion compris)")
     cnt = Counter(main + ([ch] if ch else []))
-    for n, q in sorted(cnt.items()):
+    # sideboard (règles de tournoi 601.1.c) : 10 cartes au plus, seulement des cartes valides pour le Main Deck, limites
+    # d'exemplaires sur Main Deck + sideboard
+    if len(side) > 10:
+        err.append(f"sideboard : {len(side)}/10 cartes au plus")
+    tot = cnt + Counter(side)
+    for n, q in sorted(tot.items()):
         if q > 3:
-            err.append(f"{n} : {q} exemplaires (3 au plus)")
+            err.append(f"{n} : {q} exemplaires (3 au plus, sideboard compris)" if n in side else f"{n} : {q} exemplaires (3 au plus)")
         if "Unique" in (S.get(n, {}).get("text") or "") and q > 1:
             err.append(f"{n} est Unique : 1 exemplaire au plus")
     sig = sum(q for n, q in cnt.items() if S.get(n, {}).get("super") == "Signature")
     if sig > 3:
         err.append(f"{sig} cartes Signature (3 au plus)")
     if lg and ident:
-        for n in sorted(cnt):
+        for n in sorted(set(cnt) | set(side)):
             if n not in S:
                 err.append(f"carte inconnue : {n}")
                 continue
             if S[n]["type"] in ("Rune", "Battlefield", "Legend"):
-                err.append(f"{n} ne va pas dans le deck principal")
+                err.append(f"{n} ne va pas dans le deck principal" + (" ni dans le sideboard" if n in side else ""))
             if not set(S[n]["domains"]) <= ident:
                 err.append(f"{n} est hors des domaines de la légende")
             if S[n]["super"] == "Signature" and not (S[n]["tags"] & ltags):
@@ -231,10 +282,10 @@ def validate(d):
     for b in bfs:
         if S.get(b, {}).get("type") != "Battlefield":
             err.append(f"{b} n'est pas un battlefield")
-    todo = sorted(n for n in set(cnt) | set(bfs) | ({lg} if lg else set()) if n in S and n not in _cards.IMPL)
+    todo = sorted(n for n in set(cnt) | set(side) | set(bfs) | ({lg} if lg else set()) if n in S and n not in _cards.IMPL)
     if todo:
         err.append("pas encore modélisées : " + ", ".join(todo))
-    banned = sorted(n for n in set(cnt) | set(bfs) | ({lg} if lg else set()) if n in S and _BAN.get(n))
+    banned = sorted(n for n in set(cnt) | set(side) | set(bfs) | ({lg} if lg else set()) if n in S and _BAN.get(n))
     if banned:
         err.append("⚠ bannies en Standard : " + ", ".join(banned))
     return err
