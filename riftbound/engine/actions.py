@@ -427,6 +427,9 @@ def full_choices(g, pid=None):
     return pid is not None and bool(ags) and bool(getattr(ags[pid], "every_choice", False))
 
 
+REPEAT_KEYS = ("rep", "reps", "rep2", "sq", "tg2")
+
+
 def spell_variants(g, pid, card, im, base, ctx, every=False):
     """A spell's choices with its optional Repeat costs: the printed [Repeat] (choice rep=True, the repetition's
     targets in tg2) and each granted Repeat instance (rule 820.1.c.2: choice reps=(repetition choice,))."""
@@ -439,6 +442,10 @@ def spell_variants(g, pid, card, im, base, ctx, every=False):
             second = im.all_choices(g, pid, ctx) or [{}]
         else:
             second = (im.choices(g, pid, ctx) if im.choices else None) or [{}]
+        # A repetition uses the spell's base choices: a choice that already carries a repetition (printed Repeat
+        # coded in the choices, e.g. Temptation rep2/tg2, Square Up sq/tg2) would repeat again without its cost
+        # paid (rule 820.1.c.2).
+        second = [c for c in second if not any(c.get(k) for k in REPEAT_KEYS)] or [{}]
     for ch in base:
         out.append(ch)
         if im.repeat:                              # Repeat can be paid with a Flow play too

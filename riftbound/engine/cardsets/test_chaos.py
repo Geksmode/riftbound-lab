@@ -1401,6 +1401,27 @@ def syndra_transcendent_grants_repeat_in_showdowns():
     assert chs and total_cost(g, 0, c, chs[0], "hand") == (e0 + 2, r0 + [CH])
 
 
+
+# Repeat accordé (Syndra) sur une carte qui code son propre Repeat dans ses choix (Temptation : rep2 / tg2) :
+# la répétition reprend un choix de base, jamais une variante qui contient déjà une répétition (son coût n'a pas
+# été payé, règle 820.1.c.2). Avant correctif : TypeError « multiple values for keyword argument 'tg2' ».
+@T.test
+def granted_repeat_never_reuses_printed_repeat_variant():
+    g, _ = N()
+    R(g, 0, 12)
+    put(g, 1, V3, 1); put(g, 1, V4); put(g, 1, V3)
+    g.effects.append(dict(kind="grant_repeat", pid=0, cost=lambda g_, card: (1, [])))   # un Repeat [1] accordé
+    c = hand(g, 0, "Temptation")
+    g.every_choice = True                                    # tous les choix, comme pour un joueur humain
+    chs = [ch for ch in card_choices(g, 0, c, "hand", False, False) if ch.get("reps")]
+    assert chs
+    for ch in chs:
+        for rc in ch["reps"]:
+            assert "tg2" not in rc and not rc.get("rep2") and not rc.get("rep"), rc
+    ch = next(ch for ch in chs if ch.get("rep2"))
+    g.apply(opt(g, 0, "Temptation", lambda x: x == ch))
+    settle(g)
+
 @T.test
 def kennen_storm_gives_flow_on_conquer():
     g, _ = N()
