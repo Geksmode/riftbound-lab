@@ -80,3 +80,6 @@ Maquette Claude Design (artefact https://claude.ai/artifact/3AHpJfntDdJdWSwxKH4r
 ## [2026-10-08] decision | DA « observatoire » (maquette mise à jour)
 L'utilisateur a changé la maquette : nuit étoilée #0E1230, clair de lune #EDEBFA, or d'étoile #F3D58A, domaines en lueurs, pilules sans ombre dure, Instrument Serif / Figtree / Geist Mono ; toi = menthe #72E2BC, l'adversaire = corail #FF8F7E (flèches comprises), sélection = halo bleu #93B9FF. `train/da.css` réécrit, apparence seulement.
 
+## [2026-10-08] ingest | Confort du plateau sur ordinateur
+Plateau en pleine largeur sur écran large (`fitBoard` élargit la grille, la hauteur fixe l'échelle), ta main en grand (100 x 140 avant échelle), main adverse en petits dos, bouton « Terminer le tour » compact, barre du haut sur une ligne, aide du bas retirée (Menu > Aide). Vérifié en 1900x905, 1366x768, 1024x700 et 390x844 (pas de défilement horizontal, 0 erreur JS) ; porte « table » verte.
+
