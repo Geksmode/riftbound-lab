@@ -83,3 +83,6 @@ L'utilisateur a changé la maquette : nuit étoilée #0E1230, clair de lune #EDE
 ## [2026-10-08] ingest | Confort du plateau sur ordinateur
 Plateau en pleine largeur sur écran large (`fitBoard` élargit la grille, la hauteur fixe l'échelle), ta main en grand (100 x 140 avant échelle), main adverse en petits dos, bouton « Terminer le tour » compact, barre du haut sur une ligne, aide du bas retirée (Menu > Aide). Vérifié en 1900x905, 1366x768, 1024x700 et 390x844 (pas de défilement horizontal, 0 erreur JS) ; porte « table » verte.
 
+## [2026-10-08] ingest | Fuite : l'annonce d'un cache de l'IA nommait la carte
+La bulle du coup adverse (IA ou ami en duel) utilisait `describe`, qui nomme la carte cachée (« cache Hidden Blade à Void Gate ») : `train._opp_describe` dit « cache une carte à … » et la flèche ne porte plus l'identifiant de la carte. Test `test_hidden_auto.the_table_never_names_the_card_the_opponent_hides` (parties réelles, échoue sans le correctif).
+

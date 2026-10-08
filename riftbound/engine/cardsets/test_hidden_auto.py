@@ -176,5 +176,36 @@ def switcheroo_two_units_with_the_same_might_for_a_human():
     assert a.uid not in {u for p in pairs for u in p}   # seule au battlefield 0
 
 
+@T.test
+def the_table_never_names_the_card_the_opponent_hides():
+    # 421/811 : une carte cachée est face cachée ; l'annonce du coup de l'IA dit « cache une carte à … », sans son nom
+    import json, train
+    seen = 0
+    for seed in range(1, 40):
+        train.new(seed, None, 0)
+        v = json.loads(train.step())
+        for _ in range(600):
+            while v.get("busy"):
+                v = json.loads(train.step())
+                ai = v.get("ai") or ""
+                if ai.startswith("cache "):
+                    seen += 1
+                    assert ai in [f"cache une carte à {b.name}" for b in train.W["g"].bfs], ai
+                    assert (v.get("aii") or {}).get("src") is None, v.get("aii")
+            if v.get("winner") is not None or seen >= 2:
+                break
+            if v.get("ask"):
+                v = json.loads(train.answer(json.dumps([] if v["ask"]["kind"] == "mulligan" else 0)))
+            elif v.get("dec"):
+                ops = v["dec"]["options"]
+                i = next((o["i"] for o in ops if o["k"] in ("end", "pass")), 0)
+                v = json.loads(train.act(i))
+            else:
+                v = json.loads(train.step())
+        if seen >= 2:
+            break
+    assert seen >= 1, "l'IA n'a caché aucune carte sur ces graines"
+
+
 if __name__ == "__main__":
     T.main()

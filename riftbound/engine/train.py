@@ -490,10 +490,22 @@ def _tick():
         return
     if d.player == AI and not DUEL:
         a = W["ag"][AI].decide(g, d)
-        W["last_ai"] = describe(g, a, AI) if a[0] not in ("pass",) else None
-        W["last_ai_info"] = dict(_info(a), k=a[0], src=_src(g, a)) if a[0] not in ("pass", "end") else None
+        W["last_ai"] = _opp_describe(g, a, AI) if a[0] not in ("pass",) else None
+        W["last_ai_info"] = _opp_info(g, a) if a[0] not in ("pass", "end") else None
         g.apply(a)
         W["d"] = None
+
+
+def _opp_describe(g, a, pid):
+    """Coup de l'adversaire (IA ou ami en duel) tel que tu le vois : une carte cachée reste secrète (421, 811)."""
+    if a[0] == "hide":
+        return f"cache une carte à {g.bfs[a[2]].name}"
+    return describe(g, a, pid)
+
+
+def _opp_info(g, a):
+    """Flèche du dernier coup adverse ; pour une carte cachée, ni son nom ni son identifiant."""
+    return dict(_info(a), k=a[0], src=None if a[0] == "hide" else _src(g, a))
 
 
 def step():
@@ -505,8 +517,8 @@ def act(i):
     d = W["d"]
     a = d.options[int(i)]
     if DUEL and d.player != ME:                         # coup de l'adversaire reçu : affiché comme les coups de l'IA
-        W["last_ai"] = describe(W["g"], a, d.player) if a[0] not in ("pass",) else None
-        W["last_ai_info"] = dict(_info(a), k=a[0], src=_src(W["g"], a)) if a[0] not in ("pass", "end") else None
+        W["last_ai"] = _opp_describe(W["g"], a, d.player) if a[0] not in ("pass",) else None
+        W["last_ai_info"] = _opp_info(W["g"], a) if a[0] not in ("pass", "end") else None
     h = W.setdefault("hist", [])
     if not DUEL:                                        # pas de « Reprendre » en duel : l'adversaire a déjà vu le coup
         h.append(_save())
