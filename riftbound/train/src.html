@@ -467,6 +467,26 @@ body.dkopen { overflow: hidden; }
   .main > .ctrlcol .ctrlrow button { min-height: 44px; padding: 6px 10px; }
   .main > .ctrlcol .stackcol { position: fixed; left: 8px; right: 8px; top: 92px; bottom: auto; margin: 0; max-height: 30vh; overflow-y: auto;
     flex-direction: column; flex-wrap: nowrap; background: rgba(21,26,62,.96) !important; }
+  /* Rangées qui ne défilent jamais : les cartes se resserrent (chevauchement) selon leur nombre --n et la largeur
+     disponible (unités de conteneur cqw / cqh) ; sur les champs de bataille, la taille des unités suit la hauteur. */
+  .half.p0 .hand, .zrow > .zone:nth-child(2), .zrow > .zone:nth-child(3) { container-type: inline-size; }
+  .half.p0 .hand > .card { margin-inline: 0 !important; --rot: 0deg !important; --lift: 0px !important; }
+  .half.p0 .hand > .card ~ .card { margin-left: min(4px, calc((100cqw - var(--n) * var(--cw)) / max(1, var(--n) - 1))) !important; }
+  .zrow > .zone:nth-child(3) { overflow: hidden !important; gap: 0; }
+  .zrow > .zone:nth-child(3) > .slot ~ .slot { margin-left: min(4px, calc((100cqw - (var(--n) - var(--nx, 0)) * var(--cw) - var(--nx, 0) * var(--chh)) / max(1, var(--n) - 1))); }
+  .zrow > .zone:nth-child(2) { gap: 0; }
+  .zrow > .zone:nth-child(2) > .runeslot ~ .runeslot { margin-left: min(3px, calc((100cqw - 124px - (var(--n) - var(--nx, 0)) * var(--rw) - var(--nx, 0) * var(--rh)) / max(1, var(--n) - 1))); }
+  .res-line { font-size: 9px; gap: 4px; flex: none; }
+  .bf .side { container-type: size; flex-wrap: nowrap; gap: 0; padding: 3px; overflow: hidden; }
+  .bf .side > .slot { --chh: clamp(44px, calc(100cqh - 4px), 104px); --cw: calc(var(--chh) * .714); }
+  .bf .side > .slot ~ .slot { margin-left: min(5px, calc((100cqw - (var(--n) - var(--nx, 0)) * var(--cw) - var(--nx, 0) * var(--chh)) / max(1, var(--n) - 1))); }
+  .bf .side, .zrow > .zone:nth-child(3) { justify-content: safe center; }
+  .bf .mid { overflow: hidden; }
+  .bf .mid .sdtag { flex: none; }
+  /* chaîne : une ligne compacte (petite carte + nom), la zone adverse reste visible dessous */
+  .main > .ctrlcol .stackcol { max-height: 84px !important; padding: 6px 8px; }
+  .main > .ctrlcol .stackcol .sitem { flex-direction: row; align-items: center; gap: 8px; }
+  .main > .ctrlcol .stackcol .sitem .card { --cw: 44px; --chh: 62px; width: 44px; height: 62px; margin: 0; clip-path: none; }
 }
 /*DA_CSS*/
 </style>
@@ -1067,7 +1087,7 @@ function handHTML(st, pid, srcs) {
     return card(nm, { p: vp(pid), back: !vis && !shown, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
   }).join("");
   const rv = p.rv ? ` · <b class="rvtag">${top ? "révélée" : "révélée à l'adversaire"}</b>` : "";
-  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
+  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""}" style="--n:${n}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
@@ -1083,8 +1103,8 @@ function rowHTML(st, pid, srcs) {
       <div class="piles"><div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div><div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
-    <div class="zone">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
-    <div class="zone" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    <div class="zone" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
+    <div class="zone" style="--n:${p.base.length + p.gear.length};--nx:${p.base.filter(u => u.x).length + p.gear.filter(g => g.x).length}" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
     <div class="zone legend">${leg}<span class="label">Légende</span></div>
   </div>`;
 }
@@ -1097,10 +1117,10 @@ function bfHTML(st, i, srcs) {
   if (b.fd) { const mine = b.fd[0] === MEP, seen = mine || (b.fd[1] && b.fd[1] !== "?");   // Scuttle Crab : cartes cachées adverses visibles ce tour
     fd = `<span class="fd">${card(seen ? b.fd[1] : "", { back: !seen, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
   return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + vp(b.c) : ""} ${sd ? "sd" : ""}" data-drop="${i}">
-    <div class="side top">${top}</div>
+    <div class="side top" style="--n:${b.u.filter(u => u.c !== MEP).length};--nx:${b.u.filter(u => u.c !== MEP && u.x).length}">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
       <span class="bname">${esc(b.n)}</span>${sd ? `<span class="sdtag">${st.sd.combat ? "Combat" : "Showdown"}</span>` : ""}${fd}${ctrl}</div>
-    <div class="side">${bot}</div>
+    <div class="side" style="--n:${b.u.filter(u => u.c === MEP).length};--nx:${b.u.filter(u => u.c === MEP && u.x).length}">${bot}</div>
   </div>`;
 }
 const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vision|Ambush) /;
