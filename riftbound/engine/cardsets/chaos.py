@@ -524,8 +524,9 @@ def _edge_play(g, o, ctx):
 card("Edge of Night", hidden=True, equip="1 chaos rune", bonus=2, on_play=_edge_play)
 
 
-# Ember Monk — "[Hidden] When you play a card from [Hidden], give me +2 might this turn."
-card("Ember Monk", hidden=True, on_event=lambda g, o, ev, info: (
+# Ember Monk — "When you play a card from [Hidden], give me +2 might this turn." (pas le mot-clé Hidden : il ne se
+# cache pas, règle 811.1 ; le CSV range « Hidden » dans keywords parce que le texte le mentionne, image OGN 167 vérifiée)
+card("Ember Monk", on_event=lambda g, o, ev, info: (
     ev == "played" and info["pid"] == o.ctrl and _from_facedown(info) and _q(g, o, "Ember Monk", _buff_me(2))))
 
 
@@ -1146,7 +1147,8 @@ def _pack(g, it):
     _to_hand(g, g.legal(it, 0))
 
 
-card("Pack of Wonders", hidden=True, abilities=[ability(
+# Pack of Wonders n'a pas le mot-clé Hidden (il le mentionne seulement, image OGN 181 vérifiée) : ne se cache pas (811.1).
+card("Pack of Wonders", abilities=[ability(
     "Return", exhaust=True, choices=_pack_choices, resolve=_pack,
     preds=[lambda g, it, x: x.ctrl == it.ctrl and x.uid != it.src])])
 
@@ -1384,7 +1386,9 @@ def _swap_choices(g, pid, ctx):
     for bf in ([hb] if hb is not None else [0, 1]):
         us = [u for u in g.units(loc=bf) if g.targetable(u, pid)]
         for a, b in combinations(us, 2):
-            if g.might(a) != g.might(b):
+            # deux unités de même Might sont des cibles légales (l'échange ne change rien) : proposées au joueur humain,
+            # pas à l'IA pour qui ce choix ne sert à rien
+            if g.might(a) != g.might(b) or full_choices(g, pid):
                 out.append(dict(tg=(a.uid, b.uid)))
 
     def gain(c):

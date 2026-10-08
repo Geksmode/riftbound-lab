@@ -3,7 +3,7 @@
 #
 #   scripts/verifier.sh            tout : wiki, moteur, table (+ robot navigateur si Playwright et Chromium sont là)
 #   scripts/verifier.sh moteur     wiki + tests + fuzz de chaque paquet + parties aléatoires
-#   scripts/verifier.sh table      construction de la table (+ robot navigateur)
+#   scripts/verifier.sh table      construction de la table (+ robots navigateur : téléphone, Hidden, match, duel)
 #
 # Variables : RB_FUZZ (parties par paquet, défaut 200), RB_RAND (parties t_rand, défaut 30),
 #             RB_NAV=0 pour sauter les robots navigateur, RB_MATCH=0 pour sauter le robot du match BO3 (~6 min),
@@ -61,6 +61,19 @@ navigateur() {
   [ $rc = 0 ] && ! grep -q "^ÉCHEC" <<<"$out" && echo "robot navigateur : $(grep -c '^OK' <<<"$out") contrôles OK (captures dans $LOG)"
 }
 
+cache() {   # robot du mot-clé Hidden (train/verif_hidden.mjs) : cacher au doigt et au glisser, jouer depuis la face cachée
+  if [ "${RB_NAV:-1}" = 0 ]; then echo "robot Hidden sauté (RB_NAV=0)"; return 0; fi
+  [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
+    || { echo "robot Hidden sauté (Playwright absent)"; return 0; }
+  local port=$((PORT + 4))
+  (cd "$TR/build" && exec python3 -m http.server "$port" >/dev/null 2>&1) & local srv=$!
+  sleep 1
+  local out; out=$(cd "$TR" && timeout 900 node verif_hidden.mjs "$LOG" "$port" 2>&1); local rc=$?
+  kill $srv 2>/dev/null
+  echo "$out"
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot Hidden : $(grep -c '^OK' <<<"$out") contrôles OK"
+}
+
 match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360x740 et 1400x900
   if [ "${RB_NAV:-1}" = 0 ] || [ "${RB_MATCH:-1}" = 0 ]; then echo "robot du match sauté (RB_NAV=0 ou RB_MATCH=0)"; return 0; fi
   [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
@@ -91,8 +104,8 @@ duel() {   # robot du duel entre amis (train/verif_duel.mjs) : deux navigateurs,
 
 case "$QUOI" in
   moteur) etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard ;;
-  table)  etape table table; etape navigateur navigateur; etape match match; etape duel duel ;;
-  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape match match; etape duel duel ;;
+  table)  etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape duel duel ;;
+  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape duel duel ;;
   *) sed -n '2,10p' "${BASH_SOURCE[0]}"; exit 2 ;;
 esac
 

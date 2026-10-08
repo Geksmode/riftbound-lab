@@ -68,3 +68,6 @@ Agent design : room PeerJS avec code, BO1 / BO3, reprise de l'invité ; robot `v
 ## [2026-10-08] ingest | Duel : hôte bloqué « en attente »
 Encodage JSON, renvoi du hello, statut côté hôte, journal de connexion copiable. Cause réelle non confirmée (non reproduite en local).
 
+## [2026-10-08] ingest | Hidden : Back Off ne se cachait pas en la glissant
+Table : lâcher une carte Hidden sur un battlefield lançait le ciblage pour la jouer quand elle était aussi jouable tout de suite (Back Off) ; les coups qui visent exactement la zone passent maintenant d'abord (`dropAt`). Moteur : Ember Monk, Ava Achiever et Pack of Wonders n'ont pas le mot-clé (images vérifiées) et ne se cachent plus ; Back Off cible « a unit » (amie ou déjà étourdie) pour un humain ; Switcheroo accepte deux unités de même Might pour un humain. Contrôle de toutes les cartes `cardsets/test_hidden_auto.py`, robot `verif_hidden.mjs` dans la porte. Les choix de l'IA ne changent pas, sauf qu'elle ne peut plus cacher ces trois cartes : petit changement de version du moteur.
+

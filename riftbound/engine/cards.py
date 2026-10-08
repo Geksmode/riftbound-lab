@@ -821,8 +821,16 @@ def _back_off(g, it):
         g.draw(it.ctrl, 1)
 
 
-card("Back Off", timing="action", hidden=True, preds=[P_unit], resolve=_back_off,
-     choices=lambda g, pid, ctx: tg_choices([u for u in enemies(g, pid, False, ctx["hidden_bf"]) if not u.stunned]))
+def _back_off_choices(g, pid, ctx):
+    # "[Stun] a unit" : n'importe quelle unité, amie ou ennemie, même déjà étourdie ; depuis Hidden, une unité de ce
+    # battlefield (811.1.d). L'IA garde sa liste courte : ennemis pas encore étourdis.
+    hb = ctx["hidden_bf"]
+    if full_choices(g, pid):
+        return tg_choices(all_units(g, pid, False, hb))
+    return tg_choices([u for u in enemies(g, pid, False, hb) if not u.stunned])
+
+
+card("Back Off", timing="action", hidden=True, preds=[P_unit], resolve=_back_off, choices=_back_off_choices)
 
 
 # Blitzcrank, Impassive — "[Tank] When you play me to a battlefield, you may move an enemy unit to here.

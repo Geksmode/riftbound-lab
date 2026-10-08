@@ -1405,9 +1405,11 @@ function dropAt(src, t) {
     if (mode && mode.type === "move" && mode.dest !== null && mode.dest !== zone) mode = null;
     return startMove(src, zone);
   }
-  // 3. carte jouée sur une zone
-  if (ops.some(hasMv)) { sel = src; return startTarget(ops.filter(needs)); }
-  const m = ops.filter(o => o.k !== "move" && (o.loc !== null && o.loc !== undefined ? String(o.loc) === zone : true));
+  // 3. carte jouée sur une zone. Les coups qui visent exactement cette zone passent d'abord : une carte Hidden lâchée
+  // sur un battlefield est cachée (règle 421), même si elle pourrait aussi être jouée tout de suite avec une cible (Back Off).
+  const exact = ops.filter(o => o.k !== "move" && o.loc !== null && o.loc !== undefined && String(o.loc) === zone);
+  if (ops.some(hasMv) && !exact.some(o => o.k === "hide")) { sel = src; return startTarget(ops.filter(needs)); }
+  const m = exact.length ? exact : ops.filter(o => o.k !== "move" && (o.loc === null || o.loc === undefined));
   if (m.some(needs)) { sel = src; return startTarget(m); }
   sel = null; run(m);
 }
