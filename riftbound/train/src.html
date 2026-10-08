@@ -334,6 +334,21 @@ body.dkopen { overflow: hidden; }
 .sbr .q i { font-style: normal; color: var(--brass); margin-left: 3px; }
 .sbr button { width: 44px; height: 44px; padding: 0; font-size: 18px; flex: none; }
 .mbox .big button { min-height: 44px; }
+/* ---------- duel entre amis */
+.fl { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+.fl input, .fl select { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 10px; color: var(--ink); font: inherit; font-size: 16px; min-height: 44px; min-width: 0; width: 100%; }
+.fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 10px; }
+.fgrid[hidden] { display: none; }
+.fgrid .mcard > button.go, .roombox button { min-height: 48px; font-weight: 600; }
+.mcard button.go { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #e9fff8; }
+.roombox { border-color: var(--brass); text-align: center; align-items: center; }
+.roomcode { font: 600 clamp(34px, 11vw, 52px)/1.1 var(--f-mono); letter-spacing: .18em; color: var(--brass); user-select: all; }
+.roomlink { width: 100%; background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 8px; color: var(--ink-2); font: 12px var(--f-mono); min-width: 0; }
+.roombox .acts { justify-content: center; }
+.mstat.ok { color: var(--akali); }
+.netchip { cursor: pointer; background: transparent; min-height: 0; }
+.netchip.off { color: #f0a35b; border-color: rgba(240,163,91,.5); }
+#pReady { text-align: left; }
 .sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
 @media (max-width: 820px) { .mchip { order: 3; } }
 </style>
@@ -346,6 +361,7 @@ body.dkopen { overflow: hidden; }
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
       <span class="res mchip" id="gmatch" hidden></span>
       <span class="savechip" id="saveChip" hidden></span>
+      <button class="savechip netchip" id="netChip" hidden></button>
       <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
     </div>
     <div class="boardwrap"><div class="boardgrid">
@@ -378,6 +394,7 @@ body.dkopen { overflow: hidden; }
 <svg id="arrows" aria-hidden="true"><defs><marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3fc3a3"/></marker><marker id="ahL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b58cf0"/></marker></defs><g id="arrowsG"></g></svg>
 
 <script src="pyodide/pyodide.js"></script>
+<script src="vendor/peerjs.min.js"></script>
 <script>
 const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "chaos", Order: "order" };
 const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
@@ -390,6 +407,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set();
 const rep = { get cards() { return CARDS; } };
+// Place locale (0 contre l'IA ; 0 = hôte, 1 = invité en duel) : le plateau se dessine toujours avec toi en bas.
+// vp() donne la place « visuelle » (0 = toi, 1 = l'adversaire) qui sert aux couleurs et aux classes c0/c1, p0/p1.
+let MEP = 0;
+const vp = p => (p === 0 || p === 1) ? p ^ MEP : p;
+const OPP = () => 1 - MEP;
 const J = s => JSON.parse(s);
 
 async function boot() {
@@ -412,6 +434,7 @@ async function boot() {
   py.runPython("import sys; sys.path.insert(0, '/rb/engine')");
   T = py.pyimport("train");
   READY = true; menuRender(MENUV);
+  duelAutoResume();
 }
 
 // ------------------------------------------------------------ fenêtres : nouvelle partie, défausse
@@ -506,6 +529,7 @@ const bo3 = () => MATCH && MATCH.mode === "bo3";
 const scoreTxt = w => `toi ${w[0]} – ${w[1]} IA`;
 
 async function start() {
+  if (DU) duelLeave();
   const bf = $("sBf").value, first = $("sFirst").value, lvl = $("sLvl").value, seed = $("sSeed").value.trim();
   const mk = $("sMine").value, ok = $("sOpp").value, mine = deckArg(mk), opp = deckArg(ok), mode = $("bStart").dataset.mode === "bo3" ? "bo3" : "bo1";
   store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok); store.set("rbt-mode", mode);
@@ -561,9 +585,15 @@ function prepRender() {
 
 // Sideboard entre deux manches : échanges 1 pour 1 (403.4), changement de Chosen Champion permis (601.1.c.4).
 let SB = null;
-function sbOpen() { const d = MATCH.deck; SB = { out: {}, inn: {}, champ: d.champion, err: "" }; sbRender(); }
+// ctx : deck de départ, manche, score affiché et suite (done(deck modifié ou null, résumé)) ; par défaut le match contre l'IA.
+function sbOpen(ctx) {
+  if (!ctx) ctx = { deck: MATCH.deck, game: MATCH.nx.game, score: scoreTxt(MATCH.st.wins), done: (nd, txt) => {
+    if (nd) { MATCH.deck = nd; MATCH.mine = JSON.stringify(nd); }
+    MATCH.sb[MATCH.nx.game] = true; MATCH.sbDone = txt; prepRender(); } };
+  SB = { ctx, out: {}, inn: {}, champ: ctx.deck.champion, err: "" }; sbRender();
+}
 function sbRender() {
-  const d = MATCH.deck, nx = MATCH.nx, tally = xs => { const m = {}; for (const n of xs) m[n] = (m[n] || 0) + 1; return m; };
+  const d = SB.ctx.deck, tally = xs => { const m = {}; for (const n of xs) m[n] = (m[n] || 0) + 1; return m; };
   const main = tally(d.main), side = tally(d.sideboard || []);
   const no = cnt(SB.out), ni = cnt(SB.inn);
   const lt = (CAT.by[d.legend] || {}).tg || [];
@@ -572,7 +602,7 @@ function sbRender() {
     return `<div class="sbr ${v ? "on" : ""}"><span class="nm">${esc(n)}</span><span class="q">${q - v}${v ? `<i>${k === "out" ? "−" : "+"}${v}</i>` : ""}</span><button data-sbm="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Garder" : "Ne pas faire entrer"} ${esc(n)}"${v ? "" : " disabled"}>−</button><button data-sbp="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Sortir" : "Faire entrer"} ${esc(n)}"${v < q ? "" : " disabled"}>+</button></div>`; };
   const sortN = o => Object.entries(o).sort((a, b) => a[0].localeCompare(b[0]));
   const changed = no || SB.champ !== d.champion;
-  openModal(`<h3>Sideboard avant la manche ${nx.game}</h3><div class="mscore">Match : ${scoreTxt(MATCH.st.wins)}</div>
+  openModal(`<h3>Sideboard avant la manche ${SB.ctx.game}</h3><div class="mscore">Match : ${SB.ctx.score}</div>
     <div class="small rule">Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) ; runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).</div>
     ${champs.length > 1 ? `<label class="sbch" for="sbChamp">Chosen Champion (règle 601.1.c.4)<select id="sbChamp">${champs.map(n => `<option${n === SB.champ ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>` : ""}
     ${SB.err ? `<div class="small flash">${esc(SB.err)}</div>` : ""}
@@ -586,15 +616,14 @@ function sbRender() {
     SB.err = ""; sbRender();
   });
   if ($("sbChamp")) $("sbChamp").onchange = e => { SB.champ = e.target.value; sbRender(); };
-  $("sbKeep").onclick = () => { MATCH.sb[nx.game] = true; MATCH.sbDone = "deck gardé"; prepRender(); };
+  $("sbKeep").onclick = () => SB.ctx.done(null, "deck gardé");
   $("sbOk").onclick = () => {
     const ex = o => Object.entries(o).flatMap(([n, q]) => Array(q).fill(n));
     try {
       const nd = J(T.match_swap(JSON.stringify(d), JSON.stringify(ex(SB.out)), JSON.stringify(ex(SB.inn)), SB.champ !== d.champion ? SB.champ : null));
-      MATCH.deck = nd; MATCH.mine = JSON.stringify(nd); MATCH.sb[nx.game] = true;
-      MATCH.sbDone = `${no} échange${no > 1 ? "s" : ""}${SB.champ !== d.champion ? ", champion : " + SB.champ : ""}`;
-      toast("Deck modifié pour ce match : " + MATCH.sbDone + ".");
-      prepRender();
+      const txt = `${no} échange${no > 1 ? "s" : ""}${SB.champ !== d.champion ? ", champion : " + SB.champ : ""}`;
+      toast("Deck modifié pour ce match : " + txt + ".");
+      SB.ctx.done(nd, txt);
     } catch (err) { SB.err = String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]; sbRender(); }
   };
 }
@@ -602,6 +631,7 @@ function sbRender() {
 // Lance une manche : graine de la manche, ton battlefield, premier joueur ; celui de l'IA (nx.ai_bf) a été choisi avant.
 async function launchGame(nx, bf, first) {
   const lvl = MATCH.lvl;
+  MEP = 0;
   try { META = J(T.new(nx.seed, bf || null, first === null || first === undefined ? null : +first, +lvl, MATCH.mine, MATCH.opp, nx.ai_bf)); }
   catch (err) { setupForm(String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]); return; }
   if (REC && recT) recSave(true);   // l'ancienne partie est enregistrée telle quelle avant d'en commencer une autre
@@ -675,7 +705,7 @@ function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;
   for (const [ind, t] of lines) LOG.push([ind, t]);
   const el = $("log");
-  el.innerHTML = LOG.map(([ind, t]) => `<div class="${t.startsWith("Tour ") ? "turn" : ind ? "sub" : ""} ${t.startsWith("Tu ") || t.startsWith(PN[0] + " ") ? "me" : t.startsWith(PN[1] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
+  el.innerHTML = LOG.map(([ind, t]) => `<div class="${t.startsWith("Tour ") ? "turn" : ind ? "sub" : ""} ${t.startsWith("Tu ") || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
   el.scrollTop = el.scrollHeight;
   if ($("drawer").classList.contains("open")) seenLog = LOG.length;
   badge();
@@ -691,7 +721,7 @@ function toast(msg, cls = "") {
 }
 
 function show(v) {
-  if (v !== V) { addLog(v.log || []); if (v.ai) toast(PN[1] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
+  if (v !== V) { addLog(v.log || []); if (v.ai) toast(PN[OPP()] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
   if (!v.dec && !v.ask) { mode = null; sel = null; }
   if (v.ask && !(mode && mode.type === "ask" && V && V.ask === v.ask)) {
     mode = { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
@@ -703,10 +733,10 @@ function show(v) {
   if (v.dec) for (const o of v.dec.options) { if (o.src !== null) srcs.add(String(o.src)); if (o.us) o.us.forEach(u => srcs.add(String(u))); }
   for (const [k, t] of Object.entries(v.alias || {})) if (srcs.has(String(t))) srcs.add(k);
   $("board").innerHTML =
-    `<div class="half p1 ${st.tp === 1 ? "active" : ""}">${handHTML(st, 1, srcs)}${rowHTML(st, 1, srcs)}</div>` +
+    `<div class="half p1 ${st.tp === OPP() ? "active" : ""}">${handHTML(st, OPP(), srcs)}${rowHTML(st, OPP(), srcs)}</div>` +
     `<div class="bfrow">${bfHTML(st, 0, srcs)}${bfHTML(st, 1, srcs)}</div>` +
-    `<div class="half p0 ${st.tp === 0 ? "active" : ""}">${rowHTML(st, 0, srcs)}${handHTML(st, 0, srcs)}</div>`;
-  $("stack").innerHTML = st.chain.length ? st.chain.slice().reverse().map((c, j) => `<div class="sitem c${c.c} ${j ? "old" : ""}" data-ch="${st.chain.length - 1 - j}"><div class="shead"><span class="k">${c.k === "trigger" ? "Déclenchement" : "Sur la chaîne"} · ${PN[c.c]}</span></div>${card(cardFor(c.n) || c.n, { raw: true })}<div class="stgt">${esc(c.n)}</div></div>`).join("") : `<div class="empty">Chaîne vide</div>`;
+    `<div class="half p0 ${st.tp === MEP ? "active" : ""}">${rowHTML(st, MEP, srcs)}${handHTML(st, MEP, srcs)}</div>`;
+  $("stack").innerHTML = st.chain.length ? st.chain.slice().reverse().map((c, j) => `<div class="sitem c${vp(c.c)} ${j ? "old" : ""}" data-ch="${st.chain.length - 1 - j}"><div class="shead"><span class="k">${c.k === "trigger" ? "Déclenchement" : "Sur la chaîne"} · ${PN[c.c]}</span></div>${card(cardFor(c.n) || c.n, { raw: true })}<div class="stgt">${esc(c.n)}</div></div>`).join("") : `<div class="empty">Chaîne vide</div>`;
   renderTrack(st);
   fitBoard();
   renderCtrl(v);
@@ -782,9 +812,9 @@ function floatHTML(p) {
     ${p.pe ? `<span class="fl-e">⚡ <b>${p.pe}</b> énergie flottante</span>` : ""}${pw ? `<span class="fl-pw">puissance flottante ${pw}</span>` : ""}</div>`;
 }
 function renderTrack(st) {
-  const col = pid => { const xs = []; for (let k = 0; k <= st.v; k++) xs.push(k); if (pid === 0) xs.reverse();
-    return `<div class="trk p${pid}" title="${PN[pid]} : ${st.pts[pid]} point${st.pts[pid] > 1 ? "s" : ""}">${xs.map(k => `<span class="${k === st.pts[pid] ? "on" : ""} ${k === st.v ? "goal" : ""}">${k}</span>`).join("")}</div>`; };
-  $("track").innerHTML = col(1) + col(0);
+  const col = pid => { const xs = []; for (let k = 0; k <= st.v; k++) xs.push(k); if (pid === MEP) xs.reverse();
+    return `<div class="trk p${vp(pid)}" title="${PN[pid]} : ${st.pts[pid]} point${st.pts[pid] > 1 ? "s" : ""}">${xs.map(k => `<span class="${k === st.pts[pid] ? "on" : ""} ${k === st.v ? "goal" : ""}">${k}</span>`).join("")}</div>`; };
+  $("track").innerHTML = col(OPP()) + col(MEP);
 }
 
 const KIND = { main: "phase principale", priority: "réaction", focus: "showdown" };
@@ -794,8 +824,10 @@ function renderCtrl(v) {
   $("hpop").hidden = true;
   $("bUndo").disabled = working || !v.undo;
   $("bHint").disabled = working || !v.dec;
+  $("bUndo").hidden = $("bHint").hidden = !!DU;   // en duel : ni « Reprendre » (l'adversaire a vu le coup) ni conseil
   M.className = "endbtn"; M.onclick = null;
   if (v.winner !== null && v.winner !== undefined) {
+    if (DU) return duelCtrlEnd(v);
     const w = v.winner === 0;
     matchFinish(v);
     recFinish(v);
@@ -808,8 +840,12 @@ function renderCtrl(v) {
     return;
   }
   if (v.busy) {
-    I.innerHTML = `<span class="think"><i></i>${esc(PN[1])} joue…</span><span class="tn">tour ${v.st.t}</span>`;
+    I.innerHTML = `<span class="think"><i></i>${esc(PN[OPP()])} joue…</span><span class="tn">tour ${v.st.t}</span>`;
     M.textContent = "Attends ton tour"; M.disabled = true; return;
+  }
+  if (v.wait) {   // duel : décision ou question de l'adversaire
+    I.innerHTML = `<span class="think" id="waitTxt"><i></i>En attente de ${esc(PN[OPP()])}…</span><span class="tn">tour ${v.st.t}</span>`;
+    M.textContent = "Tour de " + PN[OPP()]; M.disabled = true; return;
   }
   if (v.ask) {
     I.innerHTML = `<b class="me">À toi</b><span class="tn">choix en cours</span>`;
@@ -830,7 +866,7 @@ async function choose(i) {
   sel = null; mode = null; lastAI = null; toast("");
   LOGSTACK.push(LOG.length);
   const o = V.dec.options.find(x => x.i === i);
-  recMove(["act", i, o ? o.label : "", V.st.t]);
+  if (DU) duelLocal("act", i, o ? o.label : ""); else recMove(["act", i, o ? o.label : "", V.st.t]);
   working = true;
   await pump(J(T.act(i)));
 }
@@ -860,13 +896,14 @@ $("hpop").addEventListener("click", e => { e.stopPropagation(); const b = e.targ
 async function answer(x) {
   if (working) return;
   const a = V && V.ask;
-  recMove(["ans", x, a ? a.kind + " : " + (Array.isArray(x) ? x.map(k => a.options[k]).join(", ") : a.options[x]) : "", V ? V.st.t : 0]);
+  const lab = a ? a.kind + " : " + (Array.isArray(x) ? x.map(k => a.options[k]).join(", ") : a.options[x]) : "";
+  if (DU) duelLocal("ans", x, lab); else recMove(["ans", x, lab, V ? V.st.t : 0]);
   working = true; mode = null;
   await pump(J(T.answer(JSON.stringify(x))));
 }
 
 $("bUndo").onclick = () => {
-  if (working || !V || !V.undo) return;
+  if (working || !V || !V.undo || DU) return;
   const n = LOGSTACK.length ? LOGSTACK.pop() : LOG.length;
   LOG = LOG.slice(0, n);
   const v = J(T.undo());
@@ -900,45 +937,45 @@ function card(name, o = {}) {
 const can = (srcs, u) => srcs.has(String(u));
 function unitCard(u, srcs) {
   const tags = []; if (u.s) tags.push("ST"); if (u.k && u.k.includes("Temporary")) tags.push("TEMP"); if (u.e) tags.push("EMP"); if (u.bf) tags.push("+" + u.bf); if (u.t && u.n !== "Reflection" && u.n !== "Mech") tags.push("COPIE");
-  return card(u.n, { p: u.c, m: u.m, base: u.b, d: u.d, x: u.x, gear: u.g, tags, uid: u.u, can: can(srcs, u.u), sel: sel === String(u.u) });
+  return card(u.n, { p: vp(u.c), m: u.m, base: u.b, d: u.d, x: u.x, gear: u.g, tags, uid: u.u, can: can(srcs, u.u), sel: sel === String(u.u) });
 }
 function handHTML(st, pid, srcs) {
-  const p = st.p[pid], n = p.hand.length, top = pid === 1;
-  const vis = pid === 0;
+  const p = st.p[pid], n = p.hand.length, top = pid !== MEP;
+  const vis = pid === MEP;
   const cards = p.hand.map(([uid, nm], i) => {
     const off = i - (n - 1) / 2;
     const rot = (top ? -1 : 1) * off * 4, lift = off * off * 1.6 * (top ? -1 : 1);
-    return card(nm, { p: pid, back: !vis, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
+    return card(nm, { p: vp(pid), back: !vis, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
   }).join("");
-  return `<div class="hand ${top ? "top" : ""}"><span class="who-hand">${pid ? "Main de " + esc(PN[1]) : "Ta main"} (${n})</span>${cards || `<span class="small">main vide</span>`}</div>`;
+  return `<div class="hand ${top ? "top" : ""}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})</span>${cards || `<span class="small">main vide</span>`}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
   const runes = p.runes.map(r => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"); return `<div class="runeslot ${x ? "x" : ""}"><div class="rune" title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div></div>`; }).join("");
   const ready = p.runes.filter(r => !r.endsWith("x")).length;
-  const base = p.base.map(u => unitCard(u, srcs)).join("") + p.gear.map(g => card(g.n, { p: pid, x: g.x, uid: g.u, can: can(srcs, g.u) })).join("");
-  const champ = p.champ.map((n, k) => { const u = pid === 0 && p.champu ? p.champu[k] : undefined; return card(n, { p: pid, uid: u, can: u !== undefined && can(srcs, u), sel: u !== undefined && sel === String(u) }); }).join("");
-  const leg = champ + card(p.leg.n, { p: pid, x: p.leg.x, tags: p.leg.e ? ["EMP"] : [], uid: pid === 0 ? "legend" : undefined, can: pid === 0 && srcs.has("legend"), sel: pid === 0 && sel === "legend" });
+  const base = p.base.map(u => unitCard(u, srcs)).join("") + p.gear.map(g => card(g.n, { p: vp(pid), x: g.x, uid: g.u, can: can(srcs, g.u) })).join("");
+  const champ = p.champ.map((n, k) => { const u = pid === MEP && p.champu ? p.champu[k] : undefined; return card(n, { p: vp(pid), uid: u, can: u !== undefined && can(srcs, u), sel: u !== undefined && sel === String(u) }); }).join("");
+  const leg = champ + card(p.leg.n, { p: vp(pid), x: p.leg.x, tags: p.leg.e ? ["EMP"] : [], uid: pid === MEP ? "legend" : undefined, can: pid === MEP && srcs.has("legend"), sel: pid === MEP && sel === "legend" });
   return `<div class="zrow">
     <div class="zone pile">
-      <div class="who">${pid ? esc(PN[1]) : "Toi (" + esc(PN[0]) + ")"}</div>
+      <div class="who">${pid !== MEP ? esc(PN[pid]) : "Toi (" + esc(PN[pid]) + ")"}</div>
       <div class="score">${st.pts[pid]}<small>/${st.v}</small></div>
       <div class="piles"><div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div><div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
     <div class="zone">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
-    <div class="zone" ${pid === 0 ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    <div class="zone" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
     <div class="zone legend">${leg}<span class="label">Légende</span></div>
   </div>`;
 }
 function bfHTML(st, i, srcs) {
   const b = st.bfs[i], sd = st.sd && st.sd.bf === i;
-  const top = b.u.filter(u => u.c === 1).map(u => unitCard(u, srcs)).join("");
-  const bot = b.u.filter(u => u.c === 0).map(u => unitCard(u, srcs)).join("");
-  const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${b.c}">${PN[b.c]}</span>`;
+  const top = b.u.filter(u => u.c !== MEP).map(u => unitCard(u, srcs)).join("");
+  const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("");
+  const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
   let fd = "";
-  if (b.fd) { const mine = b.fd[0] === 0; fd = `<span class="fd">${card(mine ? b.fd[1] : "", { back: !mine, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
-  return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + b.c : ""} ${sd ? "sd" : ""}" data-drop="${i}">
+  if (b.fd) { const mine = b.fd[0] === MEP; fd = `<span class="fd">${card(mine ? b.fd[1] : "", { back: !mine, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
+  return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + vp(b.c) : ""} ${sd ? "sd" : ""}" data-drop="${i}">
     <div class="side top">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
       <span class="bname">${esc(b.n)}</span>${sd ? `<span class="sdtag">${st.sd.combat ? "Combat" : "Showdown"}</span>` : ""}${fd}${ctrl}</div>
@@ -1144,6 +1181,7 @@ function accTxt(o) {
 }
 function fbarHTML() {
   if (V && V.winner !== null && V.winner !== undefined && !working) {
+    if (DU) return duelEndHTML();
     const w = V.winner === 0;
     const head = `<span class="ft big ${w ? "me" : "opp"}">${w ? "Victoire !" : V.winner === 1 ? "Défaite" : "Partie nulle"} ${V.st.pts[0]}-${V.st.pts[1]}</span>`;
     if (bo3() && MATCH.cur && MATCH.cur.done) {
@@ -1175,7 +1213,7 @@ function fbarHTML() {
   }
   if (mode.type === "move") {
     const o = moveOpt(), d = mode.dest;
-    const enemy = d !== null && d !== "base" && V.st.bfs[+d].u.some(u => u.c === 1);
+    const enemy = d !== null && d !== "base" && V.st.bfs[+d].u.some(u => u.c !== MEP);
     const txt = `${mode.units.length} unité${mode.units.length > 1 ? "s" : ""} → ${d === null ? "touche la destination" : locName(d)}`;
     const why = d !== null && !o ? `<span class="ft flash">Ces unités ne peuvent pas partir ensemble vers cette zone.</span>` : "";
     return `<span class="ft">${esc(txt)}. Touche d'autres unités pour les ajouter.</span>${why}
@@ -1197,7 +1235,8 @@ $("fbar").addEventListener("click", e => {
   }
   const b = e.target.closest("button"); if (!b) return;
   if (b.id === "bAgain") return setupForm();
-  if (b.id === "bNextGame") return matchPrep();
+  if (b.id === "bNextGame") return DU ? duelNextGame() : matchPrep();
+  if (b.id === "bDuelMenu") { duelLeave(); return showMenu(); }
   if (b.id === "bSame") { setupForm().then(() => { if ($("sSeed")) $("sSeed").value = MATCH ? MATCH.st.seed : META.seed; }); return; }
   if (b.id === "bKeep") return answer([...mode.mull]);
   if (b.dataset.a) return answer(+b.dataset.a);
@@ -1410,7 +1449,7 @@ function drawArrows(px, py) {
   const seen = new Set();
   if (V) (V.st.chain || []).forEach((c, k) => {
     const it = document.querySelector(`#stack [data-ch="${k}"] .card`); if (!it || !c.tg) return;
-    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(centre(it), centre(t), c.c, false); seen.add(c.c + ":" + u); } });
+    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(centre(it), centre(t), vp(c.c), false); seen.add(vp(c.c) + ":" + u); } });
   });
   if (lastAI && V) {
     const tg = [...(lastAI.t1 || []), ...(lastAI.t2 || [])];
@@ -1728,6 +1767,402 @@ document.addEventListener("click", e => {
 });
 $("bDecks").onclick = () => { if (T && !working) openDecks(); };
 
+// ------------------------------------------------------------ duel entre amis (PeerJS ; moteur : train.duel_new, match_duel_next)
+// Chaque navigateur fait tourner toute la partie ; seules les entrées (act / answer) passent par le réseau, numérotées et
+// appliquées dans le même ordre des deux côtés (le moteur est déterministe). L'hôte (place 0) crée le match et garde les
+// arguments et les entrées de la manche : l'invité qui recharge sa page les reçoit ({t:"resume"}) et rejoue tout.
+// Protocole et décisions : docs/wiki/pages/duel.md.
+const CODE_ABC = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";   // sans I, L, O, 0, 1 (ambigus à l'oral et à l'écrit)
+let DU = null, DMODE = store.get("rbt-duel-mode") === "bo1" ? "bo1" : "bo3";
+const sess = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }, del(k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
+function peerOpts() {
+  const m = /[?&]peer=([^&#]+)/.exec(location.search);
+  if (!m) return { debug: 0 };   // serveur public de mise en relation 0.peerjs.com
+  const [host, port] = decodeURIComponent(m[1]).split(":");
+  return { host, port: +port || 9000, path: "/myapp", secure: false, debug: 0 };
+}
+const newCode = () => Array.from({ length: 6 }, () => CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]).join("");
+const cleanCode = s => { const t = String(s || "").trim(), m = /room=([A-Za-z0-9]+)/i.exec(t); return (m ? m[1] : t).toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6); };
+const errTxt = err => String(err && err.message || err).split("\n").filter(Boolean).slice(-1)[0];
+const oppName = () => (DU && DU.names[1 - DU.place]) || "ton ami";
+const duelScore = () => `toi ${DU.st.wins[DU.place]} – ${DU.st.wins[1 - DU.place]} ${oppName()}`;
+const roomLink = code => location.origin + location.pathname + location.search + "#room=" + code;
+function duelSend(m) { try { if (DU && DU.conn && DU.conn.open) { DU.conn.send(m); return true; } } catch (e) { console.warn(e); } return false; }
+function duelStat(txt, cls = "") { if (DU) DU.stat = [txt, cls]; const e = $("duelStat"); if (e) { e.className = "mstat " + cls; e.textContent = txt; } }
+function netChip() {
+  const c = $("netChip"); if (!c) return;
+  c.hidden = !DU || !DU.st;
+  if (c.hidden) return;
+  const on = DU.conn && DU.conn.open;
+  c.className = "savechip netchip " + (on ? "ok" : "off");
+  c.textContent = on ? `En ligne · room ${DU.code}` : (DU.role === "guest" ? "Déconnecté · toucher pour revenir" : `${oppName()} déconnecté`);
+}
+$("netChip").onclick = () => { if (DU && DU.role === "guest" && !(DU.conn && DU.conn.open)) duelJoin(DU.code, DU.names[1], DU.myDeck, DU.token); };
+
+// ---------- écran « Jouer avec un ami » (menu)
+function friendHTML(back) {
+  const dk = store.get("rbt-duel-deck") || store.get("rbt-mine") || "akali-g2";
+  const hc = /[#&]room=([A-Za-z0-9]+)/i.exec(location.hash), code = hc ? cleanCode(hc[1]) : "";
+  const room = DU && DU.role === "host" && !DU.st ? `<div class="mcard roombox" id="roomBox"><div class="t">Room ${DU.mode.toUpperCase()} ouverte</div>
+      <div class="roomcode" id="roomCode" aria-label="Code de la room">${DU.code}</div>
+      <input class="roomlink" id="roomLink" readonly value="${esc(roomLink(DU.code))}" aria-label="Lien de la room">
+      <div class="acts"><button class="go" id="bCopy">Copier le lien</button><button id="bCloseRoom">Fermer la room</button></div>
+      <div class="small">Donne ce code (ou le lien) à ton ami : la partie commence dès qu'il rejoint. Garde cette page ouverte.</div></div>` : "";
+  const st = DU && DU.stat ? DU.stat : ["", ""];
+  return `<div class="menuin msub">${back}<h2>Jouer avec un ami</h2>
+    <div class="mcard"><label class="fl" for="dName">Ton pseudo<input id="dName" maxlength="20" autocomplete="nickname" value="${esc(store.get("rbt-pseudo") || "")}" placeholder="ex. Huy"></label>
+      <label class="fl" for="dDeck">Ton deck<select id="dDeck">${deckOptions(dk)}</select></label></div>
+    ${room}
+    <div class="mstat ${st[1]}" id="duelStat" aria-live="polite">${esc(st[0])}</div>
+    <div class="fgrid"${room ? " hidden" : ""}>
+      <div class="mcard"><div class="t">Créer une room</div>
+        <div class="seg" role="radiogroup" aria-label="Format du match"><button role="radio" id="dBo1" data-dmode="bo1" aria-checked="${DMODE === "bo1"}">BO1<small>une manche</small></button><button role="radio" id="dBo3" data-dmode="bo3" aria-checked="${DMODE === "bo3"}">BO3<small>2 manches gagnantes</small></button></div>
+        <button class="go" id="bCreate">Créer une room</button></div>
+      <div class="mcard"><div class="t">Rejoindre une room</div>
+        <label class="fl" for="dCode">Code de la room (ou lien)<input id="dCode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="200" placeholder="ex. K7QM2P" value="${esc(code)}"></label>
+        <button class="go" id="bJoin">Rejoindre</button></div></div>
+    <div class="small rule">Connexion directe entre vos deux navigateurs (WebRTC) ; le serveur public PeerJS ne sert qu'à vous mettre en relation. Chaque navigateur fait tourner toute la partie : la main adverse n'est pas affichée, mais reste lisible dans la console du navigateur. Les deux pages doivent être la même version de la table. Règles du match : celles de « Nouvelle partie » (BO1 485, BO3 486, sideboard 403).</div></div>`;
+}
+function friendWire() {
+  if (!CAT && T) { loadCatalog().then(() => { if (MENUV === "friend" && !$("menu").hidden) { const v = $("dName") && $("dName").value, c = $("dCode") && $("dCode").value; menuRender("friend"); if (v && $("dName")) $("dName").value = v; if (c && $("dCode")) $("dCode").value = c; } }); }
+  const nm = $("dName"), dk = $("dDeck");
+  if (dk && dk.selectedOptions[0] && dk.selectedOptions[0].disabled) dk.value = "akali-g2";
+  if (nm) nm.onchange = () => store.set("rbt-pseudo", nm.value.trim());
+  if (dk) dk.onchange = () => store.set("rbt-duel-deck", dk.value);
+  document.querySelectorAll("[data-dmode]").forEach(b => b.onclick = () => { DMODE = b.dataset.dmode; store.set("rbt-duel-mode", DMODE); document.querySelectorAll("[data-dmode]").forEach(x => x.setAttribute("aria-checked", x.dataset.dmode === DMODE)); });
+  if ($("bCreate")) $("bCreate").onclick = duelCreate;
+  if ($("bJoin")) $("bJoin").onclick = async () => {
+    const code = cleanCode($("dCode").value), me = await friendMe(); if (!me) return;
+    if (code.length !== 6) return duelStat("Le code fait 6 caractères.", "err");
+    duelJoin(code, me.name, me.deck, Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
+  };
+  if ($("bCopy")) $("bCopy").onclick = () => {
+    const l = roomLink(DU.code), done = () => toast("Lien copié : " + l);
+    (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(l) : Promise.reject()).then(done)
+      .catch(() => { const i = $("roomLink"); i.focus(); i.select(); try { document.execCommand("copy"); done(); } catch (e) { toast("Copie impossible : sélectionne le lien et copie-le."); } });
+  };
+  if ($("bCloseRoom")) $("bCloseRoom").onclick = () => { duelLeave(); menuRender("friend"); };
+}
+// Pseudo et deck du joueur local ; null (avec un message) si le deck n'est pas jouable.
+async function friendMe() {
+  if (!READY) { duelStat("Le moteur se charge encore…"); return null; }
+  await loadCatalog();
+  const name = ($("dName").value.trim() || "Joueur").slice(0, 20), key = $("dDeck").value, deck = engineDeck(key);
+  store.set("rbt-pseudo", name); store.set("rbt-duel-deck", key);
+  if (!deck) { duelStat("Choisis un deck.", "err"); return null; }
+  const errs = J(T.check(JSON.stringify(deck))).filter(e => !e.startsWith("⚠"));
+  if (errs.length) { duelStat("Deck pas jouable : " + errs.join(" ; "), "err"); return null; }
+  return { name, deck };
+}
+function duelLeave() {
+  if (!DU) return;
+  duelSend({ t: "bye" });
+  const d = DU; DU = null; MEP = 0;
+  setTimeout(() => { try { d.peer && d.peer.destroy(); } catch (e) {} }, 200);
+  sess.del("rbt-duel"); netChip();
+}
+const duelNew = (role, code, mode, names, deck) => ({ role, place: role === "host" ? 0 : 1, code, mode, names, myDeck: deck, decks: [null, null], st: null, prep: null, game: null, q: Promise.resolve(), conn: null, peer: null, token: null, stat: null });
+
+// ---------- hôte : création de la room, poignée de main
+async function duelCreate() {
+  const me = await friendMe(); if (!me) return;
+  if (typeof Peer === "undefined") return duelStat("PeerJS n'a pas pu se charger (vendor/peerjs.min.js).", "err");
+  duelLeave();
+  DU = duelNew("host", newCode(), DMODE, [me.name, null], me.deck);
+  duelStat("Ouverture de la room…");
+  hostPeer(0);
+}
+function hostPeer(tries) {
+  const d = DU, p = new Peer("rbl-" + d.code, peerOpts()); d.peer = p;
+  p.on("open", () => { if (DU !== d) return; duelStat("Room ouverte : en attente de ton ami…", "ok"); if (MENUV === "friend" && !$("menu").hidden) menuRender("friend"); });
+  p.on("connection", c => { if (DU !== d) return c.close(); c.on("data", m => duelRecv(m, c)); c.on("close", () => { if (DU === d && d.conn === c) { d.conn = null; duelLost(); } }); });
+  p.on("disconnected", () => { if (DU === d && !p.destroyed) try { p.reconnect(); } catch (e) {} });
+  p.on("error", e => {
+    if (DU !== d) return;
+    if (e.type === "unavailable-id" && tries < 4) { p.destroy(); d.code = newCode(); return hostPeer(tries + 1); }
+    duelStat("Erreur de connexion (" + (e.type || errTxt(e)) + "). Vérifie ta connexion et recommence.", "err");
+    if (!d.st) { DU = null; try { p.destroy(); } catch (x) {} if (MENUV === "friend") menuRender("friend"); }
+  });
+}
+function duelHello(m, c) {
+  const refuse = why => { try { c.send({ t: "refuse", why }); } catch (e) {} setTimeout(() => c.close(), 300); };
+  if (DU.st) {   // match en cours : seul l'invité d'origine revient (même jeton), et reprend où il en était
+    if (m.token !== DU.token) return refuse("Cette room est déjà occupée.");
+    if (DU.conn && DU.conn !== c) try { DU.conn.close(); } catch (e) {}
+    DU.conn = c; netChip();
+    toast(oppName() + " est revenu : reprise de la partie.");
+    return c.send(duelResumeMsg());
+  }
+  if (m.commit !== BUILD.commit || m.engine !== BUILD.engine)
+    return refuse(`Versions différentes de la table (toi ${m.commit || "?"}, hôte ${BUILD.commit || "?"}) : rechargez tous les deux la page.`);
+  let errs;
+  try { errs = J(T.check(JSON.stringify(m.deck))).filter(e => !e.startsWith("⚠")); } catch (e) { errs = [errTxt(e)]; }
+  if (errs.length) return refuse("Deck refusé : " + errs.join(" ; "));
+  const nm = String(m.name || "Invité").slice(0, 20);
+  DU.conn = c; DU.token = m.token; DU.names = [DU.names[0], nm === DU.names[0] ? nm + " (2)" : nm]; DU.decks = [DU.myDeck, m.deck];
+  DU.st = J(T.match_new(DU.mode, null, JSON.stringify(DU.decks[0]), JSON.stringify(DU.decks[1])));
+  DU.mid = Date.now().toString(36) + "-d" + DU.st.seed;
+  c.send({ t: "match", st: DU.st, decks: DU.decks, names: DU.names, mode: DU.mode, mid: DU.mid, code: DU.code });
+  duelBegin();
+}
+const duelResumeMsg = () => ({ t: "resume", st: DU.st, decks: DU.decks, names: DU.names, mode: DU.mode, mid: DU.mid, code: DU.code, prep: DU.prep,
+  game: DU.game && !DU.game.done ? { no: DU.game.no, args: DU.game.args, inputs: DU.game.inputs } : null });
+
+// ---------- invité : rejoindre (aussi après un rechargement : même jeton, gardé dans la session de l'onglet)
+function duelJoin(code, name, deck, token) {
+  if (typeof Peer === "undefined") return duelStat("PeerJS n'a pas pu se charger (vendor/peerjs.min.js).", "err");
+  const back = DU && DU.role === "guest" && DU.token === token ? DU : null;
+  if (DU && !back) duelLeave();
+  if (back) { try { back.peer && back.peer.destroy(); } catch (e) {} }
+  const d = back || duelNew("guest", code, null, [null, name], deck);
+  d.token = token; DU = d;
+  sess.set("rbt-duel", JSON.stringify({ code, name, deck, token }));
+  duelStat(`Connexion à la room ${code}…`);
+  const p = new Peer(peerOpts()); d.peer = p;
+  p.on("open", () => {
+    if (DU !== d) return;
+    const c = p.connect("rbl-" + code, { reliable: true });
+    c.on("open", () => { if (DU !== d) return; d.conn = c; netChip(); c.send({ t: "hello", name, deck, token, commit: BUILD.commit, engine: BUILD.engine }); duelStat("Connecté : l'hôte prépare le match…", "ok"); });
+    c.on("data", m => duelRecv(m, c));
+    c.on("close", () => { if (DU === d && d.conn === c) { d.conn = null; duelLost(); } });
+  });
+  p.on("error", e => {
+    if (DU !== d) return;
+    const why = e.type === "peer-unavailable" ? `Room ${code} introuvable : vérifie le code ; l'hôte doit garder sa page ouverte.` : "Erreur de connexion (" + (e.type || errTxt(e)) + ").";
+    duelStat(why, "err"); toast(why, "flash");
+    if (!d.st) { DU = null; sess.del("rbt-duel"); try { p.destroy(); } catch (x) {} }
+    netChip();
+  });
+}
+async function duelAutoResume() {
+  let s = null; try { s = JSON.parse(sess.get("rbt-duel") || "null"); } catch (e) {}
+  if (!s || !s.code || DU) return;
+  await loadCatalog();
+  showMenu("friend");
+  duelJoin(s.code, s.name, s.deck, s.token);
+  duelStat(`Reconnexion à la room ${s.code}…`);
+}
+function duelLost() {
+  netChip();
+  if (!DU) return;
+  if (DU.role === "host") toast(`${oppName()} s'est déconnecté : la room reste ouverte, il peut recharger sa page pour revenir.`, "flash");
+  else toast("Connexion perdue avec l'hôte. Touche « Déconnecté » en haut pour revenir.", "flash");
+}
+
+// ---------- messages : traités un par un, dans l'ordre d'arrivée (une entrée attend la fin de la précédente)
+function duelRecv(m, c) {
+  if (!DU || !m || typeof m !== "object") return;
+  const d = DU;
+  d.q = d.q.then(() => DU === d ? duelHandle(m, c) : null).catch(err => { console.error(err); toast("Erreur du duel : " + errTxt(err), "flash"); });
+}
+async function duelHandle(m, c) {
+  const P = DU.prep, other = 1 - DU.place, here = P && m.game === P.game;
+  switch (m.t) {
+    case "hello": if (DU.role === "host") duelHello(m, c); return;
+    case "refuse": duelStat(m.why || "Refusé par l'hôte.", "err"); toast(m.why || "Refusé par l'hôte.", "flash"); { const d = DU; DU = null; sess.del("rbt-duel"); setTimeout(() => d.peer && d.peer.destroy(), 300); } showMenu("friend"); duelStat(m.why || "Refusé par l'hôte.", "err"); return;
+    case "match": if (DU.role !== "guest") return; Object.assign(DU, { st: m.st, decks: m.decks, names: m.names, mode: m.mode, mid: m.mid }); duelBegin(); return;
+    case "resume": if (DU.role === "guest") await duelResume(m); return;
+    case "sync": if (DU.role === "host") duelSend(duelResumeMsg()); return;
+    case "bye": toast(`${oppName()} a quitté le duel.`, "flash"); if (DU.conn) try { DU.conn.close(); } catch (e) {} DU.conn = null; netChip(); return;
+    case "first": if (here && P.chooser === other && P.first === null) { P.first = +m.v; duelPrepRefresh(); await hostMaybeStart(); } return;
+    case "bf": if (here && !P.bf[other]) { P.bf[other] = m.v; duelPrepRefresh(); await hostMaybeStart(); } return;
+    case "deck": if (here && !P.sb[other]) { P.deck[other] = m.deck; P.sb[other] = true; duelPrepRefresh(); await hostMaybeStart(); } return;
+    case "start": if (DU.role === "guest" && P && m.game === P.game && !P.started) await duelStartGame(m.args, m.game); return;
+    case "in": {
+      while (working) await sleep(25);
+      const g = DU.game;
+      if (!g || g.no !== m.g || g.done) return;
+      if (m.n < g.inputs.length) return;                 // déjà appliquée (renvoi après reconnexion)
+      if (m.n > g.inputs.length) {                       // une entrée manque : on redemande tout à l'hôte
+        if (DU.role === "guest") duelSend({ t: "sync" }); else toast("Désynchronisation détectée : l'invité doit recharger sa page.", "flash");
+        return;
+      }
+      await duelApply(m.op, m.v);
+      return;
+    }
+  }
+}
+
+// ---------- préparation d'une manche (règles du match : 407, 485, 486, 403 ; les deux places sont humaines)
+function duelBegin() {
+  sess.set("rbt-duel-mid", DU.mid || "");
+  netChip();
+  duelPrepNew();
+  hideMenu(); closeModal();
+  duelPrepUI(true);
+}
+function duelPrepNew() {
+  const nx = J(T.match_duel_next(JSON.stringify(DU.st)));
+  const P = { game: nx.game, nx, chooser: nx.chooser, first: nx.chooser === null || nx.chooser === undefined ? nx.first : null,
+    bf: [null, null], pick: null, deck: [null, null], sb: [!nx.sideboard, !nx.sideboard], started: false };
+  if (P.chooser === undefined) P.chooser = null;
+  if (DU.mode === "bo1" && nx.bo1_bfs) P.bf = nx.bo1_bfs.slice();
+  for (const p of [0, 1]) if (!P.bf[p] && nx.allowed[p].length === 1) P.bf[p] = nx.allowed[p][0];
+  if (!nx.sideboard) P.deck = DU.decks.slice();
+  DU.prep = P; DU.prepShown = false;
+}
+const prepOpen = () => DU && DU.prepShown && !$("modal").hidden;
+function duelPrepRefresh() { if (prepOpen() && !DU.sbOpen) duelPrepUI(); }
+function duelNextGame() { if (!DU || !DU.prep) return; duelPrepUI(true); }
+function duelPrepUI(force) {
+  const P = DU && DU.prep; if (!P || P.started) return;
+  if (!force && !prepOpen()) return;
+  DU.prepShown = true;
+  const me = DU.place, op = 1 - me, on = oppName(), nx = P.nx;
+  if (!P.sb[me]) {   // sideboard d'abord (403 : permis à partir de la manche 2, sauf après une nulle)
+    if (!DU.sbOpen) { DU.sbOpen = true; sbOpen({ deck: DU.decks[me], game: P.game, score: duelScore(), done: (nd, txt) => {
+      const d = nd || DU.decks[me]; DU.sbOpen = false; P.deck[me] = d; P.sb[me] = true; DU.sbDone = txt;
+      duelSend({ t: "deck", game: P.game, deck: d }); duelPrepUI(true); hostMaybeStart(); } }); }
+    return;
+  }
+  let who;
+  if (P.game === 1) who = `<div class="mres ${nx.roll === me ? "me" : "opp"}" id="pRoll">${nx.roll === me ? "Tu gagnes le tirage au sort." : esc(on) + " gagne le tirage au sort."}</div>
+      <div class="small rule">Règles 407.1-407.2 : le gagnant du tirage choisit de jouer en premier ou en second.</div>`;
+  else if (P.chooser === me) who = `<div class="mres">Tu as perdu la manche précédente : à toi de choisir.</div><div class="small rule">Règle 407.4 : le perdant de la manche précédente choisit.</div>`;
+  else if (P.chooser === op) who = `<div class="mres">${esc(on)} a perdu la manche précédente : à lui de choisir.</div><div class="small rule">Règle 407.4 : le perdant de la manche précédente choisit.</div>`;
+  else who = `<div class="mres">Manche précédente nulle : même premier joueur.</div><div class="small rule">Règle 407.4 : après une nulle, le joueur qui a commencé recommence.</div>`;
+  if (P.first === null && P.chooser === me) who += `<div class="prepq">Jouer en premier ou en second ?</div><div class="choices">
+      <button data-df="first">Jouer en premier</button><button data-df="second">Jouer en second</button></div>`;
+  else if (P.first === null) who += `<div class="prepdec" id="pDecision"><span class="think"><i></i>${esc(on)} choisit qui commence…</span></div>`;
+  else who += `<div class="prepdec" id="pDecision">${P.first === me ? "Tu commences." : esc(on) + " commence."}</div>`;
+  let bfs;
+  if (DU.mode === "bo1") bfs = `<div class="prepq">Tirés au hasard (règle 485.5)</div><div class="small" id="pBfs">Toi : <b>${esc(P.bf[me])}</b> · ${esc(on)} : <b>${esc(P.bf[op])}</b></div>`;
+  else {
+    const both = P.bf[0] && P.bf[1], gone = DU.st.bfs[me].filter(b => !nx.allowed[me].includes(b));
+    bfs = P.bf[me] ? `<div class="prepq">Ton battlefield : <b id="pMyBf">${esc(P.bf[me])}</b></div>`
+      : `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed[me].map(b => `<button data-dbf="${esc(b)}" aria-pressed="${P.pick === b}"><span class="bfth" style="${art(b)}"></span><span>${esc(b)}</span></button>`).join("")}</div>
+        <div class="big"><button class="main" id="bDuelBf"${P.pick ? "" : " disabled"}>Valider mon battlefield</button></div>`;
+    bfs += `<div class="small" id="pOppBf">${both ? `${esc(on)} : <b>${esc(P.bf[op])}</b>` : P.bf[op] ? `${esc(on)} a choisi son battlefield : il sera révélé quand vous aurez choisi tous les deux (règle 486.5).` : `<span class="think"><i></i>${esc(on)} choisit son battlefield…</span>`}</div>`;
+    if (gone.length) bfs += `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5) : ${gone.map(esc).join(", ")}.</div>`;
+  }
+  const waitSb = !P.sb[op] ? `<div class="small" id="pOppSb"><span class="think"><i></i>${esc(on)} fait son sideboard…</span></div>` : "";
+  const ready = P.first !== null && P.bf[0] && P.bf[1] && P.sb[0] && P.sb[1];
+  openModal(`<h3>Manche ${P.game} · ${DU.mode.toUpperCase()} · duel</h3><div class="mscore" id="pScore">Match : ${esc(duelScore())}${DU.sbDone && P.game > 1 ? ` · <span class="small">${esc(DU.sbDone)}</span>` : ""}</div>
+    <section class="prep"><div class="grp">Qui commence</div>${who}</section>
+    <section class="prep"><div class="grp">Battlefield</div>${bfs}${waitSb}</section>
+    <div class="mstat ok" id="pReady">${ready ? "Tout est choisi : la manche démarre…" : "La manche démarre dès que vous avez tous les deux choisi."}</div>
+    <div class="big"><button id="bDuelQuit">Quitter le duel</button></div>`, false);
+  $("mbox").querySelectorAll("[data-df]").forEach(b => b.onclick = () => {
+    if (P.first !== null) return;
+    P.first = b.dataset.df === "first" ? me : op;
+    duelSend({ t: "first", game: P.game, v: P.first }); duelPrepUI(true); hostMaybeStart();
+  });
+  $("mbox").querySelectorAll("[data-dbf]").forEach(b => b.onclick = () => { P.pick = b.dataset.dbf; duelPrepUI(true); });
+  if ($("bDuelBf")) $("bDuelBf").onclick = () => { if (!P.pick || P.bf[me]) return; P.bf[me] = P.pick; duelSend({ t: "bf", game: P.game, v: P.pick }); duelPrepUI(true); hostMaybeStart(); };
+  $("bDuelQuit").onclick = () => { if (confirm("Quitter le duel ? Ton ami sera prévenu.")) { duelLeave(); closeModal(); showMenu(); } };
+}
+// L'hôte lance la manche dès que tout est choisi et envoie les arguments de duel_new.
+async function hostMaybeStart() {
+  const P = DU && DU.prep;
+  if (!P || DU.role !== "host" || P.started) return;
+  if (P.first === null || !P.bf[0] || !P.bf[1] || !P.sb[0] || !P.sb[1]) return;
+  const args = [P.nx.seed, P.bf[0], P.bf[1], P.first, JSON.stringify(P.deck[0]), JSON.stringify(P.deck[1])];
+  duelSend({ t: "start", game: P.game, args });
+  await duelStartGame(args, P.game);
+}
+
+// ---------- manche
+function duelEngine(args, game) {
+  MEP = DU.place;
+  META = J(T.duel_new(args[0], args[1], args[2], args[3], args[4], args[5], MEP, DU.names.slice()));
+  if (REC && recT) recSave(true);
+  PN = META.names; CARDS = J(T.cards());
+  LOG = []; LOGSTACK = []; V = null; lastAI = null; sel = null; mode = null; toast("");
+  DU.decks = [J(args[4]), J(args[5])];
+  if (DU.prep) DU.prep.started = true;
+  DU.prepShown = false; DU.sbOpen = false;
+  DU.game = { no: game, args, inputs: [], done: false };
+  // une manche = un enregistrement (id stable : le rechargement de l'invité réécrit le même)
+  REC = { id: `${DU.mid}-g${game}-p${MEP}`, ver: PAGE_VER, kind: "duel", duel: { room: DU.code, me: MEP, names: PN.slice() }, args, inputs: [],
+    seed: META.seed, names: PN.slice(), bfs: META.bf, whoFirst: META.first, started: new Date().toISOString(), result: null,
+    match: { id: DU.mid, mode: DU.mode, game, seed: DU.st.seed }, commit: BUILD.commit, engine: BUILD.engine };
+  chip("");
+  closeModal(); hideMenu();
+  $("gmeta").textContent = `Duel · room ${DU.code} · ${DU.mode.toUpperCase()} · ${PN[MEP]} contre ${PN[OPP()]} · ${META.first === MEP ? "tu commences" : PN[OPP()] + " commence"} · ${META.bf[MEP]} / ${META.bf[OPP()]}`;
+  $("gres").hidden = true;
+  duelChip(); netChip();
+}
+function duelChip() {
+  const c = $("gmatch"); if (!c || !DU) return;
+  c.hidden = false;
+  c.textContent = DU.st.over ? `Match ${DU.st.winner === MEP ? "gagné" : DU.st.winner === OPP() ? "perdu" : "nul"} · ${duelScore()}` : `Manche ${DU.game ? DU.game.no : 1} · ${duelScore()}`;
+}
+async function duelStartGame(args, game) {
+  duelEngine(args, game);
+  toast(`Battlefields révélés : toi ${META.bf[MEP]} · ${PN[OPP()]} ${META.bf[OPP()]}`);
+  await pump(J(T.step()));
+}
+// Entrée du joueur local : numérotée, envoyée, puis appliquée par choose / answer.
+function duelLocal(op, v, label) {
+  const g = DU.game; if (!g) return;
+  const n = g.inputs.length;
+  g.inputs.push([op, v, MEP]);
+  duelSend({ t: "in", g: g.no, n, op, v });
+  if (REC && REC.inputs) { REC.inputs.push([op, v, MEP, label, V ? V.st.t : 0]); recSave(false); }
+}
+// Entrée de l'adversaire : même fonction du moteur, même valeur, même ordre.
+async function duelApply(op, v) {
+  const g = DU.game;
+  g.inputs.push([op, v, OPP()]);
+  if (REC && REC.inputs) { REC.inputs.push([op, v, OPP(), "", V ? V.st.t : 0]); recSave(false); }
+  sel = null; mode = null; lastAI = null; $("pop").hidden = true;
+  working = true;
+  await pump(J(op === "act" ? T.act(v) : T.answer(JSON.stringify(v))));
+}
+// Rechargement de l'invité : on refait la manche avec les arguments et toutes les entrées gardés par l'hôte.
+async function duelResume(m) {
+  Object.assign(DU, { st: m.st, decks: m.decks, names: m.names, mode: m.mode, mid: m.mid, code: m.code || DU.code, prep: m.prep });
+  sess.set("rbt-duel-mid", DU.mid || "");
+  if (!m.game) {
+    DU.game = null; hideMenu(); closeModal();
+    if (DU.prep) { DU.prep.started = false; DU.sbOpen = false; duelPrepUI(true); }
+    duelStat("Reconnecté.", "ok"); netChip(); return;
+  }
+  while (working) await sleep(25);
+  working = true;
+  try {
+    duelEngine(m.game.args, m.game.no);
+    const run = v => { addLog(v.log || []); v.log = []; while (v.busy) { v = J(T.step()); addLog(v.log || []); v.log = []; } return v; };
+    let v = run(J(T.step()));
+    for (const [op, x, pl] of m.game.inputs) {
+      v = run(J(op === "act" ? T.act(x) : T.answer(JSON.stringify(x))));
+      DU.game.inputs.push([op, x, pl]); REC.inputs.push([op, x, pl, "", v.st.t]);
+    }
+    working = false;
+    show(v);
+    toast(`Partie reprise : ${m.game.inputs.length} coups rejoués.`);
+  } catch (err) { working = false; console.error(err); toast("Reprise impossible : " + errTxt(err), "flash"); }
+  duelStat("Reconnecté.", "ok"); netChip();
+}
+// Fin de manche : score du match des deux côtés (match_record), puis préparation de la suivante.
+function duelCtrlEnd(v) {
+  const M = $("bMain"), I = $("turnInfo"), w = v.winner === MEP, l = v.winner === OPP();
+  const g = DU.game;
+  if (g && !g.done) {
+    g.done = true;
+    try { DU.st = J(T.match_record(JSON.stringify(DU.st), META.first, JSON.stringify(META.bf), v.winner === 0 || v.winner === 1 ? v.winner : -1)); }
+    catch (err) { console.error(err); toast("Erreur du moteur : " + errTxt(err), "flash"); }
+    if (REC) REC.match.wins = DU.st.wins.slice();
+    recFinish(v);
+    if (!DU.st.over) duelPrepNew(); else DU.prep = null;
+  }
+  duelChip();
+  I.innerHTML = `<b class="${w ? "me" : "opp"}">${w ? "Victoire !" : l ? "Défaite" : "Partie nulle"}</b> ${v.st.pts[MEP]}-${v.st.pts[OPP()]}<span class="tn">Match : ${esc(duelScore())}</span>`;
+  $("gres").hidden = false; $("gres").className = "res " + (w ? "w" : "l"); $("gres").textContent = `${w ? "Victoire" : l ? "Défaite" : "Nulle"} ${v.st.pts[MEP]}-${v.st.pts[OPP()]}`;
+  M.disabled = false;
+  if (!DU.st.over) { M.textContent = "Manche suivante"; M.onclick = () => duelNextGame(); }
+  else { M.textContent = "Retour au menu"; M.onclick = () => { duelLeave(); showMenu(); }; }
+}
+const duelOverTxt = () => { const w = DU.st.wins, k = DU.st.winner, s = `${w[MEP]}-${w[OPP()]}`; return k === MEP ? `Victoire du match ${s}` : k === OPP() ? `Défaite du match ${s}` : `Match nul ${s}`; };
+function duelEndHTML() {
+  const w = V.winner === MEP, l = V.winner === OPP();
+  const head = `<span class="ft big ${w ? "me" : "opp"}">${w ? "Victoire !" : l ? "Défaite" : "Partie nulle"} ${V.st.pts[MEP]}-${V.st.pts[OPP()]}</span>`;
+  if (!DU.st.over) return head + `<span class="ft" id="fScore">Manche ${DU.game ? DU.game.no : ""} terminée · Match : ${esc(duelScore())}</span>
+    <div class="prow"><button class="go" id="bNextGame">Manche suivante</button></div>`;
+  return head + `<span class="ft big ${DU.st.winner === MEP ? "me" : "opp"}" id="fScore">${duelOverTxt()}</span><div class="prow"><button class="go" id="bDuelMenu">Retour au menu</button></div>`;
+}
+addEventListener("pagehide", () => { if (DU && DU.role === "host") duelSend({ t: "bye" }); });
+
 // ------------------------------------------------------------ menu d'accueil
 // Écran d'accueil : point d'entrée de toute la table. Chaque vue (éditeur, nouvelle partie, listes) a un retour au menu.
 let READY = false, ENGERR = "", MENUV = "main", REPLAYS = false;
@@ -1754,6 +2189,7 @@ function menuRender(view) {
       <div class="mgrid">
       ${inGame ? item("resume", "▶", "Reprendre la partie", "Retourne à la table, tour " + V.st.t, "hot") : V ? item("resume", "▶", "Revoir la partie terminée", "Retourne à la table : " + (V.winner === 0 ? "victoire" : V.winner === 1 ? "défaite" : "partie nulle") + " " + V.st.pts[0] + "-" + V.st.pts[1]) : ""}
       ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis ton deck, celui de l'IA et son niveau.", inGame ? "" : "hot")}
+      ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room, en BO1 ou BO3.")}
       ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
       ${item("mydecks", "▤", "Mes decks", "Ta liste de decks : modifier ou jouer directement.")}
       ${item("games", "◷", "Mes parties", "Les parties enregistrées depuis cette page.")}
@@ -1770,18 +2206,22 @@ function menuRender(view) {
       <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches violettes : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
+      <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de « Reprendre » ni de conseil en duel. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
       <li><b>Donne.</b> Même numéro de donne = même partie. Laisse vide pour une donne au hasard.</li></ol></div></div>`;
   } else if (MENUV === "mydecks") {
     const ds = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
     h = `<div class="menuin msub">${back}<h2>Mes decks</h2>` + (ds.length ? ds.map(d => { const ok = deckOK(d); return `<div class="mcard row"><div class="grow"><div class="t">${esc(d.name)}</div><div class="small">${esc(d.legend || "sans légende")} · ${cnt(d.main) + (d.champion ? 1 : 0)}/40 cartes${cnt(d.sideboard) ? " · sideboard " + cnt(d.sideboard) : ""} · ${ok ? "jouable ✓" : "pas encore jouable"}</div></div><div class="acts"><button data-edit="${esc(d.id)}">Modifier</button><button data-play="${esc(d.id)}"${ok ? "" : " disabled"}>Jouer</button></div></div>`; }).join("")
       : `<div class="mcard">Aucun deck pour l'instant. Les decks de référence (Akali G2, LeBlanc IQ#5…) sont proposés dans « Nouvelle partie ».</div>`)
       + `<div class="mcard row"><div class="grow small">Les decks sont gardés sur cet appareil, et dans la base claude.ai quand elle existe.</div><div class="acts"><button data-m="deck">Créer un deck</button></div></div></div>`;
+  } else if (MENUV === "friend") {
+    h = friendHTML(back);
   } else if (MENUV === "games") {
     h = `<div class="menuin msub">${back}<h2>Mes parties</h2><div class="mcard" id="gamesBox">Chargement…</div></div>`;
   }
   M.innerHTML = h;
   M.scrollTop = 0;
   if (MENUV === "games") loadGames();
+  if (MENUV === "friend") friendWire();
 }
 async function loadGames() {
   const box = $("gamesBox"); if (!box) return;
@@ -1795,8 +2235,9 @@ async function loadGames() {
   if (MENUV !== "games" || !$("gamesBox")) return;
   gs.sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
   const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
-    const res = r ? (r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle") + " " + (r.pts || []).join("-") : "en cours";
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · IA ${g.level === 3 ? "forte" : "normale"}</div></div></div>`; }).join("")
+    const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
+    const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
@@ -1811,9 +2252,10 @@ $("menu").addEventListener("click", async e => {
   const m = t.dataset.m;
   if (m === "new") { hideMenu(); setupForm(); }
   else if (m === "resume") hideMenu();
+  else if (m === "duel") { hideMenu(); if (!(DU.game && !DU.game.done)) duelPrepUI(true); }
   else if (m === "deck") { hideMenu(); openDecks(); }
   else menuRender(m);
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("menu").hidden && MENUV !== "main") menuRender("main"); });
-showMenu();
+showMenu(/[#&]room=/i.test(location.hash) ? "friend" : "main");
 </script>
