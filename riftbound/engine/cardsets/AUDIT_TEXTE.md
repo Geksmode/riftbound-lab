@@ -72,3 +72,6 @@ Peak Guardian, Portal Rescue, Arcane Shift, Gentlemen's Duel, En Garde.
 - Acceleration Gate côté humain (choix des objets à préparer) ; éditeur de deck (Spiderling).
 - Pour l'IA : un choix « zéro cible » existe désormais pour Singularity, Fox-Fire, Bellows Breath, Tricksy Tentacles,
   Disposal Order et Volibear. Il est placé en dernier ; l'effet sur l'IA de recherche (jouer une carte sans cible) n'a pas été mesuré.
+
+## Contrôle automatique (2026-10-08)
+`test_texte_auto.py` classe le texte de tous les sorts modélisés (cible obligatoire / « up to », « any number ») et vérifie que le moteur est d'accord, sur plateau vide et avec des unités partout. Les sorts que le classement lit mal sont listés dans `EXCEPTIONS`, avec leur raison. **Deathgrip** : à trancher (voir l'exception).
