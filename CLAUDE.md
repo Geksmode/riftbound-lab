@@ -20,7 +20,8 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    collecte de comptes rendus de tournoi. Voir `docs/memoire/retex-method.md`.
 2. **Simulations** : toujours rejouer une option retenue sur des graines **neuves** avant de l'annoncer ; ne jamais
    regrouper des configurations jouées sur les mêmes graines comme si elles étaient indépendantes ; donner l'intervalle
-   (± écart-type) et dire « on ne sait pas » sous 2 écarts-types. Ne jamais agréger des chiffres de deux versions du moteur.
+   (± écart-type) et dire « on ne sait pas » sous 2 écarts-types. Ne jamais agréger des chiffres de deux versions du moteur :
+   comparer et regrouper avec `riftbound/engine/compare.py`, qui refuse ces cas (`docs/wiki/pages/resultats.md`).
 3. **Replays après chaque simulation** : ajouter les 2 à 5 parties les plus instructives au lecteur de replays
    (`riftbound/engine/add_replays.py`, voir `docs/memoire/replays-after-every-sim.md`).
 4. **Cartes non modélisées** : une carte absente de `cards.IMPL` est bloquée dans l'éditeur de deck. Ne jamais

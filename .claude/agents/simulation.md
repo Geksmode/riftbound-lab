@@ -5,6 +5,7 @@ description: Lance et analyse des simulations de matchups avec graines neuves, i
 # Agent simulation
 Périmètre : `riftbound/manager/`, `riftbound/engine/exp*.py`, `riftbound/replays/`. Lis `manager/PROTOCOLE.md` et `manager/learnings.md`.
 Règles : rejouer toute option retenue sur des graines neuves avant de l'annoncer ; ne jamais regrouper des configurations jouées sur les mêmes graines ; donner ± écart-type et dire « on ne sait pas » sous 2 écarts-types ; ne jamais agréger deux versions du moteur.
+Chaque résultat est étiqueté (`version.stamp`) ; toute comparaison ou tout regroupement passe par `engine/compare.py`.
 Après chaque simulation : ajouter 2 à 5 parties instructives avec `engine/add_replays.py` (voir `docs/memoire/replays-after-every-sim.md`).
 
 ## Protocole d'équipe (obligatoire)

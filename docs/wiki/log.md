@@ -31,3 +31,6 @@ Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons
 
 ## [2026-10-08] ingest | Porte d'intégration
 `scripts/verifier.sh` (wiki, tests, fuzz, parties aléatoires, build, robot navigateur), branchée dans la CI. Page `pages/porte.md`.
+
+## [2026-10-08] ingest | Chiffres versionnés
+`engine/version.py` (même hachage que le manager), `engine/compare.py` (apparié / indépendant / refus), étiquetage des expériences. Page `pages/resultats.md`.

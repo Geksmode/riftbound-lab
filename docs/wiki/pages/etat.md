@@ -22,7 +22,7 @@ sources: docs/REPRISE.md, git log, CI
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
 1. ~~Porte d'intégration~~ **fait le 2026-10-08** : [porte.md](porte.md).
-2. Chiffres de simulation étiquetés : hash du moteur et graines dans chaque fichier de résultats ; un script de comparaison refuse de mélanger deux versions ou deux séries sur les mêmes graines.
+2. ~~Chiffres versionnés~~ **fait le 2026-10-08** : [resultats.md](resultats.md).
 3. Tests générés depuis le texte des cartes (`up to` jouable à zéro cible, `you may` refusable, `then` appliqué quand même).
 4. Boucle « chaque partie jouée améliore l'IA » : export de la partie, analyse en CI, modèle des choix adopté seulement s'il gagne à plus de 2 écarts-types sur graines neuves.
 
