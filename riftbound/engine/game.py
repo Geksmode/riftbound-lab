@@ -2224,6 +2224,9 @@ class Game:
         tiers = [[u for u in targets if tank(u)],
                  [u for u in targets if not tank(u) and not last(u)],
                  [u for u in targets if last(u) and not tank(u)]]
+        from actions import full_choices
+        if full_choices(s, pid):
+            return s.assign_by_hand(pid, total, tiers)
         order = []
         for t in tiers:
             if len(t) > 1:
@@ -2242,6 +2245,30 @@ class Game:
         if left > 0 and order:
             out[order[-1]] = out.get(order[-1], 0) + left
             excess += left
+        if s.sd is not None:
+            s.sd.excess[pid] = excess
+        return out
+
+    def assign_by_hand(s, pid, total, tiers):
+        """Joueur humain : il choisit une à une l'unité qui reçoit ses dégâts mortels en entier (465.2.c.3), parmi
+        celles que les règles permettent à cet instant (Tank d'abord 815.1.c.2, Backline en dernier 826.4.b).
+        La dernière unité reçoit tout le reste, excédent compris (465.2.c.4)."""
+        out, left, excess = {}, total, 0
+        tiers = [list(t) for t in tiers if t]
+        while left > 0 and tiers:
+            t = tiers[0]
+            if len(t) == 1:
+                u = t[0]
+            else:
+                u = s.ask(pid, "damage_pick", list(t), left=left, need={x.uid: s.lethal_need(x, pid) for x in t})
+            t.remove(u)
+            if not t:
+                tiers.pop(0)
+            need = s.lethal_need(u, pid)
+            n = left if not tiers else min(left, need)
+            out[u] = n
+            excess += max(0, n - need)
+            left -= n
         if s.sd is not None:
             s.sd.excess[pid] = excess
         return out

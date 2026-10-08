@@ -22,15 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Contrôle du wiki
-        run: python3 scripts/wiki_lint.py
-      - name: Suite de tests du moteur (tous doivent passer)
-        run: cd riftbound/engine && python3 test_all.py
-      - name: 20 parties avec des decks légaux au hasard (0 erreur attendue)
-        run: |
-          cd riftbound/engine
-          python3 ../train/t_rand.py 20 | tee /tmp/t_rand.txt
-          grep -q "erreurs 0" /tmp/t_rand.txt
+      - name: Porte d'intégration, partie moteur (wiki, tests, fuzz de chaque paquet, parties aléatoires)
+        run: bash scripts/verifier.sh moteur
 
   build-table:
     runs-on: ubuntu-latest
@@ -44,9 +37,15 @@ jobs:
           node-version: "22"
       - name: Pyodide 0.26.4 (paquet npm)
         run: bash riftbound/train/fetch_pyodide.sh
-      - name: Construction de la table
+      - name: Playwright et Chromium (robot navigateur)
         run: |
-          bash riftbound/train/build.sh
+          cd riftbound/train
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Porte d'intégration, partie table (construction + partie jouée au format téléphone)
+        run: bash scripts/verifier.sh table
+      - name: Page d'accueil du site
+        run: |
           cp riftbound/train/build/train.html riftbound/train/build/index.html
           touch riftbound/train/build/.nojekyll
       - uses: actions/upload-pages-artifact@v3

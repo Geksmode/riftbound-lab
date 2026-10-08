@@ -18,12 +18,16 @@ sources: docs/REPRISE.md, git log, CI
 
 **Corrigé le 2026-10-08** : bug `tg2` du Repeat accordé (test `granted_repeat_never_reuses_printed_repeat_variant`) ; lien Replays du menu (`build.sh` publie `replays.html` + `games/`) ; bulle de fin de partie au-dessus de la barre à 360 px ; boutons ± de l'éditeur à 44 px. Vérifié par `train/verif_mobile.mjs` (Chromium, 360×740, partie jouée jusqu'au bout, coups injectés).
 
+**Énergie flottante (2026-10-08)** : le moteur épuise une rune prête avant de la recycler (Punch First en 1re carte : 1 énergie flotte, test `cardsets/test_energie_flottante.py`) ; la table affiche un badge « ⚡ N énergie flottante » et la puissance flottante par domaine dans la zone des runes. Vérifié dans Chromium 360×740 sur une partie réelle (graine 0, deck Sivir avec Punch First, coups injectés).
+
+**Dégâts de combat (2026-10-08)** : à la fin d'un showdown de combat, le joueur humain choisit une à une l'unité qui reçoit ses dégâts mortels (465.2.c.3), parmi celles que les règles permettent (Tank d'abord 815, Backline en dernier 826), excédent sur la dernière (465.2.c.4) ; l'IA garde son ordre. Tests `cardsets/test_degats_combat.py` ; vérifié dans Chromium 1400×900 sur une partie réelle (graine 0) : clic sur l'unité puis Valider.
+
 **Décision en attente** : branchement de `plans_general` dans `train.py`.
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
-1. Porte d'intégration `scripts/verifier.sh` (tests, 30 parties aléatoires, lint du wiki, build de la table), appliquée en CI aux branches `agent/*`.
-2. Chiffres de simulation étiquetés : hash du moteur et graines dans chaque fichier de résultats ; un script de comparaison refuse de mélanger deux versions ou deux séries sur les mêmes graines.
-3. Tests générés depuis le texte des cartes (`up to` jouable à zéro cible, `you may` refusable, `then` appliqué quand même).
+1. ~~Porte d'intégration~~ **fait le 2026-10-08** : [porte.md](porte.md).
+2. ~~Chiffres versionnés~~ **fait le 2026-10-08** : [resultats.md](resultats.md).
+3. ~~Tests générés depuis le texte des cartes~~ **fait en partie le 2026-10-08** : `engine/cardsets/test_texte_auto.py` (233 sorts : cible obligatoire injouable sur plateau vide, « up to / any number » jouable et toujours avec un choix sans cible, résolution sans erreur ; 15 unités « up to »). Pas encore généré : « you may » (refus proposé) et « then » au-delà de la résolution sans erreur. **Deathgrip** corrigé (décision de l'utilisateur : règles au plus près) : deux cibles alliées obligatoires (355.8), injouable sans deux unités alliées.
 4. Boucle « chaque partie jouée améliore l'IA » : export de la partie, analyse en CI, modèle des choix adopté seulement s'il gagne à plus de 2 écarts-types sur graines neuves.
 
 **Autres tâches en attente**

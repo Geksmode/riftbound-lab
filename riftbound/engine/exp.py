@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Suite d'experiences reprenable : python3 exp.py <parties> [budget_secondes].
 Chaque configuration terminee est ajoutee a results.json ; relancer continue la ou on s'est arrete."""
+from version import stamp
 import json, sys, time, os
 from pathlib import Path
 from multiprocessing import Pool
@@ -69,7 +70,7 @@ def one(arg):
     except Exception:
         import traceback
         return dict(err=traceback.format_exc()[-700:], seed=i)
-    return dict(w=g.winner, turns=g.turn_no, pts=[p.points for p in g.p], first=f)
+    return dict(w=g.winner, turns=g.turn_no, pts=[p.points for p in g.p], first=f, seed=i)
 
 
 def run_job(job, n, offset=0):
@@ -88,7 +89,8 @@ def run_job(job, n, offset=0):
             by["akali_first" if fi == 0 else "leblanc_first"] = round(sum(1 for o in sub if o["w"] == 0) / len(sub), 3)
     return dict(label=label, n=len(good), wr=round(wr, 4), se=round((wr * (1 - wr) / max(1, len(good))) ** .5, 4),
                 turns=round(sum(o["turns"] for o in good) / max(1, len(good)), 1), errors=len(errs),
-                err=errs[0]["err"] if errs else None, by_first=by, games=N)
+                err=errs[0]["err"] if errs else None, by_first=by, games=N,
+                per_seed=[[o["seed"], 1.0 if o["w"] == 0 else 0.5 if o["w"] == -1 else 0.0] for o in good])
 
 
 if __name__ == "__main__":
@@ -104,7 +106,7 @@ if __name__ == "__main__":
             left += 1
             continue
         t = time.time()
-        r = run_job(job, N)
+        r = stamp(run_job(job, N))
         done.append(r)
         json.dump(done, open(f, "w"), indent=1, ensure_ascii=False)
         print(f"{r['label']:42s} {r['wr']:6.1%} +-{r['se']:.3f} {r['turns']:5.1f} tours err={r['errors']}"

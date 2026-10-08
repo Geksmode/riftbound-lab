@@ -28,3 +28,24 @@ Le maximum possible jusqu'à 2, rien si toutes les runes sont prêtes (décision
 
 ## [2026-10-08] ingest | Problèmes connus corrigés
 Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons ± de l'éditeur ; robot `train/verif_mobile.mjs`.
+
+## [2026-10-08] ingest | Porte d'intégration
+`scripts/verifier.sh` (wiki, tests, fuzz, parties aléatoires, build, robot navigateur), branchée dans la CI. Page `pages/porte.md`.
+
+## [2026-10-08] ingest | Chiffres versionnés
+`engine/version.py` (même hachage que le manager), `engine/compare.py` (apparié / indépendant / refus), étiquetage des expériences. Page `pages/resultats.md`.
+
+## [2026-10-08] ingest | Tests générés depuis le texte des cartes
+`cardsets/test_texte_auto.py` : 233 sorts et 15 unités contrôlés automatiquement ; 8 faux positifs du classement expliqués ; Deathgrip à trancher.
+
+## [2026-10-08] ingest | Indicateur d'énergie flottante
+Badge dans la zone des runes de la table, puissance flottante exportée (`replay.snap` : `pp`) ; test Punch First.
+
+## [2026-10-08] decision | Règles au plus près ; Deathgrip
+Nouvelle règle permanente 6 de `CLAUDE.md` : en cas de doute, la lecture la plus fidèle aux Core Rules. Deathgrip : deux cibles alliées obligatoires (355.8).
+
+## [2026-10-08] ingest | Assignation des dégâts de combat par le joueur
+`game.assign_by_hand` : question « damage_pick » dans la table ; règles 465.2.c, 815, 826.
+
+## [2026-10-08] ingest | Boucle des parties
+Parties gardées dans le navigateur et téléchargeables, commit noté, rejeu par moteur exact (17/17 fidèles), `bilan_parties.py`, workflow « Apprentissage ». Page `pages/parties.md`.

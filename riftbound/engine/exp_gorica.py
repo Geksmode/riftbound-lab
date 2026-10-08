@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Suite Gorica (Akali Heron, RQ Singapour) : python3 exp_gorica.py <parties> [budget]. Resultats : results_gorica.json."""
+from version import stamp
 import json, sys, time
 import exp
 from exp import run_job, HERE, N, BUDGET, L, LS
@@ -43,7 +44,7 @@ if __name__ == "__main__":
             left += 1; continue
         t = time.time()
         off = job[6].get("_off", 0)
-        r = run_job(job[:6] + ({k: v for k, v in job[6].items() if k != '_off'},), N, off)
+        r = stamp(run_job(job[:6] + ({k: v for k, v in job[6].items() if k != '_off'},), N, off))
         done.append(r)
         json.dump(done, open(f, "w"), indent=1, ensure_ascii=False)
         print(f"{r['label']:44s} {r['wr']:6.1%} +-{r['se']:.3f} {r['turns']:5.1f} tours err={r['errors']} ({round(time.time()-t)}s)", flush=True)

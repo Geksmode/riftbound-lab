@@ -1,0 +1,34 @@
+name: Apprentissage (parties de l'utilisateur)
+
+# Quand un fichier de parties est déposé dans riftbound/train/games/games/ (téléchargé depuis « Mes parties » de la
+# table), chaque partie est rejouée avec le moteur exact qui l'a jouée (commit noté par la page, sinon copies figées
+# train/engine_versions/), comparée au coach, et un bilan est publié dans le résumé du run et en artefact.
+on:
+  push:
+    paths:
+      - "riftbound/train/games/games/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # git archive du commit noté par la page
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rejouer toutes les parties (moteur de leur époque) avec le coach
+        run: cd riftbound/engine && python3 train_games.py ../train/games/games/*.json --frozen --coach
+      - name: Bilan
+        run: |
+          cd riftbound/engine && python3 bilan_parties.py > /dev/null
+          cat ../train/analyses/BILAN.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: analyses-parties
+          path: riftbound/train/analyses/

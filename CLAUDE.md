@@ -20,7 +20,8 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    collecte de comptes rendus de tournoi. Voir `docs/memoire/retex-method.md`.
 2. **Simulations** : toujours rejouer une option retenue sur des graines **neuves** avant de l'annoncer ; ne jamais
    regrouper des configurations jouées sur les mêmes graines comme si elles étaient indépendantes ; donner l'intervalle
-   (± écart-type) et dire « on ne sait pas » sous 2 écarts-types. Ne jamais agréger des chiffres de deux versions du moteur.
+   (± écart-type) et dire « on ne sait pas » sous 2 écarts-types. Ne jamais agréger des chiffres de deux versions du moteur :
+   comparer et regrouper avec `riftbound/engine/compare.py`, qui refuse ces cas (`docs/wiki/pages/resultats.md`).
 3. **Replays après chaque simulation** : ajouter les 2 à 5 parties les plus instructives au lecteur de replays
    (`riftbound/engine/add_replays.py`, voir `docs/memoire/replays-after-every-sim.md`).
 4. **Cartes non modélisées** : une carte absente de `cards.IMPL` est bloquée dans l'éditeur de deck. Ne jamais
@@ -28,13 +29,15 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 5. **Vault** : le vault du projet est `docs/vault/` (notes Obsidian en français, liens `[[...]]`). Le vrai vault de
    l'utilisateur est sur son PC (Obsidian « Cerveau », dossier `20 Projets\Riftbound\`) : n'y écrire que s'il le
    demande lui-même. Chiffres remplacés → `docs/vault/Chiffres périmés.md`.
-6. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
+6. **Règles au plus près** : en cas de doute sur une carte, appliquer la lecture la plus fidèle aux Core Rules
+   (`riftbound/rules/source/core_rules_2026-07-16.txt`) et la citer. Ex. Deathgrip : deux cibles obligatoires (355.8).
+7. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
   d'itération d'un `set` qui compte (`sorted()`) : même graine = même partie. Une carte = une entrée `card(nom, ...)`
   avec au moins un test ; les numéros de règle sont cités en commentaire.
-- Après une modification du moteur : `test_all.py`, `fuzz_cards.py` sur les paquets touchés, 30 parties `t_rand.py`,
-  puis la table dans un navigateur avant de publier (commandes et carte du dépôt : `docs/wiki/pages/depot.md`).
+- Avant d'intégrer ou de publier : `scripts/verifier.sh` doit être vert (tests, fuzz de chaque paquet, parties aléatoires,
+  build et partie jouée dans un navigateur ; `docs/wiki/pages/porte.md`). Commandes et carte du dépôt : `docs/wiki/pages/depot.md`.
 - Les résultats de simulation d'avant le 2026-10-06 sont périmés (énergie flottante) : les remesurer avant de les citer.
 - Travail en équipe (chef + agents tmux) : `docs/wiki/pages/equipe.md`, missions : `docs/MISSIONS.md`.

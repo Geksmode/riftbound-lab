@@ -11,6 +11,7 @@ Versions : voir VERSIONS (nom -> (fabrique de plan, samples, horizon)). « base 
 Résultats ajoutés à results_general.json (une entrée par exécution, avec la graine0 : graines neuves = autre graine0).
 Temps par coup : moyenne et p95 des appels decide() de chaque version.
 """
+from version import stamp
 import json, sys, time, os, random, math, traceback
 from multiprocessing import Pool
 from pathlib import Path
@@ -150,6 +151,7 @@ def run(n, seed0, va, vb, procs=2):
                turns_mean=round(sum(sum(o["turns"]) for o in good) / max(1, 2 * len(good)), 1),
                errors=len(errs), err=errs[0]["err"] if errs else None, seconds=round(time.time() - t0),
                per_pair=[[o["seed"], o["score"]] for o in good], engine=os.popen("git -C %s rev-parse --short HEAD" % HERE).read().strip())
+    stamp(res)
     return res
 
 

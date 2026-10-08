@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Plans de jeu des joueurs (plans.py) : python3 exp_plans.py <parties> [graine0] [budget].
 Résultats : results_plans.json. Même bloc de graines pour toutes les configurations (comparaisons appariées)."""
+from version import stamp
 import json, sys, time, os, random
 from multiprocessing import Pool
 from exp import HERE, L
@@ -70,10 +71,10 @@ def run(job):
     wr = sum(w) / max(1, len(w))
     by = {k: round(sum(1 for o in good if o["first"] == fi and o["w"] == 0) / max(1, sum(1 for o in good if o["first"] == fi)), 3)
           for k, fi in (("akali_first", 0), ("leblanc_first", 1))}
-    return dict(label=label, n=len(good), wr=round(wr, 4), se=round((wr * (1 - wr) / max(1, len(good))) ** .5, 4),
+    return stamp(dict(label=label, n=len(good), wr=round(wr, 4), se=round((wr * (1 - wr) / max(1, len(good))) ** .5, 4),
                 turns=round(sum(o["turns"] for o in good) / max(1, len(good)), 1), errors=len(errs),
                 err=errs[0]["err"] if errs else None, by_first=by, games=N, seed0=SEED0,
-                per_seed=[[o["seed"], w[j]] for j, o in enumerate(good)])
+                per_seed=[[o["seed"], w[j]] for j, o in enumerate(good)]))
 
 
 if __name__ == "__main__":

@@ -493,6 +493,8 @@ def _alabel(g, ask, o):
     """Libellé d'une option selon la question : joueurs, X, répartitions de dégâts, paires (carte, choix de jeu)."""
     k = ask.kind
     try:
+        if k == "damage_pick":
+            return f"{_olabel(g, o)} (mortel : {ask.ctx.get('need', {}).get(o.uid, '?')} dégâts)"
         if k in ("burn_player", "choose_player") and isinstance(o, int):
             return "toi" if o == ME else "l'adversaire"
         if k == "bullet_time_x":
@@ -528,9 +530,10 @@ ASKS = dict(mulligan="Mulligan : choisis jusqu'à 2 cartes à remettre", may="Ut
             copy_target="Copier quelle unité ?", sacrifice="Sacrifier quelle unité ?", recycle_rune="Recycler quelle rune ?",
             hook_pick="Baited Hook : quelle unité prendre ?", zhonya_save="Zhonya : sauver quelle unité ?",
             star_spring="Star Spring : quelle unité ?", dusk_kill="Détruire quelle unité ?",
-            deathgrip_victim="Quelle unité sacrifier ?", herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",
+            herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",
             mixologist_pick="Quelle unité ?", ashe_pick="Quelle carte ?", target="Cible :",
-            damage_order="Ordre des dégâts :")
+            damage_order="Ordre des dégâts :",
+            damage_pick="Combat : quelle unité reçoit d'abord ses dégâts mortels ?")
 
 
 def _src(g, a):
@@ -620,6 +623,9 @@ def _ask_title(g, ask):
     """Titre de la question : connu (ASKS, puis cards.ASK_TEXT que chaque module remplit), précédé du nom de la carte
     qui demande quand il n'y figure pas déjà."""
     from cards import ASK_TEXT
+    if ask.kind == "damage_pick":
+        return (f"Combat : il te reste {ask.ctx.get('left')} dégâts à assigner. Quelle unité reçoit d'abord ses dégâts "
+                "mortels ? (règle 465.2.c : mortel en entier avant la suivante, l'excédent va à la dernière)")
     t = ASKS.get(ask.kind) or ASK_TEXT.get(ask.kind)
     it = ask.ctx.get("item") if isinstance(ask.ctx, dict) else None
     nm = getattr(it, "name", "") or ""
