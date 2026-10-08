@@ -123,5 +123,17 @@ def match_game_replays_faithfully_with_ai_battlefield():
     assert w.get("winner") == v.get("winner") and w["st"]["pts"] == v["st"]["pts"] and not any(m.get("desync") for m in mine)
 
 
+@T.test
+def duel_match_next_has_no_ai_choice():
+    st = train.match_new("bo3", 7, "akali-g2", "leblanc-iq5")
+    nx = json.loads(train.match_duel_next(st))
+    assert nx["chooser"] in (0, 1) and nx["first"] is None and len(nx["allowed"][0]) == 3 and len(nx["allowed"][1]) == 3
+    st2 = train.match_record(st, 0, json.dumps([nx["allowed"][0][0], nx["allowed"][1][1]]), 1)
+    nx2 = json.loads(train.match_duel_next(st2))
+    assert nx2["chooser"] == 0 and nx2["sideboard"] and nx["allowed"][1][1] not in nx2["allowed"][1]
+    b = json.loads(train.match_duel_next(train.match_new("bo1", 7, "akali-g2", "leblanc-iq5")))
+    assert b["bo1_bfs"][0] in b["allowed"][0] and b["bo1_bfs"][1] in b["allowed"][1]
+
+
 if __name__ == "__main__":
     T.main()

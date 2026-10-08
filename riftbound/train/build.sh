@@ -34,6 +34,8 @@ cp pyodide-cache/package/{pyodide.js,pyodide.asm.js,pyodide.asm.wasm,pyodide-loc
 base64 -w0 pyodide-cache/package/python_stdlib.zip > $B/pyodide/python_stdlib.b64.txt
 cp $E/replays/img/* $B/img/
 cp atlas/* $B/atlas/
+# PeerJS pour les duels entre amis (téléchargé par fetch_pyodide.sh)
+mkdir -p $B/vendor && cp pyodide-cache/peerjs/package/dist/peerjs.min.js $B/vendor/
 # lecteur de replays servi à côté de la table (il lit img/index.json, déjà copié ci-dessus, et games/)
 cp $E/replays/viewer.html $B/replays.html
 mkdir -p $B/games && cp $E/replays/games/* $B/games/

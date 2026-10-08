@@ -216,6 +216,19 @@ def match_next(state, mine=None, opp=None, human_bf=None):
                            sideboard=_m.can_sideboard(st), seed=_m.seed_of(st), wins=st["wins"], over=_m.over(st)))
 
 
+def match_duel_next(state):
+    """Duel entre deux joueurs : préparation de la manche sans aucun choix d'IA (les deux places sont humaines) :
+    qui choisit le premier joueur (place 0 = hôte, 1 = invité, None = imposé après une nulle), battlefields permis
+    pour chaque place (choix simultanés, ou tirés au hasard en BO1), sideboard permis, graine de la manche."""
+    import match as _m
+    st = json.loads(state)
+    bo1 = _m.pick_bfs(st) if st["mode"] == "bo1" else None
+    return json.dumps(dict(game=_m.game_no(st), chooser=_m.chooser(st), first=_m.forced_first(st),
+                           roll=st["roll"] if _m.game_no(st) == 1 else None,
+                           allowed=[_m.allowed_bfs(st, 0), _m.allowed_bfs(st, 1)], bo1_bfs=bo1,
+                           sideboard=_m.can_sideboard(st), seed=_m.seed_of(st), wins=st["wins"], over=_m.over(st)))
+
+
 def match_record(state, first, bfs, win):
     import match as _m
     st = _m.record(json.loads(state), int(first), json.loads(bfs) if isinstance(bfs, str) else bfs, int(win))
