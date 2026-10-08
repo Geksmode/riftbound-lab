@@ -91,5 +91,37 @@ def train_match_api_runs_a_game():
     assert nx2["chooser"] == 1 and nx2["first"] == 1 and nx2["sideboard"] and v["bf"][1] not in [nx2["ai_bf"]]
 
 
+@T.test
+def match_game_replays_faithfully_with_ai_battlefield():
+    """Une manche de match enregistrée comme le fait la page (bf, first, obf, coups) se rejoue à l'identique."""
+    import random, train_games
+    st = train.match_new("bo3", 21)
+    nx = json.loads(train.match_next(st))
+    first = nx["first"] if nx["first"] is not None else 1
+    natural = json.loads(train.new(nx["seed"], nx["allowed"][1], first, 1))["bf"][1]   # choix de l'IA sans obf
+    ai_bf = next(b for b in json.loads(st)["bfs"][1] if b != natural)                    # imposer un AUTRE battlefield
+    meta = json.loads(train.new(nx["seed"], nx["allowed"][1], first, 1, None, None, ai_bf))
+    rng, moves, v = random.Random(4), [], json.loads(train.step())
+    for _ in range(3000):
+        while v.get("busy"):
+            v = json.loads(train.step())
+        if v.get("winner") is not None:
+            break
+        if v.get("ask"):
+            x = [] if v["ask"]["kind"] == "mulligan" else rng.randrange(len(v["ask"]["options"]))
+            moves.append(["ans", x]); v = json.loads(train.answer(json.dumps(x)))
+        elif v.get("dec"):
+            i = rng.randrange(len(v["dec"]["options"]))
+            moves.append(["act", i]); v = json.loads(train.act(i))
+        else:
+            v = json.loads(train.step())
+    assert meta["bf"][1] == ai_bf
+    rec = dict(id="t", seed=nx["seed"], bf=meta["bf"][0], first=first, level=1, obf=ai_bf, moves=moves,
+               result=dict(winner=v.get("winner"), pts=v["st"]["pts"]))
+    _, mine, w = train_games.replay(rec)
+    assert ai_bf in [b.name for b in train.W["g"].bfs], "le rejeu doit utiliser le battlefield imposé de l'IA"
+    assert w.get("winner") == v.get("winner") and w["st"]["pts"] == v["st"]["pts"] and not any(m.get("desync") for m in mine)
+
+
 if __name__ == "__main__":
     T.main()

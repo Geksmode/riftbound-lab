@@ -20,4 +20,11 @@ sources: riftbound/engine/match.py, riftbound/engine/train.py (match_*), Core Ru
 **Code** : `engine/match.py` (fonctions pures sur un état JSON), API `train.match_new / match_next / match_record / match_swap`,
 `train.new(..., obf=)` pour le battlefield de l'IA ; validation du sideboard dans `train.validate`. Tests `cardsets/test_match.py` (8).
 **Choix de l'IA** : jouer en premier quand elle choisit ; battlefield par son plan, sinon au hasard, sans connaître le tien ; pas de sideboard.
-**Interface** : en cours (2026-10-08, agent design) : section Sideboard de l'éditeur, mode BO1 / BO3 dans « Nouvelle partie ».
+**Interface** (2026-10-08) : section « Sideboard N/10 » de l'éditeur (interrupteur « Ajouter au : Deck / Sideboard », ⇄ entre deck et sideboard,
+import / export) ; « Nouvelle partie » : mode BO1 / BO3, tirage au sort, premier ou second, battlefield parmi ceux permis, écran de sideboard
+entre les manches (1 pour 1, champion), score « Manche N · toi X – Y IA ». Chaque manche enregistre `obf` et `match {id, mode, game, seed}` ;
+`train_games.py` passe `obf` au rejeu (test discriminant `match_game_replays_faithfully_with_ai_battlefield`).
+**Vérifié** par `train/verif_match.mjs` (79 contrôles, vrais clics, 360×740 et 1400×900, dans la porte) : éditeur et sideboard, manche 1 d'un BO3
+jouée jusqu'au bout (coups injectés), sideboard, battlefield joué retiré, manche 2 lancée. **Pas testé** : manche 1 gagnée par le joueur,
+manche nulle, fin de match, changement de champion au sideboard, « Reprendre » après une fin de manche, base claude.ai réelle.
+**Changement** : en BO1 la graine d'une manche vaut donne × 10 + 1 : une « Donne N » ne redonne plus la partie d'avant ce changement.
