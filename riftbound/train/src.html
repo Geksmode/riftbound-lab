@@ -355,6 +355,23 @@ body.dkopen { overflow: hidden; }
 #pReady { text-align: left; }
 .sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
 @media (max-width: 820px) { .mchip { order: 3; } }
+/* Confort du plateau sur écran d'ordinateur : ta main en grand, la main adverse en petit (ce ne sont que des dos),
+   bouton de fin de tour compact, aide du bas retirée (elle reste dans Menu > Aide). */
+@media (min-width: 1000px) {
+  #boardHelp { display: none; }
+  .hand.top { min-height: 0; padding: 0; }
+  .hand.top .card { --cw: 40px; --chh: 56px; width: 40px; height: 56px; margin-inline: -6px; }
+  .p0 .hand { min-height: 150px; padding: 10px 0 16px; }
+  .p0 .hand .card { --cw: 100px; --chh: 140px; width: 100px; height: 140px; margin-inline: -3px; }
+  .p0 .hand .card:hover, .p0 .hand .card:focus-visible, .p0 .hand .card.can:hover { transform: translateY(-18px) scale(1.18); }
+  .endbtn { padding: 9px 12px; font-size: 15px; }
+  .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 200px; }
+  .topbar { flex-wrap: nowrap; min-width: 0; }
+  .topbar h1 { white-space: nowrap; flex: none; }
+  .topbar #gmeta, .topbar .savechip { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar #gmeta { flex: 0 1 auto; } .topbar .savechip { flex: none; }
+  .topbar .tbtns { flex: none; margin-left: auto; display: flex; gap: 6px; }
+}
 /*DA_CSS*/
 </style>
 
@@ -379,7 +396,7 @@ body.dkopen { overflow: hidden; }
         <div class="stackcol" id="stack" aria-label="Chaîne en cours"></div>
       </div>
     </div></div>
-    <p class="small" style="margin:0">Touche une carte à cadre vert pour voir ce qu'elle peut faire, ou glisse-la vers sa zone ou sa cible. Les choix (cibles, effets optionnels) se font sur la table, la question s'affiche au milieu du plateau. Touche une défausse pour voir son contenu. Flèches corail : coups de l'IA.</p>
+    <p class="small" id="boardHelp" style="margin:0">Touche une carte à cadre vert pour voir ce qu'elle peut faire, ou glisse-la vers sa zone ou sa cible. Les choix (cibles, effets optionnels) se font sur la table, la question s'affiche au milieu du plateau. Touche une défausse pour voir son contenu. Flèches corail : coups de l'IA.</p>
   </div>
 
   <aside class="panel drawer" id="drawer" aria-label="Journal de la partie">
@@ -1004,6 +1021,13 @@ function fitBoard() {
   if (!wrap || !bg) return;
   if (innerWidth < 1000) { bg.style.transform = ""; return; }
   bg.style.transform = "translateX(-50%)";
+  // Écran large : le plateau prend toute la largeur au lieu de laisser des bandes vides (la hauteur fixe l'échelle) ;
+  // deux passes, car l'élargir peut changer sa hauteur.
+  bg.style.width = "";
+  for (let k = 0; k < 2; k++) {
+    const sc0 = Math.min(1.25, wrap.clientHeight / bg.offsetHeight), free = wrap.clientWidth / sc0;
+    bg.style.width = free > bg.offsetWidth + 4 || bg.style.width ? Math.max(free, 0) + "px" : "";
+  }
   const w = bg.offsetWidth, h = bg.offsetHeight;
   const sc = Math.min(1.25, wrap.clientWidth / w, wrap.clientHeight / h);
   bg.style.transform = `translateX(-50%) scale(${sc})`;

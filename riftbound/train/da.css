@@ -185,3 +185,11 @@ details.diag pre { background: var(--night); border: 1px solid var(--trait); col
   .ctrlcol { background: rgba(21,26,62,.97) !important; border: 0 !important; border-top: 1px solid var(--trait) !important; border-radius: 22px 22px 0 0 !important; box-shadow: 0 -10px 30px rgba(5,7,20,.5); }
 }
 @media (prefers-reduced-motion: reduce) { button { transition: none; } }
+
+/* colonne de droite (tour, fin de tour, conseil, chaîne) : marge intérieure égale de chaque côté, rien ne dépasse du cadre */
+.ctrlcol { padding: 10px !important; gap: 8px; overflow: hidden; }
+.ctrlcol > * { min-width: 0; max-width: 100%; }
+.ctrlcol .endbtn { width: 100%; }
+.ctrlrow { gap: 6px; }
+@media (min-width: 1000px) { .ctrlrow button { min-width: 0; flex: 1 1 0; padding: 6px 4px; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+.ctrlcol .stackcol { margin: 0 !important; }
