@@ -362,16 +362,30 @@ body.dkopen { overflow: hidden; }
   #boardHelp { display: none; }
   .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 232px; }
   .board, .zone, .bf { --cw: 74px; --chh: 104px; }
-  .hand.top { height: 64px; min-height: 0; padding: 0; overflow: hidden; }
-  .hand.top .card { --cw: 40px; --chh: 56px; width: 40px; height: 56px; margin-inline: -6px; }
-  .zrow { grid-template-columns: 118px 200px minmax(0, 1fr) 200px; height: 140px; }
-  .zrow > .zone { min-height: 0; height: 140px; }
-  .zrow > .zone:nth-child(3) { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
-  .zone.legend { flex-wrap: nowrap; }
-  .bf { grid-template-rows: 118px auto 118px; }
+  .hand.top { height: auto; min-height: 0; padding: 0; overflow: hidden; align-items: center; }
+  .hand.top .card { --cw: 34px; --chh: 48px; width: 34px; height: 48px; margin-inline: -5px; }
+  /* moitié d'un joueur en grille : runes à gauche sur toute la hauteur, base au centre (main dessous pour toi, dessus
+     pour l'adversaire), légende + champion choisi à droite en grand, nom / score / deck / défausse sous la légende. */
+  .half { display: grid; gap: 6px; grid-template-columns: 216px minmax(0, 1fr) 244px; }
+  .half .zrow { display: contents; }
+  .half.p0 { grid-template-rows: 176px 82px 62px; grid-template-areas: "runes base leg" "runes hand leg" "runes hand pile"; }
+  .half.p1 { grid-template-rows: 62px 176px; grid-template-areas: "runes ohand pile" "runes base leg"; }
+  .half.p0 .hand { grid-area: hand; } .half.p1 .hand { grid-area: ohand; }
+  .zrow > .zone { min-height: 0; }
+  .zrow > .zone:nth-child(2) { grid-area: runes; align-content: flex-start; gap: 4px; --rw: 44px; --rh: 62px; }
+  .zrow > .zone:nth-child(3) { grid-area: base; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+  .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 10px; padding-bottom: 18px; --cw: 104px; --chh: 146px; }
+  .zone.pile { grid-area: pile; flex-direction: row; align-items: center; gap: 10px; padding: 6px 10px; }
+  .zone.pile .who { flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .zone.pile .score { order: 2; font-size: 22px; padding: 2px 10px; flex: none; }
+  .zone.pile .piles { order: 3; padding: 0; gap: 12px; }
+  .zone.pile .counts { order: 4; }
+  .zone.pile .pl { width: 34px; height: 48px; }
+  .bf { grid-template-rows: 110px auto 110px; }
+  .bf .side { padding: 3px 6px; }
   .bf .side { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; justify-content: safe center; scrollbar-width: thin; }
   .bf .side.top { align-items: flex-end; }
-  .p0 .hand { height: 150px; min-height: 0; padding: 12px 0 10px; }
+  .p0 .hand { height: auto; min-height: 0; padding: 8px 0 6px; }
   .p0 .hand .card { --cw: 84px; --chh: 118px; width: 84px; height: 118px; margin-inline: -3px; }
   .p0 .hand .card:hover, .p0 .hand .card:focus-visible, .p0 .hand .card.can:hover { transform: translateY(-16px) scale(1.2); }
   .ctrlcol, .track { contain: size; }
@@ -991,7 +1005,7 @@ function handHTML(st, pid, srcs) {
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
-  const runes = p.runes.map(r => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"); return `<div class="runeslot ${x ? "x" : ""}"><div class="rune" title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div></div>`; }).join("");
+  const runes = p.runes.map(r => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"); return `<div class="runeslot ${x ? "x" : ""}">${(IMG[d + " Rune"] || ATL[d + " Rune"]) ? `<div class="rune img" data-card="${d} Rune" title="${d}${x ? " (épuisée)" : ""}" style="${art(d + " Rune")}"></div>` : `<div class="rune" title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div>`}</div>`; }).join("");
   const ready = p.runes.filter(r => !r.endsWith("x")).length;
   const base = p.base.map(u => unitCard(u, srcs)).join("") + p.gear.map(g => card(g.n, { p: vp(pid), x: g.x, uid: g.u, can: can(srcs, g.u) })).join("");
   const champ = p.champ.map((n, k) => { const u = pid === MEP && p.champu ? p.champu[k] : undefined; return card(n, { p: vp(pid), uid: u, can: u !== undefined && can(srcs, u), sel: u !== undefined && sel === String(u) }); }).join("");

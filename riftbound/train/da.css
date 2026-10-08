@@ -193,3 +193,9 @@ details.diag pre { background: var(--night); border: 1px solid var(--trait); col
 .ctrlrow { gap: 6px; }
 @media (min-width: 1000px) { .ctrlrow button { min-width: 0; flex: 1 1 0; padding: 6px 4px; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
 .ctrlcol .stackcol { margin: 0 !important; }
+
+/* runes affichées comme les vraies cartes de rune (illustration officielle) ; épuisées = tournées et assombries */
+.runeslot { width: var(--rw, 30px); height: var(--rh, 42px); }
+.runeslot.x { width: var(--rh, 42px); height: var(--rw, 30px); }
+.rune.img { width: var(--rw, 30px); height: var(--rh, 42px); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 6px; border: 1px solid var(--trait-2); background-color: var(--relief); box-shadow: 0 4px 12px rgba(5,7,20,.5); cursor: zoom-in; }
+.runeslot.x .rune.img { opacity: .45; filter: saturate(.4); box-shadow: none; outline: 0; }
