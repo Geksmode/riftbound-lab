@@ -355,21 +355,37 @@ body.dkopen { overflow: hidden; }
 #pReady { text-align: left; }
 .sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
 @media (max-width: 820px) { .mchip { order: 3; } }
-/* Confort du plateau sur écran d'ordinateur : ta main en grand, la main adverse en petit (ce ne sont que des dos),
-   bouton de fin de tour compact, aide du bas retirée (elle reste dans Menu > Aide). */
+/* Confort du plateau sur écran d'ordinateur. Taille FIXE : chaque rangée a une hauteur fixe et la colonne de droite
+   ne compte pas dans la hauteur (contain: size), sinon une chaîne longue, beaucoup d'unités ou de runes agrandissent
+   le plateau et fitBoard rapetisse tout en cours de partie. Ce qui ne tient pas défile dans sa zone. */
 @media (min-width: 1000px) {
   #boardHelp { display: none; }
-  .hand.top { min-height: 0; padding: 0; }
+  .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 232px; }
+  .board, .zone, .bf { --cw: 74px; --chh: 104px; }
+  .hand.top { height: 64px; min-height: 0; padding: 0; overflow: hidden; }
   .hand.top .card { --cw: 40px; --chh: 56px; width: 40px; height: 56px; margin-inline: -6px; }
-  .p0 .hand { min-height: 150px; padding: 10px 0 16px; }
-  .p0 .hand .card { --cw: 100px; --chh: 140px; width: 100px; height: 140px; margin-inline: -3px; }
-  .p0 .hand .card:hover, .p0 .hand .card:focus-visible, .p0 .hand .card.can:hover { transform: translateY(-18px) scale(1.18); }
+  .zrow { grid-template-columns: 118px 200px minmax(0, 1fr) 200px; height: 140px; }
+  .zrow > .zone { min-height: 0; height: 140px; }
+  .zrow > .zone:nth-child(3) { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+  .zone.legend { flex-wrap: nowrap; }
+  .bf { grid-template-rows: 118px auto 118px; }
+  .bf .side { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; justify-content: safe center; scrollbar-width: thin; }
+  .bf .side.top { align-items: flex-end; }
+  .p0 .hand { height: 150px; min-height: 0; padding: 12px 0 10px; }
+  .p0 .hand .card { --cw: 84px; --chh: 118px; width: 84px; height: 118px; margin-inline: -3px; }
+  .p0 .hand .card:hover, .p0 .hand .card:focus-visible, .p0 .hand .card.can:hover { transform: translateY(-16px) scale(1.2); }
+  .ctrlcol, .track { contain: size; }
+  .ctrlcol .stackcol { min-height: 0; overflow-y: auto; justify-content: flex-start; scrollbar-width: thin; }
+  .stackcol .empty { margin: auto; }
+  /* chaîne : seulement le haut de chaque carte (coût, illustration) ; la carte entière s'ouvre en la touchant */
+  .sitem .card { --cw: 180px; --chh: 251px; width: 180px; height: 251px; margin: 0 auto -151px; clip-path: inset(0 0 151px 0 round 9px); }
+  .sitem.old .card { height: 251px; margin-bottom: -195px; clip-path: inset(0 0 195px 0 round 9px); }
+  .topbar { height: 40px; }
   .endbtn { padding: 9px 12px; font-size: 15px; }
-  .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 200px; }
   .topbar { flex-wrap: nowrap; min-width: 0; }
   .topbar h1 { white-space: nowrap; flex: none; }
-  .topbar #gmeta, .topbar .savechip { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .topbar #gmeta { flex: 0 1 auto; } .topbar .savechip { flex: none; }
+  .topbar #gmeta { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+  .topbar .savechip { flex: none; white-space: nowrap; }
   .topbar .tbtns { flex: none; margin-left: auto; display: flex; gap: 6px; }
 }
 /*DA_CSS*/

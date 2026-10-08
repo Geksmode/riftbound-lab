@@ -86,3 +86,6 @@ Plateau en pleine largeur sur écran large (`fitBoard` élargit la grille, la ha
 ## [2026-10-08] ingest | Fuite : l'annonce d'un cache de l'IA nommait la carte
 La bulle du coup adverse (IA ou ami en duel) utilisait `describe`, qui nomme la carte cachée (« cache Hidden Blade à Void Gate ») : `train._opp_describe` dit « cache une carte à … » et la flèche ne porte plus l'identifiant de la carte. Test `test_hidden_auto.the_table_never_names_the_card_the_opponent_hides` (parties réelles, échoue sans le correctif).
 
+## [2026-10-08] ingest | Plateau à taille fixe pendant la partie
+Le plateau rapetissait en cours de partie : la chaîne (cartes de 218 px de haut), les unités et les runes qui passaient à la ligne agrandissaient la grille et `fitBoard` réduisait l'échelle. Sur ordinateur : hauteurs fixes par rangée, colonnes de droite et des points hors calcul de hauteur (`contain: size`), ce qui déborde défile dans sa zone. Unités 74 x 104, main 84 x 118, zone légende 200 px, colonne de la chaîne 232 px, chaîne en haut de carte seulement (carte entière au toucher). Mesuré sur deux parties entières (1900x905, 1366x768, chaînes de 2 et 3) : une seule échelle par partie.
+
