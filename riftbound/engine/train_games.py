@@ -47,7 +47,9 @@ def _state(v):
 def replay(game, coach=False):
     """Rejoue une partie ; renvoie (journal, coups du joueur avec leur état, vue finale)."""
     base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
-    if game.get("mine") or game.get("opp"):
+    if game.get("obf"):                                 # match BO1/BO3 : battlefield de l'IA choisi avant la manche
+        train.new(*base, game.get("mine"), game.get("opp"), game["obf"])
+    elif game.get("mine") or game.get("opp"):
         train.new(*base, game.get("mine"), game.get("opp"))
     else:
         train.new(*base)                                # moteurs figés v10 : pas de decks personnalisés

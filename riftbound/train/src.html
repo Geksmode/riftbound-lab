@@ -244,6 +244,12 @@ body.dkopen { overflow: hidden; }
 .rn .rune { width: 20px; height: 20px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 10px/1 var(--f-mono); color: #111; font-style: normal; }
 .rn b { width: 20px; text-align: center; font-family: var(--f-mono); }
 .rn button:first-of-type { margin-left: auto; }
+.dkto { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; color: var(--ink-2); }
+.dkto button { min-height: 36px; padding: 6px 14px; border-radius: 20px; }
+.dkto button[aria-pressed="true"] { border-color: var(--brass); color: var(--ink); background: rgba(214,178,94,.16); box-shadow: inset 0 0 0 1px var(--brass); }
+.dkto button b { font-family: var(--f-mono); }
+@media (max-width: 820px), (pointer: coarse) { .dkto button { min-height: 44px; } }
+.dkhelp { color: var(--ink-3); font-size: 11.5px; }
 .dktxt { width: 100%; min-height: 260px; background: var(--chrome); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: 12.5px/1.4 var(--f-mono); }
 .linkb { background: none; border: 0; padding: 0; color: var(--akali); text-decoration: underline; cursor: pointer; font: inherit; }
 .bfcard { container-type: size; position: relative; overflow: hidden; }
@@ -293,6 +299,43 @@ body.dkopen { overflow: hidden; }
   .menu { padding-inline: 12px; }
 }
 .toast { z-index: 80; }
+/* ---------- match BO1 / BO3 : choix du mode, préparation d'une manche, sideboard */
+.seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
+.seg .segl { width: 100%; font-size: 12px; color: var(--ink-2); }
+.seg button { flex: 1 1 130px; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-weight: 600; border-radius: 10px; }
+.seg button small { font-weight: 400; font-size: 11.5px; color: var(--ink-2); }
+.setup label { grid-template-columns: minmax(0, 1fr); }
+.setup select, .setup input { min-width: 0; width: 100%; }
+.seg button[aria-checked="false"] { border-color: var(--line); }
+.seg button[aria-checked="true"]::before, .choices button[aria-pressed="true"]::before { content: "✓"; color: var(--akali); font-weight: 700; }
+.bfch button[aria-pressed="true"]::before { content: none; }
+.seg button[aria-checked="true"], .choices button[aria-pressed="true"] { border-color: var(--akali); background: rgba(63,195,163,.14); box-shadow: inset 0 0 0 1px var(--akali); color: var(--ink); }
+.small.rule { color: var(--ink-3); font-size: 11.5px; line-height: 1.4; }
+.mchip { border: 1px solid var(--brass); color: var(--brass); background: rgba(214,178,94,.08); }
+.mscore { font-family: var(--f-mono); font-size: 13px; color: var(--brass); }
+.prep { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+.mres { font-family: var(--f-display); font-size: 17px; } .mres.me { color: var(--akali); } .mres.opp { color: var(--leblanc); }
+.prepq { font-weight: 600; font-size: 14px; margin-top: 2px; }
+.prepdec { font-size: 14px; color: var(--leblanc); }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choices button { flex: 1 1 140px; min-height: 48px; padding: 8px 12px; font-weight: 600; border-radius: 10px; }
+.bfch button { display: flex; flex-direction: column; align-items: stretch; gap: 6px; text-align: center; font-weight: 500; font-size: 13px; }
+.bfth { display: block; height: 54px; border-radius: 6px; background: #151a26 center / cover no-repeat; }
+.sbstat { font-size: 13.5px; } .sbstat.ok { color: var(--akali); } .sbstat.ko { color: #f0a35b; }
+.sbbar { position: sticky; bottom: -16px; margin: 0 -16px -16px; padding: 10px 16px 16px; background: var(--chrome-2); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -8px 18px rgba(0,0,0,.35); }
+.sbch { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
+.sbch select { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 8px; color: var(--ink); font: inherit; min-height: 44px; }
+.sbcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 10px; }
+.sbcols > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sbr { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 2px 4px; border-radius: 8px; }
+.sbr.on { background: rgba(214,178,94,.1); }
+.sbr .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sbr .q { font-family: var(--f-mono); color: var(--ink-2); min-width: 22px; text-align: right; }
+.sbr .q i { font-style: normal; color: var(--brass); margin-left: 3px; }
+.sbr button { width: 44px; height: 44px; padding: 0; font-size: 18px; flex: none; }
+.mbox .big button { min-height: 44px; }
+.sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
+@media (max-width: 820px) { .mchip { order: 3; } }
 </style>
 
 <div class="shell">
@@ -301,6 +344,7 @@ body.dkopen { overflow: hidden; }
       <h1>Riftbound Entraînement</h1>
       <span class="res" id="gres" hidden></span>
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
+      <span class="res mchip" id="gmatch" hidden></span>
       <span class="savechip" id="saveChip" hidden></span>
       <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
     </div>
@@ -339,7 +383,7 @@ const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "c
 const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
 const GLYPH = { Fury: "F", Calm: "Ca", Mind: "Mi", Body: "B", Chaos: "Ch", Order: "O" };
 let PN = ["Akali", "LeBlanc"];
-const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "pool.txt"/*CARDSETS*/];
+const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "match.py", "pool.txt"/*CARDSETS*/];
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -409,45 +453,191 @@ async function setupForm(msg) {
   await loadCatalog();
   const last = k => store.get("rbt-" + k) || "";
   const mk = last("mine") || "akali-g2", ok = last("opp") || "leblanc-iq5";
+  const lm = last("mode") === "bo3" ? "bo3" : "bo1";
   openModal(`<h3>Nouvelle partie</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup">
+    <div class="seg" role="radiogroup" aria-label="Mode de match"><span class="segl">Mode</span>
+      <button role="radio" id="sBo1" data-mode="bo1" aria-checked="${lm === "bo1"}">BO1<small>une manche</small></button>
+      <button role="radio" id="sBo3" data-mode="bo3" aria-checked="${lm === "bo3"}">BO3<small>2 manches gagnantes</small></button></div>
+    <div class="small rule" id="sModeHelp"></div>
     <label for="sMine">Ton deck<select id="sMine">${deckOptions(mk)}</select></label>
     <label for="sOpp">Deck de l'IA<select id="sOpp">${deckOptions(ok)}</select></label>
     <div class="small"><button class="linkb" id="bOpenDecks">Créer ou modifier mes decks</button></div>
-    <label for="sBf">Ton battlefield<select id="sBf"></select></label>
-    <label for="sFirst">Qui commence<select id="sFirst"><option value="">Pile ou face</option><option value="0"${last("first") === "0" ? " selected" : ""}>Moi</option><option value="1"${last("first") === "1" ? " selected" : ""}>L'IA</option></select></label>
+    <label for="sBf" class="bo1only">Ton battlefield<select id="sBf"></select></label>
+    <label for="sFirst" class="bo1only">Qui commence<select id="sFirst"><option value="">Pile ou face</option><option value="0"${last("first") === "0" ? " selected" : ""}>Moi</option><option value="1"${last("first") === "1" ? " selected" : ""}>L'IA</option></select></label>
     <label for="sLvl">Niveau de l'IA<select id="sLvl"><option value="1">Normal : celle des simulations</option><option value="3"${last("lvl") === "3" ? " selected" : ""}>Fort : 3 simulations par coup, plus lente</option></select></label>
     <label for="sSeed">Donne (vide = au hasard, même numéro = même partie)<input id="sSeed" inputmode="numeric" placeholder="au hasard"></label>
     <div class="big"><button class="main" id="bStart">Commencer</button></div>
     <div class="small" id="sPlan"></div></div>`, true);
+  let MODE = lm;
+  const setMode = m => {
+    MODE = m; $("bStart").dataset.mode = m;
+    for (const b of document.querySelectorAll("[data-mode]")) b.setAttribute("aria-checked", b.dataset.mode === m);
+    for (const x of document.querySelectorAll(".bo1only")) x.hidden = m === "bo3";
+    $("sModeHelp").innerHTML = m === "bo3"
+      ? "Tirage au sort, puis le perdant de chaque manche choisit qui commence (règles 407.1, 407.4). Tu choisis ton battlefield à chaque manche ; ceux d'une manche gagnée sont retirés (486.5). Sideboard entre les manches, 1 pour 1 (403.4)."
+      : "Une manche. Battlefields tirés au hasard pour toi et l'IA (règle 485.5), sauf si tu imposes le tien pour t'entraîner.";
+    $("bStart").textContent = m === "bo3" ? "Commencer le match" : "Commencer";
+  };
+  for (const b of document.querySelectorAll("[data-mode]")) b.onclick = () => setMode(b.dataset.mode);
   const fill = () => {
     const mine = $("sMine").value, opp = $("sOpp").value, lb = last("bf");
     const isG2 = mine === "akali-g2";
-    $("sBf").innerHTML = `<option value="">${isG2 ? "Choix du plan Gorica (Sigil si LeBlanc prend Windswept, sinon Void Gate)" : "Au hasard parmi tes 3"}</option>` + deckBfs(mine).map(b => `<option${lb === b ? " selected" : ""}>${esc(b)}</option>`).join("");
+    $("sBf").innerHTML = `<option value="">Au hasard (règle 485.5)</option>` + (isG2 ? `<option value="plan"${lb === "plan" ? " selected" : ""}>Choix du plan Gorica (Sigil si LeBlanc prend Windswept, sinon Void Gate)</option>` : "") + deckBfs(mine).map(b => `<option${lb === b ? " selected" : ""}>${esc(b)}</option>`).join("");
     $("sPlan").textContent = `L'IA joue ${planTxt(deckLegend(opp))} avec l'IA « gagner à tout prix ». Elle ne voit pas ta main.`;
   };
   $("sMine").onchange = fill; $("sOpp").onchange = fill; fill();
   if ($("sMine").selectedOptions[0] && $("sMine").selectedOptions[0].disabled) $("sMine").value = "akali-g2";
   $("bOpenDecks").onclick = () => { closeModal(); openDecks(); };
   $("bStart").onclick = start;
+  setMode(lm);
   if (!$("board").querySelector(".half")) $("board").innerHTML = `<div class="loading">Choisis tes options et touche Commencer.</div>`;
 }
 
+// ------------------------------------------------------------ match BO1 / BO3 (moteur : match.py ; règles 485, 486, tournoi 403, 407)
+// MATCH garde l'état du match rendu par le moteur (st), les decks envoyés (mine change après un sideboard, sans toucher au
+// deck enregistré : règle 403.8) et la manche en cours (cur).
+let MATCH = null;
+function engineDeck(key) {
+  if (key && key.startsWith("my:")) { const d = MYDECKS[key.slice(3)]; return d ? toEngine(d) : null; }
+  const p = CAT && CAT.presets.find(x => x.key === key);
+  return p ? { ...JSON.parse(JSON.stringify(p.deck)), name: p.name } : null;
+}
+const bo3 = () => MATCH && MATCH.mode === "bo3";
+const scoreTxt = w => `toi ${w[0]} – ${w[1]} IA`;
+
 async function start() {
   const bf = $("sBf").value, first = $("sFirst").value, lvl = $("sLvl").value, seed = $("sSeed").value.trim();
-  const mk = $("sMine").value, ok = $("sOpp").value, mine = deckArg(mk), opp = deckArg(ok);
-  closeModal();
-  store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok);
-  try { META = J(T.new(seed === "" ? null : +seed, bf || null, first === "" ? null : +first, +lvl, mine, opp)); }
+  const mk = $("sMine").value, ok = $("sOpp").value, mine = deckArg(mk), opp = deckArg(ok), mode = $("bStart").dataset.mode === "bo3" ? "bo3" : "bo1";
+  store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok); store.set("rbt-mode", mode);
+  let st;
+  try { st = J(T.match_new(mode, seed === "" ? null : +seed, mine, opp)); }
+  catch (err) { setupForm(String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]); return; }
+  MATCH = { id: Date.now().toString(36) + "-m" + st.seed, mode, st, mine, opp, mk, ok, lvl, deck: engineDeck(mk), sb: {}, cur: null };
+  if (mode === "bo1") {
+    // BO1 : battlefields au hasard des deux côtés (485.5) ; « Ton battlefield » reste une option d'entraînement.
+    const nx = J(T.match_next(JSON.stringify(st), mine, opp));
+    closeModal();
+    return launchGame(nx, bf === "" ? nx.human_bf : bf === "plan" ? null : bf, first === "" ? null : +first);
+  }
+  matchPrep();
+}
+
+// Préparation d'une manche de BO3 : sideboard (si permis), qui commence, battlefield, puis lancement.
+function matchPrep() {
+  if (!MATCH) return setupForm();
+  let nx;
+  try { nx = J(T.match_next(JSON.stringify(MATCH.st), MATCH.mine, MATCH.opp)); }
+  catch (err) { toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
+  MATCH.nx = nx; if (!MATCH.sb[nx.game]) MATCH.sbDone = "";
+  MATCH.pick = { first: nx.chooser === 0 ? null : nx.first, bf: nx.allowed.length === 1 ? nx.allowed[0] : null };
+  if (nx.sideboard && !MATCH.sb[nx.game]) return sbOpen();
+  prepRender();
+}
+function prepRender() {
+  const nx = MATCH.nx, P = MATCH.pick, st = MATCH.st;
+  let who;
+  if (nx.game === 1) {
+    who = `<div class="mres ${nx.roll === 0 ? "me" : "opp"}" id="pRoll">${nx.roll === 0 ? "Tu gagnes le tirage au sort." : "L'IA gagne le tirage au sort."}</div>
+      <div class="small rule">Règles 407.1-407.2 : le gagnant du tirage choisit de jouer en premier ou en second.</div>`;
+  } else if (nx.chooser === 0) who = `<div class="mres">Tu as perdu la manche précédente : à toi de choisir.</div><div class="small rule">Règle 407.4 : le perdant de la manche précédente choisit.</div>`;
+  else if (nx.chooser === 1) who = `<div class="mres">L'IA a perdu la manche précédente : elle choisit.</div><div class="small rule">Règle 407.4 : le perdant de la manche précédente choisit.</div>`;
+  else who = `<div class="mres">Manche précédente nulle : même premier joueur.</div><div class="small rule">Règle 407.4 : après une nulle, le joueur qui a commencé recommence.</div>`;
+  if (nx.chooser === 0) who += `<div class="prepq">Jouer en premier ou en second ?</div><div class="choices">
+      <button data-pf="0" aria-pressed="${P.first === 0}">Jouer en premier</button><button data-pf="1" aria-pressed="${P.first === 1}">Jouer en second</button></div>`;
+  else who += `<div class="prepdec" id="pDecision">${nx.chooser === 1 ? (nx.first === 1 ? "L'IA choisit de jouer en premier." : "L'IA choisit de jouer en second : tu commences.") : (nx.first === 0 ? "Tu commences." : "L'IA commence.")}</div>`;
+  const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
+  const bfs = `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}"><span class="bfth" style="${art(b)}"></span><span>${esc(b)}</span></button>`).join("")}</div>
+    ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
+    <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5).</div>`;
+  const ready = P.first !== null && P.first !== undefined && P.bf;
+  openModal(`<h3>Manche ${nx.game} · BO3</h3><div class="mscore" id="pScore">Match : ${scoreTxt(st.wins)}${MATCH.sbDone ? ` · <span class="small">${esc(MATCH.sbDone)}</span>` : ""}</div>
+    <section class="prep"><div class="grp">Qui commence</div>${who}</section>
+    <section class="prep"><div class="grp">Battlefield</div>${bfs}</section>
+    <div class="big"><button class="main" id="bLaunch"${ready ? "" : " disabled"}>Lancer la manche ${nx.game}</button></div>`, true);
+  $("mbox").querySelectorAll("[data-pf]").forEach(b => b.onclick = () => { P.first = +b.dataset.pf; prepRender(); });
+  $("mbox").querySelectorAll("[data-pbf]").forEach(b => b.onclick = () => { P.bf = b.dataset.pbf; prepRender(); });
+  $("bLaunch").onclick = () => { if (!$("bLaunch").disabled) { closeModal(); launchGame(nx, P.bf, P.first); } };
+}
+
+// Sideboard entre deux manches : échanges 1 pour 1 (403.4), changement de Chosen Champion permis (601.1.c.4).
+let SB = null;
+function sbOpen() { const d = MATCH.deck; SB = { out: {}, inn: {}, champ: d.champion, err: "" }; sbRender(); }
+function sbRender() {
+  const d = MATCH.deck, nx = MATCH.nx, tally = xs => { const m = {}; for (const n of xs) m[n] = (m[n] || 0) + 1; return m; };
+  const main = tally(d.main), side = tally(d.sideboard || []);
+  const no = cnt(SB.out), ni = cnt(SB.inn);
+  const lt = (CAT.by[d.legend] || {}).tg || [];
+  const champs = [d.champion, ...[...new Set([...d.main, ...(d.sideboard || [])])].filter(n => n !== d.champion && (c => c && c.t === "Unit" && c.s === "Champion" && c.tg.some(t => lt.includes(t)))(CAT.by[n]))];
+  const row = (n, q, k) => { const v = SB[k][n] || 0;
+    return `<div class="sbr ${v ? "on" : ""}"><span class="nm">${esc(n)}</span><span class="q">${q - v}${v ? `<i>${k === "out" ? "−" : "+"}${v}</i>` : ""}</span><button data-sbm="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Garder" : "Ne pas faire entrer"} ${esc(n)}"${v ? "" : " disabled"}>−</button><button data-sbp="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Sortir" : "Faire entrer"} ${esc(n)}"${v < q ? "" : " disabled"}>+</button></div>`; };
+  const sortN = o => Object.entries(o).sort((a, b) => a[0].localeCompare(b[0]));
+  const changed = no || SB.champ !== d.champion;
+  openModal(`<h3>Sideboard avant la manche ${nx.game}</h3><div class="mscore">Match : ${scoreTxt(MATCH.st.wins)}</div>
+    <div class="small rule">Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) ; runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).</div>
+    ${champs.length > 1 ? `<label class="sbch" for="sbChamp">Chosen Champion (règle 601.1.c.4)<select id="sbChamp">${champs.map(n => `<option${n === SB.champ ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>` : ""}
+    ${SB.err ? `<div class="small flash">${esc(SB.err)}</div>` : ""}
+    <div class="sbcols"><div><div class="grp">Main Deck : touche + pour sortir</div>${sortN(main).map(([n, q]) => row(n, q, "out")).join("")}</div>
+    <div><div class="grp">Sideboard : touche + pour faire entrer</div>${sortN(side).map(([n, q]) => row(n, q, "inn")).join("") || `<div class="small">Sideboard vide.</div>`}</div></div>
+    <div class="sbbar"><div class="sbstat ${no === ni ? "ok" : "ko"}" id="sbStat">Sortent <b>${no}</b> · entrent <b>${ni}</b>${no === ni ? "" : " : il en faut autant de chaque côté (403.4)"}</div>
+    <div class="big"><button id="sbKeep">Garder le deck</button><button class="main" id="sbOk"${changed && no === ni ? "" : " disabled"}>Valider les échanges</button></div></div>`, true);
+  $("mbox").querySelectorAll("[data-sbp],[data-sbm]").forEach(b => b.onclick = () => {
+    const k = b.dataset.sbp || b.dataset.sbm, n = b.dataset.n, o = SB[k];
+    o[n] = (o[n] || 0) + (b.dataset.sbp ? 1 : -1); if (o[n] <= 0) delete o[n];
+    SB.err = ""; sbRender();
+  });
+  if ($("sbChamp")) $("sbChamp").onchange = e => { SB.champ = e.target.value; sbRender(); };
+  $("sbKeep").onclick = () => { MATCH.sb[nx.game] = true; MATCH.sbDone = "deck gardé"; prepRender(); };
+  $("sbOk").onclick = () => {
+    const ex = o => Object.entries(o).flatMap(([n, q]) => Array(q).fill(n));
+    try {
+      const nd = J(T.match_swap(JSON.stringify(d), JSON.stringify(ex(SB.out)), JSON.stringify(ex(SB.inn)), SB.champ !== d.champion ? SB.champ : null));
+      MATCH.deck = nd; MATCH.mine = JSON.stringify(nd); MATCH.sb[nx.game] = true;
+      MATCH.sbDone = `${no} échange${no > 1 ? "s" : ""}${SB.champ !== d.champion ? ", champion : " + SB.champ : ""}`;
+      toast("Deck modifié pour ce match : " + MATCH.sbDone + ".");
+      prepRender();
+    } catch (err) { SB.err = String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]; sbRender(); }
+  };
+}
+
+// Lance une manche : graine de la manche, ton battlefield, premier joueur ; celui de l'IA (nx.ai_bf) a été choisi avant.
+async function launchGame(nx, bf, first) {
+  const lvl = MATCH.lvl;
+  try { META = J(T.new(nx.seed, bf || null, first === null || first === undefined ? null : +first, +lvl, MATCH.mine, MATCH.opp, nx.ai_bf)); }
   catch (err) { setupForm(String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]); return; }
   if (REC && recT) recSave(true);   // l'ancienne partie est enregistrée telle quelle avant d'en commencer une autre
   PN = META.names;
   CARDS = J(T.cards());
   LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
-  recStart(META, bf, first, lvl, mine, opp);
-  $("gmeta").textContent = `Donne ${META.seed} · ${PN[0]} contre ${PN[1]} · ${META.first === 0 ? "tu commences" : PN[1] + " commence"} · ${META.bf[0]} / ${META.bf[1]} · IA ${lvl === "3" ? "forte" : "normale"}`;
+  MATCH.cur = { game: nx.game, done: false, prev: null };
+  // bf et first enregistrés tels que joués : la partie se rejoue à l'identique avec obf (battlefield de l'IA).
+  recStart(META, META.bf[0], String(META.first), lvl, MATCH.mine, MATCH.opp);
+  REC.obf = nx.ai_bf; REC.match = { id: MATCH.id, mode: MATCH.mode, game: nx.game, seed: MATCH.st.seed };
+  $("gmeta").textContent = `Donne ${MATCH.st.seed}${bo3() ? " · BO3" : ""} · ${PN[0]} contre ${PN[1]} · ${META.first === 0 ? "tu commences" : PN[1] + " commence"} · ${META.bf[0]} / ${META.bf[1]} · IA ${lvl === "3" ? "forte" : "normale"}`;
   $("gres").hidden = true;
+  matchChip();
+  if (bo3()) toast(`Battlefields révélés : toi ${META.bf[0]} · IA ${META.bf[1]}`);
   await pump(J(T.step()));
 }
+function matchChip() {
+  const c = $("gmatch"); if (!c) return;
+  c.hidden = !bo3();
+  if (!bo3()) return;
+  const g = MATCH.cur ? MATCH.cur.game : 1;
+  c.textContent = MATCH.st.over ? `Match ${MATCH.st.winner === 0 ? "gagné" : MATCH.st.winner === 1 ? "perdu" : "nul"} · ${scoreTxt(MATCH.st.wins)}` : `Manche ${g} · ${scoreTxt(MATCH.st.wins)}`;
+}
+// Fin d'une manche (appelée au rendu de fin de partie) : enregistre la manche dans l'état du match.
+function matchFinish(v) {
+  if (!MATCH || !MATCH.cur || MATCH.cur.done) return;
+  MATCH.cur.prev = MATCH.st;
+  try { MATCH.st = J(T.match_record(JSON.stringify(MATCH.st), META.first, JSON.stringify(META.bf), v.winner === 0 || v.winner === 1 ? v.winner : -1)); }
+  catch (err) { console.error(err); return; }
+  MATCH.cur.done = true;
+  if (REC && REC.match) REC.match.wins = MATCH.st.wins.slice();
+  matchChip();
+}
+// « Reprendre » après la fin d'une manche : la manche continue, elle sort du score du match.
+function matchUndoFinish() { if (MATCH && MATCH.cur && MATCH.cur.done) { MATCH.st = MATCH.cur.prev; MATCH.cur.done = false; if (REC && REC.match) delete REC.match.wins; matchChip(); } }
+const matchOverTxt = () => { const w = MATCH.st.wins, k = MATCH.st.winner; return k === 0 ? `Victoire du match ${w[0]}-${w[1]}` : k === 1 ? `Défaite du match ${w[0]}-${w[1]}` : `Match nul ${w[0]}-${w[1]}`; };
 
 // Fait jouer l'IA pas à pas jusqu'à ce que ce soit à toi (ou fin de partie), avec une courte pause après chacun de ses coups.
 async function pump(v) {
@@ -607,10 +797,14 @@ function renderCtrl(v) {
   M.className = "endbtn"; M.onclick = null;
   if (v.winner !== null && v.winner !== undefined) {
     const w = v.winner === 0;
+    matchFinish(v);
     recFinish(v);
     I.innerHTML = `<b class="${w ? "me" : "opp"}">${w ? "Victoire !" : v.winner === 1 ? "Défaite" : "Partie nulle"}</b> ${v.st.pts[0]}-${v.st.pts[1]}`;
     $("gres").hidden = false; $("gres").className = "res " + (w ? "w" : "l"); $("gres").textContent = `${w ? "Victoire" : "Défaite"} ${v.st.pts[0]}-${v.st.pts[1]}`;
-    M.textContent = "Nouvelle partie"; M.disabled = false; M.id = "bMain"; M.onclick = () => setupForm();
+    M.disabled = false; M.id = "bMain";
+    if (bo3() && !MATCH.st.over) { I.innerHTML += `<span class="tn">Match : ${scoreTxt(MATCH.st.wins)}</span>`; M.textContent = "Manche suivante"; M.onclick = () => matchPrep(); }
+    else if (bo3()) { const mw = MATCH.st.winner === 0; I.innerHTML += `<span class="tn">${matchOverTxt()}</span>`; $("gres").className = "res " + (mw ? "w" : "l"); $("gres").textContent = matchOverTxt(); M.textContent = "Nouveau match"; M.onclick = () => setupForm(); }
+    else { M.textContent = "Nouvelle partie"; M.onclick = () => setupForm(); }
     return;
   }
   if (v.busy) {
@@ -678,6 +872,7 @@ $("bUndo").onclick = () => {
   const v = J(T.undo());
   recMove(["undo"]);
   if (REC && REC.result) REC.result = null;   // reprendre un coup après la fin : la partie continue
+  matchUndoFinish();
   v.log = []; addLog([]); toast("Coup repris.");
   sel = null; mode = null; show(v);
 };
@@ -950,8 +1145,15 @@ function accTxt(o) {
 function fbarHTML() {
   if (V && V.winner !== null && V.winner !== undefined && !working) {
     const w = V.winner === 0;
-    return `<span class="ft big ${w ? "me" : "opp"}">${w ? "Victoire !" : V.winner === 1 ? "Défaite" : "Partie nulle"} ${V.st.pts[0]}-${V.st.pts[1]}</span>
-      <div class="prow"><button class="go" id="bAgain">Nouvelle partie</button><button id="bSame">Rejouer la même donne</button></div>`;
+    const head = `<span class="ft big ${w ? "me" : "opp"}">${w ? "Victoire !" : V.winner === 1 ? "Défaite" : "Partie nulle"} ${V.st.pts[0]}-${V.st.pts[1]}</span>`;
+    if (bo3() && MATCH.cur && MATCH.cur.done) {
+      if (!MATCH.st.over) return head + `<span class="ft" id="fScore">Manche ${MATCH.cur.game} terminée · Match : ${scoreTxt(MATCH.st.wins)}</span>
+        <div class="prow"><button class="go" id="bNextGame">Manche suivante</button><button id="bAgain">Nouveau match</button></div>`;
+      const mw = MATCH.st.winner === 0;
+      return head + `<span class="ft big ${mw ? "me" : "opp"}" id="fScore">${matchOverTxt()}</span>
+        <div class="prow"><button class="go" id="bAgain">Nouveau match</button></div>`;
+    }
+    return head + `<div class="prow"><button class="go" id="bAgain">Nouvelle partie</button><button id="bSame">Rejouer la même donne</button></div>`;
   }
   if (!mode || working) return "";
   if (mode.type === "ask") return askHTML();
@@ -995,7 +1197,8 @@ $("fbar").addEventListener("click", e => {
   }
   const b = e.target.closest("button"); if (!b) return;
   if (b.id === "bAgain") return setupForm();
-  if (b.id === "bSame") { setupForm(); $("sSeed").value = META.seed; return; }
+  if (b.id === "bNextGame") return matchPrep();
+  if (b.id === "bSame") { setupForm().then(() => { if ($("sSeed")) $("sSeed").value = MATCH ? MATCH.st.seed : META.seed; }); return; }
   if (b.id === "bKeep") return answer([...mode.mull]);
   if (b.dataset.a) return answer(+b.dataset.a);
   if (b.id === "fOk" && mode.type === "ask") return answer(mode.pick);
@@ -1237,9 +1440,10 @@ function art(n) {
 }
 
 // ------------------------------------------------------------ éditeur de deck
-// Un deck : { id, name, legend, champion, main: {nom: qté}, runes: {domaine: qté}, battlefields: [3] }.
+// Un deck : { id, name, legend, champion, main: {nom: qté}, sideboard: {nom: qté}, runes: {domaine: qté}, battlefields: [3] }.
+// Le sideboard (règles de tournoi 601.1.c) : 10 cartes au plus, valides pour le Main Deck, 3 exemplaires deck + sideboard.
 // Stocké dans la table (collection « decks ») et en copie locale ; seules les cartes modélisées sont jouables.
-let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", only: false, mine: true, lim: 120 }, DKERR = [];
+let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", only: false, mine: true, lim: 120, to: "main" }, DKERR = [];
 const RUNES = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"];
 async function loadCatalog() {
   if (CAT || !T) return;
@@ -1255,11 +1459,13 @@ const cnt = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 function toEngine(d) {
   const main = []; for (const [n, q] of Object.entries(d.main)) for (let i = 0; i < q; i++) main.push(n);
   const runes = []; for (const [r, q] of Object.entries(d.runes)) for (let i = 0; i < q; i++) runes.push(r + " Rune");
-  return { name: d.name, legend: d.legend, champion: d.champion, main, runes, battlefields: d.battlefields };
+  const sideboard = []; for (const [n, q] of Object.entries(d.sideboard || {})) for (let i = 0; i < q; i++) sideboard.push(n);
+  return { name: d.name, legend: d.legend, champion: d.champion, main, runes, battlefields: d.battlefields, sideboard };
 }
 function fromEngine(x, name) {
-  const d = { id: slug(name), name, legend: x.legend, champion: x.champion, main: {}, runes: {}, battlefields: [...(x.battlefields || [])].slice(0, 3) };
+  const d = { id: slug(name), name, legend: x.legend, champion: x.champion, main: {}, sideboard: {}, runes: {}, battlefields: [...(x.battlefields || [])].slice(0, 3) };
   for (const n of x.main) d.main[n] = (d.main[n] || 0) + 1;
+  for (const n of x.sideboard || []) d.sideboard[n] = (d.sideboard[n] || 0) + 1;
   for (const r of x.runes) { const k = r.replace(" Rune", ""); d.runes[k] = (d.runes[k] || 0) + 1; }
   return d;
 }
@@ -1286,11 +1492,13 @@ async function deleteDeck() {
   const db = await dbh(); if (db) { try { await db.collection("decks").doc(d.id).delete(); } catch (e) {} }
   DK = blankDeck(); dkRender(); toast("Deck supprimé.");
 }
-const blankDeck = () => ({ id: "", name: "", legend: "", champion: "", main: {}, runes: {}, battlefields: [] });
+const blankDeck = () => ({ id: "", name: "", legend: "", champion: "", main: {}, sideboard: {}, runes: {}, battlefields: [] });
+const MAINT = c => c && !["Legend", "Battlefield", "Rune"].includes(c.t);   // cartes valides pour le Main Deck (et le sideboard)
 
 async function openDecks() {
   await loadCatalog();
   if (!DK) { const k = store.get("rbt-dk"); DK = k && MYDECKS[k] ? JSON.parse(JSON.stringify(MYDECKS[k])) : blankDeck(); }
+  if (!DK.sideboard) DK.sideboard = {};   // decks enregistrés avant le sideboard
   $("deckView").hidden = false; document.body.classList.add("dkopen");
   dkRender();
 }
@@ -1299,9 +1507,33 @@ function closeDecks(toMenu) { $("deckView").hidden = true; document.body.classLi
 function ident() { const L = CAT.by[DK.legend]; return L ? L.d : []; }
 function ltags() { const L = CAT.by[DK.legend]; return L ? L.tg : []; }
 function canChamp(c) { return c && c.t === "Unit" && c.s === "Champion" && c.tg.some(t => ltags().includes(t)); }
-function copies(n) { return (DK.main[n] || 0) + (DK.champion === n ? 1 : 0); }
-function addCard(n) {
+function copies(n) { return (DK.main[n] || 0) + (DK.champion === n ? 1 : 0) + ((DK.sideboard || {})[n] || 0); }
+function sideAdd(n) {
   const c = CAT.by[n]; if (!c) return;
+  if (!MAINT(c)) return toast("Le sideboard ne prend que des cartes du deck principal : pas de légende, rune ni battlefield (règle 601.1.c).");
+  if (cnt(DK.sideboard) >= 10) return toast("Sideboard plein : 10 cartes au plus (règle 601.1.c.1).");
+  if (copies(n) >= 3) return toast("3 exemplaires au plus, sideboard compris (règle 601.1.c.3).");
+  DK.sideboard[n] = (DK.sideboard[n] || 0) + 1;
+  if (!c.m) toast(`${n} n'est pas encore modélisée : tu peux préparer le deck, mais pas encore le jouer.`);
+  dkRender();
+}
+function sideSub(n) { if (DK.sideboard[n]) { DK.sideboard[n]--; if (!DK.sideboard[n]) delete DK.sideboard[n]; } dkRender(); }
+// Déplacer un exemplaire du deck principal vers le sideboard, ou l'inverse (le total d'exemplaires ne change pas).
+function toSide(n) {
+  if (!DK.main[n]) return;
+  if (cnt(DK.sideboard) >= 10) return toast("Sideboard plein : 10 cartes au plus (règle 601.1.c.1).");
+  DK.main[n]--; if (!DK.main[n]) delete DK.main[n];
+  DK.sideboard[n] = (DK.sideboard[n] || 0) + 1; dkRender();
+}
+function toMain(n) {
+  if (!DK.sideboard[n]) return;
+  DK.sideboard[n]--; if (!DK.sideboard[n]) delete DK.sideboard[n];
+  if (!DK.champion && canChamp(CAT.by[n])) DK.champion = n; else DK.main[n] = (DK.main[n] || 0) + 1;
+  dkRender();
+}
+function addCard(n, fromGrid) {
+  const c = CAT.by[n]; if (!c) return;
+  if (fromGrid && DKF.to === "side" && MAINT(c)) return sideAdd(n);
   if (c.t === "Legend") {
     DK.legend = n;
     if (!cnt(DK.runes)) { DK.runes = {}; DK.runes[c.d[0]] = 6; DK.runes[c.d[1] || c.d[0]] = (DK.runes[c.d[1] || c.d[0]] || 0) + 6; }
@@ -1351,7 +1583,8 @@ function dkCard(c) {
 }
 function dkList() {
   const row = (n, q, extra = "") => { const c = CAT.by[n] || {}; return `<div class="dkr ${c.m ? "" : "todo"}" data-card="${esc(n)}"><span class="q">${q}</span><span class="nm">${esc(n)}${c.m ? "" : " <i>à modéliser</i>"}</span><span class="e">${c.e || ""}${+c.p ? "+" + c.p : ""}</span>${extra}</div>`; };
-  const pm = n => `<button data-sub="${esc(n)}" aria-label="Retirer ${esc(n)}">−</button><button data-add="${esc(n)}" aria-label="Ajouter ${esc(n)}">+</button>`;
+  const pm = n => `<button data-tside="${esc(n)}" aria-label="Passer ${esc(n)} au sideboard" title="Passer un exemplaire au sideboard">⇄</button><button data-sub="${esc(n)}" aria-label="Retirer ${esc(n)}">−</button><button data-add="${esc(n)}" aria-label="Ajouter ${esc(n)}">+</button>`;
+  const sb = DK.sideboard || {}, nsb = cnt(sb);
   const groups = { Unit: [], Spell: [], Gear: [] };
   for (const [n, q] of Object.entries(DK.main)) (groups[(CAT.by[n] || {}).t] || (groups.Other = groups.Other || [])).push([n, q]);
   const gl = { Unit: "Unités", Spell: "Sorts", Gear: "Équipements", Other: "Autres" };
@@ -1362,6 +1595,10 @@ function dkList() {
     const g = (groups[k] || []).sort((a, b) => ((+CAT.by[a[0]].e || 0) - (+CAT.by[b[0]].e || 0)) || a[0].localeCompare(b[0]));
     if (g.length) h += `<div class="dkg">${gl[k]} (${g.reduce((a, x) => a + x[1], 0)})</div>` + g.map(([n, q]) => row(n, q, (canChamp(CAT.by[n]) ? `<button data-champ="${esc(n)}" title="En faire le champion choisi">★</button>` : "") + pm(n))).join("");
   }
+  const sg = Object.entries(sb).sort((a, b) => ((+(CAT.by[a[0]] || {}).e || 0) - (+(CAT.by[b[0]] || {}).e || 0)) || a[0].localeCompare(b[0]));
+  h += `<div class="dkh" id="dkSideH">Sideboard <b>${nsb}</b>/10</div>` + (sg.length ? sg.map(([n, q]) => row(n, q, `<button data-tmain="${esc(n)}" aria-label="Passer ${esc(n)} au deck principal" title="Passer un exemplaire au deck principal">⇄</button><button data-ssub="${esc(n)}" aria-label="Retirer ${esc(n)} du sideboard">−</button><button data-sadd="${esc(n)}" aria-label="Ajouter ${esc(n)} au sideboard">+</button>`)).join("")
+    : `<div class="small">Vide. Choisis « Ajouter au : Sideboard » au-dessus de la liste, ou touche ⇄ sur une carte du deck.</div>`)
+    + `<div class="small dkhelp">Entre les manches d'un BO3 : échanges 1 pour 1 avec le deck (règle 403.4). 10 cartes au plus, 3 exemplaires deck + sideboard (601.1.c).</div>`;
   h += `<div class="dkh">Runes <b>${cnt(DK.runes)}</b>/12</div><div class="dkrunes">${(ident().length ? ident() : RUNES).map(d => `<span class="rn"><i class="rune" style="background:var(--${DOMC[d]})">${GLYPH[d]}</i>${d} <button data-rsub="${d}" aria-label="Retirer une rune ${d}">−</button><b>${DK.runes[d] || 0}</b><button data-radd="${d}" aria-label="Ajouter une rune ${d}">+</button></span>`).join("")}</div>`;
   h += `<div class="dkh">Battlefields <b>${DK.battlefields.length}</b>/3</div>` + (DK.battlefields.map(n => row(n, "", `<button data-add="${esc(n)}" aria-label="Retirer">−</button>`)).join("") || `<div class="small">Touche 3 battlefields dans la liste.</div>`);
   return h;
@@ -1392,7 +1629,8 @@ function dkRender() {
           <label class="ck"><input type="checkbox" id="dkMine"${DKF.mine ? " checked" : ""}> Domaines de ma légende</label>
           <label class="ck"><input type="checkbox" id="dkOnly"${DKF.only ? " checked" : ""}> Jouables seulement</label>
         </div>
-        <div class="small">${res.length} carte${res.length > 1 ? "s" : ""}. Touche une carte pour l'ajouter ; les cartes grisées ne sont pas encore modélisées.</div>
+        <div class="dkto" role="group" aria-label="Ajouter au"><span>Ajouter au :</span><button id="dkToMain" aria-pressed="${DKF.to !== "side"}">Deck</button><button id="dkToSide" aria-pressed="${DKF.to === "side"}">Sideboard <b>${cnt(DK.sideboard || {})}</b>/10</button></div>
+        <div class="small">${res.length} carte${res.length > 1 ? "s" : ""}. Touche une carte pour l'ajouter ${DKF.to === "side" ? "au <b>sideboard</b> (légendes, runes et battlefields vont toujours au deck)" : "au deck"} ; les cartes grisées ne sont pas encore modélisées.</div>
         <div class="dkgrid">${shown.map(dkCard).join("")}</div>
         ${res.length > shown.length ? `<button id="dkMore">Afficher ${Math.min(120, res.length - shown.length)} de plus</button>` : ""}
       </section>
@@ -1412,6 +1650,8 @@ function dkRender() {
   $("dkMine").onchange = e => { DKF.mine = e.target.checked; dkRender(); };
   $("dkOnly").onchange = e => { DKF.only = e.target.checked; dkRender(); };
   $("dkName").oninput = e => { DK.name = e.target.value; };
+  $("dkToMain").onclick = () => { DKF.to = "main"; dkRender(); };
+  $("dkToSide").onclick = () => { DKF.to = "side"; dkRender(); };
   if ($("dkMore")) $("dkMore").onclick = () => { DKF.lim += 120; dkRender(); };
   $("dkClose").onclick = () => closeDecks(true); $("dkMenu").onclick = () => closeDecks(true);
   $("dkNew").onclick = () => { DK = blankDeck(); dkRender(); };
@@ -1420,7 +1660,7 @@ function dkRender() {
   $("dkPlay").onclick = async () => { await saveDeck(); store.set("rbt-mine", "my:" + DK.id); closeDecks(); setupForm(); };
   $("dkLoad").onchange = e => {
     const v = e.target.value; if (!v) return;
-    if (v.startsWith("my:")) DK = JSON.parse(JSON.stringify(MYDECKS[v.slice(3)]));
+    if (v.startsWith("my:")) { DK = JSON.parse(JSON.stringify(MYDECKS[v.slice(3)])); if (!DK.sideboard) DK.sideboard = {}; }
     else { const p = CAT.presets.find(x => x.key === v); DK = fromEngine(p.deck, p.name + " (copie)"); DK.id = ""; }
     dkRender();
   };
@@ -1440,6 +1680,7 @@ function exportText(d) {
   if (d.champion) L.push("Champion :", "1 " + d.champion);
   L.push("Deck principal :"); for (const [n, q] of Object.entries(d.main).sort()) L.push(q + " " + n);
   L.push("Battlefields :"); for (const b of d.battlefields) L.push("1 " + b);
+  if (cnt(d.sideboard)) { L.push("Sideboard :"); for (const [n, q] of Object.entries(d.sideboard).sort()) L.push(q + " " + n); }
   L.push("Runes :"); for (const [r, q] of Object.entries(d.runes)) if (q) L.push(q + " " + r + " Rune");
   return L.join("\n");
 }
@@ -1450,6 +1691,7 @@ function importText(txt) {
   for (let line of txt.split(/\r?\n/)) {
     line = line.trim(); if (!line) continue;
     if (/^(champion|chosen champion)\s*:?$/i.test(line)) { sec = "champ"; continue; }
+    if (/^side\s*-?\s*board\s*:?$/i.test(line)) { sec = "side"; continue; }
     if (/:$/.test(line) || /^#/.test(line)) { sec = ""; continue; }
     const m = line.match(/^(\d+)\s*x?\s+(.+)$/i); const q = m ? +m[1] : 1; let n = (m ? m[2] : line).trim();
     const c = by[n.toLowerCase()] || by[(n + " rune").toLowerCase()];
@@ -1458,6 +1700,7 @@ function importText(txt) {
     else if (c.t === "Battlefield") { if (!d.battlefields.includes(c.n) && d.battlefields.length < 3) d.battlefields.push(c.n); }
     else if (c.t === "Rune") d.runes[c.d[0]] = (d.runes[c.d[0]] || 0) + q;
     else if (sec === "champ") d.champion = c.n;
+    else if (sec === "side") d.sideboard[c.n] = (d.sideboard[c.n] || 0) + q;
     else { d.main[c.n] = (d.main[c.n] || 0) + q; if (c.s === "Champion") champs.push(c.n); }
   }
   if (!d.champion && d.legend) {
@@ -1469,9 +1712,13 @@ function importText(txt) {
 }
 document.addEventListener("click", e => {
   if ($("deckView").hidden) return;
-  const t = e.target.closest("[data-add],[data-sub],[data-champ],[data-radd],[data-rsub],[data-dom],[data-unleg]");
+  const t = e.target.closest("[data-add],[data-sub],[data-champ],[data-radd],[data-rsub],[data-dom],[data-unleg],[data-sadd],[data-ssub],[data-tside],[data-tmain]");
   if (!t || !$("deckView").contains(t)) return;
-  if (t.dataset.add) addCard(t.dataset.add);
+  if (t.dataset.add) addCard(t.dataset.add, !!t.closest(".dkgrid"));
+  else if (t.dataset.sadd) sideAdd(t.dataset.sadd);
+  else if (t.dataset.ssub) sideSub(t.dataset.ssub);
+  else if (t.dataset.tside) toSide(t.dataset.tside);
+  else if (t.dataset.tmain) toMain(t.dataset.tmain);
   else if (t.dataset.sub) subCard(t.dataset.sub);
   else if (t.dataset.champ) makeChamp(t.dataset.champ);
   else if (t.dataset.radd) { if (cnt(DK.runes) >= 12) return toast("Déjà 12 runes."); DK.runes[t.dataset.radd] = (DK.runes[t.dataset.radd] || 0) + 1; dkRender(); }
@@ -1526,7 +1773,7 @@ function menuRender(view) {
       <li><b>Donne.</b> Même numéro de donne = même partie. Laisse vide pour une donne au hasard.</li></ol></div></div>`;
   } else if (MENUV === "mydecks") {
     const ds = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
-    h = `<div class="menuin msub">${back}<h2>Mes decks</h2>` + (ds.length ? ds.map(d => { const ok = deckOK(d); return `<div class="mcard row"><div class="grow"><div class="t">${esc(d.name)}</div><div class="small">${esc(d.legend || "sans légende")} · ${cnt(d.main) + (d.champion ? 1 : 0)}/40 cartes · ${ok ? "jouable ✓" : "pas encore jouable"}</div></div><div class="acts"><button data-edit="${esc(d.id)}">Modifier</button><button data-play="${esc(d.id)}"${ok ? "" : " disabled"}>Jouer</button></div></div>`; }).join("")
+    h = `<div class="menuin msub">${back}<h2>Mes decks</h2>` + (ds.length ? ds.map(d => { const ok = deckOK(d); return `<div class="mcard row"><div class="grow"><div class="t">${esc(d.name)}</div><div class="small">${esc(d.legend || "sans légende")} · ${cnt(d.main) + (d.champion ? 1 : 0)}/40 cartes${cnt(d.sideboard) ? " · sideboard " + cnt(d.sideboard) : ""} · ${ok ? "jouable ✓" : "pas encore jouable"}</div></div><div class="acts"><button data-edit="${esc(d.id)}">Modifier</button><button data-play="${esc(d.id)}"${ok ? "" : " disabled"}>Jouer</button></div></div>`; }).join("")
       : `<div class="mcard">Aucun deck pour l'instant. Les decks de référence (Akali G2, LeBlanc IQ#5…) sont proposés dans « Nouvelle partie ».</div>`)
       + `<div class="mcard row"><div class="grow small">Les decks sont gardés sur cet appareil, et dans la base claude.ai quand elle existe.</div><div class="acts"><button data-m="deck">Créer un deck</button></div></div></div>`;
   } else if (MENUV === "games") {
@@ -1549,7 +1796,7 @@ async function loadGames() {
   gs.sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
   const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
     const res = r ? (r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle") + " " + (r.pts || []).join("-") : "en cours";
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)} · tour ${esc(r ? r.turn : g.turn || "?")} · IA ${g.level === 3 ? "forte" : "normale"}</div></div></div>`; }).join("")
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · IA ${g.level === 3 ? "forte" : "normale"}</div></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
@@ -1559,7 +1806,7 @@ async function loadGames() {
 }
 $("menu").addEventListener("click", async e => {
   const t = e.target.closest("[data-m],[data-edit],[data-play]"); if (!t || t.disabled) return;
-  if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); hideMenu(); await openDecks(); return; }
+  if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); if (!DK.sideboard) DK.sideboard = {}; hideMenu(); await openDecks(); return; }
   if (t.dataset.play) { store.set("rbt-mine", "my:" + t.dataset.play); hideMenu(); setupForm(); return; }
   const m = t.dataset.m;
   if (m === "new") { hideMenu(); setupForm(); }

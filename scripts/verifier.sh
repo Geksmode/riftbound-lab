@@ -6,7 +6,8 @@
 #   scripts/verifier.sh table      construction de la table (+ robot navigateur)
 #
 # Variables : RB_FUZZ (parties par paquet, défaut 200), RB_RAND (parties t_rand, défaut 30),
-#             RB_NAV=0 pour sauter le robot navigateur, RB_PORT (défaut 8771).
+#             RB_NAV=0 pour sauter les robots navigateur, RB_MATCH=0 pour sauter le robot du match BO3 (~6 min),
+#             RB_PORT (défaut 8771).
 # Code de sortie 0 seulement si tout passe ; un résumé est imprimé à la fin.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -59,10 +60,23 @@ navigateur() {
   [ $rc = 0 ] && ! grep -q "^ÉCHEC" <<<"$out" && echo "robot navigateur : $(grep -c '^OK' <<<"$out") contrôles OK (captures dans $LOG)"
 }
 
+match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360x740 et 1400x900
+  if [ "${RB_NAV:-1}" = 0 ] || [ "${RB_MATCH:-1}" = 0 ]; then echo "robot du match sauté (RB_NAV=0 ou RB_MATCH=0)"; return 0; fi
+  [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
+    || { echo "robot du match sauté (Playwright absent)"; return 0; }
+  local port=$((PORT + 1))
+  (cd "$TR/build" && exec python3 -m http.server "$port" >/dev/null 2>&1) & local srv=$!
+  sleep 1
+  local out; out=$(cd "$TR" && timeout 1500 node verif_match.mjs "$LOG/match" "$port" 2>&1); local rc=$?
+  kill $srv 2>/dev/null
+  echo "$out" | tail -40
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot du match : $(grep -c '^OK' <<<"$out") contrôles OK"
+}
+
 case "$QUOI" in
   moteur) etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard ;;
-  table)  etape table table; etape navigateur navigateur ;;
-  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur ;;
+  table)  etape table table; etape navigateur navigateur; etape match match ;;
+  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape match match ;;
   *) sed -n '2,10p' "${BASH_SOURCE[0]}"; exit 2 ;;
 esac
 

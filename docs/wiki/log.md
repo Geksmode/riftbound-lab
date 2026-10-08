@@ -49,3 +49,9 @@ Nouvelle règle permanente 6 de `CLAUDE.md` : en cas de doute, la lecture la plu
 
 ## [2026-10-08] ingest | Boucle des parties
 Parties gardées dans le navigateur et téléchargeables, commit noté, rejeu par moteur exact (17/17 fidèles), `bilan_parties.py`, workflow « Apprentissage ». Page `pages/parties.md`.
+
+## [2026-10-08] ingest | Match BO1 / BO3 et sideboard (moteur)
+`match.py`, API `train.match_*`, sideboard validé (601.1.c). Écart signalé : en BO3 chaque joueur choisit son battlefield (486.5). Page `pages/match.md`.
+
+## [2026-10-08] ingest | Interface du match BO1 / BO3 et du sideboard
+Agent design : éditeur (sideboard), mode de match, robot `verif_match.mjs` ajouté à la porte ; chef : `obf` au rejeu.
