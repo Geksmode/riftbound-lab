@@ -64,3 +64,7 @@ PeerJS, BO1 / BO3 ; `train.duel_new`, `match_duel_next`, test à deux processus 
 
 ## [2026-10-08] ingest | Interface du duel entre amis
 Agent design : room PeerJS avec code, BO1 / BO3, reprise de l'invité ; robot `verif_duel.mjs` ajouté à la porte et à la CI (paquet `peer@1.0.2`).
+
+## [2026-10-08] ingest | Duel : hôte bloqué « en attente »
+Encodage JSON, renvoi du hello, statut côté hôte, journal de connexion copiable. Cause réelle non confirmée (non reproduite en local).
+
