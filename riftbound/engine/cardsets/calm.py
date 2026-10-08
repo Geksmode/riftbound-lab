@@ -1229,15 +1229,16 @@ def _foxfire_choices(g, pid, ctx):
     for b in (0, 1):
         if hb is not None and b != hb:
             continue
-        es = cap(g, enemies(g, pid, True, b), 6, pid)
+        # "units": a human may also choose friendly ones; the AI only enemies
+        es = cap(g, all_units(g, pid, True, b) if full_choices(g, pid) else enemies(g, pid, True, b), 6, pid)
         cands = []
         for k in range(1, len(es) + 1):
             for grp in combinations(es, k):
                 if sum(g.might(u) for u in grp) <= 4:
                     cands.append(grp)
-        cands.sort(key=lambda grp: -sum(value(g, u) for u in grp))
+        cands.sort(key=lambda grp: -sum(value(g, u) * (u.ctrl != pid) for u in grp))
         out += [dict(tg=tuple(u.uid for u in grp)) for grp in cap(g, cands, 4, pid)]
-    return out
+    return out + [dict(tg=())]                       # "any number" includes zero (rule 355.13)
 
 
 card("Fox-Fire", timing="action", hidden=True, preds=[P_unit], resolve=_foxfire, choices=_foxfire_choices)
@@ -1543,7 +1544,7 @@ def _tricksy_choices(g, pid, ctx):
             if any(u.loc != d for u in grp):
                 out.append(dict(tg=tuple(u.uid for u in grp), dest=d))
     out.sort(key=lambda c: c["dest"] != "base")
-    return out
+    return out + [dict(tg=())]                       # "any number" includes zero (rule 355.13)
 
 
 card("Tricksy Tentacles", preds=[P_enemy], resolve=_tricksy, choices=_tricksy_choices)

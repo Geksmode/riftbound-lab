@@ -1303,7 +1303,7 @@ def _voli_choose(g, it):
             if g.can_pay(it.ctrl, 0, deflect_reqs(g, it.ctrl, dict(tg=tuple(x for x, _ in a))))]
     if not opts:
         return False
-    a = g.ask(it.ctrl, "split_damage", opts, item=it)
+    a = g.ask(it.ctrl, "split_damage", opts + [()], item=it)       # "any number" includes zero (rule 355.13)
     reqs = deflect_reqs(g, it.ctrl, dict(tg=tuple(x for x, _ in a)))
     if reqs and not g.pay(it.ctrl, 0, reqs, dict(kind="ability")):
         return False

@@ -1248,15 +1248,16 @@ def _disposal_choices(g, pid, ctx):
     out = [dict(mode="draw")]
     tr = sorted(g.p[1 - pid].trash, key=lambda c: (g.impl(c) is None or not g.impl(c).flow,
                                                    -(c.spec["e"] + 2 * c.spec["p"]), c.uid))
+    zero = [dict(mode="recycle", cards=())]        # "up to 3 cards" includes zero (rule 355.13)
     if tr and full_choices(g, pid):                # a human: every set of up to 3 cards
         from itertools import combinations
         return out + [dict(mode="recycle", cards=tuple(c.uid for c in grp)) for n in range(1, min(3, len(tr)) + 1)
-                      for grp in combinations(tr, n)]
+                      for grp in combinations(tr, n)] + zero
     if tr:
         out.append(dict(mode="recycle", cards=tuple(c.uid for c in tr[:3])))
         if len(tr) > 1:
             out.append(dict(mode="recycle", cards=(tr[0].uid,)))
-    return out
+    return out + zero
 
 
 card("Disposal Order", timing="reaction", resolve=_disposal, choices=_disposal_choices)
@@ -1748,16 +1749,12 @@ card("Jagged Cutlass", equip="1 body rune", bonus=2,
 # Fae Dragon — "When you play me, buff up to four friendly units. When you spend a buff, play a Gold gear token
 # exhausted."
 def _fae_res(g, it):
-    done = []
-    for _ in range(4):
-        us = sorted([u for u in g.units(it.ctrl) if u not in done], key=lambda u: (u.buff > 0, -value(g, u), u.uid))
-        if not us:
-            break
-        u = g.ask(it.ctrl, "fae_dragon_buff", us + [None], item=it)
-        if u is None:
-            break
+    for u in _targets(g, it):                       # chosen as targets when the trigger was put on the chain (355.10)
         g.buff(u)
-        done.append(u)
+
+
+def _fae_opts(g, it):
+    return sorted(g.units(it.ctrl), key=lambda u: (u.buff > 0, -value(g, u), u.uid))
 
 
 def _fae_event(g, o, ev, info):
@@ -1765,7 +1762,9 @@ def _fae_event(g, o, ev, info):
         _trig(g, o, "Fae Dragon", lambda g_, it: make_token(g_, "Gold", it.ctrl, "base", ready=False))
 
 
-card("Fae Dragon", on_play=lambda g, o, ctx: _trig(g, o, "Fae Dragon", _fae_res), on_event=_fae_event)
+card("Fae Dragon", on_event=_fae_event,
+     on_play=lambda g, o, ctx: _trig(g, o, "Fae Dragon", _fae_res,
+                                     choose=_pick(_fae_opts, P_friend, n=4, kind="fae_dragon_buff", deflect=False)))
 
 
 # Pirate's Haven — "When you ready a friendly unit, give it +1 might this turn." (the Awaken readying is by the turn
