@@ -37,10 +37,10 @@ jobs:
           node-version: "22"
       - name: Pyodide 0.26.4 (paquet npm)
         run: bash riftbound/train/fetch_pyodide.sh
-      - name: Playwright et Chromium (robot navigateur)
+      - name: Playwright, Chromium et serveur PeerJS local (robots navigateur)
         run: |
           cd riftbound/train
-          npm install --no-save --no-package-lock playwright@1.56.1
+          npm install --no-save --no-package-lock playwright@1.56.1 peer@1.0.2
           npx playwright install --with-deps chromium
       - name: Porte d'intégration, partie table (construction + partie jouée au format téléphone)
         run: bash scripts/verifier.sh table

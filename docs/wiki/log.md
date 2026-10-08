@@ -61,3 +61,6 @@ Les cibles d'une répétition (Repeat imprimé ou accordé) ne payaient pas le D
 
 ## [2026-10-08] decision | Duel entre amis : moteur fait, interface en attente
 PeerJS, BO1 / BO3 ; `train.duel_new`, `match_duel_next`, test à deux processus ; spécification de l'interface dans `pages/duel.md`. Reprise à la session suivante.
+
+## [2026-10-08] ingest | Interface du duel entre amis
+Agent design : room PeerJS avec code, BO1 / BO3, reprise de l'invité ; robot `verif_duel.mjs` ajouté à la porte et à la CI (paquet `peer@1.0.2`).

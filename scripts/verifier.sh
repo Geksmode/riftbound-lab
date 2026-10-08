@@ -7,6 +7,7 @@
 #
 # Variables : RB_FUZZ (parties par paquet, défaut 200), RB_RAND (parties t_rand, défaut 30),
 #             RB_NAV=0 pour sauter les robots navigateur, RB_MATCH=0 pour sauter le robot du match BO3 (~6 min),
+#             RB_DUEL=0 pour sauter le robot du duel entre amis (serveur PeerJS local : paquet npm peer@1.0.2),
 #             RB_PORT (défaut 8771).
 # Code de sortie 0 seulement si tout passe ; un résumé est imprimé à la fin.
 set -uo pipefail
@@ -73,10 +74,25 @@ match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360
   [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot du match : $(grep -c '^OK' <<<"$out") contrôles OK"
 }
 
+duel() {   # robot du duel entre amis (train/verif_duel.mjs) : deux navigateurs, serveur PeerJS local
+  if [ "${RB_NAV:-1}" = 0 ] || [ "${RB_DUEL:-1}" = 0 ]; then echo "robot du duel sauté (RB_NAV=0 ou RB_DUEL=0)"; return 0; fi
+  local pj=""
+  for c in "$TR/node_modules/.bin/peerjs" /tmp/claude-0/peersrv/node_modules/.bin/peerjs; do [ -x "$c" ] && pj="$c" && break; done
+  [ -n "$pj" ] || { echo "robot du duel sauté (serveur PeerJS absent : npm install peer@1.0.2 dans riftbound/train)"; return 0; }
+  local wport=$((PORT + 2)) pport=$((PORT + 3))
+  "$pj" --port "$pport" --host 127.0.0.1 --path /myapp >/dev/null 2>&1 & local psrv=$!
+  (cd "$TR/build" && exec python3 -m http.server "$wport" >/dev/null 2>&1) & local wsrv=$!
+  sleep 2
+  local out; out=$(cd "$TR" && timeout 1800 node verif_duel.mjs "$LOG/duel" "$wport" "$pport" 2>&1); local rc=$?
+  kill $psrv $wsrv 2>/dev/null
+  echo "$out" | tail -40
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot du duel : $(grep -c '^OK' <<<"$out") contrôles OK"
+}
+
 case "$QUOI" in
   moteur) etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard ;;
-  table)  etape table table; etape navigateur navigateur; etape match match ;;
-  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape match match ;;
+  table)  etape table table; etape navigateur navigateur; etape match match; etape duel duel ;;
+  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape match match; etape duel duel ;;
   *) sed -n '2,10p' "${BASH_SOURCE[0]}"; exit 2 ;;
 esac
 
