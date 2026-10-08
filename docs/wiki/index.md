@@ -24,6 +24,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Équipe d'agents](pages/equipe.md) : chef, agents tmux, intégration
 - [Publication de la table](pages/publication.md) : Pages, artefact, pièges
 - [Chiffres versionnés](pages/resultats.md) : version du moteur dans chaque résultat, `compare.py`
+- [Duel entre amis](pages/duel.md) : room avec code (PeerJS), BO1 / BO3, ce qui est testé et ce qui ne l'est pas
 - [Match BO1 / BO3 et sideboard](pages/match.md) : règles du match, code, choix de l'IA
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI

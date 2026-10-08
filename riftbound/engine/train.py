@@ -23,11 +23,14 @@ GL = edit(G, out=[("Long Sword", 2)], add=[("Akali, Silent", 1), ("Ferrous Forer
 G2 = edit(GL, out=[("Defy", 3)], add=[("Ferrous Forerunner", 1), ("Lonely Poro", 1), ("Scuttle Crab", 1)])
 L = load("leblanc_gyatarina_ccs-iq5_1st")
 ME, AI = 0, 1
+# Duel entre deux joueurs (deux navigateurs reliés, voir duel_new) : les deux places sont humaines ; chaque navigateur
+# applique la même suite d'entrées (act / answer, dans l'ordre) et ne montre que les décisions de sa place (ME).
+DUEL = False
 
 
 class NeedChoice(Exception):
-    def __init__(s, kind, options, ctx):
-        s.kind, s.options, s.ctx = kind, options, ctx
+    def __init__(s, kind, options, ctx, pid=None):
+        s.kind, s.options, s.ctx, s.pid = kind, options, ctx, pid
 
 
 class Human:
@@ -41,18 +44,18 @@ class Human:
     def start(s, g):
         pass
 
-    def _next(s, kind, options, ctx):
+    def _next(s, kind, options, ctx, pid=None):
         if s.k < len(s.answers):
             s.k += 1
             return s.answers[s.k - 1]
-        raise NeedChoice(kind, options, ctx)
+        raise NeedChoice(kind, options, ctx, pid)
 
     def mulligan(s, g, pid):
-        out = s._next("mulligan", list(g.p[pid].hand), {})
+        out = s._next("mulligan", list(g.p[pid].hand), {}, pid)
         return [g.p[pid].hand[i] for i in out]
 
     def choose(s, g, pid, kind, options, ctx):
-        return options[s._next(kind, options, ctx)]
+        return options[s._next(kind, options, ctx, pid)]
 
 
 class TGame(Game):
@@ -125,6 +128,7 @@ def _deck(x, default):
 
 
 def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
+    duel_off()
     seed = random.randrange(10 ** 6) if seed is None else int(seed)
     Obj._n = 0
     Item._n = 0
@@ -148,6 +152,40 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     return json.dumps(dict(seed=seed, first=f, bf=[abf, lbf], battlefields=MD["battlefields"], names=names,
                            decks=[dict(legend=x["legend"], champion=x.get("champion"), main=sorted(set(x["main"])))
                                   for x in (A, B)]))
+
+
+# ------------------------------------------------------------------ duel entre deux joueurs
+def duel_new(seed, bf0, bf1, first, deck0, deck1, me, names=None):
+    """Partie à deux humains : place 0 = hôte, place 1 = invité. Les deux navigateurs appellent duel_new avec les MÊMES
+    arguments sauf `me` (leur place), puis appliquent la même suite d'entrées act / answer. Aucune IA."""
+    global ME, AI, DUEL
+    ME, AI, DUEL = int(me), 1 - int(me), True
+    seed = int(seed)
+    Obj._n = 0
+    Item._n = 0
+    D = [_deck(deck0, G2), _deck(deck1, L)]
+    A, B = with_bf(D[0], bf0 if bf0 in D[0]["battlefields"] else D[0]["battlefields"][0]), \
+        with_bf(D[1], bf1 if bf1 in D[1]["battlefields"] else D[1]["battlefields"][0])
+    nm = list(names) if names else [_short(A), _short(B)]
+    if nm[0] == nm[1]:
+        nm = [nm[0], nm[1] + " (2)"]
+    _rp.NAMES = tuple(nm)
+    ag = [Human(), Human()]
+    coach = P.PlanAgent(seed + 900000, plan=_plan_for([A, B][ME]), opp_plan=_plan_for([A, B][AI]))
+    g = TGame([A, B], ag, seed=seed, first=int(first))
+    W.clear()
+    W.update(g=g, ag=ag, coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=nm)
+    from version import engine_md5
+    return json.dumps(dict(seed=seed, first=int(first), bf=[A["battlefield"], B["battlefield"]], names=nm, me=ME,
+                           engine=engine_md5(), decks=[dict(legend=x["legend"], champion=x.get("champion"),
+                                                            main=sorted(set(x["main"]))) for x in (A, B)]))
+
+
+def duel_off():
+    """Revenir aux parties contre l'IA (la place locale redevient 0)."""
+    global ME, AI, DUEL
+    ME, AI, DUEL = 0, 1, False
+    return "{}"
 
 
 # ------------------------------------------------------------------ match BO1 / BO3 (voir match.py)
@@ -175,6 +213,19 @@ def match_next(state, mine=None, opp=None, human_bf=None):
                       human_bf)
     return json.dumps(dict(game=_m.game_no(st), chooser=ch, first=first, roll=st["roll"] if _m.game_no(st) == 1 else None,
                            allowed=_m.allowed_bfs(st, 0), ai_bf=bfs[1], human_bf=bfs[0] if st["mode"] == "bo1" else None,
+                           sideboard=_m.can_sideboard(st), seed=_m.seed_of(st), wins=st["wins"], over=_m.over(st)))
+
+
+def match_duel_next(state):
+    """Duel entre deux joueurs : préparation de la manche sans aucun choix d'IA (les deux places sont humaines) :
+    qui choisit le premier joueur (place 0 = hôte, 1 = invité, None = imposé après une nulle), battlefields permis
+    pour chaque place (choix simultanés, ou tirés au hasard en BO1), sideboard permis, graine de la manche."""
+    import match as _m
+    st = json.loads(state)
+    bo1 = _m.pick_bfs(st) if st["mode"] == "bo1" else None
+    return json.dumps(dict(game=_m.game_no(st), chooser=_m.chooser(st), first=_m.forced_first(st),
+                           roll=st["roll"] if _m.game_no(st) == 1 else None,
+                           allowed=[_m.allowed_bfs(st, 0), _m.allowed_bfs(st, 1)], bo1_bfs=bo1,
                            sideboard=_m.can_sideboard(st), seed=_m.seed_of(st), wins=st["wins"], over=_m.over(st)))
 
 
@@ -315,18 +366,21 @@ def _restore(sv):
 def _run(op):
     """Exécute op ; si l'humain doit répondre à une question en cours de résolution, tout est annulé jusqu'à la réponse."""
     sv = _save()
-    hu = W["ag"][ME]
-    hu.k = 0
+    hus = {i: a for i, a in enumerate(W["ag"]) if isinstance(a, Human)}
+    for a in hus.values():
+        a.k = 0
     W["g"].buf = []
     try:
         op()
     except NeedChoice as e:
         _restore(sv)
-        W["ag"][ME].answers = hu.answers
+        for i, a in hus.items():                       # les réponses déjà données restent pour la reprise de op
+            W["ag"][i].answers = a.answers
         W["retry"] = (op, e)
         W["g"].buf = []
         return _view(ask=e)
-    W["ag"][ME].answers = []
+    for i in hus:
+        W["ag"][i].answers = []
     W["retry"] = None
     return _view()
 
@@ -341,6 +395,7 @@ class _It:
 def _expand(g, d):
     """Sorts à cibles : le moteur ne propose que quelques combinaisons (ennemis les mieux classés, 8 au plus) pour
     l'IA. Pour le joueur humain, on ajoute toutes les combinaisons légales (prédicats de la carte, Deflect payé)."""
+    pid = d.player                                    # le joueur qui décide (en duel : pas forcément ME)
     opts, seen, groups = list(d.options), {repr(a) for a in d.options}, {}
     for a in opts:
         if a[0] == "play" and "tg" in a[3] and set(a[3]) <= {"tg", "flow"}:
@@ -349,15 +404,15 @@ def _expand(g, d):
         n = len(lst[0][3]["tg"])
         if n == 0 or any(len(a[3]["tg"]) != n or not all(isinstance(x, int) for x in a[3]["tg"]) for a in lst):
             continue
-        card = _find(g, ME, uid)
+        card = _find(g, pid, uid)
         im = g.impl(card) if card is not None else None
         if im is None or not im.preds:
             continue
         pr = [im.preds[min(i, len(im.preds) - 1)] for i in range(n)]
-        it = _It(ME, card.hidden_bf if src == "facedown" else None)
+        it = _It(pid, card.hidden_bf if src == "facedown" else None)
         rep = any(len(set(a[3]["tg"])) < n for a in lst)
         if all(p is pr[0] for p in pr):
-            slot = [o for o in g.board if g.targetable(o, ME) and pr[0](g, it, o)]
+            slot = [o for o in g.board if g.targetable(o, pid) and pr[0](g, it, o)]
             combos = (itertools.combinations_with_replacement if rep else itertools.combinations)(slot, n)
         else:
             # prédicats dépendants (la 2e cible selon la 1re) : it.targets se remplit au fil des cibles
@@ -367,7 +422,7 @@ def _expand(g, d):
                     return
                 it.targets = [(o.uid, o.oid) for o in pre]
                 it.chosen = {o.uid for o in pre}
-                for o in [o for o in g.board if g.targetable(o, ME) and pr[i](g, it, o)]:
+                for o in [o for o in g.board if g.targetable(o, pid) and pr[i](g, it, o)]:
                     if rep or o not in pre:
                         yield from _walk(i + 1, pre + [o])
             combos = list(_walk(0, []))
@@ -375,7 +430,7 @@ def _expand(g, d):
         for c in combos:
             ch = dict(extra, tg=tuple(o.uid for o in c))
             a = ("play", uid, src, ch)
-            if repr(a) in seen or not _act.affordable(g, ME, card, ch, src):
+            if repr(a) in seen or not _act.affordable(g, pid, card, ch, src):
                 continue
             seen.add(repr(a))
             opts.append(a)
@@ -387,14 +442,14 @@ def _expand(g, d):
             mgroups.setdefault((a[1], a[2]), []).append(a)
     from cards import enemies, friends
     for (uid, src), lst in mgroups.items():
-        card = _find(g, ME, uid)
+        card = _find(g, pid, uid)
         im = g.impl(card) if card is not None else None
         if im is None:
             continue
         hb = card.hidden_bf if src == "facedown" else None
-        it = _It(ME, hb)
-        ens = [e for e in enemies(g, ME, False, hb) if not im.preds or im.preds[0](g, it, e)]
-        fr = friends(g, ME)
+        it = _It(pid, hb)
+        ens = [e for e in enemies(g, pid, False, hb) if not im.preds or im.preds[0](g, it, e)]
+        fr = friends(g, pid)
         if hb is not None:
             fr = [u for u in fr if u.loc == hb] or fr
         extra = {k: v for k, v in lst[0][3].items() if k not in ("tg", "mover", "mover_oid", "dest")}
@@ -405,7 +460,7 @@ def _expand(g, d):
                         continue
                     ch = dict(extra, tg=t, mover=u.uid, mover_oid=u.oid, dest=dst)
                     a = ("play", uid, src, ch)
-                    if repr(a) in seen or not _act.affordable(g, ME, card, ch, src):
+                    if repr(a) in seen or not _act.affordable(g, pid, card, ch, src):
                         continue
                     seen.add(repr(a))
                     opts.append(a)
@@ -416,14 +471,14 @@ def _tick():
     g, d = W["g"], W["d"]
     if d is None:
         W["d"] = g.advance()
-        if W["d"] is not None and W["d"].player == ME:
+        if W["d"] is not None and (W["d"].player == ME or DUEL):   # en duel : mêmes options chez les deux joueurs
             _expand(g, W["d"])
         return
-    if d.player == ME and len(d.options) == 1:       # rien à choisir (seulement passer) : on passe pour l'humain
+    if (d.player == ME or DUEL) and len(d.options) == 1:   # rien à choisir (seulement passer) : on passe pour l'humain
         g.apply(d.options[0])
         W["d"] = None
         return
-    if d.player == AI:
+    if d.player == AI and not DUEL:
         a = W["ag"][AI].decide(g, d)
         W["last_ai"] = describe(g, a, AI) if a[0] not in ("pass",) else None
         W["last_ai_info"] = dict(_info(a), k=a[0], src=_src(g, a)) if a[0] not in ("pass", "end") else None
@@ -439,9 +494,13 @@ def step():
 def act(i):
     d = W["d"]
     a = d.options[int(i)]
+    if DUEL and d.player != ME:                         # coup de l'adversaire reçu : affiché comme les coups de l'IA
+        W["last_ai"] = describe(W["g"], a, d.player) if a[0] not in ("pass",) else None
+        W["last_ai_info"] = dict(_info(a), k=a[0], src=_src(W["g"], a)) if a[0] not in ("pass", "end") else None
     h = W.setdefault("hist", [])
-    h.append(_save())
-    del h[:-40]
+    if not DUEL:                                        # pas de « Reprendre » en duel : l'adversaire a déjà vu le coup
+        h.append(_save())
+        del h[:-40]
 
     def op():
         W["g"].apply(a)
@@ -451,7 +510,7 @@ def act(i):
 
 def answer(x):
     op, e = W["retry"]
-    W["ag"][ME].answers.append(json.loads(x) if isinstance(x, str) else x)
+    W["ag"][e.pid if e.pid is not None else ME].answers.append(json.loads(x) if isinstance(x, str) else x)
     return _run(op)
 
 
@@ -711,7 +770,9 @@ def _view(ask=None):
             b["fdu"] = gb.facedown.uid
     out["undo"] = len(W.get("hist", []))
     d = W["d"]
-    if ask is not None:
+    if ask is not None and DUEL and ask.pid is not None and ask.pid != ME:
+        out["wait"] = "adversaire"                      # question posée à l'adversaire : on attend sa réponse
+    elif ask is not None:
         out["ask"] = dict(kind=ask.kind, title=_ask_title(g, ask),
                           options=[_alabel(g, ask, o) for o in ask.options],
                           uids=[_ask_uid(g, o) for o in ask.options],
@@ -735,8 +796,11 @@ def _view(ask=None):
         out["dec"] = dict(kind=d.kind, options=[dict(i=i, k=a[0], src=_src(g, a), us=list(a[1]) if a[0] == "move" else None,
                                                      label=_act_label(g, a) if a[0] == "act" else describe(g, a, ME), **_info(a))
                                                 for i, a in enumerate(d.options)])
+    elif DUEL and d is not None and d.player != ME:
+        out["wait"] = "adversaire"                      # décision de l'adversaire : on attend son coup
     else:
         out["busy"] = True
+    out["me"] = ME
     return json.dumps(out, ensure_ascii=False)
 
 

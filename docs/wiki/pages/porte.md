@@ -14,6 +14,7 @@ sources: scripts/verifier.sh, riftbound/train/verif_mobile.mjs, .github/workflow
 | hasard | `train/t_rand.py` (`RB_RAND` parties, défaut 30) avec des decks légaux au hasard : 0 erreur |
 | table | `fetch_pyodide.sh` si besoin + `build.sh` |
 | match | `train/verif_match.mjs` (79 contrôles, ~1 min ici) : sideboard dans l'éditeur, BO3 manche 1 puis 2 par vrais clics. Sauté avec `RB_MATCH=0`. |
+| duel | `train/verif_duel.mjs` (39 contrôles) : deux navigateurs, serveur PeerJS local, manche jouée et synchronisée, reprise. Sauté avec `RB_DUEL=0` ou sans le paquet `peer`. |
 | navigateur | `train/verif_mobile.mjs` (Playwright, Chromium, 360×740) : menu, lien Replays et lecteur, partie jouée jusqu'au bout, bulle de fin au-dessus de la barre, « Nouvelle partie » au doigt, boutons ± ≥ 44 px, pas de défilement horizontal, aucune erreur JS. Sauté si Playwright est absent ou `RB_NAV=0`. |
 
 - Durée avec les réglages par défaut : environ 6 min (2026-10-08, machine cloud 4 cœurs).

@@ -55,3 +55,12 @@ Parties gardées dans le navigateur et téléchargeables, commit noté, rejeu pa
 
 ## [2026-10-08] ingest | Interface du match BO1 / BO3 et du sideboard
 Agent design : éditeur (sideboard), mode de match, robot `verif_match.mjs` ajouté à la porte ; chef : `obf` au rejeu.
+
+## [2026-10-08] ingest | Deflect sur les répétitions
+Les cibles d'une répétition (Repeat imprimé ou accordé) ne payaient pas le Deflect (809.1.c) : corrigé dans `actions.deflect_total` ; contrôle de tous les sorts `cardsets/test_deflect_auto.py` ; coût affiché dans le libellé du coup et le journal.
+
+## [2026-10-08] decision | Duel entre amis : moteur fait, interface en attente
+PeerJS, BO1 / BO3 ; `train.duel_new`, `match_duel_next`, test à deux processus ; spécification de l'interface dans `pages/duel.md`. Reprise à la session suivante.
+
+## [2026-10-08] ingest | Interface du duel entre amis
+Agent design : room PeerJS avec code, BO1 / BO3, reprise de l'invité ; robot `verif_duel.mjs` ajouté à la porte et à la CI (paquet `peer@1.0.2`).

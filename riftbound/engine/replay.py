@@ -36,6 +36,8 @@ def fr_line(g, line):
         (r"^P(\d) moves \[(.*)\] -> (.+)$", lambda m: f"{NAMES[int(m[1])]} déplace {m[2]} vers {bf(m[3])}"),
         (r"^P(\d) hides a card at (.+)$", lambda m: f"{NAMES[int(m[1])]} cache une carte à {m[2]}"),
         (r"^P(\d) \+1 point \((.+)\) -> (\d+)$", lambda m: f"{NAMES[int(m[1])]} +1 point ({pt_why(m[2])}) → {m[3]}"),
+        (r"^P(\d) pays Deflect \+(\d+) power$",
+         lambda m: f"{NAMES[int(m[1])]} paie Deflect : +{m[2]} puissance de n'importe quel domaine (règle 809)"),
         (r"^resolve (.+)$", lambda m: f"Résolution : {m[1]}"),
         (r"^(.+) takes (\d+) \((\d+) might\)$", lambda m: f"{m[1]} subit {m[2]} dégât(s) (might {m[3]})"),
         (r"^(.+) moves (\w+)->(\w+)$", lambda m: f"{m[1]} va de {bf(m[2])} à {bf(m[3])}"),
@@ -119,6 +121,11 @@ def describe(g, a, pid):
                 extra.append("vers " + (g.bfs[v].name if v in (0, 1) else "la base"))
             elif kk in ("accelerate", "repeat") and v:
                 extra.append(kk)
+        if c is not None:
+            from actions import deflect_total
+            nd = len(deflect_total(g, pid, c, dict(ch)))
+            if nd:
+                extra.append(f"Deflect +{nd} puissance")
         return f"joue {n}" + (" (" + ", ".join(extra) + ")" if extra else "")
     if k == "hide":
         c = _find(g, pid, a[1])

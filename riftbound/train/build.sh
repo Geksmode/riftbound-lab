@@ -7,7 +7,7 @@ E=$(cd .. && pwd)            # dossier riftbound/
 B=build
 [ -f pyodide-cache/package/pyodide.js ] || { echo "Lance d'abord : bash fetch_pyodide.sh"; exit 1; }
 rm -rf $B && mkdir -p $B/py/cardsets $B/data $B/pyodide $B/img $B/atlas
-for f in game.py actions.py cards.py ai.py plans.py decks.py replay.py train.py match.py pool.txt; do cp $E/engine/$f $B/py/; done
+for f in game.py actions.py cards.py ai.py plans.py decks.py replay.py train.py match.py version.py pool.txt; do cp $E/engine/$f $B/py/; done
 # modules de cartes : la liste explicite de cardsets/__init__.py (la page charge les fichiers par nom)
 CS=$(python3 -c "
 import re, os
@@ -34,6 +34,8 @@ cp pyodide-cache/package/{pyodide.js,pyodide.asm.js,pyodide.asm.wasm,pyodide-loc
 base64 -w0 pyodide-cache/package/python_stdlib.zip > $B/pyodide/python_stdlib.b64.txt
 cp $E/replays/img/* $B/img/
 cp atlas/* $B/atlas/
+# PeerJS pour les duels entre amis (téléchargé par fetch_pyodide.sh)
+mkdir -p $B/vendor && cp pyodide-cache/peerjs/package/dist/peerjs.min.js $B/vendor/
 # lecteur de replays servi à côté de la table (il lit img/index.json, déjà copié ci-dessus, et games/)
 cp $E/replays/viewer.html $B/replays.html
 mkdir -p $B/games && cp $E/replays/games/* $B/games/
