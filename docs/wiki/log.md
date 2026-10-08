@@ -77,3 +77,6 @@ Les effets « They reveal their hand » (Sabotage, Decree of Strength, Mindsplit
 ## [2026-10-08] decision | Direction artistique « Riftbound Lab — DA » appliquée à la table
 Maquette Claude Design (artefact https://claude.ai/artifact/3AHpJfntDdJdWSwxKH4rJ1 : fondations, composants, accueil, table). Couche `train/da.css` injectée après le style existant (`/*DA_CSS*/`, `build.sh`) : papier clair, encre #15172B, néon #CFF26E, couleurs de domaine franches et douces, contours 1,5 px + ombre pleine, polices Bricolage Grotesque / Instrument Sans / Geist Mono. Apparence seulement : gestes, moteur et robots inchangés (porte verte). Le lecteur de replays garde l'ancien look sombre. Les écrans de la maquette qui n'existent pas encore (puzzle du jour, progression, coach, branches « Et si… ») ne sont pas faits.
 
+## [2026-10-08] decision | DA « observatoire » (maquette mise à jour)
+L'utilisateur a changé la maquette : nuit étoilée #0E1230, clair de lune #EDEBFA, or d'étoile #F3D58A, domaines en lueurs, pilules sans ombre dure, Instrument Serif / Figtree / Geist Mono ; toi = menthe #72E2BC, l'adversaire = corail #FF8F7E (flèches comprises), sélection = halo bleu #93B9FF. `train/da.css` réécrit, apparence seulement.
+
