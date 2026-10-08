@@ -1366,22 +1366,27 @@ card("Cull the Weak", resolve=_cull)
 
 
 # Deathgrip — "[Reaction] Kill a friendly unit to give +might equal to its Might to another friendly unit this
-# turn. Draw 1."
+# turn. Draw 1."  Deux cibles obligatoires (355.7, 355.8) : tg[0] = l'unité alliée tuée, tg[1] = une AUTRE unité
+# alliée. Sans deux unités alliées, le sort ne peut pas être joué (décision de l'utilisateur, 2026-10-08 : suivre les
+# règles au plus près). À la résolution, une cible devenue illégale ne fait rien, le reste s'applique (359.3.e).
 def _deathgrip(g, it):
-    tgt = g.legal(it, 0)
-    victims = [u for u in g.units(it.ctrl) if u is not tgt]
-    if victims:
-        v = g.ask(it.ctrl, "deathgrip_victim", [None] + sorted(victims, key=lambda u: value(g, u)), target=tgt)
-        if v is not None:
-            m = g.might(v)
-            killed = g.kill([v], it.ctrl, cost=True)
-            if killed and tgt is not None and tgt in g.board:
-                g.mod(tgt, max(0, m))
+    victim, tgt = g.legal(it, 0), g.legal(it, 1)
+    if victim is not None:
+        m = g.might(victim)                            # sa Might au moment de mourir
+        killed = g.kill([victim], it.ctrl)
+        if killed and tgt is not None and tgt is not victim and tgt in g.board:
+            g.mod(tgt, max(0, m))
     g.draw(it.ctrl, 1)
 
 
-card("Deathgrip", timing="reaction", preds=[P_friend], resolve=_deathgrip,
-     choices=lambda g, pid, ctx: tg_choices(friends(g, pid)) + [dict(tg=())])
+def _deathgrip_choices(g, pid, ctx):
+    fr = friends(g, pid, False, ctx["hidden_bf"])
+    victims = cap(g, sorted(fr, key=lambda u: value(g, u)), 3, pid)          # l'IA sacrifie d'abord le moins utile
+    gets = cap(g, sorted(fr, key=lambda u: -g.might(u)), 3, pid)
+    return [dict(tg=(v.uid, t.uid)) for v in victims for t in gets if t is not v]
+
+
+card("Deathgrip", timing="reaction", preds=[P_friend, P_friend], resolve=_deathgrip, choices=_deathgrip_choices)
 
 
 # Glasc Mixologist — "[Deathknell] You may play a unit with cost no more than 3 energy and no more than 1 rune of

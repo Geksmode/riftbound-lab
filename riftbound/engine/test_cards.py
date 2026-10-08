@@ -873,7 +873,7 @@ def sacrifice_kills_mighty():
 
 @test
 def deathgrip_pump():
-    g, _ = new(answers1={"deathgrip_victim": lambda o, c: [x for x in o if x is not None][0]})
+    g, _ = new()
     g.tp = 1
     runes(g, 1, ["Order"] * 2)
     big = put(g, 1, "Ruined Rex")
@@ -881,9 +881,28 @@ def deathgrip_pump():
     hand(g, 1, "Deathgrip")
     g.p[1].deck = [Obj("Discipline", 1) for _ in range(3)]
     g.p[0].deck = []
-    g.apply(opt(g, 1, "Deathgrip", lambda ch: ch.get("tg") == (big.uid,)))
+    g.apply(opt(g, 1, "Deathgrip", lambda ch: ch.get("tg") == (s.uid, big.uid)))
     settle(g)
-    assert s.zone == "trash" and g.might(big) == 7
+    assert s.zone == "trash" and g.might(big) == 7 and len(g.p[1].hand) == 1
+
+
+@test
+def deathgrip_needs_two_friendly_units():
+    # 355.8 : deux cibles obligatoires ; avec une seule unité alliée (ou aucune), Deathgrip n'est pas jouable
+    from actions import card_choices
+    for n in (0, 1):
+        g, _ = new()
+        runes(g, 0, ["Order"] * 2)
+        for _ in range(n):
+            put(g, 0, "Soaring Scout")
+        put(g, 1, "Ruined Rex")
+        c = hand(g, 0, "Deathgrip")
+        assert not card_choices(g, 0, c, "hand", False, False, every=True), n
+    g, _ = new()
+    runes(g, 0, ["Order"] * 2)
+    a, b = put(g, 0, "Soaring Scout"), put(g, 0, "Ruined Rex")
+    chs = card_choices(g, 0, hand(g, 0, "Deathgrip"), "hand", False, False, every=True)
+    assert sorted(c["tg"] for c in chs) == sorted([(a.uid, b.uid), (b.uid, a.uid)])
 
 
 @test

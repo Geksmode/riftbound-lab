@@ -32,8 +32,6 @@ EXCEPTIONS = {
     "Curtain Call": "sort modal : le mode « Draw 1 » n'a pas de cible",
     "Piercing Light": "« Deal 2 to a unit at a battlefield » est obligatoire ; seule la 2e cible est « up to »",
     "Moonfall": "« Choose a battlefield where you have units » : injouable sans unité, malgré « up to one enemy unit »",
-    "Deathgrip": "À TRANCHER par l'utilisateur : le moteur le laisse jouer sans unité (juste « Draw 1 ») ; lecture stricte de "
-                 "355.7-355.8 : « Kill a friendly unit » et « another friendly unit » sont deux cibles obligatoires",
 }
 
 

@@ -171,10 +171,6 @@ class Heuristics:
             return real[0] if real else None
         if kind == "herald_dk_pick":
             return options[0]
-        if kind == "deathgrip_victim":
-            tgt = ctx.get("target")
-            real = [o for o in options if o is not None and (o.cname in DK_FODDER or g.has_kw(o, "Temporary"))]
-            return real[0] if real and tgt is not None else None
         if kind == "sacrifice":
             return min(options, key=lambda u: unit_value(g, u))
         if kind == "discard":

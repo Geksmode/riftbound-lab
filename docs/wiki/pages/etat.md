@@ -25,7 +25,7 @@ sources: docs/REPRISE.md, git log, CI
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
 1. ~~Porte d'intégration~~ **fait le 2026-10-08** : [porte.md](porte.md).
 2. ~~Chiffres versionnés~~ **fait le 2026-10-08** : [resultats.md](resultats.md).
-3. ~~Tests générés depuis le texte des cartes~~ **fait en partie le 2026-10-08** : `engine/cardsets/test_texte_auto.py` (233 sorts : cible obligatoire injouable sur plateau vide, « up to / any number » jouable et toujours avec un choix sans cible, résolution sans erreur ; 15 unités « up to »). Pas encore généré : « you may » (refus proposé) et « then » au-delà de la résolution sans erreur. Décision en attente : **Deathgrip** (jouable sans unité dans le moteur ; lecture stricte de 355.8 : deux cibles obligatoires).
+3. ~~Tests générés depuis le texte des cartes~~ **fait en partie le 2026-10-08** : `engine/cardsets/test_texte_auto.py` (233 sorts : cible obligatoire injouable sur plateau vide, « up to / any number » jouable et toujours avec un choix sans cible, résolution sans erreur ; 15 unités « up to »). Pas encore généré : « you may » (refus proposé) et « then » au-delà de la résolution sans erreur. **Deathgrip** corrigé (décision de l'utilisateur : règles au plus près) : deux cibles alliées obligatoires (355.8), injouable sans deux unités alliées.
 4. Boucle « chaque partie jouée améliore l'IA » : export de la partie, analyse en CI, modèle des choix adopté seulement s'il gagne à plus de 2 écarts-types sur graines neuves.
 
 **Autres tâches en attente**

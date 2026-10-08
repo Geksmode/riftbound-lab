@@ -40,3 +40,6 @@ Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons
 
 ## [2026-10-08] ingest | Indicateur d'énergie flottante
 Badge dans la zone des runes de la table, puissance flottante exportée (`replay.snap` : `pp`) ; test Punch First.
+
+## [2026-10-08] decision | Règles au plus près ; Deathgrip
+Nouvelle règle permanente 6 de `CLAUDE.md` : en cas de doute, la lecture la plus fidèle aux Core Rules. Deathgrip : deux cibles alliées obligatoires (355.8).

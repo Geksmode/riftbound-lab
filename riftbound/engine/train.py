@@ -528,7 +528,7 @@ ASKS = dict(mulligan="Mulligan : choisis jusqu'à 2 cartes à remettre", may="Ut
             copy_target="Copier quelle unité ?", sacrifice="Sacrifier quelle unité ?", recycle_rune="Recycler quelle rune ?",
             hook_pick="Baited Hook : quelle unité prendre ?", zhonya_save="Zhonya : sauver quelle unité ?",
             star_spring="Star Spring : quelle unité ?", dusk_kill="Détruire quelle unité ?",
-            deathgrip_victim="Quelle unité sacrifier ?", herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",
+            herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",
             mixologist_pick="Quelle unité ?", ashe_pick="Quelle carte ?", target="Cible :",
             damage_order="Ordre des dégâts :")
 

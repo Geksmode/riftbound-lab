@@ -29,7 +29,9 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 5. **Vault** : le vault du projet est `docs/vault/` (notes Obsidian en français, liens `[[...]]`). Le vrai vault de
    l'utilisateur est sur son PC (Obsidian « Cerveau », dossier `20 Projets\Riftbound\`) : n'y écrire que s'il le
    demande lui-même. Chiffres remplacés → `docs/vault/Chiffres périmés.md`.
-6. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
+6. **Règles au plus près** : en cas de doute sur une carte, appliquer la lecture la plus fidèle aux Core Rules
+   (`riftbound/rules/source/core_rules_2026-07-16.txt`) et la citer. Ex. Deathgrip : deux cibles obligatoires (355.8).
+7. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
