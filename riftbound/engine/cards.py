@@ -821,8 +821,16 @@ def _back_off(g, it):
         g.draw(it.ctrl, 1)
 
 
-card("Back Off", timing="action", hidden=True, preds=[P_unit], resolve=_back_off,
-     choices=lambda g, pid, ctx: tg_choices([u for u in enemies(g, pid, False, ctx["hidden_bf"]) if not u.stunned]))
+def _back_off_choices(g, pid, ctx):
+    # "[Stun] a unit" : n'importe quelle unité, amie ou ennemie, même déjà étourdie ; depuis Hidden, une unité de ce
+    # battlefield (811.1.d). L'IA garde sa liste courte : ennemis pas encore étourdis.
+    hb = ctx["hidden_bf"]
+    if full_choices(g, pid):
+        return tg_choices(all_units(g, pid, False, hb))
+    return tg_choices([u for u in enemies(g, pid, False, hb) if not u.stunned])
+
+
+card("Back Off", timing="action", hidden=True, preds=[P_unit], resolve=_back_off, choices=_back_off_choices)
 
 
 # Blitzcrank, Impassive — "[Tank] When you play me to a battlefield, you may move an enemy unit to here.
@@ -1138,7 +1146,8 @@ card("Noxus Hopeful", cost_mod=lambda g, pid, c, ch: (2, 0) if g.finalized[pid] 
 # Scuttle Crab — "When you play me, draw 1. [Deathknell] Choose an opponent. They reveal their hand. You can look
 # at their facedown cards this turn. Gain 1 XP."
 def _crab_dk(g, it):
-    g.p[1 - it.ctrl].revealed_turn = g.turn_no
+    g.reveal_hand(1 - it.ctrl, it.ctrl)
+    g.p[1 - it.ctrl].revealed_turn = g.turn_no     # cartes face cachée visibles ce tour
     g.gain_xp(it.ctrl, 1)
 
 
@@ -1620,6 +1629,7 @@ card("Watchful Sentry", deathknell=lambda g, it: g.draw(it.ctrl, 1))
 def _ashe(g, o, ctx):
     def res(g_, it):
         opp = 1 - it.ctrl
+        g_.reveal_hand(opp, it.ctrl)
         hand = g_.p[opp].hand
         if not hand:
             return

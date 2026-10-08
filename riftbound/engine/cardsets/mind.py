@@ -143,7 +143,7 @@ def _engineer(g, o, ctx):
 card("Aspiring Engineer", on_play=_engineer)
 
 
-# Ava Achiever — "[Hidden] When I attack, you may pay 1 mind rune to play a card with [Hidden] from your hand
+# Ava Achiever — "When I attack, you may pay 1 mind rune to play a card with [Hidden] from your hand
 # here, ignoring its cost."
 # Ruling chosen: a spell played "here" makes its choices like a spell played from Hidden at this battlefield
 # (rule 811.1.d.2); a unit is played to this battlefield; a gear is played to base (gear location, rule 355.2).
@@ -199,7 +199,9 @@ def _ava(g, o, ev, info):
         _trig(g, o, "Ava Achiever", res, may=True, cost=cost)
 
 
-card("Ava Achiever", hidden=True, on_event=_ava)
+# Ava n'a pas le mot-clé Hidden (image OGN 107 vérifiée) : elle ne se cache pas (811.1) et n'est pas une « card with
+# [Hidden] » pour elle-même.
+card("Ava Achiever", on_event=_ava)
 
 
 # Bard, Mercurial — "You may exhaust your legend as an additional cost to play me. When you play me, if you paid

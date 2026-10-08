@@ -38,6 +38,8 @@ def fr_line(g, line):
         (r"^P(\d) \+1 point \((.+)\) -> (\d+)$", lambda m: f"{NAMES[int(m[1])]} +1 point ({pt_why(m[2])}) → {m[3]}"),
         (r"^P(\d) pays Deflect \+(\d+) power$",
          lambda m: f"{NAMES[int(m[1])]} paie Deflect : +{m[2]} puissance de n'importe quel domaine (règle 809)"),
+        (r"^P(\d) reveals their hand \[(.*)\]$",
+         lambda m: f"{NAMES[int(m[1])]} révèle sa main : {m[2] or 'vide'}"),
         (r"^resolve (.+)$", lambda m: f"Résolution : {m[1]}"),
         (r"^(.+) takes (\d+) \((\d+) might\)$", lambda m: f"{m[1]} subit {m[2]} dégât(s) (might {m[3]})"),
         (r"^(.+) moves (\w+)->(\w+)$", lambda m: f"{m[1]} va de {bf(m[2])} à {bf(m[3])}"),

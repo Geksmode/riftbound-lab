@@ -1221,7 +1221,7 @@ card("Decisive Strike", timing="action", resolve=lambda g, it: [g.mod(u, 2) for 
 # recycle that card."
 def _reveal_recycle(g, it, ok, kind):
     opp = 1 - it.ctrl
-    g.log(f"  P{opp} reveals {g.p[opp].hand}")
+    g.reveal_hand(opp, it.ctrl)
     cs = sorted([c for c in g.p[opp].hand if ok(c)], key=lambda c: (-(c.spec["e"] + 2 * c.spec["p"]), c.uid))
     if cs:
         c = g.ask(it.ctrl, kind, cs, item=it)

@@ -169,6 +169,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 .half { border-radius: 14px; transition: border-color .2s, box-shadow .2s; }
 .half.active { box-shadow: 0 0 0 1px rgba(224,80,95,.25), 0 0 26px rgba(224,80,95,.18); }
 .card.can:hover { transform: translateY(-3px); }
+.hand.rv .rvtag { color: var(--warn, #f5c451); font-weight: 700; }
+.hand.top.rv { outline: 1px dashed rgba(245,196,81,.55); outline-offset: 2px; border-radius: 10px; }
 .hand .card.can:hover { transform: translateY(-14px) scale(1.12); }
 .stackcol { border-color: rgba(140,180,255,.2); border-radius: 12px; }
 .endbtn { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #e9fff8; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
@@ -947,9 +949,11 @@ function handHTML(st, pid, srcs) {
   const cards = p.hand.map(([uid, nm], i) => {
     const off = i - (n - 1) / 2;
     const rot = (top ? -1 : 1) * off * 4, lift = off * off * 1.6 * (top ? -1 : 1);
-    return card(nm, { p: vp(pid), back: !vis, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
+    const shown = !vis && nm && nm !== "?";            // carte de l'adversaire révélée par un effet (Sabotage, Scuttle Crab…)
+    return card(nm, { p: vp(pid), back: !vis && !shown, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
   }).join("");
-  return `<div class="hand ${top ? "top" : ""}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})</span>${cards || `<span class="small">main vide</span>`}</div>`;
+  const rv = p.rv ? ` · <b class="rvtag">${top ? "révélée" : "révélée à l'adversaire"}</b>` : "";
+  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
@@ -976,7 +980,8 @@ function bfHTML(st, i, srcs) {
   const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("");
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
   let fd = "";
-  if (b.fd) { const mine = b.fd[0] === MEP; fd = `<span class="fd">${card(mine ? b.fd[1] : "", { back: !mine, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
+  if (b.fd) { const mine = b.fd[0] === MEP, seen = mine || (b.fd[1] && b.fd[1] !== "?");   // Scuttle Crab : cartes cachées adverses visibles ce tour
+    fd = `<span class="fd">${card(seen ? b.fd[1] : "", { back: !seen, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
   return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + vp(b.c) : ""} ${sd ? "sd" : ""}" data-drop="${i}">
     <div class="side top">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
@@ -1405,9 +1410,11 @@ function dropAt(src, t) {
     if (mode && mode.type === "move" && mode.dest !== null && mode.dest !== zone) mode = null;
     return startMove(src, zone);
   }
-  // 3. carte jouée sur une zone
-  if (ops.some(hasMv)) { sel = src; return startTarget(ops.filter(needs)); }
-  const m = ops.filter(o => o.k !== "move" && (o.loc !== null && o.loc !== undefined ? String(o.loc) === zone : true));
+  // 3. carte jouée sur une zone. Les coups qui visent exactement cette zone passent d'abord : une carte Hidden lâchée
+  // sur un battlefield est cachée (règle 421), même si elle pourrait aussi être jouée tout de suite avec une cible (Back Off).
+  const exact = ops.filter(o => o.k !== "move" && o.loc !== null && o.loc !== undefined && String(o.loc) === zone);
+  if (ops.some(hasMv) && !exact.some(o => o.k === "hide")) { sel = src; return startTarget(ops.filter(needs)); }
+  const m = exact.length ? exact : ops.filter(o => o.k !== "move" && (o.loc === null || o.loc === undefined));
   if (m.some(needs)) { sel = src; return startTarget(m); }
   sel = null; run(m);
 }

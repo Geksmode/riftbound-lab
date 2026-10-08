@@ -278,6 +278,7 @@ card("Blast Cone", on_play=_cone_play, on_event=_cone_event)
 def _skewer(g, it):
     bf = it.data["bf"]
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     us = sorted([c for c in g.p[opp].hand if c.spec["type"] == "Unit" and g.impl(c) is not None],
                 key=lambda c: (c.spec["might"] or 0))
     c = g.ask(it.ctrl, "skewer_pick", us + [None]) if us else None
@@ -524,8 +525,9 @@ def _edge_play(g, o, ctx):
 card("Edge of Night", hidden=True, equip="1 chaos rune", bonus=2, on_play=_edge_play)
 
 
-# Ember Monk — "[Hidden] When you play a card from [Hidden], give me +2 might this turn."
-card("Ember Monk", hidden=True, on_event=lambda g, o, ev, info: (
+# Ember Monk — "When you play a card from [Hidden], give me +2 might this turn." (pas le mot-clé Hidden : il ne se
+# cache pas, règle 811.1 ; le CSV range « Hidden » dans keywords parce que le texte le mentionne, image OGN 167 vérifiée)
+card("Ember Monk", on_event=lambda g, o, ev, info: (
     ev == "played" and info["pid"] == o.ctrl and _from_facedown(info) and _q(g, o, "Ember Monk", _buff_me(2))))
 
 
@@ -812,6 +814,7 @@ card("Illaoi, Prophet of the Great Kraken", on_play=lambda g, o, ctx: _illaoi_to
 # choose a card from their hand. If you do, they discard that card and draw 1."
 def _investigator(g, it):
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     hand_ = g.p[opp].hand
     if not hand_ or g.p[it.ctrl].xp < 2:
         return
@@ -1080,6 +1083,7 @@ card("Minah Swiftfoot", on_event=_minah)
 # discard that card."
 def _mindsplitter(g, it):
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     if g.p[opp].hand:
         g.discard(opp, g.ask(it.ctrl, "mindsplitter_pick", sorted(g.p[opp].hand, key=lambda x: -_cval(x))))
 
@@ -1146,7 +1150,8 @@ def _pack(g, it):
     _to_hand(g, g.legal(it, 0))
 
 
-card("Pack of Wonders", hidden=True, abilities=[ability(
+# Pack of Wonders n'a pas le mot-clé Hidden (il le mentionne seulement, image OGN 181 vérifiée) : ne se cache pas (811.1).
+card("Pack of Wonders", abilities=[ability(
     "Return", exhaust=True, choices=_pack_choices, resolve=_pack,
     preds=[lambda g, it, x: x.ctrl == it.ctrl and x.uid != it.src])])
 
@@ -1384,7 +1389,9 @@ def _swap_choices(g, pid, ctx):
     for bf in ([hb] if hb is not None else [0, 1]):
         us = [u for u in g.units(loc=bf) if g.targetable(u, pid)]
         for a, b in combinations(us, 2):
-            if g.might(a) != g.might(b):
+            # deux unités de même Might sont des cibles légales (l'échange ne change rien) : proposées au joueur humain,
+            # pas à l'IA pour qui ce choix ne sert à rien
+            if g.might(a) != g.might(b) or full_choices(g, pid):
                 out.append(dict(tg=(a.uid, b.uid)))
 
     def gain(c):
