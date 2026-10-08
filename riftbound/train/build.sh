@@ -20,7 +20,7 @@ python3 - "$CS" <<'P'
 import sys, json
 mods = [m for m in sys.argv[1].split() if m]
 files = ["cardsets/__init__.py"] + [f"cardsets/{m}.py" for m in mods]
-s = open('src.html').read().replace('/*BASE_CSS*/', open('base.css').read())
+s = open('src.html').read().replace('/*BASE_CSS*/', open('base.css').read()).replace('/*DA_CSS*/', open('da.css').read())
 s = s.replace('/*CARDSETS*/', "".join(", " + json.dumps(f) for f in files))
 import subprocess, sys as _s
 commit = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], capture_output=True, text=True).stdout.strip() or None

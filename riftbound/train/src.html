@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Riftbound Entraînement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400..700&family=Geist+Mono:wght@400;500&display=swap">
 <style>
 /*BASE_CSS*/
 /* Table d'entraînement : même tapis que le lecteur de replays ; à droite, le panneau d'action (ce que tu peux faire), le conseil
@@ -355,6 +355,7 @@ body.dkopen { overflow: hidden; }
 #pReady { text-align: left; }
 .sbr button:disabled, .big button:disabled { opacity: .4; cursor: default; }
 @media (max-width: 820px) { .mchip { order: 3; } }
+/*DA_CSS*/
 </style>
 
 <div class="shell">
@@ -378,7 +379,7 @@ body.dkopen { overflow: hidden; }
         <div class="stackcol" id="stack" aria-label="Chaîne en cours"></div>
       </div>
     </div></div>
-    <p class="small" style="margin:0">Touche une carte à cadre vert pour voir ce qu'elle peut faire, ou glisse-la vers sa zone ou sa cible. Les choix (cibles, effets optionnels) se font sur la table, la question s'affiche au milieu du plateau. Touche une défausse pour voir son contenu. Flèches violettes : coups de l'IA.</p>
+    <p class="small" style="margin:0">Touche une carte à cadre vert pour voir ce qu'elle peut faire, ou glisse-la vers sa zone ou sa cible. Les choix (cibles, effets optionnels) se font sur la table, la question s'affiche au milieu du plateau. Touche une défausse pour voir son contenu. Flèches corail : coups de l'IA.</p>
   </div>
 
   <aside class="panel drawer" id="drawer" aria-label="Journal de la partie">
@@ -395,7 +396,7 @@ body.dkopen { overflow: hidden; }
 <div class="deckview" id="deckView" hidden role="dialog" aria-label="Éditeur de deck"></div>
 <div class="modal" id="modal" hidden><div class="mbox" id="mbox" role="dialog" aria-modal="true"></div></div>
 
-<svg id="arrows" aria-hidden="true"><defs><marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3fc3a3"/></marker><marker id="ahL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b58cf0"/></marker></defs><g id="arrowsG"></g></svg>
+<svg id="arrows" aria-hidden="true"><defs><marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#72E2BC"/></marker><marker id="ahL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF8F7E"/></marker></defs><g id="arrowsG"></g></svg>
 
 <script src="pyodide/pyodide.js"></script>
 <script src="vendor/peerjs.min.js"></script>
@@ -1419,13 +1420,13 @@ function dropAt(src, t) {
   sel = null; run(m);
 }
 
-// ---------- flèches : tes cibles (vert), sorts de la chaîne et dernier coup de LeBlanc (violet), déplacements préparés
+// ---------- flèches : tes cibles (vert), sorts de la chaîne et dernier coup de LeBlanc (corail), déplacements préparés
 function centre(el) { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
 function arrow(a, b, who, dashed) {
   const [x1, y1] = a, [x2, y2] = b, dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
   const ex = x2 - dx / L * 14, ey = y2 - dy / L * 14, bend = Math.min(80, L / 4);
   const cx = (x1 + ex) / 2 - dy / L * bend, cy = (y1 + ey) / 2 + dx / L * bend;
-  const col = who === 0 ? "#3fc3a3" : "#b58cf0";
+  const col = who === 0 ? "#72E2BC" : "#FF8F7E";   // couleurs joueur de la DA (da.css)
   return `<path d="M${x1},${y1} Q${cx},${cy} ${ex},${ey}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" ${dashed ? 'stroke-dasharray="7 6"' : ""} marker-end="url(#ah${who === 0 ? "A" : "L"})" opacity=".9"/>`;
 }
 function drawArrows(px, py) {
@@ -2253,7 +2254,7 @@ function menuRender(view) {
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction il devient « Passer ».</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » annule ton dernier coup, autant de fois que tu veux.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
-      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches violettes : ses derniers coups.</li>
+      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches corail : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
       <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de « Reprendre » ni de conseil en duel. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
