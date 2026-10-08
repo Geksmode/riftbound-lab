@@ -1895,7 +1895,7 @@ class Game:
             if it.card.zone != "chain":
                 break
             it2 = Item("spell", it.ctrl, it.name, card=it.card, src=it.src,
-                       data=dict(it.data, **ch, rep=False, reps=None, tg2=()))
+                       data={**it.data, **ch, "rep": False, "reps": None, "tg2": ()})
             for i, uid in enumerate(ch.get("tg", ())):
                 o = s.obj(uid) if isinstance(uid, int) else None
                 pred = preds[min(i, len(preds) - 1)] if preds else None

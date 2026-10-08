@@ -1406,13 +1406,16 @@ def _singularity(g, it):
 
 
 def _singularity_choices(g, pid, ctx):
-    es = cap(g, enemies(g, pid, False, ctx["hidden_bf"]), 4, pid)
+    # "each of up to two units": any units (a human may choose a friendly one), and zero targets (rule 355.13)
+    hb = ctx["hidden_bf"]
+    es = cap(g, all_units(g, pid, False, hb) if full_choices(g, pid) else enemies(g, pid, False, hb), 4, pid)
     out = [dict(tg=(a.uid, b.uid)) for i, a in enumerate(es) for b in es[i + 1:]] + [dict(tg=(a.uid,)) for a in es]
 
     def score(c):
-        return -sum(value(g, g.obj(u)) * (g.might(g.obj(u)) - g.obj(u).damage <= 6) for u in c["tg"])
+        return -sum(value(g, g.obj(u)) * (g.obj(u).ctrl != pid) * (g.might(g.obj(u)) - g.obj(u).damage <= 6)
+                    for u in c["tg"])
     out.sort(key=score)
-    return out
+    return out + [dict(tg=())]
 
 
 card("Singularity", preds=[P_unit], resolve=_singularity, choices=_singularity_choices, max_choices=10)

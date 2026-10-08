@@ -231,6 +231,7 @@ body.dkopen { overflow: hidden; }
 .dkr .nm i { font-size: 10.5px; color: #f0a35b; font-style: normal; }
 .dkr .e { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); }
 .dkr button, .rn button { width: 24px; height: 24px; padding: 0; border-radius: 6px; font-size: 14px; line-height: 1; }
+@media (max-width: 820px), (pointer: coarse) { .dkr button, .rn button { width: 44px; height: 44px; font-size: 18px; } }   /* cibles tactiles */
 .dkr.todo .nm { color: var(--ink-2); }
 .dkrunes { display: grid; gap: 4px; }
 .rn { display: flex; align-items: center; gap: 6px; font-size: 13px; }
@@ -249,6 +250,43 @@ body.dkopen { overflow: hidden; }
   .dkgrid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
   .dkbar { padding: 8px 48px 8px 12px; } .dkcat { padding: 10px 12px 20px; }
 }
+
+/* ---------- menu d'accueil (plein écran, au-dessus de la table) */
+.menu { position: fixed; inset: 0; z-index: 58; overflow-y: auto; -webkit-overflow-scrolling: touch; background: radial-gradient(1200px 700px at 30% 0%, #1d2540 0%, #12141c 60%); padding: max(16px, env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px)); }
+.menuin { width: min(960px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.mhead { text-align: center; padding: 18px 0 4px; }
+.mhead h1 { font-size: clamp(26px, 6vw, 40px); color: var(--brass); letter-spacing: .02em; }
+.mhead p { margin: 6px 0 0; color: var(--ink-2); font-size: 14px; }
+.mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 10px; }
+.mitem { display: flex; align-items: center; gap: 14px; text-align: left; min-height: 64px; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); text-decoration: none; color: var(--ink); cursor: pointer; min-width: 0; }
+.mitem:hover, .mitem:focus-visible { border-color: var(--brass); background: rgba(255,255,255,.08); }
+.mitem:disabled { opacity: .5; cursor: default; }
+.mitem .ic { font-size: 24px; width: 34px; text-align: center; flex: none; }
+.mitem b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 18px; }
+.mitem span.d { display: block; font-size: 12.5px; color: var(--ink-2); line-height: 1.3; }
+.mitem.hot { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; }
+.mitem.hot span.d { color: #cdeee4; }
+.mstat { text-align: center; font-size: 12.5px; color: var(--ink-2); min-height: 1.4em; }
+.mstat.err { color: #f0a35b; }
+.msub { display: flex; flex-direction: column; gap: 10px; }
+.mback { align-self: flex-start; min-height: 44px; padding: 8px 16px; border-radius: 22px; }
+.msub h2 { font-family: var(--f-display); font-weight: 400; font-size: 24px; color: var(--brass); margin: 0; }
+.mcard { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.mcard.row { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.mcard .grow { flex: 1 1 200px; min-width: 0; overflow-wrap: anywhere; }
+.mcard .acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.mcard button { min-height: 44px; padding: 8px 14px; border-radius: 10px; }
+.mcard button:disabled { opacity: .45; cursor: default; }
+.mcard .t { font-weight: 600; }
+.mcard.warn { border-color: rgba(240,163,91,.5); color: #f0c9a0; }
+.mhelp { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; line-height: 1.45; }
+.mhelp b { color: var(--brass); font-weight: 600; }
+#dkMenu { min-height: 44px; padding: 6px 14px; border-radius: 22px; }
+@media (max-width: 820px) {
+  .tbtns button, .endbtn, .ctrlrow button { min-height: 44px; }
+  .menu { padding-inline: 12px; }
+}
+.toast { z-index: 80; }
 </style>
 
 <div class="shell">
@@ -258,7 +296,7 @@ body.dkopen { overflow: hidden; }
       <span class="res" id="gres" hidden></span>
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
       <span class="savechip" id="saveChip" hidden></span>
-      <div class="tbtns"><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
+      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
     </div>
     <div class="boardwrap"><div class="boardgrid">
       <div class="track" id="track" aria-label="Points"></div>
@@ -283,6 +321,7 @@ body.dkopen { overflow: hidden; }
 <div class="pop hpop" id="hpop" hidden></div>
 <div class="prompt" id="fbar" hidden></div>
 <div class="toast" id="aiLine" aria-live="polite" hidden></div>
+<div class="menu" id="menu" role="dialog" aria-label="Menu principal"></div>
 <div class="deckview" id="deckView" hidden role="dialog" aria-label="Éditeur de deck"></div>
 <div class="modal" id="modal" hidden><div class="mbox" id="mbox" role="dialog" aria-modal="true"></div></div>
 
@@ -322,17 +361,17 @@ async function boot() {
     ...PY.map(f => get("py/" + f, "/rb/engine/" + f))]);
   py.runPython("import sys; sys.path.insert(0, '/rb/engine')");
   T = py.pyimport("train");
-  setupForm();
+  READY = true; menuRender(MENUV);
 }
 
 // ------------------------------------------------------------ fenêtres : nouvelle partie, défausse
 function openModal(html, closable = true) {
   $("mbox").innerHTML = (closable ? `<button class="mclose" id="mClose" aria-label="Fermer">✕</button>` : "") + html;
   $("modal").hidden = false; $("modal").dataset.closable = closable ? "1" : "";
-  const c = $("mClose"); if (c) c.onclick = closeModal;
+  const c = $("mClose"); if (c) c.onclick = () => closeModal(true);
 }
-function closeModal() { $("modal").hidden = true; $("mbox").innerHTML = ""; if (V && !working) decorate(); }
-$("modal").addEventListener("click", e => { if (e.target === $("modal") && $("modal").dataset.closable) closeModal(); });
+function closeModal(toMenu) { $("modal").hidden = true; $("mbox").innerHTML = ""; if (V && !working) decorate(); if (toMenu === true && !V && $("deckView").hidden) showMenu(); }
+$("modal").addEventListener("click", e => { if (e.target === $("modal") && $("modal").dataset.closable) closeModal(true); });
 function openTrash(pid) {
   if (!V) return;
   const t = V.st.p[pid].trash;
@@ -373,7 +412,7 @@ async function setupForm(msg) {
     <label for="sLvl">Niveau de l'IA<select id="sLvl"><option value="1">Normal : celle des simulations</option><option value="3"${last("lvl") === "3" ? " selected" : ""}>Fort : 3 simulations par coup, plus lente</option></select></label>
     <label for="sSeed">Donne (vide = au hasard, même numéro = même partie)<input id="sSeed" inputmode="numeric" placeholder="au hasard"></label>
     <div class="big"><button class="main" id="bStart">Commencer</button></div>
-    <div class="small" id="sPlan"></div></div>`, !!V);
+    <div class="small" id="sPlan"></div></div>`, true);
   const fill = () => {
     const mine = $("sMine").value, opp = $("sOpp").value, lb = last("bf");
     const isG2 = mine === "akali-g2";
@@ -394,6 +433,7 @@ async function start() {
   store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok);
   try { META = J(T.new(seed === "" ? null : +seed, bf || null, first === "" ? null : +first, +lvl, mine, opp)); }
   catch (err) { setupForm(String(err.message || err).split("\n").filter(Boolean).slice(-1)[0]); return; }
+  if (REC && recT) recSave(true);   // l'ancienne partie est enregistrée telle quelle avant d'en commencer une autre
   PN = META.names;
   CARDS = J(T.cards());
   LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
@@ -496,12 +536,13 @@ function recSave(now) {
   if (!REC) return;
   clearTimeout(recT);
   if (!now) { recT = setTimeout(() => recSave(true), 2500); return; }
+  const rec = REC;   // la partie visée est figée ici : un enregistrement tardif ne doit pas atterrir sous l'id de la partie suivante
   const body = { ...REC, updated: new Date().toISOString(), turn: V ? V.st.t : 0, pts: V ? V.st.pts : [0, 0],
     log: LOG.map(([ind, t]) => (ind ? "  " : "") + t).slice(-2500) };
   dbh().then(db => {
     if (!db) { chip("Partie non enregistrée", "off"); return; }
-    return db.collection("games").doc(REC.id).set(body).then(() => chip(REC && REC.result ? "Partie enregistrée ✓" : "Enregistrement ✓", "ok"))
-      .catch(e => chip(e && e.code === "quota_exceeded" ? "Stockage plein" : "Partie non enregistrée", "off"));
+    return db.collection("games").doc(rec.id).set(body).then(() => REC === rec && chip(rec.result ? "Partie enregistrée ✓" : "Enregistrement ✓", "ok"))
+      .catch(e => REC === rec && chip(e && e.code === "quota_exceeded" ? "Stockage plein" : "Partie non enregistrée", "off"));
   });
 }
 function recFinish(v) {
@@ -602,6 +643,7 @@ $("bUndo").onclick = () => {
   sel = null; mode = null; show(v);
 };
 $("bNew").onclick = () => { if (!working && T) setupForm(); };
+$("bMenu").onclick = () => showMenu();
 
 
 // ------------------------------------------------------------ rendu du plateau (repris du lecteur de replays)
@@ -927,7 +969,14 @@ $("fbar").addEventListener("click", e => {
 // La bulle se pose entre les deux battlefields (là où il n'y a pas d'unités) ; le message de LeBlanc juste au-dessus.
 function placeFloat() {
   const row = document.querySelector("#board .bfrow"), F = $("fbar"), Tt = $("aiLine");
-  if (!row || innerWidth <= 820) { F.style.left = F.style.top = Tt.style.left = Tt.style.top = ""; return; }
+  if (!row || innerWidth <= 820) {
+    F.style.left = F.style.top = Tt.style.left = Tt.style.top = "";
+    // téléphone : la bulle se pose juste au-dessus de la barre de commande, dont la hauteur varie (une ou deux lignes)
+    const cc = document.querySelector(".ctrlcol");
+    F.style.bottom = cc && getComputedStyle(cc).position === "sticky" ? Math.round(cc.getBoundingClientRect().height + 8) + "px" : "";
+    return;
+  }
+  F.style.bottom = "";
   const r = row.getBoundingClientRect(), cx = r.left + r.width / 2;
   if (!F.hidden) {
     // Trois places possibles : milieu des battlefields, au-dessus de la main de LeBlanc, au niveau de ta main.
@@ -1133,13 +1182,13 @@ const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
-  if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal();
+  if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
   if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } } });
 
 
 if (store.get("rbt-journal")) journal(true); else badge();
 document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
-boot().catch(err => { $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
+boot().catch(err => { ENGERR = err.message || String(err); menuRender(MENUV); $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
 // ------------------------------------------------------------ images : fichier propre (cartes du pool) ou planche de 60 cartes
 function art(n) {
   if (IMG[n]) return `background-image:url('${IMG[n]}');`;
@@ -1206,7 +1255,7 @@ async function openDecks() {
   $("deckView").hidden = false; document.body.classList.add("dkopen");
   dkRender();
 }
-function closeDecks() { $("deckView").hidden = true; document.body.classList.remove("dkopen"); if (DK && DK.id) store.set("rbt-dk", DK.id); }
+function closeDecks(toMenu) { $("deckView").hidden = true; document.body.classList.remove("dkopen"); if (DK && DK.id) store.set("rbt-dk", DK.id); if (toMenu === true) showMenu(); }
 
 function ident() { const L = CAT.by[DK.legend]; return L ? L.d : []; }
 function ltags() { const L = CAT.by[DK.legend]; return L ? L.tg : []; }
@@ -1289,7 +1338,7 @@ function dkRender() {
   const nm = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
   const ok = !DKERR.some(e => !e.startsWith("⚠"));
   const modeled = CAT.cards.filter(c => c.m).length;
-  V_.innerHTML = `<div class="dkbar"><h2>Mes decks</h2>
+  V_.innerHTML = `<div class="dkbar"><button id="dkMenu">← Menu</button><h2>Éditeur de deck</h2>
       <select id="dkLoad" aria-label="Ouvrir un deck"><option value="">Ouvrir…</option><optgroup label="Mes decks">${nm.map(d => `<option value="my:${esc(d.id)}">${esc(d.name)}</option>`).join("")}</optgroup><optgroup label="Copier un deck de référence">${CAT.presets.map(p => `<option value="${esc(p.key)}">${esc(p.name)}</option>`).join("")}</optgroup></select>
       <button id="dkNew">Nouveau</button><button id="dkImp">Importer</button><button id="dkExp">Exporter</button>
       <span class="small">${modeled} cartes jouables sur ${CAT.cards.length}</span>
@@ -1325,7 +1374,7 @@ function dkRender() {
   $("dkOnly").onchange = e => { DKF.only = e.target.checked; dkRender(); };
   $("dkName").oninput = e => { DK.name = e.target.value; };
   if ($("dkMore")) $("dkMore").onclick = () => { DKF.lim += 120; dkRender(); };
-  $("dkClose").onclick = closeDecks;
+  $("dkClose").onclick = () => closeDecks(true); $("dkMenu").onclick = () => closeDecks(true);
   $("dkNew").onclick = () => { DK = blankDeck(); dkRender(); };
   $("dkSave").onclick = saveDeck;
   if ($("dkDel")) $("dkDel").onclick = deleteDeck;
@@ -1392,4 +1441,87 @@ document.addEventListener("click", e => {
   else if (t.dataset.dom) { const d = t.dataset.dom; DKF.dom = DKF.dom.includes(d) ? DKF.dom.filter(x => x !== d) : [...DKF.dom, d]; DKF.lim = 120; dkRender(); }
 });
 $("bDecks").onclick = () => { if (T && !working) openDecks(); };
+
+// ------------------------------------------------------------ menu d'accueil
+// Écran d'accueil : point d'entrée de toute la table. Chaque vue (éditeur, nouvelle partie, listes) a un retour au menu.
+let READY = false, ENGERR = "", MENUV = "main", REPLAYS = false;
+// Le lien Replays n'apparaît que si le lecteur existe à côté de la page (sinon masqué).
+fetch("replays.html", { method: "HEAD" }).then(r => { REPLAYS = r.ok; menuRender(MENUV); }).catch(() => {});
+const fmtDate = iso => { try { return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
+function showMenu(view) {
+  $("hpop").hidden = true; $("pop").hidden = true; toast("");
+  $("deckView").hidden = true;
+  $("menu").hidden = false; document.body.classList.add("dkopen"); menuRender(view || "main");
+}
+function hideMenu() { $("menu").hidden = true; if ($("deckView").hidden) document.body.classList.remove("dkopen"); }
+function menuRender(view) {
+  MENUV = view || "main";
+  const M = $("menu"); if (!M) return;
+  const back = `<button class="mback" data-m="main">← Menu</button>`;
+  let h = "";
+  if (MENUV === "main") {
+    const inGame = V && (V.winner === null || V.winner === undefined);
+    const dis = READY ? "" : " disabled";
+    const item = (id, ic, t, d, cls = "") => `<button class="mitem ${cls}" data-m="${id}"${dis}><span class="ic" aria-hidden="true">${ic}</span><span><b>${t}</b><span class="d">${d}</span></span></button>`;
+    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Entraînement</h1><p>Joue contre l'IA, prépare tes decks, relis tes parties.</p></div>
+      <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "Moteur prêt." : "Chargement du moteur de jeu…"}</div>
+      <div class="mgrid">
+      ${inGame ? item("resume", "▶", "Reprendre la partie", "Retourne à la table, tour " + V.st.t, "hot") : V ? item("resume", "▶", "Revoir la partie terminée", "Retourne à la table : " + (V.winner === 0 ? "victoire" : V.winner === 1 ? "défaite" : "partie nulle") + " " + V.st.pts[0] + "-" + V.st.pts[1]) : ""}
+      ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis ton deck, celui de l'IA et son niveau.", inGame ? "" : "hot")}
+      ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
+      ${item("mydecks", "▤", "Mes decks", "Ta liste de decks : modifier ou jouer directement.")}
+      ${item("games", "◷", "Mes parties", "Les parties enregistrées depuis cette page.")}
+      ${REPLAYS ? `<a class="mitem" href="replays.html"><span class="ic" aria-hidden="true">↺</span><span><b>Replays</b><span class="d">Le lecteur de parties de simulation.</span></span></a>` : ""}
+      ${item("help", "?", "Aide", "Règles de la table, en quelques lignes.")}
+      </div></div>`;
+  } else if (MENUV === "help") {
+    h = `<div class="menuin msub">${back}<h2>Aide : règles de la table</h2><div class="mcard"><ol class="mhelp">
+      <li><b>But.</b> Marquer les points de victoire avant l'IA en contrôlant les battlefields. Le moteur applique les Core Rules complètes ; une même donne donne toujours la même partie.</li>
+      <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
+      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction il devient « Passer ».</li>
+      <li><b>Reprendre.</b> « ↶ Reprendre » annule ton dernier coup, autant de fois que tu veux.</li>
+      <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
+      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches violettes : ses derniers coups.</li>
+      <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
+      <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
+      <li><b>Donne.</b> Même numéro de donne = même partie. Laisse vide pour une donne au hasard.</li></ol></div></div>`;
+  } else if (MENUV === "mydecks") {
+    const ds = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
+    h = `<div class="menuin msub">${back}<h2>Mes decks</h2>` + (ds.length ? ds.map(d => { const ok = deckOK(d); return `<div class="mcard row"><div class="grow"><div class="t">${esc(d.name)}</div><div class="small">${esc(d.legend || "sans légende")} · ${cnt(d.main) + (d.champion ? 1 : 0)}/40 cartes · ${ok ? "jouable ✓" : "pas encore jouable"}</div></div><div class="acts"><button data-edit="${esc(d.id)}">Modifier</button><button data-play="${esc(d.id)}"${ok ? "" : " disabled"}>Jouer</button></div></div>`; }).join("")
+      : `<div class="mcard">Aucun deck pour l'instant. Les decks de référence (Akali G2, LeBlanc IQ#5…) sont proposés dans « Nouvelle partie ».</div>`)
+      + `<div class="mcard row"><div class="grow small">Les decks sont gardés sur cet appareil, et dans la base claude.ai quand elle existe.</div><div class="acts"><button data-m="deck">Créer un deck</button></div></div></div>`;
+  } else if (MENUV === "games") {
+    h = `<div class="menuin msub">${back}<h2>Mes parties</h2><div class="mcard" id="gamesBox">Chargement…</div></div>`;
+  }
+  M.innerHTML = h;
+  M.scrollTop = 0;
+  if (MENUV === "games") loadGames();
+}
+async function loadGames() {
+  const box = $("gamesBox"); if (!box) return;
+  const db = await dbh();
+  if (!db) { box.className = "mcard warn"; box.innerHTML = `<div class="t">Enregistrement indisponible hors claude.ai</div><div class="small">Cette copie de la table fonctionne, mais tes parties n'y sont pas gardées (« Partie non enregistrée »). Ouvre la table depuis claude.ai pour les retrouver ici.</div>`; return; }
+  let gs = [];
+  try { const qs = await db.collection("games").get(); gs = qs.docs.map(d => d.data()).filter(x => x && x.id); }
+  catch (e) { box.className = "mcard warn"; box.textContent = "Lecture des parties impossible pour l'instant."; return; }
+  if (MENUV !== "games" || !$("gamesBox")) return;
+  gs.sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
+  const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
+    const res = r ? (r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle") + " " + (r.pts || []).join("-") : "en cours";
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)} · tour ${esc(r ? r.turn : g.turn || "?")} · IA ${g.level === 3 ? "forte" : "normale"}</div></div></div>`; }).join("")
+    : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
+  $("gamesBox").outerHTML = html;
+}
+$("menu").addEventListener("click", async e => {
+  const t = e.target.closest("[data-m],[data-edit],[data-play]"); if (!t || t.disabled) return;
+  if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); hideMenu(); await openDecks(); return; }
+  if (t.dataset.play) { store.set("rbt-mine", "my:" + t.dataset.play); hideMenu(); setupForm(); return; }
+  const m = t.dataset.m;
+  if (m === "new") { hideMenu(); setupForm(); }
+  else if (m === "resume") hideMenu();
+  else if (m === "deck") { hideMenu(); openDecks(); }
+  else menuRender(m);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("menu").hidden && MENUV !== "main") menuRender("main"); });
+showMenu();
 </script>

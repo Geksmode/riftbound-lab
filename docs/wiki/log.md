@@ -16,3 +16,15 @@ Dépôt `Geksmode/riftbound-lab` créé (PR 1) : `.github/workflows/ci.yml` (tes
 
 ## [2026-10-07] restructure | Architecture en wiki
 Ajout de `docs/wiki/` (index, conventions, journal, contrôle `scripts/wiki_lint.py`) ; `CLAUDE.md` réduit aux règles ; carte du dépôt et état déplacés en pages.
+
+## [2026-10-07] decision | Ordre des chantiers de process
+Porte d'intégration, chiffres versionnés, tests générés depuis le texte des cartes, boucle d'apprentissage des parties. Détail : `pages/etat.md`.
+
+## [2026-10-08] ingest | Première itération des agents et retex
+Intégration de `agent/cartes`, `agent/ia`, `agent/design` ; 1034 tests ; retex écrit. Voir `pages/etat.md` et `riftbound/retex/retex-equipe-iteration1.md`.
+
+## [2026-10-08] decision | Gemdragon et Hwei : « ready up to 2 runes »
+Le maximum possible jusqu'à 2, rien si toutes les runes sont prêtes (décision de l'utilisateur) ; tests des cas limites ajoutés.
+
+## [2026-10-08] ingest | Problèmes connus corrigés
+Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons ± de l'éditeur ; robot `train/verif_mobile.mjs`.

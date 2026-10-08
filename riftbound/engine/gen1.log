@@ -1,0 +1,14 @@
+general contre base: 51.9% ± 0.030 (z=0.62) sur 79 paires, joueur0 0.51 / joueur1 0.53, ms/coup {'A_mean': 273.5, 'A_p95': 1043.3, 'B_mean': 309.8, 'B_p95': 1233.1}, erreurs 1, 1131s
+ s._advance()
+           ~~~~~~~~~~^^
+  File "/tmp/claude-0/-home-user-riftbound-lab/6e26cf1d-d5c8-50ed-a8fb-13f2b72cf2a3/scratchpad/wt/rb-ia/riftbound/engine/game.py", line 1799, in _advance
+    s.resolve_top()
+    ~~~~~~~~~~~~~^^
+  File "/tmp/claude-0/-home-user-riftbound-lab/6e26cf1d-d5c8-50ed-a8fb-13f2b72cf2a3/scratchpad/wt/rb-ia/riftbound/engine/game.py", line 1868, in resolve_top
+    s.repeat_resolution(it, im)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/tmp/claude-0/-home-user-riftbound-lab/6e26cf1d-d5c8-50ed-a8fb-13f2b72cf2a3/scratchpad/wt/rb-ia/riftbound/engine/game.py", line 1898, in repeat_resolution
+    data=dict(it.data, **ch, rep=False, reps=None, tg2=()))
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: dict() got multiple values for keyword argument 'tg2'
+

@@ -504,6 +504,8 @@ def _alabel(g, ask, o):
             q, a = o
             return f"{WORDS.get(a, a)} {'ta légende' if q == ME else 'la légende adverse'}"
         if k == "split_damage":
+            if not o:
+                return "aucune cible"
             if all(isinstance(x, int) for x in o):
                 return " + ".join(str(x) for x in o) + " dégâts"
             return ", ".join(f"{n} à {_olabel(g, u)}" for u, n in o)

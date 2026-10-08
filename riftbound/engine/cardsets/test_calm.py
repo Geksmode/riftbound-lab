@@ -1017,7 +1017,7 @@ def fox_fire_from_facedown_only_there():
     a = put(g, 1, "Soaring Scout", 0, bf_control=False)
     b = put(g, 1, "Soaring Scout", 1)
     chs = card_choices(g, 0, c, "facedown", False, False)
-    assert chs and all(ch["tg"] == (a.uid,) for ch in chs), chs
+    assert chs and all(ch["tg"] in ((a.uid,), ()) for ch in chs), chs      # zero target allowed (355.13)
     assert b.zone == "board"
 
 
