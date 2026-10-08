@@ -221,8 +221,7 @@ def total_cost(g, pid, card, choice, src):
     # mandatory additional costs of the location (Dragon Roost) and Deflect: enemy objects chosen (rule 809)
     if choice.get("loc_reqs"):
         reqs += list(choice["loc_reqs"])
-    if not im.ignore_deflect:
-        reqs += deflect_reqs(g, pid, choice)
+    reqs += deflect_total(g, pid, card, choice)
     what = dict(kind=sp["type"].lower(), card=card, obj=None, ab=None, choice=choice, src=src)
     mods = cost_mods(g, pid, what) if (g.effects or cards_hooks().get("cost_aura")) else []
     e, reqs = _apply_mods(g, pid, e, reqs, parts, mods, pay_ctx(card))
@@ -254,6 +253,21 @@ def deflect_reqs(g, pid, choice):
             if o.loc in (0, 1) and g.bfs[o.loc].name == "Heisho, Shell of the World":
                 continue
             out += [ANY] * g.kw_value(o, "Deflect")
+    return out
+
+
+def deflect_total(g, pid, card, choice):
+    """Tout le coût de Deflect d'un sort joué avec ce choix (809.1.c : « pour chaque fois qu'ils me choisissent ») :
+    cibles du sort, puis cibles de chaque répétition payée (Repeat imprimé : tg2 ; Repeat accordé : reps), car une
+    répétition choisit ses propres cibles (820)."""
+    im = g.impl(card)
+    if im is not None and im.ignore_deflect:
+        return []
+    out = deflect_reqs(g, pid, choice)
+    if choice.get("rep"):
+        out += deflect_reqs(g, pid, dict(tg=choice.get("tg2", ())))
+    for r in choice.get("reps", ()):
+        out += deflect_reqs(g, pid, dict(tg=r.get("tg", ())))
     return out
 
 
@@ -727,6 +741,9 @@ def play_card(g, pid, card, src, ch, limited=False):
             if g.effects else []
         if not g.pay(pid, e, reqs, pay_ctx(card)):
             raise RuntimeError(f"cannot pay for {card} {ch}")
+        nd = len(deflect_total(g, pid, card, ch))
+        if nd:
+            g.log(f"  P{pid} pays Deflect +{nd} power")
         paid_e = e
         # consume Heron discount and the one-shot cost effects that applied ("the next spell you play...")
         g.effects = [ef for ef in g.effects if not (ef.get("kind") == "heron" and ef["pid"] == pid)
