@@ -61,17 +61,17 @@ navigateur() {
   [ $rc = 0 ] && ! grep -q "^ÉCHEC" <<<"$out" && echo "robot navigateur : $(grep -c '^OK' <<<"$out") contrôles OK (captures dans $LOG)"
 }
 
-cache() {   # robot du mot-clé Hidden (train/verif_hidden.mjs) : cacher au doigt et au glisser, jouer depuis la face cachée
+cache() {   # robots des cartes cachées et révélées : verif_hidden.mjs (cacher, jouer depuis la face cachée), verif_revele.mjs (main révélée)
   if [ "${RB_NAV:-1}" = 0 ]; then echo "robot Hidden sauté (RB_NAV=0)"; return 0; fi
   [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
     || { echo "robot Hidden sauté (Playwright absent)"; return 0; }
   local port=$((PORT + 4))
   (cd "$TR/build" && exec python3 -m http.server "$port" >/dev/null 2>&1) & local srv=$!
   sleep 1
-  local out; out=$(cd "$TR" && timeout 900 node verif_hidden.mjs "$LOG" "$port" 2>&1); local rc=$?
+  local out; out=$(cd "$TR" && timeout 900 node verif_hidden.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_revele.mjs "$LOG" "$port" 2>&1); local rc=$?
   kill $srv 2>/dev/null
   echo "$out"
-  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot Hidden : $(grep -c '^OK' <<<"$out") contrôles OK"
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robots Hidden et main révélée : $(grep -c '^OK' <<<"$out") contrôles OK"
 }
 
 match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360x740 et 1400x900

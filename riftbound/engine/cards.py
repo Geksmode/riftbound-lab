@@ -1146,7 +1146,8 @@ card("Noxus Hopeful", cost_mod=lambda g, pid, c, ch: (2, 0) if g.finalized[pid] 
 # Scuttle Crab — "When you play me, draw 1. [Deathknell] Choose an opponent. They reveal their hand. You can look
 # at their facedown cards this turn. Gain 1 XP."
 def _crab_dk(g, it):
-    g.p[1 - it.ctrl].revealed_turn = g.turn_no
+    g.reveal_hand(1 - it.ctrl, it.ctrl)
+    g.p[1 - it.ctrl].revealed_turn = g.turn_no     # cartes face cachée visibles ce tour
     g.gain_xp(it.ctrl, 1)
 
 
@@ -1628,6 +1629,7 @@ card("Watchful Sentry", deathknell=lambda g, it: g.draw(it.ctrl, 1))
 def _ashe(g, o, ctx):
     def res(g_, it):
         opp = 1 - it.ctrl
+        g_.reveal_hand(opp, it.ctrl)
         hand = g_.p[opp].hand
         if not hand:
             return

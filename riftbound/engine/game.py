@@ -250,6 +250,7 @@ class Game:
             s.victory += 1
         s.board = []              # Obj on the board (units and gear)
         s.chain = []
+        s.shown_hand = None    # main révélée (424) : dict(pid, to, uids, turn), voir reveal_hand
         s.priority = None
         s.passes = 0
         s.chain_origin = None     # 'play' | 'trigger' : what opened the current chain
@@ -838,6 +839,16 @@ class Game:
             for c in cards:
                 if c.cname in names and c.zone == "deck":
                     s.impl(c).on_seen(s, c, pid)
+        return cards
+
+    def reveal_hand(s, pid, to):
+        """« They reveal their hand » (424.3.a) : les cartes en main de pid à cet instant sont révélées. L'état dure
+        jusqu'à la fin de la résolution de l'effet (424.1.a.3) ; la table le garde affiché jusqu'au coup suivant joué
+        chaîne vide (le focus est passé), voir _apply. Les cartes ajoutées ensuite ne sont pas révélées (424.3.a.1)."""
+        cards = list(s.p[pid].hand)
+        s.shown_hand = dict(pid=pid, to=to, uids=[c.uid for c in cards], turn=s.turn_no)
+        s.log(f"  P{pid} reveals their hand {cards}")
+        s.emit("reveal_hand", pid=pid, cards=cards, to=to)
         return cards
 
     def reveal(s, pid, n=1, owner=None, look_first=True, until=None):
@@ -1823,6 +1834,8 @@ class Game:
 
     def _apply(s, a):
         kind = a[0]
+        if s.shown_hand is not None and not s.chain:  # l'effet qui a révélé la main est résolu et on rejoue : fin
+            s.shown_hand = None
         if s.chain:                                  # priority decision
             if kind == "pass":
                 s.passes += 1

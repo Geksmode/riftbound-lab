@@ -373,6 +373,7 @@ def _run(op):
     try:
         op()
     except NeedChoice as e:
+        W["ask_shown"] = _shown_now(W["g"])           # main révélée pendant la résolution interrompue (Sabotage…)
         _restore(sv)
         for i, a in hus.items():                       # les réponses déjà données restent pour la reprise de op
             W["ag"][i].answers = a.answers
@@ -382,7 +383,16 @@ def _run(op):
     for i in hus:
         W["ag"][i].answers = []
     W["retry"] = None
+    W["ask_shown"] = None
     return _view()
+
+
+def _shown_now(g):
+    """Main révélée (Game.shown_hand) telle qu'elle est maintenant : {pid, cards: [[uid, nom, révélée?]...]}."""
+    sh = g.shown_hand
+    if sh is None:
+        return None
+    return dict(pid=sh["pid"], cards=[[c.uid, c.cname, c.uid in sh["uids"]] for c in g.p[sh["pid"]].hand])
 
 
 class _It:
@@ -754,9 +764,19 @@ def _view(ask=None):
     g = W["g"]
     st = snap(g)
     opp = st["p"][AI]
-    opp["hand"] = [[0, "?"] for _ in opp["hand"]]
+    # Main de l'adversaire cachée, sauf les cartes qu'un effet vient de révéler (Sabotage, Scuttle Crab… 424) : elles
+    # restent visibles pendant la résolution et jusqu'au coup suivant joué chaîne vide (Game.shown_hand).
+    sh = (W.get("ask_shown") if ask is not None else None) or _shown_now(g)
+    if sh is not None and sh["pid"] == AI:
+        opp["hand"] = [[0, n if r else "?"] for _, n, r in sh["cards"]]
+        opp["rv"] = 1
+    else:
+        opp["hand"] = [[0, "?"] for _ in opp["hand"]]
+    if sh is not None and sh["pid"] == ME:
+        st["p"][ME]["rv"] = 1                           # ta main est révélée à l'adversaire
+    look = g.p[AI].revealed_turn == g.turn_no           # Scuttle Crab : « you can look at their facedown cards this turn »
     for b in st["bfs"]:
-        if b["fd"] is not None and b["fd"][0] == AI:
+        if b["fd"] is not None and b["fd"][0] == AI and not look:
             b["fd"] = [AI, "?"]
     out = dict(st=st, log=g.buf, winner=g.winner, ai=W.pop("last_ai", None), aii=W.pop("last_ai_info", None))
     W["last_ai"] = None

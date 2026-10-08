@@ -278,6 +278,7 @@ card("Blast Cone", on_play=_cone_play, on_event=_cone_event)
 def _skewer(g, it):
     bf = it.data["bf"]
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     us = sorted([c for c in g.p[opp].hand if c.spec["type"] == "Unit" and g.impl(c) is not None],
                 key=lambda c: (c.spec["might"] or 0))
     c = g.ask(it.ctrl, "skewer_pick", us + [None]) if us else None
@@ -813,6 +814,7 @@ card("Illaoi, Prophet of the Great Kraken", on_play=lambda g, o, ctx: _illaoi_to
 # choose a card from their hand. If you do, they discard that card and draw 1."
 def _investigator(g, it):
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     hand_ = g.p[opp].hand
     if not hand_ or g.p[it.ctrl].xp < 2:
         return
@@ -1081,6 +1083,7 @@ card("Minah Swiftfoot", on_event=_minah)
 # discard that card."
 def _mindsplitter(g, it):
     opp = 1 - it.ctrl
+    g.reveal_hand(opp, it.ctrl)
     if g.p[opp].hand:
         g.discard(opp, g.ask(it.ctrl, "mindsplitter_pick", sorted(g.p[opp].hand, key=lambda x: -_cval(x))))
 
