@@ -11,8 +11,10 @@ déterministe : en rejouant ces choix avec train.py on retrouve toute la partie,
 Chaque fiche : résultat, vérification (la partie rejouée finit-elle comme sur la page ?), et tour par tour tes coups,
 ceux de LeBlanc et le score. Le fichier choices.jsonl rassemble tous tes coups (état résumé + choix) : c'est la matière
 pour apprendre à l'IA de LeBlanc à anticiper ta façon de jouer."""
-import json, os, sys, glob
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import json, os, sys, glob, shutil, subprocess, tempfile
+HERE = os.path.dirname(os.path.abspath(__file__))
+# RB_ENGINE : rejouer avec une copie figée du moteur (train/engine_versions/<ver>, préparée par frozen_engine)
+sys.path.insert(0, os.environ.get("RB_ENGINE") or HERE)
 import train
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "train", "analyses")
@@ -27,6 +29,7 @@ def load_games(paths):
             for g in (d if isinstance(d, list) else [d]):
                 g = g.get("data", g) if isinstance(g, dict) else g
                 if isinstance(g, dict) and "moves" in g:
+                    g["_file"] = f
                     out.append(g)
     return out
 
@@ -43,7 +46,11 @@ def _state(v):
 
 def replay(game, coach=False):
     """Rejoue une partie ; renvoie (journal, coups du joueur avec leur état, vue finale)."""
-    train.new(game["seed"], game.get("bf"), game.get("first"), game.get("level", 1), game.get("mine"), game.get("opp"))
+    base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
+    if game.get("mine") or game.get("opp"):
+        train.new(*base, game.get("mine"), game.get("opp"))
+    else:
+        train.new(*base)                                # moteurs figés v10 : pas de decks personnalisés
     v = json.loads(train.step())
     log, mine = [], []
 
@@ -111,19 +118,100 @@ def sheet(game, log, mine, v):
     return "\n".join(lines)
 
 
+VERSIONS = os.path.join(HERE, "..", "train", "engine_versions")
+
+
+def frozen_engine(ver, tmp):
+    """Copie de train/engine_versions/<ver> dont les chemins de données pointent vers ce dépôt (comme le manager)."""
+    src = os.path.join(VERSIONS, ver or "")
+    if not ver or not os.path.isdir(src):
+        return None
+    dst = os.path.join(tmp, ver)
+    shutil.copytree(src, dst)
+    root = os.path.abspath(os.path.join(HERE, ".."))
+    for dp, _, fs in os.walk(dst):
+        for f in fs:
+            if f.endswith(".py"):
+                q = os.path.join(dp, f)
+                t = open(q, encoding="utf-8").read()
+                open(q, "w", encoding="utf-8").write(t.replace("Path(__file__).resolve().parents[1]", f"Path({root!r})"))
+    return dst
+
+
+def analyse(games, coach, emit, engine_label):
+    rows = []
+    for g in games:
+        try:
+            log, mine, v = replay(g, coach)
+        except Exception as e:                         # deck inconnu de ce moteur, etc.
+            print(("GAME " if emit else "") + json.dumps(dict(id=g["id"], error=f"{type(e).__name__}: {e}"[:300],
+                                                              engine=engine_label)), flush=True)
+            continue
+        txt = sheet(g, log, mine, v).replace("\n## Journal", f"- Moteur du rejeu : {engine_label}\n\n## Journal", 1)
+        open(os.path.join(os.environ.get("RB_SHEETS") or OUT, f"{g['id']}.md"), "w").write(txt)
+        faithful = "Rejeu fidèle à la page : oui" in txt
+        for m in mine:
+            rows.append(dict(game=g["id"], ver=g.get("ver"), engine=engine_label, faithful=faithful,
+                             won=v.get("winner") == 0, **m))
+        print(("GAME " if emit else "") + json.dumps(dict(id=g["id"], winner=v.get("winner"), pts=v["st"]["pts"],
+                                                          n=len(mine), faithful=faithful, engine=engine_label)), flush=True)
+    return rows
+
+
 def main(args):
-    coach = "--coach" in args
+    coach, frozen, emit = "--coach" in args, "--frozen" in args, "--emit" in args
     paths = [a for a in args if not a.startswith("--")] or [os.path.join(OUT, "..", "games")]
     games = load_games(paths)
     os.makedirs(OUT, exist_ok=True)
-    allc = open(os.path.join(OUT, "choices.jsonl"), "w")
-    for g in games:
-        log, mine, v = replay(g, coach)
-        open(os.path.join(OUT, f"{g['id']}.md"), "w").write(sheet(g, log, mine, v))
-        for m in mine:
-            allc.write(json.dumps(dict(game=g["id"], won=v.get("winner") == 0, **m), ensure_ascii=False) + "\n")
-        print(g["id"], "gagnant", v.get("winner"), v["st"]["pts"], len(mine), "décisions")
-    allc.close()
+    if emit:                                            # sous-processus lancé avec RB_ENGINE : renvoie ses lignes
+        for r in analyse(games, coach, True, os.environ.get("RB_ENGINE_LABEL", "?")):
+            print("CHOICE " + json.dumps(r, ensure_ascii=False), flush=True)
+        return
+    rows = []
+    if frozen:
+        # Chaque partie est rejouée avec le moteur figé de sa version de page (ver), puis, si le rejeu n'est pas
+        # fidèle, avec les versions suivantes et enfin le moteur actuel : on garde le premier rejeu fidèle.
+        vers = sorted(d for d in os.listdir(VERSIONS) if os.path.isdir(os.path.join(VERSIONS, d)))
+        left = {g["id"]: g for g in games}
+        best = {}                                        # id -> (lignes de choix, résumé) du rejeu retenu
+        with tempfile.TemporaryDirectory() as tmp:
+            engines = {v: frozen_engine(v, tmp) for v in vers}
+            for step in vers + [None]:
+                todo = [g for g in left.values() if step is None or (g.get("ver") or "") <= step]
+                if not todo:
+                    continue
+                sheets = os.path.join(tmp, "fiches-" + (step or "actuel")); os.makedirs(sheets, exist_ok=True)
+                env = dict(os.environ, RB_ENGINE=engines[step], RB_ENGINE_LABEL="figé " + step, RB_SHEETS=sheets) if step \
+                    else dict(os.environ, RB_ENGINE_LABEL="actuel", RB_SHEETS=sheets)
+                env.pop("RB_ENGINE", None) if step is None else None
+                out = subprocess.run([sys.executable, os.path.abspath(__file__), "--emit"] + (["--coach"] if coach else [])
+                                     + [g["_file"] for g in todo], env=env, capture_output=True, text=True)
+                got = {}
+                for line in out.stdout.splitlines():
+                    if line.startswith("CHOICE "):
+                        r = json.loads(line[7:]); got.setdefault(r["game"], [[], None])[0].append(r)
+                    elif line.startswith("GAME "):
+                        r = json.loads(line[5:]); got.setdefault(r["id"], [[], None])[1] = r
+                for gid, (rs, summ) in got.items():
+                    if summ and summ.get("faithful"):
+                        best[gid] = (rs, summ, sheets); left.pop(gid, None)
+                    elif summ and gid not in best and not summ.get("error"):
+                        best[gid] = (rs, summ, sheets)       # non fidèle : gardé faute de mieux, signalé
+            for gid, g in left.items():
+                if gid in best:
+                    best[gid][1]["faithful"] = False
+            for gid in sorted(best):
+                rs, summ, sheets = best[gid]
+                shutil.copy(os.path.join(sheets, gid + ".md"), os.path.join(OUT, gid + ".md"))
+                rows += rs
+                print(json.dumps(summ, ensure_ascii=False))
+        for gid in sorted(set(g["id"] for g in games) - set(best)):
+            print(json.dumps(dict(id=gid, error="aucun moteur ne rejoue cette partie"), ensure_ascii=False))
+    else:
+        rows = analyse(games, coach, False, "actuel")
+    with open(os.path.join(OUT, "choices.jsonl"), "w") as allc:
+        for r in rows:
+            allc.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
 if __name__ == "__main__":
