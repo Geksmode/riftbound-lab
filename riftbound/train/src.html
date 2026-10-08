@@ -483,6 +483,16 @@ body.dkopen { overflow: hidden; }
   .bf .side, .zrow > .zone:nth-child(3) { justify-content: safe center; }
   .bf .mid { overflow: hidden; }
   .bf .mid .sdtag { flex: none; }
+  /* main agrandie : rangée de grandes cartes au-dessus de ta zone, défilement horizontal au doigt (pan-x), un geste
+     vers le haut glisse la carte sur le plateau */
+  .half.p0 { position: relative; }
+  .half.p0 .hand.open { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; z-index: 30; container-type: normal;
+    overflow-x: auto; overflow-y: hidden; justify-content: flex-start; align-items: center; padding: 10px 10px 12px;
+    background: rgba(14,18,48,.97); border-top: 1px solid rgba(243,213,138,.6); border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 30px rgba(5,7,20,.6); touch-action: pan-x; scrollbar-width: none; }
+  .half.p0 .hand.open > .card { --cw: 88px; --chh: 123px; width: 88px; height: 123px; flex: none; touch-action: pan-x; }
+  .half.p0 .hand.open > .card ~ .card { margin-left: 8px !important; }
+  .half.p0 .hand.open > .card:hover, .half.p0 .hand.open > .card.can:hover { transform: none; }
   /* chaîne : une ligne compacte (petite carte + nom), la zone adverse reste visible dessous */
   .main > .ctrlcol .stackcol { max-height: 84px !important; padding: 6px 8px; }
   .main > .ctrlcol .stackcol .sitem { flex-direction: row; align-items: center; gap: 8px; }
@@ -543,6 +553,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+let HANDOPEN = false;   // téléphone : main serrée ouverte en grand (handDense)
 let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set();
 const rep = { get cards() { return CARDS; } };
 // Place locale (0 contre l'IA ; 0 = hôte, 1 = invité en duel) : le plateau se dessine toujours avec toi en bas.
@@ -1001,7 +1012,7 @@ const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 async function choose(i) {
   if (working || !V || !V.dec) return;
-  sel = null; mode = null; lastAI = null; toast("");
+  sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false);
   LOGSTACK.push(LOG.length);
   const o = V.dec.options.find(x => x.i === i);
   if (DU) duelLocal("act", i, o ? o.label : ""); else recMove(["act", i, o ? o.label : "", V.st.t]);
@@ -1087,7 +1098,7 @@ function handHTML(st, pid, srcs) {
     return card(nm, { p: vp(pid), back: !vis && !shown, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
   }).join("");
   const rv = p.rv ? ` · <b class="rvtag">${top ? "révélée" : "révélée à l'adversaire"}</b>` : "";
-  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""}" style="--n:${n}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
+  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""} ${!top && HANDOPEN ? "open" : ""}" style="--n:${n}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
@@ -1206,7 +1217,7 @@ function run(m) {
 
 // ---------- cibles
 function startTarget(cands, P = []) {
-  const src = sel;
+  const src = sel; setHandOpen(false);
   cands = cands.filter(needs);
   if (!cands.length) return;
   mode = { type: "target", src, cands, P: [], skip: false, M: null, D: null };
@@ -1471,8 +1482,24 @@ function decorate() {
 }
 
 // ---------- toucher
+// Téléphone : une main serrée (moins de 44 px visibles par carte, en pratique plus de 8 cartes) s'ouvre en grand au
+// premier toucher ; on la fait défiler du doigt, on touche une carte (ses actions) ou on la glisse vers le plateau.
+function handDense() {
+  const h = document.querySelector("#board .half.p0 .hand"); if (!h || !MOBILE.matches) return false;
+  const cs = [...h.querySelectorAll(":scope > .card")]; if (cs.length < 2) return false;
+  return (h.clientWidth - cs[0].offsetWidth) / (cs.length - 1) < 44;
+}
+function setHandOpen(on) {
+  HANDOPEN = !!on;
+  const h = document.querySelector("#board .half.p0 .hand"); if (h) h.classList.toggle("open", HANDOPEN);
+}
 document.addEventListener("click", e => {
   if (noClick) { noClick = false; return; }
+  if (MOBILE.matches && !e.target.closest("#pop, #fbar, #zoom, #hpop, #modal")) {
+    const inHand = e.target.closest("#board .half.p0 .hand");
+    if (inHand && !HANDOPEN && handDense()) { setHandOpen(true); Z.hidden = true; return; }
+    if (!inHand && HANDOPEN && !(mode && mode.type === "target")) setHandOpen(false);
+  }
   if (e.target.closest("#pop, #fbar, #zoom, #hpop")) return;
   if (!$("hpop").hidden && !e.target.closest("#bHint")) $("hpop").hidden = true;
   const el = e.target.closest("[data-card]");
@@ -1522,6 +1549,8 @@ document.addEventListener("pointermove", e => {
   if (!drag) return;
   if (!drag.on) {
     if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 8) return;
+    // main agrandie : un geste plutôt horizontal fait défiler la main, seul un geste vers le plateau glisse la carte
+    if (drag.el.closest(".hand.open") && Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0)) { drag = null; return; }
     drag.on = true; Z.hidden = true; $("pop").hidden = true;
     if (!(mode && mode.type === "move")) { mode = null; sel = drag.src; }
     const r = drag.el.getBoundingClientRect(), g = drag.el.cloneNode(true);

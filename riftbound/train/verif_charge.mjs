@@ -55,6 +55,40 @@ W["d"] = None
   if (bad) fails++;
   console.log((bad ? "ÉCHEC " : "OK    ") + `${w}x${h}`, JSON.stringify(m), "erreurs JS", errs.length);
   await pg.screenshot({ path: `${OUT}/charge-${w}.png` });
+  if (w !== 393) continue;
+  // gestes sur une main serrée (17 cartes) : ouvrir, défiler, toucher une carte, geste horizontal, glisser vers le plateau
+  const ok = (n, v) => { if (!v) fails++; console.log((v ? "OK   " : "ÉCHEC") + " " + n); };
+  const box = sel => pg.locator(sel).first().boundingBox();
+  let hb = await box("#board .half.p0 .hand > .card:nth-of-type(6)");
+  await pg.touchscreen.tap(hb.x + 6, hb.y + hb.height / 2); await pg.waitForTimeout(300);
+  const op = await ev("(()=>{ const h = document.querySelector('#board .half.p0 .hand'); const c = h.querySelector(':scope > .card'); return { open: h.classList.contains('open'), cw: Math.round(c.getBoundingClientRect().width), sw: h.scrollWidth, cw2: h.clientWidth, pop: !$('pop').hidden } })()");
+  ok(`main serrée : le premier toucher l'ouvre en grand (cartes ${op.cw} px, sans ouvrir de menu)`, op.open && op.cw >= 80 && !op.pop);
+  await pg.screenshot({ path: `${OUT}/main-ouverte-${w}.png` });
+  ok(`main ouverte : elle défile (${op.sw} px de contenu pour ${op.cw2} px)`, op.sw > op.cw2 + 50);
+  await ev("document.querySelector('#board .half.p0 .hand').scrollLeft = 99999"); await pg.waitForTimeout(200);
+  const last = await ev("(()=>{ const h = document.querySelector('#board .half.p0 .hand'), r = h.getBoundingClientRect(), cs = [...h.querySelectorAll(':scope > .card')]; const c = cs[cs.length - 1].getBoundingClientRect(); return c.right <= r.right + 1 && c.left >= r.left - 1 })()");
+  ok("main ouverte : la dernière carte se voit en entier après défilement", last);
+  const playable = await ev("(()=>{ const c = document.querySelector('#board .half.p0 .hand.open > .card.can'); if (!c) return null; c.parentElement.scrollLeft = c.offsetLeft - 120; return c.dataset.uid })()");
+  await pg.waitForTimeout(250);
+  if (playable) {
+    hb = await box(`#board [data-uid="${playable}"]`);
+    await pg.touchscreen.tap(hb.x + hb.width / 2, hb.y + hb.height / 2); await pg.waitForTimeout(300);
+    const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
+    ok(`main ouverte : toucher une carte jouable montre ses actions (${JSON.stringify(pop.replace(/\n/g, " | ").slice(0, 60))})`, /Jouer|Cibler|Cacher/.test(pop));
+    await ev("sel = null; mode = null; $('pop').hidden = true; decorate()"); await pg.waitForTimeout(200);
+    hb = await box(`#board [data-uid="${playable}"]`);
+    await pg.mouse.move(hb.x + hb.width / 2, hb.y + hb.height / 2); await pg.mouse.down();
+    await pg.mouse.move(hb.x + hb.width / 2 - 40, hb.y + hb.height / 2 - 3, { steps: 6 }); await pg.mouse.up(); await pg.waitForTimeout(200);
+    const hz = await ev("({ ghost: !!document.querySelector('.ghost'), open: document.querySelector('#board .half.p0 .hand').classList.contains('open'), mode: mode ? mode.type : null })");
+    ok(`geste horizontal dans la main ouverte : pas de glisser (fantôme ${hz.ghost}, mode ${hz.mode}), la main reste ouverte`, !hz.ghost && hz.open && !hz.mode);
+    const n0 = await ev("V.st.p[MEP].hand.length");
+    hb = await box(`#board [data-uid="${playable}"]`); const z = await box('#board .bf[data-drop="0"]');
+    await pg.mouse.move(hb.x + hb.width / 2, hb.y + hb.height / 2); await pg.mouse.down();
+    await pg.mouse.move(hb.x + hb.width / 2, hb.y - 30, { steps: 4 }); await pg.mouse.move(z.x + z.width / 2, z.y + z.height / 2, { steps: 8 }); await pg.mouse.up();
+    await pg.waitForTimeout(600); await waitFor("!!(V && !working)");
+    const after = await ev("({ n: V.st.p[MEP].hand.length, mode: mode ? mode.type : null, ask: !!V.ask, open: document.querySelector('#board .half.p0 .hand').classList.contains('open') })");
+    ok(`glisser une carte de la main ouverte vers un champ de bataille : coup lancé (main ${n0} → ${after.n}, mode ${after.mode}, question ${after.ask}), main refermée`, (after.n < n0 || after.mode || after.ask) && !after.open);
+  } else ok("main ouverte : une carte jouable visible (décision " + await ev("JSON.stringify([V.dec && V.dec.kind, V.ask && V.ask.kind, V.dec && V.dec.options.map(o => o.k).join(',')])") + ")", false);
 }
 await b.close();
 process.exitCode = fails ? 1 : 0;
