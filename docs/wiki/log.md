@@ -25,3 +25,6 @@ Intégration de `agent/cartes`, `agent/ia`, `agent/design` ; 1034 tests ; retex 
 
 ## [2026-10-08] decision | Gemdragon et Hwei : « ready up to 2 runes »
 Le maximum possible jusqu'à 2, rien si toutes les runes sont prêtes (décision de l'utilisateur) ; tests des cas limites ajoutés.
+
+## [2026-10-08] ingest | Problèmes connus corrigés
+Repeat accordé (`tg2`), lien Replays, bulle de fin de partie à 360 px, boutons ± de l'éditeur ; robot `train/verif_mobile.mjs`.

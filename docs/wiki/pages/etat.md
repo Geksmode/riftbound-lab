@@ -16,7 +16,9 @@ sources: docs/REPRISE.md, git log, CI
 - Gemdragon / Hwei : « ready up to 2 runes » = le maximum possible jusqu'à 2, rien si tout est prêt (décision de l'utilisateur, 2026-10-08, testé).
 - Retex : `riftbound/retex/retex-equipe-iteration1.md`. Les chiffres de simulation d'avant 1034 tests ne sont plus comparables.
 
-**Décisions en attente** : branchement de `plans_general` dans `train.py` ; bug `tg2` dans `game.py::repeat_resolution`.
+**Corrigé le 2026-10-08** : bug `tg2` du Repeat accordé (test `granted_repeat_never_reuses_printed_repeat_variant`) ; lien Replays du menu (`build.sh` publie `replays.html` + `games/`) ; bulle de fin de partie au-dessus de la barre à 360 px ; boutons ± de l'éditeur à 44 px. Vérifié par `train/verif_mobile.mjs` (Chromium, 360×740, partie jouée jusqu'au bout, coups injectés).
+
+**Décision en attente** : branchement de `plans_general` dans `train.py`.
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**
 1. Porte d'intégration `scripts/verifier.sh` (tests, 30 parties aléatoires, lint du wiki, build de la table), appliquée en CI aux branches `agent/*`.

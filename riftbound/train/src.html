@@ -231,6 +231,7 @@ body.dkopen { overflow: hidden; }
 .dkr .nm i { font-size: 10.5px; color: #f0a35b; font-style: normal; }
 .dkr .e { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); }
 .dkr button, .rn button { width: 24px; height: 24px; padding: 0; border-radius: 6px; font-size: 14px; line-height: 1; }
+@media (max-width: 820px), (pointer: coarse) { .dkr button, .rn button { width: 44px; height: 44px; font-size: 18px; } }   /* cibles tactiles */
 .dkr.todo .nm { color: var(--ink-2); }
 .dkrunes { display: grid; gap: 4px; }
 .rn { display: flex; align-items: center; gap: 6px; font-size: 13px; }
@@ -968,7 +969,14 @@ $("fbar").addEventListener("click", e => {
 // La bulle se pose entre les deux battlefields (là où il n'y a pas d'unités) ; le message de LeBlanc juste au-dessus.
 function placeFloat() {
   const row = document.querySelector("#board .bfrow"), F = $("fbar"), Tt = $("aiLine");
-  if (!row || innerWidth <= 820) { F.style.left = F.style.top = Tt.style.left = Tt.style.top = ""; return; }
+  if (!row || innerWidth <= 820) {
+    F.style.left = F.style.top = Tt.style.left = Tt.style.top = "";
+    // téléphone : la bulle se pose juste au-dessus de la barre de commande, dont la hauteur varie (une ou deux lignes)
+    const cc = document.querySelector(".ctrlcol");
+    F.style.bottom = cc && getComputedStyle(cc).position === "sticky" ? Math.round(cc.getBoundingClientRect().height + 8) + "px" : "";
+    return;
+  }
+  F.style.bottom = "";
   const r = row.getBoundingClientRect(), cx = r.left + r.width / 2;
   if (!F.hidden) {
     // Trois places possibles : milieu des battlefields, au-dessus de la main de LeBlanc, au niveau de ta main.
@@ -1438,7 +1446,7 @@ $("bDecks").onclick = () => { if (T && !working) openDecks(); };
 // Écran d'accueil : point d'entrée de toute la table. Chaque vue (éditeur, nouvelle partie, listes) a un retour au menu.
 let READY = false, ENGERR = "", MENUV = "main", REPLAYS = false;
 // Le lien Replays n'apparaît que si le lecteur existe à côté de la page (sinon masqué).
-fetch("../replays/viewer.html", { method: "HEAD" }).then(r => { REPLAYS = r.ok; menuRender(MENUV); }).catch(() => {});
+fetch("replays.html", { method: "HEAD" }).then(r => { REPLAYS = r.ok; menuRender(MENUV); }).catch(() => {});
 const fmtDate = iso => { try { return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
 function showMenu(view) {
   $("hpop").hidden = true; $("pop").hidden = true; toast("");
@@ -1463,7 +1471,7 @@ function menuRender(view) {
       ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
       ${item("mydecks", "▤", "Mes decks", "Ta liste de decks : modifier ou jouer directement.")}
       ${item("games", "◷", "Mes parties", "Les parties enregistrées depuis cette page.")}
-      ${REPLAYS ? `<a class="mitem" href="../replays/viewer.html"><span class="ic" aria-hidden="true">↺</span><span><b>Replays</b><span class="d">Le lecteur de parties de simulation.</span></span></a>` : ""}
+      ${REPLAYS ? `<a class="mitem" href="replays.html"><span class="ic" aria-hidden="true">↺</span><span><b>Replays</b><span class="d">Le lecteur de parties de simulation.</span></span></a>` : ""}
       ${item("help", "?", "Aide", "Règles de la table, en quelques lignes.")}
       </div></div>`;
   } else if (MENUV === "help") {
