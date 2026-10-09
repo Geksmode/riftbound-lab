@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 // Robot de charge au format téléphone : 17 cartes en main, 6 unités de chaque côté sur chaque champ de bataille,
-// 7 unités en base, 12 runes dont une partie épuisée. Aucune carte ne doit sortir de sa zone, aucune zone ne doit
+// 7 unités en base, 12 runes dont une partie épuisée (téléphone, puis ordinateur 1875x902 et 1400x900). Aucune carte ne doit sortir de sa zone, aucune zone ne doit
 // déborder et la page ne doit pas défiler (393x851, 360x740, 412x915). Situation posée dans le moteur (Pyodide).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_charge.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
@@ -8,8 +8,9 @@ const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW)
 const OUT = process.argv[2], PORT = process.argv[3] || "8791";
 const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHROME) ? { executablePath: process.env.CHROME_PATH || LOCAL_CHROME } : {});
 let fails = 0;
-for (const [w, h] of [[393, 851], [360, 740], [412, 915]]) {
-  const pg = await (await b.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })).newPage();
+for (const [w, h] of [[393, 851], [360, 740], [412, 915], [1875, 902], [1400, 900]]) {   // + ordinateur : unités épuisées dans leur moitié de battlefield
+  const mob = w < 1000;
+  const pg = await (await b.newContext({ viewport: { width: w, height: h }, isMobile: mob, hasTouch: mob, deviceScaleFactor: mob ? 2 : 1 })).newPage();
   const errs = []; pg.on("pageerror", e => errs.push(String(e)));
   const ev = s => pg.evaluate(s);
   const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(100); } throw new Error(s); };
@@ -45,12 +46,15 @@ W["d"] = None
   const m = JSON.parse(await ev(`(()=>{
     const out = [];
     const check = (sel, kids) => document.querySelectorAll(sel).forEach(z => { const r = z.getBoundingClientRect(); z.querySelectorAll(kids).forEach(c => { const q = c.getBoundingClientRect(); if (q.width && (q.left < r.left - 2 || q.right > r.right + 2)) out.push(sel + ' : ' + (c.dataset.card || c.className) + ' ' + Math.round(q.left) + '-' + Math.round(q.right) + ' hors ' + Math.round(r.left) + '-' + Math.round(r.right)); }); });
-    check('.half.p0 .hand', ':scope > .card'); check('.zrow > .zone:nth-child(3)', ':scope > .slot'); check('.bf .side', ':scope > .slot'); check('.zrow > .zone:nth-child(2)', ':scope > .runeslot');
+    check('.half.p0 .hand', ':scope > .card'); check('.zrow > .zone:nth-child(3)', ':scope > .slot'); check('.bf .side', ':scope > .slot'); document.querySelectorAll('.bf .side').forEach(z => { const r = z.getBoundingClientRect(); z.querySelectorAll(':scope > .slot > .card').forEach(c => { const q = c.getBoundingClientRect(); if (q.height && (q.top < r.top - 2 || q.bottom > r.bottom + 2)) out.push('.bf .side (hauteur) : ' + (c.dataset.card || '') + (c.parentElement.classList.contains('x') ? ' épuisée ' : ' ') + Math.round(q.top) + '-' + Math.round(q.bottom) + ' hors ' + Math.round(r.top) + '-' + Math.round(r.bottom)); }); }); check('.zrow > .zone:nth-child(2)', ':scope > .runeslot');
     const unit = document.querySelector('.bf .side > .slot'), hc = document.querySelector('.half.p0 .hand > .card');
     const sc = [...document.querySelectorAll('.zone, .bf .side, .hand')].filter(e => e.scrollWidth > e.clientWidth + 1).map(e => e.className + '[' + (e.closest('.half') ? e.closest('.half').className : '') + '] ' + e.scrollWidth + '/' + e.clientWidth + ' ' + getComputedStyle(e).overflowX + ' ' + [...e.children].map(c => c.className + ':' + Math.round(c.getBoundingClientRect().right - e.getBoundingClientRect().left)).join(','));
-    return JSON.stringify({ hors: out.slice(0, 6), nHors: out.length, page: document.documentElement.scrollHeight > innerHeight + 1 || document.documentElement.scrollWidth > innerWidth + 1,
+    return JSON.stringify({ hors: out.slice(0, 60), nHors: out.length, page: document.documentElement.scrollHeight > innerHeight + 1 || document.documentElement.scrollWidth > innerWidth + 1,
       unite: unit ? Math.round(unit.getBoundingClientRect().width) + 'x' + Math.round(unit.getBoundingClientRect().height) : null,
       main: hc ? Math.round(hc.getBoundingClientRect().width) + 'x' + Math.round(hc.getBoundingClientRect().height) : null, defile: sc }) })()`));
+  if (!mob) {   // ordinateur : seulement le battlefield (17 cartes en main y débordent : sujet à part, hors de ce robot)
+    m.hors = m.hors.filter(x => x.startsWith('.bf')); m.nHors = m.hors.length; m.page = false; m.defile = m.defile.filter(x => x.startsWith('side'));
+  }
   const bad = m.nHors > 0 || m.page || m.defile.length > 0 || errs.length;
   if (bad) fails++;
   console.log((bad ? "ÉCHEC " : "OK    ") + `${w}x${h}`, JSON.stringify(m), "erreurs JS", errs.length);

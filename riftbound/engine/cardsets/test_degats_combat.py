@@ -60,5 +60,19 @@ def ai_keeps_its_own_order():
     assert sum(out.values()) == 4 and len(out) >= 1
 
 
+@T.test
+def zero_might_unit_needs_one_damage_so_four_does_not_clear_akali_and_crab():
+    # 142.4.b : une unité à 0 Might n'a des dégâts mortels qu'à partir de 1. Akali, Silent (4) + Scuttle Crab (0) en
+    # défense : 4 dégâts tuent Akali, le Crab survit et le défenseur garde le battlefield ; il en faut 5 (retour utilisateur).
+    g, _ = new(tp=1)
+    a = put(g, 1, "Master Yi, Tempered", "base")             # Might 4
+    put(g, 0, "Akali, Silent", 0)
+    put(g, 0, "Scuttle Crab", 0)
+    g.bfs[0].ctrl = 0
+    g.apply([o for o in options_of(g, "move") if o[1] == (a.uid,) and o[2] == 0][0])
+    settle(g)
+    assert [u.cname for u in g.units(0, 0)] == ["Scuttle Crab"] and g.bfs[0].ctrl == 0 and g.p[1].points == 0
+
+
 if __name__ == "__main__":
     T.main()

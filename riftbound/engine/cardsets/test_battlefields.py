@@ -760,5 +760,44 @@ def fuzz_random_games_with_these_battlefields():
     _fuzz(int(os.environ.get("RB_BF_FUZZ", "2")))
 
 
+@T.test
+def valley_of_idols_without_energy_asks_nothing_and_says_why():
+    # Retour utilisateur 2026-10-09 : « oui » à Valley of Idols, mais ni énergie payée ni buff. Sans de quoi payer 1 énergie,
+    # la question n'est plus posée et le journal explique pourquoi ; avec de quoi payer, l'énergie part et le buff est posé.
+    for nr in (2, 3):
+        asked = []
+        g, _ = new(bf1="Valley of Idols", answers0={"may": lambda o, c: (asked.append(1), True)[1]})
+        runes(g, 0, ["Order"] * nr)                   # Soaring Scout coûte 2
+        put(g, 0, "Soaring Scout", 1)
+        hand(g, 0, "Soaring Scout")
+        g.apply(opt(g, 0, "Soaring Scout", lambda ch: ch.get("loc") == 1))
+        settle(g)
+        buffs = sorted(u.buff for u in g.units(0, 1))
+        if nr == 2:
+            assert asked == [] and buffs == [0, 0] and any("pas de quoi payer" in l for l in g.lines), (asked, buffs)
+        else:
+            assert asked == [1] and buffs == [0, 1] and all(r.exhausted for r in g.p[0].runes), (asked, buffs)
+
+
+@T.test
+def optional_cost_that_cannot_be_paid_is_not_offered_to_a_human():
+    # Demande de l'utilisateur : « si le coût supplémentaire ne peut pas être payé, ne propose pas d'activer le bf ».
+    # Monastery of Hirana : « When you conquer here, you may spend a buff to draw 1 » ; sans unité buffée, pas de question.
+    for buffed in (False, True):
+        asked = []
+        g, ag = new(bf1="Monastery of Hirana", answers0={"may": lambda o, c: (asked.append(1), True)[1]})
+        ag[0].every_choice = True                     # joueur humain : le coût est essayé sur une copie de la partie
+        u = put(g, 0, "Arena Kingpin", "base")
+        u.buff = 1 if buffed else 0
+        g.bfs[1].ctrl = None
+        g.apply([o for o in options_of(g, "move") if o[1] == (u.uid,) and o[2] == 1][0])
+        settle(g)
+        assert g.bfs[1].ctrl == 0
+        if buffed:
+            assert asked == [1] and g.obj(u.uid).buff == 0, asked
+        else:
+            assert asked == [] and any("pas de quoi payer" in l for l in g.lines), (asked, g.lines[-6:])
+
+
 if __name__ == "__main__":
     T.main()

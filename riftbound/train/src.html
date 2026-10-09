@@ -169,6 +169,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .half { border-radius: 14px; transition: border-color .2s, box-shadow .2s; }
 .half.active { box-shadow: 0 0 0 1px rgba(224,80,95,.25), 0 0 26px rgba(224,80,95,.18); }
 .card.can:hover { transform: translateY(-3px); }
+.slot.x .card.can:hover { transform: translate(-50%, calc(-50% - 3px)) rotate(90deg); } .slot.x .card.drop-hover { transform: translate(-50%, -50%) rotate(90deg) scale(1.12); }
 .hand.rv .rvtag { color: var(--warn, #f5c451); font-weight: 700; }
 .hand.top.rv { outline: 1px dashed rgba(245,196,81,.55); outline-offset: 2px; border-radius: 10px; }
 .hand .card.can:hover { transform: translateY(-14px) scale(1.12); }
@@ -1791,6 +1792,12 @@ function dropAt(src, t) {
 
 // ---------- flèches : tes cibles (vert), sorts de la chaîne et dernier coup de LeBlanc (corail), déplacements préparés
 function centre(el) { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+// Départ d'une flèche depuis une carte de la chaîne : la carte n'y montre que son haut (le reste est rogné par une marge
+// négative), donc on part du bord gauche, au milieu de la partie VISIBLE (sinon la flèche sortait du vide sous le sort).
+function chainStart(el) {
+  const r = el.getBoundingClientRect(), mb = Math.min(0, parseFloat(getComputedStyle(el).marginBottom) || 0);
+  return [r.left + 6, r.top + Math.max(8, (r.height + mb) / 2)];
+}
 function arrow(a, b, who, dashed) {
   const [x1, y1] = a, [x2, y2] = b, dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
   const ex = x2 - dx / L * 14, ey = y2 - dy / L * 14, bend = Math.min(80, L / 4);
@@ -1817,7 +1824,8 @@ function drawArrows(px, py) {
     }
   } else if (mode && mode.type === "ask") {
     const fromEl = (mode.a.src !== null && mode.a.src !== undefined && srcEl(mode.a.src)) || document.querySelector("#stack .sitem .card");
-    if (fromEl) (mode.a.uids || []).forEach((u, i) => { if (u === null || String(u) === String(mode.a.src)) return; const t = srcEl(u); if (t) h += arrow(centre(fromEl), centre(t), 0, i !== mode.pick); });
+    const p0 = fromEl && (fromEl.closest("#stack") ? chainStart(fromEl) : centre(fromEl));
+    if (fromEl) (mode.a.uids || []).forEach((u, i) => { if (u === null || String(u) === String(mode.a.src)) return; const t = srcEl(u); if (t) h += arrow(p0, centre(t), 0, i !== mode.pick); });
   } else if (mode && mode.type === "move" && mode.dest !== null) {
     const zt = zoneEl(mode.dest);
     if (zt) mode.units.forEach(u => { const x = unitEl(u); if (x) h += arrow(centre(x), centre(zt), 0, false); });
@@ -1828,9 +1836,11 @@ function drawArrows(px, py) {
   const seen = new Set();
   if (V) (V.st.chain || []).forEach((c, k) => {
     const it = document.querySelector(`#stack [data-ch="${k}"] .card`); if (!it || !c.tg) return;
-    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(centre(it), centre(t), vp(c.c), false); seen.add(vp(c.c) + ":" + u); } });
+    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(chainStart(it), centre(t), vp(c.c), false); seen.add(vp(c.c) + ":" + u); } });
   });
-  if (lastAI && V) {
+  // dernier coup de l'IA : seulement quand la chaîne est vide (sinon chaque sort de la chaîne montre déjà ses cibles, et
+  // ces flèches partaient du premier sort de l'IA même quand elles appartenaient à un autre)
+  if (lastAI && V && !(V.st.chain || []).length) {
     const tg = [...(lastAI.t1 || []), ...(lastAI.t2 || [])];
     const fromEl = document.querySelector("#stack .sitem.c1 .card") || document.querySelector("#board .hand.top");
     if (fromEl) tg.forEach(u => { const t = unitEl(u); if (t && !seen.has("1:" + u)) h += arrow(centre(fromEl), centre(t), 1, false); });
