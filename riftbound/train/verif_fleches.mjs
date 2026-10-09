@@ -39,7 +39,11 @@ async function chainTest(pg, ev, phone, tag) {
   await pg.screenshot({ path: `${OUT}/chaine_${tag}_defaut.png` });
   // point de la partie VISIBLE de la carte (en ordinateur, les éléments anciens sont rognés : leur centre est caché)
   const at = async k => { await ev(`document.querySelector('#stack [data-ch="${k}"]').scrollIntoView({ block: 'nearest' })`);
-    return ev(`(()=>{ const r = document.querySelector('#stack [data-ch="${k}"] .card').getBoundingClientRect(); return [r.left + r.width / 2, r.top + Math.min(14, r.height / 2)]; })()`); };
+    // premier point de la carte (de haut en bas) qui touche vraiment cet élément : sur téléphone, le haut de la carte
+    // peut passer sous la main de l'adversaire
+    return ev(`(()=>{ const r = document.querySelector('#stack [data-ch="${k}"] .card').getBoundingClientRect(), x = r.left + r.width / 2;
+      for (let y = r.top + Math.min(14, r.height / 2); y < r.bottom; y += 4) { const e = document.elementFromPoint(x, y); if (e && e.closest('#stack [data-ch="${k}"]')) return [x, y]; }
+      return [x, r.top + Math.min(14, r.height / 2)]; })()`); };
   const [x0, y0] = await at(0);
   if (phone) await pg.touchscreen.tap(x0, y0); else await pg.mouse.move(x0, y0);
   await pg.waitForTimeout(300);
@@ -47,7 +51,13 @@ async function chainTest(pg, ev, phone, tag) {
   ok(`${tag} ${phone ? "toucher" : "survol"} de l'élément du dessous : ses flèches à la place (${a1})`, a1 === "0>A");
   if (phone) ok(`${tag} le toucher ouvre toujours la carte en grand`, await ev("!document.getElementById('zoom').hidden"));
   await pg.screenshot({ path: `${OUT}/chaine_${tag}_${phone ? "toucher" : "survol"}.png` });
-  if (phone) { const [x1, y1] = await at(1); await pg.touchscreen.tap(x1, y1); } else await pg.mouse.move(2, 2);
+  if (phone) {
+    // la carte ouverte en grand peut recouvrir le haut de la chaîne : un vrai joueur la ferme d'abord (toucher ailleurs)
+    const [x1, y1] = await at(1);
+    if (!(await ev(`!!document.elementFromPoint(${x1}, ${y1})?.closest('#stack [data-ch="1"]')`))) await ev("document.getElementById('zoom').hidden = true");
+    ok(`${tag} carte en grand fermée : toujours les flèches de l'élément touché (${await ev(ARR)})`, (await ev(ARR)) === "0>A");
+    await pg.touchscreen.tap(x1, y1);
+  } else await pg.mouse.move(2, 2);
   await pg.waitForTimeout(300);
   const a2 = await ev(ARR);
   ok(`${tag} ${phone ? "toucher du haut de la chaîne" : "sortie du survol"} : retour aux flèches du haut (${a2})`, a2 === "1>B");

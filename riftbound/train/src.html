@@ -1908,15 +1908,19 @@ function drawArrows(px, py) {
   $("arrowsG").innerHTML = h;
 }
 let rafA = 0;
-// survol d'un élément de la chaîne (souris) ou toucher (téléphone : l'événement mouseover compatible suit le toucher) :
-// ses flèches remplacent celles du haut de la chaîne ; en quittant la chaîne, retour au haut de la chaîne
+// survol d'un élément de la chaîne (souris) ou toucher (téléphone) : ses flèches remplacent celles du haut de la chaîne ;
+// en quittant la chaîne à la souris, retour au haut. Le survol ne compte que pour une vraie souris : sur téléphone, le
+// « mouseover » de compatibilité qui suit un toucher peut tomber sur la carte ouverte en grand et ramenait au haut
+// (échec du robot en CI, selon le moment).
 function setChainFocus(k) { if (k === chainFocus) return; chainFocus = k; drawArrows(); }
-document.addEventListener("mouseover", e => {
-  if (drag && drag.on) return;
-  const it = e.target.closest && e.target.closest("#stack [data-ch]");
+const chainItem = e => e.target.closest && e.target.closest("#stack [data-ch]");
+document.addEventListener("pointerover", e => {
+  if (e.pointerType !== "mouse" || (drag && drag.on)) return;
+  const it = chainItem(e);
   setChainFocus(it ? +it.dataset.ch : null);
 });
-document.addEventListener("click", e => { const it = e.target.closest && e.target.closest("#stack [data-ch]"); if (it) setChainFocus(+it.dataset.ch); }, true);
+document.addEventListener("pointerdown", e => { const it = chainItem(e); if (it) setChainFocus(+it.dataset.ch); }, true);
+document.addEventListener("click", e => { const it = chainItem(e); if (it) setChainFocus(+it.dataset.ch); }, true);
 const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(() => { drawArrows(); placeFloat(); if (!$("pop").hidden) placePop(); if (!$("hpop").hidden) placeHint(); }); };
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
