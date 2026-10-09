@@ -146,3 +146,10 @@ Demande : retirer l'entrée « Replays » du menu (elle ouvrait le lecteur des s
 
 ## [2026-10-09] ingest | IA générale : recherche à tirages communs et élimination en passes, mesurée et gardée
 Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées sur les decks par défaut (49 légendes, IA générique, `engine/exp_search.py` mode `defaut`, graines neuves à chaque ligne) : « sh » contre l'ancienne recherche à budget de simulations égal **55,8 % ± 1,9** (200 paires) ; tirages communs seuls à budget égal **58,4 % ± 2,3** (160) ; « sh » contre l'ancienne au niveau Normal **65,3 % ± 2,3** (160) ; « sh » contre tirages communs seuls 58,8 % ± 2,8 (120) ; Akali G2 contre LeBlanc IQ#5 avec leurs plans **62,5 % ± 2,9** (120). Défaut `RB_SEARCH=sh` gardé. Essais non retenus (horizon 1 ou 3 tours, poids de l'évaluation, sorts [Reaction] gardés) : rien au-delà de 2 écarts-types sur graines neuves. Temps par décision sur les mêmes positions, Pyodide sous node : 417 → 503 ms en moyenne, p95 2,4 s inchangé. Page [recherche de l'IA](../memoire/riftbound-search-ai.md). Lecteur de replays : noms des joueurs pris dans la partie (decks autres qu'Akali / LeBlanc), 5 parties ajoutées. Auteur : agent IA.
+
+## [2026-10-09] change | Favicon Riftbound LAB
+- Icône SVG (losange doré sur fond bleu nuit) en `<link rel="icon">` data-URI dans `riftbound/train/src.html` (table) et `riftbound/replays/viewer.html` (replays). Autorisée par la CSP (`img-src data:`). Non vérifiée dans un navigateur.
+
+## [2026-10-09] fix | Chaîne : capacités activées (légende, Empower, Equip) sans illustration
+- Cause : le moteur nomme une capacité activée « Carte: capacité » (« Akali, Rogue Assassin: Empower », « Long Sword: Equip », « Baited Hook: Hook ») ; `cardFor` ne la rattachait à aucune carte, d'où une carte sans image avec le texte brut. `cardFor` (table et replays) retire maintenant le suffixe « : capacité ».
+- Vérifié : noms relevés sur 40 parties aléatoires (5 formes, toutes corrigées) et logique de `cardFor` rejouée sous node. **Pas** vérifié dans un navigateur (cache Pyodide absent) : à confirmer sur la table.
