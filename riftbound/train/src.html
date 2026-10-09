@@ -677,7 +677,10 @@ async function boot() {
   const py = await loadPyodide({ indexURL: new URL("pyodide/", location.href).href, stdLibURL });
   window.fetch = realFetch;
   for (const d of ["/rb", "/rb/cards", "/rb/decks", "/rb/engine", "/rb/engine/cardsets"]) py.FS.mkdir(d);
-  const get = async (u, dst) => py.FS.writeFile(dst, new Uint8Array(await fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); })));
+  // Les fichiers du moteur ont la version de la page en paramètre : sinon le navigateur peut garder l'ancien moteur en
+  // cache (GitHub Pages : 10 min) sous une page neuve, et une fonction ajoutée manque (« T.replay_load n'est pas une fonction »).
+  const ver = encodeURIComponent([BUILD.commit, BUILD.engine].filter(Boolean).join("-") || String(Date.now()));
+  const get = async (u, dst) => py.FS.writeFile(dst, new Uint8Array(await fetch(u + "?v=" + ver).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); })));
   await Promise.all([get("data/cards_unique.csv", "/rb/cards/cards_unique.csv"), get("data/decks.json", "/rb/decks/decks.json"),
     ...PY.map(f => get("py/" + f, "/rb/engine/" + f))]);
   py.runPython("import sys; sys.path.insert(0, '/rb/engine')");

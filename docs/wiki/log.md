@@ -153,3 +153,7 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-09] fix | Chaîne : capacités activées (légende, Empower, Equip) sans illustration
 - Cause : le moteur nomme une capacité activée « Carte: capacité » (« Akali, Rogue Assassin: Empower », « Long Sword: Equip », « Baited Hook: Hook ») ; `cardFor` ne la rattachait à aucune carte, d'où une carte sans image avec le texte brut. `cardFor` (table et replays) retire maintenant le suffixe « : capacité ».
 - Vérifié : noms relevés sur 40 parties aléatoires (5 formes, toutes corrigées) et logique de `cardFor` rejouée sous node. **Pas** vérifié dans un navigateur (cache Pyodide absent) : à confirmer sur la table.
+
+## [2026-10-09] fix | Table : « T.replay_load n'est pas une fonction » après publication
+- Cause : la page neuve chargeait les fichiers du moteur (`py/*.py`, `data/*`) depuis le cache du navigateur (GitHub Pages : 10 min), donc l'ancien `train.py` sans `replay_load`.
+- Correction : `src.html` ajoute `?v=<commit>-<empreinte du moteur>` (constante `BUILD` posée par `build.sh`) à chaque fichier chargé dans Pyodide. Pas essayé sur un vrai téléphone.
