@@ -8,7 +8,7 @@ All choices made during resolution (targets, "you may", damage assignment...) us
 """
 import os
 import random
-from game import SPEC
+from game import SPEC, Obj, Item
 from cards import value as unit_value
 
 REACTIVE = {"Discipline", "Defy", "Not So Fast", "Back Off", "Block", "En Garde", "Ki Barrier", "Deathgrip",
@@ -18,6 +18,12 @@ REACTIVE = {"Discipline", "Defy", "Not So Fast", "Back Off", "Block", "En Garde"
 # à 7 une tenue gagne. L'IA doit alors refuser la tenue adverse à tout prix. RB_TEMPO=0 rend l'ancienne IA.
 TEMPO = os.environ.get("RB_TEMPO", "1") != "0"
 URGENT_SAMPLES = 6
+# Recherche (2026-10-09) : "old" = chaque option jugée sur son propre monde tiré au hasard (s.rng avance entre les
+# options) ; "crn" = tirages communs (le k-ième monde est le même pour toutes les options) ; "sh" = tirages communs
+# + élimination en plusieurs passes (successive halving) avec SH_EXTRA × (options × samples) rollouts en plus.
+# RB_SEARCH=old rend l'ancienne recherche (comparaisons).
+SEARCH = os.environ.get("RB_SEARCH", "sh")
+SH_EXTRA = float(os.environ.get("RB_SH_EXTRA", "1.0"))
 
 DK_FODDER = {"Soaring Scout", "Honest Broker", "Watchful Sentry", "Black Rose Dignitary", "LeBlanc, Fragmented",
              "Lonely Poro", "Scuttle Crab"}
@@ -246,7 +252,7 @@ def rollout(g, max_steps=300):
 
 
 class SearchAgent(Heuristics):
-    def __init__(s, seed=0, samples=1, max_cands=40, name="", horizon=2, cfg=None):
+    def __init__(s, seed=0, samples=1, max_cands=40, name="", horizon=2, cfg=None, search=None, sh_extra=None):
         s.cfg = dict(cfg or {})
         s.rng = random.Random(seed)
         s.samples = samples
@@ -254,6 +260,8 @@ class SearchAgent(Heuristics):
         s.name = name
         s.horizon = horizon
         s.fast = FastAgent()
+        s.search = search or SEARCH
+        s.sh_extra = SH_EXTRA if sh_extra is None else sh_extra
 
     def start(s, g):
         pass
@@ -268,18 +276,42 @@ class SearchAgent(Heuristics):
         ready = sum(1 for r in g.p[opp].runes if not r.exhausted)
         return ready >= 5 and len(g.p[opp].hand) >= 1
 
-    def score(s, g, me, a, base_now=None):
-        tot = 0.0
-        for _ in range(s.samples):
+    # -------- un rollout : surchargé par PlanAgent (politiques du plan, valeur + forme, a priori)
+    def policies(s, me):
+        pol = PolicyAgent()
+        pol.cfg = s.cfg
+        return [pol, pol]
+
+    def value(s, c, me):
+        return evaluate(c, me)
+
+    def prior_of(s, g, me, a):
+        return 0.0
+
+    def one(s, g, me, a, rng, world=None):
+        """Valeur d'un rollout. `world` (graine) : le monde caché et l'aléa du jeu sont fixés par la graine, et les
+        compteurs d'identifiants remis à l'identique, pour que toutes les options voient exactement le même monde."""
+        if world is not None:
+            n0, i0 = Obj._n, Item._n
+        try:
             c = g.clone()
-            determinize(c, me, s.rng)
-            pol = PolicyAgent()
-            pol.cfg = s.cfg
-            c.agents = [pol, pol]
+            determinize(c, me, rng)
+            if world is not None:
+                c.rng = random.Random(world * 2 + 1)
+            c.agents = s.policies(me)
             c.apply(a)
             rollout_policy(c, s.horizon)
-            tot += evaluate(c, me)
-        return tot / s.samples
+            return s.value(c, me)
+        finally:
+            if world is not None:
+                Obj._n, Item._n = n0, i0
+
+    def score(s, g, me, a, base_now=None):
+        """Ancienne recherche : s.samples mondes tirés avec s.rng (différents d'une option à l'autre)."""
+        tot = 0.0
+        for _ in range(s.samples):
+            tot += s.one(g, me, a, s.rng)
+        return tot / s.samples + s.prior_of(g, me, a)
 
     def decide(s, g, d):
         opts = d.options
@@ -293,12 +325,18 @@ class SearchAgent(Heuristics):
             opts = opts[:1] + s.rng.sample(opts[1:], s.max_cands - 1)
         return s.pick(g, d, opts)[0]
 
+    def urgent(s, g, d, me, best_v):
+        return TEMPO and d.kind == "main" and s.samples < URGENT_SAMPLES and (best_v < -5000 or danger(g, me))
+
     def pick(s, g, d, opts):
         """Meilleure option et scores [(v, a)] ; en danger ou si tout perd, on refait avec plus de tirages."""
+        if s.search != "old" and type(s).score is SearchAgent.score:
+            # (une sous-classe qui redéfinit encore score(), ex. plans.py figé d'une session du manager : ancienne recherche)
+            return s.pick_crn(g, d, opts)
         me = d.player
         scored = [(s.score(g, me, a), a) for a in opts]
         best_v = max(v for v, _ in scored)
-        if TEMPO and d.kind == "main" and s.samples < URGENT_SAMPLES and (best_v < -5000 or danger(g, me)):
+        if s.urgent(g, d, me, best_v):
             # gagner à tout prix : un seul tirage dit « tout perd » au hasard ; on mesure la chance de survie
             n0, s.samples = s.samples, URGENT_SAMPLES
             try:
@@ -311,7 +349,61 @@ class SearchAgent(Heuristics):
                 best, best_v = a, v
         return best, best_v, scored
 
+    def pick_crn(s, g, d, opts):
+        """Tirages communs : une graine par indice de tirage, tirée au début de la décision ; l'option i au tirage k
+        est jouée dans le monde k (même main et cartes cachées adverses, même ordre des decks, même aléa).
+        Mode "sh" : après la première passe, on garde la meilleure moitié et on lui ajoute des tirages, jusqu'à 2
+        options ; budget en plus = sh_extra × options × samples, réparti également entre les passes."""
+        me = d.player
+        n = len(opts)
+        worlds = []
+        tot = [0.0] * n
+        cnt = [0] * n
+        pri = [s.prior_of(g, me, a) for a in opts]
 
+        def run(i, k):
+            while len(worlds) < k:
+                worlds.append(s.rng.getrandbits(30))
+            for j in range(cnt[i], k):
+                tot[i] += s.one(g, me, opts[i], random.Random(worlds[j]), worlds[j])
+            cnt[i] = max(cnt[i], k)
+
+        def val(i):
+            return tot[i] / cnt[i] + pri[i]
+
+        def ranked(idx):
+            return sorted(idx, key=lambda i: (-val(i), i))
+
+        k0 = s.samples
+        for i in range(n):
+            run(i, k0)
+        if s.urgent(g, d, me, max(val(i) for i in range(n))):
+            k0 = URGENT_SAMPLES                     # mêmes premiers mondes, on complète jusqu'à 6
+            for i in range(n):
+                run(i, k0)
+        surv = ranked(range(n))
+        if s.search == "sh" and n > 1:
+            sizes, m = [], n
+            while m > 2:
+                m = max(2, m // 2)
+                sizes.append(m)
+            sizes = sizes or [2]
+            budget = int(s.sh_extra * n * s.samples)
+            per, carry = budget // len(sizes), budget % len(sizes)
+            k = k0
+            for m in sizes:
+                surv = surv[:m]
+                carry += per
+                add = carry // m
+                if add:
+                    k += add
+                    carry -= add * m
+                    for i in surv:
+                        run(i, k)
+                surv = ranked(surv)
+        scored = [(val(i), opts[i]) for i in range(n)]
+        b = surv[0]
+        return opts[b], val(b), scored
 
 
 # ---------------------------------------------------------------------- cheap policy (rollouts, baseline)

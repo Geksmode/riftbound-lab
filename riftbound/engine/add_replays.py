@@ -5,7 +5,8 @@
   1. trouver les donnes instructives :   python3 add_replays.py flips results_plans.json "<config A>" "<config B>" <graine0>
      (graines où A gagne et B perd : même donne, seul le plan change)
   2. lire le déroulé d'une partie :      python3 add_replays.py digest <graine> <deck> <plan Akali|-> <plan LeBlanc|->
-  3. écrire une spec JSON (liste d'objets id, group, seed, deck, a_plan, l_plan, title, note ; tempo, refl, video facultatifs) puis
+  3. écrire une spec JSON (liste d'objets id, group, seed, deck, a_plan, l_plan, title, note ; tempo, refl, video,
+     search [version Akali, version LeBlanc] d'exp_search.py facultatifs) puis
                                          python3 add_replays.py add spec.json
   4. republier l'artefact (voir ../replays/README.md).
 Fil « Agent manager » : python3 add_replays.py picks ../manager/results/session_NNN_picks.json
@@ -36,10 +37,15 @@ def flips(path, a, b, seed0, wa=1.0, wb=0.0):
     return [s for s in sorted(A) if A[s] == wa and B.get(s) == wb]
 
 
-def rec(seed, deck, a_plan, l_plan):
+def rec(seed, deck, a_plan, l_plan, search=None):
+    """search : [version Akali, version LeBlanc] d'exp_search.VERSIONS (ex. ["sh", "old"]), sinon la recherche par défaut."""
     from replay import record_plan
     D, L = decks()
-    return record_plan(seed, D[deck], L, a_plan or None, l_plan or None)
+    kw = None
+    if search:
+        from exp_search import VERSIONS
+        kw = [dict(zip(("search", "samples", "sh_extra"), VERSIONS[v])) for v in search]
+    return record_plan(seed, D[deck], L, a_plan or None, l_plan or None, agent_kw=kw)
 
 
 def digest(rep, width=150):
@@ -76,7 +82,7 @@ def _job(e):
         rep = record_plan(e["seed"], _build(j["akali"]), _build(j["opp"]), j.get("akali_plan"), j.get("opp_plan"),
                           j.get("akali_bfs"), j.get("opp_bfs"), j.get("first"))
     else:
-        rep = rec(e["seed"], e.get("deck", "G2"), e.get("a_plan"), e.get("l_plan"))
+        rep = rec(e["seed"], e.get("deck", "G2"), e.get("a_plan"), e.get("l_plan"), e.get("search"))
     json.dump(rep, open(OUT / f"{e['id']}.json", "w"), ensure_ascii=False, separators=(",", ":"))
     return dict(id=e["id"], file=f"{e['id']}.json", group=e.get("group", ""), session=e.get("session"), seed=e["seed"], title=e["title"],
                 note=e["note"], plans=rep["plans"], winner=rep["winner"], pts=rep["pts"], first=rep["first"],

@@ -408,21 +408,20 @@ class PlanAgent(SearchAgent):
             return r
         return super().choose(g, pid, kind, options, ctx)
 
-    def score(s, g, me, a, base_now=None):
-        tot = 0.0
-        for _ in range(s.samples):
-            c = g.clone()
-            determinize(c, me, s.rng)
-            ag = [None, None]
-            ag[me] = PlanPolicy(s.plan)
-            ag[1 - me] = PlanPolicy(s.opp_plan)
-            for x in ag:
-                x.cfg = s.cfg
-            c.agents = ag
-            c.apply(a)
-            rollout_policy(c, s.horizon)
-            tot += evaluate(c, me) + s.plan.shape(c, me)
+    # un rollout de SearchAgent (ancienne recherche ou tirages communs) : politiques et valeur du plan
+    def policies(s, me):
+        ag = [None, None]
+        ag[me] = PlanPolicy(s.plan)
+        ag[1 - me] = PlanPolicy(s.opp_plan)
+        for x in ag:
+            x.cfg = s.cfg
+        return ag
+
+    def value(s, c, me):
+        return evaluate(c, me) + s.plan.shape(c, me)
+
+    def prior_of(s, g, me, a):
         pr = s.plan.prior(g, me, a)
         if _ai.TEMPO and pr < 0 and danger(g, me):
             pr = 0.0                                   # à portée de défaite, les principes du plan ne tiennent plus
-        return tot / s.samples + pr
+        return pr
