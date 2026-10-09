@@ -1556,5 +1556,25 @@ def mystic_reversal_steals_a_spell_and_retargets_it():
     assert g.played[0] == ["Mystic Reversal"]
 
 
+@T.test
+def charm_on_the_opponents_turn_gives_me_the_conquer():
+    # 469.1 : conquérir = prendre le contrôle d'un battlefield pas encore marqué ce tour, quel que soit le tour. L'adversaire
+    # déplace mon unité (Charm) pendant son tour : showdown sur un battlefield vide, ou combat gagné -> je marque le point.
+    for case in ("showdown", "combat"):
+        g, _ = new(tp=1)
+        g.every_choice = True
+        runes(g, 1, ["Calm"] * 3)
+        c = hand(g, 1, "Charm")
+        me = put(g, 0, "Arena Kingpin", "base")
+        if case == "combat":
+            put(g, 1, "Determined Sentry", 1)
+        g.bfs[1].ctrl = 1 if case == "combat" else None
+        o = [o for o in options_of(g, "play") if o[1] == c.uid and dict(o[3]).get("tg") == (me.uid,) and dict(o[3]).get("dest") == 1]
+        assert o, case
+        g.apply(o[0])
+        settle(g)
+        assert g.bfs[1].ctrl == 0 and g.p[0].points == 1 and g.p[1].points == 0, (case, [p.points for p in g.p])
+
+
 if __name__ == "__main__":
     T.main()
