@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Recherche de l'IA (ai.SearchAgent.pick) : version A contre version B, parties appariées.
 
-    python3 exp_search.py <paires> <graine0> <A> <B> <akali|miroir> [processus]
+    python3 exp_search.py <paires> <graine0> <A> <B> <akali|miroir|defaut> [processus]
 
 Une paire = une graine g jouée DEUX fois, mêmes decks, même premier joueur, mêmes battlefields : partie 1, A tient le
 joueur 0 ; partie 2, B tient le joueur 0 (places échangées). Score de A pour la paire = moyenne des deux parties ;
@@ -10,8 +10,9 @@ Graines des agents liées au siège (g et g+500000, comme exp_plans.one et repla
 exactement 0,5 par paire, et une partie se rejoue avec add_replays (clé « search »).
   akali  : Akali G2 (plan Gorica) contre LeBlanc IQ#5 (plan Hook tempo), tirage du premier joueur et des
            battlefields exactement comme exp_plans.one ;
+  defaut : deux decks par défaut (train.default_decks, 49 légendes) tirés au hasard, IA générique des deux côtés ;
   miroir : un deck légal au hasard (exp_general.rdeck) des deux côtés, IA générique (plans.Plan()).
-Versions : VERSIONS (nom -> (mode de recherche, samples, sh_extra)). Résultats : results_search.json (stamp()).
+Versions : VERSIONS (nom -> (mode de recherche, samples, sh_extra)), réglages après @ (version()). Résultats : results_search.json (stamp()).
 Temps par décision : moyenne et p95 des decide() à plus d'une option, par version."""
 from version import stamp
 import json, sys, time, os, random, math, traceback
@@ -26,7 +27,7 @@ from exp_gorica import G2
 sys.argv = _argv
 import plans as P
 from game import Game, Obj, Item
-from decks import with_bf
+from decks import with_bf, load
 from exp_general import Timed, pct
 
 VERSIONS = {
@@ -38,6 +39,44 @@ VERSIONS = {
 }
 
 
+_DD = []
+
+
+def _defaults():
+    """Clés des decks par défaut de chaque légende (train.default_decks : listes de tournoi jouables), triées."""
+    if not _DD:
+        import train as T
+        _DD.extend(sorted(T.default_decks().values()))
+    return _DD
+
+
+def version(v):
+    """Nom de VERSIONS, éventuellement suivi de réglages : « old@h=1,card0=1.8,pol=1 ». Clés : s (recherche),
+    n (tirages), x (sh_extra), h (horizon) ; une clé de ai.EV = poids de l'évaluation ; toute autre clé = entrée de cfg
+    (politique de simulation, choix). Retourne (recherche, tirages, sh_extra, horizon, cfg)."""
+    import ai
+    nm, _, opts = v.partition("@")
+    sm, n, ex = VERSIONS[nm]
+    h, cfg, ev = 2, {}, {}
+    for kv in filter(None, opts.split(",")):
+        k, _, x = kv.partition("=")
+        if k == "s":
+            sm = x
+        elif k == "n":
+            n = int(x)
+        elif k == "x":
+            ex = float(x)
+        elif k == "h":
+            h = int(x)
+        elif k in ai.EV:
+            ev[k] = float(x)
+        else:
+            cfg[k] = float(x) if x.replace(".", "", 1).lstrip("-").isdigit() else x
+    if ev:
+        cfg["ev"] = ev
+    return sm, n, ex, h, cfg
+
+
 def setup(seed, mode):
     """(decks, plans neufs, premier joueur) de la graine : mêmes decks et premier joueur pour les deux parties."""
     r = random.Random(seed * 7919)
@@ -47,6 +86,13 @@ def setup(seed, mode):
         lbf = pl.battlefield(L, f == 1) or r.choice(L["battlefields"])
         abf = pa.battlefield(G2, f == 0, lbf) or r.choice(G2["battlefields"])
         return [with_bf(G2, abf), with_bf(L, lbf)], [pa, pl], f
+    if mode == "defaut":
+        dd = _defaults()
+        ka, kb = r.choice(dd), r.choice(dd)
+        da, db = load(ka), load(kb)
+        f = r.randrange(2)
+        return ([with_bf(da, r.choice(sorted(da["battlefields"]))), with_bf(db, r.choice(sorted(db["battlefields"])))],
+                [P.Plan(), P.Plan()], f)
     from exp_general import rdeck
     d = rdeck(random.Random(seed))
     f = r.randrange(2)
@@ -61,8 +107,9 @@ def play(seed, mode, v0, v1):
     tm = [[], []]
     ag = []
     for i, (v, pl, op) in enumerate(((v0, p0, p1), (v1, p1, p0))):
-        sm, n, ex = VERSIONS[v]
-        ag.append(P.PlanAgent(seed + 500000 * i, plan=pl, opp_plan=op, samples=n, search=sm, sh_extra=ex))
+        sm, n, ex, h, cfg = version(v)
+        ag.append(P.PlanAgent(seed + 500000 * i, plan=pl, opp_plan=op, samples=n, search=sm, sh_extra=ex, horizon=h,
+                              cfg=cfg))
     wr = [Timed(ag[0], tm[0]), Timed(ag[1], tm[1])]
     g = Game(decks, wr, seed=seed, first=f)
     while True:

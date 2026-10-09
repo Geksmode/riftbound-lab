@@ -5,8 +5,10 @@
   1. trouver les donnes instructives :   python3 add_replays.py flips results_plans.json "<config A>" "<config B>" <graine0>
      (graines où A gagne et B perd : même donne, seul le plan change)
   2. lire le déroulé d'une partie :      python3 add_replays.py digest <graine> <deck> <plan Akali|-> <plan LeBlanc|->
+     (partie d'exp_search.py, IA générique : python3 add_replays.py dsearch <graine> <defaut|miroir> <v joueur0> <v joueur1>)
   3. écrire une spec JSON (liste d'objets id, group, seed, deck, a_plan, l_plan, title, note ; tempo, refl, video,
-     search [version Akali, version LeBlanc] d'exp_search.py facultatifs) puis
+     search [version joueur 0, version joueur 1] d'exp_search.py, mode « defaut »/« miroir » (partie d'exp_search :
+     decks et battlefields de setup(), deck/a_plan/l_plan ignorés) facultatifs) puis
                                          python3 add_replays.py add spec.json
   4. republier l'artefact (voir ../replays/README.md).
 Fil « Agent manager » : python3 add_replays.py picks ../manager/results/session_NNN_picks.json
@@ -37,20 +39,43 @@ def flips(path, a, b, seed0, wa=1.0, wb=0.0):
     return [s for s in sorted(A) if A[s] == wa and B.get(s) == wb]
 
 
-def rec(seed, deck, a_plan, l_plan, search=None):
-    """search : [version Akali, version LeBlanc] d'exp_search.VERSIONS (ex. ["sh", "old"]), sinon la recherche par défaut."""
-    from replay import record_plan
+def _kw(search):
+    """[version joueur 0, version joueur 1] d'exp_search (ex. ["sh", "old@h=1"]) -> arguments des deux agents."""
+    from exp_search import version
+    out = []
+    for v in search:
+        sm, n, ex, h, cfg = version(v)
+        out.append(dict(search=sm, samples=n, sh_extra=ex, horizon=h, cfg=cfg))
+    return out
+
+
+def rec(seed, deck, a_plan, l_plan, search=None, mode=None):
+    """search : [version joueur 0, version joueur 1] d'exp_search (ex. ["sh", "old"]), sinon la recherche par défaut.
+    mode : « defaut » ou « miroir » = la partie d'exp_search.py (decks, battlefields et premier joueur de setup(),
+    IA générique des deux côtés) ; sinon Akali (deck) contre LeBlanc IQ#5."""
+    import replay
+    kw = _kw(search) if search else None
+    if mode in ("defaut", "miroir"):
+        import exp_search as X
+        from game import Obj, Item
+        Obj._n = 0
+        Item._n = 0
+        dk, _, f = X.setup(seed, mode)
+        names = [d["legend"].split(",")[0] for d in dk]
+        if names[0] == names[1]:
+            names[1] += " (2)"
+        replay.NAMES = tuple(names)
+        return replay.record_plan(seed, dk[0], dk[1], None, None, [dk[0]["battlefield"]], [dk[1]["battlefield"]], f,
+                                  agent_kw=kw)
     D, L = decks()
-    kw = None
-    if search:
-        from exp_search import VERSIONS
-        kw = [dict(zip(("search", "samples", "sh_extra"), VERSIONS[v])) for v in search]
-    return record_plan(seed, D[deck], L, a_plan or None, l_plan or None, agent_kw=kw)
+    return replay.record_plan(seed, D[deck], L, a_plan or None, l_plan or None, agent_kw=kw)
 
 
 def digest(rep, width=150):
-    out = [f"graine {rep['seed']} plans {rep['plans']} premier={'Akali' if rep['first'] == 0 else 'LeBlanc'} "
-           f"bf={[p['bf'] for p in rep['players']]} gagnant={'Akali' if rep['winner'] == 0 else 'LeBlanc'} {rep['pts']}",
+    nm = [p.get("name") or x for p, x in zip(rep["players"], ("Akali", "LeBlanc"))]
+    win = nm[rep["winner"]] if rep["winner"] in (0, 1) else "nul"
+    out = [f"graine {rep['seed']} plans {rep['plans']} joueurs {nm} premier={nm[rep['first']]} "
+           f"bf={[p['bf'] for p in rep['players']]} gagnant={win} {rep['pts']}",
            f"mulligan {rep.get('mulligan')}"]
     for fr in rep["frames"]:
         for ind, t in fr["ev"]:
@@ -82,7 +107,7 @@ def _job(e):
         rep = record_plan(e["seed"], _build(j["akali"]), _build(j["opp"]), j.get("akali_plan"), j.get("opp_plan"),
                           j.get("akali_bfs"), j.get("opp_bfs"), j.get("first"))
     else:
-        rep = rec(e["seed"], e.get("deck", "G2"), e.get("a_plan"), e.get("l_plan"), e.get("search"))
+        rep = rec(e["seed"], e.get("deck", "G2"), e.get("a_plan"), e.get("l_plan"), e.get("search"), e.get("mode"))
     json.dump(rep, open(OUT / f"{e['id']}.json", "w"), ensure_ascii=False, separators=(",", ":"))
     return dict(id=e["id"], file=f"{e['id']}.json", group=e.get("group", ""), session=e.get("session"), seed=e["seed"], title=e["title"],
                 note=e["note"], plans=rep["plans"], winner=rep["winner"], pts=rep["pts"], first=rep["first"],
@@ -134,6 +159,8 @@ if __name__ == "__main__":
     elif cmd == "digest":
         ap, lp = (None if x == "-" else x for x in sys.argv[4:6])
         print(digest(rec(int(sys.argv[2]), sys.argv[3], ap, lp)))
+    elif cmd == "dsearch":                            # dsearch <graine> <defaut|miroir> <version j0> <version j1>
+        print(digest(rec(int(sys.argv[2]), None, None, None, sys.argv[4:6], sys.argv[3])))
     elif cmd == "add":
         add(json.load(open(sys.argv[2])))
     elif cmd == "picks":

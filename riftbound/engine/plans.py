@@ -418,7 +418,7 @@ class PlanAgent(SearchAgent):
         return ag
 
     def value(s, c, me):
-        return evaluate(c, me) + s.plan.shape(c, me)
+        return evaluate(c, me, s.ev) + s.plan.shape(c, me)
 
     def prior_of(s, g, me, a):
         pr = s.plan.prior(g, me, a)

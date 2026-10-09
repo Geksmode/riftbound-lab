@@ -37,22 +37,29 @@ def lasting_might(g, o):
     return m
 
 
-def point_value(p, victory):
-    return 7.0 * p + 4.0 * max(0, p - (victory - 3))
+# Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
+EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
+          card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0)
 
 
-def card_value(c):
+def point_value(p, victory, w=EV):
+    return w["pts"] * p + w["pts_hi"] * max(0, p - (victory - 3))
+
+
+def card_value(c, w=EV):
     n = c.cname
     if n in REACTIVE:
-        return 2.0
+        return w["react"]
     sp = c.spec
-    return 1.4 + 0.05 * min(sp["e"], 8)
+    if w["react_kw"] and "Reaction" in sp["keywords"]:
+        return w["react"]
+    return w["card0"] + w["card_e"] * min(sp["e"], 8)
 
 
-def unit_eval(g, u):
+def unit_eval(g, u, w=EV):
     m = max(0, lasting_might(g, u))
     sp = u.spec
-    v = 1.0 + 0.8 * m + 0.12 * (sp["e"] + 1.5 * sp["p"])
+    v = w["unit0"] + w["might"] * m + w["cost"] * (sp["e"] + 1.5 * sp["p"])
     if u.token and u.cname == "Reflection" or g.has_kw(u, "Temporary"):
         v = 0.4 + 0.4 * m
     if u.cname == "Mech":
@@ -62,7 +69,7 @@ def unit_eval(g, u):
     if u.empowered:
         v += 0.5
     if u.loc in (0, 1):
-        v += 0.4
+        v += w["on_bf"]
     return v
 
 
@@ -75,7 +82,9 @@ def danger(g, me):
     return g.p[1 - me].points >= g.victory - 2
 
 
-def evaluate(g, me):
+def evaluate(g, me, w=None):
+    if w is None:
+        w = EV
     if g.winner is not None:
         t = 25.0 * g.turn_no if TEMPO else 0.0         # gagner tôt, perdre le plus tard possible
         if g.winner == me:
@@ -86,30 +95,30 @@ def evaluate(g, me):
     s = 0.0
     for pid, sign in ((me, 1.0), (1 - me, -1.0)):
         pl = g.p[pid]
-        v = point_value(pl.points, g.victory)
+        v = point_value(pl.points, g.victory, w)
         held = 0
         for b in g.bfs:
             if b.ctrl == pid:
-                v += 3.0
+                v += w["bf"]
                 held += 1
                 if b.facedown is not None and b.facedown.owner == pid:
-                    v += 1.8
+                    v += w["fd"]
         if TEMPO and held and pl.points >= g.victory - 1:
-            v += 40.0                                  # tenue gagnante au début de son prochain tour
+            v += w["hold_win"]                         # tenue gagnante au début de son prochain tour
         for o in g.board:
             if o.ctrl != pid:
                 continue
             if o.spec["type"] == "Unit":
-                v += unit_eval(g, o)
+                v += unit_eval(g, o, w)
             else:
                 v += GEAR_V.get(o.cname, 1.0)
-        v += sum(card_value(c) for c in pl.hand)
-        v += 0.9 * len(pl.runes)
+        v += sum(card_value(c, w) for c in pl.hand)
+        v += w["rune"] * len(pl.runes)
         if pl.legend.empowered:
-            v += 2.0
-        v += 0.15 * pl.xp
+            v += w["leg_emp"]
+        v += w["xp"] * pl.xp
         if len(pl.deck) < 3:
-            v -= 3.0
+            v -= w["deck_low"]
         s += sign * v
     return s
 
@@ -261,6 +270,7 @@ class SearchAgent(Heuristics):
         s.horizon = horizon
         s.fast = FastAgent()
         s.search = search or SEARCH
+        s.ev = dict(EV, **s.cfg["ev"]) if s.cfg.get("ev") else None
         s.sh_extra = SH_EXTRA if sh_extra is None else sh_extra
 
     def start(s, g):
@@ -283,7 +293,7 @@ class SearchAgent(Heuristics):
         return [pol, pol]
 
     def value(s, c, me):
-        return evaluate(c, me)
+        return evaluate(c, me, s.ev)
 
     def prior_of(s, g, me, a):
         return 0.0

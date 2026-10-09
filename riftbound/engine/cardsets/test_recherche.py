@@ -80,5 +80,20 @@ def best_of_halving_is_among_the_most_sampled():
     assert seen[repr(best)] == max(seen.values()), seen
 
 
+@T.test
+def evaluation_weights_default_and_override():
+    """ai.EV (poids de l'évaluation) : sans réglage, la valeur est celle des poids par défaut ; un réglage cfg["ev"]
+    ne touche que l'agent qui le porte (les essais d'auto-jeu comparent deux agents dans la même partie)."""
+    g, d = midgame()
+    me = d.player
+    v0 = ai.evaluate(g, me)
+    assert v0 == ai.evaluate(g, me, dict(ai.EV))
+    hand = len(g.p[me].hand) - len(g.p[1 - me].hand)
+    w = dict(ai.EV, card0=ai.EV["card0"] + 1.0, react=ai.EV["react"] + 1.0)
+    assert abs(ai.evaluate(g, me, w) - v0 - hand) < 1e-9
+    a, b = P.PlanAgent(1, cfg={"ev": {"bf": 9.0}}), P.PlanAgent(1)
+    assert a.ev["bf"] == 9.0 and b.ev is None and ai.EV["bf"] == 3.0
+
+
 if __name__ == "__main__":
     T.main()
