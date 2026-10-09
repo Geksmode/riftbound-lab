@@ -199,3 +199,8 @@ details.diag pre { background: var(--night); border: 1px solid var(--trait); col
 .runeslot.x { width: var(--rh, 42px); height: var(--rw, 30px); }
 .rune.img { width: var(--rw, 30px); height: var(--rh, 42px); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 6px; border: 1px solid var(--trait-2); background-color: var(--relief); box-shadow: 0 4px 12px rgba(5,7,20,.5); cursor: zoom-in; }
 .runeslot.x .rune.img { opacity: .45; filter: saturate(.4); box-shadow: none; outline: 0; }
+
+/* Flow : sort de ta défausse jouable pour son coût de Flow, au bout de ta main (bord pointillé or, étiquette FLOW) */
+.hand .card.flow { outline: 2px dashed var(--gold); outline-offset: 2px; }
+.hand .card.flow .tags b { background: var(--gold); color: var(--gold-ink); }
+

@@ -797,6 +797,7 @@ def _view(ask=None):
         c["tg"] = list((it.data or {}).get("tg", ()) or ()) + list((it.data or {}).get("tg2", ()) or ())
         c["src"] = it.src if isinstance(it.src, int) else None
     st["p"][ME]["champu"] = [c.uid for c in g.p[ME].champ]
+    st["p"][ME]["trashu"] = [[c.uid, c.cname] for c in g.p[ME].trash]   # Flow (829) : sorts jouables depuis ta défausse
     for b, gb in zip(st["bfs"], g.bfs):
         if gb.facedown is not None and gb.facedown.owner == ME:
             b["fdu"] = gb.facedown.uid

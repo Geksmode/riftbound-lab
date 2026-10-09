@@ -1077,7 +1077,7 @@ $("bMenu").onclick = () => showMenu();
 // ------------------------------------------------------------ rendu du plateau (repris du lecteur de replays)
 function card(name, o = {}) {
   const img = IMG[name] || ATL[name];
-  const cls = ["card"]; if (o.p !== undefined) cls.push("c" + o.p); if (o.can) cls.push("can"); if (o.sel) cls.push("sel"); if (o.back) cls.push("back"); else if (!img) cls.push("noimg");
+  const cls = ["card"]; if (o.cls) cls.push(o.cls); if (o.p !== undefined) cls.push("c" + o.p); if (o.can) cls.push("can"); if (o.sel) cls.push("sel"); if (o.back) cls.push("back"); else if (!img) cls.push("noimg");
   let extra = "";
   if (o.m !== undefined && o.m !== null) { const d = o.base == null ? 0 : o.m - o.base; extra += `<span class="mt ${d > 0 ? "up" : d < 0 ? "dn" : ""}">${o.m}</span>`; }
   if (o.d) extra += `<span class="dmg">${o.d}</span>`;
@@ -1105,8 +1105,12 @@ function handHTML(st, pid, srcs) {
     const shown = !vis && nm && nm !== "?";            // carte de l'adversaire révélée par un effet (Sabotage, Scuttle Crab…)
     return card(nm, { p: vp(pid), back: !vis && !shown, cost: true, raw: true, style: `--rot:${rot}deg;--lift:${lift}px;`, uid: vis ? uid : undefined, can: vis && can(srcs, uid), sel: vis && sel === String(uid) });
   }).join("");
+  // Flow (règle 829) : un sort de ta défausse jouable pour son coût de Flow s'affiche au bout de ta main (marqué FLOW),
+  // pour le jouer comme une carte de la main (toucher, glisser, cibler) ; il est banni après.
+  const flow = vis ? (p.trashu || []).filter(([uid]) => can(srcs, uid)) : [];
+  const fc = flow.map(([uid, nm]) => card(nm, { p: vp(pid), raw: true, tags: ["FLOW"], style: "--rot:0deg;--lift:0px;", uid, can: true, sel: sel === String(uid), cls: "flow" })).join("");
   const rv = p.rv ? ` · <b class="rvtag">${top ? "révélée" : "révélée à l'adversaire"}</b>` : "";
-  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""} ${!top && HANDOPEN ? "open" : ""}" style="--n:${n}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || `<span class="small">main vide</span>`}</div>`;
+  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""} ${!top && HANDOPEN ? "open" : ""}" style="--n:${n + flow.length}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || (fc ? "" : `<span class="small">main vide</span>`)}${fc}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
