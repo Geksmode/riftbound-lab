@@ -1285,6 +1285,8 @@ const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vis
 function cardFor(n) {
   const known = k => IMG[k] || CARDS[k] || ATL[k];
   if (known(n)) return n;
+  // capacité activée : le moteur la nomme « Carte: capacité » (« Akali, Rogue Assassin: Empower », « Long Sword: Equip »)
+  const i = n.lastIndexOf(": "); if (i > 0 && known(n.slice(0, i))) return n.slice(0, i);
   const m = n.replace(TRIG_PREFIX, "");
   if (known(m)) return m;
   const pool = [...Object.keys(CARDS), ...Object.keys(IMG)];
