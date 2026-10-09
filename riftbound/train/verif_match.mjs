@@ -72,7 +72,7 @@ async function run(W, H, mobile, SEED) {
   await pg.selectOption("#sOpp", "akali-g2");
   await tap("#sBo3");
   ok("nouvelle partie : BO3 choisi, battlefield et premier joueur masqués", await ev("document.getElementById('sBo3').getAttribute('aria-checked')==='true' && document.getElementById('sBf').closest('label').hidden"));
-  await pg.fill("#sSeed", SEED);
+  await pg.click(".vopt summary"); await pg.fill("#sSeed", SEED);   // la donne est dans « Plus d'options »
   await pg.screenshot({ path: `${OUT}/nouvelle-partie-bo3-${tag}.png` });
   await tap("#bStart"); await waitFor("!!document.getElementById('bLaunch')");
   const roll = await ev("document.getElementById('pRoll').textContent");

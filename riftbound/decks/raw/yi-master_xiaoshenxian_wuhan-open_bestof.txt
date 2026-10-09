@@ -1,0 +1,42 @@
+# legend: Master Yi, Wuju Master
+# player: 小神仙
+# event: Wuhan Regional Open (Best-Of Master Yi, Wuju Master)
+# date: 2026-08-30
+# placement:
+# url: https://magicalmeta.ink/riftbound/decklists/master-yi-wuju-master-best-of-wuhan-regional-open-vendetta
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Master Yi, Wuju Master
+[champion]
+1 Master Yi, Tempered
+[main]
+3 Master Yi, Unstoppable
+3 Herald of Spring
+3 Wuju Apprentice
+3 Gemhand Hunter
+3 Zhonya's Hourglass
+3 Concentrate
+3 Discipline
+3 Punch First
+3 Voracious Gromp
+2 Back Off
+2 Defy
+2 Grim Resolve
+2 Emperor's Divide
+2 Repulse
+1 Scuttle Crab
+1 Alpha Strike
+[runes]
+6 Calm Rune
+6 Body Rune
+[battlefields]
+1 Gardens of Becoming
+1 Reckoner's Arena
+1 The Papertree
+[sideboard]
+2 Skyward Strike
+1 Crumbling Sands
+2 Decree of Strength
+3 Decree of Focus
+1 Defy
+1 Back Off

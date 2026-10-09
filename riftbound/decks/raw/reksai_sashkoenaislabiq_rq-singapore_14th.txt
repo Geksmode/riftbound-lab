@@ -1,0 +1,43 @@
+# legend: Rek'sai, Void Burrower
+# player: SashkoEnaiSlabiq
+# event: Riftbound Regional Qualifier - Singapore (Best-Of Rek'Sai)
+# date: 2026-09-05
+# placement: 14
+# url: https://riftdecks.com/riftbound-metagame/deck-reksai-void-burrower-281243
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Rek'sai, Void Burrower
+[champion]
+1 Rek'Sai, Breacher
+[main]
+3 Carrion Dredger
+1 Disciple of Shen
+3 Inferna
+3 Mischievous Marai
+1 Kennen, Keeper of Balance
+3 Kai'Sa, Survivor
+3 Noxus Hopeful
+1 Ashe, Focused
+2 Vi, Peacekeeper
+2 Ferrous Forerunner
+3 Undertitan
+1 Forge of the Future
+1 Long Sword
+3 Cleave
+3 Cull the Weak
+3 Falling Star
+3 Hidden Blade
+[runes]
+7 Fury Rune
+5 Order Rune
+[battlefields]
+1 Forbidding Waste
+1 The Candlelit Sanctum
+1 Zaun Warrens
+[sideboard]
+2 Ashe, Focused
+2 Decree of Unity
+2 Forge of the Future
+2 Salvage
+1 Brittle Steel
+1 Vi, Peacekeeper

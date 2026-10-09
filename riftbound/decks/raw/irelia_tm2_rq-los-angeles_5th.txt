@@ -1,0 +1,47 @@
+# legend: Irelia, Blade Dancer
+# player: TM2 (Jason T.)
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-26
+# placement: 5
+# url: https://riftdecks.com/riftbound-metagame/deck-irelia-blade-dancer-315176
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Irelia, Blade Dancer
+[champion]
+1 Irelia, Fervent
+[main]
+2 Lonely Poro
+2 Scuttle Crab
+3 Tideturner
+1 Pyke, Returned
+3 Stellacorn Herder
+1 Vex, Apathetic
+3 Astral Heron
+3 Zhonya's Hourglass
+3 Boots of Swiftness
+1 Charm
+3 Defiant Dance
+3 Defy
+1 Gust
+3 Discipline
+1 Not So Fast
+2 Rebuke
+1 Ride The Wind
+1 Switcheroo
+2 Star-Crossed
+[runes]
+5 Calm Rune
+7 Chaos Rune
+[battlefields]
+1 Abandoned Hall
+1 Sunken Temple
+1 Targon's Peak
+[sideboard]
+1 Decree of Focus
+1 Gust
+1 Abandon
+1 Not So Fast
+3 Ravenbloom Prefect
+1 Star-Crossed
+1 Adaptatron
+1 Vex, Apathetic

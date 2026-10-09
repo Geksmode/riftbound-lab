@@ -1,0 +1,44 @@
+# legend: Rengar, Pridestalker
+# player: DSG Prismaticism
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-27
+# placement: 1
+# url: https://mobalytics.gg/riftbound/decks/rengar-pridestalker-los-angeles-regional-qualifier-1st-dsg-prismaticism
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Rengar, Pridestalker
+[champion]
+1 Rengar, Trophy Hunter
+[main]
+3 Inferna
+3 Irresistible Faefolk
+3 Pit Rookie
+2 First Mate
+3 Grim Apothecary
+3 Kinkou Initiate
+2 Nidalee, Cat Form
+1 Pakaa Cub
+1 Pyke, Dockside Butcher
+3 Kai'Sa, Survivor
+3 Noxus Hopeful
+1 Darius, Trifarian
+1 Ferrous Forerunner
+3 Punch First
+3 Sabotage
+2 Thrill of the Hunt
+2 Rampage
+[runes]
+4 Fury Rune
+8 Body Rune
+[battlefields]
+1 Emperor's Dais
+1 Seat of Power
+1 Star Spring
+[sideboard]
+2 Decree of Strength
+2 Brittle Steel
+1 Noxian Demolitionist
+1 Pyke, Dockside Butcher
+1 Rampage
+1 Brynhir Thundersong
+2 Ferrous Forerunner

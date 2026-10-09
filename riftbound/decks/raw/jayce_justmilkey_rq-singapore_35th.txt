@@ -1,0 +1,45 @@
+# legend: Jayce, Defender of Tomorrow
+# player: justmilkey
+# event: Riftbound Regional Qualifier - Singapore (Best-Of Jayce)
+# date: 2026-09-05
+# placement: 35
+# url: https://mobalytics.gg/riftbound/decks/jayce-defender-of-tomorrow-singapore-regional-qualifier-best-of-justmilkey
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Jayce, Defender of Tomorrow
+[champion]
+1 Jayce, Brilliant Inventor
+[main]
+3 Elder Dragon
+3 Platewyrm Egg
+3 Dazzling Aurora
+3 Clairvoyance
+3 Bellows Breath
+2 Flurry of Blades
+2 Sabotage
+2 Garbage Grabber
+1 Downstage Dramatics
+3 Dredge Up
+3 Mobilize
+3 Catalyst of Aeons
+1 Deadly Flourish
+1 Rocket Barrage
+3 Promising Future
+2 Sprite Burst
+1 Gutter Palace
+[runes]
+5 Mind Rune
+7 Body Rune
+[battlefields]
+1 Dragon Roost
+1 Forgotten Monument
+1 Sigil of the Storm
+[sideboard]
+1 Decree of Strength
+2 Repulse
+1 Sabotage
+1 Unyielding Spirit
+2 Disposal Order
+1 Turn to Dust
+1 Deadly Flourish
+1 Sprite Burst

@@ -4,10 +4,36 @@ akali_dongdong_wuhan-open_5th: OK
 akali_gorica_rq-singapore: OK 
 akali_hxn-tempete_rq-la_7th: OK 
 akali_khavai_skirmish-carfurle_41st: OK 
+ambessa_tss-riftboundtee_rq-la_201st: OK 
+azir_mice-squirtle_rq-la_3rd: OK 
+diana_asc-nalkpas_rq-los-angeles_22nd: OK 
+fiora_fr0zen_rq-singapore_8th: OK 
+irelia_tm2_rq-los-angeles_5th: OK 
+ivern_aserty_rq-barcelona_277th: OK 
+jax_t1win_rq-los-angeles_162nd: OK 
+jayce_justmilkey_rq-singapore_35th: OK 
+kaisa_william-n_rq-los-angeles_9th: OK 
+kennen_dsg-awesumrosum_rq-los-angeles_13th: OK 
+khazix_cuoemrei_rq-los-angeles_20th: OK 
 leblanc_aurazera_rebound-la_9th: OK 
 leblanc_blank_rq-singapore-bestof: A VERIFIER main_deck(champion+main)=32 (attendu 40)
 leblanc_gyatarina_ccs-iq5_1st: OK 
 leblanc_mill-twistedtcg_rq-la_12th: OK 
 leblanc_riuzake_rq-vancouver_21st: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
 leblanc_zidenberg_ccs-sunday5_7th: OK 
+leesin_terrythecactus_rq-vancouver_153rd: OK 
+lillia_duncan_rq-sydney_33rd: OK 
+lucian_banrate-demon_rq-barcelona_25th: OK 
+nasus_drinkmaker888_rq-barcelona_80th: OK 
+ornn_mice-themanland_rq-barcelona_1st: OK 
+pyke_royy_rebound-la_2nd: OK 
+reksai_sashkoenaislabiq_rq-singapore_14th: OK 
+renata-glasc_purp_rq-singapore_311th: OK 
+rengar_dsg-prismaticism_rq-los-angeles_1st: OK 
+sett_ctcg-collin-k_rq-utrecht_3rd: OK 
+shen_sgf-sevya_rq-singapore_450th: OK 
+sivir_randyyy_rq-los-angeles_146th: OK 
+vex_eep-bonk-repeat_rq-sydney_4th: OK 
 yi-bladesman_ekpilot_rq-singapore_3rd: OK 
+yi-bladesman_swagalisk_rq-la_6th: OK 
+yi-master_xiaoshenxian_wuhan-open_bestof: OK 

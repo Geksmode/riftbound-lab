@@ -1,0 +1,44 @@
+# legend: Master Yi, Wuju Bladesman
+# player: SWAGALISK (Charlie L.)
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-26
+# placement: 6
+# url: https://riftdecks.com/riftbound-metagame/deck-master-yi-wuju-bladesman-315144
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: dernière carte du sideboard (1 Ruin Runner ?) coupée dans la recherche, non confirmée : retirée (sideboard 9)
+[legend]
+1 Master Yi, Wuju Bladesman
+[champion]
+1 Master Yi, Tempered
+[main]
+1 Legion Marauder
+2 Lonely Poro
+3 Pit Rookie
+3 Scuttle Crab
+3 First Mate
+1 Akali, Silent
+3 Rengar, Trophy Hunter
+1 Ruin Runner
+2 Zhonya's Hourglass
+3 Charm
+3 Defy
+2 En Garde
+3 Punch First
+3 Sabotage
+3 Discipline
+2 Rampage
+1 Onslaught
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Emperor's Dais
+1 Seat of Power
+1 Star Spring
+[sideboard]
+1 Decree of Focus
+2 Decree of Strength
+1 Repulse
+1 Unyielding Spirit
+1 Alpha Strike
+3 Disarming Rake

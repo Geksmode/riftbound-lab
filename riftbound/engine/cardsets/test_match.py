@@ -135,5 +135,34 @@ def duel_match_next_has_no_ai_choice():
     assert b["bo1_bfs"][0] in b["allowed"][0] and b["bo1_bfs"][1] in b["allowed"][1]
 
 
+@T.test
+def default_deck_per_legend_for_the_vs_screen():
+    # Écran de sélection contre l'IA : chaque légende qui a une liste de tournoi jouable reçoit un deck par défaut,
+    # avec sideboard s'il en existe un jouable (même deck en BO1 et en BO3), meilleur classement ensuite.
+    from decks import DECKS, load
+    dd = train.default_decks()
+    ok = {}
+    for k in sorted(DECKS):
+        d = load(k)
+        if not [e for e in train.validate(d) if not e.startswith("⚠")]:
+            ok.setdefault(d["legend"], []).append(k)
+    assert sorted(dd) == sorted(ok), (dd, ok)
+    for lg, k in dd.items():
+        d = load(k)
+        assert d["legend"] == lg
+        if any(load(x)["sideboard"] for x in ok[lg]):
+            assert d["sideboard"], (lg, k)
+            best = min(train._place(x) for x in ok[lg] if load(x)["sideboard"])
+            assert train._place(k) == best, (lg, k, best)
+    cat = json.loads(train.catalog())
+    assert len(cat["legends"]) == 49 and len({l["n"] for l in cat["legends"]}) == 49
+    assert {l["n"]: l["key"] for l in cat["legends"] if l["key"]} == dd
+    keys = {p["key"] for p in cat["presets"]}
+    assert set(dd.values()) <= keys
+    # le deck par défaut se joue tel quel par la table, sideboard compris (BO3)
+    st = json.loads(train.match_new("bo3", 3, "akali-g2", dd["LeBlanc, Deceiver"]))
+    assert st["mode"] == "bo3"
+
+
 if __name__ == "__main__":
     T.main()
