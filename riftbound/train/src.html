@@ -1264,13 +1264,16 @@ function card(name, o = {}) {
   if (o.d) extra += `<span class="dmg">${o.d}</span>`;
   if (o.cost && !o.back) { const c = CARDS[name] || {}; if (c.e !== undefined) extra += `<span class="cost">${c.e}${c.p ? "+" + c.p : ""}</span>`; }
   if (o.tags && o.tags.length) extra += `<span class="tags">${o.tags.map(t => `<b>${t}</b>`).join("")}</span>`;
-  if (o.gear && o.gear.length) extra += `<span class="gear">+ ${esc(o.gear.join(", "))}</span>`;
+  // équipement attaché : cartes réelles posées derrière l'unité, décalées vers le haut (une bande par équipement)
+  let behind = "";
+  if (o.gear && o.gear.length) behind = o.gear.map((g, i) => card(g, { raw: true, cls: "behind" + (o.x ? " x" : ""), p: o.p, style: `--gk:${o.gear.length - i};` })).join("");
   const style = (o.style || "") + (img && !o.back ? art(name) : "");
   const label = o.back ? "Carte cachée" : name;
   const inner = !img && !o.back ? esc(name) : "";
   const uid = o.uid !== undefined ? ` data-uid="${o.uid}"` : "";
   const c = `<div class="${cls.join(" ")}" tabindex="0" data-card="${o.back ? "" : esc(name)}"${uid} title="${esc(label)}" aria-label="${esc(label)}" style="${style}">${inner}${extra}</div>`;
-  return o.raw ? c : `<div class="slot ${o.x ? "x" : ""}">${c}</div>`;
+  if (o.raw) return c;
+  return behind ? `<div class="slot geared ${o.x ? "x" : ""}" style="--gn:${o.gear.length}">${behind}${c}</div>` : `<div class="slot ${o.x ? "x" : ""}">${c}</div>`;
 }
 const can = (srcs, u) => srcs.has(String(u));
 function unitCard(u, srcs) {
