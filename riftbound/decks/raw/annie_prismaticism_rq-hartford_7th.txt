@@ -1,0 +1,45 @@
+# legend: Annie, Dark Child
+# player: DSG Prismaticism (Kyle B.)
+# event: Riftbound Regional Qualifier - RQ Hartford (Best-Of Annie, Unleashed)
+# date: 2026-06-20
+# placement: 7
+# url: https://riftdecks.com/riftbound-metagame/deck-annie-dark-child-201054
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: main, runes et battlefields d'après mobalytics (Hartford Top 8, Prismaticism), runes et battlefields confirmés par riftdecks (7e, 11-2-1) ; sideboard de 8 d'après mobalytics, dont les 4 premières lignes confirmées par riftdecks. Carte(s) bannie(s) depuis : Stacked Deck, The Arena's Greatest.
+[legend]
+1 Annie, Dark Child
+[champion]
+1 Annie, Stubborn
+[main]
+3 Inferna
+2 Overzealous Fan
+3 Traveling Merchant
+2 Grim Apothecary
+3 Rengar, Pouncing
+3 Kai'Sa, Survivor
+3 Noxus Hopeful
+2 Vex, Apathetic
+3 Ferrous Forerunner
+3 Long Sword
+2 Cleave
+3 Stacked Deck
+1 Abandon
+3 Flash
+1 Hard Bargain
+2 Star-Crossed
+[runes]
+5 Chaos Rune
+7 Fury Rune
+[battlefields]
+1 Seat of Power
+1 The Arena's Greatest
+1 Zaun Warrens
+[sideboard]
+1 Factory Recall
+1 Abandon
+1 Against the Odds
+1 Rebuke
+1 Switcheroo
+1 Star-Crossed
+1 Kha'Zix, Mutating Horror
+1 Thermo Beam

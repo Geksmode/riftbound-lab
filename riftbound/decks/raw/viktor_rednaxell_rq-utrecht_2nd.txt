@@ -1,0 +1,46 @@
+# legend: Viktor, Herald of the Arcane
+# player: Rednaxell
+# event: Riftbound Regional Qualifier - RQ Utrecht (Best-Of Viktor, Unleashed)
+# date: 2026-06-13
+# placement: 2
+# url: https://riftdecks.com/riftbound-metagame/deck-viktor-herald-of-the-arcane-183375
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: listes concordantes Mobalytics / Rift Mana / RiftDecks selon la recherche (Piltover Archive donne des quantités incohérentes). Bannie depuis : The Arena's Greatest.
+[legend]
+1 Viktor, Herald of the Arcane
+[champion]
+1 Viktor, Leader
+[main]
+3 Carrion Dredger
+3 Honest Broker
+2 Card Sharp
+1 Chakram Dancer
+3 Xin Zhao, Vigilant
+2 Vi, Peacekeeper
+2 Thousand-Tailed Watcher
+2 Sprite Fountain
+2 Bellows Breath
+3 Stupefy
+3 Cull the Weak
+1 Facebreaker
+3 Hidden Blade
+1 Salvage
+2 Shadow's Call
+1 Eclipse
+2 Wages of Pain
+3 Imperial Decree
+[runes]
+5 Mind Rune
+7 Order Rune
+[battlefields]
+1 Forbidding Waste
+1 Rockfall Path
+1 The Arena's Greatest
+[sideboard]
+1 Ashe, Focused
+1 Eclipse
+2 Pickpocket
+1 Safety Inspector
+1 Salvage
+1 Singularity
+1 Sprite Fountain

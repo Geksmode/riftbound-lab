@@ -1,0 +1,44 @@
+# legend: Jinx, Loose Cannon
+# player: Htpiper151
+# event: Riftbound Regional Qualifier - Sydney (Best-Of Jinx, Unleashed)
+# date: 2026-05-16
+# placement: 86
+# url: https://mobalytics.gg/riftbound/decks/jinx-loose-cannon-sydney-regional-qualifier-best-of-htpiper151
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: cartes bannies depuis : Stacked Deck, The Arena's Greatest. Piltover Archive donne les mêmes cartes avec des quantités doublées (6 Seal of Rage, 4 Cleave...) : artefact d'affichage, Mobalytics retenu.
+[legend]
+1 Jinx, Loose Cannon
+[champion]
+1 Jinx, Demolitionist
+[main]
+3 Chemtech Enforcer
+3 Overzealous Fan
+2 Teemo, Scout
+3 Traveling Merchant
+1 Windsinger
+3 Evershade Stalker
+3 Flame Chompers
+1 Pyke, Dockside Butcher
+3 Undying Legion
+3 Noxus Hopeful
+3 Seal of Rage
+2 Cleave
+1 Gust
+1 Hextech Ray
+3 Stacked Deck
+2 Falling Star
+2 Switcheroo
+[runes]
+9 Fury Rune
+3 Chaos Rune
+[battlefields]
+1 Seat of Power
+1 The Arena's Greatest
+1 Zaun Warrens
+[sideboard]
+3 Acceptable Losses
+1 Gust
+1 Falling Star
+1 Switcheroo
+1 Star-Crossed
+1 Brynhir Thundersong

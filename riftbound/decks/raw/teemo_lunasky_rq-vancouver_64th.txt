@@ -1,0 +1,41 @@
+# legend: Teemo, Swift Scout
+# player: lunasky
+# event: Riftbound Regional Qualifier - Vancouver (Best-Of Teemo, Unleashed)
+# date: 2026-05-30
+# placement: 64
+# url: https://mobalytics.gg/riftbound/decks/teemo-swift-scout-vancouver-regional-qualifier-best-of-lunasky
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: cartes bannies depuis : Stacked Deck, The Arena's Greatest. Meilleur Teemo de Sydney (6e, AshenOCE) écarté : Baron Nashor non modélisé. Teemo, Strategist : 3 au total (1 champion + 2) d'après Mobalytics, mise en forme brouillée ; Piltover Archive (quantités doublées, 63 cartes) diverge. Total 40 + 8 cohérent.
+[legend]
+1 Teemo, Swift Scout
+[champion]
+1 Teemo, Strategist
+[main]
+2 Teemo, Strategist
+3 Evelynn, Entrancing
+3 Ravenbloom Student
+3 Tideturner
+1 Fizz, Trickster
+3 Nocturne, Horrifying
+3 Sprite Fountain
+3 Stacked Deck
+3 Stupefy
+3 Switcheroo
+2 Eclipse
+3 Sprite Call
+2 Star-Crossed
+1 Wages of Pain
+3 Consult the Past
+1 Singularity
+[runes]
+6 Mind Rune
+6 Chaos Rune
+[battlefields]
+1 Bandle Tree
+1 Startipped Peak
+1 The Arena's Greatest
+[sideboard]
+2 Gust
+2 Turn to Dust
+2 Vex, Apathetic
+2 Unchecked Power

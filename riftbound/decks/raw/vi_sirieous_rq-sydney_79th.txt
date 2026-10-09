@@ -1,0 +1,41 @@
+# legend: Vi, Piltover Enforcer
+# player: sirieous
+# event: Riftbound Regional Qualifier - RQ Sydney (Best-Of Vi, Unleashed)
+# date: 2026-05-16
+# placement: 79
+# url: https://riftdecks.com/riftbound-metagame/deck-vi-piltover-enforcer-148110
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: main d'après RiftDecks, sideboard d'après Mobalytics ; Riftwatch le classe 96e. Bannie depuis : The Arena's Greatest.
+[legend]
+1 Vi, Piltover Enforcer
+[champion]
+1 Vi, Destructive
+[main]
+3 Honest Broker
+3 Unsung Hero
+3 Jhin, Murderous Artist
+3 Rengar, Unseen
+2 Pouty Poro
+2 Pyke, Dockside Butcher
+2 Rek'Sai, Breacher
+2 Fiora, Victorious
+2 Kai'Sa, Survivor
+2 Noxus Hopeful
+3 Long Sword
+3 Hextech Gauntlets
+3 B.F. Sword
+3 Deathgrip
+2 Falling Star
+1 Tactical Retreat
+[runes]
+8 Fury Rune
+4 Order Rune
+[battlefields]
+1 Forge of the Fluft
+1 Rockfall Path
+1 The Arena's Greatest
+[sideboard]
+2 Cull the Weak
+2 Salvage
+2 Ashe, Focused
+2 Brynhir Thundersong

@@ -1,0 +1,43 @@
+# legend: Ahri, Nine-Tailed Fox
+# player: Kawaii Tsukiko
+# event: Riftbound Regional Qualifier - Sydney (Best-Of Ahri, Unleashed)
+# date: 2026-05-16
+# placement: 127
+# url: https://riftdecks.com/riftbound-metagame/deck-ahri-nine-tailed-fox-148567
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement) ; sideboard d'après https://mobalytics.gg/riftbound/decks/ahri-nine-tailed-fox-sydney-regional-qualifier-best-of-kawaii-tsukiko
+# note: carte bannie depuis : The Arena's Greatest (battlefield). Placement 127e (Mobalytics, riftdecks) ; Riftwatch indiquerait 140e (mise en page ambiguë).
+[legend]
+1 Ahri, Nine-Tailed Fox
+[champion]
+1 Ahri, Inquisitive
+[main]
+3 Jhin, Meticulous Killer
+3 Ravenbloom Student
+2 Plundering Poro
+2 Sona, Harmonious
+2 Thousand-Tailed Watcher
+3 Sprite Fountain
+3 Defy
+3 Desert's Call
+3 Discipline
+3 Flurry of Feathers
+2 Charm
+2 Stupefy
+2 Back Off
+2 Consult the Past
+2 Sprite Burst
+1 Emperor's Divide
+1 Eclipse
+[runes]
+5 Calm Rune
+7 Mind Rune
+[battlefields]
+1 Dusk Rose Lab
+1 The Arena's Greatest
+1 The Grand Plaza
+[sideboard]
+3 Disarming Rake
+2 Unchecked Power
+1 Emperor's Divide
+1 Plundering Poro
+1 Heart of Dark Ice

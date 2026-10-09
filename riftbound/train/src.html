@@ -692,7 +692,17 @@ const planTxt = lg => /^LeBlanc/.test(lg || "") ? "le plan Hook tempo" : /^Akali
 // (toi, l'IA). On touche un panneau pour le rendre actif, puis une légende : elle prend son deck par défaut (meilleure liste
 // de tournoi jouable, avec sideboard : train.default_decks), le même en BO1 et en BO3. « ? » = une légende au hasard pour
 // l'IA, tirée au lancement. Une légende sans deck jouable est grisée.
-const presetLabel = p => p.player ? `${(p.deck.legend || "").split(",")[0]} · ${p.player}${p.event ? " · " + p.event.replace(/^Riftbound\s+/, "") : ""}${p.place ? " (" + p.place + "e)" : ""}` : p.name;
+const presetLabel = (p, lg = true) => (p.player ? `${lg ? (p.deck.legend || "").split(",")[0] + " · " : ""}${p.player}${p.event ? " · " + p.event.replace(/^Riftbound\s+/, "") : ""}${p.place ? " (" + p.place + "e)" : ""}` : p.name) + (p.ban && p.ban.length ? " ⚠" : "");
+// Menu déroulant d'un panneau : seulement les variantes de la légende choisie (tes decks, puis les listes de tournoi,
+// le deck par défaut en tête avec ★).
+function legendOptions(lg, selKey) {
+  const opt = (k, label, bad) => `<option value="${esc(k)}"${selKey === k ? " selected" : ""}${bad ? " disabled" : ""}>${esc(label)}${bad ? " (pas encore jouable)" : ""}</option>`;
+  const mine = Object.values(MYDECKS).filter(d => d.legend === lg).sort((a, b) => a.name.localeCompare(b.name));
+  const dk = legendDefault(lg);
+  const pre = (CAT ? CAT.presets : []).filter(p => p.deck.legend === lg).sort((a, b) => (b.key === dk) - (a.key === dk));
+  return (mine.length ? `<optgroup label="Mes decks">${mine.map(d => opt("my:" + d.id, d.name, !deckOK(d))).join("")}</optgroup>` : "")
+    + (pre.length ? `<optgroup label="Listes de tournoi">${pre.map(p => opt(p.key, (p.key === dk ? "★ " : "") + presetLabel(p, false), !presetOK(p))).join("")}</optgroup>` : "");
+}
 function tileArt(n) {
   if (IMG[n]) return `background-image:url('${IMG[n]}');background-size:100% auto;background-position:50% 12%;`;
   const a = ATL[n]; if (!a) return "";
@@ -715,7 +725,7 @@ async function setupForm(msg) {
     + `<button class="vtile rnd" data-leg="?" title="Au hasard" aria-label="Légende au hasard pour l'IA"><span class="vart">?</span><span class="vnm">Hasard</span></button>`;
   const pad = (who, lbl) => `<div class="vpad ${who}" data-side="${who}" role="button" tabindex="0" aria-label="Choisir pour ${who === "p1" ? "toi" : "l'IA"}">
       <div class="vpart"></div><div class="vpinfo"><div class="vtag">${lbl}</div><div class="vlg"></div>
-      <select id="${who === "p1" ? "sMine" : "sOpp"}" aria-label="${who === "p1" ? "Ton deck" : "Deck de l'IA"}">${deckOptions(who === "p1" ? mk : ok)}</select>
+      <select id="${who === "p1" ? "sMine" : "sOpp"}" aria-label="${who === "p1" ? "Ton deck (variantes de la légende)" : "Deck de l'IA (variantes de la légende)"}">${legendOptions(deckLegend(who === "p1" ? mk : ok), who === "p1" ? mk : ok)}</select>
       ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><span>Niv.</span><button role="radio" data-lvl="1">Normal</button><button role="radio" data-lvl="3">Fort</button></div>` : ""}<div class="small vdk"></div></div></div>`;
   openModal(`<h3>Contre l'IA</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup vs">
     <div class="small vhelp">Touche ton panneau ou celui de l'IA, puis une légende. Chaque légende arrive avec son deck par défaut (meilleure liste de tournoi jouable, sideboard compris).</div>
@@ -735,6 +745,7 @@ async function setupForm(msg) {
     <div class="small" id="sPlan"></div></div>`, true);
   $("mbox").classList.add("wide");
   let MODE = lm, SIDE = "cpu", RND = last("rnd") === "1";
+  const setDeck = (id, k) => { $(id).innerHTML = legendOptions(deckLegend(k), k); $(id).value = k; };
   const setMode = m => {
     MODE = m; $("bStart").dataset.mode = m;
     for (const b of document.querySelectorAll("[data-mode]")) b.setAttribute("aria-checked", b.dataset.mode === m);
@@ -766,9 +777,10 @@ async function setupForm(msg) {
       P.querySelector("select").disabled = rnd;
     }
     const sb = k => { const d = engineDeck(k); return d ? (d.sideboard || []).length : 0; };
+    const ban = k => { const p = CAT && CAT.presets.find(x => x.key === k); return p && p.ban && p.ban.length ? ` · ⚠ bannies depuis : ${p.ban.join(", ")}` : ""; };
     for (const [who, k, lg] of [["p1", mine, l1], ["cpu", opp, l2]])
       document.querySelector(`.vpad.${who} .vdk`).textContent = who === "cpu" && RND ? "deck par défaut de la légende tirée" :
-        (k === legendDefault(lg) ? "par défaut · " : "") + (sb(k) ? `sideboard ${sb(k)}` : "sans sideboard");
+        (k === legendDefault(lg) ? "par défaut · " : "") + (sb(k) ? `sideboard ${sb(k)}` : "sans sideboard") + ban(k);
     for (const t of document.querySelectorAll(".vtile")) { t.classList.toggle("p1", t.dataset.leg === l1); t.classList.toggle("cpu", RND ? t.dataset.leg === "?" : t.dataset.leg === l2); }
     $("sPlan").textContent = RND ? "L'IA tire une légende au hasard parmi celles qui ont un deck jouable, avec son deck par défaut. Elle ne voit pas ta main."
       : `L'IA joue ${planTxt(l2)} avec l'IA « gagner à tout prix ». Elle ne voit pas ta main.`;
@@ -777,16 +789,17 @@ async function setupForm(msg) {
     if (t.classList.contains("off")) return;
     const lg = t.dataset.leg;
     if (lg === "?") { RND = true; setSide("cpu"); fill(); return; }
-    if (SIDE === "cpu") { RND = false; $("sOpp").value = legendDefault(lg); }
-    else { const mineK = legendDecks(lg).filter(k => k.startsWith("my:")); $("sMine").value = mineK.includes(last("mine")) ? last("mine") : (mineK[0] || legendDefault(lg)); }
+    if (SIDE === "cpu") { RND = false; setDeck("sOpp", legendDefault(lg)); }
+    else { const mineK = legendDecks(lg).filter(k => k.startsWith("my:")); setDeck("sMine", mineK.includes(last("mine")) ? last("mine") : (mineK[0] || legendDefault(lg))); }
     fill();
   };
   $("sMine").onchange = fill; $("sOpp").onchange = () => { RND = false; fill(); };
-  if ($("sMine").selectedOptions[0] && $("sMine").selectedOptions[0].disabled) $("sMine").value = "akali-g2";
+  if (!$("sMine").value || ($("sMine").selectedOptions[0] && $("sMine").selectedOptions[0].disabled)) setDeck("sMine", "akali-g2");
+  if (!$("sOpp").value || ($("sOpp").selectedOptions[0] && $("sOpp").selectedOptions[0].disabled)) setDeck("sOpp", "leblanc-iq5");
   $("bOpenDecks").onclick = () => { closeModal(); openDecks(); };
   $("bStart").onclick = () => {
     store.set("rbt-rnd", RND ? "1" : "");
-    if (RND) { const ls = legs.filter(l => legendDecks(l.n).length); const l = ls[Math.floor(Math.random() * ls.length)]; $("sOpp").disabled = false; $("sOpp").value = legendDefault(l.n); }
+    if (RND) { const ls = legs.filter(l => legendDecks(l.n).length); const l = ls[Math.floor(Math.random() * ls.length)]; $("sOpp").disabled = false; setDeck("sOpp", legendDefault(l.n)); }
     start();
   };
   setSide("cpu"); setLvl($("sLvl").value); fill(); setMode(lm);

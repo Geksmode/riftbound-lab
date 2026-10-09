@@ -69,6 +69,8 @@ async function run(W, H, mobile, SEED) {
   await tap("#dkPlay"); await waitFor("!!document.getElementById('bStart')");
   const SAVED = "(d=>JSON.stringify([d.champion, d.main, d.sideboard]))(MYDECKS['leblanc-sb-test'])", sideSaved = await ev(SAVED);
   ok("nouvelle partie : ton deck = le deck enregistré", await ev("document.getElementById('sMine').value") === "my:leblanc-sb-test");
+  // écran « Contre l'IA » : panneau IA, puis la légende Akali (le menu ne montre que ses variantes), puis la liste G2
+  await tap(".vpad.cpu .vtag"); await tap('.vtile[data-leg="Akali, Rogue Assassin"]');
   await pg.selectOption("#sOpp", "akali-g2");
   await tap("#sBo3");
   ok("nouvelle partie : BO3 choisi, battlefield et premier joueur masqués", await ev("document.getElementById('sBo3').getAttribute('aria-checked')==='true' && document.getElementById('sBf').closest('label').hidden"));

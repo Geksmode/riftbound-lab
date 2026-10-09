@@ -118,3 +118,6 @@ Demande : un deck par défaut par légende pour l'IA (meilleures listes du web, 
 
 ## [2026-10-09] ingest | 28 decks par défaut (un par légende) pour l'écran « Contre l'IA »
 Collecte par 5 agents (recherche web, transcriptions validées par `decks/check_raw.py`) : 28 légendes sur 49 ont une liste jouable, 25 avec sideboard. 21 restent grisées : listes publiées d'avant les bans (Stacked Deck, The Arena's Greatest, Aspirant's Climb, Ekko) et quota de recherches épuisé. Une carte de sideboard non confirmée (Yi Bladesman) retirée plutôt que devinée. Contrôle : 56 parties (chaque deck des deux côtés), 0 erreur, 0 partie sans fin. Doutes de transcription listés dans `riftbound/decks/README.md`.
+
+## [2026-10-09] ingest | Les 49 légendes ont un deck par défaut ; menu par légende
+Demande : pour les légendes manquantes, prendre les Best-Of d'Unleashed ; le menu déroulant ne montre que les variantes de la légende. Fait : 18 Best-Of d'Unleashed (Sydney, Vancouver, Utrecht, Hartford) et 3 Best-Of de Vendetta (Mel, Zed, Renekton, absents d'Unleashed). Les cartes bannies depuis sont jouables et marquées ⚠ ; une liste sans carte bannie passe toujours avant (`train.default_decks`, `_banned`). Lignes ambiguës retirées plutôt que devinées (Renekton, Yi Bladesman). 106 parties de contrôle, 0 erreur. Détail et doutes : `riftbound/decks/README.md`.

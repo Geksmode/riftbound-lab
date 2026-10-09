@@ -1,0 +1,43 @@
+# legend: Darius, Hand of Noxus
+# player: MICE DiamondHat
+# event: Riftbound Regional Qualifier - Utrecht (Top 8 / Best-Of Darius, Unleashed)
+# date: 2026-06-13
+# placement: 6
+# url: https://riftdecks.com/riftbound-metagame/deck-darius-hand-of-noxus-183895
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: carte bannie depuis : The Arena's Greatest (battlefield). Seal of Unity : 2 (Mobalytics, Rift Mana) ; un résultat attribuait 3 à riftdecks, 2 retenu (total 39 cohérent).
+[legend]
+1 Darius, Hand of Noxus
+[champion]
+1 Darius, Trifarian
+[main]
+3 Carrion Dredger
+3 Honest Broker
+2 Inferna
+3 Vanguard Captain
+3 Xin Zhao, Vigilant
+3 Noxus Hopeful
+3 Spectral Matron
+3 Safety Inspector
+2 Vi, Peacekeeper
+2 Seal of Unity
+3 Baited Hook
+1 Falling Star
+3 Hidden Blade
+3 Rally the Troops
+1 Shadow's Call
+1 Grand Strategem
+[runes]
+4 Fury Rune
+8 Order Rune
+[battlefields]
+1 Emperor's Dais
+1 The Arena's Greatest
+1 Trifarian War Camp
+[sideboard]
+1 Cull the Weak
+1 Falling Star
+2 Salvage
+2 Ashe, Focused
+1 Imperial Decree
+1 Vi, Peacekeeper

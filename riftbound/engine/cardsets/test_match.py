@@ -150,9 +150,12 @@ def default_deck_per_legend_for_the_vs_screen():
     for lg, k in dd.items():
         d = load(k)
         assert d["legend"] == lg
-        if any(load(x)["sideboard"] for x in ok[lg]):
+        # sans carte bannie d'abord (une liste Best-Of d'Unleashed seulement faute de mieux), puis sideboard, puis place
+        pool = [x for x in ok[lg] if not train._banned(load(x))] or ok[lg]
+        assert k in pool, (lg, k)
+        if any(load(x)["sideboard"] for x in pool):
             assert d["sideboard"], (lg, k)
-            best = min(train._place(x) for x in ok[lg] if load(x)["sideboard"])
+            best = min(train._place(x) for x in pool if load(x)["sideboard"])
             assert train._place(k) == best, (lg, k, best)
     cat = json.loads(train.catalog())
     assert len(cat["legends"]) == 49 and len({l["n"] for l in cat["legends"]}) == 49
