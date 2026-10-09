@@ -304,6 +304,64 @@ body.dkopen { overflow: hidden; }
 }
 .toast { z-index: 80; }
 /* ---------- match BO1 / BO3 : choix du mode, préparation d'une manche, sideboard */
+/* sélection contre l'IA, à la Smash Bros : grille des légendes, deux panneaux (toi en menthe, l'IA en corail) */
+.mbox.wide { width: min(1000px, 100%); }
+.vs { --tw: 70px; gap: 10px; }
+.vhelp { color: var(--ink-2); }
+.roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--tw), 1fr)); gap: 4px; }
+.vtile { position: relative; padding: 0; min-height: 0; height: calc(var(--tw) * .78); border-radius: 8px; overflow: hidden; border: 2px solid var(--line); background: var(--chrome); display: block; }
+.vtile .vart, .vpart { position: absolute; inset: 0; background-repeat: no-repeat; display: grid; place-items: center; font-size: 26px; color: var(--ink-2); font-family: var(--f-display, serif);
+  background-size: calc(var(--aw) * 10) calc(var(--aw) * 1.4 * 6); background-position: calc(var(--aw) * var(--c, 0) * -1) calc(var(--aw) * 1.4 * (var(--r, 0) + .1) * -1); }
+.vtile .vart { --aw: 100cqw; }
+.vtile { container-type: inline-size; }
+.vtile .vnm { position: absolute; left: 0; right: 0; bottom: 0; padding: 1px 3px; font-size: 10.5px; line-height: 1.2; text-align: left; color: #fff; background: linear-gradient(transparent, rgba(5,7,20,.92) 45%); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vtile.off { cursor: not-allowed; }
+.vtile.off .vart { filter: grayscale(1) brightness(.45); }
+.vtile .vlock { position: absolute; top: 2px; right: 2px; font-size: 9px; padding: 0 4px; border-radius: 6px; background: rgba(5,7,20,.8); color: var(--ink-3); }
+.vtile:not(.off):hover { border-color: var(--ink-2); }
+.vtile.p1 { border-color: var(--akali); box-shadow: 0 0 0 1px var(--akali), 0 0 14px rgba(114,226,188,.4); }
+.vtile.cpu { border-color: var(--leblanc); box-shadow: 0 0 0 1px var(--leblanc), 0 0 14px rgba(255,143,126,.4); }
+.vtile.p1.cpu { border-color: var(--akali) var(--leblanc) var(--leblanc) var(--akali); }
+.vtile.p1::before, .vtile.cpu::after { position: absolute; top: 2px; z-index: 1; font: 700 9.5px/1.5 var(--f-mono, monospace); padding: 0 4px; border-radius: 6px; color: #10131e; }
+.vtile.p1::before { content: "TOI"; left: 2px; background: var(--akali); }
+.vtile.cpu::after { content: "IA"; right: 2px; background: var(--leblanc); }
+.vpads { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: stretch; }
+.vsx { align-self: center; font: 400 30px var(--f-display, serif); color: var(--brass); }
+.vpad { position: relative; display: grid; grid-template-columns: var(--pw) minmax(0, 1fr); gap: 8px; padding: 8px; border-radius: 14px; border: 2px solid var(--line); background: var(--chrome); cursor: pointer; --pw: 104px; }
+.vpad.p1 { background: linear-gradient(135deg, rgba(114,226,188,.16), transparent 70%); }
+.vpad.cpu { background: linear-gradient(225deg, rgba(255,143,126,.16), transparent 70%); }
+.vpad.p1.act { border-color: var(--akali); box-shadow: 0 0 16px rgba(114,226,188,.35); }
+.vpad.cpu.act { border-color: var(--leblanc); box-shadow: 0 0 16px rgba(255,143,126,.35); }
+.vpad .vpart { position: relative; inset: auto; --aw: var(--pw); width: var(--pw); height: calc(var(--pw) * 1.05); border-radius: 10px; background-color: var(--night); }
+.vpad.rnd .vpart { font-size: 54px; }
+.vpinfo { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.vtag { font: 700 11px var(--f-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+.vpad.p1 .vtag { color: var(--akali); } .vpad.cpu .vtag { color: var(--leblanc); }
+.vlg { font: 400 24px/1.05 var(--f-display, serif); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vpad select { min-height: 36px; font-size: 12.5px; width: 100%; min-width: 0; }
+.vlvl { display: flex; gap: 4px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.vlvl button { flex: 1; min-height: 32px; padding: 2px 6px; font-size: 12px; }
+.vlvl button[aria-checked="true"] { border-color: var(--leblanc); color: var(--ink); background: rgba(255,143,126,.14); }
+.vopt summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; padding: 4px 0; }
+.vopt[open] { display: grid; gap: 8px; }
+@media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
+  .mbox.wide { padding: 10px; gap: 6px; max-height: calc(100dvh - 16px); }
+  .modal:has(.mbox.wide) { padding: 8px; }
+  .vs { --tw: 44px; gap: 6px; }
+  .vhelp { display: none; }
+  .roster { gap: 3px; }
+  .vtile { border-width: 1.5px; border-radius: 6px; }
+  .vtile .vnm { font-size: 8.5px; padding: 0 2px; }
+  .vtile .vlock { display: none; }
+  .vtile.p1::before, .vtile.cpu::after { font-size: 8px; padding: 0 2px; }
+  .vpads { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .vsx { display: none; }
+  .vpad { --pw: 100%; grid-template-columns: minmax(0, 1fr); padding: 6px; gap: 4px; }
+  .vpad { container-type: inline-size; }
+  .vpad .vpart { --aw: calc(100cqw - 12px); width: 100%; height: 64px; }
+  .vlg { font-size: 19px; }
+  .vpad select { min-height: 34px; font-size: 12px; }
+}
 .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
 .seg .segl { width: 100%; font-size: 12px; color: var(--ink-2); }
 .seg button { flex: 1 1 130px; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-weight: 600; border-radius: 10px; }
@@ -596,6 +654,7 @@ async function boot() {
 
 // ------------------------------------------------------------ fenêtres : nouvelle partie, défausse
 function openModal(html, closable = true) {
+  $("mbox").classList.remove("wide");
   $("mbox").innerHTML = (closable ? `<button class="mclose" id="mClose" aria-label="Fermer">✕</button>` : "") + html;
   $("modal").hidden = false; $("modal").dataset.closable = closable ? "1" : "";
   const c = $("mClose"); if (c) c.onclick = () => closeModal(true);
@@ -612,7 +671,7 @@ function deckOptions(selKey) {
   const mine = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
   const opt = (k, label, bad) => `<option value="${esc(k)}"${selKey === k ? " selected" : ""}${bad ? " disabled" : ""}>${esc(label)}${bad ? " (pas encore jouable)" : ""}</option>`;
   return `<optgroup label="Mes decks">${mine.length ? mine.map(d => opt("my:" + d.id, d.name, !deckOK(d))).join("") : `<option disabled>aucun pour l'instant</option>`}</optgroup>
-    <optgroup label="Decks de référence">${(CAT ? CAT.presets : [{ key: "akali-g2", name: "Akali G2 (Gorica)" }, { key: "leblanc-iq5", name: "LeBlanc IQ#5 (Gyatarina)" }]).map(p => opt(p.key, p.name, CAT && !presetOK(p))).join("")}</optgroup>`;
+    <optgroup label="Decks de référence">${(CAT ? CAT.presets : [{ key: "akali-g2", name: "Akali G2 (Gorica)" }, { key: "leblanc-iq5", name: "LeBlanc IQ#5 (Gyatarina)" }]).map(p => opt(p.key, presetLabel(p), CAT && !presetOK(p))).join("")}</optgroup>`;
 }
 // Ce que la page envoie au moteur : la clé d'un deck de référence, ou le deck perso en JSON.
 function deckArg(key) {
@@ -629,48 +688,109 @@ function deckLegend(key) {
 }
 const planTxt = lg => /^LeBlanc/.test(lg || "") ? "le plan Hook tempo" : /^Akali/.test(lg || "") ? "le plan Gorica" : "l'IA générique (sans plan propre à ce deck)";
 
+// Écran de sélection contre l'IA, à la manière de Smash Bros : la grille des légendes en haut, deux panneaux en bas
+// (toi, l'IA). On touche un panneau pour le rendre actif, puis une légende : elle prend son deck par défaut (meilleure liste
+// de tournoi jouable, avec sideboard : train.default_decks), le même en BO1 et en BO3. « ? » = une légende au hasard pour
+// l'IA, tirée au lancement. Une légende sans deck jouable est grisée.
+const presetLabel = p => p.player ? `${(p.deck.legend || "").split(",")[0]} · ${p.player}${p.event ? " · " + p.event.replace(/^Riftbound\s+/, "") : ""}${p.place ? " (" + p.place + "e)" : ""}` : p.name;
+function tileArt(n) {
+  if (IMG[n]) return `background-image:url('${IMG[n]}');background-size:100% auto;background-position:50% 12%;`;
+  const a = ATL[n]; if (!a) return "";
+  return `background-image:url('atlas/a${a[0]}.jpg');--c:${a[1] % 10};--r:${Math.floor(a[1] / 10)};`;
+}
+const legendDecks = lg => [...Object.values(MYDECKS).filter(d => d.legend === lg && deckOK(d)).map(d => "my:" + d.id),
+  ...(CAT ? CAT.presets.filter(p => p.deck.legend === lg && presetOK(p)).map(p => p.key) : [])];
+const legendDefault = lg => { const l = CAT && CAT.legends.find(x => x.n === lg); return (l && l.key) || legendDecks(lg).find(k => !k.startsWith("my:")) || legendDecks(lg)[0] || null; };
+
 async function setupForm(msg) {
   await loadCatalog();
   const last = k => store.get("rbt-" + k) || "";
   const mk = last("mine") || "akali-g2", ok = last("opp") || "leblanc-iq5";
   const lm = last("mode") === "bo3" ? "bo3" : "bo1";
-  openModal(`<h3>Nouvelle partie</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup">
+  const legs = (CAT ? CAT.legends : []).slice().sort((x, y) => x.n.localeCompare(y.n));
+  const short = l => l.split(",")[0], dup = l => legs.filter(x => short(x.n) === short(l)).length > 1;
+  const tname = l => dup(l) ? short(l).split(" ").pop() + " " + l.split(",")[1].trim().split(" ").pop() : short(l);   // Master Yi ×2
+  const tiles = legs.map(l => { const on = legendDecks(l.n).length > 0;
+    return `<button class="vtile${on ? "" : " off"}" data-leg="${esc(l.n)}"${on ? "" : ` aria-disabled="true"`} title="${esc(l.n)}${on ? "" : " : pas encore de deck jouable"}" aria-label="${esc(l.n)}${on ? "" : " (pas encore de deck)"}"><span class="vart" style="${tileArt(l.n)}"></span><span class="vnm">${esc(tname(l.n))}</span>${on ? "" : `<span class="vlock">bientôt</span>`}</button>`; }).join("")
+    + `<button class="vtile rnd" data-leg="?" title="Au hasard" aria-label="Légende au hasard pour l'IA"><span class="vart">?</span><span class="vnm">Hasard</span></button>`;
+  const pad = (who, lbl) => `<div class="vpad ${who}" data-side="${who}" role="button" tabindex="0" aria-label="Choisir pour ${who === "p1" ? "toi" : "l'IA"}">
+      <div class="vpart"></div><div class="vpinfo"><div class="vtag">${lbl}</div><div class="vlg"></div>
+      <select id="${who === "p1" ? "sMine" : "sOpp"}" aria-label="${who === "p1" ? "Ton deck" : "Deck de l'IA"}">${deckOptions(who === "p1" ? mk : ok)}</select>
+      ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><span>Niv.</span><button role="radio" data-lvl="1">Normal</button><button role="radio" data-lvl="3">Fort</button></div>` : ""}<div class="small vdk"></div></div></div>`;
+  openModal(`<h3>Contre l'IA</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup vs">
+    <div class="small vhelp">Touche ton panneau ou celui de l'IA, puis une légende. Chaque légende arrive avec son deck par défaut (meilleure liste de tournoi jouable, sideboard compris).</div>
+    <div class="roster" role="group" aria-label="Légendes">${tiles}</div>
+    <div class="vpads">${pad("p1", "Toi")}<div class="vsx">VS</div>${pad("cpu", "IA")}</div>
+    <input type="hidden" id="sLvl" value="${last("lvl") === "3" ? "3" : "1"}">
     <div class="seg" role="radiogroup" aria-label="Mode de match"><span class="segl">Mode</span>
       <button role="radio" id="sBo1" data-mode="bo1" aria-checked="${lm === "bo1"}">BO1<small>une manche</small></button>
-      <button role="radio" id="sBo3" data-mode="bo3" aria-checked="${lm === "bo3"}">BO3<small>2 manches gagnantes</small></button></div>
+      <button role="radio" id="sBo3" data-mode="bo3" aria-checked="${lm === "bo3"}">BO3<small>2 manches gagnantes, sideboard</small></button></div>
     <div class="small rule" id="sModeHelp"></div>
-    <label for="sMine">Ton deck<select id="sMine">${deckOptions(mk)}</select></label>
-    <label for="sOpp">Deck de l'IA<select id="sOpp">${deckOptions(ok)}</select></label>
-    <div class="small"><button class="linkb" id="bOpenDecks">Créer ou modifier mes decks</button></div>
+    <div class="big"><button class="main" id="bStart">Commencer</button></div>
+    <details class="vopt"><summary>Plus d'options</summary>
     <label for="sBf" class="bo1only">Ton battlefield<select id="sBf"></select></label>
     <label for="sFirst" class="bo1only">Qui commence<select id="sFirst"><option value="">Pile ou face</option><option value="0"${last("first") === "0" ? " selected" : ""}>Moi</option><option value="1"${last("first") === "1" ? " selected" : ""}>L'IA</option></select></label>
-    <label for="sLvl">Niveau de l'IA<select id="sLvl"><option value="1">Normal : celle des simulations</option><option value="3"${last("lvl") === "3" ? " selected" : ""}>Fort : 3 simulations par coup, plus lente</option></select></label>
     <label for="sSeed">Donne (vide = au hasard, même numéro = même partie)<input id="sSeed" inputmode="numeric" placeholder="au hasard"></label>
-    <div class="big"><button class="main" id="bStart">Commencer</button></div>
+    <div class="small"><button class="linkb" id="bOpenDecks">Créer ou modifier mes decks</button></div></details>
     <div class="small" id="sPlan"></div></div>`, true);
-  let MODE = lm;
+  $("mbox").classList.add("wide");
+  let MODE = lm, SIDE = "cpu", RND = last("rnd") === "1";
   const setMode = m => {
     MODE = m; $("bStart").dataset.mode = m;
     for (const b of document.querySelectorAll("[data-mode]")) b.setAttribute("aria-checked", b.dataset.mode === m);
     for (const x of document.querySelectorAll(".bo1only")) x.hidden = m === "bo3";
     $("sModeHelp").innerHTML = m === "bo3"
-      ? "Tirage au sort, puis le perdant de chaque manche choisit qui commence (règles 407.1, 407.4). Tu choisis ton battlefield à chaque manche ; ceux d'une manche gagnée sont retirés (486.5). Sideboard entre les manches, 1 pour 1 (403.4)."
-      : "Une manche. Battlefields tirés au hasard pour toi et l'IA (règle 485.5), sauf si tu imposes le tien pour t'entraîner.";
+      ? "Tirage au sort, puis le perdant de chaque manche choisit qui commence (règles 407.1, 407.4). Tu choisis ton battlefield à chaque manche ; ceux d'une manche gagnée sont retirés (486.5). Sideboard entre les manches, 1 pour 1 (403.4). L'IA ne sideboarde pas encore : elle garde son deck de la manche 1."
+      : "Une manche, avec le même deck qu'en BO3. Battlefields tirés au hasard pour toi et l'IA (règle 485.5), sauf si tu imposes le tien (plus d'options).";
     $("bStart").textContent = m === "bo3" ? "Commencer le match" : "Commencer";
   };
   for (const b of document.querySelectorAll("[data-mode]")) b.onclick = () => setMode(b.dataset.mode);
+  const setLvl = v => { $("sLvl").value = v; for (const b of document.querySelectorAll("[data-lvl]")) b.setAttribute("aria-checked", b.dataset.lvl === v); };
+  for (const b of document.querySelectorAll("[data-lvl]")) b.onclick = e => { e.stopPropagation(); setLvl(b.dataset.lvl); };
+  const setSide = s => { SIDE = s; for (const x of document.querySelectorAll(".vpad")) x.classList.toggle("act", x.dataset.side === s); };
+  for (const x of document.querySelectorAll(".vpad")) {
+    x.onclick = e => { if (!e.target.closest("select, button")) setSide(x.dataset.side); };
+    x.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target === x) { e.preventDefault(); setSide(x.dataset.side); } };
+  }
   const fill = () => {
     const mine = $("sMine").value, opp = $("sOpp").value, lb = last("bf");
     const isG2 = mine === "akali-g2";
     $("sBf").innerHTML = `<option value="">Au hasard (règle 485.5)</option>` + (isG2 ? `<option value="plan"${lb === "plan" ? " selected" : ""}>Choix du plan Gorica (Sigil si LeBlanc prend Windswept, sinon Void Gate)</option>` : "") + deckBfs(mine).map(b => `<option${lb === b ? " selected" : ""}>${esc(b)}</option>`).join("");
-    $("sPlan").textContent = `L'IA joue ${planTxt(deckLegend(opp))} avec l'IA « gagner à tout prix ». Elle ne voit pas ta main.`;
+    const l1 = deckLegend(mine), l2 = deckLegend(opp);
+    for (const [who, lg, rnd] of [["p1", l1, false], ["cpu", l2, RND]]) {
+      const P = document.querySelector(".vpad." + who);
+      P.classList.toggle("rnd", rnd);
+      P.querySelector(".vpart").setAttribute("style", rnd ? "" : tileArt(lg));
+      P.querySelector(".vpart").textContent = rnd ? "?" : "";
+      P.querySelector(".vlg").textContent = rnd ? "Au hasard" : tname(lg || "");
+      P.querySelector("select").disabled = rnd;
+    }
+    const sb = k => { const d = engineDeck(k); return d ? (d.sideboard || []).length : 0; };
+    for (const [who, k, lg] of [["p1", mine, l1], ["cpu", opp, l2]])
+      document.querySelector(`.vpad.${who} .vdk`).textContent = who === "cpu" && RND ? "deck par défaut de la légende tirée" :
+        (k === legendDefault(lg) ? "par défaut · " : "") + (sb(k) ? `sideboard ${sb(k)}` : "sans sideboard");
+    for (const t of document.querySelectorAll(".vtile")) { t.classList.toggle("p1", t.dataset.leg === l1); t.classList.toggle("cpu", RND ? t.dataset.leg === "?" : t.dataset.leg === l2); }
+    $("sPlan").textContent = RND ? "L'IA tire une légende au hasard parmi celles qui ont un deck jouable, avec son deck par défaut. Elle ne voit pas ta main."
+      : `L'IA joue ${planTxt(l2)} avec l'IA « gagner à tout prix ». Elle ne voit pas ta main.`;
   };
-  $("sMine").onchange = fill; $("sOpp").onchange = fill; fill();
+  for (const t of document.querySelectorAll(".vtile")) t.onclick = () => {
+    if (t.classList.contains("off")) return;
+    const lg = t.dataset.leg;
+    if (lg === "?") { RND = true; setSide("cpu"); fill(); return; }
+    if (SIDE === "cpu") { RND = false; $("sOpp").value = legendDefault(lg); }
+    else { const mineK = legendDecks(lg).filter(k => k.startsWith("my:")); $("sMine").value = mineK.includes(last("mine")) ? last("mine") : (mineK[0] || legendDefault(lg)); }
+    fill();
+  };
+  $("sMine").onchange = fill; $("sOpp").onchange = () => { RND = false; fill(); };
   if ($("sMine").selectedOptions[0] && $("sMine").selectedOptions[0].disabled) $("sMine").value = "akali-g2";
   $("bOpenDecks").onclick = () => { closeModal(); openDecks(); };
-  $("bStart").onclick = start;
-  setMode(lm);
-  if (!$("board").querySelector(".half")) $("board").innerHTML = `<div class="loading">Choisis tes options et touche Commencer.</div>`;
+  $("bStart").onclick = () => {
+    store.set("rbt-rnd", RND ? "1" : "");
+    if (RND) { const ls = legs.filter(l => legendDecks(l.n).length); const l = ls[Math.floor(Math.random() * ls.length)]; $("sOpp").disabled = false; $("sOpp").value = legendDefault(l.n); }
+    start();
+  };
+  setSide("cpu"); setLvl($("sLvl").value); fill(); setMode(lm);
+  if (!$("board").querySelector(".half")) $("board").innerHTML = `<div class="loading">Choisis ta légende, celle de l'IA, puis Commencer.</div>`;
 }
 
 // ------------------------------------------------------------ match BO1 / BO3 (moteur : match.py ; règles 485, 486, tournoi 403, 407)
