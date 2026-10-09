@@ -138,3 +138,7 @@ Retours de l'utilisateur :
 
 ## [2026-10-09] change | Favicon Riftbound LAB
 - Icône SVG (losange doré sur fond bleu nuit) en `<link rel="icon">` data-URI dans `riftbound/train/src.html` (table) et `riftbound/replays/viewer.html` (replays). Autorisée par la CSP (`img-src data:`). Non vérifiée dans un navigateur.
+
+## [2026-10-09] fix | Chaîne : capacités activées (légende, Empower, Equip) sans illustration
+- Cause : le moteur nomme une capacité activée « Carte: capacité » (« Akali, Rogue Assassin: Empower », « Long Sword: Equip », « Baited Hook: Hook ») ; `cardFor` ne la rattachait à aucune carte, d'où une carte sans image avec le texte brut. `cardFor` (table et replays) retire maintenant le suffixe « : capacité ».
+- Vérifié : noms relevés sur 40 parties aléatoires (5 formes, toutes corrigées) et logique de `cardFor` rejouée sous node. **Pas** vérifié dans un navigateur (cache Pyodide absent) : à confirmer sur la table.

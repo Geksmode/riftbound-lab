@@ -443,6 +443,7 @@ const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vis
 function cardFor(n) {
   const known = k => IMG[k] || (rep.cards && rep.cards[k]);
   if (known(n)) return n;
+  const i = n.lastIndexOf(": "); if (i > 0 && known(n.slice(0, i))) return n.slice(0, i);   // « Carte: capacité »
   const m = n.replace(TRIG_PREFIX, "");
   if (known(m)) return m;
   const pool = [...Object.keys(rep.cards || {}), ...Object.keys(IMG)];
