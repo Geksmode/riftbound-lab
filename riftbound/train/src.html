@@ -131,6 +131,32 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .mbox h3 { color: var(--brass); font-size: 17px; padding-right: 30px; }
 .mclose { position: absolute; top: 10px; right: 10px; padding: 2px 9px; }
 .tgrid { display: flex; flex-wrap: wrap; gap: 8px; }
+/* mode replay : barre de lecture dans la colonne de contrôle, même DA que la partie */
+.rpbar { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.rpnav { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+.rpnav button { min-height: 36px; padding: 0; font-size: 15px; }
+.rpbar input[type=range] { width: 100%; accent-color: var(--brass); min-height: 24px; }
+.rplab { font-size: 12.5px; line-height: 1.35; padding: 6px 8px; border-radius: 10px; background: rgba(255,255,255,.05); border-left: 3px solid var(--ink-3); }
+.rplab.moi { border-left-color: var(--akali); } .rplab.ia { border-left-color: var(--leblanc); }
+.rpmine { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 12px; border: 1px solid var(--akali); background: rgba(114,226,188,.08); }
+.rpmine .rpq { font-size: 12.5px; color: var(--ink); }
+.rpmine .hintrow { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; padding: 3px 0; }
+.rpmine .hintrow.mine span:first-child { color: var(--akali); }
+.rpend { font: 400 20px var(--f-display, serif); text-align: center; }
+.rpend.w { color: var(--akali); } .rpend.l { color: var(--leblanc); }
+.rpwarn { color: var(--warn); }
+.rpt { color: var(--brass); }
+.rpfold { display: none; }
+body.replay #boardHelp { display: none; }
+@media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
+  /* téléphone : la barre de lecture devient un panneau au-dessus de la barre de commande (placé par rpPlace) */
+  .rpbar { position: fixed; left: 8px; right: 8px; z-index: 44; max-height: 42vh; overflow-y: auto; padding: 8px; gap: 6px;
+    background: var(--deep); border: 1px solid var(--trait-2); border-radius: 16px; box-shadow: 0 -8px 30px rgba(5,7,20,.6); }
+  .rpnav button { min-height: 40px; }
+  .rpfold { display: block; min-height: 30px; padding: 2px 8px; font-size: 12px; background: transparent; border-color: transparent; color: var(--ink-2); }
+  .rpbar.fold .rplab, .rpbar.fold .rpmine, .rpbar.fold .rpwarn, .rpbar.fold #rpQuit { display: none; }
+  .rpmine .hintrow { padding: 2px 0; }
+}
 .pl.deck.known { background-size: cover; background-position: center 15%; outline: 2px solid var(--brass); outline-offset: 1px; cursor: pointer; position: relative; }
 .pl.deck.known .eye { position: absolute; top: -8px; left: -8px; font: 600 10px/1.4 var(--f-mono, monospace); padding: 0 4px; border-radius: 8px; background: var(--brass); color: #10131e; white-space: nowrap; }
 .prompt .mull.seen { justify-content: center; }
@@ -1126,6 +1152,7 @@ const KIND = { main: "phase principale", priority: "réaction", focus: "showdown
 function renderCtrl(v) {
   const M = $("bMain"), I = $("turnInfo");
   $("hpop").hidden = true;
+  if (RP) return rpCtrl(v);
   $("bUndo").disabled = working || !v.undo;
   $("bHint").disabled = working || !v.dec;
   $("bUndo").hidden = $("bHint").hidden = !!DU;   // en duel : ni « Reprendre » (l'adversaire a vu le coup) ni conseil
@@ -1217,7 +1244,7 @@ $("bUndo").onclick = () => {
   v.log = []; addLog([]); toast("Coup repris.");
   sel = null; mode = null; show(v);
 };
-$("bNew").onclick = () => { if (!working && T) setupForm(); };
+$("bNew").onclick = () => { if (!working && T) { if (RP) exitReplay(); setupForm(); } };
 $("bMenu").onclick = () => showMenu();
 
 
@@ -2611,11 +2638,118 @@ function duelEndHTML() {
 }
 addEventListener("pagehide", () => { if (DU && DU.role === "host") duelSend({ t: "bye" }); });
 
+// ------------------------------------------------------------ mode replay (« Mes parties » → « Revoir »)
+// Le moteur rejoue la partie enregistrée (train.replay_load : moteur déterministe, suite exacte de tes choix) et garde une
+// image de chaque étape. Même plateau que la partie, en lecture seule ; la colonne de droite devient la barre de lecture :
+// étapes, tes décisions (⇤ ⇥), lecture automatique, et « Analyser ce coup » (conseil de l'IA à ta place, écart en points).
+// La partie en cours éventuelle est gardée et rendue en quittant.
+let RP = null;
+async function startReplay(g) {
+  if (RP || working) return;
+  openModal(`<h3>Revoir la partie</h3><div class="think"><i></i>Le moteur rejoue la partie coup par coup…</div><div class="small">L'IA recalcule ses coups : de quelques secondes à une minute.</div>`, false);
+  await sleep(60);
+  let r;
+  try { r = J(T.replay_load(JSON.stringify(g))); }
+  catch (err) { closeModal(); toast("Rejeu impossible : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
+  closeModal(); hideMenu(); setHandOpen(false); toast("");
+  RP = { g, r, k: 0, timer: null, hint: {}, busy: false,
+    keep: { V, LOG, LOGSTACK, META, PN, MEP, lastAI, CARDS, seenLog, gmeta: $("gmeta").textContent, gres: $("gres").hidden } };
+  MEP = 0; META = r.meta; PN = r.meta.names; CARDS = J(T.cards()); LOGSTACK = [];
+  RP.warn = [];
+  if (g.engine && BUILD.engine && g.engine !== BUILD.engine) RP.warn.push("moteur différent de celui de la partie : le rejeu peut s'écarter");
+  if (r.desync !== null && r.desync !== undefined) RP.warn.push(`le rejeu s'arrête à ta décision n° ${r.desync + 1} (moteur changé depuis)`);
+  else if (!r.same) RP.warn.push("fin différente de la partie enregistrée (moteur changé depuis)");
+  $("gmeta").textContent = `Replay · donne ${g.seed} · ${PN[0]} contre ${PN[1]}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + g.match.game : ""} · ${fmtDate(g.updated || g.started)}`;
+  $("gres").hidden = true;
+  document.body.classList.add("replay");
+  rpGo(0);
+}
+function rpGo(k) {
+  if (!RP) return;
+  k = Math.max(0, Math.min(RP.r.n - 1, k | 0)); RP.k = k;
+  const f = J(T.replay_frame(k));
+  RP.f = f;
+  LOG = RP.r.log.filter(l => l[2] <= k).map(l => [l[0], l[1]]); seenLog = LOG.length;
+  lastAI = f.v.aii || null; mode = null; sel = null;
+  const v = { ...f.v, dec: null, ask: null, ai: null, aii: null, alias: {}, undo: 0, busy: false, wait: null };
+  V = v; show(v); addLog([]);
+}
+function rpStop() { if (RP && RP.timer) { clearInterval(RP.timer); RP.timer = null; } }
+function rpPlay() {
+  if (!RP) return;
+  if (RP.timer) { rpStop(); rpCtrl(V); return; }
+  if (RP.k >= RP.r.n - 1) rpGo(0);
+  RP.timer = setInterval(() => { if (!RP) return; if (RP.k >= RP.r.n - 1) { rpStop(); rpCtrl(V); return; } rpGo(RP.k + 1); }, 1100);
+  rpCtrl(V);
+}
+const normLab = x => String(x || "").replace(/^Tu joues : /, "").toLowerCase().trim();
+function rpCtrl(v) {
+  const M = $("bMain"), I = $("turnInfo"), f = RP.f || { lab: "", who: "jeu" }, k = RP.k, n = RP.r.n;
+  $("bUndo").hidden = $("bHint").hidden = true;
+  I.innerHTML = `<b class="rpt">Replay</b><span class="tn">tour ${v.st.t} · étape ${k + 1}/${n}</span>`;
+  M.className = "endbtn"; M.disabled = false; M.onclick = rpPlay;
+  M.textContent = RP.timer ? "⏸ Pause" : k >= n - 1 ? "↺ Revoir du début" : "▶ Lecture";
+  let bar = $("rpbar");
+  if (!bar) { bar = document.createElement("div"); bar.id = "rpbar"; bar.className = "rpbar"; $("stack").before(bar); }
+  const mine = RP.r.mine.find(x => x[0] === k);
+  const nx = RP.r.mine.find(x => x[0] > k), pv = [...RP.r.mine].reverse().find(x => x[0] < k);
+  const hs = RP.hint[k];
+  const rows = hs ? (hs.length ? hs.map((x, j) => { const me = normLab(x.label) === normLab(mine[1]);
+      return `<div class="hintrow ${j ? "" : "best"} ${me ? "mine" : ""}"><span>${esc(cap(x.label))}${me ? " <b>(ton coup)</b>" : ""}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></div>`; }).join("")
+      + (hs.some(x => normLab(x.label) === normLab(mine[1])) ? "" : `<div class="small">Ton coup n'est pas parmi les ${hs.length} meilleurs de l'IA.</div>`)
+      + `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit.</div>`
+    : `<div class="small">Rien à conseiller ici (un seul coup possible).</div>`) : "";
+  const end = v.winner !== null && v.winner !== undefined ? `<div class="rpend ${v.winner === 0 ? "w" : "l"}">${v.winner === 0 ? "Victoire" : v.winner === 1 ? "Défaite" : "Partie nulle"} ${v.st.pts[0]}-${v.st.pts[1]}</div>` : "";
+  bar.classList.toggle("fold", !!RP.fold);
+  bar.innerHTML = `<button class="rpfold" id="rpFold" aria-expanded="${!RP.fold}">${RP.fold ? "▴ Afficher le détail" : "▾ Réduire pour voir le plateau"}</button><div class="rpnav" role="group" aria-label="Navigation du replay">
+      <button data-rpg="0" title="Début" aria-label="Début">⏮</button><button data-rpg="${pv ? pv[0] : 0}" title="Ta décision précédente" aria-label="Ta décision précédente">⇤</button><button data-rpg="${k - 1}" title="Étape précédente" aria-label="Étape précédente">◀</button><button data-rpg="${k + 1}" title="Étape suivante" aria-label="Étape suivante">▶</button><button data-rpg="${nx ? nx[0] : n - 1}" title="Ta décision suivante" aria-label="Ta décision suivante">⇥</button><button data-rpg="${n - 1}" title="Fin" aria-label="Fin">⏭</button></div>
+    <input type="range" id="rpRange" min="0" max="${n - 1}" value="${k}" aria-label="Étape du replay">
+    ${RP.warn.length ? `<div class="small rpwarn">${esc(RP.warn.join(" · "))}</div>` : ""}
+    ${end}
+    ${f.lab ? `<div class="rplab ${f.who}">${esc(f.lab)}</div>` : ""}
+    ${mine ? `<div class="rpmine"><div class="rpq">Ici, ${esc(mine[1].replace(/^Tu /, "tu "))}</div>${mine[1].startsWith("Tu joues") ? (hs ? rows : `<button class="go" id="rpAn"${RP.busy ? " disabled" : ""}>${RP.busy ? "Analyse…" : "Analyser ce coup"}</button>`) : `<div class="small">Réponse à une question : pas de conseil.</div>`}</div>` : ""}
+    <button id="rpQuit">Quitter le replay</button>`;
+  rpPlace();
+}
+// Téléphone : le panneau du replay se pose juste au-dessus de la barre de commande (#ctrl), sans la recouvrir.
+function rpPlace() {
+  const bar = $("rpbar"); if (!bar) return;
+  if (!MOBILE.matches) { bar.style.bottom = ""; return; }
+  const c = $("ctrl").getBoundingClientRect();
+  bar.style.bottom = Math.max(8, innerHeight - c.top + 6) + "px";
+}
+addEventListener("resize", () => { if (RP) rpPlace(); });
+document.addEventListener("click", async e => {
+  if (!RP) return;
+  const b = e.target.closest("#rpbar [data-rpg]");
+  if (b) { rpStop(); rpGo(+b.dataset.rpg); return; }
+  if (e.target.closest("#rpQuit")) { exitReplay(); return; }
+  if (e.target.closest("#rpFold")) { RP.fold = !RP.fold; rpCtrl(V); return; }
+  if (e.target.closest("#rpAn") && !RP.busy) {
+    const k = RP.k; RP.busy = true; rpCtrl(V); await sleep(40);
+    try { RP.hint[k] = J(T.replay_hint(k, 5)); } catch (err) { RP.hint[k] = []; }
+    RP.busy = false; if (RP && RP.k === k) rpCtrl(V);
+  }
+});
+document.addEventListener("input", e => { if (RP && e.target.id === "rpRange") { rpStop(); rpGo(+e.target.value); } });
+function exitReplay() {
+  if (!RP) return;
+  rpStop();
+  const K = RP.keep; RP = null;
+  const bar = $("rpbar"); if (bar) bar.remove();
+  document.body.classList.remove("replay");
+  let r = { prev: false };
+  try { r = J(T.replay_exit()); } catch (e) {}
+  LOG = K.LOG; LOGSTACK = K.LOGSTACK; META = K.META; PN = K.PN; MEP = K.MEP; lastAI = K.lastAI; CARDS = K.CARDS; seenLog = K.seenLog;
+  $("gmeta").textContent = K.gmeta; $("gres").hidden = K.gres;
+  mode = null; sel = null;
+  if (K.V && r.prev) { V = K.V; show(K.V); addLog([]); }
+  else { V = null; $("board").innerHTML = `<div class="loading">Choisis une partie à revoir, ou commence une nouvelle partie.</div>`; $("stack").innerHTML = ""; showMenu("games"); }
+}
+
 // ------------------------------------------------------------ menu d'accueil
 // Écran d'accueil : point d'entrée de toute la table. Chaque vue (éditeur, nouvelle partie, listes) a un retour au menu.
-let READY = false, ENGERR = "", MENUV = "main", REPLAYS = false;
-// Le lien Replays n'apparaît que si le lecteur existe à côté de la page (sinon masqué).
-fetch("replays.html", { method: "HEAD" }).then(r => { REPLAYS = r.ok; menuRender(MENUV); }).catch(() => {});
+let READY = false, ENGERR = "", MENUV = "main";
 const fmtDate = iso => { try { return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
 function showMenu(view) {
   $("hpop").hidden = true; $("pop").hidden = true; toast("");
@@ -2640,8 +2774,7 @@ function menuRender(view) {
       ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room, en BO1 ou BO3.")}
       ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
       ${item("mydecks", "▤", "Mes decks", "Ta liste de decks : modifier ou jouer directement.")}
-      ${item("games", "◷", "Mes parties", "Les parties enregistrées depuis cette page.")}
-      ${REPLAYS ? `<a class="mitem" href="replays.html"><span class="ic" aria-hidden="true">↺</span><span><b>Replays</b><span class="d">Le lecteur de parties de simulation.</span></span></a>` : ""}
+      ${item("games", "◷", "Mes parties", "Tes parties enregistrées : revois-les coup par coup, avec le conseil de l'IA.")}
       ${item("help", "?", "Aide", "Règles de la table, en quelques lignes.")}
       </div></div>`;
   } else if (MENUV === "help") {
@@ -2685,7 +2818,8 @@ async function loadGames() {
   const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
     const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
     const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div></div>`; }).join("")
+    const canRp = !g.duel && g.kind !== "duel" && Array.isArray(g.moves);
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div>${canRp ? `<div class="acts"><button class="go" data-rp="${esc(g.id)}">Revoir</button></div>` : ""}</div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
@@ -2694,12 +2828,13 @@ async function loadGames() {
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
-  const t = e.target.closest("[data-m],[data-edit],[data-play]"); if (!t || t.disabled) return;
+  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp]"); if (!t || t.disabled) return;
+  if (t.dataset.rp) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.rp); if (g) startReplay(g); return; }
   if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); if (!DK.sideboard) DK.sideboard = {}; hideMenu(); await openDecks(); return; }
   if (t.dataset.play) { store.set("rbt-mine", "my:" + t.dataset.play); hideMenu(); setupForm(); return; }
   const m = t.dataset.m;
-  if (m === "new") { hideMenu(); setupForm(); }
-  else if (m === "resume") hideMenu();
+  if (m === "new") { if (RP) exitReplay(); hideMenu(); setupForm(); }
+  else if (m === "resume") { if (RP) exitReplay(); hideMenu(); }
   else if (m === "duel") { hideMenu(); if (!(DU.game && !DU.game.done)) duelPrepUI(true); }
   else if (m === "deck") { hideMenu(); openDecks(); }
   else menuRender(m);

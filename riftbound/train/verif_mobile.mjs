@@ -13,13 +13,8 @@ const ev = s => pg.evaluate(s);
 const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(150); } throw new Error("attente : " + s); };
 await pg.goto(`http://localhost:${PORT}/train.html`);
 await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
-await waitFor("!!document.querySelector('#menu a[href=\"replays.html\"]')", 15000).catch(() => {});
-ok("menu : entrée Replays affichée", await ev("!!document.querySelector('#menu a[href=\"replays.html\"]')"));
-await pg.tap('#menu a[href="replays.html"]');
-await pg.waitForURL(/replays\.html/); await waitFor("typeof GAMES !== 'undefined' && GAMES && (GAMES.length || Object.keys(GAMES).length) > 0", 30000).catch(() => {});
-ok("lecteur de replays : parties chargées", await ev("typeof GAMES !== 'undefined' && !!GAMES && (GAMES.length || Object.keys(GAMES).length) > 0"));
-await pg.screenshot({ path: OUT + "/replays-360.png" });
-await pg.goBack(); await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
+// le lecteur des simulations n'est plus dans le menu : on revoit ses parties depuis « Mes parties » (verif_replay.mjs)
+ok("menu : plus d'entrée Replays, « Mes parties » présent", await ev("!document.querySelector('#menu a[href=\"replays.html\"]') && !!document.querySelector('#menu [data-m=games]')"));
 await pg.tap("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
 await ev("document.getElementById('sSeed').value='7'"); await pg.tap("#bStart");
 let seed = 12345; const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };

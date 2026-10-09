@@ -617,6 +617,96 @@ def hint(n=4):
     return json.dumps(out, ensure_ascii=False)
 
 
+# ------------------------------------------------------------------ mode replay (« Mes parties » → « Revoir »)
+# La table rejoue une partie enregistrée (réglages + suite exacte des choix, moteur déterministe : comme
+# train_games.replay) et garde une image de chaque étape. Pour chacune de tes décisions, l'état est gardé : « Analyser »
+# y calcule le conseil de l'IA (ce qu'elle aurait joué et l'écart). La partie en cours, s'il y en a une, est gardée et
+# rendue en quittant le replay.
+def replay_load(game_json):
+    game = json.loads(game_json) if isinstance(game_json, str) else dict(game_json)
+    prev = _save() if W.get("g") is not None else None
+    base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
+    meta = json.loads(new(*base, game.get("mine"), game.get("opp"), game.get("obf")))
+    frames, svs, logs, mine, out = [], {}, [], [], dict(desync=None)
+
+    def push(v, lab, who):
+        k = len(frames)
+        logs.extend([ind, t, k] for ind, t in v.get("log", []))
+        v = dict(v, log=[])
+        frames.append(json.dumps(dict(v=v, lab=lab, who=who), ensure_ascii=False))
+
+    def drain(v, lab, who):
+        while True:
+            if v.get("log") or not v.get("busy"):
+                push(v, (_short_ai(v) if who == "ia" else lab), who)
+                lab, who = "", "ia"
+            if not v.get("busy"):
+                return v
+            v = json.loads(step())
+            who = "ia"
+    v = drain(json.loads(step()), "Début de la partie", "jeu")
+    for m in game.get("moves") or []:
+        k = m[0]
+        if k == "hint":
+            continue
+        if k == "undo":
+            v = drain(json.loads(undo()), "Tu reprends ton dernier coup", "moi")
+            continue
+        j = len(frames) - 1                              # l'image où tu décides
+        if k == "act" and v.get("dec") and isinstance(m[1], int) and m[1] < len(v["dec"]["options"]):
+            lab = v["dec"]["options"][m[1]]["label"]
+            svs[j] = _save()
+            mine.append([j, "Tu joues : " + lab])
+            v = drain(json.loads(act(m[1])), "Toi : " + lab, "moi")
+        elif k == "ans" and v.get("ask"):
+            a = v["ask"]
+            x = m[1]
+            lab = ", ".join(a["options"][i] for i in x if isinstance(i, int) and i < len(a["options"])) \
+                if isinstance(x, list) else (a["options"][x] if isinstance(x, int) and x < len(a["options"]) else str(x))
+            svs[j] = None                                # une réponse à une question : pas de conseil possible
+            mine.append([j, f"Tu réponds ({a['title']}) : {lab or 'rien'}"])
+            v = drain(json.loads(answer(json.dumps(x))), "Toi : " + (lab or "rien"), "moi")
+        else:
+            out["desync"] = len(mine)
+            break
+    W["rp"] = dict(frames=frames, svs=svs, prev=prev)
+    res = game.get("result") or {}
+    same = (not res) or (res.get("winner") == v.get("winner") and res.get("pts") == v["st"]["pts"])
+    return json.dumps(dict(meta=meta, n=len(frames), log=logs, mine=mine, desync=out["desync"],
+                           same=same, end=dict(winner=v.get("winner"), pts=v["st"]["pts"], t=v["st"]["t"])),
+                      ensure_ascii=False)
+
+
+def _short_ai(v):
+    return (f"{_rp.NAMES[AI]} : {v['ai']}") if v.get("ai") else ""
+
+
+def replay_frame(k):
+    return W["rp"]["frames"][int(k)]
+
+
+def replay_hint(k, n=5):
+    """Conseil de l'IA à ta décision de l'image k (état gardé au rejeu) ; la partie rejouée n'est pas touchée."""
+    sv = W["rp"]["svs"].get(int(k))
+    if sv is None:
+        return json.dumps([])
+    cur = _save()
+    try:
+        _restore(sv)
+        return hint(n)
+    finally:
+        _restore(cur)
+
+
+def replay_exit():
+    """Quitte le replay : la partie en cours avant le replay est rendue telle quelle."""
+    rp = W.pop("rp", None)
+    if rp and rp.get("prev") is not None:
+        _restore(rp["prev"])
+        return json.dumps(dict(prev=True))
+    return json.dumps(dict(prev=False))
+
+
 def _olabel(g, o):
     if o is None:
         return "aucun"
