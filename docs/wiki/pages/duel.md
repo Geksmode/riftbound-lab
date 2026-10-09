@@ -37,3 +37,4 @@ binaire par défaut de PeerJS entre navigateurs différents. Changements : encod
 toutes les 6 s (3 fois), l'hôte affiche « Ton ami se connecte… », journal de connexion avec « Copier le diagnostic » (à demander à
 l'utilisateur si le blocage revient). Vérifié en local : robot du duel vert, hello perdu volontairement puis renvoyé, match démarré.
 
+**2026-10-09** : l'utilisateur confirme que le duel fonctionne en réseau réel (après les correctifs JSON et renvoi du hello).

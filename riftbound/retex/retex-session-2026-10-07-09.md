@@ -51,6 +51,6 @@ confort du plateau sur ordinateur, version téléphone.
   question sans cible ; objets relus par `g.obj(uid)` dans les tests via `train` ; choix humains selon le texte.
 
 ## Questions ouvertes
-- Duel en réseau réel : à confirmer avec les diagnostics des deux navigateurs.
+- ~~Duel en réseau réel~~ : confirmé par l'utilisateur le 2026-10-09 (partie en réseau qui fonctionne).
 - ~~Cas Evelynn~~ : confirmé par l'utilisateur le 2026-10-09, c'était le tour adverse, donc pas d'effet (« on your turn ») : fausse alerte, le moteur était juste. Le journal le dit désormais.
-- Aucun des changements de la table n'a encore été essayé par l'utilisateur sur son téléphone après publication.
+- Ciblage par liste sur téléphone : essayé par l'utilisateur sur son téléphone le 2026-10-09, il fonctionne. Les autres changements téléphone (rangées resserrées, main agrandie) : pas de retour explicite.

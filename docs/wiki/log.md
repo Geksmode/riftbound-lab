@@ -106,3 +106,6 @@ Reproduit par le chemin de la table : Evelynn jouée depuis la face cachée pend
 ## [2026-10-09] retex | Session du 7 au 9 octobre (PR #1 à #15)
 Revue autocritique : `riftbound/retex/retex-session-2026-10-07-09.md`. Leçons validées par l'utilisateur et écrites dans `CLAUDE.md` (PID, PR fusionnée, règle 7 robot / vrai téléphone), `docs/memoire/riftbound-training-table.md` et `docs/memoire/riftbound-engine.md`.
 
+## [2026-10-09] ingest | Confirmations de l'utilisateur
+Duel entre amis : fonctionne en réseau réel (page `duel.md`). Ciblage par liste sur téléphone : essayé sur son téléphone, fonctionne. Retex mis à jour.
+
