@@ -2316,5 +2316,150 @@
    "Windswept Hillock"
   ],
   "ia": "tempo"
+ },
+ {
+  "id": "ia-sh-620040a",
+  "file": "ia-sh-620040a.json",
+  "group": "IA générale : recherche « sh » contre ancienne « old » (decks par défaut, 2026-10-09)",
+  "session": null,
+  "seed": 620040,
+  "title": "Même donne 620040, Master Yi avec la nouvelle recherche : 9-2",
+  "note": "Master Yi (nouvelle recherche « sh ») contre Ezreal (ancienne). Yi tient Aspirant's Climb dès le tour 3 et protège son Lonely Poro (Discipline contre Gust, En Garde et Defy au tour 6), reprend le battlefield au tour 9 avec Charm, First Mate et Punch First, puis prend aussi Seat of Power au tour 11 et gagne 9-2. Comparer avec la même donne où les IA sont échangées.",
+  "plans": [
+   "aucun",
+   "aucun"
+  ],
+  "winner": 0,
+  "pts": [
+   9,
+   2
+  ],
+  "first": 0,
+  "turns": 15,
+  "bf": [
+   "Seat of Power",
+   "Aspirant's Climb"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Master Yi",
+   "Ezreal"
+  ]
+ },
+ {
+  "id": "ia-sh-620040b",
+  "file": "ia-sh-620040b.json",
+  "group": "IA générale : recherche « sh » contre ancienne « old » (decks par défaut, 2026-10-09)",
+  "session": null,
+  "seed": 620040,
+  "title": "Même donne, IA échangées : Master Yi (ancienne) mène 7-1 et perd 7-9",
+  "note": "Mêmes decks, mêmes mains. Master Yi, joué par l'ancienne recherche, mène 7-1 au tour 12, puis termine ses tours 13 et 17 sans rien faire et ne joue que Charm au tour 15 : Ezreal (nouvelle recherche) reprend les deux battlefields aux tours 14 et 16, arrive à 7-7 puis gagne 9-7 au tour 20. Défaut connu de l'ancienne recherche : à un point de la victoire, un seul tirage par coup ne voit pas comment conclure.",
+  "plans": [
+   "aucun",
+   "aucun"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   9
+  ],
+  "first": 0,
+  "turns": 20,
+  "bf": [
+   "Seat of Power",
+   "Aspirant's Climb"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Master Yi",
+   "Ezreal"
+  ]
+ },
+ {
+  "id": "ia-sh-akali-690001a",
+  "file": "ia-sh-akali-690001a.json",
+  "group": "IA générale : recherche « sh » contre « old », Akali G2 contre LeBlanc IQ#5 (2026-10-09)",
+  "session": null,
+  "seed": 690001,
+  "title": "Donne 690001, Akali avec la nouvelle recherche : gagne 8-5",
+  "note": "Akali (plan Gorica, recherche « sh ») contre LeBlanc (Hook tempo, ancienne recherche). LeBlanc mène 0-4 au tour 7. Au tour 8, Akali joue Ferrous Forerunner, prend Sigil of the Storm avec Kai'Sa et Windswept Hillock avec Akali, Deadly Weapon, puis cache Block à Sigil : au tour 9, Block sauve Kai'Sa et LeBlanc ne reprend rien. Akali tient les deux battlefields (4-4, 6-4) et gagne 8-5 au tour 14.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   5
+  ],
+  "first": 1,
+  "turns": 14,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Akali",
+   "LeBlanc"
+  ]
+ },
+ {
+  "id": "ia-sh-akali-690001b",
+  "file": "ia-sh-akali-690001b.json",
+  "group": "IA générale : recherche « sh » contre « old », Akali G2 contre LeBlanc IQ#5 (2026-10-09)",
+  "session": null,
+  "seed": 690001,
+  "title": "Même donne, recherches échangées : LeBlanc gagne 8-6",
+  "note": "Mêmes decks et mêmes plans, recherches échangées. Akali (ancienne recherche) égalise à 2-2 au tour 6 avec Shuriken Flip et Kai'Sa, sans rien cacher ; au tour 7, LeBlanc (nouvelle recherche) joue Vi, Peacekeeper à Windswept Hillock, tue Akali, Deadly Weapon puis Kai'Sa et reprend les deux battlefields (2-4). Akali revient à 6-7 mais LeBlanc tient Windswept Hillock au tour 17 : 6-8.",
+  "plans": [
+   "Gorica",
+   "Hook tempo"
+  ],
+  "winner": 1,
+  "pts": [
+   6,
+   8
+  ],
+  "first": 1,
+  "turns": 17,
+  "bf": [
+   "Sigil of the Storm",
+   "Windswept Hillock"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Akali",
+   "LeBlanc"
+  ]
+ },
+ {
+  "id": "ia-h1-660006",
+  "file": "ia-h1-660006.json",
+  "group": "IA générale : essais non retenus (2026-10-09)",
+  "session": null,
+  "seed": 660006,
+  "title": "Horizon d'un tour (rejeté, 43 % ± 3) : Renata perd 7-8",
+  "note": "Renata Glasc joue avec des simulations qui s'arrêtent après un seul tour (sh@h=1) contre Ornn (horizon de deux tours, défaut). À 6-6, au tour 13, Renata envoie toutes ses unités à Treasure Hoard (7-6) et laisse Veiled Temple à Ornn ; au tour 14, Ornn marque la tenue de Veiled Temple (7), joue quatre cartes et attaque Treasure Hoard en trois vagues (Pit Crew, Patched Porobot, puis Pit Crew et deux Sprites) : il reprend le battlefield et gagne 8-7.",
+  "plans": [
+   "aucun",
+   "aucun"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 0,
+  "turns": 14,
+  "bf": [
+   "Treasure Hoard",
+   "Veiled Temple"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Renata Glasc",
+   "Ornn"
+  ]
  }
 ]

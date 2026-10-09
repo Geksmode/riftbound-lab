@@ -11,6 +11,9 @@ Lecteur publié : https://claude.ai/artifact/ThZartFw9uTqb6jcjvpgFV (source `vie
   (mode d'emploi en tête de `engine/add_replays.py`). Chaque partie a un `group` (la simulation d'origine) et des `plans` ;
   le lecteur les range par simulation. Groupe actuel : « Simulation des plans de jeu » (3 parties sur la même donne
   80002 avec trois plans Akali, plus la défaite type du plan Gorica).
+- Parties de l'IA générale (decks par défaut, autres légendes) : `add_replays.py dsearch <graine> defaut <v0> <v1>`, et dans
+  la spec `"mode": "defaut", "search": [v0, v1]`. L'index porte `names` (noms des joueurs), que le lecteur affiche à la place
+  d'Akali / LeBlanc.
 - Une partie seule : `python3 replay.py <graine> [bf_akali|-] [bf_leblanc|-] [premier]`.
 
 L'enregistreur (`engine/replay.py`) est additif : `RecGame` et `RecAgent` héritent du moteur et de l'IA sans les modifier,

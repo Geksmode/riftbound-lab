@@ -111,7 +111,8 @@ def _job(e):
     json.dump(rep, open(OUT / f"{e['id']}.json", "w"), ensure_ascii=False, separators=(",", ":"))
     return dict(id=e["id"], file=f"{e['id']}.json", group=e.get("group", ""), session=e.get("session"), seed=e["seed"], title=e["title"],
                 note=e["note"], plans=rep["plans"], winner=rep["winner"], pts=rep["pts"], first=rep["first"],
-                turns=rep["turns"], bf=[p["bf"] for p in rep["players"]], ia="tempo" if ai.TEMPO else "ancienne")
+                turns=rep["turns"], bf=[p["bf"] for p in rep["players"]], ia="tempo" if ai.TEMPO else "ancienne",
+                names=[p["name"] for p in rep["players"]])
 
 
 def add(entries):
@@ -123,7 +124,7 @@ def add(entries):
     idx = [e for e in idx if e["id"] not in ids] + new
     json.dump(idx, open(f, "w"), ensure_ascii=False, indent=1)
     for e in new:
-        print(e["id"], e["seed"], e["plans"], "Akali" if e["winner"] == 0 else "LeBlanc", e["pts"])
+        print(e["id"], e["seed"], e["plans"], e["names"][e["winner"]] if e["winner"] in (0, 1) else "nul", e["pts"])
     return new
 
 

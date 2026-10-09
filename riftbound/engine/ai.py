@@ -310,7 +310,7 @@ class SearchAgent(Heuristics):
                 c.rng = random.Random(world * 2 + 1)
             c.agents = s.policies(me)
             c.apply(a)
-            rollout_policy(c, s.horizon)
+            rollout_policy(c, s.horizon, cfg=s.cfg)
             return s.value(c, me)
         finally:
             if world is not None:
@@ -479,11 +479,18 @@ class PolicyAgent(Heuristics):
             units.sort(key=lambda o: -(s.card_of(g, o).spec["might"] or 0))
             return units[0]
         # 4. gear / spells that remove a blocker
+        if plays and s.cfg.get("pol_keep"):
+            # (essai) garder les sorts [Reaction] pour les fenêtres de réaction au lieu de les jeter dans son tour
+            plays = [o for o in plays if not s.reaction_card(g, o)]
         if plays:
             return plays[0]
         for o in acts:
             return o
         return ("end",)
+
+    def reaction_card(s, g, o):
+        c = s.card_of(g, o)
+        return c is not None and c.spec["type"] == "Spell" and "Reaction" in c.spec["keywords"]
 
     def is_unit(s, g, o):
         c = s.card_of(g, o)
@@ -516,9 +523,11 @@ class PolicyAgent(Heuristics):
         return ("pass",)
 
 
-def rollout_policy(g, horizon=2, max_steps=600):
+def rollout_policy(g, horizon=2, max_steps=600, cfg=None):
     """Play on with the cheap policy until `horizon` turns have passed (or the game ends)."""
     pol = PolicyAgent()
+    if cfg:
+        pol.cfg = cfg
     stop = g.turn_no + horizon
     for _ in range(max_steps):
         d = g.advance()
