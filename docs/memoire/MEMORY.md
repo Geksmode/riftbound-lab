@@ -2,7 +2,7 @@
 - [riftbound-lab-goal](riftbound-lab-goal.md) — project goal, French-speaking user
 - [riftbound-decklists](riftbound-decklists.md) — parsed tournament decklists in riftbound/decks, deck sites blocked, WebSearch workaround
 - [akali-vs-leblanc](akali-vs-leblanc.md) — user plays Akali; matchup vs LeBlanc ~35%, plan file
-- [riftbound-engine](riftbound-engine.md) — faithful rules engine in riftbound/engine, all pool cards modelled, calibration
+- [riftbound-engine](riftbound-engine.md) — faithful rules engine in riftbound/engine, calibration, leçons (mots-clés, effets sans cible, tests via train)
 - [akali-gorica-heron](akali-gorica-heron.md) — user plays Gorica's Akali Heron; best build G2 52.9% vs LeBlanc
 - [retex-method](retex-method.md) — 'retex' = self-critical review; fresh-seed and anti-pooling rules for sims
 - [riftbound-vault](riftbound-vault.md) — "le vault" = Obsidian markdown vault /mnt/project-files/vault/, keep it updated
@@ -13,7 +13,7 @@
 - [riftbound-tempo-ai](riftbound-tempo-ai.md) — "win at all costs" AI flag ai.TEMPO, paired effects, Akali-at-7 passivity left
 - [leblanc-real-play](leblanc-real-play.md) — LeBlanc keeps Reflection on battlefield, hides more, video rules; flags RB_REFL/RB_VIDEO, no measurable effect
 - [akali-vs-yi-coaching](akali-vs-yi-coaching.md) — 0-2 vs Yi Bladesman/Azir, Yi fiche, carnet de parties, puzzles artifact
-- [riftbound-training-table](riftbound-training-table.md) — play-vs-AI training artifact, Pyodide engine, engine/train.py
+- [riftbound-training-table](riftbound-training-table.md) — table d'entraînement (Pyodide, GitHub Pages), état 2026-10-09 et leçons d'interface
 - [riftbound-train-games](riftbound-train-games.md) — v10 records user games (db "games"), train_games.py replay/analysis, plan to tune LeBlanc AI
 - [riftbound-deckbuilder](riftbound-deckbuilder.md) — v11 deck builder (938 cards, non-IMPL greyed), train.new(mine, opp), atlas images, model-all-cards project
 - GitHub repo (2026-10-07): user created Geksmode/riftbound-lab (in project repos) because they will switch Claude accounts; the repo must be self-sufficient for any other agent (code, data, retex, manager protocol + routine prompt, memory conventions as CLAUDE.md/docs; no Riot card images, a script re-downloads them). The thread "Replays graphiques des simulations" owns the cleanup and push, after the last card modelling is finished and tested.

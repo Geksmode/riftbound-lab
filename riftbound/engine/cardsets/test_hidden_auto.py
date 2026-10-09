@@ -207,5 +207,45 @@ def the_table_never_names_the_card_the_opponent_hides():
     assert seen >= 1, "l'IA n'a caché aucune carte sur ces graines"
 
 
+def _evelynn_setup(tp=0, enemy_loc=1):
+    asked = []
+    g, _ = new(tp=tp, answers0={"may": lambda o, c: (asked.append("may"), True)[1]})
+    runes(g, 0, [])
+    put(g, 0, "Arena Kingpin", 0)
+    g.bfs[0].ctrl = 0
+    e = put(g, 1, "Ancient Warmonger", enemy_loc) if enemy_loc is not None else None
+    c = Obj("Evelynn, Entrancing", 0)
+    c.zone, c.hidden_bf, c.hidden_turn = "facedown", 0, g.turn_no - 1
+    g.bfs[0].facedowns.append(c)
+    return g, c, e, asked
+
+
+@T.test
+def evelynn_from_facedown_on_my_turn_moves_an_enemy_from_elsewhere():
+    for loc in (1, "base"):                       # « at a different location » : l'autre battlefield ou sa base
+        g, c, e, asked = _evelynn_setup(enemy_loc=loc)
+        g.apply(opt(g, 0, "Evelynn, Entrancing", src="facedown"))
+        settle(g)
+        assert asked == ["may"] and e.loc == 0, (loc, asked, e.loc)
+
+
+@T.test
+def evelynn_without_an_enemy_elsewhere_asks_nothing_and_says_why():
+    g, c, e, asked = _evelynn_setup(enemy_loc=None)   # aucune unité ennemie ailleurs (ici : aucune du tout)
+    g.apply(opt(g, 0, "Evelynn, Entrancing", src="facedown"))
+    settle(g)
+    assert asked == [] and any("aucune cible possible" in l for l in g.lines), g.lines[-5:]
+
+
+@T.test
+def evelynn_from_facedown_on_the_opponents_turn_has_no_effect_and_says_why():
+    from actions import play_card
+    g, c, e, asked = _evelynn_setup(tp=1)
+    play_card(g, 0, c, "facedown", dict(loc=0))
+    g.flush_triggers()
+    assert asked == [] and e.loc == 1 and all(it.name != "Evelynn, Entrancing" for it in g.chain)
+    assert any("pendant le tour adverse" in l for l in g.lines), g.lines[-5:]
+
+
 if __name__ == "__main__":
     T.main()

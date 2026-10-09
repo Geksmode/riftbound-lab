@@ -1705,9 +1705,13 @@ class Game:
         for pid in (s.tp, 1 - s.tp):        # rule 383.3.d.1
             mine = [t for t in q if t.ctrl == pid]
             for it in mine:
+                ch = it.data.get("_choose")
+                if ch is not None and getattr(ch, "options", None) is not None and not ch.options(s, it):
+                    # aucune cible légale : la capacité est retirée (402.4) ; on ne demande pas « utiliser l'effet ? »
+                    s.log(f"  {it.name} : aucune cible possible, l'effet ne s'applique pas")
+                    continue
                 if it.data.get("_may") and not s.ask(pid, "may", [True, False], item=it):
                     continue
-                ch = it.data.get("_choose")
                 if ch is not None and not ch(s, it):
                     continue
                 c = it.data.get("_cost")

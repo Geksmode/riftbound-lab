@@ -1,6 +1,6 @@
 ---
 name: riftbound-training-table
-description: play-vs-AI training artifact (Pyodide runs real engine), engine/train.py, sources riftbound/train/
+description: table d'entraînement (moteur réel dans Pyodide), publiée sur GitHub Pages ; leçons d'interface et de vérification (retex 2026-10-09)
 metadata:
   type: project
   modified: 2026-10-05T16:56:40.551Z
@@ -17,3 +17,13 @@ metadata:
 - v7 (2026-10-06): user wants every game button on the board, not in the top-right panel. #actBox (status, Terminer/Passer, Conseil, ask/mulligan), #fbar (Valider la cible / Lancer le combat, now static) and Reprendre mon coup live in .ctrlcol, the board's right column (236px, above the chain); boardgrid min-width 1144. Phone: .ctrlcol sticky at the bottom of the board. The right panel keeps only the journal and Nouvelle partie.
 - v8 (2026-10-06): user wants a RiftAtlas-like UI with no interaction box. Score track (0-8 circles) left of the board; right column = turn info, big END TURN/Passer button (#bMain), Conseil (popover #hpop), ↶ Reprendre, chain. Every question (mulligan, may Oui/Non, targets, buttons) sits in a bubble (#fbar, class prompt) placed by placeFloat() on the first spot that hides no highlighted card (BF middle, LeBlanc's hand, your hand row). Deck/trash piles are clickable and open a modal with the trash list. Setup is a modal. Accelerate shows as "Accelerate (+1 énergie +1 domaine) / Normal". Fixed bug: ask uids were always null (asks come from a restored deep copy, so compare by uid, not identity); asks now also expose hand cards, zones (zs) and the source (src). inter.js is now extracted from src.html (src.html is the master copy). Test bot dnd3.py.
 - v9 (2026-10-06): Shuriken Flip = 3 picks on the board (enemy or "Pas d'ennemi", ally to move, destination zone; steps 1/2/3 in the bubble); train._expand adds all enemy x ally x zone combos for options with "mover". No emoji, "Cibler" text. Journal is a hidden right drawer (top-bar button with unread count). Opening Nouvelle partie no longer drops a pending mulligan. pump() catches engine errors (toast, no frozen table). Modern look (gradients, glass, animations).
+
+## État 2026-10-09 (après les PR #1 à #15)
+Publiée par la CI sur GitHub Pages (plus l'artefact). DA « observatoire » (`train/da.css`, maquette Claude Design). Ordinateur : plateau pleine largeur, taille fixe pendant la partie, runes en vraies cartes, légende agrandie. Téléphone : plein écran sans défilement, rangées qui se resserrent, main agrandie au toucher (plus de 8 cartes), ciblage par liste dans la bulle. Robots dans la porte : verif_mobile, verif_hidden, verif_revele, verif_charge, verif_cibles, verif_match, verif_duel. Détails : `docs/wiki/log.md`, retex `riftbound/retex/retex-session-2026-10-07-09.md`.
+
+## Leçons (retex 2026-10-09, validées par l'utilisateur)
+- **Quand** je touche à la mise en page, **aucune taille ne doit dépendre du contenu** (chaîne, unités, runes) et je **vérifie par mesure automatique** à plusieurs tailles et sur une situation chargée : rien hors de son cadre, aucun libellé coupé, aucun défilement, une seule échelle sur une partie entière. *Pourquoi :* plateau qui rapetissait en cours de partie, boutons hors cadre, runes coupées, main qui débordait, tous sur mes propres captures sans que je les relève. *(PR #11 à #14)*
+- **Quand** je teste un geste, **prendre le cas difficile** (carte à plusieurs actions, cible cachée sous la bulle), pas le cas simple. **Sur téléphone**, tout choix doit être faisable hors du plateau (liste dans la bulle) et aucune rangée ne défile. *Pourquoi :* le premier robot Hidden passait avec Zhonya alors que Back Off ne se cachait pas au glisser ; base inaccessible pour Shuriken Flip. *(PR #9, #15)*
+- **Pièges CSS :** limiter un sélecteur à son contexte (`.shell > .main`, pas `.main`, classe aussi portée par des boutons) ; une image individuelle (IMG) n'a pas de taille de fond, contrairement aux planches : `background-size: cover`. *Pourquoi :* bouton du sideboard étiré à 779 px (attrapé par le robot du match), runes coupées. *(PR #12, #13)*
+- **Quand** un texte décrit un coup adverse (bulle, journal, flèche), **vérifier qu'il ne révèle rien de caché**. *Pourquoi :* « LeBlanc cache Hidden Blade » (`train._opp_describe`). *(PR #11)*
+
