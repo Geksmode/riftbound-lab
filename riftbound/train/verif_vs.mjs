@@ -21,9 +21,10 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const n = await ev("document.querySelectorAll('.vtile').length"), on = await ev("[...document.querySelectorAll('.vtile:not(.off)')].map(t => t.dataset.leg)");
   const dflt = await ev("Object.fromEntries(CAT.legends.filter(l => l.key).map(l => [l.n, l.key]))");
   ok(`${w} px : 49 légendes + « ? » (${n}), jouables = légendes avec un deck par défaut + « ? » (${on.length})`, n === 50 && Object.keys(dflt).every(l => on.includes(l)) && on.includes("?"));
-  const off = await ev("(document.querySelector('.vtile.off')||{}).dataset.leg");
-  const before = await ev("$('sOpp').value"); await tap(`.vtile.off[data-leg="${off}"]`);
-  ok(`${w} px : une légende grisée (${off}) ne se choisit pas`, await ev("$('sOpp').value") === before);
+  const off = await ev("document.querySelector('.vtile.off')?.dataset.leg ?? null");
+  if (off) { const before = await ev("$('sOpp').value"); await tap(`.vtile.off[data-leg="${off}"]`);
+    ok(`${w} px : une légende grisée (${off}) ne se choisit pas`, await ev("$('sOpp').value") === before); }
+  else ok(`${w} px : aucune légende grisée, les 49 ont un deck par défaut`, Object.keys(dflt).length === 49);
   await tap(".vpad.cpu .vtag"); await tap('.vtile[data-leg="Akali, Rogue Assassin"]');
   ok(`${w} px : IA → Akali prend son deck par défaut (${await ev("$('sOpp').value")})`, await ev("$('sOpp').value") === dflt["Akali, Rogue Assassin"] && await ev("document.querySelector('.vtile.cpu').dataset.leg") === "Akali, Rogue Assassin");
   await tap(".vpad.p1 .vtag"); await tap('.vtile[data-leg="LeBlanc, Deceiver"]');

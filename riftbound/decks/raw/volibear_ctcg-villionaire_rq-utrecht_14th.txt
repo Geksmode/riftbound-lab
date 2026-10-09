@@ -1,0 +1,42 @@
+# legend: Volibear, Relentless Storm
+# player: CTCG Villionaire
+# event: Riftbound Regional Qualifier - Utrecht (Best-Of Volibear, Unleashed)
+# date: 2026-06-13
+# placement: 14
+# url: https://mobalytics.gg/riftbound/decks/volibear-relentless-storm-utrecht-regional-qualifier-best-of-ctcg-villionaire
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: carte bannie depuis : Aspirant's Climb (battlefield). Sideboard d'après Mobalytics (riftdecks tronqué dans les résultats).
+[legend]
+1 Volibear, Relentless Storm
+[champion]
+1 Volibear, Furious
+[main]
+3 Rengar, Trophy Hunter
+3 Ferrous Forerunner
+1 Deadbloom Predator
+3 Gentle Gemdragon
+3 Kadregrin the Infernal
+3 Elder Dragon
+3 Dazzling Aurora
+1 Punch First
+3 Sabotage
+2 Challenge
+2 Falling Star
+1 Get Excited!
+3 Mobilize
+3 Catalyst of Aeons
+2 Stormbringer
+3 Sky Splitter
+[runes]
+6 Fury Rune
+6 Body Rune
+[battlefields]
+1 Aspirant's Climb
+1 Sigil of the Storm
+1 The Papertree
+[sideboard]
+1 Punch First
+2 Repulse
+2 Unyielding Spirit
+1 Challenge
+2 Thermo Beam

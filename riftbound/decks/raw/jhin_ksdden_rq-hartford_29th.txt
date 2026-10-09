@@ -1,0 +1,42 @@
+# legend: Jhin, Virtuoso
+# player: Ksdden
+# event: Riftbound Regional Qualifier - RQ Hartford (Best-Of Jhin, Unleashed)
+# date: 2026-06-20
+# placement: 29
+# url: https://riftdecks.com/riftbound-metagame/deck-jhin-virtuoso-205597
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: Mobalytics/RiftDecks/Riftmana concordants. Bannies depuis : Ekko, Recurrent, Aspirant's Climb.
+[legend]
+1 Jhin, Virtuoso
+[champion]
+1 Jhin, Meticulous Killer
+[main]
+1 Keeper of Masks
+3 Ekko, Recurrent
+3 Brynhir Thundersong
+3 Seal of Insight
+2 Energy Conduit
+2 Hextech Anomaly
+2 Gutter Palace
+3 Downstage Dramatics
+3 Consult the Past
+3 Curtain Call
+3 Deadly Flourish
+1 Falling Comet
+3 Promising Future
+1 Sprite Burst
+3 Progress Day
+3 Time Warp
+[runes]
+2 Fury Rune
+10 Mind Rune
+[battlefields]
+1 Aspirant's Climb
+1 Forgotten Monument
+1 Sigil of the Storm
+[sideboard]
+1 Vi, Destructive
+2 Falling Comet
+2 Sprite Burst
+1 Thousand-Tailed Watcher
+2 Unchecked Power

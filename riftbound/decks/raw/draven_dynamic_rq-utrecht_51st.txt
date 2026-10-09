@@ -1,0 +1,45 @@
+# legend: Draven, Glorious Executioner
+# player: Dynamic
+# event: Riftbound Regional Qualifier - RQ Utrecht (Best-Of Draven, Unleashed)
+# date: 2026-06-13
+# placement: 51
+# url: https://riftdecks.com/riftbound-metagame/deck-draven-glorious-executioner-183752
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: Best-Of mieux classés écartés car ils jouent Baron Nashor (non modélisé) : Sydney 10e (Micah Catelan, main), Vancouver 44e (POG CHUNGUS, main) ; Sydney 30e (Nathan, non Best-Of) l'a en sideboard. Mobalytics et RiftDecks concordants. Bannie depuis : Stacked Deck.
+[legend]
+1 Draven, Glorious Executioner
+[champion]
+1 Draven, Showboat
+[main]
+3 Overzealous Fan
+3 Tideturner
+3 Noxus Hopeful
+3 Darius, Trifarian
+2 Treasure Hunter
+2 Jhin, Murderous Artist
+2 Kai'Sa, Survivor
+2 Vex, Apathetic
+2 Ferrous Forerunner
+3 Spinning Axe
+3 Stacked Deck
+2 Gust
+2 Falling Star
+2 Rebuke
+2 Ride The Wind
+2 Switcheroo
+1 Cleave
+[runes]
+6 Fury Rune
+6 Chaos Rune
+[battlefields]
+1 Forbidding Waste
+1 Targon's Peak
+1 Treasure Hoard
+[sideboard]
+2 Star-Crossed
+1 Cleave
+1 Gust
+1 Against the Odds
+1 Kai'Sa, Survivor
+1 Thermo Beam
+1 Brynhir Thundersong

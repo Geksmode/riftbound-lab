@@ -1,0 +1,46 @@
+# legend: Mel, Soul's Reflection
+# player: CTG Alanzq
+# event: Riftbound Regional Qualifier - Barcelona (Best-Of Mel)
+# date: 2026-08-23
+# placement: 19
+# url: https://riftdecks.com/riftbound-metagame/deck-mel-soul-s-reflection-247311
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: liste recoupée riftdecks + mobalytics + magicalmeta (riftools mal découpé) ; magicalmeta date 2026-08-26 ; Stacked Deck banni depuis
+[legend]
+1 Mel, Soul's Reflection
+[champion]
+1 Mel, Defiant Soul
+[main]
+3 Ravenbloom Student
+3 Traveling Merchant
+3 Applied Researchers
+2 Vex, Apathetic
+2 Thousand-Tailed Watcher
+3 Rebuttal
+3 Stacked Deck
+3 Stupefy
+3 Dredge Up
+1 Smoke Screen
+1 Switcheroo
+3 Shock Blast
+1 Star-Crossed
+3 Up from the Deep
+2 Singularity
+3 Time Warp
+[runes]
+7 Mind Rune
+5 Chaos Rune
+[battlefields]
+1 Forbidding Waste
+1 Ravenbloom Conservatory
+1 Threshold of the Gray
+[sideboard]
+1 Acceptable Losses
+1 Decree of Insight
+1 Abandon
+1 Turn to Dust
+1 Fizz, Trickster
+2 Pickpocket
+1 Star-Crossed
+1 Mel, Newly Awakened
+1 Unchecked Power

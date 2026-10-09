@@ -1,0 +1,44 @@
+# legend: Ezreal, Prodigal Explorer
+# player: Bradykin
+# event: Riftbound Regional Qualifier - RQ Hartford (Best-Of Ezreal, Unleashed)
+# date: 2026-06-20
+# placement: 3
+# url: https://riftdecks.com/riftbound-metagame/deck-ezreal-prodigal-explorer-200683
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: liste complète selon Mobalytics/TCGplayer (« Top 4 ») ; RiftDecks la classe 3e (12-1-2). Bannies depuis : Stacked Deck, Aspirant's Climb.
+[legend]
+1 Ezreal, Prodigal Explorer
+[champion]
+1 Ezreal, Prodigy
+[main]
+2 Vex, Apathetic
+2 Thousand-Tailed Watcher
+3 Bewitching Spirit
+3 Fizz, Trickster
+3 Pack of Wonders
+2 The List
+2 Treasure Trove
+1 Sprite Fountain
+3 Bellows Breath
+2 Gust
+3 Stacked Deck
+3 Stupefy
+1 Turn to Dust
+1 Eclipse
+3 Star-Crossed
+2 Wages of Pain
+3 Deadly Flourish
+[runes]
+7 Chaos Rune
+5 Mind Rune
+[battlefields]
+1 Aspirant's Climb
+1 Frozen Fortress
+1 Sigil of the Storm
+[sideboard]
+1 Acceptable Losses
+2 Angler Beast
+2 Kha'Zix, Mutating Horror
+1 Mindsplitter
+1 Sprite Fountain
+1 Turn to Dust

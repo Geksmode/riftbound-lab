@@ -1,3 +1,4 @@
+ahri_kawaii-tsukiko_rq-sydney_127th: A VERIFIER cartes bannies aujourd'hui: ["The Arena's Greatest"] (liste antérieure au ban)
 akali_asc-harukaze_rq-barcelona_10th: OK 
 akali_collin-kaiser_ccs-iq5_6th: A VERIFIER main_deck(champion+main)=39 (attendu 40)
 akali_dongdong_wuhan-open_5th: OK 
@@ -5,13 +6,20 @@ akali_gorica_rq-singapore: OK
 akali_hxn-tempete_rq-la_7th: OK 
 akali_khavai_skirmish-carfurle_41st: OK 
 ambessa_tss-riftboundtee_rq-la_201st: OK 
+annie_prismaticism_rq-hartford_7th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "The Arena's Greatest"] (liste antérieure au ban)
 azir_mice-squirtle_rq-la_3rd: OK 
+darius_mice-diamondhat_rq-utrecht_6th: A VERIFIER cartes bannies aujourd'hui: ["The Arena's Greatest"] (liste antérieure au ban)
 diana_asc-nalkpas_rq-los-angeles_22nd: OK 
+draven_dynamic_rq-utrecht_51st: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)
+ezreal_bradykin_rq-hartford_3rd: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "Aspirant's Climb"] (liste antérieure au ban)
 fiora_fr0zen_rq-singapore_8th: OK 
+garen_duality_rq-sydney_288th: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
 irelia_tm2_rq-los-angeles_5th: OK 
 ivern_aserty_rq-barcelona_277th: OK 
 jax_t1win_rq-los-angeles_162nd: OK 
 jayce_justmilkey_rq-singapore_35th: OK 
+jhin_ksdden_rq-hartford_29th: A VERIFIER cartes bannies aujourd'hui: ['Ekko, Recurrent', "Aspirant's Climb"] (liste antérieure au ban)
+jinx_htpiper151_rq-sydney_86th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "The Arena's Greatest"] (liste antérieure au ban)
 kaisa_william-n_rq-los-angeles_9th: OK 
 kennen_dsg-awesumrosum_rq-los-angeles_13th: OK 
 khazix_cuoemrei_rq-los-angeles_20th: OK 
@@ -22,18 +30,31 @@ leblanc_mill-twistedtcg_rq-la_12th: OK
 leblanc_riuzake_rq-vancouver_21st: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
 leblanc_zidenberg_ccs-sunday5_7th: OK 
 leesin_terrythecactus_rq-vancouver_153rd: OK 
+leona_elle-xv_rq-sydney_140th: A VERIFIER cartes bannies aujourd'hui: ["The Arena's Greatest"] (liste antérieure au ban)
 lillia_duncan_rq-sydney_33rd: OK 
 lucian_banrate-demon_rq-barcelona_25th: OK 
+lux_ctcg-relivia_rq-hartford_6th: A VERIFIER cartes bannies aujourd'hui: ['Ekko, Recurrent', "Aspirant's Climb"] (liste antérieure au ban)
+mel_ctg-alanzq_rq-barcelona_19th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)
+miss-fortune_battle-cattle_rq-sydney_35th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "Aspirant's Climb"] (liste antérieure au ban)
 nasus_drinkmaker888_rq-barcelona_80th: OK 
 ornn_mice-themanland_rq-barcelona_1st: OK 
+poppy_rowanno1_rq-sydney_21st: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
 pyke_royy_rebound-la_2nd: OK 
 reksai_sashkoenaislabiq_rq-singapore_14th: OK 
 renata-glasc_purp_rq-singapore_311th: OK 
+renekton_maskofmomentum_rq-singapore_384th: OK 
 rengar_dsg-prismaticism_rq-los-angeles_1st: OK 
+rumble_catmeat_rq-sydney_250th: OK 
 sett_ctcg-collin-k_rq-utrecht_3rd: OK 
 shen_sgf-sevya_rq-singapore_450th: OK 
 sivir_randyyy_rq-los-angeles_146th: OK 
+teemo_lunasky_rq-vancouver_64th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "The Arena's Greatest"] (liste antérieure au ban)
 vex_eep-bonk-repeat_rq-sydney_4th: OK 
+vi_sirieous_rq-sydney_79th: A VERIFIER cartes bannies aujourd'hui: ["The Arena's Greatest"] (liste antérieure au ban)
+viktor_rednaxell_rq-utrecht_2nd: A VERIFIER cartes bannies aujourd'hui: ["The Arena's Greatest"] (liste antérieure au ban)
+volibear_ctcg-villionaire_rq-utrecht_14th: A VERIFIER cartes bannies aujourd'hui: ["Aspirant's Climb"] (liste antérieure au ban)
+yasuo_kiiro_rq-vancouver_148th: OK 
 yi-bladesman_ekpilot_rq-singapore_3rd: OK 
 yi-bladesman_swagalisk_rq-la_6th: OK 
 yi-master_xiaoshenxian_wuhan-open_bestof: OK 
+zed_ghosterdriver_rq-barcelona_164th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)

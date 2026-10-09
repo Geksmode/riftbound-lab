@@ -1,0 +1,40 @@
+# legend: Miss Fortune, Bounty Hunter
+# player: Battle Cattle
+# event: Riftbound Regional Qualifier - RQ Sydney (Best-Of Miss Fortune, Unleashed)
+# date: 2026-05-16
+# placement: 35
+# url: https://riftdecks.com/riftbound-metagame/deck-miss-fortune-bounty-hunter-148144
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: les listes mieux classées (Hartford 13e, Vancouver 36e) jouent Baron Nashor (non modélisé). Sideboard : Unyielding Spirit 2 (Mobalytics) ou 3 (RiftDecks/RiftMana) ; on garde 2 (sideboard 7/8). Bannies depuis : Stacked Deck, Aspirant's Climb.
+[legend]
+1 Miss Fortune, Bounty Hunter
+[champion]
+1 Miss Fortune, Captain
+[main]
+1 Mindsplitter
+3 Elder Dragon
+3 Scryer's Bloom
+2 Last Rites
+3 Dazzling Aurora
+1 Bullet Time
+3 Flurry of Blades
+3 Gust
+3 Stacked Deck
+1 Abandon
+3 Confront
+2 Heedless Resurrection
+3 Mobilize
+2 Invert Timelines
+3 Lunar Boon
+3 Catalyst of Aeons
+[runes]
+7 Body Rune
+5 Chaos Rune
+[battlefields]
+1 Aspirant's Climb
+1 Forgotten Monument
+1 The Papertree
+[sideboard]
+3 Sabotage
+2 Unyielding Spirit
+2 Downwell

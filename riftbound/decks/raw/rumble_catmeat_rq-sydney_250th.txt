@@ -1,0 +1,44 @@
+# legend: Rumble, Mechanized Menace
+# player: Catmeat
+# event: Riftbound Regional Qualifier - RQ Sydney (Best-Of Rumble, Unleashed)
+# date: 2026-05-16
+# placement: 250
+# url: https://riftdecks.com/riftbound-metagame/deck-rumble-mechanized-menace-148111
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: 2 Rumble, Hotheaded en plus du champion et 2 Deadly Flourish (RiftDecks tronqué à 1) : seules valeurs donnant 40 cartes ; Riftwatch le classe 270e. Aucune carte bannie depuis.
+[legend]
+1 Rumble, Mechanized Menace
+[champion]
+1 Rumble, Hotheaded
+[main]
+2 Rumble, Hotheaded
+3 Forecaster
+3 Gem Jammer
+3 Plundering Poro
+3 Bubble Bot
+3 Hwei, Brooding Painter
+3 Ferrous Forerunner
+3 Thousand-Tailed Watcher
+1 Bellows Breath
+1 Blood Rush
+2 Retreat
+3 Stupefy
+3 Falling Star
+2 Eclipse
+2 Deadly Flourish
+1 Singularity
+1 Time Warp
+[runes]
+6 Fury Rune
+6 Mind Rune
+[battlefields]
+1 Ravenbloom Conservatory
+1 Star Spring
+1 Trifarian War Camp
+[sideboard]
+1 Turn to Dust
+1 Rumble, Scrapper
+2 Thermo Beam
+1 Singularity
+2 Unchecked Power
+1 Time Warp

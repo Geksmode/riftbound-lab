@@ -1,0 +1,42 @@
+# legend: Renekton, Butcher of the Sands
+# player: MaskofMomentum
+# event: Riftbound Regional Qualifier - Singapore (Best-Of Renekton)
+# date: 2026-09-05
+# placement: 384
+# url: https://riftmana.com/singapore-best-of-metal-cards-legend-winner-decklists-vendetta-regional-qualifier/
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement ; riftmana + extrait de playriftbound.com/en-us/news/organizedplay/singapores-top-decks pour le sideboard)
+# note: même joueur Best-Of Renekton à Barcelone (251e) mais liste complète de Barcelone introuvable (version différente : Sabotage seulement au sideboard) ; runes 4 Fury / 8 Body selon riftmana ; 2 Sabotage au main selon riftmana, absent d'un extrait de la page officielle
+# note: sideboard : Decree of Rage, Decree of Strength et Ferrous Forerunner retirés (quantités ambiguës dans la source, « 2 » seulement déduit du total de 10)
+[legend]
+1 Renekton, Butcher of the Sands
+[champion]
+1 Renekton, Rage Fueled
+[main]
+1 Cleave
+1 Darius, Trifarian
+1 Ferrous Forerunner
+1 Grim Apothecary
+3 First Mate
+3 Inferna
+3 Irresistible Faefolk
+3 Kai'Sa, Survivor
+3 Kinkou Initiate
+3 Nidalee, Cat Form
+3 Noxus Hopeful
+3 Pit Rookie
+3 Punch First
+3 Rampage
+3 Rengar, Trophy Hunter
+2 Sabotage
+[runes]
+4 Fury Rune
+8 Body Rune
+[battlefields]
+1 Seat of Power
+1 Star Spring
+1 Protective Sands
+[sideboard]
+1 Brittle Steel
+1 Brynhir Thundersong
+1 Sabotage
+1 Thermo Beam

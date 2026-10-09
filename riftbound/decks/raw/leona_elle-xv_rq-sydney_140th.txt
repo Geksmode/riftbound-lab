@@ -1,0 +1,44 @@
+# legend: Leona, Radiant Dawn
+# player: Elle XV
+# event: Riftbound Regional Qualifier - Sydney (Best-Of Leona, Unleashed)
+# date: 2026-05-16
+# placement: 140
+# url: https://riftdecks.com/riftbound-metagame/deck-leona-radiant-dawn-148032
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement) ; concordance riftdecks / Riftmana / Mobalytics
+# note: carte bannie depuis : The Arena's Greatest (battlefield). Piltover Archive diverge (Fiora, Worthy x4...), écarté.
+[legend]
+1 Leona, Radiant Dawn
+[champion]
+1 Leona, Zealot
+[main]
+3 Lonely Poro
+2 Scuttle Crab
+3 Stalwart Poro
+3 Nami, Headstrong
+2 Fiora, Victorious
+2 Stellacorn Herder
+2 Irelia, Fervent
+3 Vi, Peacekeeper
+2 Zhonya's Hourglass
+2 Heart of Dark Ice
+1 Charm
+3 Defy
+1 Cull the Weak
+2 Discipline
+1 Emperor's Divide
+3 Back Off
+2 Call to Glory
+2 Zenith Blade
+[runes]
+7 Calm Rune
+5 Order Rune
+[battlefields]
+1 Monastery of Hirana
+1 Sunken Temple
+1 The Arena's Greatest
+[sideboard]
+1 Charm
+1 Cull the Weak
+1 Not So Fast
+2 Disarming Rake
+3 Ashe, Focused

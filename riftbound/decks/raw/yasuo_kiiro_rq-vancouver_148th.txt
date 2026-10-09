@@ -1,0 +1,43 @@
+# legend: Yasuo, Unforgiven
+# player: Kiiro
+# event: Riftbound Regional Qualifier - Vancouver (Best-Of Yasuo, Unleashed)
+# date: 2026-05-30
+# placement: 148
+# url: https://mobalytics.gg/riftbound/decks/yasuo-unforgiven-vancouver-regional-qualifier-best-of-kiiro
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement) ; quantités d'après Riftmana, runes d'après Piltover Archive
+# note: Best-Of Yasuo mieux classé (Utrecht 112e, Bezz) écarté : contient Baron Nashor, non modélisé. Riftwatch indique 153e. Sideboard : Riftmana coupé après 5 lignes mais total = 8.
+[legend]
+1 Yasuo, Unforgiven
+[champion]
+1 Yasuo, Remorseful
+[main]
+3 Charm
+3 Defy
+2 En Garde
+2 Gust
+1 Abandon
+3 Discipline
+3 Mask of Foresight
+1 Ride The Wind
+3 Scuttle Crab
+3 Treasure Hunter
+2 Zhonya's Hourglass
+2 Fizz, Trickster
+2 Heart of Dark Ice
+2 Star-Crossed
+3 Kha'Zix, Mutating Horror
+2 Stellacorn Herder
+2 Vex, Apathetic
+[runes]
+6 Calm Rune
+6 Chaos Rune
+[battlefields]
+1 Targon's Peak
+1 Veiled Temple
+1 Star Spring
+[sideboard]
+1 Abandon
+2 Flash
+1 Isolate
+2 Adaptatron
+2 Irelia, Fervent
