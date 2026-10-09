@@ -267,7 +267,8 @@ def catalog():
     for k in sorted(DECKS):
         d, m = load(k), DECKS[k]
         pre.append(dict(key=k, name=k.replace("_", " · "), deck=_export(d), player=m.get("player") or "",
-                        event=m.get("event") or "", place=m.get("placement") or "", date=m.get("date") or ""))
+                        event=m.get("event") or "", place=m.get("placement") or "", date=m.get("date") or "",
+                        ban=_banned(d)))
     dflt = default_decks()
     legends = [dict(n=x["name"], d=[d for d in x["domain"].split("|") if d], key=dflt.get(x["name"]))
                for x in _spec_rows() if x["type"] == "Legend"]
@@ -279,16 +280,24 @@ def _place(k):
     return int(p) if p else 999
 
 
+def _banned(d):
+    """Cartes du deck bannies en Standard depuis la liste (ex. listes Best-Of d'Unleashed) : jouables, signalées."""
+    return sorted({n for n in [d["legend"], d.get("champion")] + d["main"] + d.get("sideboard", []) + d["battlefields"]
+                   if n and _BAN.get(n)})
+
+
 def default_decks():
     """Deck par défaut de l'IA pour chaque légende (menu de sélection) : parmi les listes de tournoi de decks.json
-    jouables par le moteur (validate vide : construction 103, sideboard 601.1.c, cartes modélisées), celles qui ont un
-    sideboard d'abord (le même deck sert en BO1 et en BO3), puis le meilleur classement. {légende: clé de decks.json}."""
+    jouables par le moteur (validate sans erreur : construction 103, sideboard 601.1.c, cartes modélisées), celles sans
+    carte bannie d'abord, puis avec sideboard (le même deck sert en BO1 et en BO3), puis le meilleur classement. Une
+    légende dont toutes les listes ont une carte bannie depuis (Best-Of d'Unleashed) garde la meilleure, signalée.
+    {légende: clé de decks.json}."""
     best = {}
     for k in sorted(DECKS):
         d = load(k)
         if [e for e in validate(d) if not e.startswith("⚠")]:
             continue
-        rank = (0 if d["sideboard"] else 1, _place(k), k)
+        rank = (1 if _banned(d) else 0, 0 if d["sideboard"] else 1, _place(k), k)
         if d["legend"] not in best or rank < best[d["legend"]][0]:
             best[d["legend"]] = (rank, k)
     return {lg: v[1] for lg, v in sorted(best.items())}

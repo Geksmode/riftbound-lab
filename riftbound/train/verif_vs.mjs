@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 // Robot de l'écran de sélection contre l'IA (à la Smash Bros) dans la vraie table : 49 légendes + « ? » ; une légende
 // sans deck jouable est grisée et ne se choisit pas ; panneau IA actif → la légende touchée prend son deck par défaut
-// (train.default_decks) ; panneau Toi actif → la légende va à ton deck ; « ? » tire une légende jouable au lancement ;
+// (train.default_decks) ; chaque menu ne montre que les variantes de sa légende ; panneau Toi actif → la légende va à ton deck ; « ? » tire une légende jouable au lancement ;
 // la partie démarre avec les bonnes légendes. Ordinateur et téléphone : tout tient à l'écran (pas de défilement horizontal).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_vs.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
@@ -28,6 +28,10 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   ok(`${w} px : IA → Akali prend son deck par défaut (${await ev("$('sOpp').value")})`, await ev("$('sOpp').value") === dflt["Akali, Rogue Assassin"] && await ev("document.querySelector('.vtile.cpu').dataset.leg") === "Akali, Rogue Assassin");
   await tap(".vpad.p1 .vtag"); await tap('.vtile[data-leg="LeBlanc, Deceiver"]');
   ok(`${w} px : Toi → LeBlanc va à ton deck (${await ev("$('sMine').value")}), l'IA garde Akali`, await ev("$('sMine').value") === dflt["LeBlanc, Deceiver"] && await ev("$('sOpp').value") === dflt["Akali, Rogue Assassin"] && await ev("document.querySelector('.vpad.p1 .vlg').textContent") === "LeBlanc");
+  const legsOf = id => ev(`[...$('${id}').options].map(o => deckLegend(o.value))`);
+  const lo = await legsOf("sOpp"), lm = await legsOf("sMine");
+  ok(`${w} px : le menu de l'IA ne montre que les variantes d'Akali (${lo.length}), le tien que celles de LeBlanc (${lm.length})`, lo.length >= 2 && lo.every(x => x === "Akali, Rogue Assassin") && lm.length >= 2 && lm.every(x => x === "LeBlanc, Deceiver"));
+  ok(`${w} px : le deck par défaut est en tête du menu, marqué ★`, await ev("$('sOpp').options[0].value === $('sOpp').value && $('sOpp').options[0].text.startsWith('★')"));
   const fit = await ev("(()=>{const m=$('mbox'),r=m.getBoundingClientRect();return {sw: document.documentElement.scrollWidth, w: innerWidth, right: r.right, bottom: [...document.querySelectorAll('.vpad')].map(x=>x.getBoundingClientRect().bottom), h: innerHeight}})()");
   ok(`${w} px : pas de défilement horizontal, les deux panneaux visibles sans défiler (${JSON.stringify(fit)})`, fit.sw <= fit.w && fit.right <= fit.w && Math.max(...fit.bottom) <= fit.h);
   const art = await ev("getComputedStyle(document.querySelector('.vtile:not(.off) .vart')).backgroundImage");

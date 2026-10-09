@@ -4,7 +4,8 @@
 
 Contrôles : noms connus de la base de cartes (suggestion du nom le plus proche sinon), règles de construction (103) et
 du sideboard (601.1.c) via train.validate, cartes non modélisées (cards.IMPL), 12 runes, 3 battlefields.
-Usage : python3 decks/check_raw.py decks/raw/jinx_*.txt     (code de sortie 1 si un deck a un problème)"""
+Usage : python3 decks/check_raw.py decks/raw/jinx_*.txt     (code de sortie 1 si un deck a un problème)
+        --ban-ok : une carte bannie en Standard depuis la liste (ex. liste Best-Of d'Unleashed) n'est qu'un avertissement."""
 import csv, difflib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,7 +35,7 @@ def parse(path):
     return head, secs
 
 
-def check(path):
+def check(path, ban_ok=False):
     import train
     head, secs = parse(path)
     probs = []
@@ -52,15 +53,15 @@ def check(path):
     if len(deck["battlefields"]) != 3:
         probs.append(f"battlefields : {len(deck['battlefields'])}/3")
     if not probs:
-        probs += train.validate(deck)
+        probs += [e for e in train.validate(deck) if not (ban_ok and e.startswith("⚠"))]
     return head, deck, probs
 
 
 if __name__ == "__main__":
-    bad = 0
-    for p in sys.argv[1:]:
+    bad, ban_ok = 0, "--ban-ok" in sys.argv
+    for p in [a for a in sys.argv[1:] if a != "--ban-ok"]:
         try:
-            head, deck, probs = check(p)
+            head, deck, probs = check(p, ban_ok)
         except Exception as e:                       # noqa: BLE001
             head, deck, probs = {}, {}, [f"lecture impossible : {e}"]
         bad += bool(probs)
