@@ -1282,6 +1282,7 @@ def sigil_recycles_rune():
     g.apply(("move", (u.uid,), 0))
     settle(g)
     assert len(g.p[0].runes) == 2 and g.p[0].points == 1
+    assert g.p[0].pool_e == 1          # the recycled ready rune floats its energy (429.3.a)
 
 
 @test
