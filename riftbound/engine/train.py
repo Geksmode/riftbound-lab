@@ -866,6 +866,8 @@ def _ask_uid(g, o):
     """Objet d'un choix cliquable sur la table : unité ou équipement en jeu, ou carte de ta main."""
     if not hasattr(o, "uid") or isinstance(o, bool):
         return None
+    if hasattr(o, "domain") and any(r.uid == o.uid for r in g.p[ME].runes):
+        return o.uid                                   # une de tes runes (recycler, préparer…) : on la touche sur le plateau
     # La question vient d'une copie de l'état (rejouée ensuite) : on compare par uid, pas par identité.
     if g.obj(o.uid) is not None or any(c.uid == o.uid for c in g.p[ME].hand):
         return o.uid
@@ -933,6 +935,7 @@ def _view(ask=None):
         c["tg"] = list((it.data or {}).get("tg", ()) or ()) + list((it.data or {}).get("tg2", ()) or ())
         c["src"] = it.src if isinstance(it.src, int) else None
     st["p"][ME]["champu"] = [c.uid for c in g.p[ME].champ]
+    st["p"][ME]["runeu"] = [r.uid for r in g.p[ME].runes]   # même ordre que p.runes : les runes se touchent pour répondre
     st["p"][ME]["trashu"] = [[c.uid, c.cname] for c in g.p[ME].trash]   # Flow (829) : sorts jouables depuis ta défausse
     kt = []                                             # dessus connu (Predict, Vision) : tant qu'il reste dessus
     for c in g.p[ME].deck:
