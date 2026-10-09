@@ -1403,6 +1403,19 @@ def human_option_labels_are_readable():
         assert "→" in train._alabel(g, A, (u, "base"))
 
 
+@test
+def human_can_move_any_subset_of_units():
+    """Table : un humain peut déplacer n'importe quel sous-ensemble d'unités (2, 3, 4 sur 5), l'IA garde ses groupes plafonnés."""
+    from actions import move_options
+    g, ag = new()
+    for n in ["Mournful Witness", "Stellacorn Herder", "Mournful Witness", "Stellacorn Herder", "Mournful Witness"]:
+        put(g, 0, n)
+    sizes = lambda: sorted({len(o[1]) for o in move_options(g, 0) if o[2] == 1})
+    assert sizes() == [1, 4, 5]
+    ag[0].every_choice = True
+    assert sizes() == [1, 2, 3, 4, 5]
+
+
 def run():
     ok = 0
     fails = []
