@@ -52,5 +52,5 @@ confort du plateau sur ordinateur, version téléphone.
 
 ## Questions ouvertes
 - Duel en réseau réel : à confirmer avec les diagnostics des deux navigateurs.
-- Cas Evelynn de l'utilisateur : cause exacte non confirmée (tour adverse ou aucune cible) sans la partie enregistrée.
+- ~~Cas Evelynn~~ : confirmé par l'utilisateur le 2026-10-09, c'était le tour adverse, donc pas d'effet (« on your turn ») : fausse alerte, le moteur était juste. Le journal le dit désormais.
 - Aucun des changements de la table n'a encore été essayé par l'utilisateur sur son téléphone après publication.
