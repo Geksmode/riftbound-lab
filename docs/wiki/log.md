@@ -157,3 +157,7 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-09] fix | Table : « T.replay_load n'est pas une fonction » après publication
 - Cause : la page neuve chargeait les fichiers du moteur (`py/*.py`, `data/*`) depuis le cache du navigateur (GitHub Pages : 10 min), donc l'ancien `train.py` sans `replay_load`.
 - Correction : `src.html` ajoute `?v=<commit>-<empreinte du moteur>` (constante `BUILD` posée par `build.sh`) à chaque fichier chargé dans Pyodide. Pas essayé sur un vrai téléphone.
+
+## [2026-10-09] fix | Irelia, Blade Dancer : plus de question inutile à chaque « choose »
+- Retour utilisateur : la question « utiliser l'effet ? » d'Irelia revenait à chaque choix d'unité alliée, même légende inclinée.
+- Correction (`cardsets/legends.py`) : le coût porte `can` ; pas de question si la légende est déjà inclinée, si aucune rune ne peut être payée, ou si l'unité choisie est déjà prête (« ready it » ne ferait rien). Tests `irelia_no_question_when_useless_or_unpayable` et `irelia_second_choice_not_asked_once_legend_exhausted` (échouent sans la correction).
