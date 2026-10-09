@@ -131,6 +131,12 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .mbox h3 { color: var(--brass); font-size: 17px; padding-right: 30px; }
 .mclose { position: absolute; top: 10px; right: 10px; padding: 2px 9px; }
 .tgrid { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl.deck.known { background-size: cover; background-position: center 15%; outline: 2px solid var(--brass); outline-offset: 1px; cursor: pointer; position: relative; }
+.pl.deck.known .eye { position: absolute; top: -8px; left: -8px; font: 600 10px/1.4 var(--f-mono, monospace); padding: 0 4px; border-radius: 8px; background: var(--brass); color: #10131e; white-space: nowrap; }
+.prompt .mull.seen { justify-content: center; }
+.prompt .mull.seen .card { --cw: 120px; --chh: 168px; width: 120px; height: 168px; }
+.prompt .mull.seen .seenc.cur .card { outline: 3px solid var(--brass); outline-offset: 2px; }
+.prompt .mull.seen .seenc.other { opacity: .5; }
 .tgrid .card { --cw: 86px; --chh: 120px; width: 86px; height: 120px; }
 .zoom { z-index: 70; pointer-events: none; }
 .hpop { min-width: 260px; max-width: 340px; border-color: var(--brass); }
@@ -662,6 +668,13 @@ function openModal(html, closable = true) {
 }
 function closeModal(toMenu) { $("modal").hidden = true; $("mbox").innerHTML = ""; if (V && !working) decorate(); if (toMenu === true && !V && $("deckView").hidden) showMenu(); }
 $("modal").addEventListener("click", e => { if (e.target === $("modal") && $("modal").dataset.closable) closeModal(true); });
+// Dessus connu de ton deck (Predict 436, Vision 817, « look at the top… ») : les cartes vues, dans l'ordre, tant
+// qu'elles restent sur le dessus (train : known_top).
+function openKnownTop() {
+  if (!V) return;
+  const kt = V.st.p[MEP].known_top || [];
+  openModal(`<h3>Dessus connu de ton deck (${kt.length})</h3>${kt.length ? `<div class="tgrid">${kt.map(n => card(n, { raw: true })).join("")}</div><div class="small">Dans l'ordre : la première sera piochée en premier. Vu par Predict ou Vision ; disparaît dès que la carte quitte le dessus.</div>` : `<div class="small">Rien de connu pour l'instant.</div>`}`);
+}
 function openTrash(pid) {
   if (!V) return;
   const t = V.st.p[pid].trash;
@@ -1257,7 +1270,9 @@ function rowHTML(st, pid, srcs) {
     <div class="zone pile">
       <div class="who">${pid !== MEP ? esc(PN[pid]) : "Toi (" + esc(PN[pid]) + ")"}</div>
       <div class="score">${st.pts[pid]}<small>/${st.v}</small></div>
-      <div class="piles"><div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div><div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
+      <div class="piles">${(() => { const kt = pid === MEP ? (p.known_top || []) : [];
+        return kt.length ? `<div class="pl deck known" data-deck="1" tabindex="0" role="button" title="Deck : ${p.deck} cartes. Dessus connu (Predict, Vision) : ${esc(kt.join(", "))}. Touche pour voir." style="${art(kt[0])}"><b class="eye">👁 ${kt.length}</b><span>${p.deck}</span></div>`
+          : `<div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div>`; })()}<div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
     <div class="zone" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
@@ -1500,6 +1515,7 @@ function askHTML() {
     return `<span class="ft">Mulligan : touche jusqu'à 2 cartes à remettre.</span><div class="mull">${a.options.map((c, i) => `<button data-m="${i}" aria-pressed="${mode.mull.has(i)}" title="${esc(c)}">${card(c, { raw: true, p: 0, cost: true })}</button>`).join("")}</div>
       <div class="prow"><button class="go" id="bKeep">${n ? `Remettre ${n} carte${n > 1 ? "s" : ""}` : "Garder ma main"}</button></div>`;
   }
+  if (a.show && a.show.length) return `<span class="ft">${who}${esc(a.title)}</span><div class="mull seen">${a.show.map((n, i) => `<div class="seenc${a.show.length > 1 ? (i === (a.cur || 0) ? " cur" : " other") : ""}">${card(n, { raw: true, cost: true })}</div>`).join("")}</div><div class="prow">${a.options.map((o, i) => `<button class="${i ? "" : "go"}" data-a="${i}">${esc(cap(o))}</button>`).join("")}</div>`;
   if (a.kind === "may") return `<span class="ft">${who}Utiliser cet effet ?</span><div class="prow"><button class="go" data-a="0">Oui</button><button data-a="1">Non</button></div>`;
   const pickable = (a.uids || []).some(u => u !== null) || (a.zs || []).some(z => z !== null);
   const loose = a.options.map((o, i) => i).filter(i => !((a.uids || [])[i] !== null && (a.uids || [])[i] !== undefined) && !((a.zs || [])[i] !== null && (a.zs || [])[i] !== undefined));
@@ -1695,6 +1711,7 @@ document.addEventListener("click", e => {
   if (e.target.closest("#modal")) { if (el && el.dataset.card) showZoom(el); else Z.hidden = true; return; }
   const tr = e.target.closest("#board [data-trash]");
   if (tr) { Z.hidden = true; return openTrash(+tr.dataset.trash); }
+  if (e.target.closest("#board [data-deck]")) { Z.hidden = true; return openKnownTop(); }
   if (V && V.ask && mode && mode.type === "ask" && !working && e.target.closest("#board")) {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
     let i = u ? (mode.a.uids || []).findIndex(x => x !== null && String(x) === u.dataset.uid) : -1;
@@ -1852,6 +1869,7 @@ const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
+  if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
   if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } } });
 

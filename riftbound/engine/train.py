@@ -593,15 +593,20 @@ def hint(n=4):
     g, d = W["g"], W["d"]
     if d is None or d.player != ME or len(d.options) < 2:
         return json.dumps([])
-    sv = _save()
+    # Calcul sur une COPIE : la partie en cours n'est jamais remplacée (la remplacer par une copie cassait les capacités
+    # en attente qui gardent des objets du plateau : Ashe, Fizz… audit du 2026-10-09).
+    n0, i0 = Obj._n, Item._n
+    cp = copy.deepcopy(dict(g=g, ag=W["ag"], d=d))
     try:
+        g2, d2 = cp["g"], cp["d"]
+        g2.agents = cp["ag"]
         c = W["coach"]
-        opts = list(d.options)
+        opts = list(d2.options)
         if len(opts) > c.max_cands:
             opts = opts[:1] + c.rng.sample(opts[1:], c.max_cands - 1)
-        best, best_v, scored = c.pick(g, d, opts)
+        best, best_v, scored = c.pick(g2, d2, opts)
     finally:
-        _restore(sv)
+        Obj._n, Item._n = n0, i0
     scored.sort(key=lambda x: -x[0])
     idx = {repr(a): i for i, a in enumerate(W["d"].options)}
     out = []
@@ -658,6 +663,8 @@ def _alabel(g, ask, o):
     """Libellé d'une option selon la question : joueurs, X, répartitions de dégâts, paires (carte, choix de jeu)."""
     k = ask.kind
     try:
+        if k == "predict_recycle":
+            return "la recycler (sous le deck)" if o else "la garder sur le dessus"
         if k == "damage_pick":
             return f"{_olabel(g, o)} (mortel : {ask.ctx.get('need', {}).get(o.uid, '?')} dégâts)"
         if k in ("burn_player", "choose_player") and isinstance(o, int):
@@ -788,6 +795,12 @@ def _ask_title(g, ask):
     """Titre de la question : connu (ASKS, puis cards.ASK_TEXT que chaque module remplit), précédé du nom de la carte
     qui demande quand il n'y figure pas déjà."""
     from cards import ASK_TEXT
+    if ask.kind == "predict_recycle":
+        c, n, i = ask.ctx.get("card"), ask.ctx.get("n", 1), ask.ctx.get("i", 0)
+        return (f"Predict : dessus de ton deck" + (f" (carte {i + 1}/{n})" if n > 1 else "") +
+                f" : {c.cname if c is not None else '?'}. La recycler sous le deck, ou la garder ? (règle 436)")
+    if ask.kind == "predict_top":
+        return "Predict : quelle carte remettre sur le dessus ? (la première choisie sera piochée en premier)"
     if ask.kind == "damage_pick":
         return (f"Combat : il te reste {ask.ctx.get('left')} dégâts à assigner. Quelle unité reçoit d'abord ses dégâts "
                 "mortels ? (règle 465.2.c : mortel en entier avant la suivante, l'excédent va à la dernière)")
@@ -831,6 +844,12 @@ def _view(ask=None):
         c["src"] = it.src if isinstance(it.src, int) else None
     st["p"][ME]["champu"] = [c.uid for c in g.p[ME].champ]
     st["p"][ME]["trashu"] = [[c.uid, c.cname] for c in g.p[ME].trash]   # Flow (829) : sorts jouables depuis ta défausse
+    kt = []                                             # dessus connu (Predict, Vision) : tant qu'il reste dessus
+    for c in g.p[ME].deck:
+        if c.uid not in g.p[ME].seen:
+            break
+        kt.append(c.cname)
+    st["p"][ME]["known_top"] = kt
     for b, gb in zip(st["bfs"], g.bfs):
         if gb.facedown is not None and gb.facedown.owner == ME:
             b["fdu"] = gb.facedown.uid
@@ -846,6 +865,10 @@ def _view(ask=None):
                               for o in ask.options],
                           src=_ask_src(g, ask),
                           item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None)
+        if ask.kind == "predict_recycle" and ask.ctx.get("card") is not None:
+            top = ask.ctx.get("top") or [ask.ctx["card"]]          # les cartes vues (Predict N), en grand dans la question
+            out["ask"]["show"] = [c.cname for c in top]
+            out["ask"]["cur"] = ask.ctx.get("i", 0)
     elif g.winner is not None:
         pass
     elif d is not None and d.player == ME:

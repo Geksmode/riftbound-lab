@@ -150,6 +150,7 @@ class Player:
         s.bf_name = battlefield
         s.turns = 0              # turns started by this player
         s.revealed_turn = -1     # Scuttle Crab: hand revealed to the opponent this turn
+        s.seen = set()           # uids des cartes de son propre deck que le joueur a vues (Predict, Vision : 436, 817)
         s.gold_spent = 0
 
 
@@ -833,6 +834,8 @@ class Game:
         if not cards:
             return cards
         owner = pid if owner is None else owner
+        if owner == pid:
+            s.p[pid].seen.update(c.uid for c in cards)     # la table montre le dessus connu tant qu'il reste dessus
         s.emit("look", pid=pid, cards=cards, owner=owner)
         names = _cards().HOOKS.get("on_seen")
         if names:
@@ -915,8 +918,8 @@ class Game:
         s.look(pid, top)
         top = [c for c in top if c in pl.deck[:n]]
         keep, rec = [], []
-        for c in top:
-            if s.ask(pid, "predict_recycle", [False, True], card=c, n=len(top)):
+        for i, c in enumerate(top):
+            if s.ask(pid, "predict_recycle", [False, True], card=c, n=len(top), i=i, top=list(top)):
                 rec.append(c)
             else:
                 keep.append(c)

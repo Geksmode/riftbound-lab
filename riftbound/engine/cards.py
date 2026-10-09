@@ -682,7 +682,8 @@ def _star_spring(g, b, ev, info):
         played = info["card"]
 
         def choose(g_, it):
-            us = [u for u in g_.units(it.ctrl, b.idx) if u is not played]
+            # comparer par uid : la table rejoue la partie depuis une copie profonde (choix humain), « is » y échoue
+            us = [u for u in g_.units(it.ctrl, b.idx) if u.uid != played.uid]
             if not us:
                 return False
             u = g_.ask(it.ctrl, "star_spring", us)
@@ -1649,11 +1650,14 @@ def _ashe(g, o, ctx):
         g_.to_zone(c, "banish")
 
         def back(g2, eff, info):
-            if info["pid"] == opp and c in g2.p[opp].banish:
+            # relire la carte par uid/oid : la table (choix humain, conseil) et l'IA (clone) travaillent sur une copie
+            # profonde de la partie, où « c » capturé n'est plus l'objet de l'exil
+            x = next((y for y in g2.p[opp].banish if y.uid == eff["uid"] and y.oid == eff["oid"]), None)
+            if info["pid"] == opp and x is not None:
                 g2.effects.remove(eff)
-                g2.p[opp].banish.remove(c)
-                c.zone = "hand"; g2.p[opp].hand.append(c)
-        g_.effects.append(dict(on="hold", fn=back))
+                g2.p[opp].banish.remove(x)
+                x.zone = "hand"; g2.p[opp].hand.append(x)
+        g_.effects.append(dict(on="hold", fn=back, uid=c.uid, oid=c.oid))
     g.queue_trigger(o.ctrl, "Ashe", res, src=o.uid)
 
 
