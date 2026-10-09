@@ -103,3 +103,6 @@ Sur téléphone, les cibles sont petites ou cachées sous la bulle (ta base : im
 ## [2026-10-09] ingest | Retour : Evelynn « pas activée » depuis la face cachée
 Reproduit par le chemin de la table : Evelynn jouée depuis la face cachée pendant ton tour déplace bien l'ennemi (Astral Heron en même temps compris). Deux cas sans effet, conformes au texte mais muets : pendant le tour adverse (« on your turn ») et sans unité ennemie ailleurs. Changements : `flush_triggers` ne pose plus la question « utiliser l'effet ? » quand une capacité à cible n'a aucune cible légale (402.4, `trig_target.options`), et le journal explique les deux cas. Petit changement de version du moteur (une question de moins pour l'IA dans ces cas). Partie de l'utilisateur non consultée : cause exacte de son cas non confirmée.
 
+## [2026-10-09] retex | Session du 7 au 9 octobre (PR #1 à #15)
+Revue autocritique : `riftbound/retex/retex-session-2026-10-07-09.md`. Leçons validées par l'utilisateur et écrites dans `CLAUDE.md` (PID, PR fusionnée, règle 7 robot / vrai téléphone), `docs/memoire/riftbound-training-table.md` et `docs/memoire/riftbound-engine.md`.
+

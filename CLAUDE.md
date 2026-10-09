@@ -32,6 +32,7 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 6. **Règles au plus près** : en cas de doute sur une carte, appliquer la lecture la plus fidèle aux Core Rules
    (`riftbound/rules/source/core_rules_2026-07-16.txt`) et la citer. Ex. Deathgrip : deux cibles obligatoires (355.8).
 7. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
+   Pour la table, distingue « vérifié par robot (toucher simulé) » et « essayé sur un vrai téléphone » (retex 2026-10-09).
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
@@ -40,4 +41,7 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 - Avant d'intégrer ou de publier : `scripts/verifier.sh` doit être vert (tests, fuzz de chaque paquet, parties aléatoires,
   build et partie jouée dans un navigateur ; `docs/wiki/pages/porte.md`). Commandes et carte du dépôt : `docs/wiki/pages/depot.md`.
 - Les résultats de simulation d'avant le 2026-10-06 sont périmés (énergie flottante) : les remesurer avant de les citer.
+- Processus de fond (serveur http, PeerJS) : les arrêter par leur PID enregistré, jamais `pkill -f` (il tue ton propre shell).
+- Avant de committer sur la branche de travail : vérifier si la PR précédente est fusionnée (`git log origin/main`) ; si oui,
+  repartir de `origin/main` (une PR fusionnée ne reçoit plus rien).
 - Travail en équipe (chef + agents tmux) : `docs/wiki/pages/equipe.md`, missions : `docs/MISSIONS.md`.
