@@ -664,6 +664,10 @@ def _sigil(g, b, ev, info):
             rs = g_.p[it.ctrl].runes
             if rs:
                 r = g_.ask(it.ctrl, "recycle_rune", list(rs))
+                if not r.exhausted:
+                    # a ready rune is first exhausted for its [Add] 1 Energy (rule 429.3.a: Add Reactions resolve
+                    # even during an ability's resolution); the energy floats in the Rune Pool, as in Game.pay
+                    g_.p[it.ctrl].pool_e += 1
                 g_.recycle_rune(it.ctrl, r)
         g.queue_trigger(info["pid"], "Sigil of the Storm", res)
 
