@@ -321,7 +321,7 @@ svg.eval { width: 100%; height: 100px; display: block; cursor: crosshair; }
     <div class="box">
       <h3>Avantage estimé</h3>
       <svg class="eval" id="eval" role="img" aria-label="Évaluation de la position au fil de la partie"></svg>
-      <div class="legend"><span>Au-dessus : Akali devant</span><span>clic pour aller à ce moment</span></div>
+      <div class="legend"><span id="evleg">Au-dessus : Akali devant</span><span>clic pour aller à ce moment</span></div>
     </div>
     <div class="box grow">
       <h3>Journal</h3>
@@ -335,7 +335,7 @@ svg.eval { width: 100%; height: 100px; display: block; cursor: crosshair; }
 const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "chaos", Order: "order" };
 const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
 const GLYPH = { Fury: "F", Calm: "Ca", Mind: "Mi", Body: "B", Chaos: "Ch", Order: "O" };
-const PN = ["Akali", "LeBlanc"];
+let PN = ["Akali", "LeBlanc"];   // noms des joueurs de la partie chargée (index : names), Akali / LeBlanc par défaut
 let IMG = {}, GAMES = [], rep = null, fi = 0, timer = null, turnStarts = [], showOpp = true, decOnly = false;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -359,10 +359,12 @@ async function load(i) {
   stop();
   $("gsel").value = i;
   const g = GAMES[i];
+  PN = g.names && g.names.length === 2 ? g.names : ["Akali", "LeBlanc"];
+  $("evleg").textContent = `Au-dessus : ${PN[0]} devant`;
   $("gres").className = "res " + (g.winner === 0 ? "w" : "l");
-  $("gres").textContent = `${g.winner === 0 ? "Victoire Akali" : "Victoire LeBlanc"} ${g.pts[0]}-${g.pts[1]}`;
-  const pl = g.plans && (g.plans[0] !== "aucun" || g.plans[1] !== "aucun") ? ` · plans : Akali ${g.plans[0]}, LeBlanc ${g.plans[1]}` : "";
-  $("gmeta").textContent = `${g.first === 0 ? "Akali commence" : "LeBlanc commence"} · ${g.turns} tours · ${g.bf[0]} / ${g.bf[1]}${pl}`;
+  $("gres").textContent = `${g.winner === 0 || g.winner === 1 ? "Victoire " + PN[g.winner] : "Nul"} ${g.pts[0]}-${g.pts[1]}`;
+  const pl = g.plans && (g.plans[0] !== "aucun" || g.plans[1] !== "aucun") ? ` · plans : ${PN[0]} ${g.plans[0]}, ${PN[1]} ${g.plans[1]}` : "";
+  $("gmeta").textContent = `${PN[g.first]} commence · ${g.turns} tours · ${g.bf[0]} / ${g.bf[1]}${pl}`;
   $("gnote").textContent = g.note;
   rep = await fetch("games/" + g.file).then(r => r.json());
   turnStarts = [];
@@ -455,10 +457,10 @@ function stackItems(f) {
   const resolved = new Set(lines.filter(t => t.startsWith("Résolution : ")).map(t => t.slice(13)));
   f.st.chain.forEach(c => { out.push({ n: c.n, c: c.c, k: c.k === "trigger" ? "Déclenchement" : "Sur la chaîne", on: true }); seen.add(c.n); });
   lines.forEach(t => {
-    const m = t.match(/^(Akali|LeBlanc) joue (.+?)( \(carte cachée révélée\))?(?: — (.*))?$/);
+    const who = PN.find(n => t.startsWith(n + " joue ")), m = who && t.slice(who.length).match(/^ joue (.+?)( \(carte cachée révélée\))?(?: — (.*))?$/);
     if (m) {
-      const nm = m[2].split(" depuis")[0], cd = rep.cards[nm];
-      if (cd && cd.t === "Spell" && !seen.has(nm)) { seen.add(nm); out.push({ n: nm, c: m[1] === "Akali" ? 0 : 1, k: m[3] ? "Sort caché révélé" : "Sort", tgt: m[4], on: !resolved.has(nm) }); }
+      const nm = m[1].split(" depuis")[0], cd = rep.cards[nm];
+      if (cd && cd.t === "Spell" && !seen.has(nm)) { seen.add(nm); out.push({ n: nm, c: who === PN[0] ? 0 : 1, k: m[2] ? "Sort caché révélé" : "Sort", tgt: m[3], on: !resolved.has(nm) }); }
     }
   });
   resolved.forEach(n => { if (!seen.has(n)) { seen.add(n); out.push({ n, c: null, k: "Déclenchement", on: false }); } });

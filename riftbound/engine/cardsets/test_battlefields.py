@@ -799,5 +799,54 @@ def optional_cost_that_cannot_be_paid_is_not_offered_to_a_human():
             assert asked == [] and any("pas de quoi payer" in l for l in g.lines), (asked, g.lines[-6:])
 
 
+@T.test
+def star_spring_never_offers_the_unit_just_played_to_a_human():
+    # « they may move ANOTHER unit they control here to its base » (retour utilisateur 2026-10-09). Chemin de la table
+    # (train : choix humain, partie rejouée depuis une copie profonde) : l'unité jouée n'est pas proposée.
+    import json, train
+    from game import Obj, Rune
+    v = json.loads(train.new(4, None, 0))
+    for _ in range(300):
+        if v.get("busy"):
+            v = json.loads(train.step())
+        elif v.get("ask"):
+            v = json.loads(train.answer(json.dumps([] if v["ask"]["kind"] == "mulligan" else 0)))
+        elif v.get("dec") and v["dec"]["kind"] == "main":
+            break
+        else:
+            v = json.loads(train.act(0)) if v.get("dec") else json.loads(train.step())
+    g, me = train.W["g"], train.ME
+    b = g.bfs[0]
+    b.name = "Star Spring"
+    other = Obj("Soaring Scout", me)
+    g.enter_board(other, me, 0, ready=True)
+    b.ctrl = me
+    g.p[me].runes = [Rune("Order", me) for _ in range(4)]
+    c = Obj("Soaring Scout", me)
+    c.zone = "hand"
+    g.p[me].hand.append(c)
+    train.W["d"] = None
+    v = json.loads(train.step())
+    while v.get("busy"):
+        v = json.loads(train.step())
+    i = [o["i"] for o in v["dec"]["options"] if o["k"] == "play" and o.get("src") == c.uid and o.get("loc") == 0][0]
+    v = json.loads(train.act(i))
+    offered = []
+    for _ in range(40):
+        if v.get("busy"):
+            v = json.loads(train.step())
+        elif v.get("ask"):
+            if v["ask"]["kind"] == "star_spring":
+                offered.append(v["ask"]["options"])
+            v = json.loads(train.answer(json.dumps(0)))
+        elif v.get("dec") and v["dec"]["kind"] != "main":            # passer jusqu'à la résolution de la chaîne
+            v = json.loads(train.act(next(o["i"] for o in v["dec"]["options"] if o["k"] == "pass")))
+        else:
+            break
+    g = train.W["g"]
+    assert not offered, offered                       # une seule unité possible (l'autre) : rien à demander
+    assert g.obj(c.uid).loc == 0 and g.obj(other.uid).loc == "base", (offered, g.obj(c.uid).loc, g.obj(other.uid).loc)
+
+
 if __name__ == "__main__":
     T.main()

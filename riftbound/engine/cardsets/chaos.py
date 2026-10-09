@@ -24,6 +24,13 @@ def _me(g, it):
     return o
 
 
+def _loc_now(g, it, here):
+    """Position actuelle de la source d'un déclenchement (relue par uid, pas par l'objet capturé : la table et l'IA
+    rejouent sur une copie profonde de la partie) ; à défaut, sa position quand il a été mis en attente."""
+    o = g.obj(it.src)
+    return o.loc if o is not None else here
+
+
 def _same(g, uid, oid):
     o = g.obj(uid)
     return o if o is not None and o.oid == oid else None
@@ -539,13 +546,14 @@ def _evelynn(g, o, ctx):
     if g.tp != o.ctrl:
         g.log("  Evelynn, Entrancing : jouée depuis la face cachée pendant le tour adverse, pas d'effet (« on your turn »)")
         return
+    here = o.loc
 
     def res(g_, it):
         u, me = g_.legal(it, 0), _me(g_, it)
         if u is not None and me is not None and me.loc in (0, 1) and u.loc != me.loc:
             g_.move([u], me.loc, it.ctrl)
     _q(g, o, "Evelynn, Entrancing", res, may=True,
-       choose=trig_target(lambda g_, it: [u for u in enemies(g_, it.ctrl) if u.loc != o.loc],
+       choose=trig_target(lambda g_, it: [u for u in enemies(g_, it.ctrl) if u.loc != _loc_now(g_, it, here)],
                           lambda g_, it, u: u.ctrl != it.ctrl, deflect=True))
 
 
@@ -660,13 +668,15 @@ def _fizz(g, it):
     sp = play_card(g, pid, c, "trash", dict(ch), limited=True)
     if sp is None:
         return
-    iid = sp.id
+    iid, uid, owner = sp.id, c.uid, c.owner
 
     def recycle(g_, eff, info):
         if info.get("item") is not None and info["item"].id == iid:
             g_.effects.remove(eff)
-            if c in g_.p[c.owner].trash:
-                g_.recycle_cards(c.owner, [c])      # "Recycle that spell after you play it"
+            # relire la carte par uid : la table et l'IA rejouent sur une copie profonde, où « c » capturé est périmé
+            x = next((y for y in g_.p[owner].trash if y.uid == uid), None)
+            if x is not None:
+                g_.recycle_cards(owner, [x])      # "Recycle that spell after you play it"
     g.effects.append(dict(on="played", fn=recycle, dur="turn"))
 
 
@@ -1517,6 +1527,8 @@ card("The Syren", abilities=[ability(
 # Tideturner — "[Hidden] When you play me, you may choose a friendly unit. Move me to its location and it to my
 # original location."  (its target may be chosen freely when played from Hidden, rule 811.1.d.2 example)
 def _tideturner(g, o, ctx):
+    here = o.loc
+
     def res(g_, it):
         u, me = g_.legal(it, 0), _me(g_, it)
         if u is None or me is None or u.loc == me.loc:
@@ -1525,7 +1537,8 @@ def _tideturner(g, o, ctx):
         g_.move([me], there, it.ctrl)
         g_.move([u], orig, it.ctrl)
     _q(g, o, "Tideturner", res, may=True,
-       choose=trig_target(lambda g_, it: [u for u in friends(g_, it.ctrl) if u.uid != it.src and u.loc != o.loc],
+       choose=trig_target(lambda g_, it: [u for u in friends(g_, it.ctrl) if u.uid != it.src
+                                          and u.loc != _loc_now(g_, it, here)],
                           lambda g_, it, u: u.ctrl == it.ctrl and u.uid != it.src, kind="friend_target"))
 
 

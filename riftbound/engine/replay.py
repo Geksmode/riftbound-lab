@@ -376,9 +376,10 @@ def _rec_plan_agent():
     return RecPlanAgent
 
 
-def record_plan(seed, a_deck, l_deck, a_plan=None, l_plan=None, a_bfs=None, l_bfs=None, first=None):
+def record_plan(seed, a_deck, l_deck, a_plan=None, l_plan=None, a_bfs=None, l_bfs=None, first=None, agent_kw=None):
     """Rejoue la partie `seed` exactement comme exp_plans.one et manager/run_session.one (mêmes tirages, mêmes plans,
-    battlefields ou premier joueur éventuellement forcés) et l'enregistre."""
+    battlefields ou premier joueur éventuellement forcés) et l'enregistre. `agent_kw` : [dict Akali, dict LeBlanc]
+    passés aux agents (ex. recherche search/samples/sh_extra d'exp_search.py)."""
     import plans as P
     from decks import with_bf
     Obj._n = 0
@@ -391,7 +392,8 @@ def record_plan(seed, a_deck, l_deck, a_plan=None, l_plan=None, a_bfs=None, l_bf
     abf = (pa.battlefield(a_deck, f == 0, lbf) if pa and not a_bfs else None) or r.choice(a_bfs or a_deck["battlefields"])
     A, L = with_bf(a_deck, abf), with_bf(l_deck, lbf)
     RA = _rec_plan_agent()
-    ag = [RA(seed, plan=pa, opp_plan=pl), RA(seed + 500000, plan=pl, opp_plan=pa)]
+    kw = agent_kw or [{}, {}]
+    ag = [RA(seed, plan=pa, opp_plan=pl, **kw[0]), RA(seed + 500000, plan=pl, opp_plan=pa, **kw[1])]
     g = RecGame([A, L], ag, seed=seed, first=f)
     while True:
         d = g.advance()

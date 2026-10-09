@@ -9,7 +9,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | trouver un fichier, lancer tests ou build | [pages/depot.md](pages/depot.md) |
 | intégrer une branche, vérifier avant de pousser | [pages/porte.md](pages/porte.md) |
 | modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md) |
-| travailler sur l'IA ou les plans | [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
+| travailler sur l'IA ou les plans | [recherche de l'IA générale](../memoire/riftbound-search-ai.md), [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats | [pages/resultats.md](pages/resultats.md) |
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [replays après chaque sim](../memoire/replays-after-every-sim.md), [manager](../memoire/riftbound-manager.md) |

@@ -61,17 +61,17 @@ navigateur() {
   [ $rc = 0 ] && ! grep -q "^ÉCHEC" <<<"$out" && echo "robot navigateur : $(grep -c '^OK' <<<"$out") contrôles OK (captures dans $LOG)"
 }
 
-cache() {   # robots : verif_hidden.mjs (cacher, jouer depuis la face cachée), verif_revele.mjs (main révélée), verif_charge.mjs (téléphone chargé), verif_cibles.mjs (ciblage par liste), verif_flow.mjs (Flow depuis la défausse), verif_vs.mjs (sélection contre l IA), verif_fleches.mjs (flèches)
+cache() {   # robots : verif_hidden.mjs (cacher, jouer depuis la face cachée), verif_revele.mjs (main révélée), verif_charge.mjs (téléphone chargé), verif_cibles.mjs (ciblage par liste), verif_flow.mjs (Flow depuis la défausse), verif_vs.mjs (sélection contre l IA), verif_fleches.mjs (flèches), verif_predict.mjs (Predict), verif_replay.mjs (mode replay)
   if [ "${RB_NAV:-1}" = 0 ]; then echo "robot Hidden sauté (RB_NAV=0)"; return 0; fi
   [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
     || { echo "robot Hidden sauté (Playwright absent)"; return 0; }
   local port=$((PORT + 4))
   (cd "$TR/build" && exec python3 -m http.server "$port" >/dev/null 2>&1) & local srv=$!
   sleep 1
-  local out; out=$(cd "$TR" && timeout 900 node verif_hidden.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_revele.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_charge.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_cibles.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_flow.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_vs.mjs "$LOG" "$port" 2>&1 && timeout 900 node verif_fleches.mjs "$LOG" "$port" 2>&1); local rc=$?
+  local out; out=$(cd "$TR" && timeout 900 node verif_hidden.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_revele.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_charge.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_cibles.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_flow.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_vs.mjs "$LOG" "$port" 2>&1 && timeout 900 node verif_fleches.mjs "$LOG" "$port" 2>&1 && timeout 600 node verif_predict.mjs "$LOG" "$port" 2>&1 && timeout 1200 node verif_replay.mjs "$LOG" "$port" 2>&1); local rc=$?
   kill $srv 2>/dev/null
   echo "$out"
-  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robots Hidden, main révélée, charge, ciblage, Flow, sélection contre l IA et flèches : $(grep -c '^OK' <<<"$out") contrôles OK"
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robots Hidden, main révélée, charge, ciblage, Flow, sélection contre l IA, flèches, Predict et replay : $(grep -c '^OK' <<<"$out") contrôles OK"
 }
 
 match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360x740 et 1400x900

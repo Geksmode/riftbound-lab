@@ -593,15 +593,20 @@ def hint(n=4):
     g, d = W["g"], W["d"]
     if d is None or d.player != ME or len(d.options) < 2:
         return json.dumps([])
-    sv = _save()
+    # Calcul sur une COPIE : la partie en cours n'est jamais remplacée (la remplacer par une copie cassait les capacités
+    # en attente qui gardent des objets du plateau : Ashe, Fizz… audit du 2026-10-09).
+    n0, i0 = Obj._n, Item._n
+    cp = copy.deepcopy(dict(g=g, ag=W["ag"], d=d))
     try:
+        g2, d2 = cp["g"], cp["d"]
+        g2.agents = cp["ag"]
         c = W["coach"]
-        opts = list(d.options)
+        opts = list(d2.options)
         if len(opts) > c.max_cands:
             opts = opts[:1] + c.rng.sample(opts[1:], c.max_cands - 1)
-        best, best_v, scored = c.pick(g, d, opts)
+        best, best_v, scored = c.pick(g2, d2, opts)
     finally:
-        _restore(sv)
+        Obj._n, Item._n = n0, i0
     scored.sort(key=lambda x: -x[0])
     idx = {repr(a): i for i, a in enumerate(W["d"].options)}
     out = []
@@ -610,6 +615,96 @@ def hint(n=4):
         out.append(dict(i=idx.get(repr(a)), label=describe(W["g"], a, ME),
                         gap=("perd la partie" if gap < -1000 else round(gap, 1))))
     return json.dumps(out, ensure_ascii=False)
+
+
+# ------------------------------------------------------------------ mode replay (« Mes parties » → « Revoir »)
+# La table rejoue une partie enregistrée (réglages + suite exacte des choix, moteur déterministe : comme
+# train_games.replay) et garde une image de chaque étape. Pour chacune de tes décisions, l'état est gardé : « Analyser »
+# y calcule le conseil de l'IA (ce qu'elle aurait joué et l'écart). La partie en cours, s'il y en a une, est gardée et
+# rendue en quittant le replay.
+def replay_load(game_json):
+    game = json.loads(game_json) if isinstance(game_json, str) else dict(game_json)
+    prev = _save() if W.get("g") is not None else None
+    base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
+    meta = json.loads(new(*base, game.get("mine"), game.get("opp"), game.get("obf")))
+    frames, svs, logs, mine, out = [], {}, [], [], dict(desync=None)
+
+    def push(v, lab, who):
+        k = len(frames)
+        logs.extend([ind, t, k] for ind, t in v.get("log", []))
+        v = dict(v, log=[])
+        frames.append(json.dumps(dict(v=v, lab=lab, who=who), ensure_ascii=False))
+
+    def drain(v, lab, who):
+        while True:
+            if v.get("log") or not v.get("busy"):
+                push(v, (_short_ai(v) if who == "ia" else lab), who)
+                lab, who = "", "ia"
+            if not v.get("busy"):
+                return v
+            v = json.loads(step())
+            who = "ia"
+    v = drain(json.loads(step()), "Début de la partie", "jeu")
+    for m in game.get("moves") or []:
+        k = m[0]
+        if k == "hint":
+            continue
+        if k == "undo":
+            v = drain(json.loads(undo()), "Tu reprends ton dernier coup", "moi")
+            continue
+        j = len(frames) - 1                              # l'image où tu décides
+        if k == "act" and v.get("dec") and isinstance(m[1], int) and m[1] < len(v["dec"]["options"]):
+            lab = v["dec"]["options"][m[1]]["label"]
+            svs[j] = _save()
+            mine.append([j, "Tu joues : " + lab])
+            v = drain(json.loads(act(m[1])), "Toi : " + lab, "moi")
+        elif k == "ans" and v.get("ask"):
+            a = v["ask"]
+            x = m[1]
+            lab = ", ".join(a["options"][i] for i in x if isinstance(i, int) and i < len(a["options"])) \
+                if isinstance(x, list) else (a["options"][x] if isinstance(x, int) and x < len(a["options"]) else str(x))
+            svs[j] = None                                # une réponse à une question : pas de conseil possible
+            mine.append([j, f"Tu réponds ({a['title']}) : {lab or 'rien'}"])
+            v = drain(json.loads(answer(json.dumps(x))), "Toi : " + (lab or "rien"), "moi")
+        else:
+            out["desync"] = len(mine)
+            break
+    W["rp"] = dict(frames=frames, svs=svs, prev=prev)
+    res = game.get("result") or {}
+    same = (not res) or (res.get("winner") == v.get("winner") and res.get("pts") == v["st"]["pts"])
+    return json.dumps(dict(meta=meta, n=len(frames), log=logs, mine=mine, desync=out["desync"],
+                           same=same, end=dict(winner=v.get("winner"), pts=v["st"]["pts"], t=v["st"]["t"])),
+                      ensure_ascii=False)
+
+
+def _short_ai(v):
+    return (f"{_rp.NAMES[AI]} : {v['ai']}") if v.get("ai") else ""
+
+
+def replay_frame(k):
+    return W["rp"]["frames"][int(k)]
+
+
+def replay_hint(k, n=5):
+    """Conseil de l'IA à ta décision de l'image k (état gardé au rejeu) ; la partie rejouée n'est pas touchée."""
+    sv = W["rp"]["svs"].get(int(k))
+    if sv is None:
+        return json.dumps([])
+    cur = _save()
+    try:
+        _restore(sv)
+        return hint(n)
+    finally:
+        _restore(cur)
+
+
+def replay_exit():
+    """Quitte le replay : la partie en cours avant le replay est rendue telle quelle."""
+    rp = W.pop("rp", None)
+    if rp and rp.get("prev") is not None:
+        _restore(rp["prev"])
+        return json.dumps(dict(prev=True))
+    return json.dumps(dict(prev=False))
 
 
 def _olabel(g, o):
@@ -658,6 +753,8 @@ def _alabel(g, ask, o):
     """Libellé d'une option selon la question : joueurs, X, répartitions de dégâts, paires (carte, choix de jeu)."""
     k = ask.kind
     try:
+        if k == "predict_recycle":
+            return "la recycler (sous le deck)" if o else "la garder sur le dessus"
         if k == "damage_pick":
             return f"{_olabel(g, o)} (mortel : {ask.ctx.get('need', {}).get(o.uid, '?')} dégâts)"
         if k in ("burn_player", "choose_player") and isinstance(o, int):
@@ -788,6 +885,12 @@ def _ask_title(g, ask):
     """Titre de la question : connu (ASKS, puis cards.ASK_TEXT que chaque module remplit), précédé du nom de la carte
     qui demande quand il n'y figure pas déjà."""
     from cards import ASK_TEXT
+    if ask.kind == "predict_recycle":
+        c, n, i = ask.ctx.get("card"), ask.ctx.get("n", 1), ask.ctx.get("i", 0)
+        return (f"Predict : dessus de ton deck" + (f" (carte {i + 1}/{n})" if n > 1 else "") +
+                f" : {c.cname if c is not None else '?'}. La recycler sous le deck, ou la garder ? (règle 436)")
+    if ask.kind == "predict_top":
+        return "Predict : quelle carte remettre sur le dessus ? (la première choisie sera piochée en premier)"
     if ask.kind == "damage_pick":
         return (f"Combat : il te reste {ask.ctx.get('left')} dégâts à assigner. Quelle unité reçoit d'abord ses dégâts "
                 "mortels ? (règle 465.2.c : mortel en entier avant la suivante, l'excédent va à la dernière)")
@@ -831,6 +934,12 @@ def _view(ask=None):
         c["src"] = it.src if isinstance(it.src, int) else None
     st["p"][ME]["champu"] = [c.uid for c in g.p[ME].champ]
     st["p"][ME]["trashu"] = [[c.uid, c.cname] for c in g.p[ME].trash]   # Flow (829) : sorts jouables depuis ta défausse
+    kt = []                                             # dessus connu (Predict, Vision) : tant qu'il reste dessus
+    for c in g.p[ME].deck:
+        if c.uid not in g.p[ME].seen:
+            break
+        kt.append(c.cname)
+    st["p"][ME]["known_top"] = kt
     for b, gb in zip(st["bfs"], g.bfs):
         if gb.facedown is not None and gb.facedown.owner == ME:
             b["fdu"] = gb.facedown.uid
@@ -846,6 +955,10 @@ def _view(ask=None):
                               for o in ask.options],
                           src=_ask_src(g, ask),
                           item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None)
+        if ask.kind == "predict_recycle" and ask.ctx.get("card") is not None:
+            top = ask.ctx.get("top") or [ask.ctx["card"]]          # les cartes vues (Predict N), en grand dans la question
+            out["ask"]["show"] = [c.cname for c in top]
+            out["ask"]["cur"] = ask.ctx.get("i", 0)
     elif g.winner is not None:
         pass
     elif d is not None and d.player == ME:

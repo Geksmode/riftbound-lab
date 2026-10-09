@@ -8,6 +8,7 @@ sources: docs/REPRISE.md, git log, CI
 - Moteur : 917 cartes jouables sur 919 (bloquées : Baron Nashor et Baron Pit, il faut un troisième battlefield). `test_all.py` = 968/968, `t_rand.py 20` = 0 erreur (2026-10-07).
 - CI GitHub Actions sur `main` : tests et build de la table, tous verts ; publication sur Pages configurée (adresse attendue https://geksmode.github.io/riftbound-lab/, ouverture de la page **non vérifiée**).
 - Équipe d'agents en place ([equipe.md](equipe.md)).
+- **IA générale (2026-10-09)** : recherche « sh » (tirages communs + élimination en passes) par défaut, +15 points contre l'ancienne sur les decks par défaut (65,3 % ± 2,3, 160 paires), 62,5 % ± 2,9 en Akali contre LeBlanc ; temps Pyodide 417 → 503 ms par décision. Détails : [recherche de l'IA](../../memoire/riftbound-search-ai.md).
 
 **Fait le 2026-10-08 (1re itération des agents, intégrée dans `claude/sleepy-hopper-azt8ub`, non fusionnée dans `main`)**
 - `cartes` : 7 cartes corrigées pour le choix « zéro cible » (355.13), 66 tests ajoutés, `AUDIT_TEXTE.md` ; `test_all.py` = 1034/1034, `t_rand.py 30` = 0 erreur (relancés par le chef).
