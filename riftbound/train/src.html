@@ -597,6 +597,8 @@ body.dkopen { overflow: hidden; }
   .main > .ctrlcol .stackcol { max-height: 84px !important; padding: 6px 8px; }
   .main > .ctrlcol .stackcol .sitem { flex-direction: row; align-items: center; gap: 8px; }
   .main > .ctrlcol .stackcol .sitem .card { --cw: 44px; --chh: 62px; width: 44px; height: 62px; margin: 0; clip-path: none; }
+  /* les éléments plus anciens restent accessibles en faisant défiler la chaîne : les toucher montre leurs cibles */
+  .main > .ctrlcol .stackcol .sitem.old { display: flex; }
 }
 /*DA_CSS*/
 </style>
@@ -654,7 +656,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 let HANDOPEN = false;   // téléphone : main serrée ouverte en grand (handDense)
-let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set();
+let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set(), chainFocus = null;   // chainFocus : élément de la chaîne dont on montre les cibles (null : le haut)
 const rep = { get cards() { return CARDS; } };
 // Place locale (0 contre l'IA ; 0 = hôte, 1 = invité en duel) : le plateau se dessine toujours avec toi en bas.
 // vp() donne la place « visuelle » (0 = toi, 1 = l'adversaire) qui sert aux couleurs et aux classes c0/c1, p0/p1.
@@ -1070,6 +1072,7 @@ function show(v) {
     `<div class="half p1 ${st.tp === OPP() ? "active" : ""}">${handHTML(st, OPP(), srcs)}${rowHTML(st, OPP(), srcs)}</div>` +
     `<div class="bfrow">${bfHTML(st, 0, srcs)}${bfHTML(st, 1, srcs)}</div>` +
     `<div class="half p0 ${st.tp === MEP ? "active" : ""}">${rowHTML(st, MEP, srcs)}${handHTML(st, MEP, srcs)}</div>`;
+  chainFocus = null;   // la chaîne change : on revient à ses cibles du haut
   $("stack").innerHTML = st.chain.length ? st.chain.slice().reverse().map((c, j) => `<div class="sitem c${vp(c.c)} ${j ? "old" : ""}" data-ch="${st.chain.length - 1 - j}"><div class="shead"><span class="k">${c.k === "trigger" ? "Déclenchement" : "Sur la chaîne"} · ${PN[c.c]}</span></div>${card(cardFor(c.n) || c.n, { raw: true })}<div class="stgt">${esc(c.n)}</div></div>`).join("") : `<div class="empty">Chaîne vide</div>`;
   renderTrack(st);
   fitBoard();
@@ -1883,11 +1886,15 @@ function drawArrows(px, py) {
     const se = srcEl(sel);
     if (se) { const us = new Set(); optsFor(sel).filter(hasT).forEach(o => o.t1.forEach(u => us.add(String(u)))); us.forEach(u => { const t = unitEl(u); if (t) h += arrow(centre(se), centre(t), 0, true); }); }
   }
-  const seen = new Set();
-  if (V) (V.st.chain || []).forEach((c, k) => {
-    const it = document.querySelector(`#stack [data-ch="${k}"] .card`); if (!it || !c.tg) return;
-    c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(chainStart(it), centre(t), vp(c.c), false); seen.add(vp(c.c) + ":" + u); } });
-  });
+  // chaîne : seulement les cibles d'UN élément, le haut de la chaîne (dernier ajouté) par défaut, ou celui que la souris
+  // survole / que le doigt a touché (chainFocus) ; sinon toutes les flèches se croisaient (retour utilisateur 2026-10-09)
+  const seen = new Set(), ch = V ? (V.st.chain || []) : [];
+  if (ch.length) {
+    const k = chainFocus !== null && chainFocus < ch.length ? chainFocus : ch.length - 1, c = ch[k];
+    const it = document.querySelector(`#stack [data-ch="${k}"] .card`);
+    document.querySelectorAll("#stack .sitem").forEach(x => x.classList.toggle("foc", +x.dataset.ch === k && ch.length > 1));
+    if (it && it.getClientRects().length && c.tg) c.tg.forEach(u => { const t = unitEl(u); if (t) { h += arrow(chainStart(it), centre(t), vp(c.c), false); seen.add(vp(c.c) + ":" + u); } });
+  }
   // dernier coup de l'IA : seulement quand la chaîne est vide (sinon chaque sort de la chaîne montre déjà ses cibles, et
   // ces flèches partaient du premier sort de l'IA même quand elles appartenaient à un autre)
   if (lastAI && V && !(V.st.chain || []).length) {
@@ -1898,6 +1905,15 @@ function drawArrows(px, py) {
   $("arrowsG").innerHTML = h;
 }
 let rafA = 0;
+// survol d'un élément de la chaîne (souris) ou toucher (téléphone : l'événement mouseover compatible suit le toucher) :
+// ses flèches remplacent celles du haut de la chaîne ; en quittant la chaîne, retour au haut de la chaîne
+function setChainFocus(k) { if (k === chainFocus) return; chainFocus = k; drawArrows(); }
+document.addEventListener("mouseover", e => {
+  if (drag && drag.on) return;
+  const it = e.target.closest && e.target.closest("#stack [data-ch]");
+  setChainFocus(it ? +it.dataset.ch : null);
+});
+document.addEventListener("click", e => { const it = e.target.closest && e.target.closest("#stack [data-ch]"); if (it) setChainFocus(+it.dataset.ch); }, true);
 const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(() => { drawArrows(); placeFloat(); if (!$("pop").hidden) placePop(); if (!$("hpop").hidden) placeHint(); }); };
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
