@@ -59,6 +59,8 @@ svg#arrows { position: fixed; inset: 0; width: 100%; height: 100%; pointer-event
 .card.staged { outline: 2px dashed var(--brass); outline-offset: 2px; opacity: .75; }
 .card.isel { box-shadow: 0 0 0 3px var(--akali), 0 0 18px rgba(63,195,163,.95); }
 .card.picked { box-shadow: 0 0 0 3px var(--active), 0 0 14px rgba(224,80,95,.9); }
+.rune.drop-ok { box-shadow: 0 0 0 3px var(--brass), 0 0 16px rgba(214,178,94,.95); cursor: pointer; opacity: 1 !important; }
+.rune.picked { box-shadow: 0 0 0 3px var(--active), 0 0 14px rgba(224,80,95,.9); opacity: 1 !important; }
 .card.picked::after { content: attr(data-n); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--active); color: #fff; font: 600 13px/1 var(--f-mono); padding: 4px 7px; border-radius: 12px; z-index: 2; }
 .card.grp-sel { box-shadow: 0 0 0 3px var(--brass), 0 0 16px rgba(214,178,94,.95); }
 .log div.me { color: var(--akali); } .log div.opp { color: var(--leblanc); }
@@ -1298,7 +1300,8 @@ function handHTML(st, pid, srcs) {
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
-  const runes = p.runes.map(r => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"); return `<div class="runeslot ${x ? "x" : ""}">${(IMG[d + " Rune"] || ATL[d + " Rune"]) ? `<div class="rune img" data-card="${d} Rune" title="${d}${x ? " (épuisée)" : ""}" style="${art(d + " Rune")}"></div>` : `<div class="rune" title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div>`}</div>`; }).join("");
+  const askU = new Set(pid === MEP && V && V.ask ? (V.ask.uids || []).filter(u => u !== null).map(String) : []);   // runes à toucher pour répondre
+  const runes = p.runes.map((r, ri) => { const d = RUNE[r.slice(0, 2)] || "", x = r.endsWith("x"), ru = pid === MEP && p.runeu ? String(p.runeu[ri]) : null, du = ru !== null && askU.has(ru) ? ` data-uid="${ru}"` : ""; return `<div class="runeslot ${x ? "x" : ""}">${(IMG[d + " Rune"] || ATL[d + " Rune"]) ? `<div class="rune img"${du} data-card="${d} Rune" title="${d}${x ? " (épuisée)" : ""}" style="${art(d + " Rune")}"></div>` : `<div class="rune"${du} title="${d}${x ? " (épuisée)" : ""}" style="background:var(--${DOMC[d] || "ink-3"})">${GLYPH[d] || "?"}</div>`}</div>`; }).join("");
   const ready = p.runes.filter(r => !r.endsWith("x")).length;
   const base = p.base.map(u => unitCard(u, srcs)).join("") + p.gear.map(g => card(g.n, { p: vp(pid), x: g.x, uid: g.u, can: can(srcs, g.u) })).join("");
   const champ = p.champ.map((n, k) => { const u = pid === MEP && p.champu ? p.champu[k] : undefined; return card(n, { p: vp(pid), uid: u, can: u !== undefined && can(srcs, u), sel: u !== undefined && sel === String(u) }); }).join("");
