@@ -1,0 +1,38 @@
+# legend: Lillia, Bashful Bloom
+# player: Duncan
+# event: Riftbound Regional Qualifier - Sydney
+# date: 2026-05-16
+# placement: 33
+# url: https://mobalytics.gg/riftbound/decks/lillia-bashful-bloom-sydney-regional-qualifier-best-of-duncan
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Lillia, Bashful Bloom
+[champion]
+1 Lillia, Fae Fawn
+[main]
+3 Plundering Poro
+3 Ravenbloom Student
+2 Tasty Faefolk
+3 Thousand-Tailed Watcher
+3 Mask of Foresight
+3 Sprite Fountain
+3 Heart of Dark Ice
+1 Charm
+3 Defy
+3 Stupefy
+3 Discipline
+3 Smoke and Mirrors
+3 Sprite Burst
+3 Unchecked Power
+[runes]
+6 Calm Rune
+6 Mind Rune
+[battlefields]
+1 Dusk Rose Lab
+1 Forbidding Waste
+1 Seat of Power
+[sideboard]
+1 Charm
+2 Lilting Lullaby
+3 Disarming Rake
+2 Falling Comet

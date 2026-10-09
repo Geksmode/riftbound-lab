@@ -1,0 +1,43 @@
+# legend: Ornn, Fire Below the Mountain
+# player: MICE TheManLand
+# event: Riftbound Regional Qualifier - Barcelona
+# date: 2026-08-23
+# placement: 1
+# url: https://mobalytics.gg/riftbound/decks/ornn-fire-below-the-mountain-barcelona-regional-qualifier-1st-mice-themanland
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Ornn, Fire Below the Mountain
+[champion]
+1 Ornn, Blacksmith
+[main]
+3 Clockwork Keeper
+3 Patched Porobot
+3 Scuttle Crab
+2 Aspiring Engineer
+1 Lecturing Yordle
+3 Pit Crew
+3 Seal of Focus
+1 Cloth Armor
+3 Poro Snax
+3 Brutalizer
+1 Guardian Angel
+1 Mask of Foresight
+3 Sprite Fountain
+3 Sterak's Gage
+1 Helm of Suppression
+2 Charm
+3 Defy
+[runes]
+8 Calm Rune
+4 Mind Rune
+[battlefields]
+1 Ornn's Forge
+1 Seat of Power
+1 Veiled Temple
+[sideboard]
+2 Decree of Focus
+2 Decree of Insight
+1 Guardian Angel
+1 Not So Fast
+2 Disarming Rake
+2 Pickpocket

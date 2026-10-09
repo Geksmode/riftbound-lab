@@ -1,0 +1,39 @@
+# legend: Sivir, Battle Mistress
+# player: Randyyy
+# event: Riftbound Regional Qualifier - Los Angeles (Best-Of Sivir)
+# date: 2026-09-27
+# placement: 146
+# url: https://playriftbound.com/en-us/news/organizedplay/los-angeles-top-decks/
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: runes et battlefields tirés d'une copie communautaire (riftbound.gg/decks/sivir-randyyy-copy/), à vérifier ; sideboard non fiable, laissé vide
+[legend]
+1 Sivir, Battle Mistress
+[champion]
+1 Sivir, Mercenary
+[main]
+3 Ezreal, Prodigy
+3 Fizz, Trickster
+1 Pyke, Returned
+3 Shadow Order Disciple
+3 Tail-Cloaked Matriarch
+2 Tideturner
+3 Tornado Warrior
+3 Traveling Merchant
+2 Edge of Night
+1 Grim Resolve
+1 Gust
+1 Last Rites
+3 Punch First
+3 Rampage
+2 Sabotage
+2 Star-Crossed
+2 Switcheroo
+1 Acceptable Losses
+[runes]
+5 Body Rune
+7 Chaos Rune
+[battlefields]
+1 Sandswept Tomb
+1 Sigil of the Storm
+1 Zaun Warrens
+[sideboard]

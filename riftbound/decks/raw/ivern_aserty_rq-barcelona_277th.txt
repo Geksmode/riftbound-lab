@@ -1,0 +1,46 @@
+# legend: Ivern, Green Father
+# player: Aserty
+# event: Riftbound Regional Qualifier - Barcelona (Best-Of Ivern)
+# date: 2026-08-23
+# placement: 277
+# url: https://riftbounddecklists.com/decklists/ivern-green-father/aserty-ivern-green-father-2026-08-23-277.html
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: un 2e Ivern, Nurturer figure dans le main (en plus du champion), ce qui donne 40 ; Daisy! au sideboard confirmé par 3 sources sur 4 (riftmana l'omet)
+[legend]
+1 Ivern, Green Father
+[champion]
+1 Ivern, Nurturer
+[main]
+1 Ivern, Nurturer
+2 Affectionate Poro
+2 Astral Heron
+1 Back Off
+1 Call to Glory
+1 Daisy!
+3 Defy
+3 Discipline
+2 Emperor's Divide
+2 Fallen Feline
+3 Friendship
+2 Frisky Hunter
+2 Grand Strategem
+1 Kennen, Keeper of Balance
+1 Ki Barrier
+3 Mutated Mouser
+1 Not So Fast
+2 Solari Sunhawk
+3 Stalwart Poro
+3 Trusty Ramhound
+[runes]
+6 Calm Rune
+6 Order Rune
+[battlefields]
+1 Forbidding Waste
+1 Rockfall Path
+1 Vilemaw's Lair
+[sideboard]
+1 Daisy!
+2 Decree of Unity
+2 Flurry of Feathers
+2 Janna, Savior
+3 Salvage

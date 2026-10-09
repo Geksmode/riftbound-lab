@@ -1,0 +1,40 @@
+# legend: Lucian, Purifier
+# player: BANRATE DEMON
+# event: Riftbound Regional Qualifier - Barcelona
+# date: 2026-08-23
+# placement: 25
+# url: https://riftdecks.com/riftbound-metagame/deck-lucian-purifier-246832
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Lucian, Purifier
+[champion]
+1 Lucian, Merciless
+[main]
+1 Lucian, Merciless
+3 Irresistible Faefolk
+3 Pit Rookie
+3 First Mate
+3 Kinkou Initiate
+3 Kai'Sa, Survivor
+3 Noxus Hopeful
+3 Ferrous Forerunner
+3 Doran's Blade
+3 Long Sword
+2 Blighted Battleaxe
+3 Punch First
+3 Sabotage
+2 Falling Star
+1 Relentless Pursuit
+[runes]
+6 Body Rune
+6 Fury Rune
+[battlefields]
+1 Forbidding Waste
+1 Forge of the Fluft
+1 Windswept Hillock
+[sideboard]
+3 Brittle Steel
+1 Falling Star
+2 Legion Rearguard
+1 Pendulum Blade
+3 Rampage

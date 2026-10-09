@@ -1,0 +1,35 @@
+# legend: Jax, Grandmaster At Arms
+# player: T1WIN
+# event: Riftbound Regional Qualifier - Los Angeles (Best-Of Jax)
+# date: 2026-09-27
+# placement: 162
+# url: https://playriftbound.com/en-us/news/organizedplay/los-angeles-top-decks/
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: runes 6 Calm / 6 Body d'après une seule source (Riftmana), à vérifier ; sideboard non retrouvé, laissé vide
+[legend]
+1 Jax, Grandmaster At Arms
+[champion]
+1 Jax, Unmatched
+[main]
+3 First Mate
+2 Irelia, Fervent
+3 Irresistible Faefolk
+3 Lucian, Merciless
+3 Rengar, Trophy Hunter
+3 Scuttle Crab
+3 Brutalizer
+2 Doran's Blade
+3 Guardian Angel
+3 Counter Strike
+3 Defy
+3 Discipline
+2 Punch First
+3 Rampage
+[runes]
+6 Calm Rune
+6 Body Rune
+[battlefields]
+1 Forbidding Waste
+1 Ornn's Forge
+1 Sunken Temple
+[sideboard]

@@ -1,0 +1,42 @@
+# legend: Sett, The Boss
+# player: CTCG Collin K
+# event: Riftbound Regional Qualifier - Utrecht (Top 4)
+# date: 2026-06-13
+# placement: 3
+# url: https://riftdecks.com/riftbound-metagame/deck-sett-the-boss-183407
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: main d'après riftdecks (texte) ; sideboard d'après mobalytics (Top 4) et TCGplayer, concordants ; mobalytics dit « Top 4 », riftdecks et TCGplayer « 3rd »
+[legend]
+1 Sett, The Boss
+[champion]
+1 Sett, Kingpin
+[main]
+2 Cithria of Cloudfield
+3 Irresistible Faefolk
+3 Pit Rookie
+3 First Mate
+3 Fiora, Victorious
+2 Kinkou Monk
+3 Rengar, Trophy Hunter
+1 Vi, Peacekeeper
+3 Arena Bar
+3 Punch First
+1 Repulse
+3 Sabotage
+3 Showstopper
+2 Challenge
+1 Hidden Blade
+3 Call to Glory
+[runes]
+7 Body Rune
+5 Order Rune
+[battlefields]
+1 Grove of the God-Willow
+1 Monastery of Hirana
+1 Valley of Idols
+[sideboard]
+2 Akshan, Mischievous
+2 Lucian, Merciless
+2 Ashe, Focused
+1 Repulse
+1 Vi, Peacekeeper

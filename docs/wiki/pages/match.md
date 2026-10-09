@@ -30,7 +30,7 @@ manche nulle, fin de match, changement de champion au sideboard, « Reprendre »
 **Écran « Contre l'IA »** (2026-10-09, à la Smash Bros) : grille des 49 légendes + « ? » (hasard) ; panneaux « Toi » (menthe) et
 « IA » (corail), on touche un panneau puis une légende. Chaque légende prend son **deck par défaut** (`train.default_decks` : parmi les
 listes de `decks.json` jouables par le moteur, celles avec sideboard d'abord, puis le meilleur classement), le même en BO1 et en BO3.
-Une légende sans liste jouable est grisée (« bientôt »). Au 2026-10-09 seules Akali (dongdong, Wuhan Open 5e) et LeBlanc (GYATarina,
-CCS IQ#5 1re) en ont une. L'IA **ne sideboarde pas encore** : son sideboard est chargé mais pas utilisé. Robot `train/verif_vs.mjs`
+Une légende sans liste jouable est grisée (« bientôt »). Au 2026-10-09, 28 légendes sur 49 en ont une (liste, doutes de transcription
+et légendes manquantes : `riftbound/decks/README.md`). L'IA **ne sideboarde pas encore** : son sideboard est chargé mais pas utilisé. Robot `train/verif_vs.mjs`
 (18 contrôles, 1400×900 et 393×851, vrais clics / toucher simulé) dans la porte ; test `default_deck_per_legend_for_the_vs_screen`.
 **Changement** : en BO1 la graine d'une manche vaut donne × 10 + 1 : une « Donne N » ne redonne plus la partie d'avant ce changement.

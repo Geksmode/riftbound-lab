@@ -1,0 +1,43 @@
+# legend: Kai'Sa, Daughter of the Void
+# player: William N. (will win)
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-26
+# placement: 9
+# url: https://riftdecks.com/riftbound-metagame/deck-kai-sa-daughter-of-the-void-315270
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Kai'Sa, Daughter of the Void
+[champion]
+1 Kai'Sa, Survivor
+[main]
+3 Plundering Poro
+3 Watchful Sentry
+3 Lecturing Yordle
+3 Noxus Hopeful
+3 Brynhir Thundersong
+3 Thousand-Tailed Watcher
+1 Ferrous Forerunner
+3 Stupefy
+3 Falling Star
+3 Temporal Breach
+2 Bellows Breath
+2 Hextech Ray
+2 Smoke Screen
+2 Time Warp
+1 Perfect Execution
+1 Rocket Barrage
+1 Progress Day
+[runes]
+7 Fury Rune
+5 Mind Rune
+[battlefields]
+1 Frozen Fortress
+1 Rockfall Path
+1 Void Gate
+[sideboard]
+2 Decree of Insight
+2 Decree of Rage
+2 Brittle Steel
+2 Pickpocket
+1 Ferrous Forerunner
+1 Icathian Rain

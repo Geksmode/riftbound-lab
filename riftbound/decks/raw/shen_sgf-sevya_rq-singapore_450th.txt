@@ -1,0 +1,43 @@
+# legend: Shen, Eye of Twilight
+# player: SGF Sevya
+# event: Riftbound Regional Qualifier - Singapore
+# date: 2026-09-05
+# placement: 450
+# url: https://mobalytics.gg/riftbound/decks/shen-eye-of-twilight-singapore-regional-qualifier-best-of-sgf-sevya
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Shen, Eye of Twilight
+[champion]
+1 Shen, Scourge of Shadows
+[main]
+3 Lonely Poro
+3 Loyal Poro
+3 Unsung Hero
+2 Kennen, Keeper of Balance
+2 Fiora, Victorious
+2 Vi, Peacekeeper
+2 Tasty Faefolk
+3 Defy
+3 Discipline
+3 Hidden Blade
+2 Charm
+2 En Garde
+2 Deathgrip
+2 Emperor's Divide
+2 Ki Barrier
+1 Back Off
+2 B.F. Sword
+[runes]
+6 Calm Rune
+6 Order Rune
+[battlefields]
+1 Fortified Position
+1 Kinkou Temple
+1 Trifarian War Camp
+[sideboard]
+2 Decree of Focus
+2 Decree of Unity
+2 Disarming Rake
+2 Ashe, Focused
+1 Imperial Decree
+1 Vilemaw

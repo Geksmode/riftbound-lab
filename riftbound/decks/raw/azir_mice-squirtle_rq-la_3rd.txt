@@ -1,0 +1,40 @@
+# legend: Azir, Emperor of the Sands
+# player: MICE Squirtle
+# event: Riftbound Regional Qualifier - Los Angeles
+# date: 2026-09-26
+# placement: 3
+# url: https://riftdecks.com/riftbound-metagame/deck-azir-emperor-of-the-sands-315581
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Azir, Emperor of the Sands
+[champion]
+1 Azir, Sovereign
+[main]
+3 Doran's Shield
+3 Eye of the Herald
+3 Soul Sword
+3 Brutalizer
+3 B.F. Sword
+2 Hand Hammer
+3 Defy
+3 Discipline
+3 Hidden Blade
+3 Back Off
+3 Guards!
+3 Arise!
+2 En Garde
+2 Deathgrip
+[runes]
+7 Calm Rune
+5 Order Rune
+[battlefields]
+1 Hall of Legends
+1 Seat of Power
+1 Trifarian War Camp
+[sideboard]
+2 Decree of Focus
+2 Decree of Unity
+2 Salvage
+2 Ashe, Focused
+1 Charm
+1 Disarming Rake

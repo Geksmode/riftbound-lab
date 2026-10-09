@@ -1,0 +1,49 @@
+# legend: Kennen, Heart of the Tempest
+# player: DSG AwesumRosum
+# event: Riftbound Regional Qualifier - Los Angeles (Best-Of Kennen)
+# date: 2026-09-27
+# placement: 13
+# url: https://riftwatch.gg/decks/los-angeles-best-13/
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Kennen, Heart of the Tempest
+[champion]
+1 Kennen, Storm of Shuriken
+[main]
+1 Carrion Dredger
+3 Shadow Order Disciple
+1 Tideturner
+3 Traveling Merchant
+2 Ezreal, Prodigy
+1 Fizz, Trickster
+2 Tornado Warrior
+3 Tail-Cloaked Matriarch
+3 Rhasa the Sunderer
+2 Gust
+3 Lightning Rush
+2 Flash
+1 Hard Bargain
+2 Ride The Wind
+1 Salvage
+2 Switcheroo
+1 Star-Crossed
+2 Last Rites
+3 Seal of Discord
+1 Up from the Deep
+[runes]
+9 Chaos Rune
+3 Order Rune
+[battlefields]
+1 Minefield
+1 Shadow Temple
+1 Zaun Warrens
+[sideboard]
+1 Decree of Unity
+1 Hard Bargain
+1 Lacerate
+1 Rebuke
+1 Salvage
+1 Fizz, Trickster
+2 Ravenbloom Prefect
+1 Star-Crossed
+1 Up from the Deep

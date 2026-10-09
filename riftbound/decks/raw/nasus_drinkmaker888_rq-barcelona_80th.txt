@@ -1,0 +1,36 @@
+# legend: Nasus, Curator of the Sands
+# player: drinkmaker888
+# event: Riftbound Regional Qualifier - Barcelona (Best-Of Nasus)
+# date: 2026-08-23
+# placement: 80
+# url: https://riftdecks.com/riftbound-metagame/deck-nasus-curator-of-the-sands-247395
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: sideboard (10 cartes) non retrouvé de façon fiable (sources contradictoires), laissé vide
+[legend]
+1 Nasus, Curator of the Sands
+[champion]
+1 Nasus, Ascended
+[main]
+3 Clockwork Keeper
+3 Lonely Poro
+3 Ravenbloom Student
+3 Sprite Queen
+1 Tasty Faefolk
+3 Thousand-Tailed Watcher
+3 Bellows Breath
+2 Charm
+3 Defy
+3 En Garde
+3 Stupefy
+3 Discipline
+1 Not So Fast
+2 Eclipse
+3 Find Your Center
+[runes]
+6 Calm Rune
+6 Mind Rune
+[battlefields]
+1 Ravenbloom Conservatory
+1 Targon's Peak
+1 Vilemaw's Lair
+[sideboard]

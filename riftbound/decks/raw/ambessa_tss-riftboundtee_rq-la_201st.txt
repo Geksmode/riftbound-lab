@@ -1,0 +1,48 @@
+# legend: Ambessa, Matriarch of War
+# player: TSS RiftboundTee (TJ T.)
+# event: Riftbound Regional Qualifier - Los Angeles (Best-Of Ambessa)
+# date: 2026-09-26
+# placement: 201
+# url: https://riftdecks.com/riftbound-metagame/deck-ambessa-matriarch-of-war-315778
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: transcription douteuse : 22 unités visibles sur 23 annoncées ; la 23e est un 2e Ambessa, The Wolf listé dans les unités (mentionné par un résumé, quantité 1 déduite du total 23) ; sideboard d'une seule transcription
+[legend]
+1 Ambessa, Matriarch of War
+[champion]
+1 Ambessa, The Wolf
+[main]
+1 Ambessa, The Wolf
+3 Irresistible Faefolk
+3 Legion Marauder
+2 Noxian Emissary
+1 Pit Rookie
+2 First Mate
+2 Kayle, Justified
+2 Kennen, Keeper of Balance
+2 Lucian, Merciless
+2 Rengar, Trophy Hunter
+3 Vi, Peacekeeper
+3 Punch First
+1 Sabotage
+1 Challenge
+2 Guttural Roar
+1 Public Execution
+2 Tactical Retreat
+3 Rampage
+2 Onslaught
+1 Primal Strength
+[runes]
+8 Body Rune
+4 Order Rune
+[battlefields]
+1 Risen Altar
+1 Sandswept Tomb
+1 Star Spring
+[sideboard]
+2 Decree of Strength
+2 Repulse
+1 Sabotage
+1 Public Execution
+2 Salvage
+1 Kayle, Justified
+1 Ambessa, Respected and Feared

@@ -35,6 +35,259 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Akali, Rogue Assassin",Brittle Steel,ven-003,Spell,Fury,2,6,0,,17
 "Akali, Rogue Assassin",Decree of Rage,ven-015,Spell,Fury,1,6,0,,17
 "Akali, Rogue Assassin",Pendulum Blade,ven-011,Gear,Fury,3,6,0,,17
+"Ambessa, Matriarch of War","Ambessa, The Wolf",ven-084,Unit,Body,4,1,200,1.0,0
+"Ambessa, Matriarch of War","Kayle, Justified",ven-134,Unit,Order,3,1,100,2.0,100
+"Ambessa, Matriarch of War",Public Execution,ven-154,Spell,Body|Order,2,1,100,1.0,100
+"Ambessa, Matriarch of War",Sabotage,ogn-156,Spell,Body,1,1,100,1.0,100
+"Ambessa, Matriarch of War",Challenge,ogn-128,Spell,Body,2,1,100,1.0,0
+"Ambessa, Matriarch of War",First Mate,ogn-132,Unit,Body,3,1,100,2.0,0
+"Ambessa, Matriarch of War",Guttural Roar,ven-072,Spell,Body,2,1,100,2.0,0
+"Ambessa, Matriarch of War",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Ambessa, Matriarch of War","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,2.0,0
+"Ambessa, Matriarch of War",Legion Marauder,ven-074,Unit,Body,2,1,100,3.0,0
+"Ambessa, Matriarch of War","Lucian, Merciless",sfd-113,Unit,Body,3,1,100,2.0,0
+"Ambessa, Matriarch of War",Noxian Emissary,ven-128,Unit,Order,2,1,100,2.0,0
+"Ambessa, Matriarch of War",Onslaught,ven-081,Spell,Body,4,1,100,2.0,0
+"Ambessa, Matriarch of War",Pit Rookie,ogn-136,Unit,Body,2,1,100,1.0,0
+"Ambessa, Matriarch of War",Primal Strength,ogn-154,Spell,Body,4,1,100,1.0,0
+"Ambessa, Matriarch of War",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Ambessa, Matriarch of War",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
+"Ambessa, Matriarch of War","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,2.0,0
+"Ambessa, Matriarch of War",Tactical Retreat,unl-175,Spell,Order,2,1,100,2.0,0
+"Ambessa, Matriarch of War","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,3.0,0
+"Ambessa, Matriarch of War","Ambessa, Respected and Feared",ven-136,Unit,Order,5,1,0,,100
+"Ambessa, Matriarch of War",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Ambessa, Matriarch of War",Repulse,unl-106,Spell,Body,1,1,0,,100
+"Ambessa, Matriarch of War",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Azir, Emperor of the Sands",Arise!,sfd-198,Spell,Calm|Order,6,1,100,3.0,0
+"Azir, Emperor of the Sands","Azir, Sovereign",sfd-177,Unit,Order,4,1,100,1.0,0
+"Azir, Emperor of the Sands",B.F. Sword,sfd-161,Gear,Order,4,1,100,3.0,0
+"Azir, Emperor of the Sands",Back Off,unl-042,Spell,Calm,3,1,100,3.0,0
+"Azir, Emperor of the Sands",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
+"Azir, Emperor of the Sands",Deathgrip,sfd-163,Spell,Order,2,1,100,2.0,0
+"Azir, Emperor of the Sands",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Azir, Emperor of the Sands",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Azir, Emperor of the Sands",Doran's Shield,sfd-033,Gear,Calm,1,1,100,3.0,0
+"Azir, Emperor of the Sands",En Garde,ogn-046,Spell,Calm,1,1,100,2.0,0
+"Azir, Emperor of the Sands",Eye of the Herald,sfd-153,Gear,Order,1,1,100,3.0,0
+"Azir, Emperor of the Sands",Guards!,sfd-154,Spell,Order,3,1,100,3.0,0
+"Azir, Emperor of the Sands",Hand Hammer,ven-027,Gear,Calm,2,1,100,2.0,0
+"Azir, Emperor of the Sands",Hidden Blade,ogn-213,Spell,Order,2,1,100,3.0,0
+"Azir, Emperor of the Sands",Soul Sword,unl-039,Gear,Calm,1,1,100,3.0,0
+"Azir, Emperor of the Sands","Ashe, Focused",unl-169,Unit,Order,5,1,0,,100
+"Azir, Emperor of the Sands",Charm,ogn-043,Spell,Calm,1,1,0,,100
+"Azir, Emperor of the Sands",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Azir, Emperor of the Sands",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Azir, Emperor of the Sands",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Azir, Emperor of the Sands",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Diana, Scorn of the Moon",Acceptable Losses,ogn-179,Spell,Chaos,1,1,100,1.0,100
+"Diana, Scorn of the Moon","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,1.0,100
+"Diana, Scorn of the Moon",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,100
+"Diana, Scorn of the Moon","Diana, Lunari",unl-079,Unit,Mind,3,1,100,1.0,0
+"Diana, Scorn of the Moon",Eclipse,unl-063,Spell,Mind,3,1,100,2.0,0
+"Diana, Scorn of the Moon",Flash,ogs-011,Spell,Chaos,2,1,100,1.0,0
+"Diana, Scorn of the Moon",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
+"Diana, Scorn of the Moon",Hard Bargain,sfd-136,Spell,Chaos,2,1,100,2.0,0
+"Diana, Scorn of the Moon","Hwei, Brooding Painter",unl-080,Unit,Mind,5,1,100,3.0,0
+"Diana, Scorn of the Moon",Moonfall,unl-198,Spell,Mind|Chaos,3,1,100,3.0,0
+"Diana, Scorn of the Moon",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
+"Diana, Scorn of the Moon",Rebuke,ogn-172,Spell,Chaos,2,1,100,1.0,0
+"Diana, Scorn of the Moon",Ride The Wind,ogn-173,Spell,Chaos,2,1,100,2.0,0
+"Diana, Scorn of the Moon",Smoke Screen,ogn-093,Spell,Mind,2,1,100,1.0,0
+"Diana, Scorn of the Moon",Sprite Fountain,unl-078,Gear,Mind,2,1,100,2.0,0
+"Diana, Scorn of the Moon",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Diana, Scorn of the Moon",Switcheroo,sfd-145,Spell,Chaos,2,1,100,1.0,0
+"Diana, Scorn of the Moon",Tideturner,ogn-199,Unit,Chaos,2,1,100,3.0,0
+"Diana, Scorn of the Moon",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,3.0,0
+"Diana, Scorn of the Moon","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,3.0,0
+"Diana, Scorn of the Moon",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Diana, Scorn of the Moon",Singularity,ogn-105,Spell,Mind,6,1,0,,100
+"Diana, Scorn of the Moon",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,0,,100
+"Diana, Scorn of the Moon",Turn to Dust,unl-070,Spell,Mind,2,1,0,,100
+"Diana, Scorn of the Moon",Up from the Deep,ven-100,Spell,Chaos,3,1,0,,100
+"Fiora, Grand Duelist",Challenge,ogn-128,Spell,Body,2,1,100,2.0,0
+"Fiora, Grand Duelist",Dazzling Aurora,ogn-160,Gear,Body,9,1,100,3.0,0
+"Fiora, Grand Duelist",Divining Shells,unl-161,Gear,Order,2,1,100,2.0,0
+"Fiora, Grand Duelist",Elder Dragon,unl-118,Unit,Body,12,1,100,3.0,0
+"Fiora, Grand Duelist","Fiora, Worthy",sfd-180,Unit,Order,3,1,100,1.0,0
+"Fiora, Grand Duelist",Flurry of Blades,ogn-133,Spell,Body,1,1,100,2.0,0
+"Fiora, Grand Duelist",Harnessed Dragon,ogn-234,Unit,Order,8,1,100,2.0,0
+"Fiora, Grand Duelist",Mobilize,ogn-134,Spell,Body,2,1,100,3.0,0
+"Fiora, Grand Duelist","Poppy, Paragon",unl-116,Unit,Body,5,1,100,2.0,0
+"Fiora, Grand Duelist",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
+"Fiora, Grand Duelist","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"Fiora, Grand Duelist",Repulse,unl-106,Spell,Body,1,1,100,2.0,0
+"Fiora, Grand Duelist",Rift Herald,unl-179,Unit,Order,8,1,100,3.0,0
+"Fiora, Grand Duelist",Riposte,sfd-206,Spell,Body|Order,2,1,100,2.0,0
+"Fiora, Grand Duelist",Sacrifice,unl-173,Spell,Order,1,1,100,3.0,0
+"Fiora, Grand Duelist","Sett, Brawler",ogn-164,Unit,Body,5,1,100,1.0,0
+"Fiora, Grand Duelist",Shepherd's Heirloom,unl-158,Gear,Order,2,1,100,3.0,0
+"Fiora, Grand Duelist","Akshan, Mischievous",sfd-109,Unit,Body,4,1,0,,100
+"Fiora, Grand Duelist","Fiora, Victorious",ogn-232,Unit,Order,4,1,0,,100
+"Fiora, Grand Duelist",Forge of the Future,ogn-212,Gear,Order,2,1,0,,100
+"Fiora, Grand Duelist","Kayle, Justified",ven-134,Unit,Order,3,1,0,,100
+"Fiora, Grand Duelist",Punch First,sfd-097,Spell,Body,1,1,0,,100
+"Fiora, Grand Duelist",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Irelia, Blade Dancer",Gust,ogn-169,Spell,Chaos,1,1,100,1.0,100
+"Irelia, Blade Dancer",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,100
+"Irelia, Blade Dancer",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,100
+"Irelia, Blade Dancer","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,1.0,100
+"Irelia, Blade Dancer",Astral Heron,ven-044,Unit,Calm,7,1,100,3.0,0
+"Irelia, Blade Dancer",Boots of Swiftness,sfd-133,Gear,Chaos,3,1,100,3.0,0
+"Irelia, Blade Dancer",Charm,ogn-043,Spell,Calm,1,1,100,1.0,0
+"Irelia, Blade Dancer",Defiant Dance,sfd-196,Spell,Calm|Chaos,1,1,100,3.0,0
+"Irelia, Blade Dancer",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Irelia, Blade Dancer",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Irelia, Blade Dancer","Irelia, Fervent",sfd-057,Unit,Calm,5,1,100,1.0,0
+"Irelia, Blade Dancer",Lonely Poro,sfd-036,Unit,Calm,2,1,100,2.0,0
+"Irelia, Blade Dancer","Pyke, Returned",unl-145,Unit,Chaos,3,1,100,1.0,0
+"Irelia, Blade Dancer",Rebuke,ogn-172,Spell,Chaos,2,1,100,2.0,0
+"Irelia, Blade Dancer",Ride The Wind,ogn-173,Spell,Chaos,2,1,100,1.0,0
+"Irelia, Blade Dancer",Scuttle Crab,unl-053,Unit,Calm,2,1,100,2.0,0
+"Irelia, Blade Dancer",Stellacorn Herder,sfd-048,Unit,Calm,4,1,100,3.0,0
+"Irelia, Blade Dancer",Switcheroo,sfd-145,Spell,Chaos,2,1,100,1.0,0
+"Irelia, Blade Dancer",Tideturner,ogn-199,Unit,Chaos,2,1,100,3.0,0
+"Irelia, Blade Dancer",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
+"Irelia, Blade Dancer",Abandon,unl-131,Spell,Chaos,2,1,0,,100
+"Irelia, Blade Dancer",Adaptatron,ogn-056,Unit,Calm,4,1,0,,100
+"Irelia, Blade Dancer",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Irelia, Blade Dancer",Ravenbloom Prefect,ven-102,Unit,Chaos,3,1,0,,100
+"Ivern, Green Father","Ivern, Nurturer",unl-051,Unit,Calm,5,1,200,1.0,0
+"Ivern, Green Father",Daisy!,unl-196,Unit,Calm|Order,9,1,100,1.0,100
+"Ivern, Green Father",Affectionate Poro,ven-024,Unit,Calm,3,1,100,2.0,0
+"Ivern, Green Father",Astral Heron,ven-044,Unit,Calm,7,1,100,2.0,0
+"Ivern, Green Father",Back Off,unl-042,Spell,Calm,3,1,100,1.0,0
+"Ivern, Green Father",Call to Glory,ogn-207,Spell,Order,3,1,100,1.0,0
+"Ivern, Green Father",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Ivern, Green Father",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Ivern, Green Father",Emperor's Divide,sfd-043,Spell,Calm,2,1,100,2.0,0
+"Ivern, Green Father",Fallen Feline,ven-132,Unit,Order,2,1,100,2.0,0
+"Ivern, Green Father",Friendship,unl-046,Spell,Calm,1,1,100,3.0,0
+"Ivern, Green Father",Frisky Hunter,unl-033,Unit,Calm,4,1,100,2.0,0
+"Ivern, Green Father",Grand Strategem,ogn-233,Spell,Order,6,1,100,2.0,0
+"Ivern, Green Father","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,1.0,0
+"Ivern, Green Father",Ki Barrier,ven-126,Spell,Order,2,1,100,1.0,0
+"Ivern, Green Father",Mutated Mouser,unl-036,Unit,Calm,2,1,100,3.0,0
+"Ivern, Green Father",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,0
+"Ivern, Green Father",Solari Sunhawk,ven-122,Unit,Order,3,1,100,2.0,0
+"Ivern, Green Father",Stalwart Poro,ogn-052,Unit,Calm,2,1,100,3.0,0
+"Ivern, Green Father",Trusty Ramhound,sfd-159,Unit,Order,2,1,100,3.0,0
+"Ivern, Green Father",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Ivern, Green Father",Flurry of Feathers,unl-044,Spell,Calm,4,1,0,,100
+"Ivern, Green Father","Janna, Savior",sfd-053,Unit,Calm,3,1,0,,100
+"Ivern, Green Father",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Jax, Grandmaster At Arms",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
+"Jax, Grandmaster At Arms",Counter Strike,sfd-194,Spell,Calm|Body,2,1,100,3.0,0
+"Jax, Grandmaster At Arms",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Jax, Grandmaster At Arms",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Jax, Grandmaster At Arms",Doran's Blade,sfd-095,Gear,Body,2,1,100,2.0,0
+"Jax, Grandmaster At Arms",First Mate,ogn-132,Unit,Body,3,1,100,3.0,0
+"Jax, Grandmaster At Arms",Guardian Angel,sfd-051,Gear,Calm,2,1,100,3.0,0
+"Jax, Grandmaster At Arms","Irelia, Fervent",sfd-057,Unit,Calm,5,1,100,2.0,0
+"Jax, Grandmaster At Arms",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Jax, Grandmaster At Arms","Jax, Unmatched",sfd-054,Unit,Calm,5,1,100,1.0,0
+"Jax, Grandmaster At Arms","Lucian, Merciless",sfd-113,Unit,Body,3,1,100,3.0,0
+"Jax, Grandmaster At Arms",Punch First,sfd-097,Spell,Body,1,1,100,2.0,0
+"Jax, Grandmaster At Arms",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
+"Jax, Grandmaster At Arms","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"Jax, Grandmaster At Arms",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Deadly Flourish,unl-073,Spell,Mind,4,1,100,1.0,100
+"Jayce, Defender of Tomorrow",Sabotage,ogn-156,Spell,Body,1,1,100,2.0,100
+"Jayce, Defender of Tomorrow",Sprite Burst,unl-069,Spell,Mind,5,1,100,2.0,100
+"Jayce, Defender of Tomorrow",Bellows Breath,sfd-080,Spell,Mind,1,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Catalyst of Aeons,ogn-138,Spell,Body,4,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Clairvoyance,ven-056,Spell,Mind,7,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Dazzling Aurora,ogn-160,Gear,Body,9,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Downstage Dramatics,unl-061,Spell,Mind,2,1,100,1.0,0
+"Jayce, Defender of Tomorrow",Dredge Up,ven-049,Spell,Mind,2,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Elder Dragon,unl-118,Unit,Body,12,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Flurry of Blades,ogn-133,Spell,Body,1,1,100,2.0,0
+"Jayce, Defender of Tomorrow",Garbage Grabber,ogn-099,Gear,Mind,2,1,100,2.0,0
+"Jayce, Defender of Tomorrow",Gutter Palace,unl-088,Gear,Mind,4,1,100,1.0,0
+"Jayce, Defender of Tomorrow","Jayce, Brilliant Inventor",ven-068,Unit,Mind,6,1,100,1.0,0
+"Jayce, Defender of Tomorrow",Mobilize,ogn-134,Spell,Body,2,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Platewyrm Egg,ven-075,Gear,Body,3,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Promising Future,ogn-115,Spell,Mind,5,1,100,3.0,0
+"Jayce, Defender of Tomorrow",Rocket Barrage,sfd-077,Spell,Mind,4,1,100,1.0,0
+"Jayce, Defender of Tomorrow",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Jayce, Defender of Tomorrow",Disposal Order,unl-103,Spell,Body,2,1,0,,100
+"Jayce, Defender of Tomorrow",Repulse,unl-106,Spell,Body,1,1,0,,100
+"Jayce, Defender of Tomorrow",Turn to Dust,unl-070,Spell,Mind,2,1,0,,100
+"Jayce, Defender of Tomorrow",Unyielding Spirit,ogn-145,Spell,Body,1,1,0,,100
+"Kai'Sa, Daughter of the Void",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,1.0,100
+"Kai'Sa, Daughter of the Void",Bellows Breath,sfd-080,Spell,Mind,1,1,100,2.0,0
+"Kai'Sa, Daughter of the Void",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Falling Star,ogn-029,Spell,Fury,2,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Hextech Ray,ogn-009,Spell,Fury,1,1,100,2.0,0
+"Kai'Sa, Daughter of the Void","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,1.0,0
+"Kai'Sa, Daughter of the Void",Lecturing Yordle,ogn-087,Unit,Mind,3,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Perfect Execution,ven-012,Spell,Fury,3,1,100,1.0,0
+"Kai'Sa, Daughter of the Void",Plundering Poro,sfd-069,Unit,Mind,2,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Progress Day,ogn-114,Spell,Mind,6,1,100,1.0,0
+"Kai'Sa, Daughter of the Void",Rocket Barrage,sfd-077,Spell,Mind,4,1,100,1.0,0
+"Kai'Sa, Daughter of the Void",Smoke Screen,ogn-093,Spell,Mind,2,1,100,2.0,0
+"Kai'Sa, Daughter of the Void",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Temporal Breach,ven-066,Spell,Mind,2,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Time Warp,ogn-122,Spell,Mind,10,1,100,2.0,0
+"Kai'Sa, Daughter of the Void",Watchful Sentry,ogn-096,Unit,Mind,2,1,100,3.0,0
+"Kai'Sa, Daughter of the Void",Brittle Steel,ven-003,Spell,Fury,2,1,0,,100
+"Kai'Sa, Daughter of the Void",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Kai'Sa, Daughter of the Void",Decree of Rage,ven-015,Spell,Fury,1,1,0,,100
+"Kai'Sa, Daughter of the Void",Icathian Rain,ogn-248,Spell,Fury|Mind,7,1,0,,100
+"Kai'Sa, Daughter of the Void",Pickpocket,sfd-074,Unit,Mind,3,1,0,,100
+"Kennen, Heart of the Tempest","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,1.0,100
+"Kennen, Heart of the Tempest",Hard Bargain,sfd-136,Spell,Chaos,2,1,100,1.0,100
+"Kennen, Heart of the Tempest",Salvage,ogn-224,Spell,Order,2,1,100,1.0,100
+"Kennen, Heart of the Tempest",Star-Crossed,unl-128,Spell,Chaos,3,1,100,1.0,100
+"Kennen, Heart of the Tempest",Up from the Deep,ven-100,Spell,Chaos,3,1,100,1.0,100
+"Kennen, Heart of the Tempest",Carrion Dredger,unl-153,Unit,Order,2,1,100,1.0,0
+"Kennen, Heart of the Tempest","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,1,100,2.0,0
+"Kennen, Heart of the Tempest",Flash,ogs-011,Spell,Chaos,2,1,100,2.0,0
+"Kennen, Heart of the Tempest",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
+"Kennen, Heart of the Tempest","Kennen, Storm of Shuriken",ven-113,Unit,Chaos,3,1,100,1.0,0
+"Kennen, Heart of the Tempest",Last Rites,sfd-150,Gear,Chaos,3,1,100,2.0,0
+"Kennen, Heart of the Tempest",Lightning Rush,ven-156,Spell,Order|Chaos,1,1,100,3.0,0
+"Kennen, Heart of the Tempest",Rhasa the Sunderer,ogn-195,Unit,Chaos,10,1,100,3.0,0
+"Kennen, Heart of the Tempest",Ride The Wind,ogn-173,Spell,Chaos,2,1,100,2.0,0
+"Kennen, Heart of the Tempest",Seal of Discord,ogn-204,Gear,Chaos,0,1,100,3.0,0
+"Kennen, Heart of the Tempest",Shadow Order Disciple,ven-095,Unit,Chaos,2,1,100,3.0,0
+"Kennen, Heart of the Tempest",Switcheroo,sfd-145,Spell,Chaos,2,1,100,2.0,0
+"Kennen, Heart of the Tempest",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,3.0,0
+"Kennen, Heart of the Tempest",Tideturner,ogn-199,Unit,Chaos,2,1,100,1.0,0
+"Kennen, Heart of the Tempest",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,2.0,0
+"Kennen, Heart of the Tempest",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,3.0,0
+"Kennen, Heart of the Tempest",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Kennen, Heart of the Tempest",Lacerate,ven-127,Spell,Order,2,1,0,,100
+"Kennen, Heart of the Tempest",Ravenbloom Prefect,ven-102,Unit,Chaos,3,1,0,,100
+"Kennen, Heart of the Tempest",Rebuke,ogn-172,Spell,Chaos,2,1,0,,100
+"Kha'Zix, Voidreaver",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
+"Kha'Zix, Voidreaver",Sabotage,ogn-156,Spell,Body,1,1,100,2.0,100
+"Kha'Zix, Voidreaver","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,1.0,0
+"Kha'Zix, Voidreaver","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,3.0,0
+"Kha'Zix, Voidreaver",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Kha'Zix, Voidreaver","Kha'Zix, Mutating Horror",unl-143,Unit,Chaos,4,1,100,1.0,0
+"Kha'Zix, Voidreaver",Kinkou Initiate,unl-097,Unit,Body,3,1,100,3.0,0
+"Kha'Zix, Voidreaver",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Kha'Zix, Voidreaver","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,2.0,0
+"Kha'Zix, Voidreaver",Ride The Wind,ogn-173,Spell,Chaos,2,1,100,1.0,0
+"Kha'Zix, Voidreaver",Shadow Order Disciple,ven-095,Unit,Chaos,2,1,100,3.0,0
+"Kha'Zix, Voidreaver",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,0
+"Kha'Zix, Voidreaver",Switcheroo,sfd-145,Spell,Chaos,2,1,100,1.0,0
+"Kha'Zix, Voidreaver",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,2.0,0
+"Kha'Zix, Voidreaver",Tideturner,ogn-199,Unit,Chaos,2,1,100,1.0,0
+"Kha'Zix, Voidreaver",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,1.0,0
+"Kha'Zix, Voidreaver",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,1.0,0
+"Kha'Zix, Voidreaver",Up from the Deep,ven-100,Spell,Chaos,3,1,100,2.0,0
+"Kha'Zix, Voidreaver","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,2.0,0
+"Kha'Zix, Voidreaver",Void Assault,unl-202,Spell,Body|Chaos,2,1,100,3.0,0
+"Kha'Zix, Voidreaver","Zed, Without a Sound",ven-112,Unit,Chaos,5,1,100,1.0,0
+"Kha'Zix, Voidreaver",Acceptable Losses,ogn-179,Spell,Chaos,1,1,0,,100
+"Kha'Zix, Voidreaver",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Kha'Zix, Voidreaver",Gust,ogn-169,Spell,Chaos,1,1,0,,100
+"Kha'Zix, Voidreaver",Hard Bargain,sfd-136,Spell,Chaos,2,1,0,,100
+"Kha'Zix, Voidreaver",Ravenbloom Prefect,ven-102,Unit,Chaos,3,1,0,,100
 "Leblanc, Deceiver",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,6,100,1.2,50
 "Leblanc, Deceiver",Glasc Mixologist,sfd-165,Unit,Order,5,6,100,3.0,0
 "Leblanc, Deceiver","Karthus, Eternal",ogn-236,Unit,Order,3,6,100,3.0,0
@@ -67,24 +320,327 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Leblanc, Deceiver","Ashe, Focused",unl-169,Unit,Order,5,6,0,,17
 "Leblanc, Deceiver",Safety Inspector,unl-164,Unit,Order,5,6,0,,17
 "Leblanc, Deceiver",Time Warp,ogn-122,Spell,Mind,10,6,0,,17
-"Master Yi, Wuju Bladesman",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,100
-"Master Yi, Wuju Bladesman",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
-"Master Yi, Wuju Bladesman",Alpha Strike,unl-192,Spell,Calm|Body,3,1,100,1.0,0
-"Master Yi, Wuju Bladesman",Charm,ogn-043,Spell,Calm,1,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
-"Master Yi, Wuju Bladesman",En Garde,ogn-046,Spell,Calm,1,1,100,2.0,0
-"Master Yi, Wuju Bladesman",First Mate,ogn-132,Unit,Body,3,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Lonely Poro,sfd-036,Unit,Calm,2,1,100,3.0,0
-"Master Yi, Wuju Bladesman","Master Yi, Tempered",unl-113,Unit,Body,4,1,100,1.0,0
-"Master Yi, Wuju Bladesman",Onslaught,ven-081,Spell,Body,4,1,100,1.0,0
-"Master Yi, Wuju Bladesman",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
-"Master Yi, Wuju Bladesman","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Ruin Runner,sfd-105,Unit,Body,6,1,100,2.0,0
-"Master Yi, Wuju Bladesman",Sabotage,ogn-156,Spell,Body,1,1,100,1.0,0
-"Master Yi, Wuju Bladesman",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
-"Master Yi, Wuju Bladesman",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,2.0,0
-"Master Yi, Wuju Bladesman",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
-"Master Yi, Wuju Bladesman",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
-"Master Yi, Wuju Bladesman",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Lee Sin, Blind Monk",Sabotage,ogn-156,Spell,Body,1,1,100,1.0,100
+"Lee Sin, Blind Monk",Back Off,unl-042,Spell,Calm,3,1,100,1.0,0
+"Lee Sin, Blind Monk",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
+"Lee Sin, Blind Monk",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Lee Sin, Blind Monk",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Lee Sin, Blind Monk",Doran's Blade,sfd-095,Gear,Body,2,1,100,1.0,0
+"Lee Sin, Blind Monk",Emperor's Divide,sfd-043,Spell,Calm,2,1,100,1.0,0
+"Lee Sin, Blind Monk",En Garde,ogn-046,Spell,Calm,1,1,100,2.0,0
+"Lee Sin, Blind Monk",First Mate,ogn-132,Unit,Body,3,1,100,2.0,0
+"Lee Sin, Blind Monk","Irelia, Fervent",sfd-057,Unit,Calm,5,1,100,3.0,0
+"Lee Sin, Blind Monk","Lee Sin, Centered",ogn-151,Unit,Body,6,1,100,1.0,0
+"Lee Sin, Blind Monk",Lonely Poro,sfd-036,Unit,Calm,2,1,100,3.0,0
+"Lee Sin, Blind Monk","Nidalee, Cat Form",unl-114,Unit,Body,3,1,100,2.0,0
+"Lee Sin, Blind Monk",Pit Rookie,ogn-136,Unit,Body,2,1,100,2.0,0
+"Lee Sin, Blind Monk",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Lee Sin, Blind Monk","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,2.0,0
+"Lee Sin, Blind Monk",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
+"Lee Sin, Blind Monk",Wizened Elder,ogn-065,Unit,Calm,4,1,100,3.0,0
+"Lee Sin, Blind Monk",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,2.0,0
+"Lee Sin, Blind Monk",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Lee Sin, Blind Monk",Not So Fast,sfd-045,Spell,Calm,2,1,0,,100
+"Lee Sin, Blind Monk","Sett, Brawler",ogn-164,Unit,Body,5,1,0,,100
+"Lee Sin, Blind Monk",Unyielding Spirit,ogn-145,Spell,Body,1,1,0,,100
+"Lillia, Bashful Bloom",Charm,ogn-043,Spell,Calm,1,1,100,1.0,100
+"Lillia, Bashful Bloom",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Lillia, Bashful Bloom",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Heart of Dark Ice,sfd-052,Gear,Calm,3,1,100,3.0,0
+"Lillia, Bashful Bloom","Lillia, Fae Fawn",unl-082,Unit,Mind,3,1,100,1.0,0
+"Lillia, Bashful Bloom",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Plundering Poro,sfd-069,Unit,Mind,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Smoke and Mirrors,unl-083,Spell,Mind,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Sprite Burst,unl-069,Spell,Mind,5,1,100,3.0,0
+"Lillia, Bashful Bloom",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
+"Lillia, Bashful Bloom",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Lillia, Bashful Bloom",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,2.0,0
+"Lillia, Bashful Bloom",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
+"Lillia, Bashful Bloom",Unchecked Power,ogn-123,Spell,Mind,7,1,100,3.0,0
+"Lillia, Bashful Bloom",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Lillia, Bashful Bloom",Falling Comet,ogn-085,Spell,Mind,5,1,0,,100
+"Lillia, Bashful Bloom",Lilting Lullaby,unl-190,Spell,Calm|Mind,2,1,0,,100
+"Lucian, Purifier","Lucian, Merciless",sfd-113,Unit,Body,3,1,200,1.0,0
+"Lucian, Purifier",Falling Star,ogn-029,Spell,Fury,2,1,100,2.0,100
+"Lucian, Purifier",Blighted Battleaxe,unl-019,Gear,Fury,4,1,100,2.0,0
+"Lucian, Purifier",Doran's Blade,sfd-095,Gear,Body,2,1,100,3.0,0
+"Lucian, Purifier",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,3.0,0
+"Lucian, Purifier",First Mate,ogn-132,Unit,Body,3,1,100,3.0,0
+"Lucian, Purifier",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Lucian, Purifier","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,3.0,0
+"Lucian, Purifier",Kinkou Initiate,unl-097,Unit,Body,3,1,100,3.0,0
+"Lucian, Purifier",Long Sword,sfd-022,Gear,Fury,2,1,100,3.0,0
+"Lucian, Purifier",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Lucian, Purifier",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
+"Lucian, Purifier",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Lucian, Purifier",Relentless Pursuit,sfd-184,Spell,Fury|Body,2,1,100,1.0,0
+"Lucian, Purifier",Sabotage,ogn-156,Spell,Body,1,1,100,3.0,0
+"Lucian, Purifier",Brittle Steel,ven-003,Spell,Fury,2,1,0,,100
+"Lucian, Purifier",Legion Rearguard,ogn-010,Unit,Fury,2,1,0,,100
+"Lucian, Purifier",Pendulum Blade,ven-011,Gear,Fury,3,1,0,,100
+"Lucian, Purifier",Rampage,ven-083,Spell,Body,3,1,0,,100
+"Master Yi, Wuju Bladesman",Rampage,ven-083,Spell,Body,3,2,100,2.0,50
+"Master Yi, Wuju Bladesman",Charm,ogn-043,Spell,Calm,1,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Defy,ogn-045,Spell,Calm,1,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Discipline,ogn-058,Spell,Calm,2,2,100,3.0,0
+"Master Yi, Wuju Bladesman",En Garde,ogn-046,Spell,Calm,1,2,100,2.0,0
+"Master Yi, Wuju Bladesman",First Mate,ogn-132,Unit,Body,3,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Lonely Poro,sfd-036,Unit,Calm,2,2,100,2.5,0
+"Master Yi, Wuju Bladesman","Master Yi, Tempered",unl-113,Unit,Body,4,2,100,1.0,0
+"Master Yi, Wuju Bladesman",Onslaught,ven-081,Spell,Body,4,2,100,1.0,0
+"Master Yi, Wuju Bladesman",Pit Rookie,ogn-136,Unit,Body,2,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Punch First,sfd-097,Spell,Body,1,2,100,3.0,0
+"Master Yi, Wuju Bladesman","Rengar, Trophy Hunter",unl-120,Unit,Body,5,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Ruin Runner,sfd-105,Unit,Body,6,2,100,1.5,0
+"Master Yi, Wuju Bladesman",Sabotage,ogn-156,Spell,Body,1,2,100,2.0,0
+"Master Yi, Wuju Bladesman",Scuttle Crab,unl-053,Unit,Calm,2,2,100,3.0,0
+"Master Yi, Wuju Bladesman",Zhonya's Hourglass,ogn-077,Gear,Calm,2,2,100,2.0,0
+"Master Yi, Wuju Bladesman",Alpha Strike,unl-192,Spell,Calm|Body,3,2,50,1.0,50
+"Master Yi, Wuju Bladesman",Not So Fast,sfd-045,Spell,Calm,2,2,50,1.0,50
+"Master Yi, Wuju Bladesman","Akali, Silent",ven-038,Unit,Calm,4,2,50,1.0,0
+"Master Yi, Wuju Bladesman",Legion Marauder,ven-074,Unit,Body,2,2,50,1.0,0
+"Master Yi, Wuju Bladesman",Decree of Focus,ven-040,Spell,Calm,1,2,0,,100
+"Master Yi, Wuju Bladesman",Decree of Strength,ven-085,Spell,Body,1,2,0,,100
+"Master Yi, Wuju Bladesman",Disarming Rake,sfd-032,Unit,Calm,3,2,0,,100
+"Master Yi, Wuju Bladesman",Repulse,unl-106,Spell,Body,1,2,0,,50
+"Master Yi, Wuju Bladesman",Unyielding Spirit,ogn-145,Spell,Body,1,2,0,,50
+"Master Yi, Wuju Master",Back Off,unl-042,Spell,Calm,3,1,100,2.0,100
+"Master Yi, Wuju Master",Defy,ogn-045,Spell,Calm,1,1,100,2.0,100
+"Master Yi, Wuju Master",Alpha Strike,unl-192,Spell,Calm|Body,3,1,100,1.0,0
+"Master Yi, Wuju Master",Concentrate,unl-091,Spell,Body,5,1,100,3.0,0
+"Master Yi, Wuju Master",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Master",Emperor's Divide,sfd-043,Spell,Calm,2,1,100,2.0,0
+"Master Yi, Wuju Master",Gemhand Hunter,unl-094,Unit,Body,2,1,100,3.0,0
+"Master Yi, Wuju Master",Grim Resolve,unl-095,Spell,Body,2,1,100,2.0,0
+"Master Yi, Wuju Master",Herald of Spring,unl-034,Unit,Calm,4,1,100,3.0,0
+"Master Yi, Wuju Master","Master Yi, Tempered",unl-113,Unit,Body,4,1,100,1.0,0
+"Master Yi, Wuju Master","Master Yi, Unstoppable",unl-059,Unit,Calm,12,1,100,3.0,0
+"Master Yi, Wuju Master",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Master Yi, Wuju Master",Repulse,unl-106,Spell,Body,1,1,100,2.0,0
+"Master Yi, Wuju Master",Scuttle Crab,unl-053,Unit,Calm,2,1,100,1.0,0
+"Master Yi, Wuju Master",Voracious Gromp,unl-100,Unit,Body,5,1,100,3.0,0
+"Master Yi, Wuju Master",Wuju Apprentice,unl-040,Unit,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Master",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
+"Master Yi, Wuju Master",Crumbling Sands,ven-039,Spell,Calm,1,1,0,,100
+"Master Yi, Wuju Master",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Master Yi, Wuju Master",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Master Yi, Wuju Master",Skyward Strike,unl-038,Spell,Calm,2,1,0,,100
+"Nasus, Curator of the Sands",Bellows Breath,sfd-080,Spell,Mind,1,1,100,3.0,0
+"Nasus, Curator of the Sands",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
+"Nasus, Curator of the Sands",Clockwork Keeper,ogn-044,Unit,Calm,2,1,100,3.0,0
+"Nasus, Curator of the Sands",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Nasus, Curator of the Sands",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Nasus, Curator of the Sands",Eclipse,unl-063,Spell,Mind,3,1,100,2.0,0
+"Nasus, Curator of the Sands",En Garde,ogn-046,Spell,Calm,1,1,100,3.0,0
+"Nasus, Curator of the Sands",Find Your Center,ogn-047,Spell,Calm,3,1,100,3.0,0
+"Nasus, Curator of the Sands",Lonely Poro,sfd-036,Unit,Calm,2,1,100,3.0,0
+"Nasus, Curator of the Sands","Nasus, Ascended",ven-046,Unit,Calm,8,1,100,1.0,0
+"Nasus, Curator of the Sands",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,0
+"Nasus, Curator of the Sands",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
+"Nasus, Curator of the Sands",Sprite Queen,unl-084,Unit,Mind,7,1,100,3.0,0
+"Nasus, Curator of the Sands",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Nasus, Curator of the Sands",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,1.0,0
+"Nasus, Curator of the Sands",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Guardian Angel,sfd-051,Gear,Calm,2,1,100,1.0,100
+"Ornn, Fire Below the Mountain",Aspiring Engineer,sfd-061,Unit,Mind,3,1,100,2.0,0
+"Ornn, Fire Below the Mountain",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
+"Ornn, Fire Below the Mountain",Clockwork Keeper,ogn-044,Unit,Calm,2,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Cloth Armor,sfd-064,Gear,Mind,1,1,100,1.0,0
+"Ornn, Fire Below the Mountain",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Helm of Suppression,ven-045,Gear,Calm,4,1,100,1.0,0
+"Ornn, Fire Below the Mountain",Lecturing Yordle,ogn-087,Unit,Mind,3,1,100,1.0,0
+"Ornn, Fire Below the Mountain",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,1.0,0
+"Ornn, Fire Below the Mountain","Ornn, Blacksmith",sfd-058,Unit,Calm,5,1,100,1.0,0
+"Ornn, Fire Below the Mountain",Patched Porobot,ven-058,Unit,Mind,2,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Pit Crew,ogn-091,Unit,Mind,3,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Poro Snax,sfd-046,Gear,Calm,1,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Seal of Focus,ogn-081,Gear,Calm,0,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Sterak's Gage,sfd-056,Gear,Calm,3,1,100,3.0,0
+"Ornn, Fire Below the Mountain",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Ornn, Fire Below the Mountain",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Ornn, Fire Below the Mountain",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Ornn, Fire Below the Mountain",Not So Fast,sfd-045,Spell,Calm,2,1,0,,100
+"Ornn, Fire Below the Mountain",Pickpocket,sfd-074,Unit,Mind,3,1,0,,100
+"Pyke, Bloodharbor Ripper",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,100
+"Pyke, Bloodharbor Ripper",Bewitching Spirit,unl-121,Unit,Chaos,3,1,100,3.0,0
+"Pyke, Bloodharbor Ripper",Blood Rush,sfd-003,Spell,Fury,1,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Brittle Steel,ven-003,Spell,Fury,2,1,100,1.0,0
+"Pyke, Bloodharbor Ripper",Death from Below,unl-186,Spell,Fury|Chaos,4,1,100,1.0,0
+"Pyke, Bloodharbor Ripper","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,1,100,3.0,0
+"Pyke, Bloodharbor Ripper",Falling Star,ogn-029,Spell,Fury,2,1,100,3.0,0
+"Pyke, Bloodharbor Ripper","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Gust Monk,ven-101,Unit,Chaos,2,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Kharox,ven-114,Unit,Chaos,6,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Piercing Light,sfd-023,Spell,Fury,2,1,100,1.0,0
+"Pyke, Bloodharbor Ripper","Pyke, Dockside Butcher",unl-028,Unit,Fury,3,1,100,1.0,0
+"Pyke, Bloodharbor Ripper",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,2.0,0
+"Pyke, Bloodharbor Ripper",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,3.0,0
+"Pyke, Bloodharbor Ripper",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,3.0,0
+"Pyke, Bloodharbor Ripper",Treasure Hunter,sfd-130,Unit,Chaos,2,1,100,3.0,0
+"Pyke, Bloodharbor Ripper","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,3.0,0
+"Pyke, Bloodharbor Ripper",Void Seeker,ogn-024,Spell,Fury,3,1,100,1.0,0
+"Pyke, Bloodharbor Ripper",Angler Beast,unl-132,Unit,Chaos,5,1,0,,100
+"Pyke, Bloodharbor Ripper",Decree of Rage,ven-015,Spell,Fury,1,1,0,,100
+"Pyke, Bloodharbor Ripper",Downwell,sfd-147,Spell,Chaos,8,1,0,,100
+"Pyke, Bloodharbor Ripper",Hard Bargain,sfd-136,Spell,Chaos,2,1,0,,100
+"Pyke, Bloodharbor Ripper",Ravenbloom Prefect,ven-102,Unit,Chaos,3,1,0,,100
+"Pyke, Bloodharbor Ripper",Switcheroo,sfd-145,Spell,Chaos,2,1,0,,100
+"Rek'sai, Void Burrower","Ashe, Focused",unl-169,Unit,Order,5,1,100,1.0,100
+"Rek'sai, Void Burrower",Forge of the Future,ogn-212,Gear,Order,2,1,100,1.0,100
+"Rek'sai, Void Burrower","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,2.0,100
+"Rek'sai, Void Burrower",Carrion Dredger,unl-153,Unit,Order,2,1,100,3.0,0
+"Rek'sai, Void Burrower",Cleave,ogn-004,Spell,Fury,1,1,100,3.0,0
+"Rek'sai, Void Burrower",Cull the Weak,ogn-209,Spell,Order,2,1,100,3.0,0
+"Rek'sai, Void Burrower",Disciple of Shen,ven-117,Unit,Order,2,1,100,1.0,0
+"Rek'sai, Void Burrower",Falling Star,ogn-029,Spell,Fury,2,1,100,3.0,0
+"Rek'sai, Void Burrower",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,2.0,0
+"Rek'sai, Void Burrower",Hidden Blade,ogn-213,Spell,Order,2,1,100,3.0,0
+"Rek'sai, Void Burrower",Inferna,unl-002,Unit,Fury,2,1,100,3.0,0
+"Rek'sai, Void Burrower","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,3.0,0
+"Rek'sai, Void Burrower","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,1.0,0
+"Rek'sai, Void Burrower",Long Sword,sfd-022,Gear,Fury,2,1,100,1.0,0
+"Rek'sai, Void Burrower",Mischievous Marai,unl-003,Unit,Fury,2,1,100,3.0,0
+"Rek'sai, Void Burrower",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Rek'sai, Void Burrower","Rek'Sai, Breacher",sfd-029,Unit,Fury,3,1,100,1.0,0
+"Rek'sai, Void Burrower",Undertitan,sfd-175,Unit,Order,6,1,100,3.0,0
+"Rek'sai, Void Burrower",Brittle Steel,ven-003,Spell,Fury,2,1,0,,100
+"Rek'sai, Void Burrower",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Rek'sai, Void Burrower",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Renata Glasc, Chem-Baroness","Bard, Mercurial",sfd-079,Unit,Mind,4,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Cloth Armor,sfd-064,Gear,Mind,1,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Deathgrip,sfd-163,Spell,Order,2,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Enthralling Protector,unl-162,Unit,Order,2,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Hidden Blade,ogn-213,Spell,Order,2,1,100,3.0,0
+"Renata Glasc, Chem-Baroness",Hostile Takeover,sfd-202,Spell,Mind|Order,5,1,100,2.0,0
+"Renata Glasc, Chem-Baroness","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Ki Barrier,ven-126,Spell,Order,2,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Patched Porobot,ven-058,Unit,Mind,2,1,100,3.0,0
+"Renata Glasc, Chem-Baroness",Pit Crew,ogn-091,Unit,Mind,3,1,100,3.0,0
+"Renata Glasc, Chem-Baroness",Plundering Poro,sfd-069,Unit,Mind,2,1,100,3.0,0
+"Renata Glasc, Chem-Baroness","Renata Glasc, Mastermind",sfd-088,Unit,Mind,5,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Shepherd's Heirloom,unl-158,Gear,Order,2,1,100,3.0,0
+"Renata Glasc, Chem-Baroness",Singularity,ogn-105,Spell,Mind,6,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Sprite Burst,unl-069,Spell,Mind,5,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
+"Renata Glasc, Chem-Baroness",Stupefy,ogn-095,Spell,Mind,1,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,2.0,0
+"Renata Glasc, Chem-Baroness",Time Warp,ogn-122,Spell,Mind,10,1,100,2.0,0
+"Renata Glasc, Chem-Baroness","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,1.0,0
+"Renata Glasc, Chem-Baroness",Bellows Breath,sfd-080,Spell,Mind,1,1,0,,100
+"Renata Glasc, Chem-Baroness",Cull the Weak,ogn-209,Spell,Order,2,1,0,,100
+"Renata Glasc, Chem-Baroness",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Renata Glasc, Chem-Baroness",Forge of the Future,ogn-212,Gear,Order,2,1,0,,100
+"Renata Glasc, Chem-Baroness",Pickpocket,sfd-074,Unit,Mind,3,1,0,,100
+"Renata Glasc, Chem-Baroness",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Rengar, Pridestalker",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,1.0,100
+"Rengar, Pridestalker","Pyke, Dockside Butcher",unl-028,Unit,Fury,3,1,100,1.0,100
+"Rengar, Pridestalker",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
+"Rengar, Pridestalker","Darius, Trifarian",ogn-027,Unit,Fury,5,1,100,1.0,0
+"Rengar, Pridestalker",First Mate,ogn-132,Unit,Body,3,1,100,2.0,0
+"Rengar, Pridestalker",Grim Apothecary,unl-021,Unit,Fury,3,1,100,3.0,0
+"Rengar, Pridestalker",Inferna,unl-002,Unit,Fury,2,1,100,3.0,0
+"Rengar, Pridestalker",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Rengar, Pridestalker","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,3.0,0
+"Rengar, Pridestalker",Kinkou Initiate,unl-097,Unit,Body,3,1,100,3.0,0
+"Rengar, Pridestalker","Nidalee, Cat Form",unl-114,Unit,Body,3,1,100,2.0,0
+"Rengar, Pridestalker",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Rengar, Pridestalker",Pakaa Cub,ogn-135,Unit,Body,3,1,100,1.0,0
+"Rengar, Pridestalker",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
+"Rengar, Pridestalker",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Rengar, Pridestalker","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,1.0,0
+"Rengar, Pridestalker",Sabotage,ogn-156,Spell,Body,1,1,100,3.0,0
+"Rengar, Pridestalker",Thrill of the Hunt,unl-184,Spell,Fury|Body,2,1,100,2.0,0
+"Rengar, Pridestalker",Brittle Steel,ven-003,Spell,Fury,2,1,0,,100
+"Rengar, Pridestalker",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,0,,100
+"Rengar, Pridestalker",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
+"Rengar, Pridestalker",Noxian Demolitionist,ven-080,Unit,Body,2,1,0,,100
+"Sett, The Boss",Repulse,unl-106,Spell,Body,1,1,100,1.0,100
+"Sett, The Boss","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,1.0,100
+"Sett, The Boss",Arena Bar,ogn-124,Gear,Body,3,1,100,3.0,0
+"Sett, The Boss",Call to Glory,ogn-207,Spell,Order,3,1,100,3.0,0
+"Sett, The Boss",Challenge,ogn-128,Spell,Body,2,1,100,2.0,0
+"Sett, The Boss",Cithria of Cloudfield,ogn-139,Unit,Body,2,1,100,2.0,0
+"Sett, The Boss","Fiora, Victorious",ogn-232,Unit,Order,4,1,100,3.0,0
+"Sett, The Boss",First Mate,ogn-132,Unit,Body,3,1,100,3.0,0
+"Sett, The Boss",Hidden Blade,ogn-213,Spell,Order,2,1,100,1.0,0
+"Sett, The Boss",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Sett, The Boss",Kinkou Monk,ogn-141,Unit,Body,4,1,100,2.0,0
+"Sett, The Boss",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
+"Sett, The Boss",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Sett, The Boss","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"Sett, The Boss",Sabotage,ogn-156,Spell,Body,1,1,100,3.0,0
+"Sett, The Boss","Sett, Kingpin",ogn-240,Unit,Order,4,1,100,1.0,0
+"Sett, The Boss",Showstopper,ogn-270,Spell,Body|Order,1,1,100,3.0,0
+"Sett, The Boss","Akshan, Mischievous",sfd-109,Unit,Body,4,1,0,,100
+"Sett, The Boss","Ashe, Focused",unl-169,Unit,Order,5,1,0,,100
+"Sett, The Boss","Lucian, Merciless",sfd-113,Unit,Body,3,1,0,,100
+"Shen, Eye of Twilight",B.F. Sword,sfd-161,Gear,Order,4,1,100,2.0,0
+"Shen, Eye of Twilight",Back Off,unl-042,Spell,Calm,3,1,100,1.0,0
+"Shen, Eye of Twilight",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
+"Shen, Eye of Twilight",Deathgrip,sfd-163,Spell,Order,2,1,100,2.0,0
+"Shen, Eye of Twilight",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Shen, Eye of Twilight",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Shen, Eye of Twilight",Emperor's Divide,sfd-043,Spell,Calm,2,1,100,2.0,0
+"Shen, Eye of Twilight",En Garde,ogn-046,Spell,Calm,1,1,100,2.0,0
+"Shen, Eye of Twilight","Fiora, Victorious",ogn-232,Unit,Order,4,1,100,2.0,0
+"Shen, Eye of Twilight",Hidden Blade,ogn-213,Spell,Order,2,1,100,3.0,0
+"Shen, Eye of Twilight","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,2.0,0
+"Shen, Eye of Twilight",Ki Barrier,ven-126,Spell,Order,2,1,100,2.0,0
+"Shen, Eye of Twilight",Lonely Poro,sfd-036,Unit,Calm,2,1,100,3.0,0
+"Shen, Eye of Twilight",Loyal Poro,unl-156,Unit,Order,3,1,100,3.0,0
+"Shen, Eye of Twilight","Shen, Scourge of Shadows",ven-042,Unit,Calm,5,1,100,1.0,0
+"Shen, Eye of Twilight",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,2.0,0
+"Shen, Eye of Twilight",Unsung Hero,sfd-167,Unit,Order,2,1,100,3.0,0
+"Shen, Eye of Twilight","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,2.0,0
+"Shen, Eye of Twilight","Ashe, Focused",unl-169,Unit,Order,5,1,0,,100
+"Shen, Eye of Twilight",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Shen, Eye of Twilight",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Shen, Eye of Twilight",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Shen, Eye of Twilight",Imperial Decree,ogn-221,Spell,Order,5,1,0,,100
+"Shen, Eye of Twilight",Vilemaw,unl-060,Unit,Calm,8,1,0,,100
+"Sivir, Battle Mistress",Acceptable Losses,ogn-179,Spell,Chaos,1,1,100,1.0,0
+"Sivir, Battle Mistress",Edge of Night,sfd-139,Gear,Chaos,3,1,100,2.0,0
+"Sivir, Battle Mistress","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,1,100,3.0,0
+"Sivir, Battle Mistress","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,3.0,0
+"Sivir, Battle Mistress",Grim Resolve,unl-095,Spell,Body,2,1,100,1.0,0
+"Sivir, Battle Mistress",Gust,ogn-169,Spell,Chaos,1,1,100,1.0,0
+"Sivir, Battle Mistress",Last Rites,sfd-150,Gear,Chaos,3,1,100,1.0,0
+"Sivir, Battle Mistress",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"Sivir, Battle Mistress","Pyke, Returned",unl-145,Unit,Chaos,3,1,100,1.0,0
+"Sivir, Battle Mistress",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
+"Sivir, Battle Mistress",Sabotage,ogn-156,Spell,Body,1,1,100,2.0,0
+"Sivir, Battle Mistress",Shadow Order Disciple,ven-095,Unit,Chaos,2,1,100,3.0,0
+"Sivir, Battle Mistress","Sivir, Mercenary",sfd-143,Unit,Chaos,4,1,100,1.0,0
+"Sivir, Battle Mistress",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,0
+"Sivir, Battle Mistress",Switcheroo,sfd-145,Spell,Chaos,2,1,100,2.0,0
+"Sivir, Battle Mistress",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,3.0,0
+"Sivir, Battle Mistress",Tideturner,ogn-199,Unit,Chaos,2,1,100,2.0,0
+"Sivir, Battle Mistress",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,3.0,0
+"Sivir, Battle Mistress",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,3.0,0
+"Vex, Gloomist",Defy,ogn-045,Spell,Calm,1,1,100,2.0,100
+"Vex, Gloomist",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,100
+"Vex, Gloomist",Star-Crossed,unl-128,Spell,Chaos,3,1,100,1.0,100
+"Vex, Gloomist",Switcheroo,sfd-145,Spell,Chaos,2,1,100,1.0,100
+"Vex, Gloomist",Back Off,unl-042,Spell,Calm,3,1,100,2.0,0
+"Vex, Gloomist",Boots of Swiftness,sfd-133,Gear,Chaos,3,1,100,2.0,0
+"Vex, Gloomist",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Vex, Gloomist",Edge of Night,sfd-139,Gear,Chaos,3,1,100,2.0,0
+"Vex, Gloomist",Ember Monk,ogn-167,Unit,Chaos,4,1,100,2.0,0
+"Vex, Gloomist",Emperor's Divide,sfd-043,Spell,Calm,2,1,100,3.0,0
+"Vex, Gloomist","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,3.0,0
+"Vex, Gloomist",Existential Dread,unl-134,Spell,Chaos,1,1,100,2.0,0
+"Vex, Gloomist","Kha'Zix, Mutating Horror",unl-143,Unit,Chaos,4,1,100,2.0,0
+"Vex, Gloomist",Mutated Mouser,unl-036,Unit,Calm,2,1,100,3.0,0
+"Vex, Gloomist","Pyke, Returned",unl-145,Unit,Chaos,3,1,100,2.0,0
+"Vex, Gloomist","Sona, Harmonious",ogn-073,Unit,Calm,4,1,100,2.0,0
+"Vex, Gloomist","Teemo, Scout",ogn-197,Unit,Chaos,2,1,100,3.0,0
+"Vex, Gloomist",Treasure Hunter,sfd-130,Unit,Chaos,2,1,100,2.0,0
+"Vex, Gloomist","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,1.0,0
+"Vex, Gloomist",Abandon,unl-131,Spell,Chaos,2,1,0,,100
+"Vex, Gloomist",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
+"Vex, Gloomist",Rebuke,ogn-172,Spell,Chaos,2,1,0,,100

@@ -1,0 +1,43 @@
+# legend: Lee Sin, Blind Monk
+# player: TerryTheCactus (Ethan S.)
+# event: Riftbound Regional Qualifier - Vancouver (Best-Of Lee Sin)
+# date: 2026-05-30
+# placement: 153
+# url: https://riftdecks.com/riftbound-metagame/deck-lee-sin-blind-monk-170894
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+[legend]
+1 Lee Sin, Blind Monk
+[champion]
+1 Lee Sin, Centered
+[main]
+3 Lonely Poro
+3 Scuttle Crab
+3 Wizened Elder
+3 Irelia, Fervent
+2 Pit Rookie
+2 First Mate
+2 Nidalee, Cat Form
+2 Rengar, Trophy Hunter
+2 Zhonya's Hourglass
+1 Doran's Blade
+3 Defy
+3 Discipline
+3 Punch First
+2 Charm
+2 En Garde
+1 Back Off
+1 Emperor's Divide
+1 Sabotage
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Abandoned Hall
+1 Monastery of Hirana
+1 Star Spring
+[sideboard]
+2 Disarming Rake
+2 Unyielding Spirit
+2 Sabotage
+1 Not So Fast
+1 Sett, Brawler

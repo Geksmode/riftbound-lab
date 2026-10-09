@@ -1,0 +1,46 @@
+# legend: Renata Glasc, Chem-Baroness
+# player: Purp
+# event: Riftbound Regional Qualifier - Singapore (Best-Of Renata Glasc)
+# date: 2026-09-05
+# placement: 311
+# url: https://mobalytics.gg/riftbound/decks/renata-glasc-chem-baroness-singapore-regional-qualifier-best-of-purp
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: main recoupé entre mobalytics (tronqué) et riftmana (complet) ; sideboard d'après mobalytics
+[legend]
+1 Renata Glasc, Chem-Baroness
+[champion]
+1 Renata Glasc, Mastermind
+[main]
+1 Cloth Armor
+2 Stupefy
+2 Deathgrip
+2 Enthralling Protector
+3 Hidden Blade
+1 Ki Barrier
+3 Patched Porobot
+3 Plundering Poro
+3 Shepherd's Heirloom
+3 Sprite Fountain
+2 Kennen, Keeper of Balance
+3 Pit Crew
+1 Bard, Mercurial
+2 Hostile Takeover
+2 Sprite Burst
+1 Vi, Peacekeeper
+1 Singularity
+2 Thousand-Tailed Watcher
+2 Time Warp
+[runes]
+8 Mind Rune
+4 Order Rune
+[battlefields]
+1 Forge of the Fluft
+1 Seat of Power
+1 Treasure Hoard
+[sideboard]
+2 Bellows Breath
+2 Decree of Insight
+1 Cull the Weak
+1 Forge of the Future
+2 Salvage
+2 Pickpocket
