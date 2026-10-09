@@ -595,6 +595,11 @@ def move_options(g, pid):
         if not movers:
             continue
         groups = set()
+        if full_choices(g, pid) and len(movers) <= 10:
+            # Humain : n'importe quel sous-ensemble d'unités prêtes (règle 144 : on choisit librement les unités à déplacer).
+            uids = sorted(u.uid for u in movers)
+            for mask in range(1, 1 << len(uids)):
+                groups.add(tuple(x for i, x in enumerate(uids) if mask >> i & 1))
         for u in movers:
             groups.add((u.uid,))
         by_loc = {}
