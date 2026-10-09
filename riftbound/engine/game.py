@@ -1710,12 +1710,17 @@ class Game:
                     # aucune cible légale : la capacité est retirée (402.4) ; on ne demande pas « utiliser l'effet ? »
                     s.log(f"  {it.name} : aucune cible possible, l'effet ne s'applique pas")
                     continue
+                c = it.data.get("_cost")
+                if c is not None and it.data.get("_may") and not s.cost_payable(it, c):
+                    # coût optionnel impayable (Valley of Idols sans énergie) : ni question ni effet, et on le dit
+                    s.log(f"  {it.name} : pas de quoi payer ({getattr(c, 'label', 'le coût')}), l'effet ne s'applique pas")
+                    continue
                 if it.data.get("_may") and not s.ask(pid, "may", [True, False], item=it):
                     continue
                 if ch is not None and not ch(s, it):
                     continue
-                c = it.data.get("_cost")
                 if c is not None and not c(s, it):
+                    s.log(f"  {it.name} : coût non payé, l'effet ne s'applique pas")
                     continue
                 s.chain.append(it)
                 s.log(f"  trigger on chain: {it.name}")
@@ -1724,6 +1729,22 @@ class Game:
             s.priority = s.chain[-1].ctrl
             s.passes = 0
         s.need_cleanup = True
+
+    def cost_payable(s, it, c):
+        """Le coût optionnel c d'un déclenchement « may » peut-il être payé maintenant ? (retour utilisateur : Valley of
+        Idols proposée sans énergie). c.can quand le coût le dit (cards.may_pay) ; sinon, pour un joueur humain
+        seulement, essai sur une copie de la partie (premier choix à chaque question) ; l'IA garde son comportement."""
+        if getattr(c, "can", None) is not None:
+            return bool(c.can(s, it))
+        ag = s.agents[it.ctrl] if s.agents else None
+        if not (getattr(ag, "every_choice", False) or getattr(s, "every_choice", False)):
+            return True
+        g2 = s.clone()
+        g2.agents = [_FirstChoice(), _FirstChoice()]
+        try:
+            return bool(c(g2, it))
+        except Exception:                                  # noqa: BLE001 — dans le doute, on pose la question
+            return True
 
     def on_finalize(s, item):
         """Targeting effects (Irelia: 'When you choose me')."""
@@ -2518,6 +2539,12 @@ class Game:
             s.agents, s.lines = ag, lines
         g.logging = False
         return g
+
+
+class _FirstChoice:
+    """Agent d'essai pour Game.cost_payable : prend le premier choix proposé."""
+    def choose(self, g, pid, kind, options, ctx):
+        return options[0]
 
 
 def _temporary_kill(g, it):

@@ -298,10 +298,12 @@ def item_by_id(g, iid):
     return None
 
 
-def trig_target(options_fn, pred=None, kind="target", optional=False, deflect=False):
+def trig_target(options_fn, pred=None, kind="target", optional=False, deflect=True):
     """Build a finalization-time chooser for a triggered ability with one target.
-    deflect=True: enemy targets with [Deflect] must be paid for (rule 809); unpayable ones are not offered.
-    (False by default only to keep the behaviour of the cards modelled before the card modules.)"""
+    Enemy targets with [Deflect] must be paid for (rule 809.1.c : « Spells and abilities an opponent controls that
+    target [me] cost ... more ») ; unpayable ones are not offered. Friendly targets never pay (deflect_reqs).
+    deflect=False was the default before 2026-10-09: Akali, Deadly Weapon targeted Master Yi, Tempered (Deflect at
+    Level 6) for free (retour utilisateur)."""
     def opts_of(g, it):
         opts = options_fn(g, it)
         if pred is not None and full_choices(g, it.ctrl):      # a human may choose any legal target
@@ -327,11 +329,16 @@ def trig_target(options_fn, pred=None, kind="target", optional=False, deflect=Fa
 
 
 def may_pay(e, reqs_fn=None):
+    def can(g, it):
+        return g.can_pay(it.ctrl, e, reqs_fn(g, it) if reqs_fn else [])
+
     def cost(g, it):
         reqs = reqs_fn(g, it) if reqs_fn else []
         if not g.can_pay(it.ctrl, e, reqs):
             return False
         return g.pay(it.ctrl, e, reqs)
+    cost.can = can            # flush_triggers : pas de question « utiliser l'effet ? » quand on ne peut pas payer
+    cost.label = f"{e} énergie" + (" et des runes" if reqs_fn else "")
     return cost
 
 

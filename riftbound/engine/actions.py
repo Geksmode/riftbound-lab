@@ -510,6 +510,11 @@ def abilities_of(g, obj):
     leg = getattr(obj, "zone", None) == "legend"
     im = g.impl(g.p[obj.ctrl].legend_name) if leg else g.impl(obj)
     out = list(im.abilities) if im is not None else []
+    if not leg and getattr(obj, "attached_to", None) is not None:
+        # 434.1.e : une carte attachée a son texte de règles inactif tant qu'elle reste attachée ; un équipement attaché ne
+        # peut donc plus utiliser Equip (ni ses autres capacités imprimées) pour changer d'unité. Il reste attaché jusqu'à
+        # ce qu'il quitte l'unité (mort, effet « detach »…). Les capacités données par un autre effect restent (ci-dessous).
+        out = []
     out += [a for a, _ in obj.abs]
     if not leg and obj.attached:
         for n in g.copied_texts(obj):

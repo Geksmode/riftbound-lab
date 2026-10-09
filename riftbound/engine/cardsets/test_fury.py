@@ -1583,5 +1583,45 @@ def fuzz_smoke():
     assert g.turn_no > 1
 
 
+@T.test
+def deadly_weapon_pays_deflect_of_master_yi_tempered_at_level_6():
+    # 809.1.c : une capacité qui choisit une unité ennemie avec Deflect coûte 1 puissance de plus. Master Yi, Tempered a
+    # Deflect au niveau 6 (6 XP). Retour utilisateur 2026-10-09 : l'effet d'Akali Deadly Weapon le ciblait gratuitement.
+    def run(xp, nr):
+        seen = []
+        pick = lambda o, c: (seen.append(sorted(x.cname for x in o)), next((x for x in o if x.cname.startswith("Master Yi")), o[0]))[1]
+        g, _ = new(answers0={"may": lambda o, c: True, "target": pick})
+        runes(g, 0, ["Fury"] * nr)
+        ak = put(g, 0, "Akali, Deadly Weapon", "base")
+        put(g, 1, "Master Yi, Tempered", 0)
+        g.p[1].xp = xp
+        g.apply([o for o in options_of(g, "move") if o[1] == (ak.uid,) and o[2] == 0][0])
+        settle(g)
+        return seen, len(g.p[0].runes), [l for l in g.lines if "Deflect" in l]
+    seen, left, paid = run(6, 0)                 # niveau 6, rien pour payer : Yi n'est pas proposé
+    assert not any("Master Yi, Tempered" in x for x in seen), seen
+    seen, left, paid = run(6, 1)                 # niveau 6, une rune : Yi proposé, Deflect payé (rune recyclée)
+    assert any("Master Yi, Tempered" in x for x in seen) and left == 0, (seen, left)
+    seen, left, paid = run(5, 1)                 # niveau 5 : pas de Deflect, ciblage gratuit (la rune reste)
+    assert any("Master Yi, Tempered" in x for x in seen) and left == 1, (seen, left)
+
+
+@T.test
+def attached_equipment_stays_on_its_unit_until_it_leaves():
+    # 434.1.e : une carte attachée a son texte de règles inactif ; Long Sword attachée ne peut pas s'équiper sur une autre
+    # unité (retour utilisateur 2026-10-09). Quand l'unité meurt, l'équipement se détache et peut de nouveau s'équiper.
+    g, _ = new()
+    runes(g, 0, ["Fury"] * 4)
+    a = put(g, 0, "Arena Kingpin", "base")
+    b = put(g, 0, "Arena Kingpin", "base")
+    ls = put(g, 0, "Long Sword", "base")
+    g.apply([o for o in act_options(g, 0, "Long Sword") if o[3]["tg"] == (a.uid,)][0]); settle(g)
+    assert g.obj(ls.uid).attached_to == a.uid
+    assert not act_options(g, 0, "Long Sword")
+    g.kill([g.obj(a.uid)]); settle(g)
+    assert g.obj(ls.uid).attached_to is None
+    assert [o for o in act_options(g, 0, "Long Sword") if o[3]["tg"] == (b.uid,)]
+
+
 if __name__ == "__main__":
     T.main()

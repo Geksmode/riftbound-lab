@@ -1534,6 +1534,10 @@ def svellsongur_doubles_the_unit_text():
     assert len(g.p[0].hand) == 2
     runes(g, 0, ["Calm"] * 2)
     ff = put(g, 0, "Ferrous Forerunner")
+    # 434.1.e : attaché, son texte de règles (Equip) est inactif : pas de rééquipement vers une autre unité
+    assert not act_options(g, 0, "Svellsongur")
+    g.kill([g.obj(v.uid)]); settle(g)                   # l'unité meurt : l'équipement se détache, revient à la base
+    assert g.obj(sv.uid).attached_to is None
     g.apply([o for o in act_options(g, 0, "Svellsongur") if o[3]["tg"] == (ff.uid,)][0]); settle(g)
     g.kill([ff]); settle(g)
     assert len(_named(g, 0, "Mech")) == 4
