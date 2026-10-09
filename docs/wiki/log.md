@@ -109,3 +109,6 @@ Revue autocritique : `riftbound/retex/retex-session-2026-10-07-09.md`. Leçons v
 ## [2026-10-09] ingest | Confirmations de l'utilisateur
 Duel entre amis : fonctionne en réseau réel (page `duel.md`). Ciblage par liste sur téléphone : essayé sur son téléphone, fonctionne. Retex mis à jour.
 
+## [2026-10-09] ingest | Flow jouable depuis la défausse dans la table
+Le moteur appliquait Flow (829) : les 15 sorts se jouent depuis la défausse au coût de Flow imprimé puis sont bannis (`cardsets/test_flow_auto.py`, 3 tests : coût exact lu sur le texte, pas sans les ressources, pas sans Flow). Mais la table ne montrait aucune carte de la défausse portant ce coup : impossible de jouer Flow à la main. Maintenant un sort jouable avec Flow s'affiche au bout de ta main (marqué FLOW, bord pointillé or) et se joue comme une carte de la main (`train` exporte `trashu`). Robot `verif_flow.mjs` (ordinateur et téléphone) dans la porte.
+
