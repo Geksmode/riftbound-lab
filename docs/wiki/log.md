@@ -153,3 +153,20 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-09] fix | Chaîne : capacités activées (légende, Empower, Equip) sans illustration
 - Cause : le moteur nomme une capacité activée « Carte: capacité » (« Akali, Rogue Assassin: Empower », « Long Sword: Equip », « Baited Hook: Hook ») ; `cardFor` ne la rattachait à aucune carte, d'où une carte sans image avec le texte brut. `cardFor` (table et replays) retire maintenant le suffixe « : capacité ».
 - Vérifié : noms relevés sur 40 parties aléatoires (5 formes, toutes corrigées) et logique de `cardFor` rejouée sous node. **Pas** vérifié dans un navigateur (cache Pyodide absent) : à confirmer sur la table.
+
+## [2026-10-09] fix | Table : « T.replay_load n'est pas une fonction » après publication
+- Cause : la page neuve chargeait les fichiers du moteur (`py/*.py`, `data/*`) depuis le cache du navigateur (GitHub Pages : 10 min), donc l'ancien `train.py` sans `replay_load`.
+- Correction : `src.html` ajoute `?v=<commit>-<empreinte du moteur>` (constante `BUILD` posée par `build.sh`) à chaque fichier chargé dans Pyodide. Pas essayé sur un vrai téléphone.
+
+## [2026-10-09] fix | Irelia, Blade Dancer : plus de question inutile à chaque « choose »
+- Retour utilisateur : la question « utiliser l'effet ? » d'Irelia revenait à chaque choix d'unité alliée, même légende inclinée.
+- Correction (`cardsets/legends.py`) : le coût porte `can` ; pas de question si la légende est déjà inclinée, si aucune rune ne peut être payée, ou si l'unité choisie est déjà prête (« ready it » ne ferait rien). Tests `irelia_no_question_when_useless_or_unpayable` et `irelia_second_choice_not_asked_once_legend_exhausted` (échouent sans la correction).
+
+## [2026-10-09] change | Chaîne : flèches d'un seul élément, survol / toucher pour les autres
+- Demande : la chaîne affichait les flèches de ciblage de tous ses éléments à la fois, trop brouillon. Maintenant (`riftbound/train/src.html`, `drawArrows`) seules les flèches du haut de la chaîne (dernier ajouté) sont tracées ; survoler (souris) ou toucher (téléphone) un autre élément montre les siennes à la place (contour blanc sur l'élément montré, `base.css` `.sitem.foc`) ; en quittant la chaîne ou quand elle change, retour au haut. Les flèches du dernier coup de l'IA (chaîne vide) ne changent pas.
+- Téléphone : les éléments anciens de la chaîne étaient masqués (`display: none`) ; ils sont maintenant visibles dans la bande de la chaîne (qui défile), sinon on ne pouvait pas les toucher. Le toucher ouvre toujours la carte en grand, comme avant.
+- Vérifié par robot (`verif_fleches.mjs`) : chaîne de 2 éléments ciblants posée dans l'état affiché, en ordinateur 1893x899 (survol) et en téléphone 360x740 (toucher simulé) : une seule série de flèches par défaut, celles de l'autre élément au survol / toucher, retour au haut ensuite. Pas essayé sur un vrai téléphone.
+
+## [2026-10-09] fix | Flèches de la chaîne : toucher sur téléphone (échec du robot en CI)
+- CI (PR #26) : « toucher de l'élément du dessous » restait sur les flèches du haut. Cause : le `mouseover` de compatibilité qui suit un toucher pouvait tomber hors de la chaîne (carte en grand) et ramenait au haut, selon le moment.
+- Correction : survol compté seulement pour une vraie souris (`pointerover`, `pointerType === "mouse"`) ; toucher via `pointerdown`. Robot : il touche un point de la carte qui n'est pas recouvert (le haut d'un élément de la chaîne passe sous la main adverse en 360x740), et ferme la carte en grand avant de toucher le haut. 3 passages verts de suite en local ; pas essayé sur un vrai téléphone.

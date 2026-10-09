@@ -199,6 +199,18 @@ def _irelia_cost(g, it):
     return g.pay(it.ctrl, 0, [ANY])
 
 
+def _irelia_can(g, it):
+    # Pas de question « utiliser l'effet ? » (retour utilisateur) quand la légende est déjà inclinée, qu'aucune rune ne
+    # peut être payée, ou que l'unité choisie est déjà prête (« ready it » ne ferait rien).
+    o = _same(g, it.data["u"], it.data["oid"])
+    return (not _leg(g, it.ctrl).exhausted and g.can_pay(it.ctrl, 0, [ANY])
+            and o is not None and o.exhausted)
+
+
+_irelia_cost.can = _irelia_can
+_irelia_cost.label = "légende prête et 1 rune, pour une unité inclinée"
+
+
 def _irelia_ready(g, it):
     o = _same(g, it.data["u"], it.data["oid"])
     if o is not None:

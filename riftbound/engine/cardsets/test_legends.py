@@ -234,6 +234,60 @@ def irelia_readies_chosen_friendly_unit():
     assert len(g.p[0].runes) == 3                          # 1 rune of any type paid (recycled)
 
 
+def _irelia_asks():
+    asked = []
+
+    def may(options, ctx):
+        if "Irelia" in ctx["item"].name:
+            asked.append(ctx["item"].data["u"])
+        return True
+    return asked, may
+
+
+@T.test
+def irelia_no_question_when_useless_or_unpayable():
+    # retour utilisateur : la question n'est posée que si on peut incliner la légende, payer 1 rune, et que l'unité
+    # choisie est inclinée ; sinon ni question ni paiement.
+    asked, may = _irelia_asks()
+    g, _ = new(answers0={"may": may})
+    leg(g, 0, "Irelia, Blade Dancer")
+    runes(g, 0, ["Calm"] * 4)
+    u = put(g, 0, "Pouty Poro")                            # déjà prête
+    hand(g, 0, "Discipline")
+    g.apply(opt(g, 0, "Discipline", lambda ch: ch["tg"] == (u.uid,)))
+    settle(g)
+    assert asked == [] and not g.p[0].legend.exhausted and len(g.p[0].runes) == 4
+    # légende déjà inclinée : pas de question non plus
+    asked2, may2 = _irelia_asks()
+    g2, _ = new(answers0={"may": may2})
+    leg(g2, 0, "Irelia, Blade Dancer").exhausted = True
+    runes(g2, 0, ["Calm"] * 4)
+    u2 = put(g2, 0, "Pouty Poro", ready=False)
+    hand(g2, 0, "Discipline")
+    g2.apply(opt(g2, 0, "Discipline", lambda ch: ch["tg"] == (u2.uid,)))
+    settle(g2)
+    assert asked2 == [] and u2.exhausted
+
+
+@T.test
+def irelia_second_choice_not_asked_once_legend_exhausted():
+    # deux sorts qui choisissent chacun une unité alliée inclinée : la légende inclinée par le premier, le second
+    # déclenchement n'est plus proposé (retour utilisateur : trop de questions Irelia à chaque « choose »).
+    asked, may = _irelia_asks()
+    g, _ = new(answers0={"may": may})
+    leg(g, 0, "Irelia, Blade Dancer")
+    runes(g, 0, ["Calm"] * 6)
+    a = put(g, 0, "Pouty Poro", ready=False)
+    b = put(g, 0, "Soaring Scout", ready=False)
+    hand(g, 0, "Discipline")
+    hand(g, 0, "Discipline")
+    g.apply(opt(g, 0, "Discipline", lambda ch: ch["tg"] == (a.uid,)))
+    settle(g)
+    g.apply(opt(g, 0, "Discipline", lambda ch: ch["tg"] == (b.uid,)))
+    settle(g)
+    assert asked == [a.uid] and not a.exhausted and b.exhausted, asked
+
+
 @T.test
 def irelia_conquer_pays_1_to_ready_legend():
     g, _ = new()

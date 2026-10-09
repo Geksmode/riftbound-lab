@@ -159,6 +159,8 @@ h1, h3, h4 { font-family: var(--f-display); font-weight: 400; margin: 0; text-wr
 .sitem.c0 .card { border-color: var(--akali); box-shadow: 0 0 0 1px var(--akali), 0 0 18px rgba(0,0,0,.6); }
 .sitem.c1 .card { border-color: var(--leblanc); box-shadow: 0 0 0 1px var(--leblanc), 0 0 18px rgba(0,0,0,.6); }
 .sitem.old { opacity: .55; }
+.sitem.foc { opacity: 1; }   /* élément de la chaîne dont les flèches sont montrées (survol / toucher) */
+.sitem.foc .card { outline: 2px solid rgba(255,255,255,.7); outline-offset: 2px; }
 .sitem.old .card { width: 156px; height: 60px; background-position: center 18%; }
 .shead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 6px; font-size: 11px; }
 .shead .k { color: var(--ink-2); }
