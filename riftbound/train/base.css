@@ -119,6 +119,11 @@ h1, h3, h4 { font-family: var(--f-display); font-weight: 400; margin: 0; text-wr
 /* carte épuisée : centrée dans son emplacement couché, puis tournée (sans ça elle restait calée en haut avant rotation et
    débordait de ~15 px vers le bas : sous la barre du battlefield côté adverse) */
 .slot.x .card { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
+/* équipement attaché : carte derrière l'unité, dépassant vers le haut (--gk = rang, --gn = nombre) */
+.slot.geared { margin-top: calc(var(--gn) * 13px); }
+.slot.geared .card.behind { position: absolute; left: 50%; top: 50%; z-index: 0; filter: brightness(.8); transform: translate(-50%, calc(-50% - var(--gk) * 13px)); }
+.slot.geared .card.behind.x { transform: translate(-50%, calc(-50% - var(--gk) * 13px)) rotate(90deg); }
+.slot.geared > .card:not(.behind) { z-index: 1; }
 .card.c0 { border-color: var(--akali); } .card.c1 { border-color: var(--leblanc); }
 .card.hl { box-shadow: 0 0 0 2px var(--brass), 0 0 14px rgba(214,178,94,.9); }
 .card.noimg { display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; padding: 4px; background: #33476b; }
