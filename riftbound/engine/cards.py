@@ -302,13 +302,17 @@ def trig_target(options_fn, pred=None, kind="target", optional=False, deflect=Fa
     """Build a finalization-time chooser for a triggered ability with one target.
     deflect=True: enemy targets with [Deflect] must be paid for (rule 809); unpayable ones are not offered.
     (False by default only to keep the behaviour of the cards modelled before the card modules.)"""
-    def choose(g, it):
+    def opts_of(g, it):
         opts = options_fn(g, it)
         if pred is not None and full_choices(g, it.ctrl):      # a human may choose any legal target
             opts = list(opts) + sorted([o for o in g.board if o not in opts and g.targetable(o, it.ctrl)
                                         and pred(g, it, o)], key=lambda o: (o.ctrl == it.ctrl, o.uid))
         if deflect:
             opts = [o for o in opts if g.can_pay(it.ctrl, 0, deflect_reqs(g, it.ctrl, dict(tg=(o.uid,))))]
+        return opts
+
+    def choose(g, it):
+        opts = opts_of(g, it)
         if not opts:
             return False
         o = g.ask(it.ctrl, kind, opts, item=it)
@@ -318,6 +322,7 @@ def trig_target(options_fn, pred=None, kind="target", optional=False, deflect=Fa
             return False
         g.add_target(it, o, pred)
         return True
+    choose.options = opts_of          # flush_triggers : pas de question « may » quand il n'y a aucune cible
     return choose
 
 

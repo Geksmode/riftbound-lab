@@ -534,7 +534,10 @@ card("Ember Monk", on_event=lambda g, o, ev, info: (
 # Evelynn, Entrancing — "[Hidden] [Backline] When you play me from face down on your turn, you may move an enemy
 # unit at a different location to my battlefield."  (target chosen freely: rule 811.1.d.2)
 def _evelynn(g, o, ctx):
-    if ctx.get("src") != "facedown" or g.tp != o.ctrl:
+    if ctx.get("src") != "facedown":
+        return
+    if g.tp != o.ctrl:
+        g.log("  Evelynn, Entrancing : jouée depuis la face cachée pendant le tour adverse, pas d'effet (« on your turn »)")
         return
 
     def res(g_, it):
