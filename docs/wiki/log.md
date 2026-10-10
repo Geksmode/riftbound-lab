@@ -190,3 +190,6 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 
 ## [2026-10-10] ingest | Table : unités homonymes numérotées
 - Demande de l'utilisateur : avec plusieurs fois la même unité en jeu, on ne savait pas laquelle on ciblait. `Game.dup_no` / `Game.label` numérotent (par uid, les deux joueurs ensemble) les objets en jeu qui partagent un nom : badge doré « #2 » en bas à gauche de la carte (`snap` : `dn`), même numéro dans les libellés (cibles, déplacements, questions, bande de choix sur téléphone). Les cibles de tes coups disent « adverse », celles des coups de l'IA « (à toi) ». Seule en jeu, une unité n'a pas de numéro. Test `duplicate_units_are_numbered_in_labels_and_snap`.
+
+## [2026-10-10] ingest | Table : équipement attaché décalé à gauche
+- Signalé par l'utilisateur (capture) : une unité équipée sur un battlefield avait sa might coupée, car l'équipement dépassait vers le haut et poussait l'unité vers le bas. L'équipement dépasse maintenant vers la gauche (16 px par équipement), sur la même ligne que l'unité (`base.css`, `.slot.geared`). Vérifié par robot à 1899, 1400, 393 et 360 px (1 et 2 équipements, unité prête ou épuisée) : might visible, équipement à gauche, pas de défilement horizontal.
