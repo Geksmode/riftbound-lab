@@ -178,3 +178,6 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-10] decision | Tests de l'IA sur des decks variés
 - Règle de l'utilisateur : les prochains tests de l'IA se font sur des decks variés (`exp_search.py ... defaut`, environ 80 paires), plus sur Akali contre LeBlanc par défaut. Mémoire `ia-tests-decks-varies.md`, règle 8 de `CLAUDE.md`, agents `ia` et `simulation`.
 - En cours : essai `pts_ramp` (points pondérés, idée de l'utilisateur : premiers points moins chers, derniers plus chers) ; réglage désactivé par défaut, criblage r=2, r=4 et courbe 4→10 (`pts_ramp=1.5,pts_hi=0`) en mode defaut, graines 710000+, 711000+, 713000+.
+
+## [2026-10-10] decision | Fin de la règle « replays après chaque simulation »
+- Décision de l'utilisateur : on enlève la règle 3 de `CLAUDE.md` (replays systématiques). `add_replays.py` et le lecteur restent, utilisés seulement sur demande. Mémoire `replays-after-every-sim.md` supprimée, mentions retirées des agents, de l'index et de MISSIONS.

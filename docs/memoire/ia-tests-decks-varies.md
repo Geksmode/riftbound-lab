@@ -14,4 +14,4 @@ Le 2026-10-10, l'utilisateur a dit : « pour les prochains tests, tu peux retire
 - nombre de paires raisonnable : environ 80 paires pour un criblage (≈ 15 min sur 4 processus), puis une confirmation sur des
   graines neuves de taille comparable pour une option retenue (règle 2 de `CLAUDE.md` inchangée : ± écart-type, « on ne sait pas » sous 2 écarts-types) ;
 - ne lancer Akali contre LeBlanc (mode `akali`) que si l'utilisateur le demande, ou pour un plan propre à ces decks (`plans.py`).
-Related: [[riftbound-search-ai]], [[retex-method]], [[replays-after-every-sim]].
+Related: [[riftbound-search-ai]], [[retex-method]].
