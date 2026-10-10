@@ -1225,9 +1225,10 @@ function renderCtrl(v) {
   const M = $("bMain"), I = $("turnInfo");
   $("hpop").hidden = true;
   if (RP) return rpCtrl(v);
-  $("bUndo").disabled = working || !v.undo;
+  $("bUndo").disabled = working || !(DU ? duelUndoIdx() >= 0 : v.undo);
   $("bHint").disabled = working || !v.dec;
-  $("bUndo").hidden = $("bHint").hidden = !!DU;   // en duel : ni « Reprendre » (l'adversaire a vu le coup) ni conseil
+  $("bHint").hidden = !!DU;   // en duel : pas de conseil ; « Reprendre » seulement tant que tu as la main (duelUndoIdx)
+  $("bUndo").hidden = false;
   M.className = "endbtn"; M.onclick = null;
   if (v.winner !== null && v.winner !== undefined) {
     if (DU) return duelCtrlEnd(v);
@@ -1269,7 +1270,7 @@ async function choose(i) {
   sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false);
   LOGSTACK.push(LOG.length);
   const o = V.dec.options.find(x => x.i === i);
-  if (DU) duelLocal("act", i, o ? o.label : ""); else recMove(["act", i, o ? o.label : "", V.st.t]);
+  if (DU) duelLocal("act", i, o ? o.label : "", o ? o.k : ""); else recMove(["act", i, o ? o.label : "", V.st.t]);
   working = true;
   await pump(J(T.act(i)));
 }
@@ -1306,7 +1307,8 @@ async function answer(x) {
 }
 
 $("bUndo").onclick = () => {
-  if (working || !V || !V.undo || DU) return;
+  if (DU) return duelUndo();
+  if (working || !V || !V.undo) return;
   const n = LOGSTACK.length ? LOGSTACK.pop() : LOG.length;
   LOG = LOG.slice(0, n);
   const v = J(T.undo());
@@ -1997,8 +1999,36 @@ document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
-  if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } } });
+  if (e.key === "Escape") {
+    // Échap ferme d'abord ce qui est ouvert (conseil, zoom, carte choisie) ; sinon il vaut « ↶ Reprendre »
+    const open = !$("hpop").hidden || !Z.hidden || ((sel !== null || mode) && V) || !$("pop").hidden;
+    $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); }
+    const t = e.target, typing = t && t.closest && t.closest("input, textarea, select, [contenteditable]");
+    if (!open && !typing && !e.repeat && $("modal").hidden && $("menu").hidden && !$("drawer").classList.contains("open")
+        && !$("bUndo").hidden && !$("bUndo").disabled) $("bUndo").click();
+  } });
 
+
+// Barre d'espace = gros bouton « Terminer le tour » / « Passer » (focus, réaction), seulement pendant une décision de partie.
+// Laissée au navigateur dans un champ de saisie, et sur un élément atteint par Tab : Espace l'active déjà.
+// Un bouton ou une carte qui a gardé le focus après un clic souris ne bloque pas le raccourci
+// (pas de :focus-visible ici : Chrome le rend vrai dès qu'une touche est enfoncée).
+let tabNav = false;
+document.addEventListener("pointerdown", () => { tabNav = false; }, true);
+document.addEventListener("keydown", e => {
+  if (e.key === "Tab") { tabNav = true; return; }
+  if (e.key !== " " || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  if (t && t.closest && t.closest("input, textarea, select, [contenteditable]")) return;
+  if (tabNav && t && t !== document.body) return;
+  if (!$("modal").hidden || !$("menu").hidden || RP || !V || !V.dec || V.ask || V.busy || V.wait) return;
+  if (V.winner !== null && V.winner !== undefined) return;
+  const M = $("bMain");
+  if (M.disabled || !M.onclick) return;
+  e.preventDefault();
+  if (t && t.blur && t !== document.body) t.blur();   // sinon le bouton cliqué avant s'active aussi au relâchement
+  M.click();
+});
 
 if (store.get("rbt-journal")) journal(true); else badge();
 document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
@@ -2551,7 +2581,18 @@ async function duelHandle(m, c) {
         if (DU.role === "guest") duelSend({ t: "sync" }); else toast("Désynchronisation détectée : l'invité doit recharger sa page.", "flash");
         return;
       }
-      await duelApply(m.op, m.v);
+      await duelApply(m.op, m.v, m.k);
+      return;
+    }
+    case "undo": {
+      while (working) await sleep(25);
+      const g = DU.game;
+      if (!g || g.no !== m.g || g.done) return;
+      if (duelUndoIdx(other) !== m.n) {                  // l'annulation ne correspond pas à nos entrées
+        if (DU.role === "guest") duelSend({ t: "sync" }); else toast("Désynchronisation détectée : l'invité doit recharger sa page.", "flash");
+        return;
+      }
+      duelUndoApply(m.n, `${oppName()} reprend son dernier coup.`);
       return;
     }
   }
@@ -2667,21 +2708,52 @@ async function duelStartGame(args, game) {
   await pump(J(T.step()));
 }
 // Entrée du joueur local : numérotée, envoyée, puis appliquée par choose / answer.
-function duelLocal(op, v, label) {
+function duelLocal(op, v, label, k) {
   const g = DU.game; if (!g) return;
   const n = g.inputs.length;
-  g.inputs.push([op, v, MEP]);
-  duelSend({ t: "in", g: g.no, n, op, v });
+  g.inputs.push([op, v, MEP, k || ""]);
+  duelSend({ t: "in", g: g.no, n, op, v, k: k || "" });
   if (REC && REC.inputs) { REC.inputs.push([op, v, MEP, label, V ? V.st.t : 0]); recSave(false); }
 }
 // Entrée de l'adversaire : même fonction du moteur, même valeur, même ordre.
-async function duelApply(op, v) {
+async function duelApply(op, v, k) {
   const g = DU.game;
-  g.inputs.push([op, v, OPP()]);
+  g.inputs.push([op, v, OPP(), k || ""]);
+  if (op === "act") LOGSTACK.push(LOG.length);
   if (REC && REC.inputs) { REC.inputs.push([op, v, OPP(), "", V ? V.st.t : 0]); recSave(false); }
   sel = null; mode = null; lastAI = null; $("pop").hidden = true;
   working = true;
   await pump(J(op === "act" ? T.act(v) : T.answer(JSON.stringify(v))));
+}
+// « Reprendre » en duel (règle de table) : le joueur peut annuler son dernier coup tant qu'il n'a pas passé le focus,
+// c'est-à-dire tant que l'adversaire n'a rien joué depuis et que la décision est encore la sienne. Jamais un « Passer »
+// ni un « Terminer le tour ». Rend l'indice de l'entrée à retirer (avec les réponses qui l'ont suivie), ou -1.
+// who = place du joueur qui reprend : MEP pour soi ; l'autre place pour vérifier une annulation reçue (sans la main).
+function duelUndoIdx(who = MEP) {
+  const g = DU && DU.game;
+  if (!g || g.done || !V || (V.winner !== null && V.winner !== undefined)) return -1;
+  if (who === MEP && (working || !V.dec || V.wait || V.ask || V.busy)) return -1;
+  for (let j = g.inputs.length - 1; j >= 0; j--) {
+    const [op, , pl, k] = g.inputs[j];
+    if (pl !== who) return -1;                           // l'adversaire a joué depuis : le focus est passé
+    if (op === "act") return k && k !== "pass" && k !== "end" ? j : -1;
+  }
+  return -1;
+}
+function duelUndo() {
+  const j = duelUndoIdx(); if (j < 0) return;
+  duelSend({ t: "undo", g: DU.game.no, n: j });
+  duelUndoApply(j, "Coup repris.");
+}
+function duelUndoApply(j, msg) {
+  const g = DU.game;
+  g.inputs.length = j;
+  if (REC && REC.inputs) { REC.inputs.length = Math.min(REC.inputs.length, j); recSave(false); }
+  const n = LOGSTACK.length ? LOGSTACK.pop() : LOG.length;
+  LOG = LOG.slice(0, n);
+  const v = J(T.undo());
+  v.log = []; addLog([]); toast(msg);
+  sel = null; mode = null; lastAI = null; $("pop").hidden = true; show(v);
 }
 // Rechargement de l'invité : on refait la manche avec les arguments et toutes les entrées gardés par l'hôte.
 async function duelResume(m) {
@@ -2698,9 +2770,10 @@ async function duelResume(m) {
     duelEngine(m.game.args, m.game.no);
     const run = v => { addLog(v.log || []); v.log = []; while (v.busy) { v = J(T.step()); addLog(v.log || []); v.log = []; } return v; };
     let v = run(J(T.step()));
-    for (const [op, x, pl] of m.game.inputs) {
+    for (const [op, x, pl, k] of m.game.inputs) {
+      if (op === "act") LOGSTACK.push(LOG.length);
       v = run(J(op === "act" ? T.act(x) : T.answer(JSON.stringify(x))));
-      DU.game.inputs.push([op, x, pl]); REC.inputs.push([op, x, pl, "", v.st.t]);
+      DU.game.inputs.push([op, x, pl, k || ""]); REC.inputs.push([op, x, pl, "", v.st.t]);
     }
     working = false;
     show(v);
@@ -3070,13 +3143,13 @@ function menuRender(view) {
       <li><b>Débutant ?</b> « Apprendre à jouer » (menu) : une partie guidée en 6 défis.</li>
       <li><b>But.</b> Marquer les points de victoire avant l'IA en contrôlant les battlefields. Le moteur applique les Core Rules complètes ; une même donne donne toujours la même partie.</li>
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
-      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction il devient « Passer ».</li>
-      <li><b>Reprendre.</b> « ↶ Reprendre » annule ton dernier coup, autant de fois que tu veux.</li>
+      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace.</li>
+      <li><b>Reprendre.</b> « ↶ Reprendre » (touche Échap) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches corail : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
-      <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de « Reprendre » ni de conseil en duel. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
+      <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de conseil en duel ; « Reprendre » tant que tu gardes la main. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
       <li><b>Donne.</b> Même numéro de donne = même partie. Laisse vide pour une donne au hasard.</li></ol></div></div>`;
   } else if (MENUV === "mydecks") {
     const ds = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));

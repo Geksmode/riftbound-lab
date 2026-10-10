@@ -203,3 +203,9 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 
 ## [2026-10-10] decision | Menu de la table en tableau de bord
 L'utilisateur a choisi le tableau de bord parmi 5 dispositions : deck d'entraînement (aucun par défaut, choisi par le joueur) et dernière partie en haut, les autres entrées en rangée compacte. Détail : `memoire/riftbound-training-table.md` ; robot `train/verif_dash.mjs` dans la porte.
+
+## [2026-10-10] decision | Barre d'espace : terminer le tour ou passer
+Demande de l'utilisateur : dans la table, Espace = gros bouton (« Terminer le tour », « Passer » en réaction et en showdown). Ignorée dans un champ, sur un élément atteint par Tab, sur le menu et les fenêtres. Robot `train/verif_espace.mjs` dans la porte (vérifié par robot, pas encore essayé à la main).
+
+## [2026-10-10] decision | Échap = « Reprendre » ; « Reprendre » permis en duel tant qu'on garde le focus
+Demande de l'utilisateur : Échap annule le dernier coup (après avoir lâché une carte choisie). En duel, on peut reprendre son dernier coup tant qu'on n'a pas passé le focus (l'adversaire n'a rien joué, ni « Passer » ni « Terminer le tour » repris). Règle de table, pas une règle des Core Rules. Détail : `pages/duel.md`. Vérifié par robot (deux navigateurs), pas encore à la main.
