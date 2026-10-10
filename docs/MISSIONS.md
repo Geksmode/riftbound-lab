@@ -41,7 +41,7 @@ sous 2 écarts-types, une seule version du moteur).
 Livrables : (1) note de synthèse des ressources et des principes retenus ; (2) un plan **déduit du deck** (rôle, cartes
 clés, courbe) pour toute légende ; (3) un banc d'essai : N decks légaux aléatoires, IA générale contre l'ancienne,
 paires de graines, intervalles ; (4) réglage des paramètres par auto-jeu, confirmé sur graines neuves ;
-(5) temps par coup mesuré dans le navigateur (Pyodide). Replays des parties instructives après chaque simulation.
+(5) temps par coup mesuré dans le navigateur (Pyodide).
 Fin : gain annoncé seulement s'il dépasse 2 écarts-types sur graines neuves, avec le chiffre et l'intervalle.
 
 ## retex (à faire par le chef et l'agent retex)
