@@ -1999,20 +1999,25 @@ document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
-  if (e.key === "Escape") {
-    // Échap ferme d'abord ce qui est ouvert (conseil, zoom, carte choisie) ; sinon il vaut « ↶ Reprendre »
-    const open = !$("hpop").hidden || !Z.hidden || ((sel !== null || mode) && V) || !$("pop").hidden;
-    $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); }
-    const t = e.target, typing = t && t.closest && t.closest("input, textarea, select, [contenteditable]");
-    if (!open && !typing && !e.repeat && $("modal").hidden && $("menu").hidden && !$("drawer").classList.contains("open")
-        && !$("bUndo").hidden && !$("bUndo").disabled) $("bUndo").click();
+  if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } }
+  // Retour arrière = « ↶ Reprendre » (sauf dans un champ de saisie, une fenêtre, le menu ou le journal)
+  if (e.key === "Backspace" && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const t = e.target;
+    if (t && t.closest && t.closest("input, textarea, select, [contenteditable]")) return;
+    if (!$("modal").hidden || !$("menu").hidden || $("drawer").classList.contains("open")) return;
+    e.preventDefault();
+    if (!$("bUndo").hidden && !$("bUndo").disabled) $("bUndo").click();
   } });
 
 
-// Barre d'espace = gros bouton « Terminer le tour » / « Passer » (focus, réaction), seulement pendant une décision de partie.
+// Barre d'espace = gros bouton « Terminer le tour » / « Passer » (focus, réaction), seulement pendant une décision de partie ;
+// pendant une question oui / non (« Utiliser cet effet ? »…), elle répond « Oui » : je veux faire l'effet.
 // Laissée au navigateur dans un champ de saisie, et sur un élément atteint par Tab : Espace l'active déjà.
 // Un bouton ou une carte qui a gardé le focus après un clic souris ne bloque pas le raccourci
 // (pas de :focus-visible ici : Chrome le rend vrai dès qu'une touche est enfoncée).
+// Indice de « oui » d'une question oui / non (options True / False du moteur, libellées « oui » / « non »), sinon -1.
+const yesIdx = a => { const o = (a.options || []).map(x => String(x).toLowerCase());
+  return o.length === 2 && o.includes("oui") && o.includes("non") ? o.indexOf("oui") : -1; };
 let tabNav = false;
 document.addEventListener("pointerdown", () => { tabNav = false; }, true);
 document.addEventListener("keydown", e => {
@@ -2021,8 +2026,15 @@ document.addEventListener("keydown", e => {
   const t = e.target;
   if (t && t.closest && t.closest("input, textarea, select, [contenteditable]")) return;
   if (tabNav && t && t !== document.body) return;
-  if (!$("modal").hidden || !$("menu").hidden || RP || !V || !V.dec || V.ask || V.busy || V.wait) return;
+  if (!$("modal").hidden || !$("menu").hidden || RP || !V || V.busy || V.wait || working) return;
   if (V.winner !== null && V.winner !== undefined) return;
+  if (V.ask) {
+    const yes = yesIdx(V.ask); if (yes < 0) return;
+    e.preventDefault();
+    if (t && t.blur && t !== document.body) t.blur();
+    return answer(yes);
+  }
+  if (!V.dec) return;
   const M = $("bMain");
   if (M.disabled || !M.onclick) return;
   e.preventDefault();
@@ -3143,8 +3155,8 @@ function menuRender(view) {
       <li><b>Débutant ?</b> « Apprendre à jouer » (menu) : une partie guidée en 6 défis.</li>
       <li><b>But.</b> Marquer les points de victoire avant l'IA en contrôlant les battlefields. Le moteur applique les Core Rules complètes ; une même donne donne toujours la même partie.</li>
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
-      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace.</li>
-      <li><b>Reprendre.</b> « ↶ Reprendre » (touche Échap) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
+      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace, qui répond aussi « Oui » aux questions oui / non (« Utiliser cet effet ? »).</li>
+      <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches corail : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>

@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-// Robot des raccourcis clavier de la vraie table : Échap = « ↶ Reprendre » (après avoir lâché une carte choisie) ; Espace = gros bouton « Terminer le tour » / « Passer »
+// Robot des raccourcis clavier de la vraie table : Retour arrière = « ↶ Reprendre » (Échap ne reprend rien) ; Espace = « Oui » aux questions oui / non ; Espace = gros bouton « Terminer le tour » / « Passer »
 // (réaction, showdown), même si une carte a gardé le focus après un clic souris ; sans effet sur le menu,
 // dans un champ de saisie, ou quand ce n'est pas à toi. Ordinateur seulement (pas de clavier sur téléphone).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_espace.mjs <dossier des journaux (inutilisé)> [port]
@@ -29,19 +29,34 @@ for (let i = 0; i < 300; i++) {
   if (await ev("V.dec.kind === 'main' && V.dec.options.some(o => o.k !== 'end' && o.k !== 'pass')")) break;
   await ev("(async()=>{ const o = V.dec.options.find(o => o.k === 'end' || o.k === 'pass') || V.dec.options[0]; await choose(o.i) })()");
 }
-// Échap = « ↶ Reprendre » : un coup joué puis Échap revient à l'état d'avant ; avec une carte choisie, Échap la lâche d'abord
+// Retour arrière = « ↶ Reprendre » : un coup joué, Échap ne le reprend pas, Retour arrière revient à l'état d'avant
 const snap = "JSON.stringify([V.st, V.dec && V.dec.options.map(o => o.label)])";
 const s0 = await ev(snap), u0 = await ev("V.undo");
 const j = await ev("V.dec.options.findIndex(o => o.k !== 'end' && o.k !== 'pass')");
+const lab = await ev(`V.dec.options[${j}].label`);
 await ev(`(async()=>{ await choose(V.dec.options[${j}].i) })()`); await waitFor("!!(V && !working && !V.busy)");
 for (let i = 0; i < 20 && await ev("!!V.ask"); i++) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); await waitFor("!!(V && !working)"); }
-const played = await ev(snap) !== s0;
-await pg.keyboard.press("Escape"); await waitFor("!!(V && !working)");
-ok(`Échap après un coup (« ${await ev(`V.dec.options[${j}].label`)} ») : coup repris, même état qu'avant`, played && await ev(snap) === s0 && await ev("V.undo") === u0);
+const s1 = await ev(snap);
+await pg.keyboard.press("Escape"); await pg.waitForTimeout(200);
+ok(`Échap après un coup (« ${lab} ») : rien n'est repris`, s1 !== s0 && await ev(snap) === s1);
+await pg.keyboard.press("Backspace"); await waitFor("!!(V && !working)");
+ok(`Retour arrière après ce coup : coup repris, même état qu'avant`, await ev(snap) === s0 && await ev("V.undo") === u0);
 await pg.locator("#board .half.p0 .hand .card.can").first().click(); await pg.waitForTimeout(200);
 const selOn = await ev("sel !== null || !!mode"), sB = await ev(snap), uB = await ev("V.undo");
 await pg.keyboard.press("Escape"); await pg.waitForTimeout(200);
 ok(`Échap avec une carte jouable choisie : la carte est lâchée, rien n'est repris`, selOn && await ev("sel === null && !mode") && await ev(snap) === sB && await ev("V.undo") === uB);
+// Espace sur une question oui / non (« Utiliser cet effet ? ») : répond « Oui ». Question posée dans le moteur (Pyodide).
+const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+await py(`
+W["T_YES"] = []
+def _posee():
+    def op():
+        W["T_YES"].append(W["g"].ask(ME, "may", [True, False]))
+    return _run(op)`);
+await ev("(async()=>{ await pump(J(T._posee())) })()"); await waitFor("!!(V && !working && V.ask)");
+const shown = await ev("V.ask.kind === 'may' && /Utiliser cet effet/.test(document.body.innerText)");
+await pg.keyboard.press("Space"); await waitFor("!!(V && !working && !V.ask)");
+ok(`Espace sur « Utiliser cet effet ? » : répond Oui (question affichée : ${shown})`, shown && JSON.stringify(await ev("T.W.get('T_YES').toJs()")) === "[true]");
 const t0 = await ev("V.st.t");
 // clic souris sur une carte de la main : elle prend le focus ; Espace doit quand même terminer le tour
 await pg.locator("#board .half.p0 .hand .card").first().click(); await pg.waitForTimeout(200);
