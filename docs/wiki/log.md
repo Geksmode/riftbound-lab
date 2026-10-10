@@ -200,3 +200,6 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 
 ## [2026-10-10] decision | La table s'appelle « Riftbound Observatory »
 - Choix de l'utilisateur après un brainstorm : l'ancien nom « Riftbound Entraînement » ne collait pas à la DA « observatoire ». Titre de l'onglet et du menu changés (`train/src.html`), même lien d'artefact.
+
+## [2026-10-10] decision | Menu de la table en tableau de bord
+L'utilisateur a choisi le tableau de bord parmi 5 dispositions : deck d'entraînement (aucun par défaut, choisi par le joueur) et dernière partie en haut, les autres entrées en rangée compacte. Détail : `memoire/riftbound-training-table.md` ; robot `train/verif_dash.mjs` dans la porte.

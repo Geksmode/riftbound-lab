@@ -24,6 +24,9 @@ Publiée par la CI sur GitHub Pages (plus l'artefact). DA « observatoire » (`t
 ## Tutoriel (2026-10-10)
 Menu « Apprendre à jouer » : partie guidée Yi contre Darius, IA débutante, 6 défis, coach. Détails : `docs/wiki/pages/tutoriel.md`.
 
+## Menu en tableau de bord (2026-10-10)
+Choix de l'utilisateur parmi 5 dispositions : le tableau de bord. En haut, « Ton deck d'entraînement » (illustration de la légende, liste, bilan victoires/défaites avec ce deck, « Jouer avec ce deck », « Changer », « Modifier ») et « Dernière partie » (reprendre, revoir, ou tutoriel pour un nouveau). En dessous, une rangée compacte : Nouvelle partie, ami, tutoriel, éditeur, Mes decks, Mes parties, Aide. **Aucun deck par défaut** (demande de l'utilisateur) : un nouveau joueur voit « Aucun deck choisi » et le choisit (légende, puis liste : ses decks, puis les listes de tournoi, la conseillée ★ en tête). Clé `rbt-train` (forme `my:<id>` ou clé de liste). Robot : `train/verif_dash.mjs`.
+
 ## Leçons (retex 2026-10-09, validées par l'utilisateur)
 - **Quand** je touche à la mise en page, **aucune taille ne doit dépendre du contenu** (chaîne, unités, runes) et je **vérifie par mesure automatique** à plusieurs tailles et sur une situation chargée : rien hors de son cadre, aucun libellé coupé, aucun défilement, une seule échelle sur une partie entière. *Pourquoi :* plateau qui rapetissait en cours de partie, boutons hors cadre, runes coupées, main qui débordait, tous sur mes propres captures sans que je les relève. *(PR #11 à #14)*
 - **Quand** je teste un geste, **prendre le cas difficile** (carte à plusieurs actions, cible cachée sous la bulle), pas le cas simple. **Sur téléphone**, tout choix doit être faisable hors du plateau (liste dans la bulle) et aucune rangée ne défile. *Pourquoi :* le premier robot Hidden passait avec Zhonya alors que Back Off ne se cachait pas au glisser ; base inaccessible pour Shuriken Flip. *(PR #9, #15)*
