@@ -53,7 +53,9 @@ async function settled() {   // les deux pages au repos, au même nombre d'entr�
   throw new Error("les deux pages ne se stabilisent pas : " + JSON.stringify([await H.ev(STATE), await G.ev(STATE)]));
 }
 // Joue jusqu'à la fin de la manche (ou max entrées) ; contrôle la synchro à chaque coup. Renvoie le nombre d'entrées.
-async function play(max, label) {
+// undo : nombre de « Reprendre » à essayer (Échap chez l'hôte, bouton chez l'invité), tant que le joueur garde la main.
+const UNDO = { done: 0, bad: 0, oppBlocked: 0, passBlocked: 0, passSeen: 0 };
+async function play(max, label, undo = 0) {
   let n = 0, desync = 0, waitBad = 0, both = 0, checks = 0;
   for (;;) {
     const [a, c] = await settled();
@@ -66,7 +68,26 @@ async function play(max, label) {
     if ((a.dec || a.ask) && (c.dec || c.ask)) both++;
     if (!other.wait || !/En attente/.test(other.waitTxt)) waitBad++;
     if (st.ask) await me.ev(`(async()=>{ await answer(${st.ask === "mulligan" ? "[]" : rnd(st.nopt)}) })()`);
-    else await me.ev(`(async()=>{ await choose(V.dec.options[${rnd(st.nopt)}].i) })()`);
+    else {
+      const j = rnd(st.nopt), k = await me.ev(`V.dec.options[${j}].k`);
+      await me.ev(`(async()=>{ await choose(V.dec.options[${j}].i) })()`);
+      if (UNDO.done < undo) {
+        const [a2, c2] = await settled(), mine = me === H ? a2 : c2;
+        const can = await me.ev("duelUndoIdx() >= 0 && !document.getElementById('bUndo').disabled");
+        if (k === "pass" || k === "end") { UNDO.passSeen++; if (!can) UNDO.passBlocked++; }
+        else if (mine.dec && !mine.wait) {
+          if (!await ot.ev("document.getElementById('bUndo').disabled")) UNDO.bad++;   // l'autre n'a pas la main : bouton éteint
+          else UNDO.oppBlocked++;
+          if (!can) UNDO.bad++;
+          else {
+            if (me === H) await H.pg.keyboard.press("Escape"); else await G.tap("#bUndo");
+            const [a3, c3] = await settled();
+            if (!same(a3, a) || !same(c3, c)) { UNDO.bad++; console.log("  reprise : état différent", JSON.stringify(a3), JSON.stringify(a)); }
+            UNDO.done++; continue;
+          }
+        }
+      }
+    }
     n++;
     if (n % 100 === 0) console.log(`  ${label} : ${n} entrées, tour ${a.t}, points ${a.pts.join("-")}`);
   }
@@ -126,10 +147,12 @@ try {
   await prep(1);
   ok("noms : hôte « Huy », invité « Ami » des deux côtés", JSON.stringify(await H.ev("PN")) === JSON.stringify(["Huy", "Ami"]) && JSON.stringify(await G.ev("PN")) === JSON.stringify(["Huy", "Ami"]));
   ok("invité : sa main en bas (« Ta main »), celle de l'hôte cachée en haut", await G.ev("document.querySelector('#board .half.p0 .who-hand').textContent.startsWith('Ta main') && document.querySelectorAll('#board .hand.top .card.back').length === V.st.p[0].hand.length"));
-  ok("en duel : ni « Reprendre » ni « Conseil »", await H.ev("document.getElementById('bUndo').hidden && document.getElementById('bHint').hidden") && await G.ev("document.getElementById('bUndo').hidden && document.getElementById('bHint').hidden"));
+  ok("en duel : pas de « Conseil », « Reprendre » affiché mais éteint au début", await H.ev("!document.getElementById('bUndo').hidden && document.getElementById('bUndo').disabled && document.getElementById('bHint').hidden") && await G.ev("!document.getElementById('bUndo').hidden && document.getElementById('bUndo').disabled && document.getElementById('bHint').hidden"));
   await H.shot("b-manche1-debut"); await G.shot("b-manche1-debut");
   // ---------- (c) manche 1 jusqu'au bout
-  const n1 = await play(6000, "manche 1");
+  const n1 = await play(6000, "manche 1", 6);
+  ok(`« Reprendre » en duel : ${UNDO.done} coups repris (Échap chez l'hôte, bouton chez l'invité), même état qu'avant des deux côtés`, UNDO.done >= 4 && UNDO.bad === 0);
+  ok(`« Reprendre » éteint chez l'adversaire (${UNDO.oppBlocked} fois) et après « Passer » / « Terminer le tour » (${UNDO.passBlocked}/${UNDO.passSeen})`, UNDO.oppBlocked >= 4 && UNDO.passBlocked === UNDO.passSeen && UNDO.passSeen > 0);
   const [e1, e2] = [await H.ev(STATE), await G.ev(STATE)];
   ok(`manche 1 terminée des deux côtés après ${n1} entrées (gagnant : place ${e1.w}, points ${e1.pts.join("-")})`, e1.w !== null && e1.w === e2.w);
   // ---------- (d) score du match

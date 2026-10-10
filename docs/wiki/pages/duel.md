@@ -11,7 +11,8 @@ Limite acceptée : chaque navigateur fait tourner toute la partie (la main adver
 **Fait et testé (moteur)**
 - `train.duel_new(seed, bf0, bf1, first, deck0, deck1, me, names)` : deux places humaines (0 = hôte, 1 = invité) ; les deux navigateurs
   l'appellent avec les mêmes arguments sauf `me`, puis appliquent la même suite d'entrées `act(i)` / `answer(x)` dans le même ordre.
-  Vue : champ `me`, `wait: "adversaire"` quand l'autre a la main, coups adverses dans `ai` / `aii` ; pas de « Reprendre » en duel.
+  Vue : champ `me`, `wait: "adversaire"` quand l'autre a la main, coups adverses dans `ai` / `aii`.
+  « Reprendre » en duel (règle de table demandée par l'utilisateur le 2026-10-10) : permis tant que le joueur n'a pas passé le focus, c'est-à-dire tant que l'adversaire n'a rien joué depuis et que la décision est encore la sienne ; jamais un « Passer » ni un « Terminer le tour ». La page envoie `{t: "undo", g, n}` (`duelUndoIdx`), les deux moteurs font `undo()` (historique gardé aussi en duel) et coupent les entrées à `n`. Test `cardsets/test_duel.py`, robot `verif_duel.mjs`.
 - Correctif nécessaire au duel : `_expand` construit les options pour le joueur qui décide (avant : toujours `ME`), sinon désynchronisation.
 - `train.match_duel_next(state)` : préparation d'une manche sans choix d'IA (chooser, first imposé, battlefields permis par place, `bo1_bfs`,
   sideboard, graine). Tests : `cardsets/test_duel.py` (deux processus synchronisés jusqu'à la fin, main adverse cachée), `test_match.py`.
