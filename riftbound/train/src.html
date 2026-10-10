@@ -2000,6 +2000,27 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } } });
 
 
+// Barre d'espace = gros bouton « Terminer le tour » / « Passer » (focus, réaction), seulement pendant une décision de partie.
+// Laissée au navigateur dans un champ de saisie, et sur un élément atteint par Tab : Espace l'active déjà.
+// Un bouton ou une carte qui a gardé le focus après un clic souris ne bloque pas le raccourci
+// (pas de :focus-visible ici : Chrome le rend vrai dès qu'une touche est enfoncée).
+let tabNav = false;
+document.addEventListener("pointerdown", () => { tabNav = false; }, true);
+document.addEventListener("keydown", e => {
+  if (e.key === "Tab") { tabNav = true; return; }
+  if (e.key !== " " || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  if (t && t.closest && t.closest("input, textarea, select, [contenteditable]")) return;
+  if (tabNav && t && t !== document.body) return;
+  if (!$("modal").hidden || !$("menu").hidden || RP || !V || !V.dec || V.ask || V.busy || V.wait) return;
+  if (V.winner !== null && V.winner !== undefined) return;
+  const M = $("bMain");
+  if (M.disabled || !M.onclick) return;
+  e.preventDefault();
+  if (t && t.blur && t !== document.body) t.blur();   // sinon le bouton cliqué avant s'active aussi au relâchement
+  M.click();
+});
+
 if (store.get("rbt-journal")) journal(true); else badge();
 document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
 boot().catch(err => { ENGERR = err.message || String(err); menuRender(MENUV); $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
@@ -3070,7 +3091,7 @@ function menuRender(view) {
       <li><b>Débutant ?</b> « Apprendre à jouer » (menu) : une partie guidée en 6 défis.</li>
       <li><b>But.</b> Marquer les points de victoire avant l'IA en contrôlant les battlefields. Le moteur applique les Core Rules complètes ; une même donne donne toujours la même partie.</li>
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
-      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction il devient « Passer ».</li>
+      <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace.</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » annule ton dernier coup, autant de fois que tu veux.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches corail : ses derniers coups.</li>
