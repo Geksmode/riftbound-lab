@@ -334,6 +334,33 @@ body.dkopen { overflow: hidden; }
 .mhelp { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; line-height: 1.45; }
 .mhelp b { color: var(--brass); font-weight: 600; }
 #dkMenu { min-height: 44px; padding: 6px 14px; border-radius: 22px; }
+/* tableau de bord : le deck d'entraînement (choisi par le joueur, aucun par défaut) et la dernière partie */
+.dash { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 12px; }
+.dcard { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); min-width: 0; }
+.dcard.deckc { flex-direction: row; gap: 14px; background: linear-gradient(135deg, rgba(114,226,188,.12), rgba(255,255,255,.04) 70%); border-color: rgba(114,226,188,.35); }
+.dcard.deckc.none { border-style: dashed; }
+.dcard .dart { position: relative; inset: auto; flex: none; --aw: 112px; width: 112px; height: 150px; border-radius: 12px; background-color: var(--night); font-size: 48px; }
+.dcard .dinfo { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; }
+.dtag { font: 700 11px var(--f-mono, monospace); letter-spacing: .08em; text-transform: uppercase; color: var(--akali); }
+.dcard.lastc .dtag { color: var(--brass); }
+.dcard h2 { font: 400 26px/1.1 var(--f-display, serif); color: var(--ink); margin: 0; overflow-wrap: anywhere; }
+.dcard h3 { font: 400 19px/1.2 var(--f-display, serif); margin: 0; }
+.dcard .small { color: var(--ink-2); font-size: 12.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.dcard .dbil { font-size: 13.5px; }
+.dcard .acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+.dcard .acts button { min-height: 44px; padding: 8px 14px; border-radius: 10px; }
+.dcard .acts button.main { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #fff; font-weight: 600; }
+.mrow { grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 8px; }
+.mrow .mitem { min-height: 52px; padding: 8px 12px; }
+.mrow .mitem b { font-size: 16px; }
+.mrow .mitem span.d { display: none; }
+.pick { --tw: 84px; }
+.pick .vtile.sel { border-color: var(--akali); box-shadow: 0 0 0 1px var(--akali), 0 0 14px rgba(114,226,188,.4); }
+@media (max-width: 700px) {
+  .dash { grid-template-columns: minmax(0, 1fr); }
+  .dcard .dart { --aw: 84px; width: 84px; height: 112px; }
+  .pick { --tw: 62px; }
+}
 @media (max-width: 820px) {
   .tbtns button, .endbtn, .ctrlrow button { min-height: 44px; }
   .menu { padding-inline: 12px; }
@@ -2937,6 +2964,84 @@ function showMenu(view) {
   $("menu").hidden = false; document.body.classList.add("dkopen"); menuRender(view || "main");
 }
 function hideMenu() { $("menu").hidden = true; if ($("deckView").hidden) document.body.classList.remove("dkopen"); }
+// ---------- tableau de bord : deck d'entraînement (clé « rbt-train ») et dernière partie
+// Aucun deck par défaut : un nouveau joueur choisit sa légende et sa liste (« Choisir mon deck »). La clé suit la forme
+// des decks de la table : « my:<id> » pour un deck de l'éditeur, sinon la clé d'une liste de tournoi.
+let PICKLG = "";
+function trainKey() {
+  const k = store.get("rbt-train"); if (!k) return null;
+  if (k.startsWith("my:")) return MYDECKS[k.slice(3)] ? k : (CAT ? null : k);
+  return !CAT || CAT.presets.some(p => p.key === k) ? k : null;
+}
+function trainOK(k) {
+  if (!k || !CAT || !T) return false;
+  if (k.startsWith("my:")) { const d = MYDECKS[k.slice(3)]; return !!d && deckOK(d); }
+  const p = CAT.presets.find(x => x.key === k); return !!p && presetOK(p);
+}
+function trainName(k) {
+  if (k.startsWith("my:")) { const d = MYDECKS[k.slice(3)]; return d ? d.name : "deck introuvable"; }
+  const p = CAT && CAT.presets.find(x => x.key === k); return p ? presetLabel(p, false) : k;
+}
+// Une partie contre l'IA a-t-elle été jouée avec ce deck ? REC.mine = la clé d'une liste, ou le deck de l'éditeur en JSON.
+function gameWith(g, k) {
+  if (!g || g.duel || g.kind === "duel" || !g.mine) return false;
+  if (!k.startsWith("my:")) return g.mine === k;
+  const d = MYDECKS[k.slice(3)]; if (!d || g.mine[0] !== "{") return false;
+  try { const x = JSON.parse(g.mine); return x.name === d.name && x.legend === d.legend; } catch (e) { return false; }
+}
+function dashDeckHTML(dis) {
+  const k = trainKey();
+  if (!k) return `<section class="dcard deckc none"><div class="dart vpart" aria-hidden="true">?</div><div class="dinfo"><div class="dtag">Ton deck d'entraînement</div><h2>Aucun deck choisi</h2>
+    <div class="small">Choisis la légende et la liste que tu veux travailler. Le tableau de bord te la proposera à chaque partie et suivra ton bilan avec.</div>
+    <div class="acts"><button class="main" data-m="pick"${dis}>Choisir mon deck</button><button data-m="deck"${dis}>Créer mon deck</button></div></div></section>`;
+  const lg = CAT ? deckLegend(k) : "", ok = trainOK(k);
+  return `<section class="dcard deckc"><div class="dart vpart" style="${lg ? tileArt(lg) : ""}" aria-hidden="true"></div><div class="dinfo"><div class="dtag">Ton deck d'entraînement</div>
+    <h2>${esc(lg ? lg.split(",")[0] : "…")}</h2><div class="small">${esc(CAT ? trainName(k) : "Chargement…")}${lg ? " · " + esc(lg) : ""}</div>
+    <div class="dbil" id="dBil"></div>
+    ${CAT && !ok ? `<div class="small" style="color:#f0a35b">Ce deck n'est pas jouable en l'état (cartes non modélisées ou deck incomplet).</div>` : ""}
+    <div class="acts"><button class="main" data-m="trainplay"${ok ? dis : " disabled"}>⚔ Jouer avec ce deck</button><button data-m="pick"${dis}>Changer</button>${k.startsWith("my:") ? `<button data-edit="${esc(k.slice(3))}"${dis}>Modifier</button>` : ""}</div></div></section>`;
+}
+function dashLastHTML(inGame, dis, gs) {
+  if (inGame) return `<div class="dtag">Partie en cours</div><h3>Tour ${V.st.t} · ${V.st.pts[0]}-${V.st.pts[1]}</h3><div class="small">La partie t'attend sur la table.</div><div class="acts"><button class="main" data-m="resume"${dis}>▶ Reprendre</button></div>`;
+  if (V) return `<div class="dtag">Dernière partie</div><h3>${V.winner === 0 ? "Victoire" : V.winner === 1 ? "Défaite" : "Partie nulle"} ${V.st.pts[0]}-${V.st.pts[1]}</h3><div class="small">Tour ${V.st.t}. Elle est encore sur la table.</div><div class="acts"><button data-m="resume"${dis}>Revoir la table</button></div>`;
+  const g = (gs || []).filter(x => x.result && !x.duel && x.kind !== "duel").sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")))[0];
+  if (g) { const r = g.result, n = g.names || ["Toi", "IA"];
+    return `<div class="dtag">Dernière partie</div><h3>${r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle"} ${esc((r.pts || []).join("-"))}</h3><div class="small">${esc(n[0])} contre ${esc(n[1])} · tour ${esc(r.turn || "?")} · ${esc(fmtDate(g.updated || g.started))}</div>
+      <div class="acts">${Array.isArray(g.moves) ? `<button data-rp="${esc(g.id)}"${dis}>Revoir coup par coup</button>` : ""}<button data-m="games"${dis}>Toutes mes parties</button></div>`; }
+  return `<div class="dtag">Dernière partie</div><h3>Pas encore de partie</h3><div class="small">${gs ? "Nouveau sur Riftbound ? Le tutoriel t'apprend les bases en une dizaine de minutes." : "Chargement de tes parties…"}</div><div class="acts"><button data-m="learn"${dis}>★ Apprendre à jouer</button></div>`;
+}
+async function dashGames() {
+  const gs = await fetchGames();
+  if (MENUV !== "main" || $("menu").hidden || !$("dLast")) return;
+  const inGame = V && (V.winner === null || V.winner === undefined);
+  $("dLast").innerHTML = dashLastHTML(inGame, READY ? "" : " disabled", gs || []);
+  const k = trainKey(), bil = $("dBil");
+  if (!k || !bil || !gs) return;
+  const mine = gs.filter(g => g.result && gameWith(g, k)), w = mine.filter(g => g.result.winner === 0).length, l = mine.filter(g => g.result.winner === 1).length;
+  bil.textContent = mine.length ? `Bilan avec ce deck : ${w} victoire${w > 1 ? "s" : ""}, ${l} défaite${l > 1 ? "s" : ""} (${mine.length} partie${mine.length > 1 ? "s" : ""} finie${mine.length > 1 ? "s" : ""})` : "Pas encore de partie finie avec ce deck.";
+}
+// Choix du deck d'entraînement : la grille des légendes, puis les listes de la légende touchée (tes decks, puis les
+// listes de tournoi, la conseillée en tête). Une liste qui n'est pas jouable est affichée grisée.
+function pickHTML(back) {
+  if (!CAT) return `<div class="menuin msub">${back}<h2>Choisir mon deck</h2><div class="mcard">Chargement des légendes…</div></div>`;
+  const legs = CAT.legends.slice().sort((x, y) => x.n.localeCompare(y.n));
+  const short = l => l.split(",")[0];
+  const tiles = legs.map(l => { const on = legendDecks(l.n).length > 0 || Object.values(MYDECKS).some(d => d.legend === l.n);
+    return `<button class="vtile${on ? "" : " off"}${PICKLG === l.n ? " sel" : ""}" data-pleg="${esc(l.n)}"${on ? "" : ` aria-disabled="true"`} title="${esc(l.n)}" aria-label="${esc(l.n)}${on ? "" : " (pas encore de deck)"}"><span class="vart" style="${tileArt(l.n)}"></span><span class="vnm">${esc(short(l.n))}</span>${on ? "" : `<span class="vlock">bientôt</span>`}</button>`; }).join("");
+  let list = `<div class="mcard small">Touche une légende pour voir ses decks.</div>`;
+  if (PICKLG) {
+    const cur = trainKey(), dk = legendDefault(PICKLG);
+    const row = (k, t, d, ok) => `<div class="mcard row"><div class="grow"><div class="t">${esc(t)}</div><div class="small">${d}</div></div><div class="acts"><button class="go" data-pick="${esc(k)}"${ok ? "" : " disabled"}>${cur === k ? "Choisi ✓" : "Choisir"}</button></div></div>`;
+    const mine = Object.values(MYDECKS).filter(d => d.legend === PICKLG).sort((a, b) => a.name.localeCompare(b.name))
+      .map(d => row("my:" + d.id, d.name, "mon deck · " + (deckOK(d) ? "jouable" : "pas encore jouable"), deckOK(d)));
+    const pre = CAT.presets.filter(p => p.deck.legend === PICKLG).sort((a, b) => (b.key === dk) - (a.key === dk))
+      .map(p => { const ok = presetOK(p); return row(p.key, presetLabel(p, false), (p.key === dk ? "★ liste conseillée · " : "") + "liste de tournoi" + ((p.deck.sideboard || []).length ? ", sideboard " + p.deck.sideboard.length : "") + (ok ? "" : " · pas encore jouable"), ok); });
+    list = `<h3 style="margin:4px 0 0;font-family:var(--f-display);font-weight:400">${esc(PICKLG)}</h3>` + [...mine, ...pre].join("");
+  }
+  return `<div class="menuin msub pick">${back}<h2>Choisir mon deck</h2><div class="small" style="color:var(--ink-2)">Le deck que tu veux travailler. Tu pourras le changer quand tu veux.</div>
+    <div class="roster" role="group" aria-label="Légendes">${tiles}</div>${list}
+    <div class="mcard row"><div class="grow small">Tu préfères ta propre liste ? Construis-la dans l'éditeur, elle apparaîtra ici sous sa légende.</div><div class="acts"><button data-m="deck">Créer un deck</button></div></div></div>`;
+}
 function menuRender(view) {
   MENUV = view || "main";
   const M = $("menu"); if (!M) return;
@@ -2946,18 +3051,20 @@ function menuRender(view) {
     const inGame = V && (V.winner === null || V.winner === undefined);
     const dis = READY ? "" : " disabled";
     const item = (id, ic, t, d, cls = "") => `<button class="mitem ${cls}" data-m="${id}"${dis}><span class="ic" aria-hidden="true">${ic}</span><span><b>${t}</b><span class="d">${d}</span></span></button>`;
-    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Entraînement</h1><p>Joue contre l'IA, prépare tes decks, relis tes parties.</p></div>
-      <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "Moteur prêt." : "Chargement du moteur de jeu…"}</div>
-      <div class="mgrid">
-      ${inGame ? item("resume", "▶", "Reprendre la partie", "Retourne à la table, tour " + V.st.t, "hot") : V ? item("resume", "▶", "Revoir la partie terminée", "Retourne à la table : " + (V.winner === 0 ? "victoire" : V.winner === 1 ? "défaite" : "partie nulle") + " " + V.st.pts[0] + "-" + V.st.pts[1]) : ""}
-      ${item("learn", "★", "Apprendre à jouer", "Tutoriel : une partie guidée en 6 défis, une dizaine de minutes.")}
-      ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis ton deck, celui de l'IA et son niveau.", inGame ? "" : "hot")}
-      ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room, en BO1 ou BO3.")}
-      ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
-      ${item("mydecks", "▤", "Mes decks", "Ta liste de decks : modifier ou jouer directement.")}
-      ${item("games", "◷", "Mes parties", "Tes parties enregistrées : revois-les coup par coup, avec le conseil de l'IA.")}
-      ${item("help", "?", "Aide", "Règles de la table, en quelques lignes.")}
+    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Entraînement</h1><p>Choisis ton deck, joue contre l'IA, relis tes parties.</p></div>
+      <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "" : "Chargement du moteur de jeu…"}</div>
+      <div class="dash">${dashDeckHTML(dis)}<section class="dcard lastc" id="dLast">${dashLastHTML(inGame, dis)}</section></div>
+      <div class="mgrid mrow">
+      ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis les deux decks et le niveau.")}
+      ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room.")}
+      ${item("learn", "★", "Apprendre à jouer", "Tutoriel : une partie guidée en 6 défis.")}
+      ${item("deck", "✎", "Éditeur de deck", "Cartes, runes, battlefields, import et export.")}
+      ${item("mydecks", "▤", "Mes decks", "Modifier ou jouer directement.")}
+      ${item("games", "◷", "Mes parties", "Revois-les coup par coup.")}
+      ${item("help", "?", "Aide", "Règles de la table.")}
       </div></div>`;
+  } else if (MENUV === "pick") {
+    h = pickHTML(back);
   } else if (MENUV === "help") {
     h = `<div class="menuin msub">${back}<h2>Aide : règles de la table</h2><div class="mcard"><ol class="mhelp">
       <li><b>Débutant ?</b> « Apprendre à jouer » (menu) : une partie guidée en 6 défis.</li>
@@ -2983,18 +3090,25 @@ function menuRender(view) {
   }
   M.innerHTML = h;
   M.scrollTop = 0;
+  if ((MENUV === "main" || MENUV === "pick") && READY && !CAT) loadCatalog().then(() => { if (CAT && (MENUV === "main" || MENUV === "pick") && !$("menu").hidden) menuRender(MENUV); });
+  if (MENUV === "main" && READY) dashGames();
   if (MENUV === "games") loadGames();
   if (MENUV === "friend") friendWire();
 }
+// Parties enregistrées (base claude.ai si elle existe, sinon ce navigateur) ; null si la lecture échoue.
+async function fetchGames() {
+  const db = await dbh();
+  let gs;
+  if (db) { try { const qs = await db.collection("games").get(); gs = qs.docs.map(d => d.data()).filter(x => x && x.id); } catch (e) { return null; } }
+  else gs = Object.values(localGames());
+  window.__GAMES = gs; fetchGames.local = !db;
+  return gs;
+}
 async function loadGames() {
   const box = $("gamesBox"); if (!box) return;
-  const db = await dbh();
-  let gs = [], local = !db;
-  if (db) {
-    try { const qs = await db.collection("games").get(); gs = qs.docs.map(d => d.data()).filter(x => x && x.id); }
-    catch (e) { box.className = "mcard warn"; box.textContent = "Lecture des parties impossible pour l'instant."; return; }
-  } else gs = Object.values(localGames());
-  window.__GAMES = gs;
+  const gs = await fetchGames();
+  if (!gs) { box.className = "mcard warn"; box.textContent = "Lecture des parties impossible pour l'instant."; return; }
+  const local = fetchGames.local;
   if (MENUV !== "games" || !$("gamesBox")) return;
   gs.sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
   const html = gs.length ? gs.slice(0, 60).map(g => { const r = g.result, n = g.names || ["Toi", "IA"];
@@ -3010,12 +3124,16 @@ async function loadGames() {
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
-  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp]"); if (!t || t.disabled) return;
+  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-pleg],[data-pick]"); if (!t || t.disabled) return;
+  if (t.dataset.pleg) { if (t.classList.contains("off")) return; PICKLG = t.dataset.pleg; menuRender("pick"); const l = $("menu").querySelector(".pick h3"); if (l) l.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
+  if (t.dataset.pick) { store.set("rbt-train", t.dataset.pick); menuRender("main"); return; }
   if (t.dataset.rp) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.rp); if (g) startReplay(g); return; }
   if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); if (!DK.sideboard) DK.sideboard = {}; hideMenu(); await openDecks(); return; }
   if (t.dataset.play) { store.set("rbt-mine", "my:" + t.dataset.play); hideMenu(); setupForm(); return; }
   const m = t.dataset.m;
   if (m === "new") { if (RP) exitReplay(); hideMenu(); setupForm(); }
+  else if (m === "trainplay") { const k = trainKey(); if (!k) return; store.set("rbt-mine", k); if (RP) exitReplay(); hideMenu(); setupForm(); }
+  else if (m === "pick") { const k = trainKey(); PICKLG = k && CAT ? deckLegend(k) : PICKLG; menuRender("pick"); }
   else if (m === "resume") { if (RP) exitReplay(); hideMenu(); }
   else if (m === "duel") { hideMenu(); if (!(DU.game && !DU.game.done)) duelPrepUI(true); }
   else if (m === "deck") { hideMenu(); openDecks(); }
