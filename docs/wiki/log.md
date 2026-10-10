@@ -209,3 +209,6 @@ Demande de l'utilisateur : dans la table, Espace = gros bouton (« Terminer le t
 
 ## [2026-10-10] decision | Échap = « Reprendre » ; « Reprendre » permis en duel tant qu'on garde le focus
 Demande de l'utilisateur : Échap annule le dernier coup (après avoir lâché une carte choisie). En duel, on peut reprendre son dernier coup tant qu'on n'a pas passé le focus (l'adversaire n'a rien joué, ni « Passer » ni « Terminer le tour » repris). Règle de table, pas une règle des Core Rules. Détail : `pages/duel.md`. Vérifié par robot (deux navigateurs), pas encore à la main.
+
+## [2026-10-10] decision | Retour arrière = « Reprendre » (pas Échap) ; Espace = « Oui » aux questions oui / non
+Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ; Échap reprend son rôle d'avant (fermer, lâcher une carte). Espace répond aussi « Oui » à toute question oui / non du moteur (options True / False : « Utiliser cet effet ? », Zilean, Rebuttal…). Robot `verif_espace.mjs`, vérifié par robot.

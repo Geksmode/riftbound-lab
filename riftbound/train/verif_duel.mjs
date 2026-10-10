@@ -53,7 +53,7 @@ async function settled() {   // les deux pages au repos, au même nombre d'entr�
   throw new Error("les deux pages ne se stabilisent pas : " + JSON.stringify([await H.ev(STATE), await G.ev(STATE)]));
 }
 // Joue jusqu'à la fin de la manche (ou max entrées) ; contrôle la synchro à chaque coup. Renvoie le nombre d'entrées.
-// undo : nombre de « Reprendre » à essayer (Échap chez l'hôte, bouton chez l'invité), tant que le joueur garde la main.
+// undo : nombre de « Reprendre » à essayer (Retour arrière chez l'hôte, bouton chez l'invité), tant que le joueur garde la main.
 const UNDO = { done: 0, bad: 0, oppBlocked: 0, passBlocked: 0, passSeen: 0 };
 async function play(max, label, undo = 0) {
   let n = 0, desync = 0, waitBad = 0, both = 0, checks = 0;
@@ -80,7 +80,7 @@ async function play(max, label, undo = 0) {
           else UNDO.oppBlocked++;
           if (!can) UNDO.bad++;
           else {
-            if (me === H) await H.pg.keyboard.press("Escape"); else await G.tap("#bUndo");
+            if (me === H) await H.pg.keyboard.press("Backspace"); else await G.tap("#bUndo");
             const [a3, c3] = await settled();
             if (!same(a3, a) || !same(c3, c)) { UNDO.bad++; console.log("  reprise : état différent", JSON.stringify(a3), JSON.stringify(a)); }
             UNDO.done++; continue;
@@ -151,7 +151,7 @@ try {
   await H.shot("b-manche1-debut"); await G.shot("b-manche1-debut");
   // ---------- (c) manche 1 jusqu'au bout
   const n1 = await play(6000, "manche 1", 6);
-  ok(`« Reprendre » en duel : ${UNDO.done} coups repris (Échap chez l'hôte, bouton chez l'invité), même état qu'avant des deux côtés`, UNDO.done >= 4 && UNDO.bad === 0);
+  ok(`« Reprendre » en duel : ${UNDO.done} coups repris (Retour arrière chez l'hôte, bouton chez l'invité), même état qu'avant des deux côtés`, UNDO.done >= 4 && UNDO.bad === 0);
   ok(`« Reprendre » éteint chez l'adversaire (${UNDO.oppBlocked} fois) et après « Passer » / « Terminer le tour » (${UNDO.passBlocked}/${UNDO.passSeen})`, UNDO.oppBlocked >= 4 && UNDO.passBlocked === UNDO.passSeen && UNDO.passSeen > 0);
   const [e1, e2] = [await H.ev(STATE), await G.ev(STATE)];
   ok(`manche 1 terminée des deux côtés après ${n1} entrées (gagnant : place ${e1.w}, points ${e1.pts.join("-")})`, e1.w !== null && e1.w === e2.w);
