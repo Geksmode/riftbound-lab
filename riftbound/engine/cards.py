@@ -819,9 +819,13 @@ def _ato(g, it):
         g.mod(u, 2 * n)
 
 
+# The AI only considers units facing an enemy; a human may choose any friendly unit at a battlefield, even with no
+# enemy there (+0, still a legal play: valid choices for its targets are all it needs, rules 355.8, 355.9.b).
 card("Against the Odds", timing="reaction", preds=[P_friend_bf], resolve=_ato,
      choices=lambda g, pid, ctx: tg_choices([u for u in friends(g, pid, True, ctx["hidden_bf"])
-                                             if g.units(1 - pid, u.loc)]))
+                                             if g.units(1 - pid, u.loc)]),
+     all_choices=lambda g, pid, ctx: tg_choices(sorted(friends(g, pid, True, ctx["hidden_bf"]),
+                                                       key=lambda u: not g.units(1 - pid, u.loc))))
 
 
 def _heron_event(g, o, ev, info):

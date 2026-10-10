@@ -617,6 +617,24 @@ def against_the_odds():
 
 
 @test
+def against_the_odds_without_enemy_is_legal_for_a_human():
+    # 355.8 : une cible valide suffit (« a friendly unit at a battlefield ») ; ex. en réaction à Sabotage (partie
+    # de l'utilisateur, 2026-10-10). L'IA, elle, ne la joue que face à un ennemi.
+    g, ag = new()
+    runes(g, 0, ["Fury"] * 2)
+    hand(g, 0, "Against the Odds")
+    u = put(g, 0, "Mournful Witness", 1)
+    put(g, 1, "Soaring Scout", "base")
+    assert not [o for o in g.advance().options if o[0] == "play"]
+    ag[0].every_choice = True
+    o = opt(g, 0, "Against the Odds")
+    assert o[3]["tg"] == (u.uid,)
+    g.apply(o)
+    settle(g)
+    assert g.might(u) == 2 and g.p[0].hand == []
+
+
+@test
 def en_garde_alone():
     g, _ = new()
     runes(g, 0, ["Calm"])

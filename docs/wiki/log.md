@@ -203,3 +203,6 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 
 ## [2026-10-10] decision | Menu de la table en tableau de bord
 L'utilisateur a choisi le tableau de bord parmi 5 dispositions : deck d'entraînement (aucun par défaut, choisi par le joueur) et dernière partie en haut, les autres entrées en rangée compacte. Détail : `memoire/riftbound-training-table.md` ; robot `train/verif_dash.mjs` dans la porte.
+
+## [2026-10-10] ingest | Against the Odds jouable sans ennemi (réaction à Sabotage)
+Signalé par l'utilisateur : en réaction à Sabotage, Against the Odds n'était pas proposée faute d'ennemi au battlefield. Les règles 355.8 et 355.9.b ne demandent qu'une unité amie à un battlefield (+0 sans ennemi) : le joueur humain a maintenant toutes les cibles (`all_choices`), l'IA garde sa liste. Cartes cachées en réaction : déjà correctes (vérifié par robot dans le navigateur).
