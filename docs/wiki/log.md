@@ -193,3 +193,7 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 
 ## [2026-10-10] ingest | Table : équipement attaché décalé à gauche
 - Signalé par l'utilisateur (capture) : une unité équipée sur un battlefield avait sa might coupée, car l'équipement dépassait vers le haut et poussait l'unité vers le bas. L'équipement dépasse maintenant vers la gauche (16 px par équipement), sur la même ligne que l'unité (`base.css`, `.slot.geared`). Vérifié par robot à 1899, 1400, 393 et 360 px (1 et 2 équipements, unité prête ou épuisée) : might visible, équipement à gauche, pas de défilement horizontal.
+
+## [2026-10-10] feat | Table : mode tutoriel « Apprendre à jouer »
+- Demande de l'utilisateur : un tutoriel court et ludique pour néophytes ; deck de base Maître Yi (sa demande). Menu → 4 écrans d'intro, puis une vraie partie (moteur complet) Yi Bladesman contre Darius, donne 202, IA débutante (`train.Gentle`), 6 défis à étoiles et un coach. Page [tutoriel](pages/tutoriel.md).
+- Moteur : `TGame.emit` note `combat_won` (exposé `cw` dans l'état) ; test `tutorial_game_is_fixed_and_playable`. Vérifié par robot `verif_tuto.mjs` (1400x900 et 393x851, toucher simulé), ajouté à `scripts/verifier.sh`. Pas essayé sur un vrai téléphone.

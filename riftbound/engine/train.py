@@ -82,6 +82,11 @@ class TGame(Game):
             if new and s.logging and s.stage != "setup":
                 s.buf.append([1, f"Tu pioches {new[0].cname}" if pid == ME else f"{_rp.NAMES[AI]} pioche une carte"])
 
+    def emit(s, ev, **info):
+        if ev == "combat_won":                          # combats gagnés depuis le dernier rendu (défis du tutoriel)
+            s.cw = getattr(s, "cw", []) + [info["pid"]]
+        return super().emit(ev, **info)
+
     def clone(s):
         b, s.buf = s.buf, []
         try:
@@ -146,7 +151,9 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     hu = Human()
     # 2026-10-10 : l'IA de la table cherche le tour entier (search="turn"), à l'essai en direct par l'utilisateur ; gain non
     # démontré (turn contre sh : 52,9 % ± 2,5 sur 120 paires, on ne sait pas) et ~3 × plus lent que "sh". Remettre "sh" pour revenir.
-    ai = P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn")
+    # level 0 : IA débutante du tutoriel (Gentle).
+    ai = (Gentle(seed + 500000, plan=pl, opp_plan=pa, samples=1, search="sh") if int(level) == 0 else
+          P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn"))
     coach = P.PlanAgent(seed + 900000, plan=_plan_for(MD), opp_plan=_plan_for(OD))
     g = TGame([A, B], [hu, ai], seed=seed, first=f)
     W.clear()
@@ -154,6 +161,59 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     return json.dumps(dict(seed=seed, first=f, bf=[abf, lbf], battlefields=MD["battlefields"], names=names,
                            decks=[dict(legend=x["legend"], champion=x.get("champion"), main=sorted(set(x["main"])))
                                   for x in (A, B)]))
+
+
+# ------------------------------------------------------------------ tutoriel (menu « Apprendre à jouer »)
+class Gentle(P.PlanAgent):
+    """IA débutante du tutoriel : mêmes règles, mêmes coups légaux que l'IA normale ; une décision sur WILD est prise au
+    hasard parmi les coups légaux (comme agents.RandomAgent), les autres par l'IA normale. Les choix en cours de
+    résolution et le mulligan restent ceux de l'IA normale. Son générateur est copié avec l'état (Reprendre, rejeu)."""
+    WILD = 0.5
+
+    def __init__(s, seed=0, **kw):
+        super().__init__(seed, **kw)
+        s.wild = random.Random(seed * 31 + 7)
+
+    def decide(s, g, d):
+        if s.wild.random() < s.WILD:
+            opts = d.options
+            if d.kind == "main" and len(opts) > 1 and s.wild.random() < 0.85:
+                opts = [o for o in opts if o[0] != "end"]
+            if d.kind != "main" and s.wild.random() < 0.6:
+                return ("pass",)
+            return s.wild.choice(opts)
+        return super().decide(g, d)
+
+
+# Decks du tutoriel : Maître Yi Wuju Bladesman (choix de l'utilisateur, 2026-10-10 : facile à jouer, montre les bases) contre Darius.
+TUTO_DECKS = ("yi-bladesman_swagalisk_rq-la_6th", "darius_mice-diamondhat_rq-utrecht_6th")
+# Donne choisie avec tuto_seeds() : tu commences ; main de départ First Mate, Pit Rookie ×2, Punch First.
+TUTO_SEED = 202
+
+
+def tuto_seeds(n=3, start=1):
+    """Donnes où la main de départ du joueur (qui commence) a au moins deux unités à 2 énergie sans puissance."""
+    found = []
+    for seed in range(start, start + 2000):
+        new(seed, None, 0, 0, TUTO_DECKS[0], TUTO_DECKS[1])
+        v = json.loads(step())
+        while v.get("busy"):
+            v = json.loads(step())
+        if not v.get("ask") or v["ask"]["kind"] != "mulligan":
+            continue
+        hand = v["ask"]["options"]
+        cheap = [n for n in hand if _game.SPEC[n]["type"] == "Unit" and _game.SPEC[n]["e"] <= 2 and not _game.SPEC[n]["p"]
+                 and not _game.SPEC[n].get("keywords")]
+        if len(cheap) >= 2:
+            found.append((seed, hand))
+            if len(found) >= n:
+                break
+    return found
+
+
+def tuto():
+    """Partie du tutoriel : donne fixe, tu commences, IA débutante (level 0)."""
+    return new(TUTO_SEED, None, 0, 0, TUTO_DECKS[0], TUTO_DECKS[1])
 
 
 # ------------------------------------------------------------------ duel entre deux joueurs
@@ -933,6 +993,7 @@ def _view(ask=None):
         if not look:
             b["fds"] = [[AI, "?"] if o == AI else [o, n] for o, n in b["fds"]]
     out = dict(st=st, log=g.buf, winner=g.winner, ai=W.pop("last_ai", None), aii=W.pop("last_ai_info", None))
+    out["cw"], g.cw = getattr(g, "cw", []), []          # vainqueurs des combats terminés depuis le dernier rendu (467)
     W["last_ai"] = None
     W["last_ai_info"] = None
     for c, it in zip(st["chain"], g.chain):
