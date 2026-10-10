@@ -45,11 +45,18 @@ def lasting_might(g, o):
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
           card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0, trick=0.0)
+          pts_ramp=0.0, trick=2.0)
 
 # Sorts de combat (2026-10-10, demande de l'utilisateur : l'IA jetait Punch First dans son tour sans combat derrière) :
 # un sort [Action] ou [Reaction] (seuls jouables pendant un showdown, 308.1.a) dont le texte change la Might « this turn ».
 # Gardé en main, il vaut `trick` de plus quand son propriétaire a une unité sur le plateau et assez de runes pour le payer.
+# Gardé par décision de l'utilisateur (2026-10-10 : « ça simule le comportement humain »), quel que soit le résultat des
+# mesures ; trick=2,0 n'est pas réglé finement. Avec POL_TRICK, la politique de simulation garde aussi ces sorts pour les
+# showdowns (sans elle, la valeur en main disparaît dans les simulations : la politique les jetait dans son tour).
+# RB_TRICK=0 rend l'ancienne IA (trick=0 et politique d'avant).
+if os.environ.get("RB_TRICK", "1") == "0":
+    EV["trick"] = 0.0
+POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
 _TRICK = {}
 
 
@@ -635,8 +642,8 @@ class PolicyAgent(Heuristics):
         if plays and s.cfg.get("pol_keep"):
             # (essai) garder les sorts [Reaction] pour les fenêtres de réaction au lieu de les jeter dans son tour
             plays = [o for o in plays if not s.reaction_card(g, o)]
-        if plays and s.cfg.get("pol_trick"):
-            # (essai 2026-10-10) garder les sorts de combat (is_trick) pour les showdowns au lieu de les jeter dans son tour
+        if plays and s.cfg.get("pol_trick", POL_TRICK):
+            # (2026-10-10) garder les sorts de combat (is_trick) pour les showdowns au lieu de les jeter dans son tour
             plays = [o for o in plays if not s.trick_card(g, o)]
         if plays:
             return plays[0]

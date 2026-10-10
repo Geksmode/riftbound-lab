@@ -1519,8 +1519,8 @@ def combat_tricks_are_detected_and_valued_in_hand():
         pl.hand = []
         pl.runes = []
     hand(g, 0, "Punch First")                          # 1 énergie + 2 puissance : 3 runes
-    w = dict(ai.EV, trick=2.0)
-    base = lambda: ai.evaluate(g, 0, w) - ai.evaluate(g, 0)
+    w0, w = dict(ai.EV, trick=0.0), dict(ai.EV, trick=2.0)
+    base = lambda: ai.evaluate(g, 0, w) - ai.evaluate(g, 0, w0)
     assert base() == 0                                 # pas d'unité, pas de rune
     put(g, 0, "Pit Rookie")
     runes(g, 0, ["Body", "Body"])
