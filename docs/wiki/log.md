@@ -174,3 +174,7 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-09] feat | Table : les choix de runes se font en touchant les runes du plateau
 - Avant : « Recycler / Prépare quelle rune ? » ouvrait une bulle avec les noms (« rune Fury »…). Maintenant les runes proposées s'allument sur ta rangée de runes (en bas à gauche), on en touche une puis « Valider ». `train.py` : `_ask_uid` reconnaît tes runes, l'état expose `p.runeu` (uid des runes, même ordre que `p.runes`) ; `src.html` : `data-uid` sur les runes de l'ask, halo `.rune.drop-ok / .picked`.
 - Vérifié par robot (ordinateur 1400x900, ask posée dans l'état affiché, pas une vraie partie jusqu'à une carte qui recycle) : 2 runes allumées, un clic en choisit une, Valider actif, aucun bouton de nom. Pas essayé sur téléphone ni sur un vrai ask moteur de bout en bout. Tests moteur : 1117/1117.
+
+## [2026-10-10] decision | Tests de l'IA sur des decks variés
+- Règle de l'utilisateur : les prochains tests de l'IA se font sur des decks variés (`exp_search.py ... defaut`, environ 80 paires), plus sur Akali contre LeBlanc par défaut. Mémoire `ia-tests-decks-varies.md`, règle 8 de `CLAUDE.md`, agents `ia` et `simulation`.
+- En cours : essai `pts_ramp` (points pondérés, idée de l'utilisateur : premiers points moins chers, derniers plus chers) ; réglage désactivé par défaut, criblage r=2, r=4 et courbe 4→10 (`pts_ramp=1.5,pts_hi=0`) en mode defaut, graines 710000+, 711000+, 713000+.
