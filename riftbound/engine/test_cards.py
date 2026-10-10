@@ -1430,6 +1430,34 @@ def every_ask_kind_has_a_french_title():
 
 
 @test
+def tutorial_game_is_fixed_and_playable():
+    """Tutoriel de la table : Yi Bladesman contre Darius, tu commences avec la main annoncée ; l'IA débutante (Gentle)
+    joue une partie complète, et la même suite de coups redonne la même partie (graine du hasard copiée avec l'état)."""
+    import json, random
+    import train
+
+    def play():
+        m = json.loads(train.tuto())
+        assert m["first"] == 0 and m["names"][0] == "Master Yi"
+        rr, v, moves = random.Random(3), json.loads(train.step()), 0
+        assert v["ask"]["kind"] == "mulligan"
+        assert sorted(v["ask"]["options"]) == ["First Mate", "Pit Rookie", "Pit Rookie", "Punch First"]
+        while v.get("winner") is None and moves < 3000:
+            moves += 1
+            if v.get("ask"):
+                v = json.loads(train.answer(json.dumps([] if v["ask"]["kind"] == "mulligan" else rr.randrange(len(v["ask"]["options"])))))
+            elif v.get("dec"):
+                v = json.loads(train.act(rr.randrange(len(v["dec"]["options"]))))
+            else:
+                v = json.loads(train.step())
+        assert isinstance(train.W["ag"][1], train.Gentle)
+        return v["winner"], v["st"]["pts"], v["st"]["t"]
+    a = play()
+    assert a[0] is not None
+    assert play() == a
+
+
+@test
 def human_option_labels_are_readable():
     import train
     from game import Opt

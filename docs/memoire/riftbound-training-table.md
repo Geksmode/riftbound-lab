@@ -21,6 +21,9 @@ metadata:
 ## État 2026-10-09 (après les PR #1 à #15)
 Publiée par la CI sur GitHub Pages (plus l'artefact). DA « observatoire » (`train/da.css`, maquette Claude Design). Ordinateur : plateau pleine largeur, taille fixe pendant la partie, runes en vraies cartes, légende agrandie. Téléphone : plein écran sans défilement, rangées qui se resserrent, main agrandie au toucher (plus de 8 cartes), ciblage par liste dans la bulle. Robots dans la porte : verif_mobile, verif_hidden, verif_revele, verif_charge, verif_cibles, verif_match, verif_duel. Détails : `docs/wiki/log.md`, retex `riftbound/retex/retex-session-2026-10-07-09.md`.
 
+## Tutoriel (2026-10-10)
+Menu « Apprendre à jouer » : partie guidée Yi contre Darius, IA débutante, 6 défis, coach. Détails : `docs/wiki/pages/tutoriel.md`.
+
 ## Leçons (retex 2026-10-09, validées par l'utilisateur)
 - **Quand** je touche à la mise en page, **aucune taille ne doit dépendre du contenu** (chaîne, unités, runes) et je **vérifie par mesure automatique** à plusieurs tailles et sur une situation chargée : rien hors de son cadre, aucun libellé coupé, aucun défilement, une seule échelle sur une partie entière. *Pourquoi :* plateau qui rapetissait en cours de partie, boutons hors cadre, runes coupées, main qui débordait, tous sur mes propres captures sans que je les relève. *(PR #11 à #14)*
 - **Quand** je teste un geste, **prendre le cas difficile** (carte à plusieurs actions, cible cachée sous la bulle), pas le cas simple. **Sur téléphone**, tout choix doit être faisable hors du plateau (liste dans la bulle) et aucune rangée ne défile. *Pourquoi :* le premier robot Hidden passait avec Zhonya alors que Back Off ne se cachait pas au glisser ; base inaccessible pour Shuriken Flip. *(PR #9, #15)*

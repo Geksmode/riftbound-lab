@@ -411,6 +411,35 @@ body.dkopen { overflow: hidden; }
 .small.rule { color: var(--ink-3); font-size: 11.5px; line-height: 1.4; }
 .mchip { border: 1px solid var(--brass); color: var(--brass); background: rgba(214,178,94,.08); }
 .mscore { font-family: var(--f-mono); font-size: 13px; color: var(--brass); }
+/* ---------- tutoriel : puce de la barre du haut, carte du coach, écrans d'intro */
+.tchip { border: 1px solid var(--akali); color: var(--akali); background: rgba(114,226,188,.08); cursor: pointer; white-space: nowrap; flex: none; min-height: 0; }
+.tchip.tbump { animation: tpop .6s ease-out; }
+.tchip .tg::before { content: " · "; }
+@keyframes tpop { 0% { transform: scale(1); } 35% { transform: scale(1.25); box-shadow: 0 0 18px var(--akali); } 100% { transform: scale(1); } }
+.coach { position: fixed; z-index: 49; top: 52px; left: 0; right: 0; margin: 0 auto; width: min(440px, calc(100vw - 24px)); box-sizing: border-box; display: flex; flex-direction: column; gap: 8px;
+  background: rgba(14,17,28,.95); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--akali); border-radius: 16px; padding: 12px 14px; box-shadow: 0 14px 36px rgba(0,0,0,.7); animation: popin .18s ease-out; }
+.coach .chh { display: flex; align-items: center; gap: 10px; }
+.coach .chh .who { margin-right: auto; font-family: var(--f-mono); font-size: 11px; color: var(--akali); text-transform: uppercase; letter-spacing: .08em; }
+.stars { font-size: 17px; letter-spacing: 2px; color: rgba(255,255,255,.18); white-space: nowrap; }
+.stars .on { color: var(--gold); text-shadow: 0 0 8px rgba(243,213,138,.6); }
+.stars .new { display: inline-block; animation: tstar .7s ease-out; }
+@keyframes tstar { 0% { transform: scale(.4); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+.coach h4 { margin: 0; font-size: 21px; line-height: 1.15; }
+.coach .won { font-family: var(--f-mono); font-size: 12px; color: var(--gold); }
+.coach p { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--ink); }
+.coach p.tip { color: var(--ink-2); font-size: 12.5px; }
+.coach .chb { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.coach .chb button { min-height: 36px; padding: 6px 14px; }
+.coach .chb .go { background: linear-gradient(180deg, #34806e, #1f5146); border-color: #4fd2b2; color: #e9fff8; font-weight: 600; }
+.tintro { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; max-width: 460px; margin: 0 auto; }
+.tintro .tig { font-family: var(--f-display); font-size: 54px; line-height: 1; color: var(--gold); text-shadow: 0 0 22px rgba(243,213,138,.35); }
+.tintro h3 { margin: 0; font-size: 26px; }
+.tintro p { margin: 0; font-size: 14.5px; line-height: 1.5; }
+.tintro .dots { display: flex; gap: 8px; } .tintro .dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.2); } .tintro .dots i.on { background: var(--akali); }
+.tintro .big { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.tintro .big button { flex: 0 1 auto; width: auto; min-width: 140px; }
+.tintro ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; text-align: left; }
+.tintro ul li::before { content: "☆ "; color: var(--gold); }
 .prep { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
 .mres { font-family: var(--f-display); font-size: 17px; } .mres.me { color: var(--akali); } .mres.opp { color: var(--leblanc); }
 .prepq { font-weight: 600; font-size: 14px; margin-top: 2px; }
@@ -513,6 +542,10 @@ body.dkopen { overflow: hidden; }
   .main > .ctrlcol .turninfo { display: none; }
   .main > .ctrlcol .ctrlrow button { white-space: nowrap; font-size: 13px; }
   .topbar #gmeta, .topbar .savechip, .topbar .mchip { display: none !important; }
+  .coach { top: 48px; padding: 10px 12px; }
+  .tchip .tg { display: none; }
+  .coach h4 { font-size: 18px; }
+  .coach p { font-size: 13px; }
   .topbar .tbtns { margin-left: auto; display: flex; gap: 4px; flex: none; width: auto; }
   .topbar .tbtns button { flex: none; width: auto; padding: 6px 12px; font-size: 13px; min-height: 36px; }
   .main > .ctrlcol .turninfo { max-height: 46px; overflow: hidden; font-size: 11px; line-height: 1.2; }
@@ -612,6 +645,7 @@ body.dkopen { overflow: hidden; }
       <span class="res" id="gres" hidden></span>
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
       <span class="res mchip" id="gmatch" hidden></span>
+      <button class="res tchip" id="gtuto" hidden aria-label="Afficher le défi du tutoriel"></button>
       <span class="savechip" id="saveChip" hidden></span>
       <button class="savechip netchip" id="netChip" hidden></button>
       <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
@@ -639,6 +673,7 @@ body.dkopen { overflow: hidden; }
 <div class="pop hpop" id="hpop" hidden></div>
 <div class="prompt" id="fbar" hidden></div>
 <div class="toast" id="aiLine" aria-live="polite" hidden></div>
+<div class="coach" id="coach" role="status" aria-live="polite" hidden></div>
 <div class="menu" id="menu" role="dialog" aria-label="Menu principal"></div>
 <div class="deckview" id="deckView" hidden role="dialog" aria-label="Éditeur de deck"></div>
 <div class="modal" id="modal" hidden><div class="mbox" id="mbox" role="dialog" aria-modal="true"></div></div>
@@ -1080,6 +1115,7 @@ function show(v) {
   fitBoard();
   renderCtrl(v);
   decorate();
+  tutoCheck(v);
 }
 
 // ------------------------------------------------------------ enregistrement des parties
@@ -2783,6 +2819,114 @@ function exitReplay() {
   else { V = null; $("board").innerHTML = `<div class="loading">Choisis une partie à revoir, ou commence une nouvelle partie.</div>`; $("stack").innerHTML = ""; showMenu("games"); }
 }
 
+// ------------------------------------------------------------ tutoriel (menu « Apprendre à jouer »)
+// Une vraie partie, moteur complet (rien n'est simplifié) : Maître Yi contre Darius, donne fixe où tu commences
+// (train.tuto), IA débutante (train.Gentle). Six défis à étoiles, dans l'ordre ; le coach explique chaque défi, et
+// quelques astuces arrivent au moment où la situation se présente (réaction, question, adversaire sur un champ…).
+let TUTO = null;
+const TSTEPS = [
+  { t: "Garde ta main", h: "Tu as pioché 4 cartes. Avant de commencer, tu peux en renvoyer jusqu'à 2 pour en repiocher (le mulligan). Ta main est bonne : deux Pit Rookie qui coûtent 2. Touche « Garder ma main ».",
+    ok: (v, U) => U.sawMull && !(v.ask && v.ask.kind === "mulligan") },
+  { t: "Joue une unité", h: "À côté de ta légende : tes 2 runes. Chaque rune s'épuise pour donner 1 énergie. Pit Rookie coûte 2 (chiffre en haut à gauche de la carte). Touche-le (cadre vert) puis « Jouer », ou glisse-le dans ta base.",
+    ok: v => myUnits(v.st) > 0 },
+  { t: "Termine ton tour", h: "Une unité arrive épuisée (couchée) : elle pourra bouger au prochain tour. Tu n'as plus d'énergie : touche le gros bouton « Terminer le tour ». Darius joue ensuite.",
+    ok: v => v.st.tp === 1 || v.st.t >= 3 },
+  { t: "Va sur un champ de bataille", h: "Nouveau tour : tes unités se redressent, tu poses 2 runes de plus et tu pioches. Glisse une unité de ta base vers un des deux champs de bataille au centre (ou touche-la puis « Déplacer »). Bouger épuise l'unité. Astuce : First Mate (3) redresse une autre unité en arrivant, qui peut donc encore bouger.",
+    ok: v => v.st.bfs.some(b => b.u.some(u => u.c === 0)) },
+  { t: "Marque un point", h: "Prendre le contrôle d'un champ, c'est le conquérir : +1 point. Au début de chacun de tes tours, chaque champ que tu tiens encore rapporte +1 point. Le premier à 8 points gagne.",
+    ok: v => v.st.pts[0] >= 1 },
+  { t: "Gagne un combat", h: "Va sur un champ où Darius a des unités, ou défends le tien. Chaque camp inflige des dégâts égaux à sa Might (sa force) ; une unité meurt quand elle reçoit autant de dégâts que sa Might. Le camp qui reste garde le champ. Punch First donne +5 Might pendant un combat, et ta légende Maître Yi donne +2 Might à une unité qui défend seule.",
+    ok: (v, U) => U.won },
+];
+const TTIPS = [
+  { id: "react", when: v => v.dec && v.dec.kind !== "main", t: "Fenêtre de réaction", h: "Une carte va se résoudre ou un combat s'ouvre : tu peux répondre avec une carte Reaction (ou Action pendant un combat). Sinon, touche « Passer »." },
+  { id: "ask", when: v => v.ask && v.ask.kind !== "mulligan", t: "Une question", h: "Une carte te demande un choix : réponds dans la bulle au milieu du plateau." },
+  { id: "oppbf", when: v => v.st.bfs.some(b => b.u.some(u => u.c === 1)), t: "Darius avance", h: "Darius a une unité sur un champ de bataille. S'il le tient au début de son tour, il marque 1 point. Pour l'en chasser, envoie plus de Might que lui." },
+  { id: "opppt", when: v => v.st.pts[1] >= 1, t: "Darius marque", h: "Chaque champ pris ou tenu rapporte des points, à lui aussi. Reprends-lui ses champs !" },
+];
+const myUnits = st => st.p[0].base.length + st.bfs.reduce((n, b) => n + b.u.filter(u => u.c === 0).length, 0);
+const tStars = (k, fresh) => `<span class="stars" aria-label="${k} défi${k > 1 ? "s" : ""} réussi${k > 1 ? "s" : ""} sur ${TSTEPS.length}">${TSTEPS.map((_, i) => `<span class="${i < k ? "on" : ""}${i === fresh ? " new" : ""}">★</span>`).join("")}</span>`;
+
+const TINTRO = [
+  { g: "8", t: "Huit points pour gagner", p: "Deux joueurs, deux champs de bataille au centre. Prendre un champ, puis le tenir, rapporte des points. Le premier à 8 points gagne." },
+  { g: "◆", t: "Les runes, ton énergie", p: "Chaque tour, tu poses 2 runes et tu pioches 1 carte. Une rune s'épuise pour 1 énergie : c'est avec elle que tu paies tes cartes." },
+  { g: "⚔", t: "Unités et combats", p: "Joue des unités dans ta base, puis envoie-les sur les champs. Deux camps sur le même champ : combat, et la plus grosse force (Might) l'emporte." },
+  { g: "★", t: "À toi de jouer", p: "Tu joues <b>Maître Yi</b> contre <b>Darius</b>, une IA débutante. Six défis, une dizaine de minutes :", list: true },
+];
+function tutoIntro(i = 0) {
+  const x = TINTRO[i], last = i === TINTRO.length - 1;
+  openModal(`<div class="tintro" id="tIntro"><div class="dots">${TINTRO.map((_, j) => `<i class="${j === i ? "on" : ""}"></i>`).join("")}</div>
+    <div class="tig" aria-hidden="true">${x.g}</div><h3>${x.t}</h3><p>${x.p}</p>
+    ${x.list ? `<ul>${TSTEPS.map(s => `<li>${esc(s.t)}</li>`).join("")}</ul><p class="small">Bloqué ? « Conseil » montre le meilleur coup, « ↶ Reprendre » annule le dernier.</p>` : ""}
+    <div class="big">${i ? `<button id="tBack">Retour</button>` : `<button id="tSkip">Passer l'intro</button>`}<button class="main" id="tNext">${last ? "Jouer la partie guidée" : "Suivant"}</button></div></div>`, true);
+  $("tNext").onclick = () => last ? tutoStart() : tutoIntro(i + 1);
+  if ($("tBack")) $("tBack").onclick = () => tutoIntro(i - 1);
+  if ($("tSkip")) $("tSkip").onclick = () => tutoStart();
+}
+async function tutoStart() {
+  if (!T || working) return;
+  if (DU) duelLeave();
+  if (RP) exitReplay();
+  closeModal(); hideMenu();
+  if (REC && recT) recSave(true);
+  REC = null; MATCH = null; MEP = 0;   // la partie du tutoriel n'est pas enregistrée dans « Mes parties »
+  try { META = J(T.tuto()); }
+  catch (err) { toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
+  PN = META.names; CARDS = J(T.cards());
+  LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
+  TUTO = { meta: META, k: 0, sawMull: false, won: false, tips: {}, open: true, fresh: -1, tip: null, end: false };
+  $("gmeta").textContent = `Tutoriel · ${PN[0]} contre ${PN[1]} (IA débutante)`;
+  $("gres").hidden = true; matchChip();
+  await pump(J(T.step()));
+}
+// Appelée à chaque rendu (show) : avance les défis, déclenche les astuces, dessine la puce et le coach.
+function tutoCheck(v) {
+  const U = TUTO;
+  if (!U || U.meta !== META || DU || RP) { if (U && U.meta !== META) TUTO = null; $("coach").hidden = true; $("gtuto").hidden = true; return; }
+  if (v.ask && v.ask.kind === "mulligan") U.sawMull = true;
+  if ((v.cw || []).includes(0)) U.won = true;          // combat gagné, en attaque ou en défense (moteur : combat_won, 467)
+  const k0 = U.k;
+  while (U.k < TSTEPS.length && TSTEPS[U.k].ok(v, U)) U.k++;
+  if (U.k > k0) { U.fresh = U.k - 1; U.tip = null; U.open = true; const c = $("gtuto"); c.classList.remove("tbump"); void c.offsetWidth; c.classList.add("tbump"); }
+  else if (!U.tip && U.k > 0 && U.k < TSTEPS.length) {
+    const tp = TTIPS.find(x => !U.tips[x.id] && x.when(v));
+    if (tp) { U.tips[tp.id] = 1; U.tip = tp; U.open = true; }
+  }
+  const over = v.winner !== null && v.winner !== undefined;
+  if ((U.k === TSTEPS.length || over) && !U.end && !working) { U.end = true; return tutoEnd(v); }
+  tutoDraw();
+}
+function tutoDraw() {
+  const U = TUTO, C = $("coach"), chip = $("gtuto");
+  if (!U) { C.hidden = chip.hidden = true; return; }
+  const done = U.k >= TSTEPS.length, cur = TSTEPS[Math.min(U.k, TSTEPS.length - 1)];
+  chip.hidden = false;
+  chip.innerHTML = done ? `Tuto ★ ${TSTEPS.length}/${TSTEPS.length}` : `Tuto ${U.k + 1}/${TSTEPS.length}<span class="tg">${esc(cur.t)}</span>`;
+  C.hidden = !U.open;
+  if (!U.open) return;
+  const won = U.fresh >= 0 ? `<div class="won">Défi réussi : ${esc(TSTEPS[U.fresh].t)} !</div>` : "";
+  const body = done ? `<h4>Tutoriel réussi</h4><p>Tu connais les bases. Finis la partie jusqu'à 8 points, ou lance une vraie partie depuis le menu.</p>`
+    : U.tip ? `<h4>${esc(U.tip.t)}</h4><p>${esc(U.tip.h)}</p><p class="tip">Défi en cours : ${esc(cur.t)}.</p>`
+    : `${won}<h4>Défi ${U.k + 1} · ${esc(cur.t)}</h4><p>${esc(cur.h)}</p>`;
+  C.innerHTML = `<div class="chh"><span class="who">Coach</span>${tStars(U.k, U.fresh)}</div>${body}
+    <div class="chb"><button class="go" id="cOk">Compris</button></div>`;
+  $("cOk").onclick = () => { U.open = false; U.fresh = -1; U.tip = null; tutoDraw(); };
+}
+function tutoEnd(v) {
+  const U = TUTO, over = v.winner !== null && v.winner !== undefined, k = U.k;
+  U.open = false; tutoDraw();
+  const res = over ? (v.winner === 0 ? `Victoire ${v.st.pts[0]}-${v.st.pts[1]} !` : v.winner === 1 ? `Défaite ${v.st.pts[0]}-${v.st.pts[1]}` : "Partie nulle") : "";
+  const head = k === TSTEPS.length ? "Tutoriel réussi !" : "Partie terminée";
+  openModal(`<div class="tintro" id="tEnd"><div class="tig" aria-hidden="true">★</div><h3>${head}</h3>${tStars(k, -1).replace('class="stars"', 'class="stars" style="font-size:28px"')}
+    <p>${res ? esc(res) + " · " : ""}${k} défi${k > 1 ? "s" : ""} réussi${k > 1 ? "s" : ""} sur ${TSTEPS.length}.</p>
+    <p>${k === TSTEPS.length ? "Tu sais jouer une unité, prendre et tenir un champ, et gagner un combat. Le reste (sorts, réactions, mots-clés) s'apprend en jouant : le bouton « Conseil » est là pour ça." : "Tu peux recommencer le tutoriel : même donne, même main de départ."}</p>
+    <div class="big">${over ? "" : `<button id="tGo">Continuer la partie</button>`}<button id="tAgain">Recommencer le tuto</button><button class="main" id="tReal">Partie contre l'IA</button></div></div>`, true);
+  if ($("tGo")) $("tGo").onclick = () => closeModal();
+  $("tAgain").onclick = () => tutoStart();
+  $("tReal").onclick = () => { closeModal(); setupForm(); };
+}
+$("gtuto").onclick = () => { if (!TUTO) return; TUTO.open = !TUTO.open; if (!TUTO.open) { TUTO.fresh = -1; TUTO.tip = null; } tutoDraw(); };
+
 // ------------------------------------------------------------ menu d'accueil
 // Écran d'accueil : point d'entrée de toute la table. Chaque vue (éditeur, nouvelle partie, listes) a un retour au menu.
 let READY = false, ENGERR = "", MENUV = "main";
@@ -2806,6 +2950,7 @@ function menuRender(view) {
       <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "Moteur prêt." : "Chargement du moteur de jeu…"}</div>
       <div class="mgrid">
       ${inGame ? item("resume", "▶", "Reprendre la partie", "Retourne à la table, tour " + V.st.t, "hot") : V ? item("resume", "▶", "Revoir la partie terminée", "Retourne à la table : " + (V.winner === 0 ? "victoire" : V.winner === 1 ? "défaite" : "partie nulle") + " " + V.st.pts[0] + "-" + V.st.pts[1]) : ""}
+      ${item("learn", "★", "Apprendre à jouer", "Tutoriel : une partie guidée en 6 défis, une dizaine de minutes.")}
       ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis ton deck, celui de l'IA et son niveau.", inGame ? "" : "hot")}
       ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room, en BO1 ou BO3.")}
       ${item("deck", "✎", "Créer / modifier un deck", "L'éditeur : cartes, runes, battlefields, import et export.")}
@@ -2815,6 +2960,7 @@ function menuRender(view) {
       </div></div>`;
   } else if (MENUV === "help") {
     h = `<div class="menuin msub">${back}<h2>Aide : règles de la table</h2><div class="mcard"><ol class="mhelp">
+      <li><b>Débutant ?</b> « Apprendre à jouer » (menu) : une partie guidée en 6 défis.</li>
       <li><b>But.</b> Marquer les points de victoire avant l'IA en contrôlant les battlefields. Le moteur applique les Core Rules complètes ; une même donne donne toujours la même partie.</li>
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction il devient « Passer ».</li>
@@ -2873,6 +3019,7 @@ $("menu").addEventListener("click", async e => {
   else if (m === "resume") { if (RP) exitReplay(); hideMenu(); }
   else if (m === "duel") { hideMenu(); if (!(DU.game && !DU.game.done)) duelPrepUI(true); }
   else if (m === "deck") { hideMenu(); openDecks(); }
+  else if (m === "learn") { if (RP) exitReplay(); hideMenu(); tutoIntro(0); }
   else menuRender(m);
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("menu").hidden && MENUV !== "main") menuRender("main"); });
