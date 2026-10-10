@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Riftbound Entraînement</title>
+<title>Riftbound Observatory</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%2314284b%22/%3E%3Cpath%20d=%22M32%208%2052%2032%2032%2056%2012%2032Z%22%20fill=%22none%22%20stroke=%22%23e0b44c%22%20stroke-width=%225%22%20stroke-linejoin=%22round%22/%3E%3Cpath%20d=%22M32%2020%2042%2032%2032%2044%2022%2032Z%22%20fill=%22%23e0b44c%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400..700&family=Geist+Mono:wght@400;500&display=swap">
@@ -668,7 +668,7 @@ body.dkopen { overflow: hidden; }
 <div class="shell">
   <div class="main">
     <div class="topbar">
-      <h1>Riftbound Entraînement</h1>
+      <h1>Riftbound Observatory</h1>
       <span class="res" id="gres" hidden></span>
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
       <span class="res mchip" id="gmatch" hidden></span>
@@ -3051,7 +3051,7 @@ function menuRender(view) {
     const inGame = V && (V.winner === null || V.winner === undefined);
     const dis = READY ? "" : " disabled";
     const item = (id, ic, t, d, cls = "") => `<button class="mitem ${cls}" data-m="${id}"${dis}><span class="ic" aria-hidden="true">${ic}</span><span><b>${t}</b><span class="d">${d}</span></span></button>`;
-    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Entraînement</h1><p>Choisis ton deck, joue contre l'IA, relis tes parties.</p></div>
+    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Observatory</h1><p>Choisis ton deck, joue contre l'IA, relis tes parties.</p></div>
       <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "" : "Chargement du moteur de jeu…"}</div>
       <div class="dash">${dashDeckHTML(dis)}<section class="dcard lastc" id="dLast">${dashLastHTML(inGame, dis)}</section></div>
       <div class="mgrid mrow">

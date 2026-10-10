@@ -198,5 +198,8 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 - Demande de l'utilisateur : un tutoriel court et ludique pour néophytes ; deck de base Maître Yi (sa demande). Menu → 4 écrans d'intro, puis une vraie partie (moteur complet) Yi Bladesman contre Darius, donne 202, IA débutante (`train.Gentle`), 6 défis à étoiles et un coach. Page [tutoriel](pages/tutoriel.md).
 - Moteur : `TGame.emit` note `combat_won` (exposé `cw` dans l'état) ; test `tutorial_game_is_fixed_and_playable`. Vérifié par robot `verif_tuto.mjs` (1400x900 et 393x851, toucher simulé), ajouté à `scripts/verifier.sh`. Pas essayé sur un vrai téléphone.
 
+## [2026-10-10] decision | La table s'appelle « Riftbound Observatory »
+- Choix de l'utilisateur après un brainstorm : l'ancien nom « Riftbound Entraînement » ne collait pas à la DA « observatoire ». Titre de l'onglet et du menu changés (`train/src.html`), même lien d'artefact.
+
 ## [2026-10-10] decision | Menu de la table en tableau de bord
 L'utilisateur a choisi le tableau de bord parmi 5 dispositions : deck d'entraînement (aucun par défaut, choisi par le joueur) et dernière partie en haut, les autres entrées en rangée compacte. Détail : `memoire/riftbound-training-table.md` ; robot `train/verif_dash.mjs` dans la porte.
