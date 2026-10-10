@@ -95,5 +95,54 @@ def evaluation_weights_default_and_override():
     assert a.ev["bf"] == 9.0 and b.ev is None and ai.EV["bf"] == 3.0
 
 
+@T.test
+def turn_search_is_deterministic_leaves_game_and_counters_and_ends_the_turn():
+    """Mode « turn » (2026-10-10) : la suite de coups est déterministe, ne touche ni la partie ni les compteurs,
+    commence par un coup légal, et chaque suite complète finit par « end » (ou atteint la profondeur)."""
+    g, d = midgame()
+    me = d.player
+    n0, i0 = Obj._n, Item._n
+    snap = (g.turn_no, len(g.p[me].hand), len(g.board), g.p[me].points, g.p[1 - me].points, len(g.p[1 - me].hand))
+    mk = lambda: P.PlanAgent(9, search="turn", cfg={"turn_d": 4})
+    a1, a2 = mk(), mk()
+    r1 = a1.pick(g, d, list(d.options))
+    r2 = a2.pick(g, d, list(d.options))
+    assert (Obj._n, Item._n) == (n0, i0)
+    assert snap == (g.turn_no, len(g.p[me].hand), len(g.board), g.p[me].points, g.p[1 - me].points,
+                    len(g.p[1 - me].hand))
+    assert r1[0] == r2[0] and r1[0] in d.options
+    assert [v for v, _ in r1[2]] == [v for v, _ in r2[2]] and a1.tplan == a2.tplan
+    assert a1.tplan[0] == (g.turn_no, me)
+    assert max(v for v, _ in r1[2]) == r1[1]
+
+
+@T.test
+def turn_agent_follows_its_plan_and_plays_whole_games():
+    """Parties complètes avec l'agent « turn » : pas d'erreur, la partie se termine, et le coup suivant de la suite est
+    rejoué sans nouvelle recherche tant qu'il est légal."""
+    for seed in (11, 12):
+        Obj._n = 0
+        Item._n = 0
+        ag = [P.PlanAgent(seed, search="turn", cfg={"turn_d": 3}), P.PlanAgent(seed + 1, search="turn", cfg={"turn_d": 3})]
+        searches = [0]
+        for x in ag:
+            pt = x.pick_turn
+
+            def spy(g_, d_, o_, pt=pt):
+                searches[0] += 1
+                return pt(g_, d_, o_)
+            x.pick_turn = spy
+        g = Game([A, L], ag, seed=seed, first=seed % 2)
+        mains = 0
+        while True:
+            d = g.advance()
+            if d is None:
+                break
+            mains += d.kind == "main" and len(d.options) > 1
+            g.apply(ag[d.player].decide(g, d))
+        assert g.winner is not None or g.turn_no > 1
+        assert 0 < searches[0] < mains, (searches[0], mains)
+
+
 if __name__ == "__main__":
     T.main()
