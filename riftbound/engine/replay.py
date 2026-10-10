@@ -102,7 +102,7 @@ def fmt_args(g, a):
     return (" — " + ", ".join(parts)) if parts else ""
 
 
-def describe(g, a, pid):
+def describe(g, a, pid, viewer=None):
     """Texte français d'une action de haut niveau, avant qu'elle soit appliquée."""
     k = a[0]
     if k == "pass":
@@ -116,7 +116,7 @@ def describe(g, a, pid):
         extra = []
         for kk, v in dict(ch).items():
             if kk in ("tg", "tg2") and v:
-                extra.append("cible " + " et ".join(short(g.obj(u) or u) for u in v))
+                extra.append("cible " + " et ".join(_tname(g, u, pid, viewer) for u in v))
             elif kk == "loc":
                 extra.append("à " + (g.bfs[v].name if v in (0, 1) else "la base"))
             elif kk == "dest" and v is not None:
@@ -137,10 +137,22 @@ def describe(g, a, pid):
         n = g.p[src[1]].legend_name if isinstance(src, tuple) else (g.obj(src).cname if g.obj(src) else "?")
         return f"active {n}"
     if k == "move":
-        us = ", ".join(short(g.obj(u)) for u in a[1])
+        us = ", ".join(g.label(g.obj(u)) if g.obj(u) is not None else str(u) for u in a[1])
         d = a[2]
         return f"déplace {us} vers " + (g.bfs[d].name if d in (0, 1) else "la base")
     return str(a)
+
+
+def _tname(g, u, pid, viewer=None):
+    """Cible d'un coup de pid, vue par viewer (pid par défaut) : « Shipyard Skulker #2 adverse » pour tes propres
+    coups, « … (à toi) » quand l'autre joueur vise ton objet ; numéro si homonymes en jeu (Game.label)."""
+    o = g.obj(u)
+    if o is None:
+        return str(u)
+    viewer = pid if viewer is None else viewer
+    if o.ctrl == pid:
+        return g.label(o)
+    return g.label(o) + (" adverse" if viewer == pid else " (à toi)" if o.ctrl == viewer else "")
 
 
 def _find(g, pid, uid):
@@ -161,6 +173,7 @@ def snap(g):
         if o.buff: d["bf"] = o.buff
         if o.empowered: d["e"] = 1
         if o.token: d["t"] = 1
+        if g.dup_no(o): d["dn"] = g.dup_no(o)     # homonymes en jeu : « #2 » sur la carte et dans les choix
         if o.cname != o.name: d["cp"] = 1         # copie d'une autre unité (Reflection, Shady Spectacles)
         if o.attached:
             d["g"] = [g.obj(x).cname for x in o.attached if g.obj(x) is not None]

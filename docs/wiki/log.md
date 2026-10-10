@@ -187,3 +187,6 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 
 ## [2026-10-10] ingest | Table : étiquette « COPIE » réservée aux vraies copies
 La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recruit de Viktor, Bird, Sprite…). L'instantané (`replay.snap`) porte désormais `cp` quand l'unité copie une autre unité (Reflection, Shady Spectacles) ; les autres jetons sont étiquetés « JETON ». Test `snap_marks_only_real_copies`.
+
+## [2026-10-10] ingest | Table : unités homonymes numérotées
+- Demande de l'utilisateur : avec plusieurs fois la même unité en jeu, on ne savait pas laquelle on ciblait. `Game.dup_no` / `Game.label` numérotent (par uid, les deux joueurs ensemble) les objets en jeu qui partagent un nom : badge doré « #2 » en bas à gauche de la carte (`snap` : `dn`), même numéro dans les libellés (cibles, déplacements, questions, bande de choix sur téléphone). Les cibles de tes coups disent « adverse », celles des coups de l'IA « (à toi) ». Seule en jeu, une unité n'a pas de numéro. Test `duplicate_units_are_numbered_in_labels_and_snap`.

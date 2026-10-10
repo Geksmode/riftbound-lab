@@ -130,6 +130,7 @@ h1, h3, h4 { font-family: var(--f-display); font-weight: 400; margin: 0; text-wr
 .card.back { background: repeating-linear-gradient(45deg, #34295a, #34295a 5px, #2b2249 5px, #2b2249 10px); border-color: #57489a; }
 .mt { position: absolute; bottom: -5px; right: -5px; min-width: 20px; text-align: center; background: #0e1424; border: 1.5px solid var(--ink-2); border-radius: 11px; font-family: var(--f-mono); font-size: 11px; font-weight: 500; padding: 0 4px; z-index: 1; }
 .mt.up { color: var(--akali); border-color: var(--akali); } .mt.dn { color: var(--active); border-color: var(--active); }
+.dupn { position: absolute; bottom: -5px; left: -5px; min-width: 20px; text-align: center; background: #f3d58a; color: #0e1424; border-radius: 11px; font-family: var(--f-mono); font-size: 12px; font-weight: 700; padding: 0 4px; z-index: 2; box-shadow: 0 0 0 1.5px #0e1424; }
 .dmg { position: absolute; top: -5px; right: -5px; background: var(--fury); color: #fff; border-radius: 10px; font-family: var(--f-mono); font-size: 11px; padding: 0 5px; z-index: 1; }
 .tags { position: absolute; left: -3px; top: 4px; display: flex; flex-direction: column; gap: 2px; z-index: 1; }
 .tags b { font-size: 8.5px; font-weight: 600; background: #0e1424; border-radius: 3px; padding: 0 3px; color: var(--brass); }
@@ -250,6 +251,7 @@ svg.eval { width: 100%; height: 100px; display: block; cursor: crosshair; }
   .fd { font-size: 9.5px; }
   .mt { font-size: 9px; min-width: 15px; bottom: -4px; right: -4px; padding: 0 2px; }
   .dmg { font-size: 9px; padding: 0 3px; }
+  .dupn { font-size: 10px; min-width: 16px; bottom: -4px; left: -4px; padding: 0 2px; }
   .tags b { font-size: 7px; }
   .gear { font-size: 7px; }
   .cost { font-size: 8.5px; padding: 0 3px; }

@@ -15,7 +15,7 @@ from game import Game, Obj, Item
 from decks import load, edit, with_bf, DECKS
 import plans as P
 import replay as _rp
-from replay import fr_line, describe, snap, short, _find
+from replay import fr_line, describe, snap, short, _find, _tname
 
 NAMES = ("Akali", "LeBlanc")
 G = load("akali_gorica_rq-singapore")
@@ -535,7 +535,7 @@ def _opp_describe(g, a, pid):
     """Coup de l'adversaire (IA ou ami en duel) tel que tu le vois : une carte cachée reste secrète (421, 811)."""
     if a[0] == "hide":
         return f"cache une carte à {g.bfs[a[2]].name}"
-    return describe(g, a, pid)
+    return describe(g, a, pid, viewer=ME)
 
 
 def _opp_info(g, a):
@@ -720,7 +720,7 @@ def _olabel(g, o):
         loc = getattr(o, "loc", None)
         where = "" if loc is None else " (" + (g.bfs[loc].name if loc in (0, 1) else "base") + ")" if hasattr(o, "uid") and g.obj(o.uid) is not None else ""
         mine = "" if getattr(o, "ctrl", ME) == ME else " adverse"
-        return f"{o.cname}{mine}{where}"
+        return f"{g.label(o) if hasattr(o, 'uid') and g.obj(o.uid) is not None else o.cname}{mine}{where}"
     if hasattr(o, "domain"):
         return f"rune {o.domain}"
     if hasattr(o, "label") and hasattr(o, "value"):       # game.Opt
@@ -858,7 +858,7 @@ def _act_label(g, a):
         e, reqs = ab["cost"](g, ME, obj, ch)
         extra = ""
         if ch.get("tg"):
-            extra = ", cible " + " et ".join(short(g.obj(u) or u) for u in ch["tg"])
+            extra = ", cible " + " et ".join(_tname(g, u, ME) for u in ch["tg"])
         return f"{ab['name']} : {name} ({_cost_txt(e, reqs)}{', épuise' if ab.get('exhaust') else ''}{extra})"
     except Exception:
         return describe(g, a, ME)
