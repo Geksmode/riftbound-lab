@@ -1326,8 +1326,10 @@ function bfHTML(st, i, srcs) {
   const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("");
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
   let fd = "";
-  if (b.fd) { const mine = b.fd[0] === MEP, seen = mine || (b.fd[1] && b.fd[1] !== "?");   // Scuttle Crab : cartes cachées adverses visibles ce tour
-    fd = `<span class="fd">${card(seen ? b.fd[1] : "", { back: !seen, raw: true, style: "width:22px;height:31px;", uid: mine ? b.fdu : undefined, can: mine && can(srcs, b.fdu) })}cachée</span>`; }
+  const fds = b.fds || (b.fd ? [b.fd] : []), fdus = b.fdus || [b.fdu];   // Bandle Tree : deux cartes cachées, chacune visible
+  if (fds.length) {
+    fd = `<span class="fd">${fds.map((f, k) => { const mine = f[0] === MEP, seen = mine || (f[1] && f[1] !== "?"), u = fdus[k];   // Scuttle Crab : cartes cachées adverses visibles ce tour
+      return card(seen ? f[1] : "", { back: !seen, raw: true, style: "width:22px;height:31px;", uid: mine ? u : undefined, can: mine && can(srcs, u) }); }).join("")}${fds.length > 1 ? fds.length + " cachées" : "cachée"}</span>`; }
   return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + vp(b.c) : ""} ${sd ? "sd" : ""}" data-drop="${i}">
     <div class="side top" style="--n:${b.u.filter(u => u.c !== MEP).length};--nx:${b.u.filter(u => u.c !== MEP && u.x).length}">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>

@@ -431,7 +431,8 @@ function bfHTML(st, i, hl) {
   const bot = b.u.filter(u => u.c === 0).map(u => unitCard(u, hl)).join("");
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${b.c}">${PN[b.c]}</span>`;
   let fd = "";
-  if (b.fd) { const vis = b.fd[0] === 0 || showOpp; fd = `<span class="fd">${card(vis ? b.fd[1] : "", { back: !vis, raw: true, style: "width:22px;height:31px;" })}cachée</span>`; }
+  const fds = b.fds || (b.fd ? [b.fd] : []);   // Bandle Tree : deux cartes cachées, chacune visible
+  if (fds.length) fd = `<span class="fd">${fds.map(f => { const vis = f[0] === 0 || showOpp; return card(vis ? f[1] : "", { back: !vis, raw: true, style: "width:22px;height:31px;" }); }).join("")}${fds.length > 1 ? fds.length + " cachées" : "cachée"}</span>`;
   return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + b.c : ""} ${sd ? "sd" : ""}">
     <div class="side top">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? `background-image:url('${IMG[b.n]}')` : ""}"></div>

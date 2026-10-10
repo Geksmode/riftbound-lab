@@ -112,6 +112,33 @@ if (JSON.parse(await facedowns())[0].includes(+ouid)) {
     }
   }
 }
+// 4. Bandle Tree (« You may hide an additional card here ») : deux cartes cachées au même endroit, chacune affichée
+//    à part et touchable ; celles de l'adversaire en dos de carte. La 2e n'était pas transmise à la table.
+await py(`
+from game import Obj
+g = W["g"]
+for b in g.bfs: b.facedowns.clear()
+BT = []
+for bf, pid, n in ((0, ME, ${JSON.stringify(CARD)}), (0, ME, ${JSON.stringify(CARD)}), (1, 1 - ME, "Back Off"), (1, 1 - ME, "Gust")):
+    c = Obj(n, pid); c.zone, c.hidden_turn, c.hidden_bf = "facedown", g.turn_no - 1, bf
+    g.bfs[bf].facedowns.append(c)
+    if pid == ME: BT.append(c.uid)
+for r in g.p[ME].runes: r.exhausted = False
+W["d"] = None
+`); await refresh(); await idle();
+const bt = JSON.parse(await ev("JSON.stringify(T.BT.toJs ? T.BT.toJs() : T.BT)")).map(String);
+const shown = await ev(`[...document.querySelectorAll('#board [data-drop="0"] .fd [data-uid]')].map(x => x.dataset.uid)`);
+const opp = await ev(`(()=>{ const f = document.querySelector('#board [data-drop="1"] .fd'); return f ? [f.children.length, f.innerText.trim()] : [0, ""] })()`);
+await pg.screenshot({ path: OUT + "/hidden-bandle-tree.png" });
+ok(`Bandle Tree : mes deux cartes cachées sont affichées séparément (${shown.join(", ")})`, shown.length === 2 && bt.every(u => shown.includes(u)));
+ok(`Bandle Tree : les deux cartes cachées adverses sont deux dos de carte (${opp.join(" · ")})`, opp[0] === 2 && /2 cachées/.test(opp[1]));
+const r2 = await pg.locator(`#board [data-uid="${bt[1]}"]`).first().boundingBox(), r1 = await pg.locator(`#board [data-uid="${bt[0]}"]`).first().boundingBox();
+ok("Bandle Tree : les deux cartes ne se recouvrent pas", !!(r1 && r2) && (r1.x + r1.width <= r2.x || r2.x + r2.width <= r1.x));
+if (r2) {
+  await pg.mouse.click(r2.x + r2.width / 2, r2.y + r2.height / 2); await pg.waitForTimeout(300);
+  const pop3 = await ev("$('pop').hidden ? '' : $('pop').innerText");
+  ok(`Bandle Tree : toucher la 2e carte cachée permet de la jouer (${JSON.stringify(pop3.replace(/\n/g, " | "))})`, /Cibler|Jouer/.test(pop3));
+}
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
 await b.close();
 process.exitCode = fails ? 1 : 0;
