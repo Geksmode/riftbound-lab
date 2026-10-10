@@ -20,6 +20,8 @@ for line in sys.stdin:
         out = train.act(c["i"])
     elif c["op"] == "answer":
         out = train.answer(json.dumps(c["x"]))
+    elif c["op"] == "undo":
+        out = train.undo()
     sys.stdout.write(out.replace("\n", " ") + "\n"); sys.stdout.flush()
 '''
 
@@ -45,14 +47,14 @@ class Client:
         s.p.stdin.close(); s.p.wait()
 
 
-def play_duel(seed, max_inputs=4000):
+def play_duel(seed, max_inputs=4000, undo=0.0):
     a, b = Client(), Client()
     try:
         args = [seed, None, None, seed % 2, "akali-g2", "leblanc-iq5"]
         a.call(op="new", args=args + [0, ["Hôte", "Invité"]])
         b.call(op="new", args=args + [1, ["Hôte", "Invité"]])
         va, vb = a.settle(a.call(op="step")), b.settle(b.call(op="step"))
-        rng, n = random.Random(seed), 0
+        rng, n, undos = random.Random(seed), 0, 0
         while va.get("winner") is None and n < max_inputs:
             turn = [v for v in (va, vb) if v.get("dec") or v.get("ask")]
             assert len(turn) == 1, ("un seul joueur doit avoir la main", va.keys(), vb.keys())
@@ -64,9 +66,19 @@ def play_duel(seed, max_inputs=4000):
                 cmd = dict(op="answer", x=[] if k == "mulligan" else rng.randrange(len(v["ask"]["options"])))
             else:
                 cmd = dict(op="act", i=rng.randrange(len(v["dec"]["options"])))
+            before = (va, vb)
             va, vb = a.settle(a.call(**cmd)), b.settle(b.call(**cmd))
             n += 1
-        return va, vb, n
+            # « Reprendre » en duel (règle de table) : seulement un coup qui n'est ni passer ni finir le tour, et si son
+            # auteur a encore la décision ; les deux navigateurs annulent ensemble et retrouvent l'état d'avant.
+            if undo and cmd["op"] == "act" and v.get("dec") and v["dec"]["options"][cmd["i"]]["k"] not in ("pass", "end"):
+                me = 0 if v is before[0] else 1
+                if (va, vb)[me].get("dec") and rng.random() < undo:
+                    ua, ub = a.call(op="undo"), b.call(op="undo")
+                    assert ua["st"] == before[0]["st"] and ub["st"] == before[1]["st"], ("reprise", seed, n)
+                    undos += 1
+                    va, vb = ua, ub
+        return va, vb, n, undos
     finally:
         a.close(); b.close()
 
@@ -74,12 +86,21 @@ def play_duel(seed, max_inputs=4000):
 @T.test
 def two_players_stay_in_sync_until_the_end():
     for seed in (3, 8):
-        va, vb, n = play_duel(seed)
+        va, vb, n, _ = play_duel(seed)
         assert va.get("winner") is not None and va["winner"] == vb["winner"], (seed, n)
         assert va["st"]["pts"] == vb["st"]["pts"] and va["st"]["t"] == vb["st"]["t"]
         assert va["me"] == 0 and vb["me"] == 1
         bf = lambda v: [(b["n"], sorted(u["n"] for u in b["u"])) for b in v["st"]["bfs"]]
         assert bf(va) == bf(vb)
+
+
+@T.test
+def undo_in_duel_keeps_both_players_in_sync():
+    for seed in (4, 9):
+        va, vb, n, undos = play_duel(seed, undo=0.5)
+        assert undos >= 5, (seed, undos)
+        assert va.get("winner") is not None and va["winner"] == vb["winner"], (seed, n)
+        assert va["st"]["pts"] == vb["st"]["pts"] and va["st"]["t"] == vb["st"]["t"]
 
 
 @T.test

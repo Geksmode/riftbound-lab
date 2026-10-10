@@ -204,6 +204,15 @@ La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recru
 ## [2026-10-10] decision | Menu de la table en tableau de bord
 L'utilisateur a choisi le tableau de bord parmi 5 dispositions : deck d'entraînement (aucun par défaut, choisi par le joueur) et dernière partie en haut, les autres entrées en rangée compacte. Détail : `memoire/riftbound-training-table.md` ; robot `train/verif_dash.mjs` dans la porte.
 
+## [2026-10-10] decision | Barre d'espace : terminer le tour ou passer
+Demande de l'utilisateur : dans la table, Espace = gros bouton (« Terminer le tour », « Passer » en réaction et en showdown). Ignorée dans un champ, sur un élément atteint par Tab, sur le menu et les fenêtres. Robot `train/verif_espace.mjs` dans la porte (vérifié par robot, pas encore essayé à la main).
+
+## [2026-10-10] decision | Échap = « Reprendre » ; « Reprendre » permis en duel tant qu'on garde le focus
+Demande de l'utilisateur : Échap annule le dernier coup (après avoir lâché une carte choisie). En duel, on peut reprendre son dernier coup tant qu'on n'a pas passé le focus (l'adversaire n'a rien joué, ni « Passer » ni « Terminer le tour » repris). Règle de table, pas une règle des Core Rules. Détail : `pages/duel.md`. Vérifié par robot (deux navigateurs), pas encore à la main.
+
+## [2026-10-10] decision | Retour arrière = « Reprendre » (pas Échap) ; Espace = « Oui » aux questions oui / non
+Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ; Échap reprend son rôle d'avant (fermer, lâcher une carte). Espace répond aussi « Oui » à toute question oui / non du moteur (options True / False : « Utiliser cet effet ? », Zilean, Rebuttal…). Robot `verif_espace.mjs`, vérifié par robot.
+
 ## [2026-10-10] decision | IA : sorts de combat gardés, runes ouvertes, suites complètes
 - Signalé par l'utilisateur : Maître Yi jouait Punch First dans son tour sans combat derrière. Causes : une carte en main valait ≈ 1,45 quelle qu'elle soit, le bruit d'un tirage unique, et la recherche du tour entier qui retenait une suite incomplète notée comme si l'attaque suivait.
 - Changements (`engine/ai.py`) : valeur des 31 sorts de combat gardés en main (`trick` = 2), politique de simulation qui les garde pour les showdowns, bonus des runes laissées prêtes pour les sorts [Action]/[Reaction] en fin de tour (`open` = 1), seules les suites complètes retenues. Décision de l'utilisateur : garder ce réglage quel que soit le résultat (« ça simule le comportement humain ») ; valeurs choisies sans mesure. Retour arrière : `RB_TRICK=0`, `RB_TURN_FULL=0`. Détail et chiffres : `memoire/riftbound-search-ai.md`.

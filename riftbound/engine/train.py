@@ -615,9 +615,8 @@ def act(i):
         W["last_ai"] = _opp_describe(W["g"], a, d.player) if a[0] not in ("pass",) else None
         W["last_ai_info"] = _opp_info(W["g"], a) if a[0] not in ("pass", "end") else None
     h = W.setdefault("hist", [])
-    if not DUEL:                                        # pas de « Reprendre » en duel : l'adversaire a déjà vu le coup
-        h.append(_save())
-        del h[:-40]
+    h.append(_save())                                   # en duel aussi, chez les deux joueurs : la page n'autorise
+    del h[:-40]                                         # « Reprendre » que tant que le joueur garde la main (undo_duel)
 
     def op():
         W["g"].apply(a)
@@ -637,6 +636,8 @@ def undo():
         _restore(W["hist"].pop())
         W["ag"][ME].answers = []
         W["retry"] = None
+        if DUEL:                                        # la flèche du coup repris ne doit pas rester chez l'adversaire
+            W["last_ai"] = W["last_ai_info"] = None
     W["g"].buf = []
     return _view()
 
