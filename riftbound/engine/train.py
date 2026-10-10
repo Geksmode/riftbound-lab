@@ -144,7 +144,9 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
         names = [names[0], names[1] + " (IA)"]
     _rp.NAMES = tuple(names)
     hu = Human()
-    ai = P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level))
+    # 2026-10-10 : l'IA de la table cherche le tour entier (search="turn"), à l'essai en direct par l'utilisateur ; gain non
+    # démontré (turn contre sh : 52,9 % ± 2,5 sur 120 paires, on ne sait pas) et ~3 × plus lent que "sh". Remettre "sh" pour revenir.
+    ai = P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn")
     coach = P.PlanAgent(seed + 900000, plan=_plan_for(MD), opp_plan=_plan_for(OD))
     g = TGame([A, B], [hu, ai], seed=seed, first=f)
     W.clear()
