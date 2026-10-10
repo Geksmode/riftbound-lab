@@ -161,6 +161,7 @@ def snap(g):
         if o.buff: d["bf"] = o.buff
         if o.empowered: d["e"] = 1
         if o.token: d["t"] = 1
+        if o.cname != o.name: d["cp"] = 1         # copie d'une autre unité (Reflection, Shady Spectacles)
         if o.attached:
             d["g"] = [g.obj(x).cname for x in o.attached if g.obj(x) is not None]
         kws = [kw for kw in ("Temporary", "Tank", "Backline", "Ganking", "Deflect", "Assault", "Shield") if g.has_kw(o, kw)]

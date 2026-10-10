@@ -946,6 +946,26 @@ def mirror_image_copy():
 
 
 @test
+def snap_marks_only_real_copies():
+    # la table affiche « COPIE » d'après le drapeau cp de l'instantané : un Reflection copie, un Recruit non
+    from replay import snap
+    from cards import make_token
+    g, _ = new()
+    g.tp = 1
+    runes(g, 1, ["Order"] * 3 + ["Mind"] * 3)
+    hand(g, 1, "Mirror Image")
+    t = put(g, 0, "Astral Heron")
+    g.apply(opt(g, 1, "Mirror Image", lambda ch: ch["tg"] == (t.uid,)))
+    settle(g)
+    rec = make_token(g, "Recruit", 1, "base")
+    st = snap(g)
+    us = {u["u"]: u for z in [p["base"] for p in st["p"]] + [b["u"] for b in st["bfs"]] for u in z}
+    r = [u for u in g.units(1) if u.token and u is not rec][0]
+    assert us[r.uid].get("cp") == 1 and us[r.uid]["t"] == 1
+    assert us[rec.uid]["t"] == 1 and "cp" not in us[rec.uid] and "cp" not in us[t.uid]
+
+
+@test
 def honest_broker_gold_pays_power():
     g, _ = new()
     b = put(g, 1, "Honest Broker")

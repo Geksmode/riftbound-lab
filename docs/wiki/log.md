@@ -184,3 +184,6 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 
 ## [2026-10-10] ingest | Bandle Tree : les deux cartes cachées affichées
 - Signalé par l'utilisateur : la 2e carte cachée sur Bandle Tree était invisible (seule la 1re était transmise à la table et au lecteur de replays). `replay.snap` ajoute `fds` (toutes les cartes cachées, `fd` gardé pour les anciens replays), `train.py` masque celles de l'IA et ajoute `fdus` ; table et lecteur affichent une carte par entrée. Test `table_shows_every_facedown_card_bandle_tree`, robot `verif_hidden.mjs` (bureau ; téléphone 360 px vérifié à part).
+
+## [2026-10-10] ingest | Table : étiquette « COPIE » réservée aux vraies copies
+La table affichait « COPIE » sur tout jeton sauf Reflection et Mech (les Recruit de Viktor, Bird, Sprite…). L'instantané (`replay.snap`) porte désormais `cp` quand l'unité copie une autre unité (Reflection, Shady Spectacles) ; les autres jetons sont étiquetés « JETON ». Test `snap_marks_only_real_copies`.

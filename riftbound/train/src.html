@@ -1279,7 +1279,7 @@ function card(name, o = {}) {
 }
 const can = (srcs, u) => srcs.has(String(u));
 function unitCard(u, srcs) {
-  const tags = []; if (u.s) tags.push("ST"); if (u.k && u.k.includes("Temporary")) tags.push("TEMP"); if (u.e) tags.push("EMP"); if (u.bf) tags.push("+" + u.bf); if (u.t && u.n !== "Reflection" && u.n !== "Mech") tags.push("COPIE");
+  const tags = []; if (u.s) tags.push("ST"); if (u.k && u.k.includes("Temporary")) tags.push("TEMP"); if (u.e) tags.push("EMP"); if (u.bf) tags.push("+" + u.bf); if (u.cp) tags.push("COPIE"); else if (u.t) tags.push("JETON");
   return card(u.n, { p: vp(u.c), m: u.m, base: u.b, d: u.d, x: u.x, gear: u.g, tags, uid: u.u, can: can(srcs, u.u), sel: sel === String(u.u) });
 }
 function handHTML(st, pid, srcs) {
