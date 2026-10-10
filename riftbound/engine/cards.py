@@ -498,7 +498,13 @@ def _uid_name(g, x):
     o = g.obj(x) if isinstance(x, int) else None
     if o is None and isinstance(x, int):
         o = next((c for p in g.p for z in (p.hand, p.trash, p.deck, p.banish) for c in z if c.uid == x), None)
-    return o.cname if o is not None else str(x)
+    return g.label(o) if o is not None else str(x)
+
+
+def _tg_name(g, u):
+    """Cible d'un choix : « Shipyard Skulker #2 » quand elle a des homonymes en jeu (Game.label)."""
+    o = g.obj(u) if isinstance(u, int) else None
+    return g.label(o) if o is not None else str(u)
 
 
 def _choice_label(g, ch):
@@ -506,7 +512,7 @@ def _choice_label(g, ch):
     for k in sorted(ch):
         v = ch[k]
         if k in ("tg", "tg2"):
-            names = ", ".join(g.obj(u).cname if isinstance(u, int) and g.obj(u) is not None else str(u) for u in v)
+            names = ", ".join(_tg_name(g, u) for u in v)
             parts.append(("cible " if k == "tg" else "cible répétée ") + names if names else "aucune cible")
         elif k == "item":
             x = item_by_id(g, v)
@@ -515,7 +521,7 @@ def _choice_label(g, ch):
             if v == "base" or v in (0, 1):
                 parts.append("à la base" if v == "base" else g.bfs[v].name)
         elif k == "mover" and g.obj(v) is not None:
-            parts.append(f"déplace {g.obj(v).cname}")
+            parts.append(f"déplace {g.label(g.obj(v))}")
         elif k in _CHOICE_WORDS:
             if v:
                 parts.append(_CHOICE_WORDS[k])

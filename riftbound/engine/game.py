@@ -312,6 +312,19 @@ class Game:
                 return o
         return None
 
+    def dup_no(s, o):
+        """Numéro d'affichage (1, 2…) d'un objet en jeu quand plusieurs objets en jeu portent le même nom (des deux
+        côtés), par ordre d'uid ; 0 s'il est seul. La table l'affiche sur la carte et dans les choix (« #2 »)."""
+        if o is None or o not in s.board:
+            return 0
+        same = sorted(x.uid for x in s.board if x.cname == o.cname)
+        return same.index(o.uid) + 1 if len(same) > 1 else 0
+
+    def label(s, o):
+        """Nom d'un objet pour les libellés de choix : « Shipyard Skulker #2 » quand il a des homonymes en jeu."""
+        n = s.dup_no(o)
+        return f"{o.cname} #{n}" if n else o.cname
+
     def units(s, pid=None, loc="any"):
         return [o for o in s.board if o.spec["type"] == "Unit" and (pid is None or o.ctrl == pid)
                 and (loc == "any" or o.loc == loc)]

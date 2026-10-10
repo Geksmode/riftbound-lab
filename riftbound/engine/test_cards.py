@@ -946,6 +946,52 @@ def mirror_image_copy():
 
 
 @test
+def duplicate_units_are_numbered_in_labels_and_snap():
+    # deux unités du même nom en jeu (une par joueur) : « #1 », « #2 » sur la carte (dn) et dans les libellés
+    from replay import snap, describe
+    from cards import _choice_label
+    g, _ = new()
+    a = put(g, 0, "Shipyard Skulker")
+    b = put(g, 1, "Shipyard Skulker")
+    c = put(g, 0, "Astral Heron")
+    assert (g.dup_no(a), g.dup_no(b), g.dup_no(c)) == (1, 2, 0)
+    assert g.label(b) == "Shipyard Skulker #2" and g.label(c) == "Astral Heron"
+    assert _choice_label(g, dict(tg=(b.uid,))) == "cible Shipyard Skulker #2"
+    assert describe(g, ("move", (a.uid, c.uid), "base"), 0) == "déplace Shipyard Skulker #1, Astral Heron vers la base"
+    k = hand(g, 0, "Gust")
+    play_b = ("play", k.uid, "hand", dict(tg=(b.uid,)))
+    assert describe(g, play_b, 0) == "joue Gust (cible Shipyard Skulker #2 adverse)"           # ton coup
+    k1 = hand(g, 1, "Gust")
+    play_a = ("play", k1.uid, "hand", dict(tg=(a.uid,)))
+    assert describe(g, play_a, 1, viewer=0) == "joue Gust (cible Shipyard Skulker #1 (à toi))"  # coup de l'IA
+    st = snap(g)
+    us = {u["u"]: u for z in [p["base"] for p in st["p"]] + [x["u"] for x in st["bfs"]] for u in z}
+    assert us[a.uid]["dn"] == 1 and us[b.uid]["dn"] == 2 and "dn" not in us[c.uid]
+    g.kill([a]); settle(g)
+    assert g.dup_no(b) == 0 and g.label(b) == "Shipyard Skulker"   # seule à nouveau : plus de numéro
+
+
+@test
+def snap_marks_only_real_copies():
+    # la table affiche « COPIE » d'après le drapeau cp de l'instantané : un Reflection copie, un Recruit non
+    from replay import snap
+    from cards import make_token
+    g, _ = new()
+    g.tp = 1
+    runes(g, 1, ["Order"] * 3 + ["Mind"] * 3)
+    hand(g, 1, "Mirror Image")
+    t = put(g, 0, "Astral Heron")
+    g.apply(opt(g, 1, "Mirror Image", lambda ch: ch["tg"] == (t.uid,)))
+    settle(g)
+    rec = make_token(g, "Recruit", 1, "base")
+    st = snap(g)
+    us = {u["u"]: u for z in [p["base"] for p in st["p"]] + [b["u"] for b in st["bfs"]] for u in z}
+    r = [u for u in g.units(1) if u.token and u is not rec][0]
+    assert us[r.uid].get("cp") == 1 and us[r.uid]["t"] == 1
+    assert us[rec.uid]["t"] == 1 and "cp" not in us[rec.uid] and "cp" not in us[t.uid]
+
+
+@test
 def honest_broker_gold_pays_power():
     g, _ = new()
     b = put(g, 1, "Honest Broker")
