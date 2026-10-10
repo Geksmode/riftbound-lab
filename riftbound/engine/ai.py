@@ -39,11 +39,25 @@ def lasting_might(g, o):
 
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
-          card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0)
+          card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
+          pts_ramp=0.0)
 
 
 def point_value(p, victory, w=EV):
-    return w["pts"] * p + w["pts_hi"] * max(0, p - (victory - 3))
+    """Valeur de p points. pts_ramp = 0 : 7 par point, +4 pour chaque point à partir de victoire−2 (historique).
+    pts_ramp = r > 0 (essai 2026-10-10, idée de l'utilisateur : les premiers points sont faciles, les derniers font
+    gagner) : le k-ième point vaut c·(1 + r·(k−1)/(victoire−2)), k = 1…victoire−1, avec c choisi pour que victoire−1
+    points valent autant qu'avant (seule la répartition change, pas le poids des points face au plateau)."""
+    old = w["pts"] * p + w["pts_hi"] * max(0, p - (victory - 3))
+    r = w.get("pts_ramp", 0.0)
+    if not r or victory < 3:
+        return old
+    top = victory - 1
+    span = victory - 2
+    c = (w["pts"] * top + w["pts_hi"] * 2) / sum(1 + r * (k - 1) / span for k in range(1, top + 1))
+    q = min(p, top)
+    return c * sum(1 + r * (k - 1) / span for k in range(1, q + 1)) + (old - (w["pts"] * top + w["pts_hi"] * 2)
+                                                                       if p > top else 0.0)
 
 
 def card_value(c, w=EV):

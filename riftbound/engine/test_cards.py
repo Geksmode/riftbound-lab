@@ -1416,6 +1416,20 @@ def human_can_move_any_subset_of_units():
     assert sizes() == [1, 2, 3, 4, 5]
 
 
+@test
+def point_value_ramp_keeps_total_and_orders_points():
+    """IA : pts_ramp = 0 garde l'ancienne valeur des points ; pts_ramp > 0 fait valoir moins les premiers points et plus
+    les derniers, avec la même valeur totale à victoire − 1 (cible lue dans g.victory, pas en dur)."""
+    import ai
+    assert [ai.point_value(p, 8) for p in (0, 5, 6, 7)] == [0.0, 35.0, 46.0, 57.0]
+    for vic in (8, 9):
+        w = dict(ai.EV, pts_ramp=2.0)
+        v = [ai.point_value(p, vic, w) for p in range(vic)]
+        steps = [v[i + 1] - v[i] for i in range(vic - 1)]
+        assert all(a < b for a, b in zip(steps, steps[1:])), steps
+        assert abs(v[vic - 1] - ai.point_value(vic - 1, vic)) < 1e-9
+
+
 def run():
     ok = 0
     fails = []
