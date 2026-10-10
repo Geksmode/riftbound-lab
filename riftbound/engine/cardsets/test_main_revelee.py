@@ -155,5 +155,22 @@ def table_shows_facedown_cards_after_scuttle_crab_this_turn():
     assert "rv" not in v["st"]["p"][1]                   # la main, elle, n'est plus révélée
 
 
+@T.test
+def table_shows_every_facedown_card_bandle_tree():
+    # Bandle Tree : deux cartes cachées au même endroit ; la table doit recevoir les deux (la 2e n'était pas transmise)
+    table_at_my_main(12)
+    g = train.W["g"]
+    mine = []
+    for bf, pid, n in ((1, 0, "Back Off"), (1, 0, "Gust"), (0, 1, "Back Off"), (0, 1, "Gust")):
+        fd = Obj(n, pid)
+        fd.zone, fd.hidden_turn, fd.hidden_bf = "facedown", g.turn_no - 1, bf
+        g.bfs[bf].facedowns.append(fd)
+        if pid == 0:
+            mine.append(fd.uid)
+    v = refresh()
+    assert v["st"]["bfs"][1]["fds"] == [[0, "Back Off"], [0, "Gust"]] and v["st"]["bfs"][1]["fdus"] == mine, v["st"]["bfs"][1]
+    assert v["st"]["bfs"][0]["fds"] == [[1, "?"], [1, "?"]] and v["st"]["bfs"][0]["fdus"] == [None, None], v["st"]["bfs"][0]
+
+
 if __name__ == "__main__":
     T.main()

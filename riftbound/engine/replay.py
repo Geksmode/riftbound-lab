@@ -189,8 +189,9 @@ def snap(g):
             base=locs["base"][i], gear=loose_gear[i], xp=p.xp, pe=p.pool_e,
             pp={d: n for d, n in sorted(p.pool_p.items()) if n}))   # Rune Pool : énergie et puissance flottantes
     st["p"] = pl
+    # fd : la première carte cachée (anciens replays) ; fds : toutes, une par carte (Bandle Tree en autorise deux)
     st["bfs"] = [dict(n=b.name, c=b.ctrl, fd=(None if b.facedown is None else [b.facedown.owner, b.facedown.cname]),
-                      u=locs[b.idx]) for b in g.bfs]
+                      fds=[[c.owner, c.cname] for c in b.facedowns], u=locs[b.idx]) for b in g.bfs]
     st["chain"] = [dict(n=short(it.name), c=it.ctrl, k=it.kind) for it in g.chain]
     if g.sd is not None:
         st["sd"] = dict(bf=g.sd.bf.idx if hasattr(g.sd.bf, "idx") else g.sd.bf, combat=g.sd.combat, a=g.sd.attacker)

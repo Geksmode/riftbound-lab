@@ -928,6 +928,8 @@ def _view(ask=None):
     for b in st["bfs"]:
         if b["fd"] is not None and b["fd"][0] == AI and not look:
             b["fd"] = [AI, "?"]
+        if not look:
+            b["fds"] = [[AI, "?"] if o == AI else [o, n] for o, n in b["fds"]]
     out = dict(st=st, log=g.buf, winner=g.winner, ai=W.pop("last_ai", None), aii=W.pop("last_ai_info", None))
     W["last_ai"] = None
     W["last_ai_info"] = None
@@ -946,6 +948,7 @@ def _view(ask=None):
     for b, gb in zip(st["bfs"], g.bfs):
         if gb.facedown is not None and gb.facedown.owner == ME:
             b["fdu"] = gb.facedown.uid
+        b["fdus"] = [c.uid if c.owner == ME else None for c in gb.facedowns]   # même ordre que fds
     out["undo"] = len(W.get("hist", []))
     d = W["d"]
     if ask is not None and DUEL and ask.pid is not None and ask.pid != ME:

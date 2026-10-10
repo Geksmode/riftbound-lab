@@ -181,3 +181,6 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 
 ## [2026-10-10] decision | Fin de la règle « replays après chaque simulation »
 - Décision de l'utilisateur : on enlève la règle 3 de `CLAUDE.md` (replays systématiques). `add_replays.py` et le lecteur restent, utilisés seulement sur demande. Mémoire `replays-after-every-sim.md` supprimée, mentions retirées des agents, de l'index et de MISSIONS.
+
+## [2026-10-10] ingest | Bandle Tree : les deux cartes cachées affichées
+- Signalé par l'utilisateur : la 2e carte cachée sur Bandle Tree était invisible (seule la 1re était transmise à la table et au lecteur de replays). `replay.snap` ajoute `fds` (toutes les cartes cachées, `fd` gardé pour les anciens replays), `train.py` masque celles de l'IA et ajoute `fdus` ; table et lecteur affichent une carte par entrée. Test `table_shows_every_facedown_card_bandle_tree`, robot `verif_hidden.mjs` (bureau ; téléphone 360 px vérifié à part).
