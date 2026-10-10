@@ -1267,7 +1267,7 @@ function card(name, o = {}) {
   if (o.dn) extra += `<span class="dupn" aria-hidden="true">#${o.dn}</span>`;   // homonymes (Game.dup_no)
   if (o.cost && !o.back) { const c = CARDS[name] || {}; if (c.e !== undefined) extra += `<span class="cost">${c.e}${c.p ? "+" + c.p : ""}</span>`; }
   if (o.tags && o.tags.length) extra += `<span class="tags">${o.tags.map(t => `<b>${t}</b>`).join("")}</span>`;
-  // équipement attaché : cartes réelles posées derrière l'unité, décalées vers le haut (une bande par équipement)
+  // équipement attaché : cartes réelles posées derrière l'unité, décalées vers la gauche (une bande par équipement)
   let behind = "";
   if (o.gear && o.gear.length) behind = o.gear.map((g, i) => card(g, { raw: true, cls: "behind" + (o.x ? " x" : ""), p: o.p, style: `--gk:${o.gear.length - i};` })).join("");
   const style = (o.style || "") + (img && !o.back ? art(name) : "");
