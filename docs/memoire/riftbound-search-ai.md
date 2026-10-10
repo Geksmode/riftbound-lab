@@ -40,4 +40,26 @@ Non mesuré : temps dans un vrai navigateur (téléphone compris).
 **Ce qui reste inconnu** : effet sur les decks au hasard (`miroir`) ; niveau Fort (3 tirages) ; réglage de `sh_extra` ;
 les pourcentages Akali contre LeBlanc publiés avant le 2026-10-09 ont été mesurés avec l'ancienne recherche (autre moteur).
 Replays : groupes « IA générale » du lecteur (`ia-sh-620040a/b`, `ia-sh-akali-690001a/b`, `ia-h1-660006`).
+**Sorts de combat et runes ouvertes (2026-10-10, décision de l'utilisateur, gardée quel que soit le résultat des mesures :
+« ça simule le comportement humain » ; valeurs « je te fais confiance »).** Cause de départ : Maître Yi jetait Punch First
+dans son tour sans combat derrière (sur 11 cas regardés, le sort ne servait qu'à 2). Une carte en main valait ≈ 1,45 quelle
+qu'elle soit, le +5 « ce tour » ne compte pas (`lasting_might`), et un seul tirage par coup fait plus de bruit que ce coût.
+- `ai.is_trick` : sort [Action]/[Reaction] (seuls jouables en showdown, 308.1.a) dont le texte change la Might « this turn »
+  (31 cartes, malus compris). En main : `EV["trick"]` = 2,0 de plus avec une unité sur le plateau et assez de runes.
+- La politique de simulation garde ces sorts pour les showdowns (`POL_TRICK`) : sans elle, la valeur en main disparaissait
+  (elle les jetait dans son tour).
+- `ai.open_count` / `EV["open"]` = 1,0 par sort [Action]/[Reaction] payable avec les runes **prêtes** au moment où la recherche
+  du tour entier finit le tour (« end ») : runes gardées ouvertes pour le tour adverse. Seulement en mode `turn` (en `sh`, seul
+  « end » recevrait le bonus).
+- Recherche du tour entier : seules les suites complètes (« end », partie finie, profondeur) sont retenues ; avant, une suite
+  d'un coup notée avec la politique qui finissait le tour gagnait (Punch First, puis fin du tour sans attaque).
+- Valeurs choisies par raisonnement, **pas mesurées** : trick 2 (une unité tuée ≈ 2 à 5, un point 7) ; open 1 (moins qu'une unité
+  posée). Retour arrière : `RB_TRICK=0` (trick, open, politique), `RB_TURN_FULL=0`.
+- Mesures (decks variés, 80 paires, moteur 630b5d9a60) : suites complètes contre ancien choix 48,8 % ± 2,8 (810000+) ;
+  trick=2 sans la politique contre rien 48,1 % ± 1,7 (811000+, Mac de l'utilisateur) : on ne sait pas. trick + politique
+  (812000+) : pas reçu. Temps par décision en `turn` : 1,1 s au lieu de 1,4 s avec les suites complètes.
+- Comportement (Yi Bladesman contre Akali G2, IA de la table, 40 parties, graines 900000-900039, nouveau réglage sans `open`) :
+  Punch First 29 fois en showdown, 12 fois dans son tour (cible au combat 7 fois, inutile 5 fois). Avant (graines 0-39) :
+  18 fois dans son tour. Petit échantillon, compteurs différents : à refaire sur les mêmes graines.
+
 Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]].

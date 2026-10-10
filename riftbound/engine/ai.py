@@ -45,7 +45,7 @@ def lasting_might(g, o):
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
           card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0, trick=2.0, open=0.0)
+          pts_ramp=0.0, trick=2.0, open=1.0)
 
 # Sorts de combat (2026-10-10, demande de l'utilisateur : l'IA jetait Punch First dans son tour sans combat derrière) :
 # un sort [Action] ou [Reaction] (seuls jouables pendant un showdown, 308.1.a) dont le texte change la Might « this turn ».
@@ -53,9 +53,12 @@ EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0
 # Gardé par décision de l'utilisateur (2026-10-10 : « ça simule le comportement humain »), quel que soit le résultat des
 # mesures ; trick=2,0 n'est pas réglé finement. Avec POL_TRICK, la politique de simulation garde aussi ces sorts pour les
 # showdowns (sans elle, la valeur en main disparaît dans les simulations : la politique les jetait dans son tour).
-# RB_TRICK=0 rend l'ancienne IA (trick=0 et politique d'avant).
+# open (runes laissées prêtes en fin de tour, open_count) : 1,0 par sort, choisi sans mesure (l'utilisateur : « je te fais
+# confiance pour la valeur ») : moins qu'une unité posée (≈ 2 à 5), pour ne pas garder ses runes au lieu de se développer.
+# RB_TRICK=0 rend l'ancienne IA (trick=0, open=0 et politique d'avant).
 if os.environ.get("RB_TRICK", "1") == "0":
     EV["trick"] = 0.0
+    EV["open"] = 0.0
 POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
 
 
