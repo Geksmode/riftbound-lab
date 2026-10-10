@@ -178,3 +178,7 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-10] decision | Tests de l'IA sur des decks variés
 - Règle de l'utilisateur : les prochains tests de l'IA se font sur des decks variés (`exp_search.py ... defaut`, environ 80 paires), plus sur Akali contre LeBlanc par défaut. Mémoire `ia-tests-decks-varies.md`, règle 8 de `CLAUDE.md`, agents `ia` et `simulation`.
 - En cours : essai `pts_ramp` (points pondérés, idée de l'utilisateur : premiers points moins chers, derniers plus chers) ; réglage désactivé par défaut, criblage r=2, r=4 et courbe 4→10 (`pts_ramp=1.5,pts_hi=0`) en mode defaut, graines 710000+, 711000+, 713000+.
+
+## [2026-10-10] ingest | IA : réserve ouverte pour réagir (mesure et réglages)
+- Retour de l'utilisateur : l'IA dépense tout pendant son tour et sous-estime les cartes en main et les runes ouvertes. Mesure `engine/exp_reserve.py` (60 parties `defaut`, graines 720100+) : l'IA actuelle finit à sec 67,6 % ± 2,9 des tours où elle a une carte à réaction ; avec `sh@res=3,pol_keep=1,pol_react=1`, 58,2 % ± 2,9 (mêmes donnes).
+- Réglages `res` (ai.EV) et `pol_react` (politique des simulations) ajoutés, désactivés par défaut ; taux de victoire à mesurer sur le Mac. Détails et commandes : [recherche de l'IA](../memoire/riftbound-search-ai.md). Replays `ia-res-720113a/b`, lecteur republié (version 38).

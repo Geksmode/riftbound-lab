@@ -31,6 +31,29 @@ poids de l'évaluation `bf=5` 48,8 % ± 1,5, `pts=9` 49,4 % ± 2,1, `might=1.1` 
 **49,1 % ± 1,6 sur 160 paires neuves (670000+)** : on ne sait pas, rien de gardé. Les réglages restent disponibles
 (`exp_search.py ... "sh@card0=1.9" sh defaut`, poids dans `ai.EV`, clés `pol_*` dans `cfg`), défaut inchangé.
 
+**Réserve ouverte pour réagir** (2026-10-10, retour de l'utilisateur : « les cartes en main sont des ressources, laisser
+des runes ouvertes pour réagir »). Diagnostic dans le code : une carte en main vaut 1,4 (2,0 si réactive) contre environ 4 pour
+une unité posée, une rune compte pareil ouverte ou engagée, et la politique des simulations ne réagit presque jamais (sorts
+[Reaction] joués dans son propre tour, réponse seulement en affrontement perdu, jamais sur la chaîne).
+Mesure descriptive (`engine/exp_reserve.py`, résultats `engine/results_reserve.json`, 60 parties `defaut`, graines 720100+,
+moteur 0ba518879e, même version des deux côtés, taux par partie ± écart-type sur les parties) :
+
+| Mesure | IA actuelle (sh) | sh@res=3,pol_keep=1,pol_react=1 |
+|---|---|---|
+| fins de tour avec une carte [Reaction]/[Action]/[Ambush] en main | 76,3 % ± 2,7 | 78,5 % ± 2,8 |
+| … mais aucune payable (à sec) | **67,6 % ± 2,9** | **58,2 % ± 2,9** |
+| fins de tour avec une réserve ouverte | 26,5 % ± 2,6 | 34,6 % ± 2,9 |
+| réserve ouverte puis utilisée au tour adverse | 26,6 % ± 4,0 | 25,2 % ± 3,4 |
+| cartes jouées pendant le tour adverse, par joueur et par partie | 0,68 ± 0,09 | 0,86 ± 0,12 |
+| sorts [Reaction] joués dans son propre tour principal | 1,32 ± 0,13 | 1,04 ± 0,11 |
+
+Les deux colonnes sont jouées sur les mêmes donnes (pas indépendantes) : elles montrent que les réglages déplacent le
+comportement, pas qu'ils font gagner. Réglages ajoutés, tous désactivés par défaut : `res` (poids de `ai.EV`, bonus si le
+joueur finit son tour en cours avec `ai.reserve()` ≥ 1 : runes prêtes + carte à réaction payable), `pol_react` (politique des
+simulations : répond avec un sort à ce qui cible ses objets, joue en affrontement perdu ou égal), `pol_keep` (existant).
+**Taux de victoire non mesuré** : à faire sur le Mac de l'utilisateur (criblage environ 80 paires `defaut`, puis graines neuves).
+Replays : groupe « IA : réserve ouverte » (`ia-res-720113a/b`, même donne).
+
 **Temps par décision** (décisions à plusieurs options). Mêmes 100 positions (graines 777003 et 777011, `engine/exp_temps.py`, Pyodide : `node engine/exp_temps.mjs`) :
 CPython old 267 ms (p95 1,5 s), sh 355 ms (p95 1,75 s) ; **Pyodide 0.26.4 sous node** old 417 ms (p95 2,4 s),
 sh 503 ms (p95 2,4 s), crn 389 ms (p95 2,0 s). Dans les parties des simulations (CPython, 4 processus) : old ≈ 245 ms,

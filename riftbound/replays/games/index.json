@@ -2461,5 +2461,63 @@
    "Renata Glasc",
    "Ornn"
   ]
+ },
+ {
+  "id": "ia-res-720113a",
+  "file": "ia-res-720113a.json",
+  "group": "IA : réserve ouverte pour réagir (essai res/pol_keep/pol_react, decks par défaut, 2026-10-10)",
+  "session": null,
+  "seed": 720113,
+  "title": "Même donne 720113, IA actuelle des deux côtés : Ivern gagne 8-7",
+  "note": "Leona contre Ivern, IA actuelle (« sh ») des deux côtés. Seulement 3 cartes jouées pendant le tour adverse sur toute la partie (Defy de Leona au tour 9, Defy et Grand Strategem d'Ivern au tour 14) ; les sorts à réaction partent surtout pendant son propre tour. Ivern gagne 8-7 au tour 19. Comparer avec la même donne jouée avec les réglages de réserve.",
+  "plans": [
+   "aucun",
+   "aucun"
+  ],
+  "winner": 1,
+  "pts": [
+   7,
+   8
+  ],
+  "first": 1,
+  "turns": 19,
+  "bf": [
+   "Monastery of Hirana",
+   "Vilemaw's Lair"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Leona",
+   "Ivern"
+  ]
+ },
+ {
+  "id": "ia-res-720113b",
+  "file": "ia-res-720113b.json",
+  "group": "IA : réserve ouverte pour réagir (essai res/pol_keep/pol_react, decks par défaut, 2026-10-10)",
+  "session": null,
+  "seed": 720113,
+  "title": "Même donne 720113, avec les réglages de réserve : Leona gagne 8-7",
+  "note": "Même donne, réglages res=3, pol_keep=1, pol_react=1 des deux côtés. 10 cartes jouées pendant le tour adverse : Friendship d'Ivern sur Vi (tour 6), Call to Glory et Defy de Leona (tour 7), Kennen révélé en embuscade (tour 10), Discipline et Friendship d'Ivern (tour 12), Call to Glory et Discipline de Leona (tour 13), Friendship et Grand Strategem d'Ivern (tour 16). Leona gagne 8-7. Une seule donne : ça montre le changement de comportement, pas que l'IA gagne plus.",
+  "plans": [
+   "aucun",
+   "aucun"
+  ],
+  "winner": 0,
+  "pts": [
+   8,
+   7
+  ],
+  "first": 1,
+  "turns": 20,
+  "bf": [
+   "Monastery of Hirana",
+   "Vilemaw's Lair"
+  ],
+  "ia": "tempo",
+  "names": [
+   "Leona",
+   "Ivern"
+  ]
  }
 ]

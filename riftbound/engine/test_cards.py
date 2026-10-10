@@ -1430,6 +1430,53 @@ def point_value_ramp_keeps_total_and_orders_points():
         assert abs(v[vic - 1] - ai.point_value(vic - 1, vic)) < 1e-9
 
 
+@test
+def ai_reserve_counts_payable_reaction_cards():
+    """IA : reserve() compte les cartes [Reaction] / [Action] / [Ambush] de la main payables avec les runes prêtes."""
+    import ai
+    g, ag = new()
+    runes(g, 0, ["Fury", "Fury", "Calm"])
+    hand(g, 0, "Discipline")                       # [Reaction], 2 Énergie
+    hand(g, 0, "Stellacorn Herder")                # unité sans mot-clé de réaction
+    assert ai.reserve(g, 0) == 1
+    g.p[0].runes[0].exhausted = g.p[0].runes[1].exhausted = True
+    assert ai.reserve(g, 0) == 0                   # une seule rune prête : Discipline n'est plus payable
+
+
+@test
+def ai_rollout_reports_reserve_at_end_of_turn():
+    """IA : rollout_policy(res_pid=) rend la réserve du joueur à la fin du tour en cours (avant le tour adverse)."""
+    import ai
+    g, ag = new()
+    runes(g, 0, ["Fury", "Fury"])
+    hand(g, 0, "Discipline")
+    g.apply(("end",))
+    assert ai.rollout_policy(g, horizon=1, res_pid=0) == 1
+
+
+@test
+def ai_policy_pol_react_answers_spell_on_my_unit():
+    """IA (essai pol_react) : la politique des simulations répond à un sort adverse qui cible mon unité, et laisse
+    passer celui qui ne me cible pas ; sans pol_react elle passe toujours hors affrontement."""
+    import ai
+    from game import Item, Decision
+    g, ag = new()
+    runes(g, 0, ["Fury", "Fury", "Calm"])
+    u = put(g, 0, "Stellacorn Herder")
+    hand(g, 0, "Discipline")
+    it = Item("spell", 1, "test")
+    it.chosen = {u.uid}
+    g.chain.append(it)
+    d = Decision("priority", 0, g.options_priority(0))
+    pol = ai.PolicyAgent()
+    assert pol.react(g, d) == ("pass",)
+    pol.cfg = dict(pol_react=1)
+    a = pol.react(g, d)
+    assert a[0] == "play" and pol.card_of(g, a).cname == "Discipline", a
+    it.chosen = set()
+    assert pol.react(g, d) == ("pass",)
+
+
 def run():
     ok = 0
     fails = []

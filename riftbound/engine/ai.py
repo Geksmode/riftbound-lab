@@ -40,7 +40,7 @@ def lasting_might(g, o):
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
           card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0)
+          pts_ramp=0.0, res=0.0)
 
 
 def point_value(p, victory, w=EV):
@@ -58,6 +58,21 @@ def point_value(p, victory, w=EV):
     q = min(p, top)
     return c * sum(1 + r * (k - 1) / span for k in range(1, q + 1)) + (old - (w["pts"] * top + w["pts_hi"] * 2)
                                                                        if p > top else 0.0)
+
+
+def timed_card(c):
+    """Carte jouable pendant le tour adverse : [Reaction] (à tout moment), [Action] (en affrontement), [Ambush]."""
+    kw = c.spec["keywords"]
+    return "Reaction" in kw or "Action" in kw or "Ambush" in kw
+
+
+def reserve(g, pid):
+    """Réserve ouverte (essai 2026-10-10, retour de l'utilisateur : garder des runes ouvertes pour réagir) : nombre de
+    cartes de la main jouables pendant le tour adverse et payables avec les runes prêtes. Approximation d'heuristique,
+    pas une règle : Énergie ≤ runes prêtes, Puissance ≤ runes possédées (domaine non vérifié)."""
+    pl = g.p[pid]
+    ready = sum(1 for r in pl.runes if not r.exhausted)
+    return sum(1 for c in pl.hand if timed_card(c) and c.spec["e"] <= ready and c.spec["p"] <= len(pl.runes))
 
 
 def card_value(c, w=EV):
@@ -324,8 +339,10 @@ class SearchAgent(Heuristics):
                 c.rng = random.Random(world * 2 + 1)
             c.agents = s.policies(me)
             c.apply(a)
-            rollout_policy(c, s.horizon, cfg=s.cfg)
-            return s.value(c, me)
+            res = (s.ev or EV)["res"]
+            # res > 0 : bonus si je finis mon tour en cours avec une réserve ouverte (runes prêtes + carte à réaction)
+            kept = rollout_policy(c, s.horizon, cfg=s.cfg, res_pid=me if res and g.tp == me else None)
+            return s.value(c, me) + (res if kept else 0.0)
         finally:
             if world is not None:
                 Obj._n, Item._n = n0, i0
@@ -524,6 +541,8 @@ class PolicyAgent(Heuristics):
 
     def react(s, g, d):
         pid = d.player
+        if s.cfg.get("pol_react"):
+            return s.react_open(g, d)
         if g.sd is None or g.sd.stage != "open":
             return ("pass",)
         bf = g.sd.bf
@@ -537,16 +556,45 @@ class PolicyAgent(Heuristics):
         return ("pass",)
 
 
-def rollout_policy(g, horizon=2, max_steps=600, cfg=None):
-    """Play on with the cheap policy until `horizon` turns have passed (or the game ends)."""
+    def react_open(s, g, d):
+        """(essai pol_react, 2026-10-10) Réagir dans les simulations : répondre à un sort ou une capacité adverse qui
+        cible un de mes objets du plateau (avec un sort), et jouer en affrontement quand je perds ou égalise (avant : seulement
+        en affrontement perdu, 8 fois sur 10, jamais sur la chaîne hors affrontement)."""
+        pid = d.player
+        plays = [o for o in d.options if o[0] == "play"]
+        if not plays:
+            return ("pass",)
+        if g.chain:
+            top = g.chain[-1]
+            if top.ctrl == pid:
+                return ("pass",)
+            hit = any(o is not None and o.ctrl == pid for o in (g.obj(u) for u in sorted(top.chosen)))
+            spells = [o for o in plays if (c := s.card_of(g, o)) is not None and c.spec["type"] == "Spell"]
+            return spells[0] if hit and spells else ("pass",)
+        if g.sd is None or g.sd.stage != "open":
+            return ("pass",)
+        bf = g.sd.bf
+        mine, theirs = s.combat_margin(g, pid, bf)
+        if g.units(pid, bf) and mine <= theirs:
+            return plays[0]
+        return ("pass",)
+
+
+def rollout_policy(g, horizon=2, max_steps=600, cfg=None, res_pid=None):
+    """Play on with the cheap policy until `horizon` turns have passed (or the game ends).
+    res_pid : retourne la réserve ouverte (reserve()) de ce joueur à la fin du tour en cours (0 si la partie finit avant)."""
     pol = PolicyAgent()
     if cfg:
         pol.cfg = cfg
     stop = g.turn_no + horizon
+    tp0, kept = g.tp, None
     for _ in range(max_steps):
         d = g.advance()
         if d is None:
-            return
+            break
+        if kept is None and res_pid is not None and g.tp != tp0:
+            kept = reserve(g, res_pid)                # premier arrêt du tour suivant : rien n'a encore été joué
         if d.kind == "main" and g.turn_no > stop:
-            return
+            break
         g.apply(pol.decide(g, d))
+    return kept or 0
