@@ -30,3 +30,5 @@ Menu « Apprendre à jouer » : partie guidée Yi contre Darius, IA débutante, 
 - **Pièges CSS :** limiter un sélecteur à son contexte (`.shell > .main`, pas `.main`, classe aussi portée par des boutons) ; une image individuelle (IMG) n'a pas de taille de fond, contrairement aux planches : `background-size: cover`. *Pourquoi :* bouton du sideboard étiré à 779 px (attrapé par le robot du match), runes coupées. *(PR #12, #13)*
 - **Quand** un texte décrit un coup adverse (bulle, journal, flèche), **vérifier qu'il ne révèle rien de caché**. *Pourquoi :* « LeBlanc cache Hidden Blade » (`train._opp_describe`). *(PR #11)*
 
+
+2026-10-10: renamed "Riftbound Entraînement" → "Riftbound Observatory" (user choice, fits the « observatoire » DA). Same artifact URL.
