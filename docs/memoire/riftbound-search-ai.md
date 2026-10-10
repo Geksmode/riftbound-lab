@@ -59,7 +59,8 @@ qu'elle soit, le +5 « ce tour » ne compte pas (`lasting_might`), et un seul ti
   trick=2 sans la politique contre rien 48,1 % ± 1,7 (811000+, Mac de l'utilisateur) : on ne sait pas. trick + politique
   (812000+) : pas reçu. Temps par décision en `turn` : 1,1 s au lieu de 1,4 s avec les suites complètes.
 - Comportement (Yi Bladesman contre Akali G2, IA de la table, 40 parties, graines 900000-900039, nouveau réglage sans `open`) :
-  Punch First 29 fois en showdown, 12 fois dans son tour (cible au combat 7 fois, inutile 5 fois). Avant (graines 0-39) :
-  18 fois dans son tour. Petit échantillon, compteurs différents : à refaire sur les mêmes graines.
+  Punch First 29 fois en showdown, 12 fois dans son tour (cible au combat 7 fois, inutile 5 fois). Ancienne IA
+  (`RB_TRICK=0 RB_TURN_FULL=0`), mêmes graines : 19 en showdown, 30 dans son tour (inutile 12 fois). Les parties divergent
+  après le premier coup différent : comptes non appariés, 40 parties seulement.
 
 Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]].
