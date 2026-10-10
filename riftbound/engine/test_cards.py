@@ -1530,6 +1530,28 @@ def combat_tricks_are_detected_and_valued_in_hand():
 
 
 @test
+def open_runes_count_castable_action_and_reaction_spells():
+    """IA (2026-10-10) : runes laissées prêtes en fin de tour = sorts [Action]/[Reaction] en main payables avec les runes
+    PRÊTES, les moins chers d'abord ; un sort de combat demande une unité sur le plateau ; une unité en main ne compte pas."""
+    import ai
+    g, _ = new()
+    for pl in g.p:
+        pl.hand = []
+    hand(g, 0, "Punch First")                          # Action, sort de combat, coût 1 + 2
+    hand(g, 0, "Stupefy")                              # Reaction, sort de combat, coût 1
+    hand(g, 0, "Pit Rookie")                           # unité : jamais comptée
+    runes(g, 0, ["Body"] * 4)
+    assert ai.open_count(g, 0) == 0                    # pas d'unité : sorts de combat inutiles
+    put(g, 0, "Pit Rookie")
+    assert ai.open_count(g, 0) == 2                    # 1 + 3 = 4 runes prêtes
+    g.p[0].runes[0].exhausted = True
+    assert ai.open_count(g, 0) == 1                    # 3 prêtes : Stupefy (1) seulement, Punch First (3) ne rentre plus
+    for r in g.p[0].runes:
+        r.exhausted = True
+    assert ai.open_count(g, 0) == 0
+
+
+@test
 def turn_search_keeps_only_complete_sequences():
     """IA (2026-10-10) : la recherche du tour entier ne retient qu'une suite complète (« end », partie finie ou
     profondeur atteinte) ; avant, une suite d'un coup notée avec la politique qui finissait le tour pouvait gagner

@@ -45,7 +45,7 @@ def lasting_might(g, o):
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
           card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0, trick=2.0)
+          pts_ramp=0.0, trick=2.0, open=0.0)
 
 # Sorts de combat (2026-10-10, demande de l'utilisateur : l'IA jetait Punch First dans son tour sans combat derrière) :
 # un sort [Action] ou [Reaction] (seuls jouables pendant un showdown, 308.1.a) dont le texte change la Might « this turn ».
@@ -57,6 +57,26 @@ EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0
 if os.environ.get("RB_TRICK", "1") == "0":
     EV["trick"] = 0.0
 POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
+
+
+def open_count(g, pid):
+    """Runes ouvertes (2026-10-10, idée de l'utilisateur : garder des runes prêtes avec des sorts [Action]/[Reaction] en
+    main vaut plus) : nombre de ces sorts que les runes PRÊTES de pid peuvent payer, les moins chers d'abord (énergie +
+    puissance, une rune chacune). Un sort de combat compte seulement si pid a une unité sur le plateau. Les runes
+    restent épuisées jusqu'à son prochain réveil : c'est ce qui sert pendant le tour adverse (308.1.a, showdowns)."""
+    pl = g.p[pid]
+    ready = sum(1 for r in pl.runes if not r.exhausted)
+    units = any(o.ctrl == pid and o.spec["type"] == "Unit" for o in g.board)
+    costs = sorted(c.spec["e"] + c.spec["p"] for c in pl.hand
+                   if c.spec["type"] == "Spell" and ("Action" in c.spec["keywords"] or "Reaction" in c.spec["keywords"])
+                   and (units or not is_trick(c.spec)))
+    n = 0
+    for k in costs:
+        if k > ready:
+            break
+        ready -= k
+        n += 1
+    return n
 _TRICK = {}
 
 
@@ -510,14 +530,22 @@ class SearchAgent(Heuristics):
             return None
 
 
+        w_open = (s.ev or EV)["open"]
+
         def value(st, a):
+            if a == ("end",) and w_open:
+                # fin du tour : bonus des runes laissées prêtes pour les sorts [Action]/[Reaction] en main (open_count) ;
+                # dans ce mode toutes les suites complètes finissent par « end », la comparaison reste équitable
+                bonus = w_open * open_count(st, me)
+            else:
+                bonus = 0.0
             c = st.clone()
             c.agents = ags
             c.apply(a)
             if a[0] != "end":
                 settle(c)
             rollout_policy(c, s.horizon, cfg=s.cfg)
-            return s.value(c, me)
+            return s.value(c, me) + bonus
 
         def advance(st, a):
             c = st.clone()
