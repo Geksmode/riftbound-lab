@@ -54,6 +54,30 @@ simulations : répond avec un sort à ce qui cible ses objets, joue en affrontem
 **Taux de victoire non mesuré** : à faire sur le Mac de l'utilisateur (criblage environ 80 paires `defaut`, puis graines neuves).
 Replays : groupe « IA : réserve ouverte » (`ia-res-720113a/b`, même donne).
 
+**Deuxième version, demandée par l'utilisateur** (2026-10-10), trois réglages de la politique des simulations, désactivés par défaut :
+- `pol_hold` : ne joue pas ce qui laisserait trop peu de runes prêtes pour payer sa meilleure réaction en main
+  (`held_reaction`, `keeps_reserve` ; coût imprimé, Puissance payée d'abord avec des runes engagées). « Poser A puis garder
+  2 runes » devient comparable à « tout poser » ;
+- `pol_swing` : en combat sur un champ de bataille que l'on défend, joue la réaction qui fait passer l'affrontement de perdu
+  ou égal à gagné. Chaque option est essayée sur une copie de la partie avec les vraies cartes (`probe`, au plus `SWING_MAX` = 6
+  options), sinon on passe. Sur la chaîne, répond avec un sort à ce qui cible ses objets (comme `pol_react`) ;
+- `pol_wary=N` : n'attaque pas un champ de bataille occupé avec une avance de Might de N ou moins si l'adversaire a 2 runes
+  prêtes ou plus et une carte en main (information publique seulement). L'exception est de casser une tenue gagnante.
+
+Même mesure, même moteur (2df144c930), mêmes 60 donnes (720100+, donc les deux colonnes ne sont pas indépendantes) :
+
+| Mesure | IA actuelle (sh) | sh@res=3,pol_hold=1,pol_swing=1,pol_wary=2 |
+|---|---|---|
+| fins de tour avec une carte à réaction en main | 76,3 % ± 2,7 | 78,8 % ± 2,9 |
+| … mais aucune payable (à sec) | **67,6 % ± 2,9** | **43,4 % ± 3,1** |
+| fins de tour avec une réserve ouverte | 26,5 % ± 2,6 | 45,7 % ± 2,9 |
+| réserve ouverte puis utilisée au tour adverse | 26,6 % ± 4,0 | 29,7 % ± 3,1 |
+| cartes jouées pendant le tour adverse, par joueur et par partie | 0,68 ± 0,09 | 1,02 ± 0,10 |
+| sorts [Reaction] joués dans son propre tour principal | 1,32 ± 0,13 | 1,12 ± 0,11 |
+
+L'IA actuelle donne exactement les mêmes chiffres sur les deux moteurs (défaut inchangé). Taux de victoire et temps par
+décision non mesurés (`probe` copie la partie à chaque option essayée) : à faire sur le Mac.
+
 **Temps par décision** (décisions à plusieurs options). Mêmes 100 positions (graines 777003 et 777011, `engine/exp_temps.py`, Pyodide : `node engine/exp_temps.mjs`) :
 CPython old 267 ms (p95 1,5 s), sh 355 ms (p95 1,75 s) ; **Pyodide 0.26.4 sous node** old 417 ms (p95 2,4 s),
 sh 503 ms (p95 2,4 s), crn 389 ms (p95 2,0 s). Dans les parties des simulations (CPython, 4 processus) : old ≈ 245 ms,

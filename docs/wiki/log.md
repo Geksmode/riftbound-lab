@@ -185,3 +185,7 @@ Demande : « améliore l'IA de base pour tous les decks ». Mesures appariées s
 ## [2026-10-10] ingest | IA : réserve ouverte pour réagir (mesure et réglages)
 - Retour de l'utilisateur : l'IA dépense tout pendant son tour et sous-estime les cartes en main et les runes ouvertes. Mesure `engine/exp_reserve.py` (60 parties `defaut`, graines 720100+) : l'IA actuelle finit à sec 67,6 % ± 2,9 des tours où elle a une carte à réaction ; avec `sh@res=3,pol_keep=1,pol_react=1`, 58,2 % ± 2,9 (mêmes donnes).
 - Réglages `res` (ai.EV) et `pol_react` (politique des simulations) ajoutés, désactivés par défaut ; taux de victoire à mesurer sur le Mac. Détails et commandes : [recherche de l'IA](../memoire/riftbound-search-ai.md). Replays `ia-res-720113a/b`, lecteur republié (version 38).
+
+## [2026-10-10] ingest | IA : politique avec réserve, réaction au bon moment, adversaire méfiant
+- Demande de l'utilisateur : réglages `pol_hold`, `pol_swing` et `pol_wary` de la politique des simulations (`ai.PolicyAgent`), désactivés par défaut, 3 tests. `pol_swing` essaie chaque réaction sur une copie de la partie (vraies cartes, pas d'effet deviné).
+- Mesure `exp_reserve.py` (60 parties `defaut`, 720100+, moteur 2df144c930) : à sec 67,6 % ± 2,9 (IA actuelle) contre 43,4 % ± 3,1 avec `sh@res=3,pol_hold=1,pol_swing=1,pol_wary=2` (mêmes donnes). Taux de victoire à mesurer sur le Mac : [recherche de l'IA](../memoire/riftbound-search-ai.md).

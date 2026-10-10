@@ -18,6 +18,7 @@ REACTIVE = {"Discipline", "Defy", "Not So Fast", "Back Off", "Block", "En Garde"
 # à 7 une tenue gagne. L'IA doit alors refuser la tenue adverse à tout prix. RB_TEMPO=0 rend l'ancienne IA.
 TEMPO = os.environ.get("RB_TEMPO", "1") != "0"
 URGENT_SAMPLES = 6
+SWING_MAX = 6          # pol_swing : options de réaction essayées au plus par fenêtre de combat (une copie de la partie chacune)
 # Recherche (2026-10-09) : "old" = chaque option jugée sur son propre monde tiré au hasard (s.rng avance entre les
 # options) ; "crn" = tirages communs (le k-ième monde est le même pour toutes les options) ; "sh" = tirages communs
 # + élimination en plusieurs passes (successive halving) avec SH_EXTRA × (options × samples) rollouts en plus.
@@ -484,6 +485,7 @@ class PolicyAgent(Heuristics):
                     return o
         # 2. attack or conquer
         best, bv = None, 0.0
+        wary = s.cfg.get("pol_wary") if s.wary_of(g, 1 - pid) else 0
         for o in moves:
             units = [g.obj(u) for u in o[1]]
             dest = o[2]
@@ -497,13 +499,20 @@ class PolicyAgent(Heuristics):
                 v = 3.0 + 0.2 * (mine - theirs)
             else:
                 v = -1.0
-            if TEMPO and b.ctrl == 1 - pid and g.p[1 - pid].points >= g.victory - 1 and mine > theirs:
+            must = TEMPO and b.ctrl == 1 - pid and g.p[1 - pid].points >= g.victory - 1 and mine > theirs
+            if must:
                 v += 4.0                               # casser la tenue gagnante avant de conquérir ailleurs
+            elif wary and theirs and 0 < mine - theirs <= wary:
+                v = -1.0                               # pol_wary : attaque serrée contre des runes ouvertes
             v -= 0.1 * len(units)
             if v > bv:
                 best, bv = o, v
         if best is not None:
             return best
+        if plays and s.cfg.get("pol_hold"):
+            keep = s.held_reaction(g, pid)
+            if keep is not None:
+                plays = [o for o in plays if s.keeps_reserve(g, pid, o, keep)]
         # 3. play the biggest unit we can
         units = [o for o in plays if s.is_unit(g, o)]
         if units:
@@ -518,6 +527,89 @@ class PolicyAgent(Heuristics):
         for o in acts:
             return o
         return ("end",)
+
+    # -------- réserve et réactions (essais du 2026-10-10, retour de l'utilisateur sur le tempo : la main et les runes
+    # ouvertes sont des ressources). Réglages de cfg, désactivés par défaut : pol_hold, pol_swing, pol_wary.
+    def held_reaction(s, g, pid):
+        """pol_hold : la carte à garder pour le tour adverse. Parmi les cartes de la main jouables pendant le tour adverse
+        (timed_card) et payables maintenant (mêmes approximations que reserve()), la plus utile (card_value), à égalité
+        la moins chère. None si aucune."""
+        pl = g.p[pid]
+        ready = sum(1 for r in pl.runes if not r.exhausted)
+        cands = [c for c in pl.hand if timed_card(c) and c.spec["e"] <= ready and c.spec["p"] <= len(pl.runes)]
+        if not cands:
+            return None
+        return max(cands, key=lambda c: (card_value(c), -c.spec["e"], -c.uid))
+
+    def keeps_reserve(s, g, pid, o, keep):
+        """pol_hold : jouer o laisse-t-il assez de runes prêtes pour payer l'Énergie de keep ensuite ? La Puissance de o
+        est payée d'abord avec des runes engagées (recyclage). Coût imprimé : les réductions de coût sont ignorées."""
+        c = s.card_of(g, o)
+        if c is None:
+            return True
+        if c is keep:
+            return False                               # la carte gardée attend le tour adverse
+        pl = g.p[pid]
+        ready = sum(1 for r in pl.runes if not r.exhausted)
+        after = ready - c.spec["e"] - max(0, c.spec["p"] - (len(pl.runes) - ready))
+        return after >= keep.spec["e"]
+
+    def wary_of(s, g, opp):
+        """pol_wary : l'adversaire peut-il réagir ? Information publique seulement : 2 runes prêtes ou plus et au moins
+        une carte en main (dans une simulation, sa main tirée au hasard n'est pas regardée)."""
+        pl = g.p[opp]
+        return sum(1 for r in pl.runes if not r.exhausted) >= 2 and len(pl.hand) >= 1
+
+    def probe(s, g, pid, a, bf):
+        """pol_swing : marge de l'affrontement (ma Might − la sienne, combat_margin) sur bf après l'option a, une fois la
+        chaîne résolue sans autre réponse. Joué sur une copie, avec les vraies cartes (aucun effet deviné) ; compteurs
+        d'identifiants remis comme avant, pour ne pas décaler la suite de la partie."""
+        n0, i0 = Obj._n, Item._n
+        try:
+            c = g.clone()
+            c.agents = g.agents
+            c.apply(a)
+            for _ in range(80):
+                if not c.chain:
+                    break
+                d = c.advance()
+                if d is None or d.kind != "priority":
+                    break
+                c.apply(("pass",))
+            if c.winner is not None:
+                return 1000.0 if c.winner == pid else -1000.0
+            mine, theirs = s.combat_margin(c, pid, bf)
+            return mine - theirs
+        finally:
+            Obj._n, Item._n = n0, i0
+
+    def react_swing(s, g, d):
+        """pol_swing : réagir quand ça change le résultat. 1) Sur la chaîne, répondre avec un sort à un sort ou une
+        capacité adverse qui cible un de mes objets (comme pol_react). 2) En combat sur un champ de bataille que je
+        défends, jouer la réaction qui fait passer l'affrontement de perdu ou égal à gagné (meilleure marge, essai sur
+        une copie, au plus SWING_MAX options) ; sinon passer, au lieu de « répondre quand je perds, 8 fois sur 10 »."""
+        pid = d.player
+        plays = [o for o in d.options if o[0] == "play"]
+        if not plays:
+            return ("pass",)
+        sd = g.sd
+        if sd is not None and sd.combat and sd.stage == "open" and sd.defender == pid:
+            bf = sd.bf
+            if g.units(pid, bf) and s.probe(g, pid, ("pass",), bf) <= 0:
+                best, bv = None, 0.0
+                for o in plays[:SWING_MAX]:
+                    v = s.probe(g, pid, o, bf)
+                    if v > bv:
+                        best, bv = o, v
+                if best is not None:
+                    return best
+        if g.chain:
+            top = g.chain[-1]
+            if top.ctrl != pid and any(o is not None and o.ctrl == pid for o in (g.obj(u) for u in sorted(top.chosen))):
+                spells = [o for o in plays if (c := s.card_of(g, o)) is not None and c.spec["type"] == "Spell"]
+                if spells:
+                    return spells[0]
+        return ("pass",)
 
     def reaction_card(s, g, o):
         c = s.card_of(g, o)
@@ -541,6 +633,8 @@ class PolicyAgent(Heuristics):
 
     def react(s, g, d):
         pid = d.player
+        if s.cfg.get("pol_swing"):
+            return s.react_swing(g, d)
         if s.cfg.get("pol_react"):
             return s.react_open(g, d)
         if g.sd is None or g.sd.stage != "open":

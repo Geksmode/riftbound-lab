@@ -1477,6 +1477,75 @@ def ai_policy_pol_react_answers_spell_on_my_unit():
     assert pol.react(g, d) == ("pass",)
 
 
+@test
+def ai_policy_pol_hold_keeps_runes_for_reaction():
+    """IA (essai pol_hold) : la politique des simulations ne joue pas ce qui la laisserait sans assez de runes prêtes pour
+    sa meilleure réaction en main ; sans pol_hold elle pose l'unité."""
+    import ai
+    from game import Decision
+    g, ag = new()
+    runes(g, 0, ["Calm"] * 5)
+    hand(g, 0, "Discipline")                       # [Reaction], 2 Énergie
+    hand(g, 0, "Stellacorn Herder")                # 4 Énergie : 5 − 4 = 1 rune, pas assez pour Discipline
+    pol = ai.PolicyAgent()
+    d = Decision("main", 0, g.options_main(0))
+    a = pol.decide(g, d)
+    assert a[0] == "play" and pol.card_of(g, a).cname == "Stellacorn Herder", a
+    pol.cfg = dict(pol_hold=1)
+    a = pol.decide(g, d)
+    assert not (a[0] == "play" and pol.card_of(g, a).cname in ("Stellacorn Herder", "Discipline")), a
+    hand(g, 0, "Affectionate Poro")                # 3 Énergie : 5 − 3 = 2, Discipline reste payable
+    a = pol.decide(g, Decision("main", 0, g.options_main(0)))
+    assert a[0] == "play" and pol.card_of(g, a).cname == "Affectionate Poro", a
+
+
+@test
+def ai_policy_pol_swing_plays_reaction_that_wins_defense():
+    """IA (essai pol_swing) : en combat sur un champ de bataille que je défends, la politique joue la réaction qui fait
+    gagner l'affrontement (essai sur une copie de la partie, vraies cartes), et passe quand je gagne déjà."""
+    import ai
+    from game import Decision, Showdown
+    g, ag = new()
+    runes(g, 0, ["Fury"] * 3)
+    put(g, 0, "Mournful Witness", loc=0)           # 2 de Might, je défends
+    e = put(g, 1, "Stellacorn Herder", loc=0, bf_control=False)   # 3 de Might, attaquant
+    hand(g, 0, "Against the Odds")                 # +2 par unité ennemie là-bas : 4 contre 3
+    g.sd = Showdown(0, True, 1)
+    g.sd.focus = 0
+    pol = ai.PolicyAgent()
+    pol.cfg = dict(pol_swing=1)
+    a = pol.decide(g, Decision("focus", 0, g.options_focus(0)))
+    assert a[0] == "play" and pol.card_of(g, a).cname == "Against the Odds", a
+    assert g.might(e) == 3 and not g.chain         # l'essai se fait sur une copie
+    put(g, 0, "Stellacorn Herder", loc=0)          # 5 contre 3 : je gagne déjà, on garde la carte
+    a = pol.decide(g, Decision("focus", 0, g.options_focus(0)))
+    assert a == ("pass",), a
+
+
+@test
+def ai_policy_pol_wary_avoids_tight_attack_into_open_runes():
+    """IA (essai pol_wary) : la politique n'attaque pas avec une avance de Might serrée quand l'adversaire a 2 runes
+    prêtes et une carte en main ; elle attaque s'il n'a pas de runes ouvertes."""
+    import ai
+    from game import Decision
+    g, ag = new()
+    put(g, 0, "Stellacorn Herder")                 # 3
+    put(g, 0, "Mournful Witness")                  # 2 : 5 contre 3, avance de 2
+    put(g, 1, "Adaptatron", loc=1)                 # 3
+    runes(g, 1, ["Fury", "Fury"])
+    hand(g, 1, "Discipline")
+    g.bfs[0].ctrl = 0                              # l'autre champ de bataille est déjà à moi : seul l'attaque compte
+    pol = ai.PolicyAgent()
+    pol.cfg = dict(pol_wary=2)
+    d = Decision("main", 0, g.options_main(0))
+    a = pol.decide(g, d)
+    assert not (a[0] == "move" and a[2] == 1), a
+    for r in g.p[1].runes:
+        r.exhausted = True
+    a = pol.decide(g, Decision("main", 0, g.options_main(0)))
+    assert a[0] == "move" and a[2] == 1, a
+
+
 def run():
     ok = 0
     fails = []
