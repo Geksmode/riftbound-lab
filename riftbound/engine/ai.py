@@ -8,6 +8,7 @@ All choices made during resolution (targets, "you may", damage assignment...) us
 """
 import os
 import random
+import re
 from game import SPEC, Obj, Item
 from cards import value as unit_value
 
@@ -26,6 +27,8 @@ URGENT_SAMPLES = 6
 # mondes pour toutes les suites) ; les autres décisions (réactions, focus) restent en "sh".
 SEARCH = os.environ.get("RB_SEARCH", "sh")
 SH_EXTRA = float(os.environ.get("RB_SH_EXTRA", "1.0"))
+# Mode "turn" : ne retenir que des suites complètes (voir turn_search). RB_TURN_FULL=0 rend l'ancien choix.
+TURN_FULL = os.environ.get("RB_TURN_FULL", "1") != "0"
 
 DK_FODDER = {"Soaring Scout", "Honest Broker", "Watchful Sentry", "Black Rose Dignitary", "LeBlanc, Fragmented",
              "Lonely Poro", "Scuttle Crab"}
@@ -42,7 +45,51 @@ def lasting_might(g, o):
 # Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
 EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
           card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0)
+          pts_ramp=0.0, trick=2.0, open=1.0)
+
+# Sorts de combat (2026-10-10, demande de l'utilisateur : l'IA jetait Punch First dans son tour sans combat derrière) :
+# un sort [Action] ou [Reaction] (seuls jouables pendant un showdown, 308.1.a) dont le texte change la Might « this turn ».
+# Gardé en main, il vaut `trick` de plus quand son propriétaire a une unité sur le plateau et assez de runes pour le payer.
+# Gardé par décision de l'utilisateur (2026-10-10 : « ça simule le comportement humain »), quel que soit le résultat des
+# mesures ; trick=2,0 n'est pas réglé finement. Avec POL_TRICK, la politique de simulation garde aussi ces sorts pour les
+# showdowns (sans elle, la valeur en main disparaît dans les simulations : la politique les jetait dans son tour).
+# open (runes laissées prêtes en fin de tour, open_count) : 1,0 par sort, choisi sans mesure (l'utilisateur : « je te fais
+# confiance pour la valeur ») : moins qu'une unité posée (≈ 2 à 5), pour ne pas garder ses runes au lieu de se développer.
+# RB_TRICK=0 rend l'ancienne IA (trick=0, open=0 et politique d'avant).
+if os.environ.get("RB_TRICK", "1") == "0":
+    EV["trick"] = 0.0
+    EV["open"] = 0.0
+POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
+
+
+def open_count(g, pid):
+    """Runes ouvertes (2026-10-10, idée de l'utilisateur : garder des runes prêtes avec des sorts [Action]/[Reaction] en
+    main vaut plus) : nombre de ces sorts que les runes PRÊTES de pid peuvent payer, les moins chers d'abord (énergie +
+    puissance, une rune chacune). Un sort de combat compte seulement si pid a une unité sur le plateau. Les runes
+    restent épuisées jusqu'à son prochain réveil : c'est ce qui sert pendant le tour adverse (308.1.a, showdowns)."""
+    pl = g.p[pid]
+    ready = sum(1 for r in pl.runes if not r.exhausted)
+    units = any(o.ctrl == pid and o.spec["type"] == "Unit" for o in g.board)
+    costs = sorted(c.spec["e"] + c.spec["p"] for c in pl.hand
+                   if c.spec["type"] == "Spell" and ("Action" in c.spec["keywords"] or "Reaction" in c.spec["keywords"])
+                   and (units or not is_trick(c.spec)))
+    n = 0
+    for k in costs:
+        if k > ready:
+            break
+        ready -= k
+        n += 1
+    return n
+_TRICK = {}
+
+
+def is_trick(spec):
+    n = spec["name"]
+    if n not in _TRICK:
+        kw = spec["keywords"]
+        _TRICK[n] = (spec["type"] == "Spell" and ("Action" in kw or "Reaction" in kw)
+                     and re.search(r"might this turn", spec["text"] or "", re.I) is not None)
+    return _TRICK[n]
 
 
 def point_value(p, victory, w=EV):
@@ -129,6 +176,9 @@ def evaluate(g, me, w=None):
             else:
                 v += GEAR_V.get(o.cname, 1.0)
         v += sum(card_value(c, w) for c in pl.hand)
+        if w["trick"] and any(o.ctrl == pid and o.spec["type"] == "Unit" for o in g.board):
+            nr = len(pl.runes)
+            v += w["trick"] * sum(1 for c in pl.hand if is_trick(c.spec) and c.spec["e"] + c.spec["p"] <= nr)
         v += w["rune"] * len(pl.runes)
         if pl.legend.empowered:
             v += w["leg_emp"]
@@ -483,14 +533,22 @@ class SearchAgent(Heuristics):
             return None
 
 
+        w_open = (s.ev or EV)["open"]
+
         def value(st, a):
+            if a == ("end",) and w_open:
+                # fin du tour : bonus des runes laissées prêtes pour les sorts [Action]/[Reaction] en main (open_count) ;
+                # dans ce mode toutes les suites complètes finissent par « end », la comparaison reste équitable
+                bonus = w_open * open_count(st, me)
+            else:
+                bonus = 0.0
             c = st.clone()
             c.agents = ags
             c.apply(a)
             if a[0] != "end":
                 settle(c)
             rollout_policy(c, s.horizon, cfg=s.cfg)
-            return s.value(c, me)
+            return s.value(c, me) + bonus
 
         def advance(st, a):
             c = st.clone()
@@ -500,7 +558,7 @@ class SearchAgent(Heuristics):
 
         end = ("end",)
         beam = [dict(seq=[], states=roots, options=list(opts), pri=0.0)]
-        done = []                                      # (valeur, suite)
+        done = []                                      # [valeur, suite, complète]
         for lvl in range(depth):
             kids = []
             for nd in beam:
@@ -511,29 +569,42 @@ class SearchAgent(Heuristics):
                     pri = nd["pri"] + s.prior_of(nd["states"][0], me, a)
                     v = sum(value(st, a) for st in nd["states"]) / len(nd["states"]) + pri
                     seq = nd["seq"] + [a]
-                    done.append((v, seq))
+                    done.append([v, seq, a == end or lvl == depth - 1])
                     if a != end:
-                        kids.append((v, len(kids), nd, a, pri))
+                        kids.append((v, len(kids), nd, a, pri, len(done) - 1))
             kids.sort(key=lambda x: (-x[0], x[1]))
             beam = []
-            for v, _, nd, a, pri in kids[:wid]:
+            for v, _, nd, a, pri, di in kids[:wid]:
                 nxt = [advance(st, a) for st in nd["states"]]
                 if any(dd is None for _, dd in nxt):
+                    done[di][2] = True
                     continue                           # partie finie dans un des mondes : valeur déjà comptée
                 common = [x for x in nxt[0][1].options if all(x in dd.options for _, dd in nxt)]
                 if end in common:
                     beam.append(dict(seq=nd["seq"] + [a], states=[c for c, _ in nxt], options=common, pri=pri))
+                else:
+                    done[di][2] = True                 # (pas de suite commune possible : on la garde telle quelle)
             if not beam:
                 break
+        # Suites retenues (2026-10-10) : seulement les suites complètes (« end », partie finie, profondeur atteinte).
+        # Une suite coupée plus tôt est notée avec la politique de simulation qui finit le tour (elle attaque dès qu'elle a
+        # l'avantage) : la garder faisait jouer « Punch First » puis, au coup suivant, passer sans attaquer. Son premier
+        # coup reste noté (scored) quand aucune suite complète ne commence par lui. cfg turn_full=0 rend l'ancien choix.
+        full = s.cfg.get("turn_full", TURN_FULL) and any(ok for _, _, ok in done)
         best_v, best = -1e18, None
-        first = {}
-        for v, seq in done:
+        first, part = {}, {}
+        for v, seq, ok in done:
+            if full and not ok:
+                k = repr(seq[0])
+                if k not in part or v > part[k][0]:
+                    part[k] = (v, seq[0])
+                continue
             if v > best_v + 1e-9:
                 best_v, best = v, seq
             k = repr(seq[0])
             if k not in first or v > first[k][0]:
                 first[k] = (v, seq[0])
-        return best, best_v, [first[repr(a)] for a in opts if repr(a) in first]
+        return best, best_v, [first.get(repr(a)) or part[repr(a)] for a in opts if repr(a) in first or repr(a) in part]
 
 
 # ---------------------------------------------------------------------- cheap policy (rollouts, baseline)
@@ -602,6 +673,9 @@ class PolicyAgent(Heuristics):
         if plays and s.cfg.get("pol_keep"):
             # (essai) garder les sorts [Reaction] pour les fenêtres de réaction au lieu de les jeter dans son tour
             plays = [o for o in plays if not s.reaction_card(g, o)]
+        if plays and s.cfg.get("pol_trick", POL_TRICK):
+            # (2026-10-10) garder les sorts de combat (is_trick) pour les showdowns au lieu de les jeter dans son tour
+            plays = [o for o in plays if not s.trick_card(g, o)]
         if plays:
             return plays[0]
         for o in acts:
@@ -611,6 +685,10 @@ class PolicyAgent(Heuristics):
     def reaction_card(s, g, o):
         c = s.card_of(g, o)
         return c is not None and c.spec["type"] == "Spell" and "Reaction" in c.spec["keywords"]
+
+    def trick_card(s, g, o):
+        c = s.card_of(g, o)
+        return c is not None and is_trick(c.spec)
 
     def is_unit(s, g, o):
         c = s.card_of(g, o)

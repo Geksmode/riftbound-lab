@@ -1504,6 +1504,77 @@ def point_value_ramp_keeps_total_and_orders_points():
         assert abs(v[vic - 1] - ai.point_value(vic - 1, vic)) < 1e-9
 
 
+@test
+def combat_tricks_are_detected_and_valued_in_hand():
+    """IA (2026-10-10) : un sort [Action]/[Reaction] qui change la Might « this turn » est un sort de combat (308.1.a :
+    seuls ceux-là se jouent en showdown) ; gardé en main avec une unité sur le plateau et assez de runes, il vaut `trick`."""
+    import ai
+    from game import SPEC
+    yes = ["Punch First", "Discipline", "Primal Strength", "Smoke Screen", "Decisive Strike", "Last Stand"]
+    no = ["Onslaught", "Rampage", "Twilight Shroud", "Master Yi, Tempered", "Hidden Blade"]
+    assert all(ai.is_trick(SPEC[n]) for n in yes), [n for n in yes if not ai.is_trick(SPEC[n])]
+    assert not any(ai.is_trick(SPEC[n]) for n in no), [n for n in no if ai.is_trick(SPEC[n])]
+    g, _ = new()
+    for pl in g.p:
+        pl.hand = []
+        pl.runes = []
+    hand(g, 0, "Punch First")                          # 1 énergie + 2 puissance : 3 runes
+    w0, w = dict(ai.EV, trick=0.0), dict(ai.EV, trick=2.0)
+    base = lambda: ai.evaluate(g, 0, w) - ai.evaluate(g, 0, w0)
+    assert base() == 0                                 # pas d'unité, pas de rune
+    put(g, 0, "Pit Rookie")
+    runes(g, 0, ["Body", "Body"])
+    assert base() == 0                                 # 2 runes : pas de quoi le payer
+    runes(g, 0, ["Body", "Body", "Body"])
+    assert abs(base() - 2.0) < 1e-9
+
+
+@test
+def open_runes_count_castable_action_and_reaction_spells():
+    """IA (2026-10-10) : runes laissées prêtes en fin de tour = sorts [Action]/[Reaction] en main payables avec les runes
+    PRÊTES, les moins chers d'abord ; un sort de combat demande une unité sur le plateau ; une unité en main ne compte pas."""
+    import ai
+    g, _ = new()
+    for pl in g.p:
+        pl.hand = []
+    hand(g, 0, "Punch First")                          # Action, sort de combat, coût 1 + 2
+    hand(g, 0, "Stupefy")                              # Reaction, sort de combat, coût 1
+    hand(g, 0, "Pit Rookie")                           # unité : jamais comptée
+    runes(g, 0, ["Body"] * 4)
+    assert ai.open_count(g, 0) == 0                    # pas d'unité : sorts de combat inutiles
+    put(g, 0, "Pit Rookie")
+    assert ai.open_count(g, 0) == 2                    # 1 + 3 = 4 runes prêtes
+    g.p[0].runes[0].exhausted = True
+    assert ai.open_count(g, 0) == 1                    # 3 prêtes : Stupefy (1) seulement, Punch First (3) ne rentre plus
+    for r in g.p[0].runes:
+        r.exhausted = True
+    assert ai.open_count(g, 0) == 0
+
+
+@test
+def turn_search_keeps_only_complete_sequences():
+    """IA (2026-10-10) : la recherche du tour entier ne retient qu'une suite complète (« end », partie finie ou
+    profondeur atteinte) ; avant, une suite d'un coup notée avec la politique qui finissait le tour pouvait gagner
+    (Punch First joué, puis fin du tour sans attaque)."""
+    import ai, random
+    g, _ = new()
+    for pl in g.p:
+        pl.hand = []
+    runes(g, 0, ["Body", "Body", "Body", "Body"])
+    put(g, 0, "Pit Rookie")
+    put(g, 1, "Pit Rookie", loc=1)
+    hand(g, 0, "Punch First")
+    hand(g, 0, "Punch First")
+    d = settle(g)
+    assert d.kind == "main" and d.player == 0
+    sa = ai.SearchAgent(seed=3, search="turn", cfg=dict(turn_w=2, turn_d=3))
+    g.agents = [sa, sa]
+    for k in range(4):
+        seq, v, scored = sa.turn_search(g, 0, list(d.options), [random.Random(k).getrandbits(30)])
+        assert seq[-1] == ("end",) or len(seq) == 3, seq
+        assert any(abs(x - v) < 1e-9 and a == seq[0] for x, a in scored)
+
+
 def run():
     ok = 0
     fails = []

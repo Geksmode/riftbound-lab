@@ -212,3 +212,8 @@ Demande de l'utilisateur : Échap annule le dernier coup (après avoir lâché u
 
 ## [2026-10-10] decision | Retour arrière = « Reprendre » (pas Échap) ; Espace = « Oui » aux questions oui / non
 Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ; Échap reprend son rôle d'avant (fermer, lâcher une carte). Espace répond aussi « Oui » à toute question oui / non du moteur (options True / False : « Utiliser cet effet ? », Zilean, Rebuttal…). Robot `verif_espace.mjs`, vérifié par robot.
+
+## [2026-10-10] decision | IA : sorts de combat gardés, runes ouvertes, suites complètes
+- Signalé par l'utilisateur : Maître Yi jouait Punch First dans son tour sans combat derrière. Causes : une carte en main valait ≈ 1,45 quelle qu'elle soit, le bruit d'un tirage unique, et la recherche du tour entier qui retenait une suite incomplète notée comme si l'attaque suivait.
+- Changements (`engine/ai.py`) : valeur des 31 sorts de combat gardés en main (`trick` = 2), politique de simulation qui les garde pour les showdowns, bonus des runes laissées prêtes pour les sorts [Action]/[Reaction] en fin de tour (`open` = 1), seules les suites complètes retenues. Décision de l'utilisateur : garder ce réglage quel que soit le résultat (« ça simule le comportement humain ») ; valeurs choisies sans mesure. Retour arrière : `RB_TRICK=0`, `RB_TURN_FULL=0`. Détail et chiffres : `memoire/riftbound-search-ai.md`.
+
