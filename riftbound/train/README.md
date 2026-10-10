@@ -1,4 +1,4 @@
-# Table d'entraînement (artefact https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC)
+# Table d'entraînement « Riftbound Observatory » (artefact https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC)
 
 Humain = Akali G2 (joueur 0) contre IA LeBlanc IQ#5, plan Hook tempo (joueur 1). Le vrai moteur Python tourne dans le
 navigateur avec Pyodide 0.26.4 (npm `pyodide@0.26.4`, fichiers publiés avec la page ; python_stdlib.zip publié en
