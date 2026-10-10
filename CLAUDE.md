@@ -33,6 +33,8 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    (`riftbound/rules/source/core_rules_2026-07-16.txt`) et la citer. Ex. Deathgrip : deux cibles obligatoires (355.8).
 7. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
    Pour la table, distingue « vérifié par robot (toucher simulé) » et « essayé sur un vrai téléphone » (retex 2026-10-09).
+8. **Tests de l'IA sur des decks variés** (2026-10-10) : `exp_search.py ... defaut`, environ 80 paires ; plus d'Akali contre
+   LeBlanc par défaut, seulement sur demande ou pour un plan propre à ces decks (`docs/memoire/ia-tests-decks-varies.md`).
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
