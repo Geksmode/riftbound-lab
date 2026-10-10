@@ -22,6 +22,8 @@ URGENT_SAMPLES = 6
 # options) ; "crn" = tirages communs (le k-ième monde est le même pour toutes les options) ; "sh" = tirages communs
 # + élimination en plusieurs passes (successive halving) avec SH_EXTRA × (options × samples) rollouts en plus.
 # RB_SEARCH=old rend l'ancienne recherche (comparaisons).
+# "turn" (2026-10-10) : décisions « main » = recherche du TOUR ENTIER en faisceau (suites de coups jusqu'à « end », mêmes
+# mondes pour toutes les suites) ; les autres décisions (réactions, focus) restent en "sh".
 SEARCH = os.environ.get("RB_SEARCH", "sh")
 SH_EXTRA = float(os.environ.get("RB_SH_EXTRA", "1.0"))
 
@@ -286,6 +288,7 @@ class SearchAgent(Heuristics):
         s.search = search or SEARCH
         s.ev = dict(EV, **s.cfg["ev"]) if s.cfg.get("ev") else None
         s.sh_extra = SH_EXTRA if sh_extra is None else sh_extra
+        s.tplan = None                 # mode "turn" : ((tour, joueur), coups restants de la suite choisie)
 
     def start(s, g):
         pass
@@ -343,6 +346,10 @@ class SearchAgent(Heuristics):
             return opts[0]
         me = d.player
         base_now = None
+        if s.search == "turn" and d.kind == "main" and not s.cfg.get("turn_replan"):
+            tp = s.tplan                # on suit la suite choisie tant que son prochain coup est légal
+            if tp and tp[0] == (g.turn_no, me) and tp[1] and tp[1][0] in opts:
+                return tp[1].pop(0)
         if s.cfg.get("respect_ambush") and d.kind == "main":
             opts = [a for a in opts if not s.risky_attack(g, me, a)] or opts
         if len(opts) > s.max_cands:
@@ -354,6 +361,8 @@ class SearchAgent(Heuristics):
 
     def pick(s, g, d, opts):
         """Meilleure option et scores [(v, a)] ; en danger ou si tout perd, on refait avec plus de tirages."""
+        if s.search == "turn" and d.kind == "main" and type(s).score is SearchAgent.score:
+            return s.pick_turn(g, d, opts)
         if s.search != "old" and type(s).score is SearchAgent.score:
             # (une sous-classe qui redéfinit encore score(), ex. plans.py figé d'une session du manager : ancienne recherche)
             return s.pick_crn(g, d, opts)
@@ -406,7 +415,7 @@ class SearchAgent(Heuristics):
             for i in range(n):
                 run(i, k0)
         surv = ranked(range(n))
-        if s.search == "sh" and n > 1:
+        if s.search in ("sh", "turn") and n > 1:
             sizes, m = [], n
             while m > 2:
                 m = max(2, m // 2)
@@ -428,6 +437,103 @@ class SearchAgent(Heuristics):
         scored = [(val(i), opts[i]) for i in range(n)]
         b = surv[0]
         return opts[b], val(b), scored
+
+    # -------- recherche du tour entier (mode "turn")
+    def pick_turn(s, g, d, opts):
+        """Suite de coups du tour (jusqu'à « end ») au lieu du seul premier coup. Retourne (premier coup de la meilleure
+        suite, sa valeur, [(meilleure valeur d'une suite commençant par a, a)]) ; la suite complète va dans s.tplan.
+        En danger (ou si tout perd), on refait avec URGENT_SAMPLES mondes, les premiers étant les mêmes."""
+        me = d.player
+        worlds = [s.rng.getrandbits(30) for _ in range(max(s.samples, URGENT_SAMPLES))]
+        n0, i0 = Obj._n, Item._n
+        try:
+            seq, v, scored = s.turn_search(g, me, opts, worlds[:s.samples])
+            if s.urgent(g, d, me, v) and s.samples < URGENT_SAMPLES:
+                seq, v, scored = s.turn_search(g, me, opts, worlds[:URGENT_SAMPLES])
+        finally:
+            Obj._n, Item._n = n0, i0
+        s.tplan = ((g.turn_no, me), list(seq[1:]))
+        return seq[0], v, scored
+
+    def turn_search(s, g, me, opts, worlds):
+        """Faisceau (largeur turn_w, profondeur turn_d) sur les suites de coups de `me`. Chaque suite est jouée dans les
+        MÊMES mondes déterminisés (main et cartes cachées adverses, aléa) : valeur = moyenne sur les mondes de
+        « la suite, puis la politique de simulation jusqu'à l'horizon » ; « end » ferme la suite. Les coups d'après
+        ne sont retenus que légaux dans tous les mondes (une carte piochée en cours de tour y diffère). Ordre de jeu,
+        réserve ouverte et répartition des unités ressortent de la comparaison des suites complètes."""
+        wid, depth = int(s.cfg.get("turn_w", 3)), int(s.cfg.get("turn_d", 5))
+        pol = PolicyAgent()
+        pol.cfg = s.cfg
+        roots = []
+        ags = s.policies(me)
+        for w in worlds:
+            c = g.clone()
+            c.agents = ags
+            determinize(c, me, random.Random(w))
+            c.rng = random.Random(w * 2 + 1)
+            roots.append(c)
+
+        def settle(c):
+            """Avance jusqu'à la prochaine décision « main » de me (les fenêtres de réaction : politique de simulation)."""
+            for _ in range(300):
+                dd = c.advance()
+                if dd is None or (dd.kind == "main" and dd.player == me):
+                    return dd
+                c.apply(pol.decide(c, dd))
+            return None
+
+
+        def value(st, a):
+            c = st.clone()
+            c.agents = ags
+            c.apply(a)
+            if a[0] != "end":
+                settle(c)
+            rollout_policy(c, s.horizon, cfg=s.cfg)
+            return s.value(c, me)
+
+        def advance(st, a):
+            c = st.clone()
+            c.agents = ags
+            c.apply(a)
+            return c, settle(c)
+
+        end = ("end",)
+        beam = [dict(seq=[], states=roots, options=list(opts), pri=0.0)]
+        done = []                                      # (valeur, suite)
+        for lvl in range(depth):
+            kids = []
+            for nd in beam:
+                acts = nd["options"]
+                if lvl:
+                    acts = acts[:s.max_cands]
+                for a in acts:
+                    pri = nd["pri"] + s.prior_of(nd["states"][0], me, a)
+                    v = sum(value(st, a) for st in nd["states"]) / len(nd["states"]) + pri
+                    seq = nd["seq"] + [a]
+                    done.append((v, seq))
+                    if a != end:
+                        kids.append((v, len(kids), nd, a, pri))
+            kids.sort(key=lambda x: (-x[0], x[1]))
+            beam = []
+            for v, _, nd, a, pri in kids[:wid]:
+                nxt = [advance(st, a) for st in nd["states"]]
+                if any(dd is None for _, dd in nxt):
+                    continue                           # partie finie dans un des mondes : valeur déjà comptée
+                common = [x for x in nxt[0][1].options if all(x in dd.options for _, dd in nxt)]
+                if end in common:
+                    beam.append(dict(seq=nd["seq"] + [a], states=[c for c, _ in nxt], options=common, pri=pri))
+            if not beam:
+                break
+        best_v, best = -1e18, None
+        first = {}
+        for v, seq in done:
+            if v > best_v + 1e-9:
+                best_v, best = v, seq
+            k = repr(seq[0])
+            if k not in first or v > first[k][0]:
+                first[k] = (v, seq[0])
+        return best, best_v, [first[repr(a)] for a in opts if repr(a) in first]
 
 
 # ---------------------------------------------------------------------- cheap policy (rollouts, baseline)

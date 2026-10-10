@@ -35,6 +35,7 @@ VERSIONS = {
     "old2": ("old", 2, 0.0),     # ancienne, 2 tirages par option : même budget que sh
     "crn": ("crn", 1, 0.0),      # tirages communs seuls : même budget que old
     "sh": ("sh", 1, 1.0),        # tirages communs + élimination en passes : budget ≈ 2 × old
+    "turn": ("turn", 1, 1.0),    # tour entier en faisceau (turn_w, turn_d dans cfg) ; réactions en sh
     "sh05": ("sh", 1, 0.5),      # budget ≈ 1,5 × old
 }
 
