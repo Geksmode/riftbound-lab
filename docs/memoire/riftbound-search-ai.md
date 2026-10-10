@@ -63,4 +63,4 @@ Non mesuré : temps dans un vrai navigateur (téléphone compris).
 **Ce qui reste inconnu** : effet sur les decks au hasard (`miroir`) ; niveau Fort (3 tirages) ; réglage de `sh_extra` ;
 les pourcentages Akali contre LeBlanc publiés avant le 2026-10-09 ont été mesurés avec l'ancienne recherche (autre moteur).
 Replays : groupes « IA générale » du lecteur (`ia-sh-620040a/b`, `ia-sh-akali-690001a/b`, `ia-h1-660006`).
-Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]], [[replays-after-every-sim]].
+Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]].

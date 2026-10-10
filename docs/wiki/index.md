@@ -12,7 +12,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | travailler sur l'IA ou les plans | [recherche de l'IA générale](../memoire/riftbound-search-ai.md), [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats | [pages/resultats.md](pages/resultats.md) |
-| lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [replays après chaque sim](../memoire/replays-after-every-sim.md), [manager](../memoire/riftbound-manager.md) |
+| lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [manager](../memoire/riftbound-manager.md) |
 | toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md) |
 | coordonner des agents | [pages/equipe.md](pages/equipe.md), `docs/MISSIONS.md`, `.claude/chef.md` |
 | connaître le jeu, les règles, la méta | `docs/vault/Riftbound - Accueil.md` (index du vault), `riftbound/rules/` |
