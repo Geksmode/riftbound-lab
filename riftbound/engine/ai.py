@@ -60,6 +60,10 @@ if os.environ.get("RB_TRICK", "1") == "0":
     EV["trick"] = 0.0
     EV["open"] = 0.0
 POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
+# Réactions de la politique de simulation (2026-10-11, PolicyAgent.react_best) : le sort qui améliore le plus le combat,
+# essayé sur une copie, au lieu de plays[0] 8 fois sur 10. RB_REACT=0 rend l'ancienne politique.
+POL_REACT = os.environ.get("RB_REACT", "1") != "0"
+REACT_CANDS = 6
 
 
 def open_count(g, pid):
@@ -711,14 +715,62 @@ class PolicyAgent(Heuristics):
         if g.sd is None or g.sd.stage != "open":
             return ("pass",)
         bf = g.sd.bf
-        mine, theirs = s.combat_margin(g, pid, bf)
         plays = [o for o in d.options if o[0] == "play"]
         if not plays:
             return ("pass",)
+        if s.cfg.get("pol_react", POL_REACT):
+            return s.react_best(g, pid, bf, plays)
+        mine, theirs = s.combat_margin(g, pid, bf)
         losing = mine <= theirs and g.units(pid, bf)
         if losing and g.rng.random() < 0.8:
             return plays[0]
         return ("pass",)
+
+    def react_best(s, g, pid, bf, plays):
+        """Réaction en showdown (2026-10-11, combats perdus de l'IA dans les parties de l'utilisateur : la politique
+        jouait plays[0] 8 fois sur 10, pas le sort qui retourne le combat ; l'IA sous-estimait les réactions adverses).
+        Chaque sort jouable (REACT_CANDS au plus) est essayé sur une copie, la chaîne résolue (les deux joueurs passent),
+        puis noté par l'écart de Might au battlefield (combat_margin). On joue le meilleur s'il améliore l'écart obtenu
+        en passant et que, sans lui, pid ne gagne pas le combat ; sinon on passe."""
+        if not g.units(pid, bf):
+            return ("pass",)
+        base = s.react_margin(g, pid, bf, ("pass",)) if g.chain else s.margin_now(g, pid, bf)
+        if base is None or base > 0:
+            return ("pass",)
+        best, bv = None, base
+        for o in plays[:REACT_CANDS]:
+            v = s.react_margin(g, pid, bf, o)
+            if v is not None and v > bv + 1e-9:
+                best, bv = o, v
+        return best or ("pass",)
+
+    def margin_now(s, g, pid, bf):
+        mine, theirs = s.combat_margin(g, pid, bf)
+        return mine - theirs
+
+    def react_margin(s, g, pid, bf, a):
+        """Écart de Might à bf pour pid après a et la résolution de la chaîne (copie ; compteurs d'objets restaurés).
+        +1000 / −1000 si la partie finit ; None si a n'a pas pu être joué."""
+        n0, i0 = Obj._n, Item._n
+        try:
+            c = g.clone()
+            c.agents = g.agents
+            try:
+                c.apply(a)
+            except Exception:
+                return None
+            for _ in range(80):
+                if not c.chain and c.chain_origin is None and not c.trigq:
+                    break
+                dd = c.advance()
+                if dd is None:
+                    return 1000.0 if c.winner == pid else -1000.0
+                if dd.kind != "priority":
+                    break
+                c.apply(("pass",))
+            return s.margin_now(c, pid, bf)
+        finally:
+            Obj._n, Item._n = n0, i0
 
 
 def rollout_policy(g, horizon=2, max_steps=600, cfg=None):
