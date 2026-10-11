@@ -4,6 +4,7 @@ Sources : guide Metafy de Gorica (résumé, texte non reproduit), deck tech de G
 commentées BMU et RQ Singapour pour Akali ; 50k Comics (Houston), DZiden, RQ Singapour, guides écrits pour LeBlanc.
 Détail et horodatages : [notes_akali_videos.md](notes_akali_videos.md), [notes_leblanc_videos.md](notes_leblanc_videos.md).
 Traduction en code : `engine/plans.py`.
+Plans des 49 autres légendes par défaut (2026-10-11, non mesurés) : [legendes.md](legendes.md), code `engine/plans_legendes.py`.
 
 ## Akali Heron (Gorica)
 **Identité.** Deck contrôle lent orienté valeur. Les points du début ne comptent pas, il faut ne pas perdre.

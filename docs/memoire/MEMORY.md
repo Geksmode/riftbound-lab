@@ -11,6 +11,7 @@
 - [riftbound-gameplans](riftbound-gameplans.md) — player gameplans in engine/plans.py; Gorica engine plan ~53% vs LeBlanc Hook tempo
 - [riftbound-search-ai](riftbound-search-ai.md) — IA générale 2026-10-09 : tirages communs + élimination en passes (défaut « sh »), +15 points contre l'ancienne sur 49 decks, essais d'évaluation non retenus, temps par coup ; sorts de combat gardés en main et runes ouvertes (2026-10-10)
 - [ia-tests-decks-varies](ia-tests-decks-varies.md) — règle 2026-10-10 : tester l'IA sur des decks variés (exp_search defaut, ~80 paires), plus d'Akali contre LeBlanc par défaut
+- [plans-par-legende](plans-par-legende.md) — 2026-10-11 : plan sourcé pour les 49 légendes par défaut (plans_legendes.py, gameplans/legendes.md), non mesuré, « @plan=leg » dans exp_search
 - [riftbound-tempo-ai](riftbound-tempo-ai.md) — "win at all costs" AI flag ai.TEMPO, paired effects, Akali-at-7 passivity left
 - [leblanc-real-play](leblanc-real-play.md) — LeBlanc keeps Reflection on battlefield, hides more, video rules; flags RB_REFL/RB_VIDEO, no measurable effect
 - [akali-vs-yi-coaching](akali-vs-yi-coaching.md) — 0-2 vs Yi Bladesman/Azir, Yi fiche, carnet de parties, puzzles artifact
