@@ -64,6 +64,11 @@ ok(`Terminer le tour : un son (${(await snd()) - n})`, (await snd()) > n);
 await idle();
 await pg.click("#bSon"); await pg.waitForTimeout(150);
 ok("menu ♪ ouvert : son activé et 6 ambiances", await ev("!$('sonPop').hidden && $('sonPop').querySelectorAll('[data-pk]').length === 6"));
+ok(`barre de volume à ${await ev("$('sonVol') ? $('sonVol').value : 'absente'")} par défaut`, await ev("!!$('sonVol') && $('sonVol').value === '70'"));
+const vb = await pg.locator("#sonVol").boundingBox();   // vrai geste : toucher la barre à 30 % de sa longueur
+await pg.mouse.click(vb.x + vb.width * 0.3, vb.y + vb.height / 2); await pg.waitForTimeout(150);
+const v30 = +(await ev("$('sonVol').value"));
+ok(`volume réglé au doigt : ${v30} (chiffre affiché ${await ev("$('sonVolN').textContent")}, gardé ${await ev("localStorage.getItem('rbt-sonvol')")})`, v30 >= 20 && v30 <= 40 && await ev("$('sonVolN').textContent === $('sonVol').value && localStorage.getItem('rbt-sonvol') === $('sonVol').value"));
 n = await snd();
 await pg.click("#sonPop [data-pk=cinematic]"); await pg.waitForTimeout(1500);
 const cin = [...sfx.ok].filter(f => f.startsWith("cinematic/")).length;
@@ -82,6 +87,7 @@ await pg.reload(); await waitFor("(()=>{const b=document.querySelector('#menu .m
 await ev("hideMenu()");
 ok("après rechargement : le son reste coupé", await ev("$('bSon').getAttribute('aria-label') === 'Sons : coupés'"));
 await pg.click("#bSon"); await pg.click("#sonPop [data-son]"); await pg.waitForTimeout(800);
+ok(`après rechargement : volume gardé (${await ev("$('sonVol').value")})`, +(await ev("$('sonVol').value")) === v30);
 ok(`rallumé : il sonne de nouveau, ambiance Cinéma gardée (« ${await ev("$('bSon').getAttribute('aria-label')")} »)`, (await snd()) > 0 && await ev("$('bSon').getAttribute('aria-label') === 'Sons : Cinéma'"));
 await pg.screenshot({ path: OUT + "/son-menu.png" });
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
