@@ -275,6 +275,7 @@ body.dkopen { overflow: hidden; }
 .dkst { font-weight: 600; font-size: 14px; }
 .dkst.ok { color: var(--akali); } .dkst.ko { color: #f0a35b; }
 .dkerr { margin: 0; padding-left: 18px; font-size: 12px; color: var(--ink-2); display: grid; gap: 2px; }
+.dkerr[hidden] { display: none; }
 .dkact { display: flex; flex-wrap: wrap; gap: 6px; }
 .dkact button.main { background: #2a3b38; border-color: var(--akali); color: var(--akali); }
 .dkh { font-family: var(--f-display); font-size: 13.5px; color: var(--brass); margin-top: 8px; display: flex; gap: 6px; align-items: baseline; }
@@ -2431,13 +2432,23 @@ function dkList() {
   h += `<div class="dkh">Battlefields <b>${DK.battlefields.length}</b>/3</div>` + (DK.battlefields.map(n => row(n, "", `<button data-add="${esc(n)}" aria-label="Retirer">−</button>`)).join("") || `<div class="small">Touche 3 battlefields dans la liste.</div>`);
   return h;
 }
+// Verdict du moteur arrivé après le rendu (worker) : on ne met à jour que l'état, les erreurs et « Jouer ce deck », sans
+// redessiner l'éditeur (un toucher en cours sur un bouton remplacé serait perdu).
+function dkVerdict() {
+  const x = toEngine(DK), e = CHK.get(JSON.stringify(x)); if (!e) return;
+  DKERR = e;
+  const ok = !blocking(e), V_ = $("deckView"), st = V_.querySelector(".dkst"), ul = V_.querySelector(".dkerr"), pl = $("dkPlay");
+  if (st) { st.className = "dkst " + (ok ? "ok" : "ko"); st.textContent = ok ? "Deck jouable ✓" : "Pas encore jouable"; }
+  if (ul) { ul.innerHTML = e.map(t => `<li>${esc(t)}</li>`).join(""); ul.hidden = !e.length; }
+  if (pl) pl.disabled = !ok;
+}
 function dkRender() {
   const V_ = $("deckView");
   if (V_.hidden) return;
   Z.hidden = true;
   const sc = V_.querySelector(".dkcat"), st0 = sc ? sc.scrollTop : 0, sd = V_.querySelector(".dkdeck"), st1 = sd ? sd.scrollTop : 0;
   { const x = toEngine(DK), e = checkCached(x);   // pas encore vérifié : on garde l'ancien verdict et on redessine au retour
-    if (e) DKERR = e; else checkAsync(x).then(() => { if (!$("deckView").hidden && CHK.has(JSON.stringify(toEngine(DK)))) dkRender(); }); }
+    if (e) DKERR = e; else checkAsync(x).then(() => { if (!$("deckView").hidden && JSON.stringify(toEngine(DK)) === JSON.stringify(x)) dkVerdict(); }); }
   const sets = [...new Set(CAT.cards.map(c => c.set))].sort();
   const res = dkFiltered(), shown = res.slice(0, DKF.lim);
   const nm = Object.values(MYDECKS).sort((a, b) => a.name.localeCompare(b.name));
@@ -2466,7 +2477,7 @@ function dkRender() {
       <aside class="dkdeck">
         <input id="dkName" placeholder="Nom du deck" value="${esc(DK.name)}">
         <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
-        ${DKERR.length ? `<ul class="dkerr">${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>` : ""}
+        <ul class="dkerr"${DKERR.length ? "" : " hidden"}>${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
         <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}</div>
         <div class="dklist">${dkList()}</div>
       </aside>
