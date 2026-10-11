@@ -193,6 +193,8 @@ body { background: radial-gradient(1200px 700px at 30% 0%, #1d2540 0%, #12141c 6
 .topbar #gmeta { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 3px 10px; }
 .tbtns { margin-left: auto; display: flex; gap: 6px; }
 .tbtns button { border-radius: 20px; padding: 6px 14px; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); font-weight: 500; }
+.tbtns button.son { min-width: 38px; padding-left: 10px; padding-right: 10px; }
+.tbtns button.son.off { opacity: .5; text-decoration: line-through; }
 .tbtns button b { display: inline-block; min-width: 18px; margin-left: 4px; padding: 0 5px; border-radius: 9px; background: var(--brass); color: #1b1608; font-size: 11px; }
 button { border-radius: 8px; transition: background-color .15s, border-color .15s, box-shadow .15s, transform .08s; }
 button:active:not(:disabled) { transform: scale(.97); }
@@ -675,7 +677,7 @@ body.dkopen { overflow: hidden; }
       <button class="res tchip" id="gtuto" hidden aria-label="Afficher le défi du tutoriel"></button>
       <span class="savechip" id="saveChip" hidden></span>
       <button class="savechip netchip" id="netChip" hidden></button>
-      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button></div>
+      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bSon" class="son" aria-pressed="true" title="Sons de la table">♪</button></div>
     </div>
     <div class="boardwrap"><div class="boardgrid">
       <div class="track" id="track" aria-label="Points"></div>
@@ -719,6 +721,96 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+// ------------------------------------------------------------ sons
+// Petits sons synthétisés en direct (Web Audio, aucun fichier) pour que la table réponde au toucher : carte touchée,
+// soulevée, jouée, cible choisie, déplacement, combat, unité qui meurt, point marqué, fin de tour, coup refusé, victoire.
+// Bouton « son » dans la barre du haut (clé rbt-son). Sans Web Audio (ou s'il échoue), la table marche pareil, muette.
+const SFX = (() => {
+  let ac = null, out = null, noiseBuf = null, on = store.get("rbt-son") !== "0", last = {};
+  function ctx() {
+    if (!on) return null;
+    try {
+      if (!ac) {
+        const A = window.AudioContext || window.webkitAudioContext; if (!A) { on = false; return null; }
+        ac = new A(); out = ac.createGain(); out.gain.value = 0.5; out.connect(ac.destination);
+        noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.5, ac.sampleRate);
+        const d = noiseBuf.getChannelData(0); let s = 1;   // bruit pseudo-aléatoire fixe (pas de Math.random)
+        for (let i = 0; i < d.length; i++) { s = (s * 16807) % 2147483647; d[i] = s / 1073741823.5 - 1; }
+      }
+      if (ac.state === "suspended") ac.resume();
+      return ac;
+    } catch (e) { return null; }
+  }
+  // note : oscillateur avec enveloppe (attaque courte, chute exponentielle) et glissé de fréquence f0 → f1
+  function tone(t, f0, f1, dur, vol, type = "sine") {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t); if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.02);
+  }
+  // souffle : bruit filtré (passe-bande glissé f0 → f1)
+  function noise(t, f0, f1, dur, vol, q = 1.2) {
+    const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    s.buffer = noiseBuf; f.type = "bandpass"; f.Q.value = q;
+    f.frequency.setValueAtTime(f0, t); if (f1 !== f0) f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + Math.min(0.02, dur / 3)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(out); s.start(t, 0, dur + 0.02);
+  }
+  const notes = (t, fs, step, dur, vol, type) => fs.forEach((f, i) => tone(t + i * step, f, f, dur, vol, type));
+  const SOUNDS = {
+    tick:   t => tone(t, 1500, 1100, 0.04, 0.10, "triangle"),                         // carte touchée
+    untick: t => tone(t, 900, 700, 0.04, 0.07, "triangle"),                           // sélection retirée
+    lift:   t => { noise(t, 1200, 2600, 0.09, 0.10, 2); tone(t, 420, 640, 0.08, 0.05); },   // carte soulevée
+    target: t => notes(t, [988, 1319], 0.05, 0.07, 0.09, "triangle"),                 // cible choisie
+    play:   t => { noise(t, 2400, 500, 0.12, 0.22, 0.8); tone(t + 0.01, 190, 80, 0.16, 0.30); },   // carte posée
+    hide:   t => noise(t, 900, 400, 0.18, 0.10, 1.5),                                 // carte cachée face cachée
+    act:    t => { tone(t, 520, 1040, 0.16, 0.10, "triangle"); tone(t + 0.04, 780, 1560, 0.14, 0.05); },   // capacité
+    move:   t => noise(t, 350, 1800, 0.26, 0.16, 1.4),                                // déplacement
+    combat: t => { noise(t, 3000, 1200, 0.22, 0.24, 0.7); tone(t, 233, 220, 0.25, 0.08, "sawtooth"); tone(t, 311, 300, 0.22, 0.06, "square"); },
+    death:  t => tone(t, 420, 110, 0.32, 0.16, "triangle"),                           // unité qui meurt
+    point:  t => notes(t, [784, 988, 1175], 0.07, 0.16, 0.12, "triangle"),            // tu marques
+    opoint: t => notes(t, [440, 370], 0.09, 0.18, 0.11, "triangle"),                  // l'adversaire marque
+    end:    t => { tone(t, 660, 660, 0.5, 0.12); tone(t + 0.08, 990, 990, 0.45, 0.07); },   // fin de tour
+    pass:   t => tone(t, 700, 600, 0.06, 0.08, "triangle"),
+    click:  t => tone(t, 1000, 800, 0.05, 0.09, "triangle"),                          // réponse à une question
+    nope:   t => { tone(t, 150, 140, 0.07, 0.10, "square"); tone(t + 0.09, 130, 120, 0.09, 0.10, "square"); },   // coup refusé
+    draw:   t => noise(t, 3500, 5500, 0.07, 0.07, 1.8),                               // tu pioches
+    opp:    t => { noise(t, 1600, 450, 0.10, 0.10, 0.8); tone(t, 150, 90, 0.12, 0.14); },   // coup de l'adversaire
+    turn:   t => tone(t, 523, 523, 0.35, 0.07),                                       // nouveau tour
+    undo:   t => tone(t, 900, 380, 0.14, 0.09, "triangle"),
+    win:    t => notes(t, [523, 659, 784, 1047], 0.11, 0.35, 0.14, "triangle"),
+    lose:   t => notes(t, [392, 330, 262], 0.16, 0.4, 0.12, "triangle"),
+  };
+  function play(k, delay = 0) {
+    const a = ctx(); if (!a || !SOUNDS[k]) return;
+    const now = a.currentTime;
+    if (last[k] && now - last[k] < 0.05 && !delay) return;   // pas deux fois le même son à la même milliseconde
+    last[k] = now;
+    try { SOUNDS[k](now + delay + 0.005); } catch (e) {}
+  }
+  // plusieurs sons d'un même rendu : légèrement décalés, sans dépasser quatre
+  const seq = ks => ks.slice(0, 4).forEach((k, j) => play(k, j * 0.11));
+  function setOn(v) { on = !!v; store.set("rbt-son", on ? "1" : "0"); if (!on && ac) { try { ac.suspend(); } catch (e) {} } if (on) play("tick"); }
+  // les navigateurs n'ouvrent l'audio qu'après un geste : on le prépare au premier toucher
+  document.addEventListener("pointerdown", () => ctx(), { capture: true, once: true });
+  return { play, seq, setOn, get on() { return on; } };
+})();
+// Sons d'un nouveau rendu du moteur : lignes du journal, points, fin de partie. prev : rendu affiché avant.
+function sfxView(prev, v) {
+  const ks = [], logs = (v.log || []).map(x => x[1] || "");
+  if (v.ai) ks.push("opp");
+  if (logs.some(t => /^(Combat|COMBAT) /.test(t))) ks.push("combat");
+  if (logs.some(t => / meurt\b/.test(t))) ks.push("death");
+  if (logs.some(t => t.startsWith("Tu pioches"))) ks.push("draw");
+  if (logs.some(t => t.startsWith("Tour "))) ks.push("turn");
+  if (prev && prev.st && v.st && prev.st.pts && v.st.pts) {
+    if (v.st.pts[MEP] > prev.st.pts[MEP]) ks.push("point");
+    if (v.st.pts[OPP()] > prev.st.pts[OPP()]) ks.push("opoint");
+  }
+  const over = x => x && x.winner !== null && x.winner !== undefined;
+  if (over(v) && !over(prev)) ks.push(v.winner === MEP ? "win" : "lose");
+  if (ks.length) SFX.seq(ks);
+}
 let HANDOPEN = false;   // téléphone : main serrée ouverte en grand (handDense)
 let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set(), chainFocus = null;   // chainFocus : élément de la chaîne dont on montre les cibles (null : le haut)
 const rep = { get cards() { return CARDS; } };
@@ -1101,6 +1193,9 @@ function journal(open) {
 function badge() { const n = $("drawer").classList.contains("open") ? 0 : LOG.length - seenLog; $("bJournal").innerHTML = "Journal" + (n > 0 ? `<b>${n > 99 ? "99+" : n}</b>` : ""); }
 $("bJournal").onclick = () => journal(!$("drawer").classList.contains("open"));
 $("bJClose").onclick = () => journal(false);
+function sonBtn() { const b = $("bSon"); b.setAttribute("aria-pressed", SFX.on); b.classList.toggle("off", !SFX.on); b.setAttribute("aria-label", SFX.on ? "Couper les sons" : "Activer les sons"); }
+$("bSon").onclick = () => { SFX.setOn(!SFX.on); sonBtn(); };
+sonBtn();
 function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;
   for (const [ind, t] of lines) LOG.push([ind, t]);
@@ -1121,7 +1216,7 @@ function toast(msg, cls = "") {
 }
 
 function show(v) {
-  if (v !== V) { addLog(v.log || []); if (v.ai) toast(PN[OPP()] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
+  if (v !== V) { sfxView(V, v); addLog(v.log || []); if (v.ai) toast(PN[OPP()] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
   if (!v.dec && !v.ask) { mode = null; sel = null; }
   if (v.ask && !(mode && mode.type === "ask" && V && V.ask === v.ask)) {
     mode = { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
@@ -1271,6 +1366,7 @@ async function choose(i) {
   sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false);
   LOGSTACK.push(LOG.length);
   const o = V.dec.options.find(x => x.i === i);
+  SFX.play(o && { play: "play", hide: "hide", act: "act", move: "move", end: "end", pass: "pass" }[o.k] || "click");
   if (DU) duelLocal("act", i, o ? o.label : "", o ? o.k : ""); else recMove(["act", i, o ? o.label : "", V.st.t]);
   working = true;
   await pump(J(T.act(i)));
@@ -1302,6 +1398,7 @@ async function answer(x) {
   if (working) return;
   const a = V && V.ask;
   const lab = a ? a.kind + " : " + (Array.isArray(x) ? x.map(k => a.options[k]).join(", ") : a.options[x]) : "";
+  SFX.play("click");
   if (DU) duelLocal("ans", x, lab); else recMove(["ans", x, lab, V ? V.st.t : 0]);
   working = true; mode = null;
   await pump(J(T.answer(JSON.stringify(x))));
@@ -1313,6 +1410,7 @@ $("bUndo").onclick = () => {
   const n = LOGSTACK.length ? LOGSTACK.pop() : LOG.length;
   LOG = LOG.slice(0, n);
   const v = J(T.undo());
+  SFX.play("undo");
   recMove(["undo"]);
   if (REC && REC.result) REC.result = null;   // reprendre un coup après la fin : la partie continue
   matchUndoFinish();
@@ -1478,7 +1576,7 @@ const unitEl = u => document.querySelector(`#board .bf [data-uid="${u}"], #board
 const srcEl = u => document.querySelector(`#board [data-uid="${u}"]`);
 const zoneEl = z => document.querySelector(`#board [data-drop="${z}"]`);
 function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
-function flash(msg) { toast(msg, "flash"); }
+function flash(msg) { SFX.play("nope"); toast(msg, "flash"); }
 function reset() { sel = null; mode = null; }
 function run(m) {
   m = uniq(m);
@@ -1501,7 +1599,7 @@ function addTarget(u, quiet) {
   u = String(u);
   if (!targetable().has(u)) { if (!quiet) flash("Cette unité n'est pas une cible possible."); return; }
   mode.P.push(u);
-  if (!quiet) decorate();
+  if (!quiet) { SFX.play("target"); decorate(); }
 }
 // Téléphone : les cartes à toucher sont petites ou cachées sous la bulle (ta base) ; la bulle liste donc les choix
 // possibles de l'étape en cours en grandes cartes, avec leur camp et leur emplacement.
@@ -1828,28 +1926,29 @@ document.addEventListener("click", e => {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
     let i = u ? (mode.a.uids || []).findIndex(x => x !== null && String(x) === u.dataset.uid) : -1;
     if (i < 0 && z) i = (mode.a.zs || []).findIndex(x => x !== null && x === z.dataset.drop);
-    if (i >= 0) { mode.pick = mode.pick === i ? null : i; Z.hidden = true; decorate(); return; }
+    if (i >= 0) { mode.pick = mode.pick === i ? null : i; SFX.play(mode.pick === null ? "untick" : "target"); Z.hidden = true; decorate(); return; }
   }
   if (V && V.dec && !working && e.target.closest("#board")) {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
     if (mode && mode.type === "target") {
-      const ph = tPhase(), drop = id => { mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = null; mode.skip = false; decorate(); };
-      if (mode.M !== null && u && u.dataset.uid === mode.M) { mode.M = mode.D = null; decorate(); return; }
-      if (ph === "mover" && u && moverSet().has(u.dataset.uid)) { mode.M = u.dataset.uid; decorate(); return; }
-      if ((ph === "dest" || ph === "done") && z && destSet().has(z.dataset.drop)) { mode.D = z.dataset.drop; decorate(); return; }
+      const ph = tPhase(), drop = id => { SFX.play("untick"); mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = null; mode.skip = false; decorate(); };
+      if (mode.M !== null && u && u.dataset.uid === mode.M) { SFX.play("untick"); mode.M = mode.D = null; decorate(); return; }
+      if (ph === "mover" && u && moverSet().has(u.dataset.uid)) { SFX.play("target"); mode.M = u.dataset.uid; decorate(); return; }
+      if ((ph === "dest" || ph === "done") && z && destSet().has(z.dataset.drop)) { SFX.play("target"); mode.D = z.dataset.drop; decorate(); return; }
       if (u && mode.P.includes(u.dataset.uid) && !u.classList.contains("drop-ok")) return drop(u.dataset.uid);
       if (ph === "t1" && u && u.classList.contains("drop-ok")) { addTarget(u.dataset.uid); return; }
       if (u && mode.P.includes(u.dataset.uid)) return drop(u.dataset.uid);
     } else if (mode && mode.type === "move") {
       if (u && u.classList.contains("can") && canMove(u.dataset.uid) && !u.closest(".hand")) {
         const id = u.dataset.uid;
+        SFX.play(mode.units.includes(id) ? "untick" : "tick");
         mode.units = mode.units.includes(id) ? mode.units.filter(x => x !== id) : [...mode.units, id];
         if (!mode.units.length) mode = null;
         decorate(); return;
       }
-      if (z && z.classList.contains("drop-ok")) { mode.dest = z.dataset.drop; decorate(); return; }
+      if (z && z.classList.contains("drop-ok")) { SFX.play("target"); mode.dest = z.dataset.drop; decorate(); return; }
     } else if (u && u.classList.contains("can")) {
-      mode = null; sel = sel === u.dataset.uid ? null : u.dataset.uid; Z.hidden = true;
+      mode = null; sel = sel === u.dataset.uid ? null : u.dataset.uid; Z.hidden = true; SFX.play(sel === null ? "untick" : "tick");
       decorate(); return;
     } else if (sel !== null) { sel = null; decorate(); }
   } else if (sel !== null && !e.target.closest("#ctrl")) { sel = null; if (V) decorate(); }
@@ -1869,7 +1968,7 @@ document.addEventListener("pointermove", e => {
     if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 8) return;
     // main agrandie : un geste plutôt horizontal fait défiler la main, seul un geste vers le plateau glisse la carte
     if (drag.el.closest(".hand.open") && Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0)) { drag = null; return; }
-    drag.on = true; Z.hidden = true; $("pop").hidden = true;
+    drag.on = true; Z.hidden = true; $("pop").hidden = true; SFX.play("lift");
     if (!(mode && mode.type === "move")) { mode = null; sel = drag.src; }
     const r = drag.el.getBoundingClientRect(), g = drag.el.cloneNode(true);
     g.classList.add("ghost"); g.classList.remove("isel"); g.style.width = r.width + "px"; g.style.height = r.height + "px";
@@ -1908,6 +2007,7 @@ function dropAt(src, t) {
   // 2. unité déplacée : déplacement préparé, lancé ensuite par le bouton
   if (ops.some(o => o.k === "move")) {
     if (mode && mode.type === "move" && mode.dest !== null && mode.dest !== zone) mode = null;
+    SFX.play("target");
     return startMove(src, zone);
   }
   // 3. carte jouée sur une zone. Les coups qui visent exactement cette zone passent d'abord : une carte Hidden lâchée
@@ -2129,6 +2229,7 @@ function sideAdd(n) {
   if (cnt(DK.sideboard) >= 10) return toast("Sideboard plein : 10 cartes au plus (règle 601.1.c.1).");
   if (copies(n) >= 3) return toast("3 exemplaires au plus, sideboard compris (règle 601.1.c.3).");
   DK.sideboard[n] = (DK.sideboard[n] || 0) + 1;
+  SFX.play("tick");
   if (!c.m) toast(`${n} n'est pas encore modélisée : tu peux préparer le deck, mais pas encore le jouer.`);
   dkRender();
 }
@@ -2162,12 +2263,14 @@ function addCard(n, fromGrid) {
     if (copies(n) >= 3) return toast("3 exemplaires au plus.");
     if (!DK.champion && canChamp(c)) DK.champion = n; else DK.main[n] = (DK.main[n] || 0) + 1;
   }
+  SFX.play("tick");
   if (!c.m) toast(`${n} n'est pas encore modélisée : tu peux préparer le deck, mais pas encore le jouer.`);
   dkRender();
 }
 function subCard(n) {
   if (DK.main[n]) { DK.main[n]--; if (!DK.main[n]) delete DK.main[n]; }
   else if (DK.champion === n) DK.champion = "";
+  SFX.play("untick");
   dkRender();
 }
 function makeChamp(n) {
