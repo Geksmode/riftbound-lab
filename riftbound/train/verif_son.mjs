@@ -11,8 +11,10 @@ const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHRO
 const pg = await (await b.newContext({ viewport: { width: 1400, height: 900 } })).newPage();
 await pg.addInitScript(() => {
   window.__snd = 0;
-  const P = window.AudioScheduledSourceNode && AudioScheduledSourceNode.prototype;
-  if (P) { const s = P.start; P.start = function (...a) { window.__snd++; return s.apply(this, a); }; }
+  for (const C of [window.AudioScheduledSourceNode, window.AudioBufferSourceNode, window.OscillatorNode]) {
+    const P = C && C.prototype;
+    if (P && Object.prototype.hasOwnProperty.call(P, "start")) { const s = P.start; P.start = function (...a) { window.__snd++; return s.apply(this, a); }; }
+  }
 });
 const errs = []; pg.on("pageerror", e => errs.push(String(e)));
 const sfx = { ok: new Set(), bad: [] };
@@ -76,7 +78,8 @@ const c = await ev("(()=>{ const e = document.querySelector('#board [data-uid].c
 if (c) { await pg.click(`#board [data-uid="${c}"]`); await pg.waitForTimeout(150); }
 ok(`son coupé : plus aucun son (Reprendre, toucher une carte : ${(await snd()) - n})`, (await snd()) === n);
 await pg.screenshot({ path: OUT + "/son-coupe.png" });
-await pg.reload(); await waitFor("!!document.getElementById('bSon')");
+await pg.reload(); await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
+await ev("hideMenu()");
 ok("après rechargement : le son reste coupé", await ev("$('bSon').getAttribute('aria-label') === 'Sons : coupés'"));
 await pg.click("#bSon"); await pg.click("#sonPop [data-son]"); await pg.waitForTimeout(800);
 ok(`rallumé : il sonne de nouveau, ambiance Cinéma gardée (« ${await ev("$('bSon').getAttribute('aria-label')")} »)`, (await snd()) > 0 && await ev("$('bSon').getAttribute('aria-label') === 'Sons : Cinéma'"));
