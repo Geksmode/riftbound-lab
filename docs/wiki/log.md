@@ -230,3 +230,6 @@ Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ;
 - 21 parties de la table (IA à recherche du tour entier, rejeux fidèles avec le moteur de leur commit). Dans son tour, l'IA attaque 29 fois et perd 21 combats (72 %, Wilson 95 % : 54-85 %). 20 autres « combats de l'IA » ont lieu dans le tour de l'utilisateur : unité adverse amenée par Blitzcrank ou Shuriken Flip (attaquant = celui qui a rendu le battlefield Contested, 190.3.a, 464.2.c.1).
 - 10 sur 21 étaient favorables au début du showdown et ont été retournés par une réaction (Discipline, Defy, Back Off…) : l'IA voit 3 mains adverses et la politique de simulation du défenseur joue `plays[0]`. 11 sur 21 étaient perdus d'avance : 2 avec toutes les options notées perdues (écart 0,3), 2 dans une suite notée gagnante (+6400), 7 non expliqués.
 - Constat sur le seul deck Akali de l'utilisateur, combats d'une même partie non indépendants. Script : `engine/combats_parties.py`. Corrections proposées, pas faites.
+
+## [2026-10-11] ingest | Table : sons des interactions
+Vrais sons MP3 (banque `uisfx`, CC0) sur les gestes et les événements de partie, menu « ♪ » (coupé / six ambiances) ; la synthèse « 8 bits » du premier essai est abandonnée. Robot `train/verif_son.mjs`. Détail : `docs/memoire/riftbound-training-table.md`.

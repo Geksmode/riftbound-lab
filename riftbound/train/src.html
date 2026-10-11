@@ -195,6 +195,11 @@ body { background: radial-gradient(1200px 700px at 30% 0%, #1d2540 0%, #12141c 6
 .tbtns button { border-radius: 20px; padding: 6px 14px; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); font-weight: 500; }
 .tbtns button.son { min-width: 38px; padding-left: 10px; padding-right: 10px; }
 .tbtns button.son.off { opacity: .5; text-decoration: line-through; }
+.sonpop { min-width: 220px; z-index: 80; display: flex; flex-direction: column; gap: 8px; }
+.sonpop .sonon.on, .sonpop .sonpk button.on { border-color: var(--brass); background: rgba(243,213,138,.16); }
+.sonpop .sonpk { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.sonpop button { min-height: 36px; }
+.sonpop .sonpk button { text-align: center; }
 .tbtns button b { display: inline-block; min-width: 18px; margin-left: 4px; padding: 0 5px; border-radius: 9px; background: var(--brass); color: #1b1608; font-size: 11px; }
 button { border-radius: 8px; transition: background-color .15s, border-color .15s, box-shadow .15s, transform .08s; }
 button:active:not(:disabled) { transform: scale(.97); }
@@ -677,7 +682,7 @@ body.dkopen { overflow: hidden; }
       <button class="res tchip" id="gtuto" hidden aria-label="Afficher le défi du tutoriel"></button>
       <span class="savechip" id="saveChip" hidden></span>
       <button class="savechip netchip" id="netChip" hidden></button>
-      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bSon" class="son" aria-pressed="true" title="Sons de la table">♪</button></div>
+      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bSon" class="son" aria-haspopup="true" aria-expanded="false" title="Sons de la table">♪</button></div>
     </div>
     <div class="boardwrap"><div class="boardgrid">
       <div class="track" id="track" aria-label="Points"></div>
@@ -700,6 +705,7 @@ body.dkopen { overflow: hidden; }
 <div class="zoom" id="zoom" hidden></div>
 <div class="pop" id="pop" hidden></div>
 <div class="pop hpop" id="hpop" hidden></div>
+<div class="pop sonpop" id="sonPop" hidden></div>
 <div class="prompt" id="fbar" hidden></div>
 <div class="toast" id="aiLine" aria-live="polite" hidden></div>
 <div class="coach" id="coach" role="status" aria-live="polite" hidden></div>
@@ -722,78 +728,59 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // ------------------------------------------------------------ sons
-// Petits sons synthétisés en direct (Web Audio, aucun fichier) pour que la table réponde au toucher : carte touchée,
-// soulevée, jouée, cible choisie, déplacement, combat, unité qui meurt, point marqué, fin de tour, coup refusé, victoire.
-// Bouton « son » dans la barre du haut (clé rbt-son). Sans Web Audio (ou s'il échoue), la table marche pareil, muette.
+// Vrais petits sons enregistrés (MP3, banque uisfx 0.4.0, audio CC0, sfx/LICENSE-AUDIO) pour que la table réponde au
+// toucher : carte touchée, soulevée, posée, cible choisie, déplacement, combat, unité qui meurt, point, fin de tour,
+// coup refusé, victoire. Six ambiances au choix (bouton « ♪ » de la barre du haut, clés rbt-son et rbt-sonpack). Les
+// fichiers de l'ambiance choisie se chargent au premier geste ; sans Web Audio ou sans fichier, la table reste muette.
 const SFX = (() => {
-  let ac = null, out = null, noiseBuf = null, on = store.get("rbt-son") !== "0", last = {};
+  const PACKS = { studio: "Studio", cinematic: "Cinéma", zen: "Zen", soft: "Feutré", organic: "Bois", glass: "Verre" };
+  // événement de la table → fichier, et gain relatif (volume conseillé par la banque, 0.26 = le plus fort)
+  const MAP = { tick: "select", untick: "deselect", lift: "drag-start", target: "check", play: "drop", hide: "lock",
+    act: "unlock", move: "swipe", combat: "warning", death: "delete", point: "reward", opoint: "stop", end: "forward",
+    pass: "press", click: "press", nope: "invalid-drop", draw: "paste", opp: "receive", turn: "notification",
+    undo: "undo", win: "achievement", lose: "disconnect" };
+  const VOL = { select: .2, deselect: .17, "drag-start": .18, check: .17, drop: .22, lock: .2, unlock: .2, swipe: .14,
+    warning: .22, delete: .22, reward: .22, stop: .19, forward: .17, press: .2, "invalid-drop": .19, paste: .17,
+    receive: .2, notification: .2, undo: .18, achievement: .26, disconnect: .19 };
+  let ac = null, out = null, on = store.get("rbt-son") !== "0", pack = PACKS[store.get("rbt-sonpack")] ? store.get("rbt-sonpack") : "studio";
+  const buf = {}, last = {};   // buf["studio/drop"] : AudioBuffer décodé, ou une promesse en cours, ou null (échec)
   function ctx() {
     if (!on) return null;
     try {
       if (!ac) {
         const A = window.AudioContext || window.webkitAudioContext; if (!A) { on = false; return null; }
-        ac = new A(); out = ac.createGain(); out.gain.value = 0.5; out.connect(ac.destination);
-        noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.5, ac.sampleRate);
-        const d = noiseBuf.getChannelData(0); let s = 1;   // bruit pseudo-aléatoire fixe (pas de Math.random)
-        for (let i = 0; i < d.length; i++) { s = (s * 16807) % 2147483647; d[i] = s / 1073741823.5 - 1; }
+        ac = new A(); out = ac.createGain(); out.gain.value = 0.9; out.connect(ac.destination);
       }
       if (ac.state === "suspended") ac.resume();
       return ac;
     } catch (e) { return null; }
   }
-  // note : oscillateur avec enveloppe (attaque courte, chute exponentielle) et glissé de fréquence f0 → f1
-  function tone(t, f0, f1, dur, vol, type = "sine") {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = type; o.frequency.setValueAtTime(f0, t); if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.02);
+  function load(p, f) {
+    const k = p + "/" + f;
+    if (k in buf) return buf[k];
+    return buf[k] = fetch("sfx/" + k + ".mp3").then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+      .then(b => new Promise((ok, ko) => ac.decodeAudioData(b, ok, ko))).then(x => buf[k] = x).catch(() => buf[k] = null);
   }
-  // souffle : bruit filtré (passe-bande glissé f0 → f1)
-  function noise(t, f0, f1, dur, vol, q = 1.2) {
-    const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
-    s.buffer = noiseBuf; f.type = "bandpass"; f.Q.value = q;
-    f.frequency.setValueAtTime(f0, t); if (f1 !== f0) f.frequency.exponentialRampToValueAtTime(f1, t + dur);
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + Math.min(0.02, dur / 3)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    s.connect(f); f.connect(g); g.connect(out); s.start(t, 0, dur + 0.02);
-  }
-  const notes = (t, fs, step, dur, vol, type) => fs.forEach((f, i) => tone(t + i * step, f, f, dur, vol, type));
-  const SOUNDS = {
-    tick:   t => tone(t, 1500, 1100, 0.04, 0.10, "triangle"),                         // carte touchée
-    untick: t => tone(t, 900, 700, 0.04, 0.07, "triangle"),                           // sélection retirée
-    lift:   t => { noise(t, 1200, 2600, 0.09, 0.10, 2); tone(t, 420, 640, 0.08, 0.05); },   // carte soulevée
-    target: t => notes(t, [988, 1319], 0.05, 0.07, 0.09, "triangle"),                 // cible choisie
-    play:   t => { noise(t, 2400, 500, 0.12, 0.22, 0.8); tone(t + 0.01, 190, 80, 0.16, 0.30); },   // carte posée
-    hide:   t => noise(t, 900, 400, 0.18, 0.10, 1.5),                                 // carte cachée face cachée
-    act:    t => { tone(t, 520, 1040, 0.16, 0.10, "triangle"); tone(t + 0.04, 780, 1560, 0.14, 0.05); },   // capacité
-    move:   t => noise(t, 350, 1800, 0.26, 0.16, 1.4),                                // déplacement
-    combat: t => { noise(t, 3000, 1200, 0.22, 0.24, 0.7); tone(t, 233, 220, 0.25, 0.08, "sawtooth"); tone(t, 311, 300, 0.22, 0.06, "square"); },
-    death:  t => tone(t, 420, 110, 0.32, 0.16, "triangle"),                           // unité qui meurt
-    point:  t => notes(t, [784, 988, 1175], 0.07, 0.16, 0.12, "triangle"),            // tu marques
-    opoint: t => notes(t, [440, 370], 0.09, 0.18, 0.11, "triangle"),                  // l'adversaire marque
-    end:    t => { tone(t, 660, 660, 0.5, 0.12); tone(t + 0.08, 990, 990, 0.45, 0.07); },   // fin de tour
-    pass:   t => tone(t, 700, 600, 0.06, 0.08, "triangle"),
-    click:  t => tone(t, 1000, 800, 0.05, 0.09, "triangle"),                          // réponse à une question
-    nope:   t => { tone(t, 150, 140, 0.07, 0.10, "square"); tone(t + 0.09, 130, 120, 0.09, 0.10, "square"); },   // coup refusé
-    draw:   t => noise(t, 3500, 5500, 0.07, 0.07, 1.8),                               // tu pioches
-    opp:    t => { noise(t, 1600, 450, 0.10, 0.10, 0.8); tone(t, 150, 90, 0.12, 0.14); },   // coup de l'adversaire
-    turn:   t => tone(t, 523, 523, 0.35, 0.07),                                       // nouveau tour
-    undo:   t => tone(t, 900, 380, 0.14, 0.09, "triangle"),
-    win:    t => notes(t, [523, 659, 784, 1047], 0.11, 0.35, 0.14, "triangle"),
-    lose:   t => notes(t, [392, 330, 262], 0.16, 0.4, 0.12, "triangle"),
-  };
+  const preload = p => { if (ctx()) [...new Set(Object.values(MAP))].forEach(f => load(p, f)); };
   function play(k, delay = 0) {
-    const a = ctx(); if (!a || !SOUNDS[k]) return;
+    const a = ctx(), f = MAP[k]; if (!a || !f) return;
     const now = a.currentTime;
-    if (last[k] && now - last[k] < 0.05 && !delay) return;   // pas deux fois le même son à la même milliseconde
+    if (last[k] && now - last[k] < 0.06 && !delay) return;   // pas deux fois le même son au même instant
     last[k] = now;
-    try { SOUNDS[k](now + delay + 0.005); } catch (e) {}
+    const go = b => { if (!b || !b.length) return; try {
+      const s = a.createBufferSource(), g = a.createGain();
+      s.buffer = b; g.gain.value = VOL[f] / 0.26; s.connect(g); g.connect(out); s.start(Math.max(a.currentTime, now + delay));
+    } catch (e) {} };
+    const b = load(pack, f);
+    if (b instanceof Promise) b.then(go); else go(b);   // premier usage : le son part dès qu'il est chargé
   }
   // plusieurs sons d'un même rendu : légèrement décalés, sans dépasser quatre
-  const seq = ks => ks.slice(0, 4).forEach((k, j) => play(k, j * 0.11));
-  function setOn(v) { on = !!v; store.set("rbt-son", on ? "1" : "0"); if (!on && ac) { try { ac.suspend(); } catch (e) {} } if (on) play("tick"); }
-  // les navigateurs n'ouvrent l'audio qu'après un geste : on le prépare au premier toucher
-  document.addEventListener("pointerdown", () => ctx(), { capture: true, once: true });
-  return { play, seq, setOn, get on() { return on; } };
+  const seq = ks => ks.slice(0, 4).forEach((k, j) => play(k, j * 0.12));
+  function setOn(v) { on = !!v; store.set("rbt-son", on ? "1" : "0"); if (!on && ac) { try { ac.suspend(); } catch (e) {} } if (on) { preload(pack); play("tick"); } }
+  function setPack(p) { if (!PACKS[p]) return; pack = p; store.set("rbt-sonpack", p); if (!on) setOn(true); else { preload(p); play("play"); } }
+  // les navigateurs n'ouvrent l'audio qu'après un geste : on le prépare (et on charge l'ambiance) au premier toucher
+  document.addEventListener("pointerdown", () => preload(pack), { capture: true, once: true });
+  return { play, seq, setOn, setPack, PACKS, get on() { return on; }, get pack() { return pack; } };
 })();
 // Sons d'un nouveau rendu du moteur : lignes du journal, points, fin de partie. prev : rendu affiché avant.
 function sfxView(prev, v) {
@@ -1193,8 +1180,25 @@ function journal(open) {
 function badge() { const n = $("drawer").classList.contains("open") ? 0 : LOG.length - seenLog; $("bJournal").innerHTML = "Journal" + (n > 0 ? `<b>${n > 99 ? "99+" : n}</b>` : ""); }
 $("bJournal").onclick = () => journal(!$("drawer").classList.contains("open"));
 $("bJClose").onclick = () => journal(false);
-function sonBtn() { const b = $("bSon"); b.setAttribute("aria-pressed", SFX.on); b.classList.toggle("off", !SFX.on); b.setAttribute("aria-label", SFX.on ? "Couper les sons" : "Activer les sons"); }
-$("bSon").onclick = () => { SFX.setOn(!SFX.on); sonBtn(); };
+// Bouton « ♪ » : petit menu des sons (activés ou coupés, ambiance ; choisir une ambiance la fait entendre)
+function sonBtn() { const b = $("bSon"); b.classList.toggle("off", !SFX.on); b.setAttribute("aria-label", "Sons : " + (SFX.on ? SFX.PACKS[SFX.pack] : "coupés")); }
+function sonPop(open) {
+  const P = $("sonPop"); P.hidden = !open; $("bSon").setAttribute("aria-expanded", !!open);
+  if (!open) return;
+  P.innerHTML = `<div class="pt">Sons de la table</div><button class="sonon ${SFX.on ? "on" : ""}" data-son="toggle" aria-pressed="${SFX.on}">${SFX.on ? "Son activé" : "Son coupé"}</button>` +
+    `<div class="small">Ambiance</div><div class="sonpk">${Object.entries(SFX.PACKS).map(([k, n]) => `<button data-pk="${k}" class="${SFX.on && SFX.pack === k ? "on" : ""}" aria-pressed="${SFX.on && SFX.pack === k}">${n}</button>`).join("")}</div>`;
+  const r = $("bSon").getBoundingClientRect();
+  P.style.left = Math.max(8, Math.min(innerWidth - P.offsetWidth - 8, r.right - P.offsetWidth)) + "px"; P.style.top = (r.bottom + 6) + "px";
+}
+$("bSon").onclick = e => { e.stopPropagation(); sonPop($("sonPop").hidden); };
+$("sonPop").addEventListener("click", e => {
+  e.stopPropagation();
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.son) SFX.setOn(!SFX.on); else if (b.dataset.pk) SFX.setPack(b.dataset.pk);
+  sonBtn(); sonPop(true);
+});
+document.addEventListener("click", e => { if (!$("sonPop").hidden && !e.target.closest("#sonPop, #bSon")) sonPop(false); }, true);
+document.addEventListener("keydown", e => { if (e.key === "Escape") sonPop(false); });
 sonBtn();
 function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;

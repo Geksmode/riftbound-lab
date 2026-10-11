@@ -35,3 +35,12 @@ Choix de l'utilisateur parmi 5 dispositions : le tableau de bord. En haut, « To
 
 
 2026-10-10: renamed "Riftbound Entraînement" → "Riftbound Observatory" (user choice, fits the « observatoire » DA). Same artifact URL.
+
+## Sons (2026-10-11)
+Demande de l'utilisateur : « plus réactive, des sons quand on interagit avec les cartes ». Premier essai en sons synthétisés
+(oscillateurs Web Audio) jugé « trop 8 bits » : remplacés par de vrais MP3 (`train/sfx/`, paquet npm `uisfx` 0.4.0, audio
+CC0). Sons : carte touchée / relâchée, soulevée, posée, cachée, capacité, cible, déplacement, combat, unité qui meurt,
+point (toi / l'adversaire), fin de tour, passer, réponse, coup refusé, pioche, coup de l'IA, nouveau tour, reprendre,
+victoire / défaite ; éditeur de deck : ajout / retrait. Menu « ♪ » de la barre du haut : son activé / coupé et six
+ambiances (Studio par défaut, Cinéma, Zen, Feutré, Bois, Verre ; clés `rbt-son`, `rbt-sonpack`). Correspondance
+événement → fichier : `SFX.MAP` dans `src.html`. Le mode replay reste muet. Robot : `train/verif_son.mjs`.
