@@ -47,3 +47,9 @@ Fin : gain annoncé seulement s'il dépasse 2 écarts-types sur graines neuves, 
 ## retex (à faire par le chef et l'agent retex)
 Après chaque mission terminée : `/retex` de la session (ce qui tient, ce qui était surévalué, biais, ce qu'on change),
 mémoire mise à jour (`docs/memoire/`), chiffres périmés signalés dans `docs/vault/Chiffres périmés.md`.
+
+## design : vrais bruits de cartes sur la table (2026-10-11) : fait
+Demande : « des sons comme sur TCG Arena, des bruits de cartes prises, posées, etc. ». Fait : ambiance « Cartes » par
+défaut, vrais enregistrements Kenney « Casino Audio » (CC0, zip fourni par l'utilisateur, `kenney.nl` étant bloqué par
+le réseau de l'environnement), 24 MP3 dans `train/sfx/cartes/` (232 Ko), importés par `train/sfx/importer_kenney.sh`.
+Détail : `docs/memoire/riftbound-training-table.md`. Reste : réglage des volumes à l'oreille par l'utilisateur.
