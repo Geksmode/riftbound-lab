@@ -58,3 +58,9 @@ dans `train/sfx/cartes/` avec la licence, et les brancher dans `SFX.MAP` (`src.h
 poser / jouer = place, déplacement = shove, pioche = take-out, mélange = shuffle, fin de partie = fan ; tirer au hasard
 parmi les variantes (card-place-1..4) sans `Math.random` qui compte pour le moteur. En faire l'ambiance par défaut.
 Fin : `train/verif_son.mjs` et `scripts/verifier.sh` verts, PR ouverte, chiffres de taille donnés.
+**État au 2026-10-11 (2e session)** : `kenney.nl` toujours refusé par le proxy (403). Fait sans les fichiers : ambiance
+« Cartes » par défaut branchée dans `SFX` (`CARTES`, variantes tirées par un xorshift à part, pas deux fois la même
+d'affilée ; « shuffle » au mulligan), script `train/sfx/importer_kenney.sh <zip>` (OGG → MP3 mono 80 kb/s, licence,
+`sfx/cartes/liste.json`), `verif_son.mjs` adapté (7 ambiances, tous les fichiers de la liste chargés). Câblage vérifié
+par robot avec des bips factices (non committés), pas avec les vrais sons. Reste : télécharger le zip, lancer le script,
+écouter, committer `sfx/cartes/`, `verifier.sh` vert, PR.

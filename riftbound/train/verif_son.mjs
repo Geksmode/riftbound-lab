@@ -39,10 +39,12 @@ async function start(seed) {
   throw new Error("pas de carte jouable");
 }
 await start(process.env.RB_SEED || "4");
-ok(`son activé par défaut, ambiance Studio (bouton ♪ : « ${await ev("$('bSon').getAttribute('aria-label')")} »)`, await ev("$('bSon').getAttribute('aria-label') === 'Sons : Studio'"));
+ok(`son activé par défaut, ambiance Cartes (bouton ♪ : « ${await ev("$('bSon').getAttribute('aria-label')")} »)`, await ev("$('bSon').getAttribute('aria-label') === 'Sons : Cartes'"));
 await pg.waitForTimeout(1500);
-const studio = [...sfx.ok].filter(f => f.startsWith("studio/")).length;
-ok(`fichiers de l'ambiance Studio chargés : ${studio}/21, aucun en erreur (${sfx.bad.join(", ") || "rien"})`, studio === 21 && !sfx.bad.length);
+// ambiance Cartes (Kenney) : tous les fichiers de sfx/cartes/liste.json dont un geste se sert, variantes comprises
+const att = await ev("SFX.cartesFiles()"), cartes = [...sfx.ok].filter(f => f.startsWith("cartes/")).length;
+ok(`fichiers de l'ambiance Cartes chargés : ${cartes}/${att.length} (${["card-place", "card-slide", "card-shove", "cards-pack-take-out", "card-shuffle", "card-fan"].map(b => b + " ×" + att.filter(f => f === b || f.startsWith(b + "-")).length).join(", ")}), aucun en erreur (${sfx.bad.join(", ") || "rien"})`,
+  att.length >= 6 && cartes === att.length && ["card-place-2", "card-slide-2"].every(f => att.includes(f)) && !sfx.bad.length);
 ok(`sons pendant le début de partie (${await snd()} lancés)`, await snd() > 0);
 // une carte de ma main qui se joue sans cible : la toucher, puis « Jouer »
 const uid = await ev(`(() => { const o = V.dec.options.find(o => o.k === 'play' && !(o.t1 && o.t1.length)); return o ? String(o.src) : null })()`);
@@ -63,7 +65,7 @@ await pg.click("#bMain"); await pg.waitForTimeout(150);
 ok(`Terminer le tour : un son (${(await snd()) - n})`, (await snd()) > n);
 await idle();
 await pg.click("#bSon"); await pg.waitForTimeout(150);
-ok("menu ♪ ouvert : son activé et 6 ambiances", await ev("!$('sonPop').hidden && $('sonPop').querySelectorAll('[data-pk]').length === 6"));
+ok("menu ♪ ouvert : son activé et 7 ambiances", await ev("!$('sonPop').hidden && $('sonPop').querySelectorAll('[data-pk]').length === 7"));
 ok(`barre de volume à ${await ev("$('sonVol') ? $('sonVol').value : 'absente'")} par défaut`, await ev("!!$('sonVol') && $('sonVol').value === '70'"));
 const vb = await pg.locator("#sonVol").boundingBox();   // vrai geste : toucher la barre à 30 % de sa longueur
 await pg.mouse.click(vb.x + vb.width * 0.3, vb.y + vb.height / 2); await pg.waitForTimeout(150);

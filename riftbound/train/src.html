@@ -731,12 +731,13 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 // ------------------------------------------------------------ sons
-// Vrais petits sons enregistrés (MP3, banque uisfx 0.4.0, audio CC0, sfx/LICENSE-AUDIO) pour que la table réponde au
-// toucher : carte touchée, soulevée, posée, cible choisie, déplacement, combat, unité qui meurt, point, fin de tour,
-// coup refusé, victoire. Six ambiances au choix (bouton « ♪ » de la barre du haut, clés rbt-son et rbt-sonpack). Les
-// fichiers de l'ambiance choisie se chargent au premier geste ; sans Web Audio ou sans fichier, la table reste muette.
+// Vrais petits sons enregistrés pour que la table réponde au toucher : carte touchée, soulevée, posée, cible choisie,
+// déplacement, combat, unité qui meurt, point, fin de tour, coup refusé, victoire. Ambiance par défaut « Cartes » : vrais
+// bruits de cartes (Kenney Casino Audio, CC0, sfx/cartes/LICENSE-KENNEY.txt), plusieurs variantes par geste ; six autres
+// ambiances d'interface (banque uisfx 0.4.0, CC0, sfx/LICENSE-AUDIO). Choix au bouton « ♪ » (clés rbt-son, rbt-sonpack,
+// rbt-sonvol). Les fichiers de l'ambiance se chargent au premier geste ; sans Web Audio ou sans fichier, la table reste muette.
 const SFX = (() => {
-  const PACKS = { studio: "Studio", cinematic: "Cinéma", zen: "Zen", soft: "Feutré", organic: "Bois", glass: "Verre" };
+  const PACKS = { cartes: "Cartes", studio: "Studio", cinematic: "Cinéma", zen: "Zen", soft: "Feutré", organic: "Bois", glass: "Verre" };
   // événement de la table → fichier, et gain relatif (volume conseillé par la banque, 0.26 = le plus fort)
   const MAP = { tick: "select", untick: "deselect", lift: "drag-start", target: "check", play: "drop", hide: "lock",
     act: "unlock", move: "swipe", combat: "warning", death: "delete", point: "reward", opoint: "stop", end: "forward",
@@ -745,9 +746,32 @@ const SFX = (() => {
   const VOL = { select: .2, deselect: .17, "drag-start": .18, check: .17, drop: .22, lock: .2, unlock: .2, swipe: .14,
     warning: .22, delete: .22, reward: .22, stop: .19, forward: .17, press: .2, "invalid-drop": .19, paste: .17,
     receive: .2, notification: .2, undo: .18, achievement: .26, disconnect: .19 };
+  // ambiance « Cartes » : événement → [son Kenney, gain]. Toucher / soulever = glisser, poser / jouer = poser,
+  // déplacement = pousser, pioche = tirer du paquet, mélange (début de partie) = mélanger, fin de partie = éventail.
+  const CARTES = { tick: ["card-slide", .8], untick: ["card-slide", .55], lift: ["card-slide", 1], target: ["card-place", .6],
+    play: ["card-place", 1], hide: ["card-place", .8], act: ["card-slide", .9], move: ["card-shove", 1], combat: ["card-shove", 1],
+    death: ["card-shove", .8], point: ["chip-lay", .9], opoint: ["chip-lay", .6], end: ["card-slide", .9], pass: ["card-slide", .7],
+    click: ["card-slide", .7], nope: ["card-shove", .45], draw: ["cards-pack-take-out", .9], opp: ["card-place", .8],
+    turn: ["card-slide", .6], undo: ["card-slide", .8], shuffle: ["card-shuffle", .9], win: ["card-fan", 1], lose: ["card-fan", .7] };
+  let LISTE = null;   // sfx/cartes/liste.json : variantes de chaque son (card-place → 4 : card-place-1..4 ; 0 : sans numéro)
+  // tirage des variantes : petit générateur à part (xorshift), jamais Math.random, et jamais deux fois la même d'affilée
+  let rs = (Date.now() % 2147483647) | 1; const lastV = {};
+  const rnd = n => { rs ^= rs << 13; rs ^= rs >>> 17; rs ^= rs << 5; return (rs >>> 0) % n; };
+  function variant(base) {
+    const n = LISTE && LISTE[base]; if (n === undefined || n === null) return null;
+    if (!n) return base;
+    let i = 1 + rnd(n); if (n > 1 && i === lastV[base]) i = i % n + 1;
+    return base + "-" + (lastV[base] = i);
+  }
+  const cartesFiles = () => [].concat(...[...new Set(Object.values(CARTES).map(x => x[0]))].map(b => {
+    const n = LISTE && LISTE[b]; return n === undefined || n === null ? [] : n ? Array.from({ length: n }, (_, i) => b + "-" + (i + 1)) : [b];
+  }));
+  let listeP = null;
+  const liste = () => listeP || (listeP = fetch("sfx/cartes/liste.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(x => LISTE = x).catch(() => LISTE = {}));
   const v0 = parseInt(store.get("rbt-sonvol"), 10);
   let vol = v0 >= 0 && v0 <= 100 ? v0 : 70;   // volume 0-100 (barre du menu ♪, clé rbt-sonvol)
-  let ac = null, out = null, on = store.get("rbt-son") !== "0", pack = PACKS[store.get("rbt-sonpack")] ? store.get("rbt-sonpack") : "studio";
+  let ac = null, out = null, on = store.get("rbt-son") !== "0", pack = PACKS[store.get("rbt-sonpack")] ? store.get("rbt-sonpack") : "cartes";
   const buf = {}, last = {};   // buf["studio/drop"] : AudioBuffer décodé, ou une promesse en cours, ou null (échec)
   const gainOf = v => 1.3 * Math.pow(v / 100, 2);   // courbe en carré : la barre suit l'oreille (0 = muet)
   function ctx() {
@@ -767,17 +791,24 @@ const SFX = (() => {
     return buf[k] = fetch("sfx/" + k + ".mp3").then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
       .then(b => new Promise((ok, ko) => ac.decodeAudioData(b, ok, ko))).then(x => buf[k] = x).catch(() => buf[k] = null);
   }
-  const preload = p => { if (ctx()) [...new Set(Object.values(MAP))].forEach(f => load(p, f)); };
+  const preload = p => {
+    if (!ctx()) return;
+    if (p === "cartes") liste().then(() => cartesFiles().forEach(f => load(p, f)));
+    else [...new Set(Object.values(MAP))].forEach(f => load(p, f));
+  };
   function play(k, delay = 0) {
-    const a = ctx(), f = MAP[k]; if (!a || !f) return;
-    const now = a.currentTime;
+    const a = ctx(); if (!a) return;
+    if (pack === "cartes" && !LISTE) { liste().then(() => play(k, delay)); return; }   // premier son : la liste d'abord
+    const p = pack, c = p === "cartes" ? CARTES[k] : null, f = c ? variant(c[0]) : p === "cartes" ? null : MAP[k];
+    if (!f) return;
+    const gain = c ? c[1] : VOL[f] / 0.26, now = a.currentTime;
     if (last[k] && now - last[k] < 0.06 && !delay) return;   // pas deux fois le même son au même instant
     last[k] = now;
     const go = b => { if (!b || !b.length) return; try {
       const s = a.createBufferSource(), g = a.createGain();
-      s.buffer = b; g.gain.value = VOL[f] / 0.26; s.connect(g); g.connect(out); s.start(Math.max(a.currentTime, now + delay));
+      s.buffer = b; g.gain.value = gain; s.connect(g); g.connect(out); s.start(Math.max(a.currentTime, now + delay));
     } catch (e) {} };
-    const b = load(pack, f);
+    const b = load(p, f);
     if (b instanceof Promise) b.then(go); else go(b);   // premier usage : le son part dès qu'il est chargé
   }
   // plusieurs sons d'un même rendu : légèrement décalés, sans dépasser quatre
@@ -787,7 +818,7 @@ const SFX = (() => {
   // les navigateurs n'ouvrent l'audio qu'après un geste : on le prépare (et on charge l'ambiance) au premier toucher
   document.addEventListener("pointerdown", () => preload(pack), { capture: true, once: true });
   function setVol(v) { vol = Math.max(0, Math.min(100, Math.round(+v || 0))); store.set("rbt-sonvol", String(vol)); if (out) out.gain.setTargetAtTime(gainOf(vol), ac.currentTime, 0.02); }
-  return { play, seq, setOn, setPack, setVol, PACKS, get on() { return on; }, get pack() { return pack; }, get vol() { return vol; } };
+  return { play, seq, setOn, setPack, setVol, PACKS, cartesFiles, get on() { return on; }, get pack() { return pack; }, get vol() { return vol; } };
 })();
 // Sons d'un nouveau rendu du moteur : lignes du journal, points, fin de partie. prev : rendu affiché avant.
 function sfxView(prev, v) {
@@ -796,6 +827,7 @@ function sfxView(prev, v) {
   if (logs.some(t => /^(Combat|COMBAT) /.test(t))) ks.push("combat");
   if (logs.some(t => / meurt\b/.test(t))) ks.push("death");
   if (logs.some(t => t.startsWith("Tu pioches"))) ks.push("draw");
+  if (v.ask && v.ask.kind === "mulligan" && !(prev && prev.ask && prev.ask.kind === "mulligan")) ks.push("shuffle");   // début de partie
   if (logs.some(t => t.startsWith("Tour "))) ks.push("turn");
   if (prev && prev.st && v.st && prev.st.pts && v.st.pts) {
     if (v.st.pts[MEP] > prev.st.pts[MEP]) ks.push("point");
