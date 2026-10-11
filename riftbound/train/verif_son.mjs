@@ -1,7 +1,8 @@
 import { existsSync } from "node:fs";
-// Robot des sons de la table : chaque geste sur une carte (toucher, jouer) et la fin du tour font partir un son,
-// le bouton « ♪ » les coupe et le choix reste après un rechargement. Les sons sont comptés en espionnant Web Audio
-// (chaque oscillateur ou bruit lancé = un appel à start()) : on vérifie qu'ils partent, pas comment ils sonnent.
+// Robot des sons de la table : les fichiers MP3 de l'ambiance se chargent et se décodent, chaque geste sur une carte
+// (toucher, jouer) et la fin du tour font partir un son, le menu « ♪ » coupe le son et change d'ambiance (chargée à son
+// tour), et ces choix restent après un rechargement. Les sons sont comptés en espionnant Web Audio (chaque son lancé =
+// un appel à start()) : on vérifie qu'ils partent, pas comment ils sonnent.
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_son.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -10,10 +11,14 @@ const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHRO
 const pg = await (await b.newContext({ viewport: { width: 1400, height: 900 } })).newPage();
 await pg.addInitScript(() => {
   window.__snd = 0;
-  const P = window.AudioScheduledSourceNode && AudioScheduledSourceNode.prototype;
-  if (P) { const s = P.start; P.start = function (...a) { window.__snd++; return s.apply(this, a); }; }
+  for (const C of [window.AudioScheduledSourceNode, window.AudioBufferSourceNode, window.OscillatorNode]) {
+    const P = C && C.prototype;
+    if (P && Object.prototype.hasOwnProperty.call(P, "start")) { const s = P.start; P.start = function (...a) { window.__snd++; return s.apply(this, a); }; }
+  }
 });
 const errs = []; pg.on("pageerror", e => errs.push(String(e)));
+const sfx = { ok: new Set(), bad: [] };
+pg.on("response", r => { const m = r.url().match(/\/sfx\/(.+\.mp3)$/); if (m) (r.ok() ? sfx.ok.add(m[1]) : sfx.bad.push(m[1] + " " + r.status())); });
 let fails = 0; const ok = (n, v) => { if (!v) fails++; console.log((v ? "OK   " : "ÉCHEC") + " " + n); };
 const ev = s => pg.evaluate(s);
 const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(150); } throw new Error("attente : " + s); };
@@ -34,7 +39,10 @@ async function start(seed) {
   throw new Error("pas de carte jouable");
 }
 await start(process.env.RB_SEED || "4");
-ok(`son activé par défaut (bouton ♪ : aria-pressed=${await ev("$('bSon').getAttribute('aria-pressed')")})`, await ev("$('bSon').getAttribute('aria-pressed') === 'true'"));
+ok(`son activé par défaut, ambiance Studio (bouton ♪ : « ${await ev("$('bSon').getAttribute('aria-label')")} »)`, await ev("$('bSon').getAttribute('aria-label') === 'Sons : Studio'"));
+await pg.waitForTimeout(1500);
+const studio = [...sfx.ok].filter(f => f.startsWith("studio/")).length;
+ok(`fichiers de l'ambiance Studio chargés : ${studio}/21, aucun en erreur (${sfx.bad.join(", ") || "rien"})`, studio === 21 && !sfx.bad.length);
 ok(`sons pendant le début de partie (${await snd()} lancés)`, await snd() > 0);
 // une carte de ma main qui se joue sans cible : la toucher, puis « Jouer »
 const uid = await ev(`(() => { const o = V.dec.options.find(o => o.k === 'play' && !(o.t1 && o.t1.length)); return o ? String(o.src) : null })()`);
@@ -54,18 +62,28 @@ n = await snd();
 await pg.click("#bMain"); await pg.waitForTimeout(150);
 ok(`Terminer le tour : un son (${(await snd()) - n})`, (await snd()) > n);
 await idle();
-await pg.click("#bSon"); await pg.waitForTimeout(100);
-ok("bouton ♪ : son coupé (aria-pressed=false, classe off)", await ev("$('bSon').getAttribute('aria-pressed') === 'false' && $('bSon').classList.contains('off')"));
+await pg.click("#bSon"); await pg.waitForTimeout(150);
+ok("menu ♪ ouvert : son activé et 6 ambiances", await ev("!$('sonPop').hidden && $('sonPop').querySelectorAll('[data-pk]').length === 6"));
+n = await snd();
+await pg.click("#sonPop [data-pk=cinematic]"); await pg.waitForTimeout(1500);
+const cin = [...sfx.ok].filter(f => f.startsWith("cinematic/")).length;
+ok(`ambiance Cinéma : son d'essai (${(await snd()) - n}) et ses fichiers chargés (${cin}/21)`, (await snd()) > n && cin === 21 && !sfx.bad.length);
+await pg.click("#sonPop [data-son]"); await pg.waitForTimeout(100);
+ok("son coupé (bouton barré, « Sons : coupés »)", await ev("$('bSon').classList.contains('off') && $('bSon').getAttribute('aria-label') === 'Sons : coupés'"));
+await pg.mouse.click(5, 300); await pg.waitForTimeout(100);
+ok("toucher ailleurs ferme le menu ♪", await ev("$('sonPop').hidden"));
 n = await snd();
 await pg.click("#bUndo").catch(() => {}); await pg.waitForTimeout(200); await idle();
 const c = await ev("(()=>{ const e = document.querySelector('#board [data-uid].can'); return e ? e.dataset.uid : null })()");
 if (c) { await pg.click(`#board [data-uid="${c}"]`); await pg.waitForTimeout(150); }
 ok(`son coupé : plus aucun son (Reprendre, toucher une carte : ${(await snd()) - n})`, (await snd()) === n);
 await pg.screenshot({ path: OUT + "/son-coupe.png" });
-await pg.reload(); await waitFor("!!document.getElementById('bSon')");
-ok("après rechargement : le son reste coupé", await ev("$('bSon').getAttribute('aria-pressed') === 'false'"));
-await pg.click("#bSon");
-ok("rallumé : il sonne de nouveau", await ev("$('bSon').getAttribute('aria-pressed') === 'true'") && (await snd()) > 0);
+await pg.reload(); await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
+await ev("hideMenu()");
+ok("après rechargement : le son reste coupé", await ev("$('bSon').getAttribute('aria-label') === 'Sons : coupés'"));
+await pg.click("#bSon"); await pg.click("#sonPop [data-son]"); await pg.waitForTimeout(800);
+ok(`rallumé : il sonne de nouveau, ambiance Cinéma gardée (« ${await ev("$('bSon').getAttribute('aria-label')")} »)`, (await snd()) > 0 && await ev("$('bSon').getAttribute('aria-label') === 'Sons : Cinéma'"));
+await pg.screenshot({ path: OUT + "/son-menu.png" });
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
 await b.close();
 process.exitCode = fails ? 1 : 0;

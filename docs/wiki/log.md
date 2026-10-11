@@ -231,8 +231,5 @@ Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ;
 - 10 sur 21 étaient favorables au début du showdown et ont été retournés par une réaction (Discipline, Defy, Back Off…) : l'IA voit 3 mains adverses et la politique de simulation du défenseur joue `plays[0]`. 11 sur 21 étaient perdus d'avance : 2 avec toutes les options notées perdues (écart 0,3), 2 dans une suite notée gagnante (+6400), 7 non expliqués.
 - Constat sur le seul deck Akali de l'utilisateur, combats d'une même partie non indépendants. Script : `engine/combats_parties.py`. Corrections proposées, pas faites.
 
-## [2026-10-11] feat | Plans de jeu pour les 49 légendes par défaut
-- Demande de l'utilisateur : chercher le plan de jeu de chaque légende par défaut. Il fait les mesures en local.
-- Recherche web : 40 guides riftbound.gg lus en entier, 3 plans déduits du deck (le guide parle d'un autre archétype : Fiora, Garen, Sivir), 6 sans guide lisible (Ivern, Poppy, Renekton, Shen, Vi, Zed : seuls des résumés de recherche, les autres sites sont refusés par le proxy). Principes communs : guide du score de riftbound.gg (conquérant / tenant).
-- Code : `engine/plans_legendes.py` (table `LEG`, `LegendPlan` : mulligan et `shape`, poids choisis sans mesure), fiches générées `gameplans/legendes.md`, option `@plan=leg` dans `exp_search.py` (fonction `agents`). Akali et LeBlanc gardent Gorica et Hook tempo. Rien n'est branché dans la table. Tests `cardsets/test_plans_legendes.py` (8). **Non mesuré** : mesure proposée `exp_search.py 80 <graines neuves> "sh@plan=leg" sh defaut`.
-
+## [2026-10-11] ingest | Table : sons des interactions
+Vrais sons MP3 (banque `uisfx`, CC0) sur les gestes et les événements de partie, menu « ♪ » (coupé / six ambiances) ; la synthèse « 8 bits » du premier essai est abandonnée. Robot `train/verif_son.mjs`. Détail : `docs/memoire/riftbound-training-table.md`.
