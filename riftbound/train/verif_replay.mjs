@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 // Robot du mode replay (« Mes parties » → « Revoir ») dans la vraie table : une partie jouée par vrais coups (enregistrée
 // dans le navigateur), une autre en cours ; on revoit la première : même plateau, barre de lecture (étapes, tes
-// décisions ⇤ ⇥, curseur, lecture auto), « Analyser ce coup » donne le conseil de l'IA ; en quittant, la partie en cours
+// décisions ⇤ ⇥, curseur, lecture auto), ⤓ télécharge une partie seule et « Tout télécharger » toutes, « Analyser ce coup » donne le conseil de l'IA ; en quittant, la partie en cours
 // revient telle quelle. Ordinateur (1400x900, clics) et téléphone (393x851, toucher simulé). Demande du 2026-10-09.
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_replay.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
@@ -39,6 +39,13 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await ev("showMenu('games')"); await waitFor("!!document.querySelector('[data-rp]')");
   const ids = await ev("[...document.querySelectorAll('[data-rp]')].map(b => b.dataset.rp)");
   ok(`${w} px : « Mes parties » propose « Revoir » (${ids.length} parties)`, ids.length >= 2);
+  const dlJson = async sel => { const [d] = await Promise.all([pg.waitForEvent("download"), tap(sel)]);
+    const ch = [], st = await d.createReadStream(); for await (const c of st) ch.push(c);
+    return { name: d.suggestedFilename(), data: JSON.parse(Buffer.concat(ch).toString("utf8")) }; };
+  const one = await dlJson(`[data-dl="${target}"]`), all = await dlJson("#bDlGames");
+  ok(`${w} px : ⤓ télécharge cette partie seule (${one.name}, ${one.data.length} partie, ${(one.data[0] && one.data[0].moves || []).length} coups), « Tout télécharger » les ${all.data.length}`,
+    one.data.length === 1 && one.data[0].id === target && Array.isArray(one.data[0].moves) && /^partie-riftbound-.*\.json$/.test(one.name)
+    && all.data.length === ids.length && all.data.some(g => g.id === target));
   await tap(`[data-rp="${target}"]`);
   await waitFor("!!(RP && document.getElementById('rpbar'))");
   const st = await ev("({ n: RP.r.n, mine: RP.r.mine.length, warn: RP.warn, bar: !!$('rpbar'), board: !!document.querySelector('#board .bfrow'), menu: $('menu').hidden })");
