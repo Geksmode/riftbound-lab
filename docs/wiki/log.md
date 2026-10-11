@@ -233,3 +233,6 @@ Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ;
 
 ## [2026-10-11] ingest | Table : sons des interactions
 Vrais sons MP3 (banque `uisfx`, CC0) sur les gestes et les événements de partie, menu « ♪ » (coupé / six ambiances) ; la synthèse « 8 bits » du premier essai est abandonnée. Robot `train/verif_son.mjs`. Détail : `docs/memoire/riftbound-training-table.md`.
+
+## [2026-10-11] ingest | Table : vrais bruits de cartes
+Ambiance « Cartes » par défaut : enregistrements Kenney « Casino Audio » (CC0), 24 MP3 (232 Ko) avec variantes, barre de volume. Détail : `docs/memoire/riftbound-training-table.md`.

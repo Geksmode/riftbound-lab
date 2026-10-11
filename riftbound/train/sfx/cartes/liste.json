@@ -1,0 +1,9 @@
+{
+"card-fan": 2,
+"card-place": 4,
+"card-shove": 4,
+"card-shuffle": 0,
+"card-slide": 8,
+"cards-pack-take-out": 2,
+"chip-lay": 3
+}

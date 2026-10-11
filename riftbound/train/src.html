@@ -748,11 +748,13 @@ const SFX = (() => {
     receive: .2, notification: .2, undo: .18, achievement: .26, disconnect: .19 };
   // ambiance « Cartes » : événement → [son Kenney, gain]. Toucher / soulever = glisser, poser / jouer = poser,
   // déplacement = pousser, pioche = tirer du paquet, mélange (début de partie) = mélanger, fin de partie = éventail.
-  const CARTES = { tick: ["card-slide", .8], untick: ["card-slide", .55], lift: ["card-slide", 1], target: ["card-place", .6],
-    play: ["card-place", 1], hide: ["card-place", .8], act: ["card-slide", .9], move: ["card-shove", 1], combat: ["card-shove", 1],
-    death: ["card-shove", .8], point: ["chip-lay", .9], opoint: ["chip-lay", .6], end: ["card-slide", .9], pass: ["card-slide", .7],
-    click: ["card-slide", .7], nope: ["card-shove", .45], draw: ["cards-pack-take-out", .9], opp: ["card-place", .8],
-    turn: ["card-slide", .6], undo: ["card-slide", .8], shuffle: ["card-shuffle", .9], win: ["card-fan", 1], lose: ["card-fan", .7] };
+  // Gains réglés à la mesure (pas à l'oreille) : crêtes Kenney à 0 dB contre -8 dB pour uisfx, d'où environ la moitié ;
+  // la pioche (moyenne -16 dB, les autres -22 à -30 dB) un peu moins.
+  const CARTES = { tick: ["card-slide", .4], untick: ["card-slide", .28], lift: ["card-slide", .5], target: ["card-place", .3],
+    play: ["card-place", .5], hide: ["card-place", .4], act: ["card-slide", .45], move: ["card-shove", .5], combat: ["card-shove", .5],
+    death: ["card-shove", .4], point: ["chip-lay", .45], opoint: ["chip-lay", .3], end: ["card-slide", .45], pass: ["card-slide", .35],
+    click: ["card-slide", .35], nope: ["card-shove", .23], draw: ["cards-pack-take-out", .32], opp: ["card-place", .4],
+    turn: ["card-slide", .3], undo: ["card-slide", .4], shuffle: ["card-shuffle", .45], win: ["card-fan", .5], lose: ["card-fan", .35] };
   let LISTE = null;   // sfx/cartes/liste.json : variantes de chaque son (card-place → 4 : card-place-1..4 ; 0 : sans numéro)
   // tirage des variantes : petit générateur à part (xorshift), jamais Math.random, et jamais deux fois la même d'affilée
   let rs = (Date.now() % 2147483647) | 1; const lastV = {};

@@ -16,8 +16,8 @@ while IFS= read -r f; do
   ffmpeg -nostdin -loglevel error -y -i "$f" -ac 1 -ar 44100 \
     -af "silenceremove=start_periods=1:start_threshold=-50dB" -codec:a libmp3lame -b:a 80k "cartes/$b.mp3"
   n=$((n + 1))
-done < <(find "$T" -type f \( -iname 'card*.ogg' -o -iname 'chip*.ogg' \) | sort)
-[ "$n" -gt 0 ] || { echo "aucun card*.ogg ni chip*.ogg dans le zip"; exit 1; }
+done < <(find "$T" -type f \( -iname 'card-*.ogg' -o -iname 'cards-pack-take-out*.ogg' -o -iname 'chip-lay*.ogg' \) | sort)
+[ "$n" -gt 0 ] || { echo "aucun son de carte dans le zip"; exit 1; }
 python3 - <<'P'
 import os, re, json
 c = {}

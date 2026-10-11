@@ -48,19 +48,8 @@ Fin : gain annoncé seulement s'il dépasse 2 écarts-types sur graines neuves, 
 Après chaque mission terminée : `/retex` de la session (ce qui tient, ce qui était surévalué, biais, ce qu'on change),
 mémoire mise à jour (`docs/memoire/`), chiffres périmés signalés dans `docs/vault/Chiffres périmés.md`.
 
-## design : vrais bruits de cartes sur la table (2026-10-11, à reprendre dans une nouvelle session)
-Demande de l'utilisateur : « des sons comme sur TCG Arena, des bruits de cartes prises, posées, etc. ». Les sons
-actuels (`train/sfx/`, banque `uisfx`) ne lui plaisent pas. La barre de volume est faite (menu « ♪ »).
-À faire : prendre Kenney « Casino Audio » (CC0, vrais enregistrements : card-place, card-slide, card-shove, card-fan,
-card-shuffle, cards-pack-take-out) sur https://kenney.nl/assets/casino-audio (l'utilisateur a autorisé `kenney.nl`
-dans le réseau de l'environnement ; la session du 11/10 ne le voyait pas encore). Convertir en MP3 (ffmpeg), les mettre
-dans `train/sfx/cartes/` avec la licence, et les brancher dans `SFX.MAP` (`src.html`) : toucher / soulever = slide,
-poser / jouer = place, déplacement = shove, pioche = take-out, mélange = shuffle, fin de partie = fan ; tirer au hasard
-parmi les variantes (card-place-1..4) sans `Math.random` qui compte pour le moteur. En faire l'ambiance par défaut.
-Fin : `train/verif_son.mjs` et `scripts/verifier.sh` verts, PR ouverte, chiffres de taille donnés.
-**État au 2026-10-11 (2e session)** : `kenney.nl` toujours refusé par le proxy (403). Fait sans les fichiers : ambiance
-« Cartes » par défaut branchée dans `SFX` (`CARTES`, variantes tirées par un xorshift à part, pas deux fois la même
-d'affilée ; « shuffle » au mulligan), script `train/sfx/importer_kenney.sh <zip>` (OGG → MP3 mono 80 kb/s, licence,
-`sfx/cartes/liste.json`), `verif_son.mjs` adapté (7 ambiances, tous les fichiers de la liste chargés). Câblage vérifié
-par robot avec des bips factices (non committés), pas avec les vrais sons. Reste : télécharger le zip, lancer le script,
-écouter, committer `sfx/cartes/`, `verifier.sh` vert, PR.
+## design : vrais bruits de cartes sur la table (2026-10-11) : fait
+Demande : « des sons comme sur TCG Arena, des bruits de cartes prises, posées, etc. ». Fait : ambiance « Cartes » par
+défaut, vrais enregistrements Kenney « Casino Audio » (CC0, zip fourni par l'utilisateur, `kenney.nl` étant bloqué par
+le réseau de l'environnement), 24 MP3 dans `train/sfx/cartes/` (232 Ko), importés par `train/sfx/importer_kenney.sh`.
+Détail : `docs/memoire/riftbound-training-table.md`. Reste : réglage des volumes à l'oreille par l'utilisateur.
