@@ -225,3 +225,8 @@ Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ;
 ## [2026-10-11] table | Mes parties : télécharger une partie seule
 - Demande de l'utilisateur : en plus de « Tout télécharger », un bouton ⤓ sur chaque partie télécharge cette partie seule (même format : liste JSON d'une partie, lue telle quelle par `bilan_parties.py`, dédoublonnée par id).
 - Vérifié par robot (`verif_replay.mjs`, ordinateur et toucher simulé 393 px) : le fichier ⤓ contient la seule partie visée avec ses coups, « Tout télécharger » les contient toutes. Pas encore essayé sur un vrai téléphone.
+
+## [2026-10-11] analyse | Combats perdus par l'IA dans les parties de l'utilisateur
+- 21 parties de la table (IA à recherche du tour entier, rejeux fidèles avec le moteur de leur commit). Dans son tour, l'IA attaque 29 fois et perd 21 combats (72 %, Wilson 95 % : 54-85 %). 20 autres « combats de l'IA » ont lieu dans le tour de l'utilisateur : unité adverse amenée par Blitzcrank ou Shuriken Flip (attaquant = celui qui a rendu le battlefield Contested, 190.3.a, 464.2.c.1).
+- 10 sur 21 étaient favorables au début du showdown et ont été retournés par une réaction (Discipline, Defy, Back Off…) : l'IA voit 3 mains adverses et la politique de simulation du défenseur joue `plays[0]`. 11 sur 21 étaient perdus d'avance : 2 avec toutes les options notées perdues (écart 0,3), 2 dans une suite notée gagnante (+6400), 7 non expliqués.
+- Constat sur le seul deck Akali de l'utilisateur, combats d'une même partie non indépendants. Script : `engine/combats_parties.py`. Corrections proposées, pas faites.
