@@ -881,6 +881,9 @@ async function boot() {
   // Le moteur (Pyodide + train) tourne dans un Web Worker (engine.worker.js) : la réflexion de l'IA ne gèle plus la page.
   const ver = encodeURIComponent([BUILD.commit, BUILD.engine].filter(Boolean).join("-") || String(Date.now()));
   T = await engineStart(ver);
+  // catalogue et verdicts des decks avant d'activer le menu : sinon il se redessine quand ils arrivent (worker), et un
+  // toucher sur un bouton remplacé se perd
+  try { await loadCatalog(); } catch (e) { console.error(e); }
   READY = true; menuRender(MENUV);
   duelAutoResume();
 }
