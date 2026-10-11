@@ -12,7 +12,7 @@ const errs = []; pg.on("pageerror", e => errs.push(String(e)));
 let fails = 0; const ok = (n, v) => { if (!v) fails++; console.log((v ? "OK   " : "ÉCHEC") + " " + n); };
 const ev = s => pg.evaluate(s);
 const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(100); } throw new Error("attente : " + s); };
-const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+const py = code => ev(`pyExec(${JSON.stringify(code)})`);
 const tapSel = async sel => { const r = await pg.locator(sel).first().boundingBox(); await pg.touchscreen.tap(r.x + r.width / 2, r.y + r.height / 2); await pg.waitForTimeout(250); };
 const strip = () => ev("[...document.querySelectorAll('#fbar .pick-strip .pk')].map(b => (b.querySelector('.pkn') || b).textContent + ' / ' + ((b.querySelector('.pkw') || {}).textContent || ''))");
 await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -37,7 +37,7 @@ e = Obj("Watchful Sentry", op); g.enter_board(e, op, 1, ready=True); g.bfs[1].ct
 W["d"] = None
 `);
 await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
-const sf = String(await ev("T.SF")), ally = String(await ev("T.ALLY")), foe = String(await ev("T.FOE"));
+const sf = String(await ev("pyGet('SF')")), ally = String(await ev("pyGet('ALLY')")), foe = String(await ev("pyGet('FOE')"));
 const sfu = String(await ev(`ALIAS["${sf}"] ?? "${sf}"`));
 await tapSel(`#board [data-uid="${sf}"]`);
 const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
@@ -58,7 +58,7 @@ ok("tout est choisi : « Valider » actif", await ev("!!document.querySelector('
 await tapSel("#fOk"); await pg.waitForTimeout(600); await waitFor("!!(V && !working)");
 for (let i = 0; i < 20; i++) { if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); await waitFor("!!(V && !working)"); } else if (await ev("!!(V.dec && V.dec.kind !== 'main' && V.dec.options.some(o => o.k === 'pass'))")) { await ev("(async()=>{ await pump(J(T.act(V.dec.options.findIndex(o => o.k === 'pass')))) })()"); await waitFor("!!(V && !working)"); } else break; }
 await py(`R = [c.zone for c in W["g"].p[ME].trash if c.uid == ${sfu}] + [W["g"].obj(${ally}).loc if W["g"].obj(${ally}) else None]`);
-const r = await ev("JSON.stringify(T.R.toJs ? T.R.toJs() : T.R)");
+const r = await ev("pyGet('R').then(JSON.stringify)");
 ok(`Shuriken Flip résolu (défausse, allié déplacé : ${r})`, r.includes("trash") && !r.includes('"base"'));
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
 await b.close();

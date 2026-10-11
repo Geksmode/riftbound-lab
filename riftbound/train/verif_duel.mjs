@@ -33,9 +33,10 @@ async function page(W, H, mobile, name) {
   return P;
 }
 const H = await page(1400, 900, false, "hote"), G = await page(360, 740, true, "invite");
-// État comparable des deux côtés (positions absolues : place 0 = hôte, 1 = invité).
+// État comparable des deux côtés (positions absolues : place 0 = hôte, 1 = invité). Au repos : ni coup en cours ni
+// fin de manche en cours d'enregistrement (DU.recP : le score du match arrive du moteur juste après le rendu).
 const STATE = `(() => { if (!V || !DU || !DU.game) return null; const st = V.st;
-  return { idle: !working, n: DU.game.inputs.length, g: DU.game.no, t: st.t, tp: st.tp, pts: st.pts, w: V.winner ?? null,
+  return { idle: !working && !DU.recP, n: DU.game.inputs.length, g: DU.game.no, t: st.t, tp: st.tp, pts: st.pts, w: V.winner ?? null,
     bfs: st.bfs.map(b => b.n + ":" + (b.c ?? "-") + ":" + b.u.map(u => u.n + "/" + u.c + "/" + u.m + "/" + (u.d || 0)).sort().join(",")),
     base: st.p.map(p => p.base.map(u => u.n).sort().join(",")), hand: st.p.map(p => p.hand.length), deck: st.p.map(p => p.deck),
     trash: st.p.map(p => p.trash.join(",")), runes: st.p.map(p => p.runes.join(",")),

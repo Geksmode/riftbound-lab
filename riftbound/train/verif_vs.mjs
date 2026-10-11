@@ -42,7 +42,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   ok(`${w} px : « ? » met l'IA au hasard`, await ev("document.querySelector('.vpad.cpu .vlg').textContent") === "Au hasard");
   await ev("$('sSeed').value='7'"); await tap("#bStart");
   await waitFor("!!(V && !working)");
-  const lg = await ev("(()=>{T.__builtins__.get('exec')(\"LG=[W['g'].p[i].legend_name for i in (0,1)]\", T.__dict__); return T.LG.toJs()})()");
+  const lg = await ev("pyExec(\"LG=[W['g'].p[i].legend_name for i in (0,1)]\", 'LG')");
   ok(`${w} px : la partie démarre, toi LeBlanc, l'IA une légende jouable tirée au hasard (${lg})`, lg[0] === "LeBlanc, Deceiver" && Object.keys(dflt).includes(lg[1]));
   ok(`${w} px : aucune erreur JS (${errs.join(" | ")})`, !errs.length);
 }

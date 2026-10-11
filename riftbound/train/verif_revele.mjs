@@ -13,7 +13,7 @@ let fails = 0; const ok = (n, v) => { if (!v) fails++; console.log((v ? "OK   " 
 const ev = s => pg.evaluate(s);
 const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(150); } throw new Error("attente : " + s); };
 const idle = () => waitFor("!!(V && !working)");
-const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+const py = code => ev(`pyExec(${JSON.stringify(code)})`);
 const refresh = () => ev("(async()=>{ await pump(J(T.step())) })()");
 async function start(seed) {
   await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -29,7 +29,7 @@ async function start(seed) {
   }
   throw new Error("pas de décision principale");
 }
-const facedowns = () => py("FD = [[c.uid for c in b.facedowns] for b in W['g'].bfs]").then(() => ev("JSON.stringify(T.FD.toJs ? T.FD.toJs() : T.FD)"));
+const facedowns = () => py("FD = [[c.uid for c in b.facedowns] for b in W['g'].bfs]").then(() => ev("pyGet('FD').then(JSON.stringify)"));
 const SETUP = `
 from game import Obj, Rune
 g = W["g"]; me = ME
@@ -46,7 +46,7 @@ const label = () => ev("(document.querySelector('#board .hand.top .who-hand')||{
 await start(process.env.RB_SEED || "4");
 await py(SETUP); await refresh(); await idle();
 ok("avant l'effet : main adverse cachée", await shown() === 0);
-const uid = String(await ev("T.SAB"));
+const uid = String(await ev("pyGet('SAB')"));
 await pg.click(`#board .hand [data-uid="${uid}"]`); await pg.waitForTimeout(300);
 const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
 await ev("(()=>{ const b = [...document.querySelectorAll('#pop button[data-i]')].find(b => /Jouer/.test(b.textContent)); if (b) b.click(); })()");

@@ -25,7 +25,8 @@ async function run(W, H, mobile, SEED) {
   const sideN = () => ev("+document.querySelector('#dkSideH b').textContent");
 
   await pg.goto(`http://localhost:${PORT}/train.html`);
-  await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=deck]');return b&&!b.disabled})()");
+  // catalogue chargé et decks vérifiés (le menu se redessine alors une fois : on attend avant de toucher)
+  await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=deck]');return b&&!b.disabled&&!!CAT&&!CHKLATER})()"); await pg.waitForTimeout(200);
   // ---------- (a) éditeur : copie de LeBlanc IQ#5, sideboard
   await tap("[data-m=deck]"); await waitFor("!!document.getElementById('dkSave')");
   await pg.selectOption("#dkLoad", "leblanc-iq5"); await waitFor("!!document.getElementById('dkSideH')");

@@ -14,7 +14,7 @@ for (const [w, h] of [[393, 851], [360, 740], [412, 915], [1875, 902], [1400, 90
   const errs = []; pg.on("pageerror", e => errs.push(String(e)));
   const ev = s => pg.evaluate(s);
   const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(100); } throw new Error(s); };
-  const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+  const py = code => ev(`pyExec(${JSON.stringify(code)})`);
   await pg.goto(`http://localhost:${PORT}/train.html`);
   await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
