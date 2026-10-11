@@ -236,3 +236,6 @@ Vrais sons MP3 (banque `uisfx`, CC0) sur les gestes et les événements de parti
 
 ## [2026-10-11] ingest | Table : vrais bruits de cartes
 Ambiance « Cartes » par défaut : enregistrements Kenney « Casino Audio » (CC0), 24 MP3 (232 Ko) avec variantes, barre de volume. Détail : `docs/memoire/riftbound-training-table.md`.
+
+## [2026-10-11] fix | Table : moteur dans un Web Worker, la page ne gèle plus
+Signalé par l'utilisateur : « la page ne répond pas » quand l'IA réfléchit. Pyodide et `train` passent dans `train/engine.worker.js` ; la page appelle le moteur de façon asynchrone. Mesure (`train/verif_reactif.mjs`, IA forte) : une réflexion de 20,9 s, page bloquée 44 ms au plus. Porte `verifier.sh table` verte (188 + 79 + 41 contrôles). Détail : `docs/memoire/riftbound-training-table.md`.

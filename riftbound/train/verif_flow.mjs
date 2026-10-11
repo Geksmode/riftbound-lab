@@ -13,7 +13,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const errs = []; pg.on("pageerror", e => errs.push(String(e)));
   const ev = s => pg.evaluate(s);
   const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(100); } throw new Error("attente : " + s); };
-  const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+  const py = code => ev(`pyExec(${JSON.stringify(code)})`);
   await pg.goto(`http://localhost:${PORT}/train.html`);
   await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
@@ -29,7 +29,7 @@ DU = [c.uid for c in g.p[me].trash if c.cname == "Dredge Up"][0]
 H0 = len(g.p[me].hand)
 W["d"] = None`);
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
-  const du = String(await ev("T.DU")), h0 = await ev("T.H0");
+  const du = String(await ev("pyGet('DU')")), h0 = await ev("pyGet('H0')");
   const names = await ev("[...document.querySelectorAll('#board .half.p0 .hand .card.flow')].map(c => c.dataset.card)");
   ok(`${w} px : Dredge Up jouable avec Flow au bout de la main, pas Onslaught sans cible (${JSON.stringify(names)})`, names.length === 1 && names[0] === "Dredge Up");
   const el = pg.locator(`#board [data-uid="${du}"]`);
@@ -43,7 +43,7 @@ W["d"] = None`);
   await pg.waitForTimeout(500); await waitFor("!!(V && !working)");
   for (let i = 0; i < 10; i++) { if (await ev("!!(V.dec && V.dec.kind !== 'main' && V.dec.options.some(o => o.k === 'pass'))")) { await ev("(async()=>{ await pump(J(T.act(V.dec.options.findIndex(o => o.k === 'pass')))) })()"); await waitFor("!!(V && !working)"); } else break; }
   await py(`Z = [c.zone for c in W["g"].p[ME].banish if c.uid == DU] + [len(W["g"].p[ME].hand), sum(1 for r in W["g"].p[ME].runes if not r.exhausted)]`);
-  const z = JSON.parse(await ev("JSON.stringify(T.Z.toJs ? T.Z.toJs() : T.Z)"));
+  const z = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)"));
   ok(`${w} px : coût de Flow payé (2 énergie : ${z[z.length - 1]} runes prêtes sur 5), carte piochée (main ${h0} → ${z[z.length - 2]}), Dredge Up bannie`, z[0] === "banish" && z[z.length - 1] === 3 && z[z.length - 2] === h0 + 1);
   ok(`${w} px : aucune erreur JavaScript` + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
   await pg.screenshot({ path: `${OUT}/flow-${w}.png` });

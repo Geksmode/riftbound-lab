@@ -30,6 +30,7 @@ open('build/train.html', 'w').write(s)
 print("modules de cartes :", len(mods))
 P
 cp $E/cards/cards_unique.csv $E/decks/decks.json $B/data/
+cp engine.worker.js $B/
 cp pyodide-cache/package/{pyodide.js,pyodide.asm.js,pyodide.asm.wasm,pyodide-lock.json} $B/pyodide/
 base64 -w0 pyodide-cache/package/python_stdlib.zip > $B/pyodide/python_stdlib.b64.txt
 cp $E/replays/img/* $B/img/

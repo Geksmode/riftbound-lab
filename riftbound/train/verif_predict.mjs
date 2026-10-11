@@ -15,7 +15,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const ev = s => pg.evaluate(s);
   const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(100); } throw new Error("attente : " + s); };
   const tap = async sel => { const l = pg.locator(sel).first(); if (mob) { const bb = await l.boundingBox(); await pg.touchscreen.tap(bb.x + bb.width / 2, bb.y + bb.height / 2); } else await l.click(); await pg.waitForTimeout(250); };
-  const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+  const py = code => ev(`pyExec(${JSON.stringify(code)})`);
   await pg.goto(`http://localhost:${PORT}/train.html`);
   await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');return b&&!b.disabled})()");
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
@@ -27,7 +27,7 @@ TOP = [c.cname for c in g.p[me].deck[:2]]
 g.queue_trigger(me, "Dramatic Visionary", lambda g_, it: g_.predict(it.ctrl, 2))
 g.flush_triggers()
 W["d"] = None`);
-  const top = await ev("T.TOP.toJs()");
+  const top = await ev("pyGet('TOP')");
   await ev("(async()=>{ await pump(J(T.step())) })()");
   for (let i = 0; i < 10; i++) {   // le déclenchement est sur la chaîne : passer la priorité jusqu'à sa résolution
     await waitFor("!!(V && !working)"); if (await ev("!!V.ask")) break;

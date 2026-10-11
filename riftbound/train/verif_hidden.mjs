@@ -13,7 +13,7 @@ let fails = 0; const ok = (n, v) => { if (!v) fails++; console.log((v ? "OK   " 
 const ev = s => pg.evaluate(s);
 const waitFor = async (s, ms = 180000) => { const t = Date.now(); while (Date.now() - t < ms) { try { if (await ev(s)) return; } catch (e) {} await pg.waitForTimeout(150); } throw new Error("attente : " + s); };
 const idle = () => waitFor("!!(V && !working)");
-const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+const py = code => ev(`pyExec(${JSON.stringify(code)})`);
 const refresh = () => ev("(async()=>{ await pump(J(T.step())) })()");
 async function start(seed) {
   await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -29,7 +29,7 @@ async function start(seed) {
   }
   throw new Error("pas de décision principale");
 }
-const facedowns = () => py("FD = [[c.uid for c in b.facedowns] for b in W['g'].bfs]").then(() => ev("JSON.stringify(T.FD.toJs ? T.FD.toJs() : T.FD)"));
+const facedowns = () => py("FD = [[c.uid for c in b.facedowns] for b in W['g'].bfs]").then(() => ev("pyGet('FD').then(JSON.stringify)"));
 // Situation : la carte en main, 5 runes prêtes (elle peut AUSSI être jouée tout de suite), une unité à moi au battlefield 0 (que je contrôle), une unité adverse en base.
 const SETUP = `
 from game import Obj, Rune
@@ -46,7 +46,7 @@ W["d"] = None
 `;
 await start(process.env.RB_SEED || "4");
 await py(SETUP); await refresh(); await idle();
-const uid = String(await ev("T.HID_UID")), ouid = String(await ev(`ALIAS["${uid}"] ?? "${uid}"`));   // exemplaire qui porte les options
+const uid = String(await ev("pyGet('HID_UID')")), ouid = String(await ev(`ALIAS["${uid}"] ?? "${uid}"`));   // exemplaire qui porte les options
 const opts = await ev(`V.dec.options.filter(o => String(o.src) === "${ouid}").map(o => o.k + ":" + o.loc + ":" + (o.t1||[]).length)`);
 ok(`${CARD} en main : le moteur propose de la cacher (${opts.join(", ")})`, opts.some(o => o.startsWith("hide:0")));
 await pg.screenshot({ path: OUT + "/hidden-avant.png" });
@@ -106,7 +106,7 @@ if (JSON.parse(await facedowns())[0].includes(+ouid)) {
       }
       console.log("  après : mode", await ev("mode ? mode.type : null"), "· bulle", JSON.stringify(await ev("$('fbar').hidden ? '' : $('fbar').innerText.slice(0,120)")));
       await py("FDZ = [c.zone for c in W['g'].p[ME].trash if c.uid == " + ouid + "]");
-      const z = await ev("JSON.stringify(T.FDZ.toJs ? T.FDZ.toJs() : T.FDZ)");
+      const z = await ev("pyGet('FDZ').then(JSON.stringify)");
       await pg.screenshot({ path: OUT + "/hidden-jouee.png" });
       ok(`la carte cachée est jouée et résolue (cible ${t}, défausse : ${z})`, z.includes("trash"));
     }
@@ -126,7 +126,7 @@ for bf, pid, n in ((0, ME, ${JSON.stringify(CARD)}), (0, ME, ${JSON.stringify(CA
 for r in g.p[ME].runes: r.exhausted = False
 W["d"] = None
 `); await refresh(); await idle();
-const bt = JSON.parse(await ev("JSON.stringify(T.BT.toJs ? T.BT.toJs() : T.BT)")).map(String);
+const bt = JSON.parse(await ev("pyGet('BT').then(JSON.stringify)")).map(String);
 const shown = await ev(`[...document.querySelectorAll('#board [data-drop="0"] .fd [data-uid]')].map(x => x.dataset.uid)`);
 const opp = await ev(`(()=>{ const f = document.querySelector('#board [data-drop="1"] .fd'); return f ? [f.children.length, f.innerText.trim()] : [0, ""] })()`);
 await pg.screenshot({ path: OUT + "/hidden-bandle-tree.png" });

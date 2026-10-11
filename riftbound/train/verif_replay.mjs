@@ -51,6 +51,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const st = await ev("({ n: RP.r.n, mine: RP.r.mine.length, warn: RP.warn, bar: !!$('rpbar'), board: !!document.querySelector('#board .bfrow'), menu: $('menu').hidden })");
   ok(`${w} px : le replay s'ouvre sur le plateau (${st.n} étapes, ${st.mine} décisions à toi, sans avertissement : ${JSON.stringify(st.warn)})`, st.n > 10 && st.mine > 3 && st.bar && st.board && st.menu && !st.warn.length);
   await tap('#rpbar [data-rpg="' + (await ev("RP.r.n - 1")) + '"]');
+  await waitFor("RP.shown === RP.k");   // l'image arrive du moteur (worker) un peu après le clic
   const endpts = await ev("V.st.pts.join('-') + ' t' + V.st.t");
   ok(`${w} px : ⏭ va à la fin, même score et même tour que la partie jouée (${endpts} / ${pts1})`, endpts === pts1);
   await tap('#rpbar [data-rpg="0"]');
@@ -58,7 +59,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const k1 = await ev("RP.k"); const isMine = await ev("RP.r.mine.some(x => x[0] === RP.k)");
   ok(`${w} px : ⇥ va à ta première décision (étape ${k1})`, isMine && k1 > 0);
   // une décision « Tu joues » avec plusieurs coups possibles : analyse
-  const kA = await ev("(()=>{ for (const [j, lab] of RP.r.mine) { if (!lab.startsWith('Tu joues')) continue; const f = J(T.replay_frame(j)); if (((f.v.dec || {}).options || []).length >= 3) return j; } return -1 })()");
+  const kA = await ev("(async()=>{ for (const [j, lab] of RP.r.mine) { if (!lab.startsWith('Tu joues')) continue; const f = await J(T.replay_frame(j)); if (((f.v.dec || {}).options || []).length >= 3) return j; } return -1 })()");
   await ev(`rpGo(${kA})`);
   const lab = await ev("$('rpbar').querySelector('.rpmine') ? $('rpbar').querySelector('.rpq').textContent : ''");
   await tap("#rpAn"); await waitFor("!!(RP && RP.hint[RP.k])", 120000); await pg.waitForTimeout(200);

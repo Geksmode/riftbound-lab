@@ -46,3 +46,18 @@ ambiances (Studio par défaut, Cinéma, Zen, Feutré, Bois, Verre ; clés `rbt-s
 événement → fichier : `SFX.MAP` dans `src.html`. Le mode replay reste muet. Robot : `train/verif_son.mjs`.
 2026-10-11 (suite) : l'utilisateur trouve ces sons « vraiment pas bien » et veut des bruits de cartes comme sur TCG Arena (prise, pose…) et une barre de volume. Barre de volume ajoutée au menu « ♪ » (0-100, défaut 70, courbe en carré, clé `rbt-sonvol`). Bruits de cartes : pas encore faits, les sites de sons (kenney.nl, freesound, OpenGameArt, Wikimedia) sont bloqués par le réseau de l'environnement ; visée : Kenney « Casino Audio » (CC0, vrais enregistrements de cartes). Écartés faute de licence claire : sons de KPat, de `tinker-spider-solitaire`, de la démo Phaser.
 2026-10-11 (bruits de cartes) : ambiance « Cartes » ajoutée et mise par défaut (7 dans le menu : Cartes + les six uisfx). Vrais enregistrements Kenney « Casino Audio » 1.1 (CC0, `train/sfx/cartes/LICENSE-KENNEY.txt`), zip fourni par l'utilisateur ; `train/sfx/importer_kenney.sh <zip>` en tire 24 MP3 mono 80 kb/s (232 Ko) et `liste.json` (variantes). Table `CARTES` de `SFX` : toucher / soulever / fin de tour = card-slide (8 variantes), poser / jouer / cible = card-place (4), déplacement / combat / mort = card-shove (4), pioche = cards-pack-take-out (2), mulligan (mélange de début de partie) = card-shuffle, victoire / défaite = card-fan (2), point marqué = chip-lay (3). Variante tirée par un xorshift à part (pas `Math.random`), jamais deux fois la même d'affilée. Gains réglés à la mesure des crêtes (0 dB Kenney contre -8 dB uisfx), pas encore à l'oreille.
+
+## Moteur dans un Web Worker (2026-10-11)
+Signalé par l'utilisateur : quand l'IA réfléchit longtemps, le navigateur dit que la page ne répond pas. Cause : Pyodide
+tournait sur le fil de la page, et l'IA cherche le tour entier depuis le 2026-10-10 (~3 × plus lent). Le moteur tourne
+maintenant dans `train/engine.worker.js` (copié par `build.sh`, sans URL `blob:`). Dans la page, `T.f(...)` rend une
+promesse (`await J(T.f(...))`, `pump` attend la réponse) ; les appels passent un par un, dans l'ordre : même graine = même
+partie. Verdicts de deck (`train.check`) en cache `CHK`, remplis par `loadCatalog` ; fins de manche (`match_record`)
+enregistrées après le rendu (bouton éteint pendant l'attente) ; `GEN` arrête la boucle d'une partie remplacée. Robots :
+`pyExec(code, nom)` / `pyGet(nom)` remplacent `T.__builtins__` et `T.X.toJs()`. Robot `train/verif_reactif.mjs` (IA
+forte, graine 11, deux passages sur une machine chargée) : réponse du moteur la plus longue 20,9 s et 21,6 s, page jamais
+bloquée plus de 44 ms pendant ce temps, Journal
+ouvert au clic pendant que l'IA joue (vérifié par robot, pas essayé sur un vrai téléphone). Une réflexion en cours ne
+s'interrompt pas : « Nouvelle partie » attend la fin du coup de l'IA.
+Piège trouvé par `verif_replay` : pendant que le moteur crée une partie, l'ancien plateau restait jouable et ses coups
+allaient dans l'ancien enregistrement ; `start`, `launchGame` et `tutoStart` tiennent `working` dès le clic.

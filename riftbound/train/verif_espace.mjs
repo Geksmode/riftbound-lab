@@ -46,7 +46,7 @@ const selOn = await ev("sel !== null || !!mode"), sB = await ev(snap), uB = awai
 await pg.keyboard.press("Escape"); await pg.waitForTimeout(200);
 ok(`Échap avec une carte jouable choisie : la carte est lâchée, rien n'est repris`, selOn && await ev("sel === null && !mode") && await ev(snap) === sB && await ev("V.undo") === uB);
 // Espace sur une question oui / non (« Utiliser cet effet ? ») : répond « Oui ». Question posée dans le moteur (Pyodide).
-const py = code => ev(`(()=>{ T.__builtins__.get('exec')(${JSON.stringify(code)}, T.__dict__); return true })()`);
+const py = code => ev(`pyExec(${JSON.stringify(code)})`);
 await py(`
 W["T_YES"] = []
 def _posee():
@@ -56,7 +56,7 @@ def _posee():
 await ev("(async()=>{ await pump(J(T._posee())) })()"); await waitFor("!!(V && !working && V.ask)");
 const shown = await ev("V.ask.kind === 'may' && /Utiliser cet effet/.test(document.body.innerText)");
 await pg.keyboard.press("Space"); await waitFor("!!(V && !working && !V.ask)");
-ok(`Espace sur « Utiliser cet effet ? » : répond Oui (question affichée : ${shown})`, shown && JSON.stringify(await ev("T.W.get('T_YES').toJs()")) === "[true]");
+ok(`Espace sur « Utiliser cet effet ? » : répond Oui (question affichée : ${shown})`, shown && JSON.stringify(await ev("pyExec(\"TYES = W.get('T_YES')\", 'TYES')")) === "[true]");
 const t0 = await ev("V.st.t");
 // clic souris sur une carte de la main : elle prend le focus ; Espace doit quand même terminer le tour
 await pg.locator("#board .half.p0 .hand .card").first().click(); await pg.waitForTimeout(200);
