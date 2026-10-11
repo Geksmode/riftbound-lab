@@ -25,6 +25,8 @@ sources: docs/REPRISE.md, git log, CI
 
 **Décision en attente** : branchement de `plans_general` dans `train.py`.
 
+**Plans par légende (2026-10-11)** : un plan sourcé pour chacune des 49 légendes par défaut ([mémoire](../../memoire/plans-par-legende.md), `riftbound/gameplans/legendes.md`), non mesuré ; à mesurer en local par l'utilisateur (`exp_search.py ... "sh@plan=leg" sh defaut`) avant tout branchement dans la table.
+
 **Duel entre amis** : fait ([duel.md](duel.md)) ; branche à fusionner par PR (Deflect sur les répétitions, duel).
 
 **À faire, dans cet ordre (décidé par l'utilisateur le 2026-10-07, après la 1re itération des agents)**

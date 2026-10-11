@@ -12,7 +12,9 @@ exactement 0,5 par paire, et une partie se rejoue avec add_replays (clé « sear
            battlefields exactement comme exp_plans.one ;
   defaut : deux decks par défaut (train.default_decks, 49 légendes) tirés au hasard, IA générique des deux côtés ;
   miroir : un deck légal au hasard (exp_general.rdeck) des deux côtés, IA générique (plans.Plan()).
-Versions : VERSIONS (nom -> (mode de recherche, samples, sh_extra)), réglages après @ (version()). Résultats : results_search.json (stamp()).
+Versions : VERSIONS (nom -> (mode de recherche, samples, sh_extra)), réglages après @ (version()) ;
+« @plan=leg » : cette version joue avec les plans par légende (plans_legendes.plan_for) au lieu de ceux du mode.
+Résultats : results_search.json (stamp()).
 Temps par décision : moyenne et p95 des decide() à plus d'une option, par version."""
 from version import stamp
 import json, sys, time, os, random, math, traceback
@@ -101,16 +103,27 @@ def setup(seed, mode):
     return [with_bf(d, r.choice(b)), with_bf(d, r.choice(b))], [P.Plan(), P.Plan()], f
 
 
-def play(seed, mode, v0, v1):
-    Obj._n = 0
-    Item._n = 0
-    decks, (p0, p1), f = setup(seed, mode)          # plans neufs à chaque partie (ils gardent un état)
-    tm = [[], []]
+def agents(seed, decks, plans, v0, v1):
+    """Agents des deux sièges : version v0 au joueur 0, v1 au joueur 1 ; « @plan=leg » remplace les plans du mode par
+    ceux de plans_legendes, pour soi et pour le modèle de l'adversaire."""
+    p0, p1 = plans
     ag = []
     for i, (v, pl, op) in enumerate(((v0, p0, p1), (v1, p1, p0))):
         sm, n, ex, h, cfg = version(v)
+        if cfg.pop("plan", None) == "leg":
+            import plans_legendes as PL
+            pl, op = PL.plan_for(decks[i]), PL.plan_for(decks[1 - i])
         ag.append(P.PlanAgent(seed + 500000 * i, plan=pl, opp_plan=op, samples=n, search=sm, sh_extra=ex, horizon=h,
                               cfg=cfg))
+    return ag
+
+
+def play(seed, mode, v0, v1):
+    Obj._n = 0
+    Item._n = 0
+    decks, plans, f = setup(seed, mode)             # plans neufs à chaque partie (ils gardent un état)
+    tm = [[], []]
+    ag = agents(seed, decks, plans, v0, v1)
     wr = [Timed(ag[0], tm[0]), Timed(ag[1], tm[1])]
     g = Game(decks, wr, seed=seed, first=f)
     while True:
