@@ -1870,13 +1870,13 @@ card("Akshan, Mischievous", kw={"Weaponmaster": 1},
 
 
 # Gangplank, Naval — "[Empower] [Body][Body] [Empowered][>] If a spell or ability that chooses me would stun me, give
-# me -might, or return me to hand, give me +3 might instead." (Game.replace_choice_effect). The +3 is permanent, except
-# when it replaces a -might for a duration: it inherits that duration (rule 375).
+# me -might, or return me to hand, give me +3 might this turn instead." (Game.replace_choice_effect ; errata du
+# 2026-08-03 : « this turn » ; avant, le +3 était permanent ou prenait la durée du -might remplacé).
 def _gangplank_rep(g, o, it, what, duration=None):
     if not o.empowered:
         return False
-    g.log(f"  {o}: +3 might instead")
-    o.mods.append([3, duration if what == "minus" else None])
+    g.log(f"  {o}: +3 might this turn instead")
+    o.mods.append([3, "turn"])
     return True
 
 

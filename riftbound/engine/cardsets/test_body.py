@@ -1506,6 +1506,8 @@ def gangplank_naval_turns_choosing_effects_into_might():
     g.to_zone(gp, "hand")
     g.resolving = None
     assert not gp.stunned and gp.zone == "board" and g.might(gp) == 6 + 9
+    # errata du 2026-08-03 : « +3 might this turn instead » : les trois +3 finissent avec le tour
+    assert [d for _, d in gp.mods] == ["turn"] * 3
     gp.empowered = False
     g.resolving = it
     g.stun(gp, 1)

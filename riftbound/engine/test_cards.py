@@ -509,6 +509,29 @@ def heron_discount():
 
 
 @test
+def heron_discount_ends_with_the_turn():
+    """Errata d'Astral Heron (2026-08-03) : « the next card you play this turn costs [2][A][A] less ». Une réduction
+    pas utilisée dans son tour ne sert plus au tour adverse (signalé par l'utilisateur : Defy, Not So Fast et
+    Discipline jouables sans rune prête pendant le tour de LeBlanc)."""
+    from actions import play_options
+    g, _ = new()
+    put(g, 0, "Astral Heron", 0)
+    runes(g, 0, ["Calm"] * 4)
+    hand(g, 0, "Scuttle Crab")
+    hand(g, 0, "Discipline")
+    g.apply(opt(g, 0, "Scuttle Crab", lambda ch: ch["loc"] == "base"))
+    settle(g)
+    assert any(ef.get("kind") == "heron" for ef in g.effects)
+    for r in g.p[0].runes:
+        r.exhausted = True
+    assert any(o[0] == "play" for o in play_options(g, 0, True, False))   # dans son tour : Discipline gratuite
+    g.apply(("end",))
+    settle(g)
+    assert g.tp == 1 and not any(ef.get("kind") == "heron" for ef in g.effects)
+    assert not any(o[0] == "play" for o in play_options(g, 0, True, False))
+
+
+@test
 def ferrous_forerunner_mechs():
     g, _ = new()
     f = put(g, 0, "Ferrous Forerunner")

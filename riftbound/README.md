@@ -20,7 +20,7 @@ Collecte du 2026-10-02. Base cartes reconstruite le 2026-10-02 depuis https://ap
 
 - `power_cost` : nombre de runes de domaine à payer. 0 pour une Unit/Spell/Gear sans coût en power, vide pour Legend/Rune/Battlefield.
 - `might` : vide pour les sorts (l'ancienne base y mettait une valeur erronée).
-- `text` : icônes converties en texte (« 1 energy », « 1 fury rune », « 1 rune of any type », « exhaust », « might »). Les textes viennent de la source à jour et intègrent les errata.
+- `text` : icônes converties en texte (« 1 energy », « 1 fury rune », « 1 rune of any type », « exhaust », « might »). Les textes viennent de la source à jour et intègrent les errata ; ceux que la source n'a pas (errata Vendetta du 2026-08-03 : Astral Heron, Gangplank Naval, Resonating Strike, Draven Vanquisher, Emperor's Dais, Fizz Trickster, Diana Lunari, Stalking Wolf) sont dans `cards/errata.py`, appliqué par `build_cards.py`.
 - Noms : suffixes de variante retirés (« (Alternate Art) », « (Overnumbered) », « (Signature) »…). Les Legends portent le nom complet (« Kai'Sa, Daughter of the Void »).
 
 ## Sources
