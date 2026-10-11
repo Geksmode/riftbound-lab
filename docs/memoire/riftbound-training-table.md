@@ -62,4 +62,4 @@ s'interrompt pas : « Nouvelle partie » attend la fin du coup de l'IA.
 Piège trouvé par `verif_replay` : pendant que le moteur crée une partie, l'ancien plateau restait jouable et ses coups
 allaient dans l'ancien enregistrement ; `start`, `launchGame` et `tutoStart` tiennent `working` dès le clic.
 Second piège (CI, `verif_match`) : un rendu repris au retour du moteur remplace les boutons sous le doigt. L'éditeur ne
-met plus à jour que son verdict (`dkVerdict`) ; le menu se redessine une fois le catalogue vérifié (le robot l'attend).
+met plus à jour que son verdict (`dkVerdict`) ; le menu ne s'active qu'une fois le catalogue chargé et vérifié (`boot`).
