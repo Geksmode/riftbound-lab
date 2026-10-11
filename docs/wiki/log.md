@@ -221,3 +221,7 @@ Correction de l'utilisateur : le raccourci « Reprendre » est Retour arrière ;
 - Signalé par l'utilisateur (capture) : Defy, Not So Fast et Discipline jouables pendant le tour de LeBlanc sans rune prête. Cause : la réduction d'Astral Heron non utilisée dans son tour attendait la carte suivante, même au tour adverse (texte imprimé sans « this turn »). L'errata du 2026-08-03 (riftbound.gg, FAQ Vendetta du 2026-08-14 ; signalé par l'utilisateur) dit « the next card you play this turn » : la réduction finit avec le tour.
 - Même errata : Gangplank, Naval (+3 « this turn », avant permanent), et 6 reformulations sans effet sur le moteur (Resonating Strike, déjà [Reaction] ; Stalking Wolf, déjà [Ambush] ; Draven Vanquisher, Emperor's Dais, Fizz Trickster, Diana Lunari). Textes de la base corrigés par `cards/errata.py` (la source rifthunt ne les avait pas). Tests `heron_discount_ends_with_the_turn` et `gangplank_naval_turns_choosing_effects_into_might`.
 
+
+## [2026-10-11] table | Mes parties : télécharger une partie seule
+- Demande de l'utilisateur : en plus de « Tout télécharger », un bouton ⤓ sur chaque partie télécharge cette partie seule (même format : liste JSON d'une partie, lue telle quelle par `bilan_parties.py`, dédoublonnée par id).
+- Vérifié par robot (`verif_replay.mjs`, ordinateur et toucher simulé 393 px) : le fichier ⤓ contient la seule partie visée avec ses coups, « Tout télécharger » les contient toutes. Pas encore essayé sur un vrai téléphone.

@@ -1,12 +1,12 @@
 ---
 titre: Boucle des parties de l'utilisateur
 resume: comment une partie jouée sur la table est gardée, déposée, rejouée fidèlement et analysée
-maj: 2026-10-08
+maj: 2026-10-11
 sources: riftbound/train/src.html, riftbound/engine/train_games.py, riftbound/engine/bilan_parties.py, .github/workflows/apprentissage.yml
 ---
 1. **Jouer** : sur claude.ai la table enregistre dans sa base (collection `games`) ; ailleurs (GitHub Pages) elle garde les parties
    dans le navigateur (`localStorage`, 60 au plus, sans le journal). Chaque partie note `commit` et `engine` de la construction (build.sh).
-2. **Déposer** : menu → Mes parties → « Télécharger mes parties » → fichier JSON à ajouter dans `riftbound/train/games/games/`.
+2. **Déposer** : menu → Mes parties → « Tout télécharger », ou ⤓ sur une partie pour elle seule (`partie-riftbound-<date>-donne-<n>.json`, liste d'une partie) → fichier JSON à ajouter dans `riftbound/train/games/games/`. Les parties sont repérées par leur id : déposer une partie seule puis le fichier complet ne crée pas de doublon (`bilan_parties.py`).
 3. **Rejouer** : `train_games.py <fichiers> --frozen --coach` rejoue chaque partie avec le moteur exact de son commit (`git archive`),
    sinon avec les copies figées `train/engine_versions/v10..v12` puis le moteur actuel ; le premier rejeu fidèle est retenu.
    `RB_ANALYSES=<dossier>` écrit ailleurs que `train/analyses/`.
