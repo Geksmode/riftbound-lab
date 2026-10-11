@@ -1,4 +1,5 @@
 import json,csv,re,html,collections
+import errata
 # curl -o bulk.json https://api.rifthunt.com/bulk/cards
 SRC='bulk.json'; import os; OUT=os.path.dirname(os.path.abspath(__file__)) + '/'
 d=json.load(open(SRC))
@@ -39,8 +40,8 @@ for x in d['cards']:
     rid=x['riftboundId']; parts=rid.split('-')
     cid='-'.join(parts[:2]); num=parts[1]
     variant=bool(x['alt'] or x['over'] or x['sig'] or x['rarity']=='Showcase' or not num.isdigit())
-    text=clean(x)
     name=re.sub(r'\s*\((Alternate Art|Overnumbered|Signature|Metal|Champion|Top 8|Starter|GG EZ|Launch Exclusive|Ultimate)\)$','',x['name'])
+    text=errata.apply(name,clean(x))   # errata absents de la source (errata.py)
     pw=x['power']
     if pw is None and x['type'] in ('Unit','Spell','Gear'): pw=0
     rows.append(dict(id=cid,set=SETS[x['set']],set_code=x['set'],collector_number=num,name=name,type=x['type'],

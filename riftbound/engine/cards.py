@@ -825,11 +825,13 @@ card("Against the Odds", timing="reaction", preds=[P_friend_bf], resolve=_ato,
 
 
 def _heron_event(g, o, ev, info):
-    # Astral Heron — "When you play your first card each turn, if I'm at a battlefield, your next card costs
-    # [2] and [A][A] less."
+    # Astral Heron — "When you play your first card each turn, if I'm at a battlefield, the next card you play this
+    # turn costs [2] and [A][A] less." (errata du 2026-08-03 : « this turn » ; avant, la réduction attendait la carte
+    # suivante même au tour adverse). dur="turn" : retirée à la fin du tour (expire).
     if ev == "played" and info["pid"] == o.ctrl and info["n"] == 1 and o.loc in (0, 1) and not info["card"].token:
         pid = o.ctrl
-        g.queue_trigger(pid, "Astral Heron", lambda g_, it: g_.effects.append(dict(kind="heron", pid=pid)), src=o.uid)
+        g.queue_trigger(pid, "Astral Heron", lambda g_, it: g_.effects.append(dict(kind="heron", pid=pid, dur="turn")),
+                        src=o.uid)
 
 
 card("Astral Heron", on_event=_heron_event)
