@@ -1191,10 +1191,11 @@ function localSave(body) {
   localSave.ok = !!localGames()[g.id];
   return localSave.ok;
 }
-function downloadGames(gs) {
+// name : nom du fichier sans extension (une seule partie) ; par défaut, toutes les parties datées du téléchargement.
+function downloadGames(gs, name) {
   const a = document.createElement("a"), d = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
   a.href = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gs, null, 1));
-  a.download = `parties-riftbound-${d}.json`;
+  a.download = `${name || "parties-riftbound-" + d}.json`;
   document.body.appendChild(a); a.click(); a.remove();
 }
 function recFinish(v) {
@@ -3200,16 +3201,18 @@ async function loadGames() {
     const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
     const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
     const canRp = !g.duel && g.kind !== "duel" && Array.isArray(g.moves);
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div>${canRp ? `<div class="acts"><button class="go" data-rp="${esc(g.id)}">Revoir</button></div>` : ""}</div>`; }).join("")
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
-    <div class="small">Télécharge-les puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
-    <button class="go" id="bDlGames">Télécharger mes parties</button></div>` : "";
+    <div class="small">Télécharge-les (toutes, ou une seule avec ⤓) puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
+    <button class="go" id="bDlGames">Tout télécharger</button></div>` : "";
   $("gamesBox").outerHTML = head + html;
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
-  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-pleg],[data-pick]"); if (!t || t.disabled) return;
+  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick]"); if (!t || t.disabled) return;
+  if (t.dataset.dl) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.dl);
+    if (g) downloadGames([g], `partie-riftbound-${String(g.updated || g.started || "").slice(0, 16).replace(/[:T]/g, "-")}-donne-${g.seed}`.replace(/[^\w.-]+/g, "_")); return; }
   if (t.dataset.pleg) { if (t.classList.contains("off")) return; PICKLG = t.dataset.pleg; menuRender("pick"); const l = $("menu").querySelector(".pick h3"); if (l) l.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
   if (t.dataset.pick) { store.set("rbt-train", t.dataset.pick); menuRender("main"); return; }
   if (t.dataset.rp) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.rp); if (g) startReplay(g); return; }
