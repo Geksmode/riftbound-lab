@@ -2,7 +2,7 @@
 titre: Version anglaise de la table
 resume: comment la table passe en anglais (page et moteur), où ajouter une traduction, comment c'est vérifié
 maj: 2026-10-17
-sources: riftbound/train/i18n.js, riftbound/engine/lang.py, riftbound/train/verif_anglais.mjs, riftbound/engine/cardsets/test_lang.py
+sources: riftbound/train/i18n.js, riftbound/engine/lang.py, riftbound/train/verif_anglais.mjs, riftbound/engine/cardsets/test_lang.py, riftbound/train/scan_textes.js
 ---
 Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app ». Une seule table, deux langues.
 
@@ -35,6 +35,14 @@ Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app »
   recycle, banish, buff, channel, gear, battlefield, base, Might).
 
 ## Vérification
+- **Balayage complet du code** (2026-10-17, signalé par l'utilisateur : bouton « Cibler » du menu d'une carte resté en
+  français) : `node train/scan_textes.js` lit tous les textes de `src.html` (littéraux JS par l'analyseur acorn, HTML,
+  attributs) et liste ceux sans traduction complète. Il a trouvé « Cibler », « … : cibler », « phase principale »,
+  « jouable », « Avec / Sans Repeat », « Cacher → », « Enregistrement ✓ », « Stockage plein », « Ton battlefield : »,
+  « Choisi ✓ », « (pas encore jouable) », « bannies depuis », « Vide. », « La plus récente en premier… » : tous
+  traduits. Les morceaux qui restent dans sa liste sont soit des noms de cartes ou du code, soit des bouts assemblés
+  dont la phrase entière est traduite (vérifiés un par un). Le robot ne les voyait pas : sa liste de mots français
+  n'avait pas « cibler », « jouable », « principale »… (ajoutés).
 - `engine/cardsets/test_lang.py` (dans `test_all.py`) : chaque question a un titre anglais ; 3 parties en anglais sans
   aucun texte français ; même partie dans les deux langues ; erreurs de deck en anglais.
 - `train/verif_anglais.mjs` (porte : étape `anglais`, `RB_EN=0` pour la sauter) : la table en `?lang=en` sur
@@ -45,6 +53,7 @@ Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app »
 - Vérifié par robot seulement (toucher simulé), pas essayé sur un vrai téléphone.
 
 ## Pas traduit
+- Le journal technique du duel (diagnostic à copier pour signaler un bug : « hôte : reçu… »).
 - Le lecteur de replays à part (`replays.html`, parties enregistrées avec un journal en français), les noms d'événements
   des listes de tournoi (données), le texte des cartes (déjà en anglais), le format d'export d'un deck (« Légende : »).
 - Le duel n'est vérifié en anglais que sur son écran d'accueil (le robot du duel joue en français) ; deux joueurs

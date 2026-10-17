@@ -26,7 +26,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Chiffres versionnés](pages/resultats.md) : version du moteur dans chaque résultat, `compare.py`
 - [Duel entre amis](pages/duel.md) : room avec code (PeerJS), BO1 / BO3, ce qui est testé et ce qui ne l'est pas
 - [Match BO1 / BO3 et sideboard](pages/match.md) : règles du match, code, choix de l'IA
-- [Tutoriel « Apprendre à jouer »](pages/tutoriel.md) : partie guidée en 6 défis pour néophytes, Yi contre Darius, IA débutante
+- [Tutoriel « Apprendre à jouer »](pages/tutoriel.md) : partie guidée pas à pas pour débutants complets (12 leçons, 6 défis, zones surlignées, focus et priorité), lexique et mots-clés expliqués, Yi contre Darius
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
 - [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.py` (moteur), robot `verif_anglais.mjs`
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI

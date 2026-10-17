@@ -17,8 +17,9 @@ const OK = ["Mulligan", "Sideboard", "Battlefield", "Battlefields", "Combat", "S
   "Legend", "Champion", "Signature", "Unit", "Spell", "Gear", "Token", "Fury", "Calm", "Mind", "Body", "Chaos", "Order",
   "Accelerate", "Hidden", "Tank", "Backline", "Ganking", "Deflect", "Assault", "Shield", "Temporary", "Empower", "Flow", "Repeat",
   "Riftbound Observatory", "Riftbound", "Predict", "Vision", "Reaction", "Action", "BO1", "BO3", "ST", "TEMP", "EMP", "Lvl", "VS",
-  "Français", "Decks.", "Coach", "Champions", "sideboard", "best", "hidden", "Pause", "⏸ Pause", "might", "Might", "Menu", "☰ Menu", "← Menu", "Destination", "Ready", "Points", "Claude", "PeerJS", "WebRTC", "Darius", "Master Yi", "LeBlanc", "Akali"];
-const FR = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|du|une|et|ou|ton|ta|tes|ses|pour|avec|sans|sur|sous|dans|vers|cible|carte|cartes|unité|unités|joue|déplace|pioche|tour|défausse|aucun|aucune|quelle|quel|toi|adverse|passe|termine|gratuit|oui|partie|parties|manche|donne|choisis|touche|suivant|compris|revoir|coup|coups|forte|normale|nouvelle|nouveau|jouer|retour|fin|début|aide|garder|valider|annuler)\b/i;
+  "Français", "Decks.", "Coach", "Champions", "sideboard", "best", "hidden", "Pause", "⏸ Pause", "might", "Might", "Menu", "☰ Menu", "← Menu", "Destination", "Ready", "Points", "Claude", "PeerJS", "WebRTC", "Darius", "Master Yi", "LeBlanc", "Akali",
+  "Ambush", "Legion", "Deathknell", "Equip", "Quick-Draw", "Weaponmaster", "Hunt", "Level", "Unique", "Empowered", "Stun", "Burn", "Mighty", "Buff", "Add", "XP", "Focus"];
+const FR = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|du|une|et|ou|ton|ta|tes|ses|pour|avec|sans|sur|sous|dans|vers|cible|carte|cartes|unité|unités|joue|déplace|pioche|tour|défausse|aucun|aucune|quelle|quel|toi|adverse|passe|termine|gratuit|oui|partie|parties|manche|donne|choisis|touche|suivant|compris|revoir|coup|coups|forte|normale|nouvelle|nouveau|jouer|retour|fin|début|aide|garder|valider|annuler|cibler|cible|cibles|jouable|principale|enregistrement|stockage|plein|choisi|vide|cacher|leçon|défi|lexique|mot|mots)\b/i;
 const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHROME) ? { executablePath: process.env.CHROME_PATH || LOCAL_CHROME } : {});
 let fails = 0;
 const ok = (n, v) => { console.log((v ? "OK   " : "ÉCHEC") + " " + n); if (!v) fails++; };
@@ -152,8 +153,21 @@ async function run1(W, H, mobile, found) {
   // tutoriel : intro, partie guidée, coach
   await ev("showMenu(); menuRender('main')"); await pg.waitForTimeout(300);
   await tap("[data-m=learn]");
-  for (let i = 0; i < 4; i++) { await waitFor("!!document.getElementById('tNext')"); await step("tutoriel, intro " + (i + 1), i === 0 ? "tuto" : null); await tap("#tNext"); }
+  const nIntro = await ev("TINTRO.length");
+  for (let i = 0; i < nIntro; i++) { await waitFor("!!document.getElementById('tNext')"); await step("tutoriel, intro " + (i + 1), i === 0 ? "tuto" : null); await tap("#tNext"); }
   await waitFor("!!(V && !working && !document.getElementById('coach').hidden)"); await step("tutoriel, coach", "coach");
+  // chaque leçon, défi et astuce du coach (avec la définition de son premier mot), l'attente, le lexique, l'agrandi
+  // d'une carte avec ses mots-clés et l'écran de fin : dessinés tour à tour puis relus
+  const nSteps = await ev("TSTEPS.length"), nTips = await ev("TTIPS.length");
+  for (let j = 0; j < nSteps; j++) { await ev(`(()=>{ TUTO.k = ${j}; TUTO.tip = null; TUTO.open = true; TUTO.fresh = ${j} > 2 ? 0 : -1; const x = TSTEPS[${j}]; TUTO.kw = x.kw ? x.kw[0] : null; const w = x.when; if (w) x.when = () => true; tutoDraw(); if (w) x.when = w; })()`); await step("tutoriel, étape " + (j + 1)); }
+  await ev(`(()=>{ const x = TSTEPS.find(s => s.wait); TUTO.k = TSTEPS.indexOf(x); const w = x.when; x.when = () => false; tutoDraw(); x.when = w; })()`); await step("tutoriel, attente");
+  for (let j = 0; j < nTips; j++) { await ev(`(()=>{ TUTO.k = 7; TUTO.tip = TTIPS[${j}]; TUTO.kw = TTIPS[${j}].kw ? TTIPS[${j}].kw[0] : null; tutoDraw(); })()`); await step("tutoriel, astuce " + (j + 1)); }
+  await ev("TUTO.tip = null; TUTO.k = TSTEPS.length; tutoDraw()"); await step("tutoriel, coach réussi");
+  await ev("openGlossary()"); await step("lexique", "lexique"); await ev("closeModal()");
+  for (const n of ["Punch First", "Pit Rookie", "Zhonya's Hourglass", "Master Yi, Tempered", "Darius, Hand of Noxus", "Hidden Blade", "Vanguard Captain", "Carrion Dredger", "Inferna"]) {
+    await ev(`(()=>{ const e = document.createElement("div"); e.dataset.card = ${JSON.stringify(n)}; document.body.appendChild(e); showZoom(e); e.remove(); })()`); await step("agrandi " + n);
+  }
+  await ev("$('zoom').hidden = true; tutoEnd(V)"); await step("tutoriel, fin"); await ev("closeModal()");
   // retour au français par le bouton du menu
   await ev("showMenu(); menuRender('main')"); await pg.waitForTimeout(300);
   await Promise.all([pg.waitForNavigation(), tap(".mlang")]);
