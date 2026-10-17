@@ -18,7 +18,7 @@ const OK = ["Mulligan", "Sideboard", "Battlefield", "Battlefields", "Combat", "S
   "Accelerate", "Hidden", "Tank", "Backline", "Ganking", "Deflect", "Assault", "Shield", "Temporary", "Empower", "Flow", "Repeat",
   "Riftbound Observatory", "Riftbound", "Predict", "Vision", "Reaction", "Action", "BO1", "BO3", "ST", "TEMP", "EMP", "Lvl", "VS",
   "Français", "Decks.", "Coach", "Champions", "sideboard", "best", "hidden", "Pause", "⏸ Pause", "might", "Might", "Menu", "☰ Menu", "← Menu", "Destination", "Ready", "Points", "Claude", "PeerJS", "WebRTC", "Darius", "Master Yi", "LeBlanc", "Akali",
-  "Ambush", "Legion", "Deathknell", "Equip", "Quick-Draw", "Weaponmaster", "Hunt", "Level", "Unique", "Empowered", "Stun", "Burn", "Mighty", "Buff", "Add", "XP"];
+  "Ambush", "Legion", "Deathknell", "Equip", "Quick-Draw", "Weaponmaster", "Hunt", "Level", "Unique", "Empowered", "Stun", "Burn", "Mighty", "Buff", "Add", "XP", "Focus"];
 const FR = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|du|une|et|ou|ton|ta|tes|ses|pour|avec|sans|sur|sous|dans|vers|cible|carte|cartes|unité|unités|joue|déplace|pioche|tour|défausse|aucun|aucune|quelle|quel|toi|adverse|passe|termine|gratuit|oui|partie|parties|manche|donne|choisis|touche|suivant|compris|revoir|coup|coups|forte|normale|nouvelle|nouveau|jouer|retour|fin|début|aide|garder|valider|annuler)\b/i;
 const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHROME) ? { executablePath: process.env.CHROME_PATH || LOCAL_CHROME } : {});
 let fails = 0;
