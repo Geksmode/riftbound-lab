@@ -69,3 +69,10 @@ Demande de l'utilisateur : « fait une version anglaise de l'app ». Bouton Engl
 `train.html?lang=en` ; choix gardé (`rbt-lang`), changer recharge la page. `src.html` reste en français : `train/i18n.js`
 (inséré par `build.sh`) traduit le texte à l'entrée dans la page ; le moteur parle anglais via `engine/lang.py`
 (`train.set_lang`). Robot `train/verif_anglais.mjs`, test `engine/cardsets/test_lang.py`. Détail : `docs/wiki/pages/anglais.md`.
+
+## Lire les cartes du mulligan (2026-10-17)
+Demande de l'utilisateur : « pendant le mulligan, on puisse lire les cartes qu'on a ». Avant, toucher une carte de la bulle
+la mettait de côté et l'agrandi y était coupé (`.mull` exclu). Maintenant : bouton « Lire » sous chaque carte (ouvre
+l'agrandi, le même bouton le referme, toucher une carte le ferme), et survol à la souris sur ordinateur (classe `.mull.mm`,
+les autres bulles de cartes gardent leur comportement). Robot `train/verif_mulligan.mjs` (vérifié par robot, toucher
+simulé ; pas essayé sur un vrai téléphone).

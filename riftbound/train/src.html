@@ -126,6 +126,8 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .prompt .mull { justify-content: center; }
 .prompt .mull button { padding: 0; }
 .prompt .mull button .card { --cw: 78px; --chh: 109px; width: 78px; height: 109px; }
+.prompt .mull .mc { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.prompt .mull button.rd { min-height: 30px; padding: 3px 12px; font-size: 12px; font-weight: 600; border: 1px solid var(--trait-2, #556); border-radius: 8px; background: rgba(255,255,255,.06); color: inherit; }
 .prompt .mull.pick button:hover .card { box-shadow: 0 0 0 3px var(--akali); }
 .toast { position: fixed; z-index: 45; pointer-events: none; max-width: min(560px, calc(100vw - 24px)); background: rgba(16,19,30,.95); border: 1px solid var(--leblanc); color: var(--leblanc); border-radius: 20px; padding: 6px 14px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
 .toast.flash { border-color: var(--active); color: #ff8a95; }
@@ -1648,7 +1650,7 @@ function showZoom(el) {
   Z.style.left = x + "px"; Z.style.top = y + "px";
 }
 const HOVER = matchMedia("(hover: hover)").matches;
-document.addEventListener("mouseover", e => { if ((drag && drag.on) || !HOVER) return; const el = e.target.closest("[data-card]"); if (el && el.dataset.card && !el.closest(".mull")) showZoom(el); else if (!e.target.closest("#zoom")) Z.hidden = true; });
+document.addEventListener("mouseover", e => { if ((drag && drag.on) || !HOVER) return; const el = e.target.closest("[data-card]"); if (el && el.dataset.card && !el.closest(".mull:not(.mm)")) showZoom(el); else if (!e.target.closest("#zoom")) Z.hidden = true; });
 // ------------------------------------------------------------ interactions : sélection, cibles, déplacements, flèches
 // Une carte touchée ouvre un petit menu (jouer, Empower, Cibler…, Déplacer…). Les cibles se choisissent une à une puis
 // « Valider la cible ». Un déplacement se prépare (unités + destination, par glisser ou toucher) puis se lance par bouton :
@@ -1813,7 +1815,8 @@ function askHTML() {
   const who = a.item ? `<b>${esc(a.item)}</b> · ` : "";
   if (a.kind === "mulligan") {
     const n = mode.mull.size;
-    return `<span class="ft">Mulligan : touche jusqu'à 2 cartes à remettre.</span><div class="mull">${a.options.map((c, i) => `<button data-m="${i}" aria-pressed="${mode.mull.has(i)}" title="${esc(c)}">${card(c, { raw: true, p: 0, cost: true })}</button>`).join("")}</div>
+    // « Lire » sous chaque carte : toucher la carte la met de côté, il faut donc un autre geste pour lire son texte
+    return `<span class="ft">Mulligan : touche jusqu'à 2 cartes à remettre.</span><div class="mull mm">${a.options.map((c, i) => `<div class="mc"><button data-m="${i}" aria-pressed="${mode.mull.has(i)}" title="${esc(c)}">${card(c, { raw: true, p: 0, cost: true })}</button><button class="rd" data-rd="${i}" title="Lire la carte">Lire</button></div>`).join("")}</div>
       <div class="prow"><button class="go" id="bKeep">${n ? `Remettre ${n} carte${n > 1 ? "s" : ""}` : "Garder ma main"}</button></div>`;
   }
   if (a.show && a.show.length) return `<span class="ft">${who}${esc(a.title)}</span><div class="mull seen">${a.show.map((n, i) => `<div class="seenc${a.show.length > 1 ? (i === (a.cur || 0) ? " cur" : " other") : ""}">${card(n, { raw: true, cost: true })}</div>`).join("")}</div><div class="prow">${a.options.map((o, i) => `<button class="${i ? "" : "go"}" data-a="${i}">${esc(cap(o))}</button>`).join("")}</div>`;
@@ -1898,6 +1901,14 @@ function fbarHTML() {
 }
 $("fbar").addEventListener("click", e => {
   e.stopPropagation();
+  const rd = e.target.closest("[data-rd]");
+  if (rd) {   // Lire une carte du mulligan : ouvre son agrandi, le même bouton le referme
+    const el = rd.parentNode.querySelector("[data-card]");
+    if (!Z.hidden && Z.dataset.rd === rd.dataset.rd) { Z.hidden = true; return; }
+    if (el) { showZoom(el); Z.dataset.rd = rd.dataset.rd; }
+    return;
+  }
+  Z.hidden = true; delete Z.dataset.rd;
   const m = e.target.closest("[data-m]");
   if (m && mode && mode.type === "ask") {
     const i = +m.dataset.m;

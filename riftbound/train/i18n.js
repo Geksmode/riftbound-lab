@@ -50,7 +50,7 @@
     ["· coût ${}", "· cost ${}"], ["· might ${}", "· might ${}"], ["· bonus +${}", "· bonus +${}"],
     ["Ce coup n'est pas possible.", "This move isn't possible."], ["Cette unité n'est pas une cible possible.", "This unit isn't a possible target."],
     ["à toi", "yours"], ["Jouer", "Play"], ["Jouer → ${}", "Play → ${}"],
-    ["Déplacer… (puis choisir la destination)", "Move… (then choose the destination)"], ["Lire la carte", "Read the card"],
+    ["Déplacer… (puis choisir la destination)", "Move… (then choose the destination)"], ["Lire la carte", "Read the card"], ["Lire", "Read"],
     ["Remettre ${} carte${}", "Put back ${} card${}"], ["Garder ma main", "Keep my hand"],
     ["Mulligan : touche jusqu'à 2 cartes à remettre.", "Mulligan: tap up to 2 cards to put back."],
     ["Utiliser cet effet ?", "Use this effect?"], ["Oui", "Yes"], ["Non", "No"],
