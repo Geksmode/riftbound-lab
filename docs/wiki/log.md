@@ -251,3 +251,6 @@ Demande de l'utilisateur : un tutoriel plus progressif, des tooltips pour les mo
 
 ## [2026-10-17] ingest | Tutoriel : focus, priorité, passer, Action et Reaction
 Demande de l'utilisateur. Deux écrans d'intro (Action / Reaction avec les vraies cartes, « chacun son tour de parole »), deux leçons au premier showdown (focus et pourquoi passer ; Action et Reaction), astuce « Tu as la priorité » (carte sur la chaîne), lexique : priorité, focus, passer (Core Rules 312-313, 338-339, 345-347). Détail : `pages/tutoriel.md`.
+
+## [2026-10-17] perf | Table : chargement du moteur ~2 fois plus rapide
+Demande de l'utilisateur. Python précompilé au build (`train/precompile.mjs` : stdlib chargée en `.pyc`, moteur en `py/bytecode.json` checked-hash), téléchargements en parallèle dans le worker. Menu actif en local : 3,5 ± 0,6 s → 1,6 ± 0,1 s (cache froid), 3,0 ± 0,5 → 1,2 ± 0,2 s (cache chaud). Sur réseau lent à froid, pas de différence mesurable (le wasm domine). Détail : `docs/memoire/riftbound-training-table.md` (« Chargement »), `pages/publication.md`.

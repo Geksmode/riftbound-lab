@@ -76,3 +76,17 @@ la mettait de côté et l'agrandi y était coupé (`.mull` exclu). Maintenant : 
 l'agrandi, le même bouton le referme, toucher une carte le ferme), et survol à la souris sur ordinateur (classe `.mull.mm`,
 les autres bulles de cartes gardent leur comportement). Robot `train/verif_mulligan.mjs` (vérifié par robot, toucher
 simulé ; pas essayé sur un vrai téléphone).
+
+## Chargement du moteur (2026-10-17)
+Demande de l'utilisateur : « le chargement de l'engine est long ». Cause principale : Pyodide 0.26.4 livre sa stdlib en `.py`,
+donc à chaque ouverture il recompilait ~120 modules (asyncio, typing, inspect…) puis tout le moteur (~1 Mo de `.py`).
+Correctif : `train/precompile.mjs` (lancé par `build.sh`) précompile avec le Python de Pyodide (node) la stdlib chargée et
+le moteur (`py/bytecode.json`, `.pyc` checked-hash, `.py` toujours servis) ; le worker télécharge stdlib, moteur et
+bytecode en même temps que le wasm, la page démarre le worker avant les index d'images.
+Mesures (Chromium sans limite CPU, serveur local `http.server` sans gzip, temps jusqu'au menu actif, ± écart-type) :
+- local, cache froid : 3487 ± 565 ms → 1625 ± 122 ms (n = 6) ; cache chaud : 3024 ± 546 → 1239 ± 150 ms (n = 6).
+- réseau lent simulé (10 Mbit/s, 150 ms) : froid 17477 ± 298 → 17224 ± 70 ms (n = 4, on ne sait pas : le téléchargement
+  domine, surtout le wasm de 10 Mo) ; chaud 12069 ± 1031 → 9782 ± 348 ms (n = 4).
+- node seul : `loadPyodide` ~1,8 s → ~0,6 s, `import train` ~530 → ~100 ms.
+Coût : +2,3 Mo bruts au premier chargement (bytecode.json 2,0 Mo, stdlib 3,1 → 3,9 Mo) ; avec gzip (GitHub Pages
+compresse le texte) environ +1,4 Mo. Pas essayé sur un vrai téléphone (limite CPU du worker non simulée).

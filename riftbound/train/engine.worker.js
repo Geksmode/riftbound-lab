@@ -12,24 +12,40 @@ importScripts("pyodide/pyodide.js");
 let py = null, T = null;
 
 async function init({ ver, py: files }) {
-  // La bibliothèque standard de Python est publiée en base64 (les .zip ne sont pas servis). Les URL blob: sont interdites par
-  // la page claude.ai : on intercepte donc la requête de Pyodide vers stdlib.zip et on lui rend les octets décodés.
-  const b64 = await fetch("pyodide/python_stdlib.b64.txt").then(r => { if (!r.ok) throw new Error("python_stdlib"); return r.text(); });
-  const bin = atob(b64.trim()), zip = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) zip[i] = bin.charCodeAt(i);
-  const stdLibURL = new URL("pyodide/stdlib-virtuel.zip", self.location.href).href;
-  const realFetch = self.fetch.bind(self);
-  self.fetch = (u, o) => String(u && u.url || u) === stdLibURL ? Promise.resolve(new Response(zip, { headers: { "Content-Type": "application/zip" } })) : realFetch(u, o);
-  py = await loadPyodide({ indexURL: new URL("pyodide/", self.location.href).href, stdLibURL });
-  self.fetch = realFetch;
-  for (const d of ["/rb", "/rb/cards", "/rb/decks", "/rb/engine", "/rb/engine/cardsets"]) py.FS.mkdir(d);
+  // Tout part en même temps : stdlib, fichiers du moteur et bytecode se téléchargent pendant que Pyodide charge son wasm.
   // Les fichiers du moteur ont la version de la page en paramètre : sinon le navigateur peut garder l'ancien moteur en
   // cache (GitHub Pages : 10 min) sous une page neuve.
-  const get = async (u, dst) => py.FS.writeFile(dst, new Uint8Array(await fetch(u + "?v=" + ver).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); })));
-  await Promise.all([get("data/cards_unique.csv", "/rb/cards/cards_unique.csv"), get("data/decks.json", "/rb/decks/decks.json"),
-    ...files.map(f => get("py/" + f, "/rb/engine/" + f))]);
+  const bytes = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); }).then(b => new Uint8Array(b));
+  const engine = Promise.all([["data/cards_unique.csv", "/rb/cards/cards_unique.csv"], ["data/decks.json", "/rb/decks/decks.json"],
+    ...files.map(f => ["py/" + f, "/rb/engine/" + f])].map(([u, dst]) => bytes(u + "?v=" + ver).then(b => [dst, b])));
+  engine.catch(() => {});
+  // Bytecode du moteur (precompile.mjs) : facultatif, sans lui Python compile les .py comme avant.
+  const pyc = fetch("py/bytecode.json?v=" + ver).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  // La bibliothèque standard de Python est publiée en base64 (les .zip ne sont pas servis). Les URL blob: sont interdites par
+  // la page claude.ai : on intercepte donc la requête de Pyodide vers stdlib.zip et on lui rend les octets décodés.
+  const zip = fetch("pyodide/python_stdlib.b64.txt").then(r => { if (!r.ok) throw new Error("python_stdlib"); return r.text(); }).then(b64ToBytes);
+  zip.catch(() => {});
+  const stdLibURL = new URL("pyodide/stdlib-virtuel.zip", self.location.href).href;
+  const realFetch = self.fetch.bind(self);
+  self.fetch = (u, o) => String(u && u.url || u) === stdLibURL ? zip.then(z => new Response(z, { headers: { "Content-Type": "application/zip" } })) : realFetch(u, o);
+  try { py = await loadPyodide({ indexURL: new URL("pyodide/", self.location.href).href, stdLibURL }); }
+  finally { self.fetch = realFetch; }
+  for (const d of ["/rb", "/rb/cards", "/rb/decks", "/rb/engine", "/rb/engine/cardsets"]) py.FS.mkdir(d);
+  for (const [dst, b] of await engine) py.FS.writeFile(dst, b);
+  // .pyc « checked-hash » : Python vérifie qu'ils viennent du .py posé à côté, sinon il recompile (jamais de bytecode périmé).
+  for (const [f, b64] of Object.entries(await pyc)) {
+    const dst = "/rb/engine/" + f;
+    py.FS.mkdirTree(dst.slice(0, dst.lastIndexOf("/")));
+    py.FS.writeFile(dst, b64ToBytes(b64));
+  }
   py.runPython("import sys; sys.path.insert(0, '/rb/engine')");
   T = py.pyimport("train");
+}
+
+function b64ToBytes(b64) {
+  const bin = atob(b64.trim()), out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
 }
 
 // Message d'une erreur Python : la dernière ligne non vide (le type et le texte), comme la page l'affichait avant.
