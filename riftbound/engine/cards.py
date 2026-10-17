@@ -23,6 +23,7 @@ Card modules live in cardsets/ (listed in cardsets/__init__.py) and are imported
 text is only keywords and reminder text are registered by auto_keywords() after them.
 """
 import re
+from lang import tr
 from game import ANY, SPEC, DOMAINS, EQUIP_BONUS, Item, Obj, Opt
 from actions import full_choices  # noqa: E402
 from actions import (play_card, attach, equip_cost, deflect_reqs, loc_allowed, open_bf, card_kw, flow_of,
@@ -339,33 +340,35 @@ def may_pay(e, reqs_fn=None):
         return g.pay(it.ctrl, e, reqs)
     cost.can = can            # flush_triggers : pas de question « utiliser l'effet ? » quand on ne peut pas payer
     cost.label = f"{e} énergie" + (" et des runes" if reqs_fn else "")
+    cost.label_en = f"{e} energy" + (" and runes" if reqs_fn else "")      # version anglaise de la table (lang)
     return cost
 
 
 def extra_label(g, ex):
     """French label of an 'as you play me' / additional cost choice dict (Impl.as_played), for a human player."""
     if not ex:
-        return "sans coût additionnel"
+        return tr("sans coût additionnel", "no additional cost")
     parts = []
     for k in sorted(ex):
         v = ex[k]
         o = g.obj(v) if isinstance(v, int) and not isinstance(v, bool) else None
         if k == "acc":
-            parts.append("payer [Accelerate]" if v else "sans [Accelerate]")
+            parts.append(tr("payer [Accelerate]", "pay [Accelerate]") if v else tr("sans [Accelerate]", "without [Accelerate]"))
         elif k == "kill" and o is not None:
-            parts.append(f"tuer {o.cname}")
+            parts.append(tr(f"tuer {o.cname}", f"kill {o.cname}"))
         elif k == "kills":
-            parts.append("tuer " + ", ".join(g.obj(u).cname for u in v if g.obj(u) is not None) if v else "ne rien tuer")
+            parts.append(tr("tuer ", "kill ") + ", ".join(g.obj(u).cname for u in v if g.obj(u) is not None) if v
+                         else tr("ne rien tuer", "kill nothing"))
         elif k == "ret_gear" and o is not None:
-            parts.append(f"renvoyer {o.cname} en main")
+            parts.append(tr(f"renvoyer {o.cname} en main", f"return {o.cname} to hand"))
         elif k == "tag":
             parts.append(f"tag {v}")
         elif k == "xp":
-            parts.append("dépenser de l'XP")
+            parts.append(tr("dépenser de l'XP", "spend XP"))
         elif o is not None:
-            parts.append(f"{k} : {o.cname}")
+            parts.append(tr(f"{k} : {o.cname}", f"{k}: {o.cname}"))
         elif v is True:
-            parts.append("payer le coût additionnel")
+            parts.append(tr("payer le coût additionnel", "pay the additional cost"))
         else:
             parts.append(f"{k} = {v}")
     return ", ".join(parts)
@@ -445,7 +448,7 @@ def remake_choices(g, it, pid):
     if not cands:
         return
     before = set(it.chosen)
-    keep = Opt("garder les choix actuels", None)
+    keep = Opt(tr("garder les choix actuels", "keep the current choices"), None)
     pick = g.ask(pid, "new_choices", [Opt(_choice_label(g, ch), ch) for ch in cands] + [keep], item=it)
     preds = im.preds or []
     if pick is not None and pick.value is not None:
@@ -488,10 +491,14 @@ def remake_choices(g, it, pid):
 
 _CHOICE_WORDS = dict(acc="avec Accelerate", free="gratuitement", ignore_energy="sans payer l'énergie",
                      pay_power="en payant la puissance", rep="répété", flow="avec Flow")
+_CHOICE_WORDS_EN = dict(acc="with Accelerate", free="for free", ignore_energy="without paying the energy",
+                        pay_power="paying the power", rep="repeated", flow="with Flow")
 
 
 _CHOICE_UIDS = dict(kill="en détruisant", spend="en dépensant le buff de", disc="en défaussant",
                     exh="en épuisant", rec="en recyclant", cards="cartes :", cs="cartes :")
+_CHOICE_UIDS_EN = dict(kill="killing", spend="spending the buff of", disc="discarding",
+                       exh="exhausting", rec="recycling", cards="cards:", cs="cards:")
 
 
 def _uid_name(g, x):
@@ -513,28 +520,29 @@ def _choice_label(g, ch):
         v = ch[k]
         if k in ("tg", "tg2"):
             names = ", ".join(_tg_name(g, u) for u in v)
-            parts.append(("cible " if k == "tg" else "cible répétée ") + names if names else "aucune cible")
+            parts.append((tr("cible ", "target ") if k == "tg" else tr("cible répétée ", "repeat target ")) + names if names
+                         else tr("aucune cible", "no target"))
         elif k == "item":
             x = item_by_id(g, v)
-            parts.append(f"sort {x.name}" if x is not None else "un sort")
+            parts.append(tr(f"sort {x.name}", f"spell {x.name}") if x is not None else tr("un sort", "a spell"))
         elif k in ("loc", "dest"):
             if v == "base" or v in (0, 1):
-                parts.append("à la base" if v == "base" else g.bfs[v].name)
+                parts.append(tr("à la base", "to base") if v == "base" else g.bfs[v].name)
         elif k == "mover" and g.obj(v) is not None:
-            parts.append(f"déplace {g.label(g.obj(v))}")
+            parts.append(tr(f"déplace {g.label(g.obj(v))}", f"moves {g.label(g.obj(v))}"))
         elif k in _CHOICE_WORDS:
             if v:
-                parts.append(_CHOICE_WORDS[k])
+                parts.append(tr(_CHOICE_WORDS[k], _CHOICE_WORDS_EN[k]))
         elif k in ("mover_oid", "oid"):
             continue
         elif k in _CHOICE_UIDS and v is not None:
             vs = v if isinstance(v, (tuple, list)) else (v,)
             names = [_uid_name(g, x) for x in vs]
             if names:
-                parts.append(_CHOICE_UIDS[k] + " " + ", ".join(names))
+                parts.append(tr(_CHOICE_UIDS[k], _CHOICE_UIDS_EN[k]) + " " + ", ".join(names))
         elif v is not None and v is not False:
             parts.append(f"{k} = {v}")
-    return " ; ".join(parts) or "sans choix"
+    return tr(" ; ", "; ").join(parts) or tr("sans choix", "no choice")
 
 
 def gain_control_item(g, it, pid):

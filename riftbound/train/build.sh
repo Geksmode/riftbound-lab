@@ -7,7 +7,7 @@ E=$(cd .. && pwd)            # dossier riftbound/
 B=build
 [ -f pyodide-cache/package/pyodide.js ] || { echo "Lance d'abord : bash fetch_pyodide.sh"; exit 1; }
 rm -rf $B && mkdir -p $B/py/cardsets $B/data $B/pyodide $B/img $B/atlas
-for f in game.py actions.py cards.py ai.py plans.py decks.py replay.py train.py match.py version.py pool.txt; do cp $E/engine/$f $B/py/; done
+for f in game.py actions.py cards.py ai.py plans.py decks.py replay.py train.py match.py version.py lang.py pool.txt; do cp $E/engine/$f $B/py/; done
 # modules de cartes : la liste explicite de cardsets/__init__.py (la page charge les fichiers par nom)
 CS=$(python3 -c "
 import re, os
@@ -21,6 +21,7 @@ import sys, json
 mods = [m for m in sys.argv[1].split() if m]
 files = ["cardsets/__init__.py"] + [f"cardsets/{m}.py" for m in mods]
 s = open('src.html').read().replace('/*BASE_CSS*/', open('base.css').read()).replace('/*DA_CSS*/', open('da.css').read())
+s = s.replace('/*I18N_JS*/', open('i18n.js').read())   # version anglaise (i18n.js), dans la page même
 s = s.replace('/*CARDSETS*/', "".join(", " + json.dumps(f) for f in files))
 import subprocess, sys as _s
 commit = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], capture_output=True, text=True).stdout.strip() or None

@@ -8,6 +8,7 @@
 # Variables : RB_FUZZ (parties par paquet, défaut 200), RB_RAND (parties t_rand, défaut 30),
 #             RB_NAV=0 pour sauter les robots navigateur, RB_MATCH=0 pour sauter le robot du match BO3 (~6 min),
 #             RB_DUEL=0 pour sauter le robot du duel entre amis (serveur PeerJS local : paquet npm peer@1.0.2),
+#             RB_EN=0 pour sauter le robot de la version anglaise (~10 min),
 #             RB_PORT (défaut 8771).
 # Code de sortie 0 seulement si tout passe ; un résumé est imprimé à la fin.
 set -uo pipefail
@@ -87,6 +88,19 @@ match() {   # robot du match BO3 et du sideboard (train/verif_match.mjs), en 360
   [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot du match : $(grep -c '^OK' <<<"$out") contrôles OK"
 }
 
+anglais() {   # robot de la version anglaise (train/verif_anglais.mjs) : toute la table avec ?lang=en, aucun texte français
+  if [ "${RB_NAV:-1}" = 0 ] || [ "${RB_EN:-1}" = 0 ]; then echo "robot de la version anglaise sauté (RB_NAV=0 ou RB_EN=0)"; return 0; fi
+  [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
+    || { echo "robot de la version anglaise sauté (Playwright absent)"; return 0; }
+  local port=$((PORT + 5))
+  (cd "$TR/build" && exec python3 -m http.server "$port" >/dev/null 2>&1) & local srv=$!
+  sleep 1
+  local out; out=$(cd "$TR" && timeout 2400 node verif_anglais.mjs "$LOG" "$port" 2>&1); local rc=$?
+  kill $srv 2>/dev/null
+  echo "$out" | tail -40
+  [ $rc = 0 ] && ! grep -q "ÉCHEC" <<<"$out" && echo "robot de la version anglaise : $(grep -c '^OK' <<<"$out") contrôles OK"
+}
+
 duel() {   # robot du duel entre amis (train/verif_duel.mjs) : deux navigateurs, serveur PeerJS local
   if [ "${RB_NAV:-1}" = 0 ] || [ "${RB_DUEL:-1}" = 0 ]; then echo "robot du duel sauté (RB_NAV=0 ou RB_DUEL=0)"; return 0; fi
   local pj=""
@@ -104,8 +118,8 @@ duel() {   # robot du duel entre amis (train/verif_duel.mjs) : deux navigateurs,
 
 case "$QUOI" in
   moteur) etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard ;;
-  table)  etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape duel duel ;;
-  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape duel duel ;;
+  table)  etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape anglais anglais; etape duel duel ;;
+  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape anglais anglais; etape duel duel ;;
   *) sed -n '2,10p' "${BASH_SOURCE[0]}"; exit 2 ;;
 esac
 

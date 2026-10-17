@@ -320,6 +320,7 @@ body.dkopen { overflow: hidden; }
 .mhead { text-align: center; padding: 18px 0 4px; }
 .mhead h1 { font-size: clamp(26px, 6vw, 40px); color: var(--brass); letter-spacing: .02em; }
 .mhead p { margin: 6px 0 0; color: var(--ink-2); font-size: 14px; }
+.mhead .mlang { margin-top: 10px; min-height: 44px; padding: 4px 14px; font-size: 13px; }
 .mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 10px; }
 .mitem { display: flex; align-items: center; gap: 14px; text-align: left; min-height: 64px; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); text-decoration: none; color: var(--ink); cursor: pointer; min-width: 0; }
 .mitem:hover, .mitem:focus-visible { border-color: var(--brass); background: rgba(255,255,255,.08); }
@@ -719,13 +720,14 @@ body.dkopen { overflow: hidden; }
 
 <svg id="arrows" aria-hidden="true"><defs><marker id="ahA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#72E2BC"/></marker><marker id="ahL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF8F7E"/></marker></defs><g id="arrowsG"></g></svg>
 
+<script>/*I18N_JS*/</script>
 <script src="vendor/peerjs.min.js"></script>
 <script>
 const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "chaos", Order: "order" };
 const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
 const GLYPH = { Fury: "F", Calm: "Ca", Mind: "Mi", Body: "B", Chaos: "Ch", Order: "O" };
 let PN = ["Akali", "LeBlanc"];
-const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "match.py", "version.py", "pool.txt"/*CARDSETS*/];
+const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "match.py", "version.py", "lang.py", "pool.txt"/*CARDSETS*/];
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -827,10 +829,10 @@ function sfxView(prev, v) {
   const ks = [], logs = (v.log || []).map(x => x[1] || "");
   if (v.ai) ks.push("opp");
   if (logs.some(t => /^(Combat|COMBAT) /.test(t))) ks.push("combat");
-  if (logs.some(t => / meurt\b/.test(t))) ks.push("death");
-  if (logs.some(t => t.startsWith("Tu pioches"))) ks.push("draw");
+  if (logs.some(t => / (meurt|dies)\b/.test(t))) ks.push("death");   // journal en français ou en anglais (i18n.js)
+  if (logs.some(t => /^(Tu pioches|You draw) /.test(t))) ks.push("draw");
   if (v.ask && v.ask.kind === "mulligan" && !(prev && prev.ask && prev.ask.kind === "mulligan")) ks.push("shuffle");   // début de partie
-  if (logs.some(t => t.startsWith("Tour "))) ks.push("turn");
+  if (logs.some(t => /^(Tour|Turn) /.test(t))) ks.push("turn");
   if (prev && prev.st && v.st && prev.st.pts && v.st.pts) {
     if (v.st.pts[MEP] > prev.st.pts[MEP]) ks.push("point");
     if (v.st.pts[OPP()] > prev.st.pts[OPP()]) ks.push("opoint");
@@ -881,6 +883,7 @@ async function boot() {
   // Le moteur (Pyodide + train) tourne dans un Web Worker (engine.worker.js) : la réflexion de l'IA ne gèle plus la page.
   const ver = encodeURIComponent([BUILD.commit, BUILD.engine].filter(Boolean).join("-") || String(Date.now()));
   T = await engineStart(ver);
+  if (I18N.lang === "en") await T.set_lang("en");   // version anglaise : questions, coups et journal du moteur (engine/lang.py)
   // catalogue et verdicts des decks avant d'activer le menu : sinon il se redessine quand ils arrivent (worker), et un
   // toucher sur un bouton remplacé se perd
   try { await loadCatalog(); } catch (e) { console.error(e); }
@@ -1283,7 +1286,7 @@ function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;
   for (const [ind, t] of lines) LOG.push([ind, t]);
   const el = $("log");
-  el.innerHTML = LOG.map(([ind, t]) => `<div class="${t.startsWith("Tour ") ? "turn" : ind ? "sub" : ""} ${t.startsWith("Tu ") || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
+  el.innerHTML = LOG.map(([ind, t]) => `<div class="${/^(Tour|Turn) /.test(t) ? "turn" : ind ? "sub" : ""} ${/^(Tu|You) /.test(t) || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
   el.scrollTop = el.scrollHeight;
   if ($("drawer").classList.contains("open")) seenLog = LOG.length;
   badge();
@@ -2206,7 +2209,8 @@ document.addEventListener("keydown", e => {
 // (pas de :focus-visible ici : Chrome le rend vrai dès qu'une touche est enfoncée).
 // Indice de « oui » d'une question oui / non (options True / False du moteur, libellées « oui » / « non »), sinon -1.
 const yesIdx = a => { const o = (a.options || []).map(x => String(x).toLowerCase());
-  return o.length === 2 && o.includes("oui") && o.includes("non") ? o.indexOf("oui") : -1; };
+  for (const [y, n] of [["oui", "non"], ["yes", "no"]]) if (o.length === 2 && o.includes(y) && o.includes(n)) return o.indexOf(y);
+  return -1; };
 let tabNav = false;
 document.addEventListener("pointerdown", () => { tabNav = false; }, true);
 document.addEventListener("keydown", e => {
@@ -3143,7 +3147,7 @@ function rpCtrl(v) {
     ${RP.warn.length ? `<div class="small rpwarn">${esc(RP.warn.join(" · "))}</div>` : ""}
     ${end}
     ${f.lab ? `<div class="rplab ${f.who}">${esc(f.lab)}</div>` : ""}
-    ${mine ? `<div class="rpmine"><div class="rpq">Ici, ${esc(mine[1].replace(/^Tu /, "tu "))}</div>${mine[1].startsWith("Tu joues") ? (hs ? rows : `<button class="go" id="rpAn"${RP.busy ? " disabled" : ""}>${RP.busy ? "Analyse…" : "Analyser ce coup"}</button>`) : `<div class="small">Réponse à une question : pas de conseil.</div>`}</div>` : ""}
+    ${mine ? `<div class="rpmine"><div class="rpq">Ici, ${esc(mine[1].replace(/^(Tu|You) /, m => m.toLowerCase()))}</div>${/^(Tu joues|You play)/.test(mine[1]) ? (hs ? rows : `<button class="go" id="rpAn"${RP.busy ? " disabled" : ""}>${RP.busy ? "Analyse…" : "Analyser ce coup"}</button>`) : `<div class="small">Réponse à une question : pas de conseil.</div>`}</div>` : ""}
     <button id="rpQuit">Quitter le replay</button>`;
   rpPlace();
 }
@@ -3389,7 +3393,7 @@ function menuRender(view) {
     const inGame = V && (V.winner === null || V.winner === undefined);
     const dis = READY ? "" : " disabled";
     const item = (id, ic, t, d, cls = "") => `<button class="mitem ${cls}" data-m="${id}"${dis}><span class="ic" aria-hidden="true">${ic}</span><span><b>${t}</b><span class="d">${d}</span></span></button>`;
-    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Observatory</h1><p>Choisis ton deck, joue contre l'IA, relis tes parties.</p></div>
+    h = `<div class="menuin"><div class="mhead"><h1>Riftbound Observatory</h1><p>Choisis ton deck, joue contre l'IA, relis tes parties.</p><button class="mlang" data-lang="${I18N.lang === "en" ? "fr" : "en"}" lang="${I18N.lang === "en" ? "fr" : "en"}">${I18N.lang === "en" ? "Français" : "English"}</button></div>
       <div class="mstat${ENGERR ? " err" : ""}" id="mstat">${ENGERR ? "Le moteur n'a pas pu se charger : " + esc(ENGERR) + ". Recharge la page." : READY ? "" : "Chargement du moteur de jeu…"}</div>
       <div class="dash">${dashDeckHTML(dis)}<section class="dcard lastc" id="dLast">${dashLastHTML(inGame, dis)}</section></div>
       <div class="mgrid mrow">

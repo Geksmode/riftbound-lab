@@ -13,6 +13,7 @@ from pathlib import Path
 from game import Game, Obj, Item, SPEC, EQUIP_BONUS
 from ai import SearchAgent, determinize, PolicyAgent, rollout_policy, evaluate
 import game as _game
+from lang import tr, en
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "replays"
@@ -74,6 +75,49 @@ def fr_line(g, line):
     return short(s)
 
 
+def en_line(g, line):
+    """Ligne du journal du moteur pour la version anglaise de la table : le texte du moteur (déjà en anglais), avec les
+    noms des joueurs, les noms des battlefields et sans les identifiants internes."""
+    s = line.strip()
+    N = lambda m: NAMES[int(m)]
+    bf = lambda m: g.bfs[int(m)].name if m in ("0", "1") else m
+    rules = [
+        (r"^P(\d) plays (.+?) from (hand|champ|facedown|trash) ?(.*)$",
+         lambda m: f"{N(m[1])} plays {m[2]}" + {"hand": "", "champ": " (champion zone)",
+                   "facedown": " (hidden card revealed)", "trash": " from the trash"}[m[3]] + fmt_args(g, m[4])),
+        (r"^P(\d) activates (.+?) ?(\(.*\))?$", lambda m: f"{N(m[1])} activates {m[2]}" + fmt_args(g, m[3] or "")),
+        (r"^P(\d) moves \[(.*)\] -> (.+)$", lambda m: f"{N(m[1])} moves {m[2]} to {bf(m[3])}"),
+        (r"^P(\d) \+1 point \((.+)\) -> (\d+)$", lambda m: f"{N(m[1])} +1 point ({m[2]}) → {m[3]}"),
+        (r"^P(\d) pays Deflect \+(\d+) power$", lambda m: f"{N(m[1])} pays Deflect: +{m[2]} power of any domain (rule 809)"),
+        (r"^P(\d) reveals their hand \[(.*)\]$", lambda m: f"{N(m[1])} reveals their hand: {m[2] or 'empty'}"),
+        (r"^resolve (.+)$", lambda m: f"Resolve: {m[1]}"),
+        (r"^(.+) takes (\d+) \((\d+) might\)$", lambda m: f"{m[1]} takes {m[2]} damage (might {m[3]})"),
+        (r"^(.+) moves (\w+)->(\w+)$", lambda m: f"{m[1]} moves from {bf(m[2])} to {bf(m[3])}"),
+        (r"^trigger on chain: (.+)$", lambda m: f"Trigger on the chain: {m[1]}"),
+        (r"^hidden (.+) at (.+) is trashed$", lambda m: f"The hidden card {m[1]} at {m[2]} goes to the trash"),
+        (r"^combat damage: attackers (\d+) vs defenders (\d+)$",
+         lambda m: f"Combat damage: attackers {m[1]} vs defenders {m[2]}"),
+        (r"^Reflection of (.+) at (.+)$", lambda m: f"Reflection of {m[1]} at {bf(m[2])}"),
+        (r"^COMBAT at (.+), attacker P(\d)$", lambda m: f"COMBAT at {m[1]}, attacker {N(m[2])}"),
+        (r"^showdown at (.+), attacker P(\d)$", lambda m: f"Showdown at {m[1]}, initiative {N(m[2])}"),
+        (r"^showdown becomes a combat$", lambda m: "The showdown becomes a combat"),
+        (r"^WINNER (\d)$", lambda m: f"{N(m[1])} WINS"),
+        (r"^BURN OUT (\d)$", lambda m: f"{N(m[1])} runs out of deck (Burn Out)"),
+        (r"^===== turn (\d+): P(\d) .*points (\d+)-(\d+)$",
+         lambda m: f"Turn {m[1]}, {N(m[2])} to play (score {m[3]}-{m[4]})"),
+    ]
+    for pat, fn in rules:
+        m = re.match(pat, s)
+        if m:
+            return short(fn(m))
+    return short(re.sub(r"\bP([01])\b", lambda m: NAMES[int(m[1])], s))
+
+
+def log_line(g, line):
+    """Ligne du journal de la table dans sa langue (lang) : française (fr_line) ou anglaise (en_line)."""
+    return en_line(g, line) if en() else fr_line(g, line)
+
+
 def pt_why(w):
     m = re.match(r"(conquer|hold) (.+)", w)
     if m:
@@ -88,13 +132,13 @@ def fmt_args(g, a):
     parts = []
     for k, v in re.findall(r"(\w+)=(.*?)(?= \w+=|$)", a):
         if k in ("tg", "tg2"):
-            v = re.sub(r"(#\d+),", r"\1 et ", v.strip(","))
+            v = re.sub(r"(#\d+),", r"\1" + tr(" et ", " and "), v.strip(","))
             if v:
-                parts.append("cible " + v)
+                parts.append(tr("cible ", "target ") + v)
         elif k == "loc":
-            parts.append("à " + (g.bfs[int(v)].name if v in ("0", "1") else "la base"))
+            parts.append(tr("à ", "at ") + (g.bfs[int(v)].name if v in ("0", "1") else tr("la base", "base")))
         elif k == "dest":
-            parts.append("vers " + (g.bfs[int(v)].name if v in ("0", "1") else "la base"))
+            parts.append(tr("vers ", "to ") + (g.bfs[int(v)].name if v in ("0", "1") else tr("la base", "base")))
         elif k in ("mover", "mover_oid", "kill", "xp"):
             continue
         else:
@@ -103,12 +147,12 @@ def fmt_args(g, a):
 
 
 def describe(g, a, pid, viewer=None):
-    """Texte français d'une action de haut niveau, avant qu'elle soit appliquée."""
+    """Texte d'une action de haut niveau, avant qu'elle soit appliquée (français, ou anglais : lang)."""
     k = a[0]
     if k == "pass":
-        return "passe"
+        return tr("passe", "passes")
     if k == "end":
-        return "termine son tour"
+        return tr("termine son tour", "ends their turn")
     if k == "play":
         _, uid, src, ch = a
         c = _find(g, pid, uid)
@@ -116,30 +160,31 @@ def describe(g, a, pid, viewer=None):
         extra = []
         for kk, v in dict(ch).items():
             if kk in ("tg", "tg2") and v:
-                extra.append("cible " + " et ".join(_tname(g, u, pid, viewer) for u in v))
+                extra.append(tr("cible ", "target ") + tr(" et ", " and ").join(_tname(g, u, pid, viewer) for u in v))
             elif kk == "loc":
-                extra.append("à " + (g.bfs[v].name if v in (0, 1) else "la base"))
+                extra.append(tr("à ", "at ") + (g.bfs[v].name if v in (0, 1) else tr("la base", "base")))
             elif kk == "dest" and v is not None:
-                extra.append("vers " + (g.bfs[v].name if v in (0, 1) else "la base"))
+                extra.append(tr("vers ", "to ") + (g.bfs[v].name if v in (0, 1) else tr("la base", "base")))
             elif kk in ("accelerate", "repeat") and v:
                 extra.append(kk)
         if c is not None:
             from actions import deflect_total
             nd = len(deflect_total(g, pid, c, dict(ch)))
             if nd:
-                extra.append(f"Deflect +{nd} puissance")
-        return f"joue {n}" + (" (" + ", ".join(extra) + ")" if extra else "")
+                extra.append(tr(f"Deflect +{nd} puissance", f"Deflect +{nd} power"))
+        return tr(f"joue {n}", f"plays {n}") + (" (" + ", ".join(extra) + ")" if extra else "")
     if k == "hide":
         c = _find(g, pid, a[1])
-        return f"cache {c.cname if c else '?'} à {g.bfs[a[2]].name}"
+        cn = c.cname if c else '?'
+        return tr(f"cache {cn} à {g.bfs[a[2]].name}", f"hides {cn} at {g.bfs[a[2]].name}")
     if k == "act":
         src = a[1]
         n = g.p[src[1]].legend_name if isinstance(src, tuple) else (g.obj(src).cname if g.obj(src) else "?")
-        return f"active {n}"
+        return tr(f"active {n}", f"activates {n}")
     if k == "move":
         us = ", ".join(g.label(g.obj(u)) if g.obj(u) is not None else str(u) for u in a[1])
         d = a[2]
-        return f"déplace {us} vers " + (g.bfs[d].name if d in (0, 1) else "la base")
+        return tr(f"déplace {us} vers ", f"moves {us} to ") + (g.bfs[d].name if d in (0, 1) else tr("la base", "base"))
     return str(a)
 
 
@@ -152,7 +197,7 @@ def _tname(g, u, pid, viewer=None):
     viewer = pid if viewer is None else viewer
     if o.ctrl == pid:
         return g.label(o)
-    return g.label(o) + (" adverse" if viewer == pid else " (à toi)" if o.ctrl == viewer else "")
+    return g.label(o) + (tr(" adverse", " (enemy)") if viewer == pid else tr(" (à toi)", " (yours)") if o.ctrl == viewer else "")
 
 
 def _find(g, pid, uid):

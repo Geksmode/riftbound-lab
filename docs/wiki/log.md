@@ -239,3 +239,6 @@ Ambiance « Cartes » par défaut : enregistrements Kenney « Casino Audio » (C
 
 ## [2026-10-11] fix | Table : moteur dans un Web Worker, la page ne gèle plus
 Signalé par l'utilisateur : « la page ne répond pas » quand l'IA réfléchit. Pyodide et `train` passent dans `train/engine.worker.js` ; la page appelle le moteur de façon asynchrone. Mesure (`train/verif_reactif.mjs`, IA forte) : une réflexion de 20,9 s, page bloquée 44 ms au plus. Porte `verifier.sh table` verte (188 + 79 + 41 contrôles). Détail : `docs/memoire/riftbound-training-table.md`.
+
+## [2026-10-17] ingest | Table : version anglaise
+Demande de l'utilisateur. Bouton English / Français (menu) ou `?lang=en` ; page traduite par `train/i18n.js`, moteur par `engine/lang.py` (la langue ne change pas la partie : `test_lang.py`). Robot `train/verif_anglais.mjs` dans la porte. Détail : `pages/anglais.md`.

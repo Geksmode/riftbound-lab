@@ -209,6 +209,7 @@ def _irelia_can(g, it):
 
 _irelia_cost.can = _irelia_can
 _irelia_cost.label = "légende prête et 1 rune, pour une unité inclinée"
+_irelia_cost.label_en = "a ready legend and 1 rune, for an exhausted unit"
 
 
 def _irelia_ready(g, it):
