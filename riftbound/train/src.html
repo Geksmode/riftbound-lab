@@ -481,6 +481,7 @@ body.dkopen { overflow: hidden; }
 .tintro .big button { flex: 0 1 auto; width: auto; min-width: 140px; }
 .tintro ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; text-align: left; }
 .tintro ul li::before { content: "☆ "; color: var(--gold); }
+.tintro ul.tl li::before { content: "• "; }
 .tintro ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; line-height: 1.4; text-align: left; }
 .tintro ol li::marker { color: var(--gold); font-weight: 600; }
 .tintro .tcards { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -3230,7 +3231,7 @@ async function exitReplay() {
 // Définitions courtes, fidèles aux Core Rules (numéros cités) et aux rappels imprimés sur les cartes. Utilisées par le
 // coach du tutoriel (mots à toucher), le lexique (bouton « Lexique ») et l'agrandi d'une carte (mots-clés de son texte).
 // GLOSS : clé → [libellé, définition, mot-clé de carte écrit [Ainsi] dans le texte].
-const GLOSS = {   // règles : énergie perdue 167, puissance 164.2.b, redresser 415.3.a, conquérir 469, tenir 469.2, combat 465-466, sort 157, Hidden 811
+const GLOSS = {   // règles : priorité 312, 338-339, focus 313, 345-347, énergie perdue 167, puissance 164.2.b, redresser 415.3.a, conquérir 469, tenir 469.2, combat 465-466, sort 157, Hidden 811
   might: ["Might", "La force d'une unité. En combat, chaque camp inflige autant de dégâts que la Might totale de ses unités ; une unité meurt quand elle a reçu des dégâts au moins égaux à sa Might."],
   energie: ["Énergie", "Ce qui paie le coût d'une carte (pastille dorée en haut à gauche). Chaque rune épuisée donne 1 énergie. L'énergie non dépensée est perdue à la fin du tour."],
   puissance: ["Puissance", "Deuxième partie du coût de certaines cartes : le « +2 » de « 1+2 ». Elle se paie en recyclant des runes de la couleur (domaine) de la carte."],
@@ -3243,6 +3244,9 @@ const GLOSS = {   // règles : énergie perdue 167, puissance 164.2.b, redresser
   tenir: ["Tenir", "Contrôler encore un champ au début de ton tour : +1 point pour chaque champ tenu."],
   combat: ["Combat", "Des unités des deux camps sur le même champ. Chaque camp inflige sa Might totale en dégâts aux unités adverses. Si les deux camps survivent, l'attaquant rentre dans sa base. Les dégâts s'effacent après le combat."],
   showdown: ["Showdown", "Une pause avant qu'un champ change de mains, ou avant les dégâts d'un combat : chacun à son tour, les joueurs peuvent jouer des cartes Action ou Reaction, ou passer."],
+  priorite: ["Priorité", "Le droit d'agir maintenant ; un seul joueur l'a à la fois. Quand une carte est jouée, la priorité passe à l'adversaire : il peut répondre avec une Reaction, ou passer. Quand tous les joueurs ont passé à la suite, la carte se résout."],
+  focus: ["Focus", "Pendant un showdown, le joueur qui a le focus peut jouer une carte Action ou Reaction, ou passer. Après chaque carte jouée, le focus va à l'autre joueur. Quand tous ont passé à la suite, le showdown se termine."],
+  passer: ["Passer", "Dire « je n'ai rien à ajouter ». Ce n'est pas abandonner ni perdre son tour : le jeu attend que chacun passe pour avancer. Sans carte Action ou Reaction utile, passer est le bon coup."],
   chaine: ["Chaîne", "Les cartes et effets qui attendent de se résoudre (colonne « Chaîne »). Le dernier ajouté se résout en premier : c'est ce qui permet de répondre à une carte avant qu'elle fasse effet."],
   legende: ["Légende", "La carte qui mène ton deck. Elle reste en jeu toute la partie, a son propre pouvoir et fixe les couleurs (domaines) de ton deck."],
   champion: ["Champion", "Une unité spéciale de ta légende, posée à côté d'elle dès le début. Tu peux la jouer comme une carte de ta main."],
@@ -3350,9 +3354,14 @@ const TSTEPS = [
   { t: "Va sur un champ de bataille", fx: ME_ZONE + " .zbase .card.can, #board .bfrow .bf",
     h: "Glisse une unité de ta base vers un champ (ou touche-la, puis « Déplacer » et le champ). Se déplacer épuise l'unité. Astuce : First Mate (3 énergie) redresse une autre unité en arrivant, qui peut donc encore bouger.",
     ok: v => v.st.bfs.some(b => b.u.some(u => u.c === MEP)), kw: ["epuise", "showdown"] },
-  { t: "Marque un point", fx: "#board .bfrow .bf",
-    h: "Avant qu'un champ change de mains, un showdown s'ouvre : chacun peut jouer une carte Action ou Reaction, ou passer. Puis ton unité conquiert le champ : +1 point.",
-    ok: v => v.st.pts[MEP] >= 1, kw: ["showdown", "conquerir"] },
+  { info: 1, t: "Le showdown : à qui de parler ?", fx: "#bMain", when: (v, U) => U.sawFocus,
+    wait: "Déplace une unité vers un champ : le jeu ouvrira un showdown.",
+    h: "Ton unité arrive sur un champ : avant que le champ change de mains, un showdown s'ouvre. Les joueurs parlent chacun leur tour ; celui dont c'est le tour a le focus, ici toi. Avec le focus, tu peux jouer une carte Action ou Reaction (cadre vert), ou passer. Passer veut dire « rien à ajouter » : ce n'est pas perdre ton tour. Quand tout le monde a passé à la suite, le showdown se termine.", kw: ["focus", "passer", "Action", "Reaction"] },
+  { info: 1, t: "Action et Reaction", fx: ME_HAND,
+    h: "Seules les cartes marquées Action ou Reaction se jouent pendant un showdown. Punch First est une Action : +5 Might à une unité, de quoi gagner un combat. Sans ennemi sur ce champ, garde-la pour un combat. Reaction va plus loin : elle se joue à tout moment, même en réponse à une carte adverse, avant qu'elle fasse effet.", kw: ["Action", "Reaction", "chaine"] },
+  { t: "Marque un point", fx: "#bMain",
+    h: "Touche « Passer » si tu n'as rien à ajouter. Si Darius passe aussi, le showdown se termine et ton unité conquiert le champ : +1 point.",
+    ok: v => v.st.pts[MEP] >= 1, kw: ["passer", "conquerir"] },
   { info: 1, t: "Tenir un champ", fx: ME_ZONE + " .score, #track",
     h: "Ton point est marqué. Au début de chacun de tes tours, chaque champ que tu contrôles encore rapporte +1 point : tu le tiens. Darius va essayer de te le reprendre ; le premier à 8 points gagne.", kw: ["tenir"] },
   { t: "Gagne un combat", fx: "#board .bfrow .bf",
@@ -3362,8 +3371,10 @@ const TSTEPS = [
     h: "Bravo ! Pour la suite : touche une carte pour lire son texte et ses mots-clés, « Conseil » montre ce que l'IA jouerait à ta place, « ↶ Reprendre » annule ton dernier coup. Le lexique explique tous les mots du jeu.", kw: ["Reaction", "chaine"] },
 ];
 const TTIPS = [
-  { id: "react", when: v => v.dec && v.dec.kind !== "main", t: "À toi de répondre", fx: "#bMain",
-    h: "Le jeu attend ta réponse : une carte va se résoudre, ou un showdown s'ouvre. Tu peux jouer une carte Reaction (ou Action pendant un showdown). Rien à jouer ? Touche « Passer ».", kw: ["Reaction", "Action", "showdown"] },
+  { id: "prio", when: v => v.dec && v.dec.kind === "priority", t: "Tu as la priorité", fx: "#stack, #bMain",
+    h: "Une carte ou un effet attend sur la chaîne (surlignée) : il n'a pas encore fait effet. Tu as la priorité, c'est-à-dire le droit de répondre maintenant, avec une carte Reaction ; ta réponse se résoudrait en premier. Rien à répondre ? Touche « Passer » : quand chacun a passé, l'effet se résout.", kw: ["priorite", "chaine", "Reaction", "passer"] },
+  { id: "react", when: v => v.dec && v.dec.kind === "focus", t: "À toi de parler", fx: "#bMain",
+    h: "Un showdown est en cours et tu as le focus : joue une carte Action ou Reaction, ou touche « Passer » si tu n'as rien d'utile.", kw: ["focus", "passer"] },
   { id: "ask", when: v => v.ask && v.ask.kind !== "mulligan", t: "Une question", h: "Une carte te demande un choix : réponds dans la bulle au milieu de la table." },
   { id: "spell", when: v => v.dec && v.dec.kind === "main" && v.st.p[MEP].hand.some(([u, n]) => (CARDS[n] || {}).t === "Spell" && v.dec.options.some(o => o.k === "play" && S(o.src) === S(u))),
     t: "Un sort jouable", fx: v => v.st.p[MEP].hand.filter(([, n]) => (CARDS[n] || {}).t === "Spell").map(([, n]) => `${ME_HAND}[data-card="${CSS.escape(n)}"]`).join(", "),
@@ -3392,15 +3403,19 @@ const TINTRO = [
   { g: "↻", t: "Un tour de jeu", p: "Chaque tour se déroule toujours dans le même ordre :",
     list: ["Tes cartes épuisées se redressent.", "Chaque champ que tu tiens rapporte 1 point.", "Tu poses 2 runes.", "Tu pioches 1 carte.", "Tu joues : poser des unités, lancer des sorts, déplacer tes unités vers les champs.", "Tu termines ton tour : à l'adversaire."] },
   { g: "⚔", t: "Les combats", p: "Quand tes unités arrivent sur un champ où sont celles de l'adversaire, il y a combat. Chaque camp inflige autant de dégâts que la Might totale de ses unités ; une unité meurt si elle reçoit au moins sa Might en dégâts. Le camp qui reste prend ou garde le champ." },
+  { cards: ["Punch First", "Discipline"], caps: ["Action", "Reaction"], t: "Jouer pendant l'adversaire : Action et Reaction",
+    p: "D'habitude, tu ne joues tes cartes que pendant ton tour, quand rien d'autre ne se passe. Deux mots-clés permettent plus. Action : la carte se joue aussi pendant un showdown, la pause avant qu'un champ change de mains ou qu'un combat fasse ses dégâts, même sur le tour adverse. Reaction : la carte se joue à tout moment, même en réponse à une autre carte, avant qu'elle fasse effet." },
+  { g: "⇄", t: "Chacun son tour de parole", p: "Un seul joueur peut agir à la fois.",
+    list: ["Quand une carte est jouée, l'adversaire reçoit la priorité : il peut répondre avec une Reaction, ou passer.", "Pendant un showdown, celui qui a le focus joue une Action ou une Reaction, ou passe ; puis le focus va à l'autre.", "Quand tout le monde a passé à la suite, le jeu avance : la carte se résout, ou le showdown se termine.", "Passer n'est pas perdre son tour : c'est dire « je n'ai rien à ajouter ». Sans carte utile, c'est le bon coup."], ul: 1 },
   { g: "★", t: "À toi de jouer", p: "Tu joues Maître Yi contre Darius, une IA débutante, dans une vraie partie. Le coach te guide étape par étape, avec six défis à réussir :", defis: true },
 ];
 function tutoIntro(i = 0) {
   const x = TINTRO[i], last = i === TINTRO.length - 1;
-  const vis = x.cards ? `<div class="tcards">${x.cards.map((n, j) => `<figure>${card(n, { raw: true })}<figcaption>${["Unité", "Sort", "Équipement"][j]}</figcaption></figure>`).join("")}</div>`
+  const vis = x.cards ? `<div class="tcards">${x.cards.map((n, j) => `<figure>${card(n, { raw: true })}<figcaption>${(x.caps || ["Unité", "Sort", "Équipement"])[j]}</figcaption></figure>`).join("")}</div>`
     : `<div class="tig" aria-hidden="true">${x.g}</div>`;
   openModal(`<div class="tintro" id="tIntro"><div class="dots" aria-label="Écran ${i + 1} sur ${TINTRO.length}">${TINTRO.map((_, j) => `<i class="${j === i ? "on" : ""}"></i>`).join("")}</div>
     ${vis}<h3>${x.t}</h3><p>${x.p}</p>
-    ${x.list ? `<ol>${x.list.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
+    ${x.list ? `<${x.ul ? "ul class=\"tl\"" : "ol"}>${x.list.map(s => `<li>${esc(s)}</li>`).join("")}</${x.ul ? "ul" : "ol"}>` : ""}
     ${x.defis ? `<ul>${TDEFIS.map(s => `<li>${esc(s.t)}</li>`).join("")}</ul><p class="small">Bloqué ? « Conseil » montre un bon coup, « ↶ Reprendre » annule le dernier.</p>` : ""}
     <div class="big">${i ? `<button id="tBack">Retour</button>` : `<button id="tSkip">Passer l'intro</button>`}<button class="main" id="tNext">${last ? "Jouer la partie guidée" : "Suivant"}</button></div>
     <button class="tglos" id="tGlos">Lexique : tous les mots du jeu</button></div>`, true);
@@ -3431,14 +3446,15 @@ function tutoCheck(v, fromNext) {
   const U = TUTO;
   if (!U || U.meta !== META || DU || RP) { if (U && U.meta !== META) TUTO = null; $("coach").hidden = true; $("gtuto").hidden = true; tutoFocus(null); return; }
   if (v.ask && v.ask.kind === "mulligan") U.sawMull = true;
+  if (v.dec && v.dec.kind === "focus") U.sawFocus = true;
   if ((v.cw || []).includes(MEP)) U.won = true;          // combat gagné, en attaque ou en défense (moteur : combat_won, 467)
   const d0 = tDone(U.k);
   while (U.k < TSTEPS.length && !TSTEPS[U.k].info && TSTEPS[U.k].ok(v, U)) U.k++;
   const cur = TSTEPS[U.k];
   // une leçon dont le moment arrive rouvre le coach (une fois), même s'il était replié
-  if (cur && cur.info && (!cur.when || cur.when(v)) && U.readyK !== U.k) { U.readyK = U.k; U.open = true; }
+  if (cur && cur.info && (!cur.when || cur.when(v, U)) && U.readyK !== U.k) { U.readyK = U.k; U.open = true; }
   if (tDone(U.k) > d0) { U.fresh = tDone(U.k) - 1; U.tip = null; U.kw = null; U.open = true; const c = $("gtuto"); c.classList.remove("tbump"); void c.offsetWidth; c.classList.add("tbump"); }
-  else if (!U.tip && !fromNext && U.k > 1 && cur && !(cur.info && (!cur.when || cur.when(v)))) {
+  else if (!U.tip && !fromNext && U.k > 1 && cur && !(cur.info && (!cur.when || cur.when(v, U)))) {
     // pas d'astuce par-dessus une leçon en cours de lecture, ni sur un défi qui vient de s'afficher (« Suivant »)
     const tp = TTIPS.find(x => !U.tips[x.id] && x.when(v));
     if (tp) { U.tips[tp.id] = 1; U.tip = tp; U.kw = null; U.open = true; }
@@ -3456,7 +3472,7 @@ function tutoDraw() {
   const U = TUTO, C = $("coach"), chip = $("gtuto");
   if (!U) { C.hidden = chip.hidden = true; tutoFocus(null); return; }
   const N = TSTEPS.length, done = U.k >= N, cur = TSTEPS[Math.min(U.k, N - 1)], nd = tDone(U.k);
-  const waiting = !done && cur.info && cur.when && V && !cur.when(V);
+  const waiting = !done && cur.info && cur.when && V && !cur.when(V, U);
   chip.hidden = false;
   chip.innerHTML = done ? `Tuto ★ ${nd}/${TDEFIS.length}` : `Tuto ${U.k + 1}/${N}<span class="tg">${esc(cur.t)}</span>`;
   C.hidden = !U.open;

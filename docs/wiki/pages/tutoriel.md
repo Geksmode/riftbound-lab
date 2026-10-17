@@ -6,28 +6,32 @@ sources: riftbound/train/src.html (GLOSS, TSTEPS, TTIPS, TINTRO, tutoCheck, tuto
 ---
 Demandes de l'utilisateur : un mode tutoriel pour un néophyte, pas trop long et ludique (2026-10-10) ; puis « plus
 progressif, qui explique vraiment pour les débutants qui ne connaissent pas du tout le jeu, des tooltips pour les
-mots-clés, accompagner pas à pas » (2026-10-17).
+mots-clés, accompagner pas à pas » (2026-10-17) ; « expliquer le focus et la priorité, pourquoi il faut passer, et les
+cartes Action et Reaction » (2026-10-17).
 
 **Déroulé** (menu → « Apprendre à jouer ») :
-1. **Sept écrans d'intro** (« Passer l'intro » possible) : ce qu'est Riftbound, le but (8 points), trois sortes de cartes
+1. **Neuf écrans d'intro** (« Passer l'intro » possible) : ce qu'est Riftbound, le but (8 points), trois sortes de cartes
    (vraies images d'une unité, d'un sort, d'un équipement), les runes, l'ordre d'un tour (redresser, tenir, 2 runes,
-   piocher, jouer, terminer : 315), les combats, puis la liste des 6 défis. Lien « Lexique » sur chaque écran.
+   piocher, jouer, terminer : 315), les combats, Action et Reaction (vraies cartes Punch First et Discipline),
+   « chacun son tour de parole » (priorité 312, 338-339 ; focus 313, 345-347 ; passer n'est pas perdre son tour),
+   puis la liste des 6 défis. Lien « Lexique » sur chaque écran.
 2. Une **vraie partie**, moteur complet (aucune règle simplifiée) : seuls la donne et l'adversaire sont choisis.
-3. **16 étapes dans l'ordre** : 10 leçons et 6 défis à étoile. Une **leçon** surligne une partie de la table (contour doré
+3. **18 étapes dans l'ordre** : 12 leçons et 6 défis à étoile. Une **leçon** surligne une partie de la table (contour doré
    qui pulse, classe `tfocus`) et l'explique ; « Suivant » passe à la suite. Certaines attendent leur moment (`when`) :
    pendant le tour de Darius, le coach dit d'attendre et de regarder ses coups. Un **défi** est une chose à faire
    (garder sa main, jouer une unité, terminer son tour, aller sur un champ, marquer un point, gagner un combat :
    événement moteur `combat_won`, 467) ; ce qu'il faut toucher est surligné.
    Leçons : la table, lire une carte (mulligan), ton camp, légende et champion, les runes, unité épuisée, nouveau tour
-   (après le tour de Darius), les champs, tenir un champ, la fin (Conseil, Reprendre, lexique).
+   (après le tour de Darius), les champs, le showdown et le focus (au premier focus : pourquoi passer),
+   Action et Reaction (Punch First surligné), tenir un champ, la fin (Conseil, Reprendre, lexique).
 4. **Mots à toucher** sous chaque explication (« Touche un mot : ») : la définition s'ouvre dans le coach.
-5. **Huit astuces de situation**, une fois chacune, jamais par-dessus une leçon ni sur un défi qui vient de s'afficher :
-   répondre (Passer), une question, un sort jouable, champion jouable, combat, Darius avance, Darius marque, défausse.
-6. Puce « Tuto k/16 » (barre du haut) : replie et rouvre le coach ; une leçon dont le moment arrive le rouvre.
+5. **Neuf astuces de situation**, une fois chacune, jamais par-dessus une leçon ni sur un défi qui vient de s'afficher :
+   priorité (une carte sur la chaîne : répondre en Reaction ou passer), focus (à toi de parler), une question, un sort jouable, champion jouable, combat, Darius avance, Darius marque, défausse.
+6. Puce « Tuto k/18 » (barre du haut) : replie et rouvre le coach ; une leçon dont le moment arrive le rouvre.
 7. Écran de fin (6 défis ou fin de partie) : continuer la partie, recommencer le tuto, partie contre l'IA.
 
-**Lexique** (`GLOSS`, dans toute la table, pas seulement le tutoriel) : 25 mots du jeu (Might, énergie, puissance, rune,
-épuisé, redresser, base, champ, conquérir, tenir, combat, showdown, chaîne, légende, champion…) et 31 mots-clés de cartes
+**Lexique** (`GLOSS`, dans toute la table, pas seulement le tutoriel) : 28 mots du jeu (Might, énergie, puissance, rune,
+épuisé, redresser, base, champ, conquérir, tenir, combat, showdown, priorité, focus, passer, chaîne, légende, champion…) et 31 mots-clés de cartes
 (Reaction, Action, Accelerate, Ambush, Assault, Shield, Tank, Deflect, Ganking, Hidden, Legion, Deathknell…), écrits
 d'après les Core Rules (numéros en commentaire) et les rappels imprimés sur les cartes. Bouton « Lexique » (coach,
 intro). **L'agrandi d'une carte** (survol ou toucher, n'importe quelle partie) explique sous son texte ses mots-clés

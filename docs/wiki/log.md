@@ -248,3 +248,6 @@ Bouton « Lire » sous chaque carte de la bulle du mulligan (et survol à la sou
 
 ## [2026-10-17] ingest | Tutoriel pas à pas pour débutants complets, lexique des mots-clés
 Demande de l'utilisateur : un tutoriel plus progressif, des tooltips pour les mots-clés, accompagner pas à pas. Sept écrans d'intro, 16 étapes (10 leçons qui surlignent la zone dont elles parlent, 6 défis), mots à toucher dans le coach, 8 astuces de situation, lexique (25 mots du jeu, 31 mots-clés) ; l'agrandi de toute carte explique ses mots-clés. Robots `verif_tuto.mjs` et `verif_anglais.mjs` étendus. Pas essayé sur un vrai téléphone. Détail : `pages/tutoriel.md`.
+
+## [2026-10-17] ingest | Tutoriel : focus, priorité, passer, Action et Reaction
+Demande de l'utilisateur. Deux écrans d'intro (Action / Reaction avec les vraies cartes, « chacun son tour de parole »), deux leçons au premier showdown (focus et pourquoi passer ; Action et Reaction), astuce « Tu as la priorité » (carte sur la chaîne), lexique : priorité, focus, passer (Core Rules 312-313, 338-339, 345-347). Détail : `pages/tutoriel.md`.

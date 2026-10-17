@@ -108,9 +108,10 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   ok(`${w} px : leçon « Les champs de bataille », champs surlignés`, (await cur()) === "Les champs de bataille" && await ev("document.querySelectorAll('#board .bfrow .bf.tfocus').length === 2"));
   await tap("#cNext");
   ok(`${w} px : défi 4 affiché sans astuce par-dessus`, (await cur()) === "Va sur un champ de bataille" && await ev("!TUTO.tip"));
+  const tips = new Set(), lessons = new Set();
   // défi 4 : aller sur un champ de bataille (la page propose le déplacement vers un champ)
   for (let i = 0; i < 40 && (await defis()) === 3; i++) {
-    if (await ev("!!$('cNext')")) { await tap("#cNext"); continue; }
+    if (await ev("!!$('cNext')")) { lessons.add(await cur()); await tap("#cNext"); continue; }
     if (await ev("!!V.ask")) { await ev("answer(0)"); await idle(); continue; }
     const mv = await ev("(V.dec.options.find(o => o.k === 'move' && !/base/i.test(o.label)) || {}).i");
     await ev(`choose(${mv !== undefined ? mv : "V.dec.options[0].i"})`); await idle();
@@ -119,7 +120,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.screenshot({ path: `${OUT}/tuto-${w}-defi4.png` });
   await fits("défi 4+");
   // la suite : le conseil de l'IA joue à ta place jusqu'à la fin du tutoriel ou de la partie
-  let seenTip = false; const tips = new Set(), lessons = new Set();
+  let seenTip = false;
   for (let i = 0; i < 400; i++) {
     if (await ev("!!document.getElementById('tEnd')")) break;
     if (await ev("V.winner !== null && V.winner !== undefined")) { await pg.waitForTimeout(300); break; }
@@ -134,7 +135,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const kk = await defis();
   ok(`${w} px : écran de fin du tutoriel (${kk}/6 défis, partie ${await ev("V.winner === null || V.winner === undefined ? 'en cours' : 'finie ' + V.st.pts.join('-')")})`, !!end);
   ok(`${w} px : au moins une astuce de situation montrée (${[...tips].join(", ")})`, seenTip);
-  ok(`${w} px : leçons lues en route (${[...lessons].join(", ")})`, lessons.has("Tenir un champ") || kk < 6);
+  ok(`${w} px : leçons lues en route (${[...lessons].join(", ")})`, ["Le showdown : à qui de parler ?", "Action et Reaction", "Tenir un champ"].every(x => lessons.has(x)) || kk < 6);
   await pg.screenshot({ path: `${OUT}/tuto-${w}-fin.png` });
   if (await ev("!!document.getElementById('tAgain')")) {
     await tap("#tAgain"); await waitFor("!!document.getElementById('bKeep')");
