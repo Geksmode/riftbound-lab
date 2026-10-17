@@ -6,6 +6,7 @@ from itertools import combinations
 
 from cards import *  # noqa: F401,F403
 from actions import affordable, total_cost
+from lang import tr
 
 
 # ====================================================================== private helpers
@@ -544,7 +545,8 @@ def _evelynn(g, o, ctx):
     if ctx.get("src") != "facedown":
         return
     if g.tp != o.ctrl:
-        g.log("  Evelynn, Entrancing : jouée depuis la face cachée pendant le tour adverse, pas d'effet (« on your turn »)")
+        g.log(tr("  Evelynn, Entrancing : jouée depuis la face cachée pendant le tour adverse, pas d'effet (« on your turn »)",
+                 "  Evelynn, Entrancing: played from face down on the opponent's turn, no effect (\"on your turn\")"))
         return
     here = o.loc
 

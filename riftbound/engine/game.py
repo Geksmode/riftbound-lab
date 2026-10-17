@@ -10,6 +10,7 @@ assignment, ordering...) are asked synchronously to the players' agents through 
 Card behaviours live in cards.py (one entry per card name).
 """
 import csv, copy, random
+from lang import tr, en as _en
 from collections import Counter
 from pathlib import Path
 
@@ -1469,9 +1470,10 @@ class Game:
                     u = s.ask(pid, "zhonya_save", us) if len(us) > 1 else us[0]
                     choice = next(p for p in mand if p[0] is u)
                 else:
-                    opts = [Opt(f"{r['name']} : sauver {u.cname}", (u, r), u) for u, r in (mand or pairs)]
+                    opts = [Opt(tr(f"{r['name']} : sauver {u.cname}", f"{r['name']}: save {u.cname}"), (u, r), u)
+                            for u, r in (mand or pairs)]
                     if not mand:
-                        opts.append(Opt("ne rien remplacer", None))
+                        opts.append(Opt(tr("ne rien remplacer", "replace nothing"), None))
                     pick = s.ask(pid, "death_replace", opts)
                     if pick is None or pick.value is None:
                         break
@@ -1724,19 +1726,24 @@ class Game:
                 ch = it.data.get("_choose")
                 if ch is not None and getattr(ch, "options", None) is not None and not ch.options(s, it):
                     # aucune cible légale : la capacité est retirée (402.4) ; on ne demande pas « utiliser l'effet ? »
-                    s.log(f"  {it.name} : aucune cible possible, l'effet ne s'applique pas")
+                    s.log(tr(f"  {it.name} : aucune cible possible, l'effet ne s'applique pas",
+                             f"  {it.name}: no possible target, the effect doesn't apply"))
                     continue
                 c = it.data.get("_cost")
                 if c is not None and it.data.get("_may") and not s.cost_payable(it, c):
                     # coût optionnel impayable (Valley of Idols sans énergie) : ni question ni effet, et on le dit
-                    s.log(f"  {it.name} : pas de quoi payer ({getattr(c, 'label', 'le coût')}), l'effet ne s'applique pas")
+                    lab = getattr(c, "label_en", None) if _en() else None
+                    lab = lab or getattr(c, "label", None) or tr("le coût", "the cost")
+                    s.log(tr(f"  {it.name} : pas de quoi payer ({lab}), l'effet ne s'applique pas",
+                             f"  {it.name}: can't pay ({lab}), the effect doesn't apply"))
                     continue
                 if it.data.get("_may") and not s.ask(pid, "may", [True, False], item=it):
                     continue
                 if ch is not None and not ch(s, it):
                     continue
                 if c is not None and not c(s, it):
-                    s.log(f"  {it.name} : coût non payé, l'effet ne s'applique pas")
+                    s.log(tr(f"  {it.name} : coût non payé, l'effet ne s'applique pas",
+                             f"  {it.name}: cost not paid, the effect doesn't apply"))
                     continue
                 s.chain.append(it)
                 s.log(f"  trigger on chain: {it.name}")

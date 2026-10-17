@@ -57,7 +57,8 @@ d'après son texte, avec les numéros de règle cités en commentaire.
   partagés (remplacements de mort, de point, de révélation, coûts alternatifs, permissions de jouer
   `play_perm`, capacités et [Add] donnés par d'autres objets, battlefield remplacé `replace_battlefield` — règle
   438, Brush d'Ivern...) décrits dans `cardsets/GUIDE.md` §9.
-- **Joueur humain** (`train.py`) : chaque question `g.ask` a un titre français (`cards.ASK_TEXT`, `ask_text()`),
+- **Joueur humain** (`train.py`) : chaque question `g.ask` a un titre français (`cards.ASK_TEXT`, `ask_text()`) et un
+  titre anglais (`lang.ASK_EN`, version anglaise de la table ; textes montrés au joueur : `lang.tr(fr, en)`),
   ses options sont lisibles (cartes, runes, lieux, `Opt`, choix de jeu, répartitions de dégâts) ; l'humain voit
   tous les choix légaux (`Human.every_choice` → `actions.full_choices`, `cards.cap`, `Impl.all_choices` :
   sous-ensembles de Commander Ledros, répartitions de Volibear, toutes les cibles...), l'IA garde ses listes

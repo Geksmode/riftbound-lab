@@ -13,7 +13,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats | [pages/resultats.md](pages/resultats.md) |
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [manager](../memoire/riftbound-manager.md) |
-| toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md) |
+| toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md), [version anglaise](pages/anglais.md) |
 | coordonner des agents | [pages/equipe.md](pages/equipe.md), `docs/MISSIONS.md`, `.claude/chef.md` |
 | connaître le jeu, les règles, la méta | `docs/vault/Riftbound - Accueil.md` (index du vault), `riftbound/rules/` |
 | reprendre le compte, la routine, les artefacts | `docs/REPRISE.md` (§2 artefacts, §3 publication, §4 routine) |
@@ -28,6 +28,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Match BO1 / BO3 et sideboard](pages/match.md) : règles du match, code, choix de l'IA
 - [Tutoriel « Apprendre à jouer »](pages/tutoriel.md) : partie guidée en 6 défis pour néophytes, Yi contre Darius, IA débutante
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
+- [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.py` (moteur), robot `verif_anglais.mjs`
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI
 
 ## Mémoire des agents (`docs/memoire/`, index [MEMORY.md](../memoire/MEMORY.md))

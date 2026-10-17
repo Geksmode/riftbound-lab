@@ -232,7 +232,9 @@ python3 fuzz_cards.py 100 --module <batch>   # random games with your cards: 0 e
 - Don't touch `train.py`, `train_games.py` or `../train/`.
 - Shared folder: re-read a file just before changing it, keep edits small, read it back a few seconds later.
 - **Human players** (`train.py`): every `g.ask` kind needs a French title, `ask_text(my_kind="Quelle carte
-  prendre ?")` (or an entry in `cards.py`); `test_cards.py` checks it. Options that are not cards, runes,
+  prendre ?")` (or an entry in `cards.py`); `test_cards.py` checks it. It also needs its English title in
+  `lang.ASK_EN` (English version of the table; `cardsets/test_lang.py` checks it). A label or log line shown to the
+  player is written `tr("français", "English")` (`from lang import tr`). Options that are not cards, runes,
   locations or booleans should be `Opt(label, value)` (the answer is the `Opt`; use `.value`). Never cap a list of
   legal choices with a bare slice: `cap(g, seq, n, pid)` keeps the AI's first n and gives a human all of them
   (`full_choices(g, pid)`); a combinatorial choice (subsets, damage splits) adds the full set when

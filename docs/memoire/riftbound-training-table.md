@@ -63,3 +63,9 @@ Piège trouvé par `verif_replay` : pendant que le moteur crée une partie, l'an
 allaient dans l'ancien enregistrement ; `start`, `launchGame` et `tutoStart` tiennent `working` dès le clic.
 Second piège (CI, `verif_match`) : un rendu repris au retour du moteur remplace les boutons sous le doigt. L'éditeur ne
 met plus à jour que son verdict (`dkVerdict`) ; le menu ne s'active qu'une fois le catalogue chargé et vérifié (`boot`).
+
+## Version anglaise (2026-10-17)
+Demande de l'utilisateur : « fait une version anglaise de l'app ». Bouton English / Français sous le titre du menu, ou
+`train.html?lang=en` ; choix gardé (`rbt-lang`), changer recharge la page. `src.html` reste en français : `train/i18n.js`
+(inséré par `build.sh`) traduit le texte à l'entrée dans la page ; le moteur parle anglais via `engine/lang.py`
+(`train.set_lang`). Robot `train/verif_anglais.mjs`, test `engine/cardsets/test_lang.py`. Détail : `docs/wiki/pages/anglais.md`.

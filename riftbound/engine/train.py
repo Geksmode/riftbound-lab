@@ -15,7 +15,9 @@ from game import Game, Obj, Item
 from decks import load, edit, with_bf, DECKS
 import plans as P
 import replay as _rp
-from replay import fr_line, describe, snap, short, _find, _tname
+from replay import log_line, describe, snap, short, _find, _tname
+import lang
+from lang import tr, set_lang  # set_lang : appelée par la page (version anglaise)
 
 NAMES = ("Akali", "LeBlanc")
 G = load("akali_gorica_rq-singapore")
@@ -59,7 +61,7 @@ class Human:
 
 
 class TGame(Game):
-    """Journal en français ; les pioches de l'humain sont notées, celles de l'IA restent cachées."""
+    """Journal dans la langue de la table (lang) ; les pioches de l'humain sont notées, celles de l'IA restent cachées."""
 
     def __init__(s, *a, **k):
         s.buf = []
@@ -70,7 +72,7 @@ class TGame(Game):
         if not s.logging:
             return
         raw = " ".join(str(x) for x in a)
-        s.buf.append([1 if raw.startswith("  ") else 0, fr_line(s, raw)])
+        s.buf.append([1 if raw.startswith("  ") else 0, log_line(s, raw)])
 
     def draw(s, pid, n=1):
         for _ in range(n):
@@ -80,7 +82,8 @@ class TGame(Game):
                 return
             new = [c for c in s.p[pid].hand if c not in before]
             if new and s.logging and s.stage != "setup":
-                s.buf.append([1, f"Tu pioches {new[0].cname}" if pid == ME else f"{_rp.NAMES[AI]} pioche une carte"])
+                s.buf.append([1, tr(f"Tu pioches {new[0].cname}", f"You draw {new[0].cname}") if pid == ME
+                               else tr(f"{_rp.NAMES[AI]} pioche une carte", f"{_rp.NAMES[AI]} draws a card")])
 
     def emit(s, ev, **info):
         if ev == "combat_won":                          # combats gagnés depuis le dernier rendu (défis du tutoriel)
@@ -126,7 +129,7 @@ def _deck(x, default):
     d = json.loads(x) if isinstance(x, str) else dict(x)
     err = [e for e in validate(d) if not e.startswith("⚠")]
     if err:
-        raise ValueError("Deck invalide : " + " ; ".join(err))
+        raise ValueError(tr("Deck invalide : ", "Invalid deck: ") + " ; ".join(err))
     return dict(legend=d["legend"], champion=d["champion"], main=list(d["main"]),
                 runes=[r.replace(" Rune", "") for r in d["runes"]], battlefields=list(d["battlefields"]),
                 battlefield=d["battlefields"][0], sideboard=list(d.get("sideboard") or []), key=d.get("name") or "perso")
@@ -146,7 +149,7 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     A, B = with_bf(MD, abf), with_bf(OD, lbf)
     names = [_short(A), _short(B)]
     if names[0] == names[1]:
-        names = [names[0], names[1] + " (IA)"]
+        names = [names[0], names[1] + tr(" (IA)", " (AI)")]
     _rp.NAMES = tuple(names)
     hu = Human()
     # 2026-10-10 : l'IA de la table cherche le tour entier (search="turn"), à l'essai en direct par l'utilisateur ; gain non
@@ -303,7 +306,7 @@ def match_swap(deck, out_cards, in_cards, champion=None):
     d = _m.sideboard_swap(json.loads(deck), json.loads(out_cards), json.loads(in_cards), champion or None)
     err = [e for e in validate(d) if not e.startswith("⚠")]
     if err:
-        raise ValueError("Deck invalide après sideboard : " + " ; ".join(err))
+        raise ValueError(tr("Deck invalide après sideboard : ", "Invalid deck after sideboarding: ") + " ; ".join(err))
     return json.dumps(d)
 
 
@@ -381,59 +384,63 @@ def validate(d):
     main, runes, bfs = list(d.get("main") or []), list(d.get("runes") or []), list(d.get("battlefields") or [])
     side = list(d.get("sideboard") or [])
     if not lg or S.get(lg, {}).get("type") != "Legend":
-        err.append("choisis une légende")
+        err.append(tr("choisis une légende", "choose a legend"))
         ident = set()
     else:
         ident = set(S[lg]["domains"])
         ltags = S[lg]["tags"]
     if not ch or S.get(ch, {}).get("super") != "Champion" or S[ch]["type"] != "Unit":
-        err.append("choisis un champion (unité Champion)")
+        err.append(tr("choisis un champion (unité Champion)", "choose a champion (Champion unit)"))
     elif lg and S.get(lg, {}).get("type") == "Legend" and not (S[ch]["tags"] & ltags):
-        err.append(f"{ch} n'a pas le tag de la légende ({', '.join(sorted(ltags))})")
+        err.append(tr(f"{ch} n'a pas le tag de la légende ({', '.join(sorted(ltags))})",
+                      f"{ch} doesn't have the legend's tag ({', '.join(sorted(ltags))})"))
     if len(main) + (1 if ch else 0) < 40:
-        err.append(f"deck principal : {len(main) + (1 if ch else 0)}/40 cartes (champion compris)")
+        err.append(tr(f"deck principal : {len(main) + (1 if ch else 0)}/40 cartes (champion compris)",
+                      f"main deck: {len(main) + (1 if ch else 0)}/40 cards (champion included)"))
     cnt = Counter(main + ([ch] if ch else []))
     # sideboard (règles de tournoi 601.1.c) : 10 cartes au plus, seulement des cartes valides pour le Main Deck, limites
     # d'exemplaires sur Main Deck + sideboard
     if len(side) > 10:
-        err.append(f"sideboard : {len(side)}/10 cartes au plus")
+        err.append(tr(f"sideboard : {len(side)}/10 cartes au plus", f"sideboard: {len(side)}/10 cards at most"))
     tot = cnt + Counter(side)
     for n, q in sorted(tot.items()):
         if q > 3:
-            err.append(f"{n} : {q} exemplaires (3 au plus, sideboard compris)" if n in side else f"{n} : {q} exemplaires (3 au plus)")
+            err.append(tr(f"{n} : {q} exemplaires (3 au plus, sideboard compris)", f"{n}: {q} copies (3 at most, sideboard included)")
+                       if n in side else tr(f"{n} : {q} exemplaires (3 au plus)", f"{n}: {q} copies (3 at most)"))
         if "Unique" in (S.get(n, {}).get("text") or "") and q > 1:
-            err.append(f"{n} est Unique : 1 exemplaire au plus")
+            err.append(tr(f"{n} est Unique : 1 exemplaire au plus", f"{n} is Unique: 1 copy at most"))
     sig = sum(q for n, q in cnt.items() if S.get(n, {}).get("super") == "Signature")
     if sig > 3:
-        err.append(f"{sig} cartes Signature (3 au plus)")
+        err.append(tr(f"{sig} cartes Signature (3 au plus)", f"{sig} Signature cards (3 at most)"))
     if lg and ident:
         for n in sorted(set(cnt) | set(side)):
             if n not in S:
-                err.append(f"carte inconnue : {n}")
+                err.append(tr(f"carte inconnue : {n}", f"unknown card: {n}"))
                 continue
             if S[n]["type"] in ("Rune", "Battlefield", "Legend"):
-                err.append(f"{n} ne va pas dans le deck principal" + (" ni dans le sideboard" if n in side else ""))
+                err.append(tr(f"{n} ne va pas dans le deck principal" + (" ni dans le sideboard" if n in side else ""),
+                              f"{n} can't go in the main deck" + (" or the sideboard" if n in side else "")))
             if not set(S[n]["domains"]) <= ident:
-                err.append(f"{n} est hors des domaines de la légende")
+                err.append(tr(f"{n} est hors des domaines de la légende", f"{n} is outside the legend's domains"))
             if S[n]["super"] == "Signature" and not (S[n]["tags"] & ltags):
-                err.append(f"{n} est une Signature d'un autre champion")
+                err.append(tr(f"{n} est une Signature d'un autre champion", f"{n} is another champion's Signature"))
     if len(runes) != 12:
         err.append(f"runes : {len(runes)}/12")
     for r_ in sorted(set(runes)):
         dom = r_.replace(" Rune", "")
         if ident and dom not in ident:
-            err.append(f"{r_} hors des domaines de la légende")
+            err.append(tr(f"{r_} hors des domaines de la légende", f"{r_} is outside the legend's domains"))
     if len(bfs) != 3 or len(set(bfs)) != 3:
-        err.append(f"battlefields : {len(set(bfs))}/3 différents")
+        err.append(tr(f"battlefields : {len(set(bfs))}/3 différents", f"battlefields: {len(set(bfs))}/3 different"))
     for b in bfs:
         if S.get(b, {}).get("type") != "Battlefield":
-            err.append(f"{b} n'est pas un battlefield")
+            err.append(tr(f"{b} n'est pas un battlefield", f"{b} is not a battlefield"))
     todo = sorted(n for n in set(cnt) | set(side) | set(bfs) | ({lg} if lg else set()) if n in S and n not in _cards.IMPL)
     if todo:
-        err.append("pas encore modélisées : " + ", ".join(todo))
+        err.append(tr("pas encore modélisées : ", "not modelled yet: ") + ", ".join(todo))
     banned = sorted(n for n in set(cnt) | set(side) | set(bfs) | ({lg} if lg else set()) if n in S and _BAN.get(n))
     if banned:
-        err.append("⚠ bannies en Standard : " + ", ".join(banned))
+        err.append(tr("⚠ bannies en Standard : ", "⚠ banned in Standard: ") + ", ".join(banned))
     return err
 
 
@@ -594,7 +601,7 @@ def _tick():
 def _opp_describe(g, a, pid):
     """Coup de l'adversaire (IA ou ami en duel) tel que tu le vois : une carte cachée reste secrète (421, 811)."""
     if a[0] == "hide":
-        return f"cache une carte à {g.bfs[a[2]].name}"
+        return tr(f"cache une carte à {g.bfs[a[2]].name}", f"hides a card at {g.bfs[a[2]].name}")
     return describe(g, a, pid, viewer=ME)
 
 
@@ -676,7 +683,7 @@ def hint(n=4):
     for v, a in scored[:n]:
         gap = v - best_v
         out.append(dict(i=idx.get(repr(a)), label=describe(W["g"], a, ME),
-                        gap=("perd la partie" if gap < -1000 else round(gap, 1))))
+                        gap=(tr("perd la partie", "loses the game") if gap < -1000 else round(gap, 1))))
     return json.dumps(out, ensure_ascii=False)
 
 
@@ -707,28 +714,28 @@ def replay_load(game_json):
                 return v
             v = json.loads(step())
             who = "ia"
-    v = drain(json.loads(step()), "Début de la partie", "jeu")
+    v = drain(json.loads(step()), tr("Début de la partie", "Start of the game"), "jeu")
     for m in game.get("moves") or []:
         k = m[0]
         if k == "hint":
             continue
         if k == "undo":
-            v = drain(json.loads(undo()), "Tu reprends ton dernier coup", "moi")
+            v = drain(json.loads(undo()), tr("Tu reprends ton dernier coup", "You take back your last move"), "moi")
             continue
         j = len(frames) - 1                              # l'image où tu décides
         if k == "act" and v.get("dec") and isinstance(m[1], int) and m[1] < len(v["dec"]["options"]):
             lab = v["dec"]["options"][m[1]]["label"]
             svs[j] = _save()
-            mine.append([j, "Tu joues : " + lab])
-            v = drain(json.loads(act(m[1])), "Toi : " + lab, "moi")
+            mine.append([j, tr("Tu joues : ", "You play: ") + lab])
+            v = drain(json.loads(act(m[1])), tr("Toi : ", "You: ") + lab, "moi")
         elif k == "ans" and v.get("ask"):
             a = v["ask"]
             x = m[1]
             lab = ", ".join(a["options"][i] for i in x if isinstance(i, int) and i < len(a["options"])) \
                 if isinstance(x, list) else (a["options"][x] if isinstance(x, int) and x < len(a["options"]) else str(x))
             svs[j] = None                                # une réponse à une question : pas de conseil possible
-            mine.append([j, f"Tu réponds ({a['title']}) : {lab or 'rien'}"])
-            v = drain(json.loads(answer(json.dumps(x))), "Toi : " + (lab or "rien"), "moi")
+            mine.append([j, tr(f"Tu réponds ({a['title']}) : {lab or 'rien'}", f"You answer ({a['title']}): {lab or 'nothing'}")])
+            v = drain(json.loads(answer(json.dumps(x))), tr("Toi : ", "You: ") + (lab or tr("rien", "nothing")), "moi")
         else:
             out["desync"] = len(mine)
             break
@@ -741,7 +748,7 @@ def replay_load(game_json):
 
 
 def _short_ai(v):
-    return (f"{_rp.NAMES[AI]} : {v['ai']}") if v.get("ai") else ""
+    return (f"{_rp.NAMES[AI]}{tr(' : ', ': ')}{v['ai']}") if v.get("ai") else ""
 
 
 def replay_frame(k):
@@ -772,15 +779,15 @@ def replay_exit():
 
 def _olabel(g, o):
     if o is None:
-        return "aucun"
+        return tr("aucun", "none")
     if o is True:
-        return "oui"
+        return tr("oui", "yes")
     if o is False:
-        return "non"
+        return tr("non", "no")
     if hasattr(o, "cname"):
         loc = getattr(o, "loc", None)
         where = "" if loc is None else " (" + (g.bfs[loc].name if loc in (0, 1) else "base") + ")" if hasattr(o, "uid") and g.obj(o.uid) is not None else ""
-        mine = "" if getattr(o, "ctrl", ME) == ME else " adverse"
+        mine = "" if getattr(o, "ctrl", ME) == ME else tr(" adverse", " (enemy)")
         return f"{g.label(o) if hasattr(o, 'uid') and g.obj(o.uid) is not None else o.cname}{mine}{where}"
     if hasattr(o, "domain"):
         return f"rune {o.domain}"
@@ -789,7 +796,7 @@ def _olabel(g, o):
     if isinstance(o, int) and not isinstance(o, bool) and o in (0, 1):
         return g.bfs[o].name
     if o == "base":
-        return "la base"
+        return tr("la base", "base")
     if isinstance(o, int) and not isinstance(o, bool):
         u = g.obj(o)
         return _olabel(g, u) if u is not None else str(o)
@@ -800,16 +807,22 @@ def _olabel(g, o):
         except Exception:
             return ", ".join(f"{k} {_olabel(g, v)}" for k, v in sorted(o.items()))
     if isinstance(o, (tuple, list)):
-        return " + ".join(_olabel(g, x) for x in o) if o else "aucun"
+        return " + ".join(_olabel(g, x) for x in o) if o else tr("aucun", "none")
     if isinstance(o, str):
-        return WORDS.get(o, o)
+        return _word(o)
     return short(o)
 
 
-# Options textuelles des questions (modes, positions) en français.
+# Options textuelles des questions (modes, positions), en français et en anglais.
 WORDS = dict(top="sur le dessus du deck", bottom="sous le deck", draw="piocher", discard="défausser",
              cards="des cartes", runes="des runes", buff="renforcer (buff)", ready="préparer", exhaust="épuiser",
              channel="canaliser 1 rune")
+WORDS_EN = dict(top="on top of the deck", bottom="at the bottom of the deck", draw="draw", discard="discard",
+                cards="cards", runes="runes", buff="buff", ready="ready", exhaust="exhaust", channel="channel 1 rune")
+
+
+def _word(o):
+    return (WORDS_EN if lang.en() else WORDS).get(o, o)
 
 
 def _alabel(g, ask, o):
@@ -817,11 +830,12 @@ def _alabel(g, ask, o):
     k = ask.kind
     try:
         if k == "predict_recycle":
-            return "la recycler (sous le deck)" if o else "la garder sur le dessus"
+            return tr("la recycler (sous le deck)", "recycle it (bottom of the deck)") if o else tr("la garder sur le dessus", "keep it on top")
         if k == "damage_pick":
-            return f"{_olabel(g, o)} (mortel : {ask.ctx.get('need', {}).get(o.uid, '?')} dégâts)"
+            need = ask.ctx.get('need', {}).get(o.uid, '?')
+            return tr(f"{_olabel(g, o)} (mortel : {need} dégâts)", f"{_olabel(g, o)} (lethal: {need} damage)")
         if k in ("burn_player", "choose_player") and isinstance(o, int):
-            return "toi" if o == ME else "l'adversaire"
+            return tr("toi", "you") if o == ME else tr("l'adversaire", "the opponent")
         if k == "bullet_time_x":
             return f"X = {o}"
         if k == "ava_play":
@@ -829,18 +843,18 @@ def _alabel(g, ask, o):
             return f"{c.cname} ({_olabel(g, ch)})"
         if k == "entourage":
             q, a = o
-            return f"{WORDS.get(a, a)} {'ta légende' if q == ME else 'la légende adverse'}"
+            return f"{_word(a)} " + (tr('ta légende', 'your legend') if q == ME else tr('la légende adverse', "the opponent's legend"))
         if k == "split_damage":
             if not o:
-                return "aucune cible"
+                return tr("aucune cible", "no target")
             if all(isinstance(x, int) for x in o):
-                return " + ".join(str(x) for x in o) + " dégâts"
-            return ", ".join(f"{n} à {_olabel(g, u)}" for u, n in o)
+                return " + ".join(str(x) for x in o) + tr(" dégâts", " damage")
+            return ", ".join(tr(f"{n} à {_olabel(g, u)}", f"{n} to {_olabel(g, u)}") for u, n in o)
         if k in ("mf_ready", "ready_pick") and isinstance(o, tuple):
             return _olabel(g, o[1])
         if k == "bard_move":
             bf, grp = o
-            return f"vers {_olabel(g, bf)} : " + (" + ".join(_olabel(g, u) for u in grp) or "aucune unité")
+            return tr(f"vers {_olabel(g, bf)} : ", f"to {_olabel(g, bf)}: ") + (" + ".join(_olabel(g, u) for u in grp) or tr("aucune unité", "no unit"))
         if k in ("move_enemy", "profiteer") and isinstance(o, tuple):
             return f"{_olabel(g, o[0])} → {_olabel(g, o[1])}"
         if isinstance(o, tuple) and len(o) == 2 and hasattr(o[0], "cname") and isinstance(o[1], dict):
@@ -896,13 +910,13 @@ DOM_FR = {"Fury": "Fury", "Calm": "Calm", "Mind": "Mind", "Body": "Body", "Chaos
 
 def _cost_txt(e, reqs):
     from game import ANY
-    parts = [f"{e} énergie"] if e else []
+    parts = [tr(f"{e} énergie", f"{e} energy")] if e else []
     cnt = {}
     for r in reqs:
-        k = "rune au choix" if r == ANY else " ou ".join(sorted(r))
+        k = tr("rune au choix", "rune of any type") if r == ANY else tr(" ou ", " or ").join(sorted(r))
         cnt[k] = cnt.get(k, 0) + 1
     parts += [f"{n} {k}" for k, n in cnt.items()]
-    return " + ".join(parts) or "gratuit"
+    return " + ".join(parts) or tr("gratuit", "free")
 
 
 def _act_label(g, a):
@@ -919,8 +933,9 @@ def _act_label(g, a):
         e, reqs = ab["cost"](g, ME, obj, ch)
         extra = ""
         if ch.get("tg"):
-            extra = ", cible " + " et ".join(_tname(g, u, ME) for u in ch["tg"])
-        return f"{ab['name']} : {name} ({_cost_txt(e, reqs)}{', épuise' if ab.get('exhaust') else ''}{extra})"
+            extra = tr(", cible ", ", target ") + tr(" et ", " and ").join(_tname(g, u, ME) for u in ch["tg"])
+        exh = tr(", épuise", ", exhausts") if ab.get("exhaust") else ""
+        return f"{ab['name']}{tr(' : ', ': ')}{name} ({_cost_txt(e, reqs)}{exh}{extra})"
     except Exception:
         return describe(g, a, ME)
 
@@ -952,14 +967,22 @@ def _ask_title(g, ask):
     from cards import ASK_TEXT
     if ask.kind == "predict_recycle":
         c, n, i = ask.ctx.get("card"), ask.ctx.get("n", 1), ask.ctx.get("i", 0)
-        return (f"Predict : dessus de ton deck" + (f" (carte {i + 1}/{n})" if n > 1 else "") +
-                f" : {c.cname if c is not None else '?'}. La recycler sous le deck, ou la garder ? (règle 436)")
+        cn = c.cname if c is not None else '?'
+        return tr(f"Predict : dessus de ton deck" + (f" (carte {i + 1}/{n})" if n > 1 else "") +
+                  f" : {cn}. La recycler sous le deck, ou la garder ? (règle 436)",
+                  f"Predict: top of your deck" + (f" (card {i + 1}/{n})" if n > 1 else "") +
+                  f": {cn}. Recycle it to the bottom of the deck, or keep it? (rule 436)")
     if ask.kind == "predict_top":
-        return "Predict : quelle carte remettre sur le dessus ? (la première choisie sera piochée en premier)"
+        return tr("Predict : quelle carte remettre sur le dessus ? (la première choisie sera piochée en premier)",
+                  "Predict: which card do you put back on top? (the first one chosen will be drawn first)")
     if ask.kind == "damage_pick":
-        return (f"Combat : il te reste {ask.ctx.get('left')} dégâts à assigner. Quelle unité reçoit d'abord ses dégâts "
-                "mortels ? (règle 465.2.c : mortel en entier avant la suivante, l'excédent va à la dernière)")
+        return tr(f"Combat : il te reste {ask.ctx.get('left')} dégâts à assigner. Quelle unité reçoit d'abord ses dégâts "
+                  "mortels ? (règle 465.2.c : mortel en entier avant la suivante, l'excédent va à la dernière)",
+                  f"Combat: you have {ask.ctx.get('left')} damage left to assign. Which unit receives its lethal damage "
+                  "first? (rule 465.2.c: lethal in full before the next one, the excess goes to the last one)")
     t = ASKS.get(ask.kind) or ASK_TEXT.get(ask.kind)
+    if t is not None:
+        t = lang.ask_title(ask.kind, t)
     it = ask.ctx.get("item") if isinstance(ask.ctx, dict) else None
     nm = getattr(it, "name", "") or ""
     if not nm:
@@ -967,7 +990,7 @@ def _ask_title(g, ask):
         o = g.obj(u) if isinstance(u, int) else None
         nm = o.cname if o is not None else ""
     if t is None:
-        t = "Choisis une option :"
+        t = tr("Choisis une option :", "Choose an option:")
     if nm and short(nm) not in t and ask.kind not in ("mulligan",):
         return f"{short(nm)} — {t}"
     return t

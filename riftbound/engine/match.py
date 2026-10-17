@@ -12,6 +12,7 @@
 L'état est un dict JSON (la page le garde) ; ces fonctions sont pures. Choix de l'IA : jouer en premier ; battlefield
 choisi par son plan (sinon au hasard) sans connaître celui du joueur (choix simultanés) ; l'IA ne sideboarde pas."""
 import random
+from lang import tr
 
 HUMAN, AI = 0, 1
 
@@ -104,7 +105,8 @@ def sideboard_swap(deck, out_cards, in_cards, champion=None):
     """Échange 1 pour 1 (403.4) : out_cards quittent le Main Deck pour le sideboard, in_cards font l'inverse.
     Le Chosen Champion peut être changé pour une unité Champion du Main Deck ou du sideboard (601.1.c.4)."""
     if len(out_cards) != len(in_cards):
-        raise ValueError("échange 1 pour 1 : autant de cartes sortent que de cartes entrent (règle 403.4)")
+        raise ValueError(tr("échange 1 pour 1 : autant de cartes sortent que de cartes entrent (règle 403.4)",
+                            "1-for-1 swap: as many cards go out as come in (rule 403.4)"))
     main, side = list(deck["main"]), list(deck.get("sideboard") or [])
     for n in out_cards:
         main.remove(n)
@@ -116,7 +118,8 @@ def sideboard_swap(deck, out_cards, in_cards, champion=None):
     if champion and champion != deck.get("champion"):
         pool = main + side
         if champion not in pool:
-            raise ValueError("le nouveau Chosen Champion doit venir du Main Deck ou du sideboard (601.1.c.4)")
+            raise ValueError(tr("le nouveau Chosen Champion doit venir du Main Deck ou du sideboard (601.1.c.4)",
+                                "the new Chosen Champion must come from the Main Deck or the sideboard (601.1.c.4)"))
         (main if champion in main else side).remove(champion)
         main.append(deck["champion"])               # l'ancien champion retourne dans le Main Deck
         d.update(main=main, sideboard=side, champion=champion)
