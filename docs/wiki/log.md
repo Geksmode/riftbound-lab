@@ -242,3 +242,6 @@ Signalé par l'utilisateur : « la page ne répond pas » quand l'IA réfléchit
 
 ## [2026-10-17] ingest | Table : version anglaise
 Demande de l'utilisateur. Bouton English / Français (menu) ou `?lang=en` ; page traduite par `train/i18n.js`, moteur par `engine/lang.py` (la langue ne change pas la partie : `test_lang.py`). Robot `train/verif_anglais.mjs` dans la porte. Détail : `pages/anglais.md`.
+
+## [2026-10-17] fix | Table : bas coupé sur un téléphone Android
+Signalé par l'utilisateur avec une capture. Hauteur prise de la zone vraiment visible (`--appH`) au lieu de `100dvh` ; `?diag=1` affiche les mesures. Non reproduit en simulation : à confirmer sur l'appareil.

@@ -69,3 +69,9 @@ Demande de l'utilisateur : « fait une version anglaise de l'app ». Bouton Engl
 `train.html?lang=en` ; choix gardé (`rbt-lang`), changer recharge la page. `src.html` reste en français : `train/i18n.js`
 (inséré par `build.sh`) traduit le texte à l'entrée dans la page ; le moteur parle anglais via `engine/lang.py`
 (`train.set_lang`). Robot `train/verif_anglais.mjs`, test `engine/cardsets/test_lang.py`. Détail : `docs/wiki/pages/anglais.md`.
+
+## Bas de la table coupé sur Android (2026-10-17)
+Capture de l'utilisateur (Android, tutoriel) : la barre Terminer le tour / Conseil / Reprendre sortait de l'écran ;
+`100dvh` y vaut plus que la zone visible. Le téléphone prend maintenant la plus petite hauteur mesurée (`appHeight` :
+innerHeight, visualViewport, clientHeight → `--appH`). Non reproduit dans Chromium simulé (les mesures y sont égales) :
+correction à confirmer sur l'appareil ; `train.html?diag=1` affiche les mesures.
