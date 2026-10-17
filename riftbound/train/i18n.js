@@ -503,6 +503,7 @@
   // Motifs écrits à la main : textes assemblés en plusieurs morceaux dans src.html.
   const ORD = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
   const P = [
+    [/^(.*) · coût (.*)$/, "$1 · cost $2"],   // en-tête de l'agrandi d'une carte
     [/^(.*) Touche une carte ou une zone en surbrillance\.$/, (m, t) => t(m[1]) + " Tap a highlighted card or zone."],
     [/^(.*)\((\d+)e\)(.*)$/, (m, t) => t(m[1]) + "(" + ORD(+m[2]) + ")" + t(m[3])],
     [/^Défausse de l'IA \((.+)\) \((\d+)\)$/, "AI's trash ($1) ($2)"],
