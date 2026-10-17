@@ -242,3 +242,6 @@ Signalé par l'utilisateur : « la page ne répond pas » quand l'IA réfléchit
 
 ## [2026-10-17] ingest | Table : version anglaise
 Demande de l'utilisateur. Bouton English / Français (menu) ou `?lang=en` ; page traduite par `train/i18n.js`, moteur par `engine/lang.py` (la langue ne change pas la partie : `test_lang.py`). Robot `train/verif_anglais.mjs` dans la porte. Détail : `pages/anglais.md`.
+
+## [2026-10-17] ingest | Lire les cartes du mulligan
+Bouton « Lire » sous chaque carte de la bulle du mulligan (et survol à la souris) ; robot `train/verif_mulligan.mjs` ajouté à la porte.
