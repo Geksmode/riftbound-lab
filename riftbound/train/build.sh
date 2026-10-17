@@ -34,6 +34,8 @@ cp $E/cards/cards_unique.csv $E/decks/decks.json $B/data/
 cp engine.worker.js $B/
 cp pyodide-cache/package/{pyodide.js,pyodide.asm.js,pyodide.asm.wasm,pyodide-lock.json} $B/pyodide/
 base64 -w0 pyodide-cache/package/python_stdlib.zip > $B/pyodide/python_stdlib.b64.txt
+# bytecode précompilé (stdlib chargée + moteur) : la page ne recompile plus le Python à chaque chargement (precompile.mjs)
+if command -v node >/dev/null; then node precompile.mjs $B; else echo "ATTENTION : node absent, Python non précompilé (chargement plus lent)"; fi
 cp $E/replays/img/* $B/img/
 cp atlas/* $B/atlas/
 # sons de la table (banque uisfx, audio CC0 : sfx/LICENSE-AUDIO)

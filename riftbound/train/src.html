@@ -909,11 +909,13 @@ const pyExec = (code, get) => engineCall({ exec: code, get: get || null }).then(
 const pyGet = name => pyExec("", name);
 
 async function boot() {
-  IMG = await fetch("img/index.json").then(r => r.json()).catch(() => ({}));
-  ATL = await fetch("atlas/index.json").then(r => r.json()).catch(() => ({}));
   // Le moteur (Pyodide + train) tourne dans un Web Worker (engine.worker.js) : la réflexion de l'IA ne gèle plus la page.
+  // Il démarre tout de suite ; les index d'images se chargent pendant ce temps.
   const ver = encodeURIComponent([BUILD.commit, BUILD.engine].filter(Boolean).join("-") || String(Date.now()));
-  T = await engineStart(ver);
+  const eng = engineStart(ver);
+  eng.catch(() => {});
+  [IMG, ATL] = await Promise.all(["img/index.json", "atlas/index.json"].map(u => fetch(u).then(r => r.json()).catch(() => ({}))));
+  T = await eng;
   if (I18N.lang === "en") await T.set_lang("en");   // version anglaise : questions, coups et journal du moteur (engine/lang.py)
   // catalogue et verdicts des decks avant d'activer le menu : sinon il se redessine quand ils arrivent (worker), et un
   // toucher sur un bouton remplacé se perd
