@@ -22,7 +22,7 @@ metadata:
 Publiée par la CI sur GitHub Pages (plus l'artefact). DA « observatoire » (`train/da.css`, maquette Claude Design). Ordinateur : plateau pleine largeur, taille fixe pendant la partie, runes en vraies cartes, légende agrandie. Téléphone : plein écran sans défilement, rangées qui se resserrent, main agrandie au toucher (plus de 8 cartes), ciblage par liste dans la bulle. Robots dans la porte : verif_mobile, verif_hidden, verif_revele, verif_charge, verif_cibles, verif_match, verif_duel. Détails : `docs/wiki/log.md`, retex `riftbound/retex/retex-session-2026-10-07-09.md`.
 
 ## Tutoriel (2026-10-10)
-Menu « Apprendre à jouer » : partie guidée Yi contre Darius, IA débutante, 6 défis, coach. Détails : `docs/wiki/pages/tutoriel.md`.
+Menu « Apprendre à jouer » : partie guidée Yi contre Darius, IA débutante, 10 leçons et 6 défis pas à pas, zones surlignées, lexique ; l'agrandi d'une carte explique ses mots-clés (toute la table). Détails : `docs/wiki/pages/tutoriel.md`.
 
 ## Menu en tableau de bord (2026-10-10)
 Choix de l'utilisateur parmi 5 dispositions : le tableau de bord. En haut, « Ton deck d'entraînement » (illustration de la légende, liste, bilan victoires/défaites avec ce deck, « Jouer avec ce deck », « Changer », « Modifier ») et « Dernière partie » (reprendre, revoir, ou tutoriel pour un nouveau). En dessous, une rangée compacte : Nouvelle partie, ami, tutoriel, éditeur, Mes decks, Mes parties, Aide. **Aucun deck par défaut** (demande de l'utilisateur) : un nouveau joueur voit « Aucun deck choisi » et le choisit (légende, puis liste : ses decks, puis les listes de tournoi, la conseillée ★ en tête). Clé `rbt-train` (forme `my:<id>` ou clé de liste). Robot : `train/verif_dash.mjs`.

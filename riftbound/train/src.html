@@ -481,6 +481,34 @@ body.dkopen { overflow: hidden; }
 .tintro .big button { flex: 0 1 auto; width: auto; min-width: 140px; }
 .tintro ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; text-align: left; }
 .tintro ul li::before { content: "☆ "; color: var(--gold); }
+.tintro ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; line-height: 1.4; text-align: left; }
+.tintro ol li::marker { color: var(--gold); font-weight: 600; }
+.tintro .tcards { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.tintro .tcards figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.tintro .tcards .card { --cw: 96px; --chh: 134px; width: 96px; height: 134px; cursor: zoom-in; }
+.tintro .tcards figcaption { font-family: var(--f-mono); font-size: 11.5px; color: var(--gold); text-transform: uppercase; letter-spacing: .06em; }
+.tintro .tglos { background: none; border: none; color: var(--akali); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; min-height: 44px; padding: 6px 10px; cursor: pointer; }
+/* ce dont parle le coach : contour doré qui pulse (contour, pas bordure : rien ne bouge sur la table) */
+.tfocus { outline: 3px solid var(--gold) !important; outline-offset: 3px; border-radius: 10px; animation: tfoc 1.3s ease-in-out infinite; }
+@keyframes tfoc { 0%, 100% { outline-color: rgba(243,213,138,1); } 50% { outline-color: rgba(243,213,138,.25); } }
+@media (prefers-reduced-motion: reduce) { .tfocus { animation: none; } }
+/* mots du lexique dans le coach : on les touche pour lire leur définition */
+.coach .kws { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.coach .kwl { font-size: 11.5px; color: var(--ink-2); }
+.coach .kw { min-height: 32px; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; border: 1px dashed var(--akali); background: rgba(114,226,188,.06); color: var(--akali); cursor: pointer; }
+.coach .kw.on { border-style: solid; background: rgba(114,226,188,.18); color: var(--ink); }
+.kwdef, .gl { display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; line-height: 1.4; }
+.coach .kwdef { padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.05); border-left: 3px solid var(--akali); }
+.kwdef b, .gl b { color: var(--gold); font-weight: 600; }
+.coach .chb button:not(.go) { background: transparent; }
+.glh { margin: 6px 0 0; font-size: 14px; color: var(--akali); }
+.glist { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 8px; }
+.glist .gl { padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); }
+.gl span { color: var(--ink); }
+/* agrandi d'une carte : ses mots-clés expliqués sous le texte */
+.zoom .zkw { display: flex; flex-direction: column; gap: 5px; border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; grid-column: 1 / -1; }
+.zoom .zkw .gl { font-size: 11.5px; line-height: 1.35; }
+.zoom .zkw .gl span { color: var(--ink-2); }
 .prep { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
 .mres { font-family: var(--f-display); font-size: 17px; } .mres.me { color: var(--akali); } .mres.opp { color: var(--leblanc); }
 .prepq { font-weight: 600; font-size: 14px; margin-top: 2px; }
@@ -1573,8 +1601,8 @@ function rowHTML(st, pid, srcs) {
           : `<div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div>`; })()}<div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
-    <div class="zone" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
-    <div class="zone" style="--n:${p.base.length + p.gear.length};--nx:${p.base.filter(u => u.x).length + p.gear.filter(g => g.x).length}" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    <div class="zone zrunes" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
+    <div class="zone zbase" style="--n:${p.base.length + p.gear.length};--nx:${p.base.filter(u => u.x).length + p.gear.filter(g => g.x).length}" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
     <div class="zone legend">${leg}<span class="label">Légende</span></div>
   </div>`;
 }
@@ -1642,7 +1670,7 @@ function showZoom(el) {
   const c = CARDS[n] || {};
   const typ = [c.s, c.t].filter(Boolean).join(" ") + (c.d && c.d.length ? " · " + c.d.join("/") : "");
   const cost = c.t === "Battlefield" || c.t === "Legend" || c.e === undefined ? "" : ` · coût ${c.e}${c.p ? " + " + c.p + " power" : ""}${c.m != null ? " · might " + c.m : ""}${c.eb ? " · bonus +" + c.eb : ""}`;
-  Z.innerHTML = `${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}<h4>${esc(n)}</h4><div class="small">${esc(typ)}${esc(cost)}</div><div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div>`;
+  Z.innerHTML = `${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}<h4>${esc(n)}</h4><div class="small">${esc(typ)}${esc(cost)}</div><div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div>${(() => { const ks = glossFor(c.tx); return ks.length ? `<div class="zkw">${ks.map(glossRow).join("")}</div>` : ""; })()}`;
   Z.hidden = false;
   const r = el.getBoundingClientRect(), w = 250, h = Z.offsetHeight;
   let x = r.right + 10; if (x + w > innerWidth - 8) x = r.left - w - 10; if (x < 8) x = Math.max(8, Math.min(innerWidth - w - 8, r.left));
@@ -3198,49 +3226,188 @@ async function exitReplay() {
   else { V = null; $("board").innerHTML = `<div class="loading">Choisis une partie à revoir, ou commence une nouvelle partie.</div>`; $("stack").innerHTML = ""; showMenu("games"); }
 }
 
+// ------------------------------------------------------------ lexique : mots du jeu et mots-clés des cartes
+// Définitions courtes, fidèles aux Core Rules (numéros cités) et aux rappels imprimés sur les cartes. Utilisées par le
+// coach du tutoriel (mots à toucher), le lexique (bouton « Lexique ») et l'agrandi d'une carte (mots-clés de son texte).
+// GLOSS : clé → [libellé, définition, mot-clé de carte écrit [Ainsi] dans le texte].
+const GLOSS = {   // règles : énergie perdue 167, puissance 164.2.b, redresser 415.3.a, conquérir 469, tenir 469.2, combat 465-466, sort 157, Hidden 811
+  might: ["Might", "La force d'une unité. En combat, chaque camp inflige autant de dégâts que la Might totale de ses unités ; une unité meurt quand elle a reçu des dégâts au moins égaux à sa Might."],
+  energie: ["Énergie", "Ce qui paie le coût d'une carte (pastille dorée en haut à gauche). Chaque rune épuisée donne 1 énergie. L'énergie non dépensée est perdue à la fin du tour."],
+  puissance: ["Puissance", "Deuxième partie du coût de certaines cartes : le « +2 » de « 1+2 ». Elle se paie en recyclant des runes de la couleur (domaine) de la carte."],
+  rune: ["Rune", "Ta source d'énergie. Tu en poses 2 par tour depuis ta réserve. Une rune s'épuise pour donner 1 énergie, ou se recycle pour donner 1 puissance de sa couleur."],
+  epuise: ["Épuisé", "Une carte tournée sur le côté est épuisée : elle a déjà servi. Une unité épuisée ne peut pas se déplacer. Tout ce que tu contrôles se redresse au début de ton tour."],
+  redresser: ["Redresser", "Remettre droite une carte épuisée : elle peut de nouveau servir (bouger, payer). Au début de ton tour, tout ce que tu contrôles se redresse."],
+  base: ["Base", "Ta zone à toi : tes unités y arrivent quand tu les joues. On ne s'y bat pas, et elle ne rapporte pas de point."],
+  champ: ["Champ de bataille", "Les deux lieux au centre de la table. Chaque champ a son propre effet. Celui qui en garde le contrôle marque des points."],
+  conquerir: ["Conquérir", "Prendre le contrôle d'un champ de bataille : +1 point, une fois par champ et par tour."],
+  tenir: ["Tenir", "Contrôler encore un champ au début de ton tour : +1 point pour chaque champ tenu."],
+  combat: ["Combat", "Des unités des deux camps sur le même champ. Chaque camp inflige sa Might totale en dégâts aux unités adverses. Si les deux camps survivent, l'attaquant rentre dans sa base. Les dégâts s'effacent après le combat."],
+  showdown: ["Showdown", "Une pause avant qu'un champ change de mains, ou avant les dégâts d'un combat : chacun à son tour, les joueurs peuvent jouer des cartes Action ou Reaction, ou passer."],
+  chaine: ["Chaîne", "Les cartes et effets qui attendent de se résoudre (colonne « Chaîne »). Le dernier ajouté se résout en premier : c'est ce qui permet de répondre à une carte avant qu'elle fasse effet."],
+  legende: ["Légende", "La carte qui mène ton deck. Elle reste en jeu toute la partie, a son propre pouvoir et fixe les couleurs (domaines) de ton deck."],
+  champion: ["Champion", "Une unité spéciale de ta légende, posée à côté d'elle dès le début. Tu peux la jouer comme une carte de ta main."],
+  unite: ["Unité", "Un combattant. Il arrive dans ta base, épuisé, puis peut se déplacer vers les champs de bataille pour les prendre ou les défendre."],
+  sort: ["Sort", "Une carte à usage unique : elle fait son effet puis va dans ta défausse."],
+  equipement: ["Équipement", "Une carte qui reste en jeu dans ta base ; certains s'attachent à une unité et lui donnent un bonus."],
+  defausse: ["Défausse", "La pile où vont les sorts joués et les unités mortes. Touche une défausse pour voir son contenu."],
+  deck: ["Deck", "Ta pioche. Tu pioches 1 carte à chacun de tes tours."],
+  mulligan: ["Mulligan", "Au début de la partie, tu peux renvoyer jusqu'à 2 cartes de ta main pour en piocher d'autres."],
+  recycler: ["Recycler", "Remettre une carte sous son paquet : sous ton deck pour une carte, sous ta réserve pour une rune."],
+  bannir: ["Bannir", "Retirer une carte de la partie : elle ne revient pas."],
+  xp: ["XP", "Points d'expérience gagnés par certaines cartes (Hunt). Ils débloquent les effets Level."],
+  jeton: ["Jeton", "Une unité ou un objet créé par un effet ; il ne fait pas partie du deck."],
+  Reaction: ["Reaction", "Se joue à tout moment, même pendant le tour adverse et en réponse à une autre carte, avant qu'elle se résolve.", 1],
+  Action: ["Action", "Se joue pendant ton tour, ou pendant n'importe quel showdown (combat compris), même sur le tour adverse.", 1],
+  Accelerate: ["Accelerate", "En payant 1 énergie et 1 puissance de plus, l'unité arrive redressée : elle peut bouger tout de suite.", 1],
+  Ambush: ["Ambush", "L'unité peut se jouer en Reaction, directement sur un champ où tu as déjà des unités.", 1],
+  Assault: ["Assault", "+X Might tant que l'unité attaque.", 1],
+  Shield: ["Shield", "+X Might tant que l'unité défend.", 1],
+  Tank: ["Tank", "L'unité doit recevoir les dégâts de combat en premier.", 1],
+  Backline: ["Backline", "L'unité reçoit les dégâts de combat en dernier.", 1],
+  Deflect: ["Deflect", "L'adversaire doit payer 1 rune de plus, de n'importe quel type, pour la choisir avec un sort ou une capacité.", 1],
+  Ganking: ["Ganking", "L'unité peut se déplacer d'un champ de bataille à l'autre, sans repasser par sa base.", 1],
+  Hidden: ["Hidden", "Pendant ton tour, pour 1 rune de n'importe quel type, tu peux poser la carte face cachée sur un champ que tu contrôles ; dès le tour suivant, tu peux la jouer en Reaction sans payer son coût.", 1],
+  Legion: ["Legion", "Effet en plus si tu as déjà joué une autre carte ce tour.", 1],
+  Deathknell: ["Deathknell", "Effet qui se déclenche quand l'unité meurt.", 1],
+  Vision: ["Vision", "Quand tu joues la carte, regarde la carte du dessus de ton deck ; tu peux la recycler.", 1],
+  Predict: ["Predict", "Regarde les X cartes du dessus de ton deck ; recycle celles que tu veux et remets les autres dans l'ordre de ton choix.", 1],
+  Temporary: ["Temporary", "La carte meurt au début du prochain tour de son propriétaire, avant le décompte des points.", 1],
+  Equip: ["Equip", "Payer le coût indiqué pour attacher cet équipement à une de tes unités, qui reçoit son bonus.", 1],
+  "Quick-Draw": ["Quick-Draw", "L'équipement a Reaction et s'attache à une de tes unités quand tu le joues.", 1],
+  Weaponmaster: ["Weaponmaster", "Quand tu joues l'unité, tu peux lui attacher un de tes équipements pour 1 rune de moins.", 1],
+  Repeat: ["Repeat", "Tu peux payer ce coût en plus pour appliquer une deuxième fois l'effet du sort.", 1],
+  Hunt: ["Hunt", "Quand l'unité conquiert ou tient un champ, tu gagnes X XP.", 1],
+  Level: ["Level", "Effet actif tant que tu as au moins ce nombre d'XP.", 1],
+  Unique: ["Unique", "Ton deck ne peut contenir qu'un seul exemplaire de cette carte.", 1],
+  Empower: ["Empower", "Payer ce coût rend la carte Empowered (une seule fois).", 1],
+  Empowered: ["Empowered", "Texte en plus, actif une fois la carte Empowered.", 1],
+  Flow: ["Flow", "Le sort peut se rejouer depuis ta défausse pour son coût de Flow ; il est ensuite banni.", 1],
+  Stun: ["Stun", "L'unité étourdie n'inflige pas de dégâts de combat ce tour.", 1],
+  Burn: ["Burn", "Le joueur met les X cartes du dessus de son deck dans sa défausse.", 1],
+  Mighty: ["Mighty", "Une unité est Mighty tant qu'elle a 5 Might ou plus.", 1],
+  Buff: ["Buff", "Un bonus permanent de +1 Might posé sur une unité ; une unité n'en porte qu'un à la fois.", 1],
+  Add: ["Add", "Ajoute de l'énergie ou de la puissance à dépenser tout de suite ; on ne peut pas y répondre.", 1],
+};
+// mots courants du texte des cartes (en minuscules) qui ont une entrée du lexique
+const GLOSS_TXT = [[/\bbuff/i, "Buff"], [/\bready\b|\breadies\b/i, "redresser"], [/\bexhaust/i, "epuise"], [/\brecycl/i, "recycler"],
+  [/\bconquer/i, "conquerir"], [/\bhold\b/i, "tenir"], [/\bXP\b/, "xp"], [/\btoken\b/i, "jeton"], [/\bbanish/i, "bannir"], [/\bshowdown/i, "showdown"]];
+// entrées du lexique pour le texte d'une carte : mots-clés [Ainsi] d'abord, puis les mots courants ; au plus `max`
+function glossFor(tx, max = 5) {
+  const out = [];
+  for (const m of (tx || "").matchAll(/\[([A-Z][A-Za-z-]+)(?: \d+| X)?\]/g)) if (GLOSS[m[1]] && !out.includes(m[1])) out.push(m[1]);
+  for (const [re, k] of GLOSS_TXT) if (re.test(tx || "") && !out.includes(k)) out.push(k);
+  return out.slice(0, max);
+}
+const glossRow = k => `<div class="gl"><b>${esc(GLOSS[k][0])}</b><span>${esc(GLOSS[k][1])}</span></div>`;
+function openGlossary() {
+  const ks = Object.keys(GLOSS), basics = ks.filter(k => !GLOSS[k][2]), kws = ks.filter(k => GLOSS[k][2]);
+  openModal(`<h3>Lexique</h3><div class="small">Les mots du jeu, puis les mots-clés écrits [ainsi] sur les cartes. Sur la table, touche une carte (ou passe la souris dessus) : ses mots-clés sont expliqués sous son texte.</div>
+    <h4 class="glh">Les bases</h4><div class="glist">${basics.map(glossRow).join("")}</div>
+    <h4 class="glh">Mots-clés des cartes</h4><div class="glist">${kws.map(glossRow).join("")}</div>`);
+}
+
 // ------------------------------------------------------------ tutoriel (menu « Apprendre à jouer »)
 // Une vraie partie, moteur complet (rien n'est simplifié) : Maître Yi contre Darius, donne fixe où tu commences
-// (train.tuto), IA débutante (train.Gentle). Six défis à étoiles, dans l'ordre ; le coach explique chaque défi, et
-// quelques astuces arrivent au moment où la situation se présente (réaction, question, adversaire sur un champ…).
+// (train.tuto), IA débutante (train.Gentle). Pensé pour quelqu'un qui ne connaît pas du tout le jeu : sept écrans
+// d'intro, puis la partie guidée pas à pas. Deux sortes d'étapes, dans l'ordre :
+// - leçon (info) : le coach montre une partie de la table (surlignée) et l'explique ; « Suivant » passe à la suite.
+//   when(v) : la leçon attend ce moment de la partie (pendant ce temps le coach montre wait) ;
+// - défi (étoile) : une chose à faire ; ok(v, U) dit qu'elle est faite.
+// fx : ce que le coach surligne (sélecteur CSS) ; kw : mots du lexique à toucher sous l'explication. Des astuces de
+// situation (TTIPS) arrivent une fois chacune quand le moment se présente (réponse, combat, sort jouable…).
 let TUTO = null;
+const ME_HAND = "#board .half.p0 .hand > .card.can", ME_ZONE = "#board .half.p0";
 const TSTEPS = [
-  { t: "Garde ta main", h: "Tu as pioché 4 cartes. Avant de commencer, tu peux en renvoyer jusqu'à 2 pour en repiocher (le mulligan). Ta main est bonne : deux Pit Rookie qui coûtent 2. Touche « Garder ma main ».",
-    ok: (v, U) => U.sawMull && !(v.ask && v.ask.kind === "mulligan") },
-  { t: "Joue une unité", h: "À côté de ta légende : tes 2 runes. Chaque rune s'épuise pour donner 1 énergie. Pit Rookie coûte 2 (chiffre en haut à gauche de la carte). Touche-le (cadre vert) puis « Jouer », ou glisse-le dans ta base.",
-    ok: v => myUnits(v.st) > 0 },
-  { t: "Termine ton tour", h: "Une unité arrive épuisée (couchée) : elle pourra bouger au prochain tour. Tu n'as plus d'énergie : touche le gros bouton « Terminer le tour ». Darius joue ensuite.",
+  { info: 1, t: "Bienvenue à la table", fx: "#board .bfrow",
+    h: "En bas, c'est ton camp ; en haut, celui de Darius. Au milieu (surligné), les deux champs de bataille : c'est là qu'on se bat pour les points. Je t'accompagne à chaque étape : lis, puis touche « Suivant ». Les mots sous l'explication s'expliquent si tu les touches.", kw: ["champ"] },
+  { info: 1, t: "Lire une carte", fx: "#fbar .mull",
+    h: "Voici ta main de départ : 4 cartes. La pastille dorée en haut à gauche, c'est le coût en énergie. Touche « Lire » sous une carte (ou passe la souris dessus) pour l'agrandir et lire son texte ; ses mots-clés sont expliqués dessous.", kw: ["energie", "unite", "sort"] },
+  { t: "Garde ta main", fx: "#bKeep",
+    h: "Avant de commencer, tu peux renvoyer jusqu'à 2 cartes pour en piocher d'autres : c'est le mulligan. Ta main est bonne : deux Pit Rookie à 2 énergie, jouables tout de suite. Touche « Garder ma main ».",
+    ok: (v, U) => U.sawMull && !(v.ask && v.ask.kind === "mulligan"), kw: ["mulligan"] },
+  { info: 1, t: "Ton camp", fx: ME_ZONE + " .zrow",
+    h: "Ta rangée (surlignée) : ton score et tes piles (deck, défausse), tes runes, ta base où arrivent tes unités, et ta légende. Ta main est juste en dessous.",
+    when: v => !v.ask, kw: ["base", "deck", "defausse"] },
+  { info: 1, t: "Ta légende et ton champion", fx: ME_ZONE + " .zone.legend",
+    h: "Maître Yi, ta légende, reste en jeu toute la partie : son pouvoir donne +2 Might à une de tes unités quand elle défend seule. À côté, ton champion Master Yi, Tempered : une unité que tu pourras jouer d'ici, comme une carte de ta main (il coûte 4).", kw: ["legende", "champion", "might"] },
+  { info: 1, t: "Les runes, ton énergie", fx: ME_ZONE + " .zrunes",
+    h: "Tu viens de poser tes 2 premières runes. Pour payer une carte, des runes s'épuisent (elles se couchent) : chacune donne 1 énergie. Au début de chacun de tes tours, elles se redressent et tu en poses 2 de plus.", kw: ["rune", "energie", "epuise"] },
+  { t: "Joue une unité", fx: `${ME_HAND}[data-card="Pit Rookie"]`,
+    h: "Tu as pioché ta carte du tour. Les cartes à cadre vert sont celles que tu peux jouer maintenant. Pit Rookie coûte 2 : c'est exactement ce que tu as. Touche-le puis « Jouer », ou glisse-le dans ta base. (Zhonya's Hourglass est un équipement : garde-le pour plus tard.)",
+    ok: v => myUnits(v.st) > 0, kw: ["unite"] },
+  { info: 1, t: "Une unité arrive épuisée", fx: ME_ZONE + " .zbase",
+    h: "Ton Pit Rookie est dans ta base, couché : il est épuisé. Il ne peut pas bouger ce tour-ci ; il se redressera au début de ton prochain tour. Son effet (« buff » une autre unité) n'a rien fait : tu n'avais pas d'autre unité.",
+    when: v => !v.ask, kw: ["epuise", "redresser", "Buff"] },
+  { t: "Termine ton tour", fx: "#bMain",
+    h: "Tes 2 runes sont épuisées : plus d'énergie. Touche le gros bouton « Terminer le tour ». Ensuite, c'est à Darius de jouer.",
     ok: v => v.st.tp === 1 || v.st.t >= 3 },
-  { t: "Va sur un champ de bataille", h: "Nouveau tour : tes unités se redressent, tu poses 2 runes de plus et tu pioches. Glisse une unité de ta base vers un des deux champs de bataille au centre (ou touche-la puis « Déplacer »). Bouger épuise l'unité. Astuce : First Mate (3) redresse une autre unité en arrivant, qui peut donc encore bouger.",
-    ok: v => v.st.bfs.some(b => b.u.some(u => u.c === 0)) },
-  { t: "Marque un point", h: "Prendre le contrôle d'un champ, c'est le conquérir : +1 point. Au début de chacun de tes tours, chaque champ que tu tiens encore rapporte +1 point. Le premier à 8 points gagne.",
-    ok: v => v.st.pts[0] >= 1 },
-  { t: "Gagne un combat", h: "Va sur un champ où Darius a des unités, ou défends le tien. Chaque camp inflige des dégâts égaux à sa Might (sa force) ; une unité meurt quand elle reçoit autant de dégâts que sa Might. Le camp qui reste garde le champ. Punch First donne +5 Might pendant un combat, et ta légende Maître Yi donne +2 Might à une unité qui défend seule.",
-    ok: (v, U) => U.won },
+  { info: 1, t: "Un nouveau tour", fx: ME_ZONE + " .zrow",
+    when: v => v.st.tp === MEP && !!v.dec && v.dec.kind === "main",
+    wait: "Darius joue son tour. Les flèches corail montrent ses coups, et le bouton « Journal » les raconte. Si le jeu te demande de répondre, touche « Passer ».",
+    h: "C'est de nouveau à toi. Chaque tour commence pareil : tes cartes se redressent, tes champs tenus marquent, tu poses 2 runes, tu pioches 1 carte. Ensuite tu joues autant de cartes que ton énergie le permet, dans l'ordre que tu veux.", kw: ["redresser", "rune", "tenir"] },
+  { info: 1, t: "Les champs de bataille", fx: "#board .bfrow .bf",
+    h: "Deux champs : Seat of Power (le tien) et Trifarian War Camp (celui de Darius). Chacun a un effet : touche son image pour le lire. Une unité qui arrive sur un champ libre le conquiert : +1 point.", kw: ["champ", "conquerir"] },
+  { t: "Va sur un champ de bataille", fx: ME_ZONE + " .zbase .card.can, #board .bfrow .bf",
+    h: "Glisse une unité de ta base vers un champ (ou touche-la, puis « Déplacer » et le champ). Se déplacer épuise l'unité. Astuce : First Mate (3 énergie) redresse une autre unité en arrivant, qui peut donc encore bouger.",
+    ok: v => v.st.bfs.some(b => b.u.some(u => u.c === MEP)), kw: ["epuise", "showdown"] },
+  { t: "Marque un point", fx: "#board .bfrow .bf",
+    h: "Avant qu'un champ change de mains, un showdown s'ouvre : chacun peut jouer une carte Action ou Reaction, ou passer. Puis ton unité conquiert le champ : +1 point.",
+    ok: v => v.st.pts[MEP] >= 1, kw: ["showdown", "conquerir"] },
+  { info: 1, t: "Tenir un champ", fx: ME_ZONE + " .score, #track",
+    h: "Ton point est marqué. Au début de chacun de tes tours, chaque champ que tu contrôles encore rapporte +1 point : tu le tiens. Darius va essayer de te le reprendre ; le premier à 8 points gagne.", kw: ["tenir"] },
+  { t: "Gagne un combat", fx: "#board .bfrow .bf",
+    h: "Un combat a lieu quand des unités des deux camps sont sur le même champ. Va attaquer un champ où Darius a des unités, ou défends le tien quand il vient. La plus grosse Might totale l'emporte ; Punch First (+5 Might) peut renverser un combat.",
+    ok: (v, U) => U.won, kw: ["combat", "might", "Action"] },
+  { info: 1, t: "Tu connais les bases", fx: "#bHint",
+    h: "Bravo ! Pour la suite : touche une carte pour lire son texte et ses mots-clés, « Conseil » montre ce que l'IA jouerait à ta place, « ↶ Reprendre » annule ton dernier coup. Le lexique explique tous les mots du jeu.", kw: ["Reaction", "chaine"] },
 ];
 const TTIPS = [
-  { id: "react", when: v => v.dec && v.dec.kind !== "main", t: "Fenêtre de réaction", h: "Une carte va se résoudre ou un combat s'ouvre : tu peux répondre avec une carte Reaction (ou Action pendant un combat). Sinon, touche « Passer »." },
-  { id: "ask", when: v => v.ask && v.ask.kind !== "mulligan", t: "Une question", h: "Une carte te demande un choix : réponds dans la bulle au milieu du plateau." },
-  { id: "oppbf", when: v => v.st.bfs.some(b => b.u.some(u => u.c === 1)), t: "Darius avance", h: "Darius a une unité sur un champ de bataille. S'il le tient au début de son tour, il marque 1 point. Pour l'en chasser, envoie plus de Might que lui." },
-  { id: "opppt", when: v => v.st.pts[1] >= 1, t: "Darius marque", h: "Chaque champ pris ou tenu rapporte des points, à lui aussi. Reprends-lui ses champs !" },
+  { id: "react", when: v => v.dec && v.dec.kind !== "main", t: "À toi de répondre", fx: "#bMain",
+    h: "Le jeu attend ta réponse : une carte va se résoudre, ou un showdown s'ouvre. Tu peux jouer une carte Reaction (ou Action pendant un showdown). Rien à jouer ? Touche « Passer ».", kw: ["Reaction", "Action", "showdown"] },
+  { id: "ask", when: v => v.ask && v.ask.kind !== "mulligan", t: "Une question", h: "Une carte te demande un choix : réponds dans la bulle au milieu de la table." },
+  { id: "spell", when: v => v.dec && v.dec.kind === "main" && v.st.p[MEP].hand.some(([u, n]) => (CARDS[n] || {}).t === "Spell" && v.dec.options.some(o => o.k === "play" && S(o.src) === S(u))),
+    t: "Un sort jouable", fx: v => v.st.p[MEP].hand.filter(([, n]) => (CARDS[n] || {}).t === "Spell").map(([, n]) => `${ME_HAND}[data-card="${CSS.escape(n)}"]`).join(", "),
+    h: "Un sort de ta main a un cadre vert : tu peux le jouer. Il fait son effet une fois, puis va dans ta défausse. Son coût « 1+2 » : 1 énergie et 2 puissance de sa couleur, payée en recyclant des runes.", kw: ["sort", "puissance", "recycler"] },
+  { id: "champ", when: v => v.dec && v.dec.kind === "main" && (v.st.p[MEP].champu || []).some(u => v.dec.options.some(o => o.k === "play" && S(o.src) === S(u))),
+    t: "Ton champion est jouable", fx: ME_ZONE + " .zone.legend .card.can",
+    h: "Tu as assez d'énergie pour Master Yi, Tempered (4), ton champion : il a un cadre vert à côté de ta légende. Touche-le pour le jouer.", kw: ["champion"] },
+  { id: "combat", when: v => v.st.sd && v.st.sd.combat, t: "Combat !", fx: "#board .bf.sd",
+    h: "Avant les dégâts, chacun peut encore jouer des cartes Action ou Reaction. Puis chaque camp inflige sa Might totale aux unités adverses ; une unité meurt si elle reçoit au moins sa Might en dégâts. Si les deux camps survivent, l'attaquant rentre dans sa base.", kw: ["combat", "might", "Action"] },
+  { id: "oppbf", when: v => v.st.bfs.some(b => b.u.some(u => u.c !== MEP)), t: "Darius avance", fx: "#board .bfrow .bf",
+    h: "Darius a une unité sur un champ de bataille. S'il le tient au début de son tour, il marque 1 point. Pour l'en chasser, envoie plus de Might que lui.", kw: ["tenir", "might"] },
+  { id: "opppt", when: v => v.st.pts[OPP()] >= 1, t: "Darius marque", h: "Chaque champ pris ou tenu rapporte des points, à lui aussi. Reprends-lui ses champs !" },
+  { id: "trash", when: v => v.st.p[MEP].trash.length > 0, t: "Ta défausse", fx: ME_ZONE + " [data-trash]",
+    h: "Une de tes cartes est dans ta défausse (un sort joué ou une unité morte). Touche la pile de défausse (surlignée) pour la revoir.", kw: ["defausse"] },
 ];
-const myUnits = st => st.p[0].base.length + st.bfs.reduce((n, b) => n + b.u.filter(u => u.c === 0).length, 0);
-const tStars = (k, fresh) => `<span class="stars" aria-label="${k} défi${k > 1 ? "s" : ""} réussi${k > 1 ? "s" : ""} sur ${TSTEPS.length}">${TSTEPS.map((_, i) => `<span class="${i < k ? "on" : ""}${i === fresh ? " new" : ""}">★</span>`).join("")}</span>`;
+const myUnits = st => st.p[MEP].base.length + st.bfs.reduce((n, b) => n + b.u.filter(u => u.c === MEP).length, 0);
+const TDEFIS = TSTEPS.filter(s => !s.info);
+const tDone = k => TSTEPS.slice(0, k).filter(s => !s.info).length;   // défis réussis quand on est à l'étape k
+const tStars = (n, fresh) => `<span class="stars" aria-label="${n} défi${n > 1 ? "s" : ""} réussi${n > 1 ? "s" : ""} sur ${TDEFIS.length}">${TDEFIS.map((_, i) => `<span class="${i < n ? "on" : ""}${i === fresh ? " new" : ""}">★</span>`).join("")}</span>`;
 
 const TINTRO = [
-  { g: "8", t: "Huit points pour gagner", p: "Deux joueurs, deux champs de bataille au centre. Prendre un champ, puis le tenir, rapporte des points. Le premier à 8 points gagne." },
-  { g: "◆", t: "Les runes, ton énergie", p: "Chaque tour, tu poses 2 runes et tu pioches 1 carte. Une rune s'épuise pour 1 énergie : c'est avec elle que tu paies tes cartes." },
-  { g: "⚔", t: "Unités et combats", p: "Joue des unités dans ta base, puis envoie-les sur les champs. Deux camps sur le même champ : combat, et la plus grosse force (Might) l'emporte." },
-  { g: "★", t: "À toi de jouer", p: "Tu joues <b>Maître Yi</b> contre <b>Darius</b>, une IA débutante. Six défis, une dizaine de minutes :", list: true },
+  { g: "✦", t: "Bienvenue dans Riftbound", p: "Riftbound est un jeu de cartes pour deux joueurs. Chacun a un deck de cartes et une légende, le héros qui mène son armée. Ce tutoriel part de zéro : aucune connaissance n'est nécessaire, tout s'explique pas à pas." },
+  { g: "8", t: "Le but : 8 points", p: "Au centre de la table, deux champs de bataille. Tes unités vont les prendre : prendre un champ rapporte 1 point, le garder jusqu'à ton tour suivant aussi. Le premier à 8 points gagne." },
+  { cards: ["Pit Rookie", "Punch First", "Zhonya's Hourglass"], t: "Trois sortes de cartes", p: "Une unité est un combattant qui reste sur la table. Un sort fait son effet une fois, puis va dans la défausse. Un équipement reste en jeu et peut renforcer une unité. Chaque carte a un coût, et chaque unité une force : sa Might." },
+  { g: "◆", t: "Les runes paient tes cartes", p: "Ton énergie vient de tes runes : à chaque tour, tu en poses 2 nouvelles. Pour jouer une carte, tu épuises (couches) autant de runes que son coût. Au début de ton tour suivant, elles se redressent." },
+  { g: "↻", t: "Un tour de jeu", p: "Chaque tour se déroule toujours dans le même ordre :",
+    list: ["Tes cartes épuisées se redressent.", "Chaque champ que tu tiens rapporte 1 point.", "Tu poses 2 runes.", "Tu pioches 1 carte.", "Tu joues : poser des unités, lancer des sorts, déplacer tes unités vers les champs.", "Tu termines ton tour : à l'adversaire."] },
+  { g: "⚔", t: "Les combats", p: "Quand tes unités arrivent sur un champ où sont celles de l'adversaire, il y a combat. Chaque camp inflige autant de dégâts que la Might totale de ses unités ; une unité meurt si elle reçoit au moins sa Might en dégâts. Le camp qui reste prend ou garde le champ." },
+  { g: "★", t: "À toi de jouer", p: "Tu joues Maître Yi contre Darius, une IA débutante, dans une vraie partie. Le coach te guide étape par étape, avec six défis à réussir :", defis: true },
 ];
 function tutoIntro(i = 0) {
   const x = TINTRO[i], last = i === TINTRO.length - 1;
-  openModal(`<div class="tintro" id="tIntro"><div class="dots">${TINTRO.map((_, j) => `<i class="${j === i ? "on" : ""}"></i>`).join("")}</div>
-    <div class="tig" aria-hidden="true">${x.g}</div><h3>${x.t}</h3><p>${x.p}</p>
-    ${x.list ? `<ul>${TSTEPS.map(s => `<li>${esc(s.t)}</li>`).join("")}</ul><p class="small">Bloqué ? « Conseil » montre le meilleur coup, « ↶ Reprendre » annule le dernier.</p>` : ""}
-    <div class="big">${i ? `<button id="tBack">Retour</button>` : `<button id="tSkip">Passer l'intro</button>`}<button class="main" id="tNext">${last ? "Jouer la partie guidée" : "Suivant"}</button></div></div>`, true);
+  const vis = x.cards ? `<div class="tcards">${x.cards.map((n, j) => `<figure>${card(n, { raw: true })}<figcaption>${["Unité", "Sort", "Équipement"][j]}</figcaption></figure>`).join("")}</div>`
+    : `<div class="tig" aria-hidden="true">${x.g}</div>`;
+  openModal(`<div class="tintro" id="tIntro"><div class="dots" aria-label="Écran ${i + 1} sur ${TINTRO.length}">${TINTRO.map((_, j) => `<i class="${j === i ? "on" : ""}"></i>`).join("")}</div>
+    ${vis}<h3>${x.t}</h3><p>${x.p}</p>
+    ${x.list ? `<ol>${x.list.map(s => `<li>${esc(s)}</li>`).join("")}</ol>` : ""}
+    ${x.defis ? `<ul>${TDEFIS.map(s => `<li>${esc(s.t)}</li>`).join("")}</ul><p class="small">Bloqué ? « Conseil » montre un bon coup, « ↶ Reprendre » annule le dernier.</p>` : ""}
+    <div class="big">${i ? `<button id="tBack">Retour</button>` : `<button id="tSkip">Passer l'intro</button>`}<button class="main" id="tNext">${last ? "Jouer la partie guidée" : "Suivant"}</button></div>
+    <button class="tglos" id="tGlos">Lexique : tous les mots du jeu</button></div>`, true);
   $("tNext").onclick = () => last ? tutoStart() : tutoIntro(i + 1);
   if ($("tBack")) $("tBack").onclick = () => tutoIntro(i - 1);
   if ($("tSkip")) $("tSkip").onclick = () => tutoStart();
+  $("tGlos").onclick = () => { openGlossary(); const c = $("mClose"); if (c) c.onclick = () => tutoIntro(i); };
 }
 async function tutoStart() {
   if (!T || working) return;
@@ -3254,52 +3421,76 @@ async function tutoStart() {
   catch (err) { working = false; toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
   PN = META.names;
   LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
-  TUTO = { meta: META, k: 0, sawMull: false, won: false, tips: {}, open: true, fresh: -1, tip: null, end: false };
+  TUTO = { meta: META, k: 0, sawMull: false, won: false, tips: {}, open: true, fresh: -1, tip: null, end: false, kw: null };
   $("gmeta").textContent = `Tutoriel · ${PN[0]} contre ${PN[1]} (IA débutante)`;
   $("gres").hidden = true; matchChip();
   await pump(J(T.step()));
 }
 // Appelée à chaque rendu (show) : avance les défis, déclenche les astuces, dessine la puce et le coach.
-function tutoCheck(v) {
+function tutoCheck(v, fromNext) {
   const U = TUTO;
-  if (!U || U.meta !== META || DU || RP) { if (U && U.meta !== META) TUTO = null; $("coach").hidden = true; $("gtuto").hidden = true; return; }
+  if (!U || U.meta !== META || DU || RP) { if (U && U.meta !== META) TUTO = null; $("coach").hidden = true; $("gtuto").hidden = true; tutoFocus(null); return; }
   if (v.ask && v.ask.kind === "mulligan") U.sawMull = true;
-  if ((v.cw || []).includes(0)) U.won = true;          // combat gagné, en attaque ou en défense (moteur : combat_won, 467)
-  const k0 = U.k;
-  while (U.k < TSTEPS.length && TSTEPS[U.k].ok(v, U)) U.k++;
-  if (U.k > k0) { U.fresh = U.k - 1; U.tip = null; U.open = true; const c = $("gtuto"); c.classList.remove("tbump"); void c.offsetWidth; c.classList.add("tbump"); }
-  else if (!U.tip && U.k > 0 && U.k < TSTEPS.length) {
+  if ((v.cw || []).includes(MEP)) U.won = true;          // combat gagné, en attaque ou en défense (moteur : combat_won, 467)
+  const d0 = tDone(U.k);
+  while (U.k < TSTEPS.length && !TSTEPS[U.k].info && TSTEPS[U.k].ok(v, U)) U.k++;
+  const cur = TSTEPS[U.k];
+  // une leçon dont le moment arrive rouvre le coach (une fois), même s'il était replié
+  if (cur && cur.info && (!cur.when || cur.when(v)) && U.readyK !== U.k) { U.readyK = U.k; U.open = true; }
+  if (tDone(U.k) > d0) { U.fresh = tDone(U.k) - 1; U.tip = null; U.kw = null; U.open = true; const c = $("gtuto"); c.classList.remove("tbump"); void c.offsetWidth; c.classList.add("tbump"); }
+  else if (!U.tip && !fromNext && U.k > 1 && cur && !(cur.info && (!cur.when || cur.when(v)))) {
+    // pas d'astuce par-dessus une leçon en cours de lecture, ni sur un défi qui vient de s'afficher (« Suivant »)
     const tp = TTIPS.find(x => !U.tips[x.id] && x.when(v));
-    if (tp) { U.tips[tp.id] = 1; U.tip = tp; U.open = true; }
+    if (tp) { U.tips[tp.id] = 1; U.tip = tp; U.kw = null; U.open = true; }
   }
   const over = v.winner !== null && v.winner !== undefined;
   if ((U.k === TSTEPS.length || over) && !U.end && !working) { U.end = true; return tutoEnd(v); }
   tutoDraw();
 }
+// surligne ce dont parle le coach (après chaque rendu du plateau)
+function tutoFocus(sel) {
+  document.querySelectorAll(".tfocus").forEach(e => e.classList.remove("tfocus"));
+  if (sel) document.querySelectorAll(sel).forEach(e => e.classList.add("tfocus"));
+}
 function tutoDraw() {
   const U = TUTO, C = $("coach"), chip = $("gtuto");
-  if (!U) { C.hidden = chip.hidden = true; return; }
-  const done = U.k >= TSTEPS.length, cur = TSTEPS[Math.min(U.k, TSTEPS.length - 1)];
+  if (!U) { C.hidden = chip.hidden = true; tutoFocus(null); return; }
+  const N = TSTEPS.length, done = U.k >= N, cur = TSTEPS[Math.min(U.k, N - 1)], nd = tDone(U.k);
+  const waiting = !done && cur.info && cur.when && V && !cur.when(V);
   chip.hidden = false;
-  chip.innerHTML = done ? `Tuto ★ ${TSTEPS.length}/${TSTEPS.length}` : `Tuto ${U.k + 1}/${TSTEPS.length}<span class="tg">${esc(cur.t)}</span>`;
+  chip.innerHTML = done ? `Tuto ★ ${nd}/${TDEFIS.length}` : `Tuto ${U.k + 1}/${N}<span class="tg">${esc(cur.t)}</span>`;
   C.hidden = !U.open;
+  const shown = U.tip || (done || waiting ? null : cur);
+  tutoFocus(U.open && shown && V ? (typeof shown.fx === "function" ? shown.fx(V) : shown.fx) : null);
   if (!U.open) return;
-  const won = U.fresh >= 0 ? `<div class="won">Défi réussi : ${esc(TSTEPS[U.fresh].t)} !</div>` : "";
-  const body = done ? `<h4>Tutoriel réussi</h4><p>Tu connais les bases. Finis la partie jusqu'à 8 points, ou lance une vraie partie depuis le menu.</p>`
-    : U.tip ? `<h4>${esc(U.tip.t)}</h4><p>${esc(U.tip.h)}</p><p class="tip">Défi en cours : ${esc(cur.t)}.</p>`
-    : `${won}<h4>Défi ${U.k + 1} · ${esc(cur.t)}</h4><p>${esc(cur.h)}</p>`;
-  C.innerHTML = `<div class="chh"><span class="who">Coach</span>${tStars(U.k, U.fresh)}</div>${body}
-    <div class="chb"><button class="go" id="cOk">Compris</button></div>`;
-  $("cOk").onclick = () => { U.open = false; U.fresh = -1; U.tip = null; tutoDraw(); };
+  const won = U.fresh >= 0 ? `<div class="won">Défi réussi : ${esc(TDEFIS[U.fresh].t)} !</div>` : "";
+  const kws = x => x && x.kw && x.kw.length ? `<div class="kws"><span class="kwl">Touche un mot :</span>${x.kw.map(k => `<button class="kw${U.kw === k ? " on" : ""}" data-kw="${esc(k)}" aria-expanded="${U.kw === k}">${esc(GLOSS[k][0])}</button>`).join("")}</div>
+    ${U.kw && x.kw.includes(U.kw) ? `<div class="kwdef"><b>${esc(GLOSS[U.kw][0])}</b><span>${esc(GLOSS[U.kw][1])}</span></div>` : ""}` : "";
+  let body, btn;
+  if (done) { body = `<h4>Tutoriel réussi</h4><p>Tu connais les bases. Finis la partie jusqu'à 8 points, ou lance une vraie partie depuis le menu.</p>`; btn = `<button class="go" id="cOk">Compris</button>`; }
+  else if (U.tip) { body = `<h4>${esc(U.tip.t)}</h4><p>${esc(U.tip.h)}</p>${kws(U.tip)}<p class="tip">${cur.info ? "Ensuite" : "Défi en cours"} : ${esc(cur.t)}.</p>`; btn = `<button class="go" id="cOk">Compris</button>`; }
+  else if (waiting) { body = `${won}<h4>Patiente un instant</h4><p>${esc(cur.wait || "Continue la partie : la suite arrive au bon moment.")}</p>`; btn = `<button class="go" id="cOk">Compris</button>`; }
+  else if (cur.info) { body = `${won}<h4>${esc(cur.t)}</h4><p>${esc(cur.h)}</p>${kws(cur)}`; btn = `<button class="go" id="cNext">${U.k === N - 1 ? "Terminer le tutoriel" : "Suivant"}</button>`; }
+  else { body = `${won}<h4>Défi ${nd + 1} · ${esc(cur.t)}</h4><p>${esc(cur.h)}</p>${kws(cur)}`; btn = `<button class="go" id="cOk">Compris</button>`; }
+  C.innerHTML = `<div class="chh"><span class="who">Coach · étape ${Math.min(U.k + 1, N)}/${N}</span>${tStars(nd, U.fresh)}</div>${body}
+    <div class="chb"><button id="cGlos">Lexique</button>${btn}</div>`;
+  C.querySelectorAll(".kw").forEach(b => b.onclick = () => { U.kw = U.kw === b.dataset.kw ? null : b.dataset.kw; tutoDraw(); });
+  $("cGlos").onclick = () => openGlossary();
+  if ($("cNext")) $("cNext").onclick = () => { U.k++; U.fresh = -1; U.kw = null; if (V) tutoCheck(V, true); };
+  if ($("cOk")) $("cOk").onclick = () => {
+    if (U.tip) { U.tip = null; U.kw = null; U.open = !!cur.info && !waiting; }   // une astuce lue : retour à la leçon en cours
+    else U.open = false;
+    U.fresh = -1; tutoDraw();
+  };
 }
 function tutoEnd(v) {
-  const U = TUTO, over = v.winner !== null && v.winner !== undefined, k = U.k;
+  const U = TUTO, over = v.winner !== null && v.winner !== undefined, n = tDone(U.k), all = n === TDEFIS.length;
   U.open = false; tutoDraw();
-  const res = over ? (v.winner === 0 ? `Victoire ${v.st.pts[0]}-${v.st.pts[1]} !` : v.winner === 1 ? `Défaite ${v.st.pts[0]}-${v.st.pts[1]}` : "Partie nulle") : "";
-  const head = k === TSTEPS.length ? "Tutoriel réussi !" : "Partie terminée";
-  openModal(`<div class="tintro" id="tEnd"><div class="tig" aria-hidden="true">★</div><h3>${head}</h3>${tStars(k, -1).replace('class="stars"', 'class="stars" style="font-size:28px"')}
-    <p>${res ? esc(res) + " · " : ""}${k} défi${k > 1 ? "s" : ""} réussi${k > 1 ? "s" : ""} sur ${TSTEPS.length}.</p>
-    <p>${k === TSTEPS.length ? "Tu sais jouer une unité, prendre et tenir un champ, et gagner un combat. Le reste (sorts, réactions, mots-clés) s'apprend en jouant : le bouton « Conseil » est là pour ça." : "Tu peux recommencer le tutoriel : même donne, même main de départ."}</p>
+  const res = over ? (v.winner === MEP ? `Victoire ${v.st.pts[MEP]}-${v.st.pts[OPP()]} !` : v.winner === OPP() ? `Défaite ${v.st.pts[MEP]}-${v.st.pts[OPP()]}` : "Partie nulle") : "";
+  const head = all ? "Tutoriel réussi !" : "Partie terminée";
+  openModal(`<div class="tintro" id="tEnd"><div class="tig" aria-hidden="true">★</div><h3>${head}</h3>${tStars(n, -1).replace('class="stars"', 'class="stars" style="font-size:28px"')}
+    <p>${res ? esc(res) + " · " : ""}${n} défi${n > 1 ? "s" : ""} réussi${n > 1 ? "s" : ""} sur ${TDEFIS.length}.</p>
+    <p>${all ? "Tu sais jouer une unité, prendre et tenir un champ, et gagner un combat. Le reste (sorts, réactions, mots-clés) s'apprend en jouant : touche une carte pour lire ses mots-clés, et le bouton « Conseil » est là quand tu hésites." : "Tu peux recommencer le tutoriel : même donne, même main de départ."}</p>
     <div class="big">${over ? "" : `<button id="tGo">Continuer la partie</button>`}<button id="tAgain">Recommencer le tuto</button><button class="main" id="tReal">Partie contre l'IA</button></div></div>`, true);
   if ($("tGo")) $("tGo").onclick = () => closeModal();
   $("tAgain").onclick = () => tutoStart();

@@ -245,3 +245,6 @@ Demande de l'utilisateur. Bouton English / Français (menu) ou `?lang=en` ; page
 
 ## [2026-10-17] ingest | Lire les cartes du mulligan
 Bouton « Lire » sous chaque carte de la bulle du mulligan (et survol à la souris) ; robot `train/verif_mulligan.mjs` ajouté à la porte.
+
+## [2026-10-17] ingest | Tutoriel pas à pas pour débutants complets, lexique des mots-clés
+Demande de l'utilisateur : un tutoriel plus progressif, des tooltips pour les mots-clés, accompagner pas à pas. Sept écrans d'intro, 16 étapes (10 leçons qui surlignent la zone dont elles parlent, 6 défis), mots à toucher dans le coach, 8 astuces de situation, lexique (25 mots du jeu, 31 mots-clés) ; l'agrandi de toute carte explique ses mots-clés. Robots `verif_tuto.mjs` et `verif_anglais.mjs` étendus. Pas essayé sur un vrai téléphone. Détail : `pages/tutoriel.md`.
