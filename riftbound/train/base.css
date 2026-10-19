@@ -202,6 +202,7 @@ svg.eval { width: 100%; height: 100px; display: block; cursor: crosshair; }
 .zoom img { width: 100%; border-radius: 8px; }
 .zoom .zt { font-size: 12.5px; color: var(--ink-2); white-space: pre-line; }
 .zoom h4 { font-size: 16px; }
+.zoom .zhd { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
 
@@ -277,7 +278,7 @@ svg.eval { width: 100%; height: 100px; display: block; cursor: crosshair; }
           width: auto; max-height: 62vh; overflow-y: auto; display: grid; grid-template-columns: 120px minmax(0, 1fr);
           gap: 4px 10px; align-content: start; }
   .zoom[hidden] { display: none; }
-  .zoom img { grid-row: span 3; }
-  .zoom h4, .zoom .small, .zoom .zt { grid-column: 2; }
+  /* Titre, type et texte forment un seul bloc à droite de l'image, aligné en haut avec elle. */
+  .zoom .zhd { grid-column: 2; align-self: start; }
 }
 @media (max-width: 380px) { :root { --cw: 34px; --chh: 48px; } .rail button { width: 40px; } }
