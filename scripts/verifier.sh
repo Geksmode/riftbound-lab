@@ -21,7 +21,9 @@ etape() {   # etape <nom> <commande...> : lance, garde la sortie, note OK / ÉCH
   local nom="$1"; shift
   local t0=$SECONDS
   if "$@" > "$LOG/$nom.txt" 2>&1; then RES+=("OK     $nom ($((SECONDS - t0)) s) : $(tail -1 "$LOG/$nom.txt")")
-  else RES+=("ÉCHEC  $nom ($((SECONDS - t0)) s) : voir $LOG/$nom.txt"); ECHEC=1; tail -15 "$LOG/$nom.txt" >&2; fi
+  else RES+=("ÉCHEC  $nom ($((SECONDS - t0)) s) : voir $LOG/$nom.txt"); ECHEC=1
+    grep -E "ÉCHEC|FAIL|Traceback|Error" "$LOG/$nom.txt" | head -30 >&2   # les contrôles ratés, même loin de la fin
+    tail -15 "$LOG/$nom.txt" >&2; fi
 }
 
 wiki()   { python3 "$ROOT/scripts/wiki_lint.py"; }

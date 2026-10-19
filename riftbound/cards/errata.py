@@ -16,6 +16,8 @@ ERRATA = [
     ("Gangplank, Naval", "give me +3 might instead.", "give me +3 might this turn instead."),
     ("Resonating Strike", "[Reaction] (Play on your turn or in showdowns.)",
      "[Reaction] (Play any time, even before spells and abilities resolve.)"),
+    # faute de frappe de la source (riftcodex, 2026-10-15), pas un errata officiel
+    ("Rousing Display", "play four to your base instead.disa", "play four to your base instead."),
 ]
 
 

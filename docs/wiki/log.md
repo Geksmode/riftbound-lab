@@ -254,3 +254,6 @@ Demande de l'utilisateur. Deux écrans d'intro (Action / Reaction avec les vraie
 
 ## [2026-10-17] perf | Table : chargement du moteur ~2 fois plus rapide
 Demande de l'utilisateur. Python précompilé au build (`train/precompile.mjs` : stdlib chargée en `.pyc`, moteur en `py/bytecode.json` checked-hash), téléchargements en parallèle dans le worker. Menu actif en local : 3,5 ± 0,6 s → 1,6 ± 0,1 s (cache froid), 3,0 ± 0,5 → 1,2 ± 0,2 s (cache chaud). Sur réseau lent à froid, pas de différence mesurable (le wasm domine). Détail : `docs/memoire/riftbound-training-table.md` (« Chargement »), `pages/publication.md`.
+
+## [2026-10-19] ingest | Extension Radiance : 166 cartes sur 167 modélisées
+Demande de l'utilisateur. Set RAD ajouté à la base (108 cartes corrigées d'après les images : domaines et tags faux dans la source), Core Rules du 2026-10-09 enregistrées, moteur : Deploy, Disarm, Show Off, jeton Bomb, évènement « devient épuisé », unit gear ; module `cardsets/radiance.py` + 180 tests, planches d'images a16-a18. Neeko, Blending In bloquée (plusieurs légendes). Détail : `pages/radiance.md`.

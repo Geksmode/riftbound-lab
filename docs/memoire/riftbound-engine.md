@@ -19,3 +19,7 @@ Related: [[akali-vs-leblanc]], [[riftbound-sources]], [[riftbound-lab-goal]].
 - **Dans un test qui passe par `train.act` / `train.answer`**, relire les objets par `g.obj(uid)` après chaque appel : l'état est restauré par copie profonde, les anciennes références sont périmées. *Pourquoi :* fausse alerte de bug sur Evelynn. *(2026-10-09)*
 - **Les choix d'un humain suivent le texte** (« a unit » = toute unité, amie ou déjà étourdie ; deux unités de même Might sont légales ; zéro cible pour « up to ») ; l'IA garde sa liste courte via `full_choices`. *Pourquoi :* Back Off, Switcheroo, et avant Singularity, Fox-Fire. *(PR #9)*
 
+
+2026-10-19 (Radiance): Core Rules of 2026-10-09 saved (rules/source/core_rules_2026-10-09.txt). Only the rules Radiance
+needs are wired in (Deploy 830, Disarm 831, Show Off 832, Bomb token 187.12, unit gear 143.5); the other changes of that
+version are not audited in the engine. Radiance cards: docs/wiki/pages/radiance.md.

@@ -8,7 +8,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | savoir où en est le projet | [pages/etat.md](pages/etat.md) |
 | trouver un fichier, lancer tests ou build | [pages/depot.md](pages/depot.md) |
 | intégrer une branche, vérifier avant de pousser | [pages/porte.md](pages/porte.md) |
-| modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md) |
+| modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md), [Radiance](pages/radiance.md) |
 | travailler sur l'IA ou les plans | [recherche de l'IA générale](../memoire/riftbound-search-ai.md), [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [plans par légende](../memoire/plans-par-legende.md) (fiches `riftbound/gameplans/legendes.md`), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats | [pages/resultats.md](pages/resultats.md) |
@@ -30,6 +30,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
 - [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.py` (moteur), robot `verif_anglais.mjs`
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI
+- [Extension Radiance](pages/radiance.md) : 166/167 cartes modélisées, Deploy / Disarm / Show Off, corrections de la source, Neeko bloquée
 
 ## Mémoire des agents (`docs/memoire/`, index [MEMORY.md](../memoire/MEMORY.md))
 Un fait par fichier : sources, objectif, Akali vs LeBlanc et Yi, moteur, decklists, plans, retex, manager, replays, table, éditeur de deck.

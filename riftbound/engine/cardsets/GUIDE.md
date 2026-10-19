@@ -259,6 +259,8 @@ engine function that reads it.
 | `point_rep`, `scoring_extra`, `fx_swap_scoring` | scoring: replace a point, conquer/hold triggers an extra time |
 | `choice_rep`, `minus_extra`, `no_counter`, `gold_extra`, `hide_cost`, `hide_slots`, `token_rep` | see `Game` / `actions` docstrings |
 | `zone_event`, `on_seen`, `on_reveal`, `reveal_rep` | cards outside the board (`g.zone_listen` is set while a listener can be affected) |
+| `dk_extra`, `channel_rep`, `move_cost`, `extra_hide_slots` | Radiance: Deathknell an additional time (Detonation Amplifier), channel +n exhausted (Seraphic Wyvern), cost to move units somewhere (Gravity Field), extra hidden cards (Bushwhack Trap) |
+| `spell_opts`, `opt_pay`, `token_swap` | optional additional costs given to spells (Seraphine, Starry-Eyed Songstress), a token replaced by another (Heimerdinger, Academy Instructor) |
 
 Other shared tools:
 - `g.effects` kind `play_perm` (`pid, key, fn(g, eff, card, src) -> bool, choice`): a permission to play a card in
@@ -268,4 +270,11 @@ Other shared tools:
   is the original name; event `bf_replaced`) and `g.swap_back(b)`: Ivern, Green Father makes the "Brush" token
   battlefield (in `TOKEN_NAMES`, never in a deck).
 - `alt_costs(g, pid, card, src) -> [dict(key=, e=, reqs=)]`: alternative costs (rule 356.1.b).
+- Radiance keywords (Core Rules 2026-10-09): `kw={"Deploy": 1}` (gear played only to a battlefield, not recalled,
+  killed when an opponent holds there: `actions.gear_locations`, `Game.hold`), `kw={"Disarm": n}` (attack trigger,
+  `cards.disarm_trigger`), `show_off=fn(g, pid, card, x)` (the play choice gets `show` and `shown`, the shown object's
+  information as it was shown, rule 832.1.d.1), the Bomb gear token, the `exhausted` event (`objs`: every object
+  exhausted by one action, "When I become exhausted"), `might_reduced` (obj, amount, by), unit gear (`o.ugear`,
+  `g.is_gear(o)`), play permissions from Banishment (`g.effects` kind `play_banished`), granted timing
+  (`card_kw(..., "Action"/"Reaction")`, `actions.eff_timing`).
 - Keep `cardsets/__init__.py` MODULES sorted, one name per line.
