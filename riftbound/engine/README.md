@@ -28,7 +28,7 @@ d'après son texte, avec les numéros de règle cités en commentaire.
   (3 au premier tour du joueur qui commence en second), Draw 1, Main, End (soin, fin des effets « ce tour »,
   vidage des pools).
 - **Runes et coûts** : épuiser = 1 énergie, recycler = 1 power du domaine, la même rune peut faire les deux ;
-  Gold (« [Reaction] Tue ceci, [E] : [Add] [A] ») utilisable pendant le paiement ; pools vidés au début de la Main
+  Gold (« [Reaction] Tue ceci, [E] : [Add] [A] ») utilisable pendant le paiement, et dépensé avant de recycler une rune ; pools vidés au début de la Main
   Phase et en fin de tour ; coûts additionnels (Accelerate, Repeat, Deflect, Sacrifice, Atakhan), réductions
   (Astral Heron, Sky Splitter, Legion de Noxus Hopeful), coûts ignorés (Hidden, Baited Hook, Rift Herald).
 - **Chaîne** : états Neutral/Showdown × Open/Closed, priorité et focus, FEPR, counters, cibles invalidées

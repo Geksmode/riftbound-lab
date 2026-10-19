@@ -1027,6 +1027,23 @@ def honest_broker_gold_pays_power():
 
 
 @test
+def gold_pays_power_before_recycling_a_rune():
+    # a ready Gold pays the power before a rune is recycled (rule 429.3); an exhausted Gold does not
+    from cards import make_token
+    g, _ = new()
+    runes(g, 0, ["Fury", "Fury"])
+    gold = make_token(g, "Gold", 0, "base", ready=True)
+    assert g.pay(0, 1, [frozenset({"Fury"})])
+    assert gold not in g.board and len(g.p[0].runes) == 2
+    assert sum(r.exhausted for r in g.p[0].runes) == 1
+    g, _ = new()
+    runes(g, 0, ["Fury", "Fury"])
+    gold = make_token(g, "Gold", 0, "base", ready=False)
+    assert g.pay(0, 1, [frozenset({"Fury"})])
+    assert gold in g.board and len(g.p[0].runes) == 1
+
+
+@test
 def rift_herald_dk_plays_from_hand():
     g, _ = new()
     h = put(g, 1, "Rift Herald")

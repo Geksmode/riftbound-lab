@@ -1179,6 +1179,11 @@ class Game:
                 use(a)
                 from_pool(req)
                 continue
+            if use_gold < len(golds):
+                # a ready Gold pays before a rune is recycled: the Gold is spent anyway, a recycled rune is
+                # lost from the board until channeled again (the player's choice, rule 429.3)
+                use_gold += 1
+                continue
             cands = [r for r in exh if r.domain in req and r not in recycle]
             if not cands:
                 cands = [r for r in ready if r.domain in req and r not in recycle]
@@ -1186,9 +1191,6 @@ class Game:
                 cnt = Counter(r.domain for r in pl.runes)
                 cands.sort(key=lambda r: (need[r.domain] - cnt[r.domain], r.domain))
                 recycle.append(cands[0])
-                continue
-            if use_gold < len(golds):
-                use_gold += 1
                 continue
             a = find(req, hard)
             if a is not None:

@@ -260,3 +260,6 @@ Demande de l'utilisateur. Set RAD ajouté à la base (108 cartes corrigées d'ap
 
 ## [2026-10-19] ingest | Fiche de carte agrandie alignée sur mobile
 Sur téléphone, le titre, le type et le texte de la fiche (`#zoom`, table et replays) forment un seul bloc `.zhd` à droite de l'image ; avant, l'image s'étendait sur trois lignes de grille et le texte partait sous elle.
+
+## [2026-10-19] decision | Paiement : le Gold avant le recyclage d'une rune
+Demande de l'utilisateur. `Game._plan_payment` dépense un Gold prêt (non épuisé) pour une puissance avant de recycler une rune (avant : le Gold ne servait que s'il ne restait aucune rune du bon domaine). Vaut pour l'humain et l'IA (le paiement est automatique) ; la version du moteur change, les chiffres d'avant ne se regroupent pas avec ceux d'après. Test `gold_pays_power_before_recycling_a_rune`.
