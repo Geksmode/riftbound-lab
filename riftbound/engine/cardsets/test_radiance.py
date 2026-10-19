@@ -255,6 +255,19 @@ def banner_of_conquest_gives_assault_here():
 
 
 @T.test
+def deploy_gear_is_shown_on_its_battlefield():
+    """Table and replays: a gear with [Deploy] played to a battlefield is drawn there (rule 830), not in the base."""
+    from replay import snap
+    g, _ = N()
+    R(g, 0)
+    hand(g, 0, "Banner of Conquest")
+    play(g, 0, "Banner of Conquest", lambda ch: ch["loc"] == 1)
+    st = snap(g)
+    assert [x["n"] for x in st["bfs"][1]["g"]] == ["Banner of Conquest"] and st["bfs"][1]["g"][0]["c"] == 0
+    assert not st["bfs"][0]["g"] and not st["p"][0]["gear"]
+
+
+@T.test
 def bilgewater_tracker_deals_1_to_two_units():
     g, _ = N()
     R(g, 0)

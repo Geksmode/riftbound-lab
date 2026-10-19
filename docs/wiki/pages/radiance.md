@@ -23,6 +23,9 @@ l'extension : 2026-10-23.
 d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance sont branchées :
 - [Deploy] (830) : équipement joué seulement sur un champ de bataille (n'importe lequel), pas rappelé au cleanup,
   détruit quand un adversaire y tient ; peut être déplacé.
+  Affichage (2026-10-19) : l'instantané `replay.snap` met ces équipements dans `bfs[i].g` (`u`, `n`, `c`, `x`) au
+  lieu de la base ; la table (`train/src.html`, `bfHTML`) et le lecteur de replays les dessinent sur leur battlefield,
+  du côté de leur contrôleur, après les unités (touchables comme cibles). Avant, ils apparaissaient dans la base.
 - [Disarm X] (831) : déclencheur d'attaque, -X sur une unité ennemie ici ; valeurs additionnées.
 - [Show Off] (832) : montrer une carte de la main ou un objet allié en jouant ; l'information est prise au moment
   où on la montre (832.1.d.1).
@@ -41,6 +44,7 @@ d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance 
 **Bloquée** : Neeko, Blending In (plusieurs légendes en jeu et choix à la construction du deck ; le moteur n'a
 qu'une légende par joueur) : `cardsets/NEEDS_radiance.md`.
 
-**Vérifié** (2026-10-19) : `cardsets/test_radiance.py` 180/180 (au moins un test par carte, plus les mots-clés) ;
-`fuzz_cards.py 300 --module radiance` : 0 exception (144 cartes jouées au moins une fois). Pas de partie jouée à la
-main dans la table avec ces cartes ; l'IA n'a pas de plan pour les nouvelles légendes.
+**Vérifié** (2026-10-19) : `cardsets/test_radiance.py` 181/181 (au moins un test par carte, plus les mots-clés) ;
+`fuzz_cards.py 300 --module radiance` : 0 exception (144 cartes jouées au moins une fois). Robot `train/verif_deploy.mjs` (vérifié par robot, glisser à la souris et toucher simulé ;
+pas essayé sur un vrai téléphone) : Pillaged Armory glissé sur un battlefield, affiché là, partie jouée jusqu'au bout.
+Pas de partie jouée à la main avec les autres cartes ; l'IA n'a pas de plan pour les nouvelles légendes.

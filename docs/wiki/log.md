@@ -263,3 +263,6 @@ Sur téléphone, le titre, le type et le texte de la fiche (`#zoom`, table et re
 
 ## [2026-10-19] decision | Baron Nashor, Baron Pit et point final à 3 battlefields
 Demande de l'utilisateur. `g.bfs` devient une liste de taille variable (`is_bf(loc)`, `g.bf_locs`, `g.locs()`, `Game.add_battlefield` ; test-garde contre `loc in (0, 1)`), Nashor ajoute le Baron Pit et y entre (369.3) ; point final par conquête = tous les battlefields marqués ce tour, 3 avec le Baron Pit (471.1.b.1), sinon pioche. Parties sans Nashor identiques coup pour coup (25 graines). Table : `train/verif_nashor.mjs`.
+
+## [2026-10-19] ingest | Équipements [Deploy] affichés sur leur battlefield
+`replay.snap` : gear sur un battlefield dans `bfs[i].g` (plus dans la base) ; table et lecteur de replays les dessinent là ; test `deploy_gear_is_shown_on_its_battlefield`, robot `train/verif_deploy.mjs` dans la porte. Détail : `pages/radiance.md`.
