@@ -36,16 +36,16 @@ def _killable(g, u, n):
 
 def _dmg_targets(g, pid, n, at_bf=True, hb=None, enemies_only=False):
     """Units a 'deal n' effect may choose, best first for the AI: enemies it kills, other enemies, then friends."""
-    us = [u for u in g.units() if (not at_bf or u.loc in (0, 1)) and g.targetable(u, pid)
+    us = [u for u in g.units() if (not at_bf or is_bf(u.loc)) and g.targetable(u, pid)
           and (hb is None or u.loc == hb) and (not enemies_only or u.ctrl != pid)]
     return sorted(us, key=lambda u: (u.ctrl == pid, not _killable(g, u, n), -value(g, u), u.uid))
 
 
 def _buff_targets(g, pid, at_bf=False, hb=None):
     """Units a beneficial effect may choose, best first for the AI: friends (at battlefields first), then enemies."""
-    us = [u for u in g.units() if (not at_bf or u.loc in (0, 1)) and g.targetable(u, pid)
+    us = [u for u in g.units() if (not at_bf or is_bf(u.loc)) and g.targetable(u, pid)
           and (hb is None or u.loc == hb)]
-    return sorted(us, key=lambda u: (u.ctrl != pid, u.loc not in (0, 1), -value(g, u), u.uid))
+    return sorted(us, key=lambda u: (u.ctrl != pid, not is_bf(u.loc), -value(g, u), u.uid))
 
 
 def _me(g, it):
@@ -172,7 +172,7 @@ def _angle_choices(g, pid, ctx):
         eqs = sorted([x for x in g.gear(side) if "Equipment" in x.spec["tags"]],
                      key=lambda x: (-EQUIP_BONUS.get(x.cname, 0), x.uid))
         us = sorted([u for u in g.units(side) if g.targetable(u, pid)],
-                    key=lambda u: (u.loc not in (0, 1), -value(g, u), u.uid))
+                    key=lambda u: (not is_bf(u.loc), -value(g, u), u.uid))
         for x in eqs:
             for u in cap(g, us, 3, pid):
                 if x.attached_to == u.uid:
@@ -300,11 +300,11 @@ def _curtain_call(g, it):
         i += 1
         if u is None:
             continue
-        if m == "d2" and u.loc in (0, 1):
+        if m == "d2" and is_bf(u.loc):
             g.deal(u, 2, "spell", it.ctrl)
         elif m == "d3" and u.loc == "base":
             g.deal(u, 3, "spell", it.ctrl)
-        elif m == "m4" and u.loc in (0, 1):
+        elif m == "m4" and is_bf(u.loc):
             g.mod(u, -4)
 
 
@@ -606,7 +606,7 @@ def _pursuit_fire(g, eff, info):
 def _pursuit_choices(g, pid, ctx):
     out = []
     for u in friends(g, pid, False, ctx["hidden_bf"]):
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if d == u.loc:
                 continue
             if d == "base":
@@ -750,13 +750,13 @@ def _thrill(g, it):
     g.to_zone(u, "banish")
     if tok or u not in g.p[owner].banish:
         return
-    locs = sorted([0, 1], key=lambda i: (g.bfs[i].ctrl == owner, i))
+    locs = sorted(g.bf_locs, key=lambda i: (g.bfs[i].ctrl == owner, i))
     _play_from(g, owner, u, "banish", _play_choices(g, owner, u, "banish", free=True, locs=locs))
 
 
 card("Thrill of the Hunt", timing="reaction", preds=[P_friend], resolve=_thrill,
      choices=lambda g, pid, ctx: tg_choices(sorted([u for u in friends(g, pid, False, ctx["hidden_bf"])],
-                                                   key=lambda u: (u.token, u.loc in (0, 1), -value(g, u), u.uid))))
+                                                   key=lambda u: (u.token, is_bf(u.loc), -value(g, u), u.uid))))
 
 
 # Upstage Comedy — "[Repeat] 2 energy. Ready a unit."
@@ -962,7 +962,7 @@ card("Oasis Raider", on_event=_fewer_runes_start(2, True))
 card("Gem Jammer", on_play=lambda g, o, ctx: g.queue_trigger(
     o.ctrl, "Gem Jammer", lambda g_, it: g_.legal(it, 0) is not None and g_.grant(g_.legal(it, 0), "Ganking", 1, "turn"),
     src=o.uid, choose=trig_target(lambda g_, it: sorted(friends(g_, it.ctrl), key=lambda u: (
-        g_.has_kw(u, "Ganking"), u.loc not in (0, 1), -value(g_, u), u.uid)) + enemies(g_, it.ctrl), P_unit,
+        g_.has_kw(u, "Ganking"), not is_bf(u.loc), -value(g_, u), u.uid)) + enemies(g_, it.ctrl), P_unit,
         kind="friendly_target", deflect=True)))
 
 
@@ -1199,7 +1199,7 @@ card("Shadow Fiend", empower="2 energy and 1 fury rune", kw_if=[(when_empowered,
 
 # Tibbers — "When you play me, deal 3 to all units at battlefields."
 def _tibbers(g, it):
-    for u in [u for u in g.units() if u.loc in (0, 1)]:
+    for u in [u for u in g.units() if is_bf(u.loc)]:
         g.deal(u, 3, "ability", it.ctrl)
 
 
@@ -1327,7 +1327,7 @@ card("Volibear, Furious", kw={"Deflect": 2},
 
 # Xerath, Freed — "1 fury rune, [E]: Deal 3 to a unit. Use this ability only while I'm at a battlefield."
 card("Xerath, Freed", abilities=[ability(
-    "Deal 3", "1 fury rune", exhaust=True, preds=[P_unit], can=lambda g, pid, o: o.loc in (0, 1),
+    "Deal 3", "1 fury rune", exhaust=True, preds=[P_unit], can=lambda g, pid, o: is_bf(o.loc),
     choices=lambda g, pid, o: tg_choices(_dmg_targets(g, pid, 3, False)),
     resolve=lambda g, it: g.legal(it, 0) is not None and g.deal(g.legal(it, 0), 3, "ability", it.ctrl))])
 
@@ -1499,7 +1499,7 @@ def _smite_rep(g, eff, u):
 
 def _smite(g, it):
     u = g.legal(it, 0)
-    if u is None or u.loc not in (0, 1):
+    if u is None or not is_bf(u.loc):
         return
     g.effects.append(dict(kind="death_rep", fn=_smite_rep, uid=u.uid, oid=u.oid, pid=it.ctrl, dur="turn"))
     g.deal(u, 3, "spell", it.ctrl)
@@ -1576,7 +1576,7 @@ card("Brynhir Thundersong", on_play=lambda g, o, ctx: g.queue_trigger(
 # Noxus Saboteur — "Your opponents' [Hidden] cards can't be revealed here." (a hidden card is revealed when it is
 # played from face down, rule 811)
 card("Noxus Saboteur",
-     forbid_play=lambda g, src, pid, c, zone: zone == "facedown" and pid != src.ctrl and src.loc in (0, 1)
+     forbid_play=lambda g, src, pid, c, zone: zone == "facedown" and pid != src.ctrl and is_bf(src.loc)
      and c.hidden_bf == src.loc)
 
 

@@ -3,8 +3,8 @@
 Ce document dit où en est le travail, ce qui restait lié à l'ancien compte Claude, et comment tout recréer.
 
 ## 1. État du travail
-- **Moteur** : 917 cartes jouables sur 919 (hors runes et jetons). Bloquées : Baron Nashor et Baron Pit (il faudrait
-  un troisième battlefield ; le moteur suppose une paire partout). Suite : `python3 test_all.py` = 968/968.
+- **Moteur** : Baron Nashor et le jeton Baron Pit sont modélisés depuis le 2026-10-19 (battlefields en liste de taille
+  variable : `is_bf`, `g.bf_locs`). Encore bloquées : Neeko, Blending In (voir `docs/wiki/pages/radiance.md`). Suite : `python3 test_all.py` = 968/968.
   Détails et décisions de règles par paquet : `riftbound/engine/cardsets/NEEDS_*.md`, guide `cardsets/GUIDE.md`.
 - **Table d'entraînement** : dernière version publiée = v12 (768 cartes jouables à ce moment). Le moteur du dépôt
   (917 cartes) **n'a pas encore été publié** dans la page : refaire `bash build.sh` puis publier (§3).

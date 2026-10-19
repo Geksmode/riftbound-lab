@@ -29,6 +29,7 @@ plans (Gorica, Hook tempo), écrits et mesurés avant. Aucun ordre de set ne com
 """
 import os
 from plans import Plan, PLANS
+from game import is_bf
 
 W_CONQ = float(os.environ.get("RB_LEG_WC", "0.3"))
 W_HOLD = float(os.environ.get("RB_LEG_WT", "1.5"))
@@ -331,7 +332,7 @@ class LegendPlan(Plan):
         d = s.d
         v = 0.0
         if d["axe"] == "C":
-            v += W_CONQ * sum(max(0, g.might(u)) for u in g.units(me) if u.loc in (0, 1))
+            v += W_CONQ * sum(max(0, g.might(u)) for u in g.units(me) if is_bf(u.loc))
         else:
             v += W_HOLD * sum(1 for b in g.bfs if b.ctrl == me)
             if g.p[1 - me].points >= g.victory - 2:

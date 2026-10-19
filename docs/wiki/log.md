@@ -257,3 +257,6 @@ Demande de l'utilisateur. Python précompilé au build (`train/precompile.mjs` :
 
 ## [2026-10-19] ingest | Extension Radiance : 166 cartes sur 167 modélisées
 Demande de l'utilisateur. Set RAD ajouté à la base (108 cartes corrigées d'après les images : domaines et tags faux dans la source), Core Rules du 2026-10-09 enregistrées, moteur : Deploy, Disarm, Show Off, jeton Bomb, évènement « devient épuisé », unit gear ; module `cardsets/radiance.py` + 180 tests, planches d'images a16-a18. Neeko, Blending In bloquée (plusieurs légendes). Détail : `pages/radiance.md`.
+
+## [2026-10-19] decision | Baron Nashor, Baron Pit et point final à 3 battlefields
+Demande de l'utilisateur. `g.bfs` devient une liste de taille variable (`is_bf(loc)`, `g.bf_locs`, `g.locs()`, `Game.add_battlefield` ; test-garde contre `loc in (0, 1)`), Nashor ajoute le Baron Pit et y entre (369.3) ; point final par conquête = tous les battlefields marqués ce tour, 3 avec le Baron Pit (471.1.b.1), sinon pioche. Parties sans Nashor identiques coup pour coup (25 graines). Table : `train/verif_nashor.mjs`.

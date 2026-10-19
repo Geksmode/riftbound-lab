@@ -1,20 +1,20 @@
 # Battlefields not modelled (batch battlefields)
 
-54 of the 55 battlefields of `batches/battlefields.txt` are registered in `battlefields.py` (the Brush token
+All 55 battlefields of `batches/battlefields.txt` are registered in `battlefields.py` (the Brush token
 included: it is created by Ivern, Green Father). The 19 that waited for engine hooks use: `cost_aura` (Repeat parts
 `on='rep'`, abilities `kind='ability'`, `flex`, `rm`, Power increase `p`), per-turn history (`Game.hist`
 `gear_played`, `gear_abs`), `cost_mod` effects, `deflect_reqs`, `loc_veto`, `aura_locs` with an additional cost
 (`loc_reqs`), `aura_cant_move`, `grant_abilities`, `death_rep`, the `returned` event, `item.data['paid_e']`,
 `grant_repeat` (`next`), `hide_slots`, and `Game.replace_battlefield` / `swap_back` (rule 438).
 
-## Still blocked
+## Baron Pit (registered 2026-10-19)
 
-- **Baron Pit** — battlefield token: "(You can't start the game with a token battlefield.) Units can move here from
-  anywhere." It only exists through Baron Nashor ("As you play me, add the Baron Pit battlefield token to the board
-  if it's not there already. If you do, I enter there."), which adds a third battlefield to the board. The engine
-  has exactly two battlefields (`g.bfs[0]`, `g.bfs[1]`; locations are `0`, `1` or `"base"` everywhere: movement,
-  showdowns, scoring, hidden cards, AI). Needs battlefields to be a list of any size. Baron Nashor stays blocked for
-  the same reason (NEEDS_chaos.md).
+- Battlefield token (rule 187.9): "(You can't start the game with a token battlefield.) Units can move here from
+  anywhere." Added by Baron Nashor (`Game.add_battlefield`). Battlefields are now a list of any size: locations are
+  `"base"` or an index of `g.bfs` (`is_bf(loc)`, `g.bf_locs`, `g.locs()`). "From anywhere": the Standard Move
+  (`actions.move_options`) lets a unit at another battlefield move here without [Ganking]. The deck editor refuses
+  token battlefields (Baron Pit, Brush) as starting battlefields (`train.validate`, `cards.TOKEN_NAMES`).
+- "A different battlefield" (Imposing Challenger) asks which one when there are two others.
 
 ## Rules decisions
 - **Mystic Vortex**: "cards with [Reaction]" = cards with the keyword (printed or granted), [Hidden] cards played

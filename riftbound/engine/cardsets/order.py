@@ -314,7 +314,7 @@ card("Commander Ledros", kw={"Deflect": 1, "Ganking": 1}, as_played=_ledros_as_p
 # Corina Veraza — "[Accelerate] When I move to a battlefield, play three 1 might Recruit unit tokens here."
 def _move_tokens(name, n, token="Recruit"):
     def ev_fn(g, o, ev, info):
-        if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+        if ev == "move" and info["obj"] is o and is_bf(info["to"]):
             to = info["to"]
             g.queue_trigger(o.ctrl, name, lambda g_, it: _tokens(g_, it.ctrl, token, n, _here(g_, it, to)), src=o.uid)
     return ev_fn
@@ -351,7 +351,7 @@ card("Darius, Executioner", on_play=_darius_play, aura_might=_other_here_aura)
 
 # Disciple of Shen — "[Hidden] I have [Shield 3] while I'm at a battlefield with exactly one other unit you control."
 card("Disciple of Shen", hidden=True,
-     kw_if=[(lambda g, o: o.loc in (0, 1) and len([u for u in g.units(o.ctrl, o.loc) if u is not o]) == 1,
+     kw_if=[(lambda g, o: is_bf(o.loc) and len([u for u in g.units(o.ctrl, o.loc) if u is not o]) == 1,
              {"Shield": 3})])
 
 
@@ -801,7 +801,7 @@ def _peak(g, it):
     if me is None:
         return
     g.buff(me)
-    if me.loc in (0, 1):
+    if is_bf(me.loc):
         for u in g.units(it.ctrl, me.loc):
             if u is not me:
                 g.buff(u)
@@ -904,7 +904,7 @@ card("Seal of Unity", add=[add_ability("1 order rune")])
 
 # Sett, Kingpin — "[Tank] I get +1 might for each buffed friendly unit at my battlefield."
 card("Sett, Kingpin", kw={"Tank": 1},
-     might_mod=lambda g, o: len([u for u in g.units(o.ctrl, o.loc) if u.buff > 0]) if o.loc in (0, 1) else 0)
+     might_mod=lambda g, o: len([u for u in g.units(o.ctrl, o.loc) if u.buff > 0]) if is_bf(o.loc) else 0)
 
 
 # Shadow's Call — "Choose a friendly unit without [Temporary]. Give it [Temporary]. Draw 2."
@@ -1082,7 +1082,7 @@ card("Trusty Ramhound", might_mod=lambda g, o: 0 if g.alone(o) else 1)
 # Ultrasoft Poro — "[Deflect] [E]: Play two 1 might Bird unit tokens with [Deflect]. Use this ability only while I'm
 # at a battlefield."
 card("Ultrasoft Poro", kw={"Deflect": 1}, abilities=[ability(
-    "Birds", exhaust=True, can=lambda g, pid, o: o.loc in (0, 1),
+    "Birds", exhaust=True, can=lambda g, pid, o: is_bf(o.loc),
     resolve=lambda g, it: _tokens(g, it.ctrl, "Bird", 2))])
 
 
@@ -1185,7 +1185,7 @@ card("Galio, Indefatigable", kw={"Deflect": 1, "Tank": 1}, no_combat_damage=lamb
 
 # Sacred Protector — "I don't deal combat damage unless I'm at a battlefield with exactly one other unit you control."
 card("Sacred Protector",
-     no_combat_damage=lambda g, o: not (o.loc in (0, 1) and
+     no_combat_damage=lambda g, o: not (is_bf(o.loc) and
                                         len([u for u in g.units(o.ctrl, o.loc) if u is not o]) == 1))
 
 
@@ -1287,7 +1287,7 @@ def _feline_play(g, o, ctx):
 
 
 def _feline_forbid(g, src, pid, c, zone):
-    if pid == src.ctrl or src.loc not in (0, 1) or c.spec["type"] != "Spell":
+    if pid == src.ctrl or not is_bf(src.loc) or c.spec["type"] != "Spell":
         return False
     return any(e.get("kind") == "feline_name" and e["uid"] == src.uid and e["oid"] == src.oid and e["name"] == c.cname
                for e in g.effects)
@@ -1300,7 +1300,7 @@ card("Fallen Feline", on_play=_feline_play, forbid_play=_feline_forbid)
 # battlefield at the same time."
 card("Mageseeker Investigator",
      move_tax=lambda g, src, pid, units, dest: [ANY] * (len(units) - 1)
-     if pid != src.ctrl and src.loc in (0, 1) and dest == src.loc and len(units) > 1 else [])
+     if pid != src.ctrl and is_bf(src.loc) and dest == src.loc and len(units) > 1 else [])
 
 
 # Hungry Wolf — "[Order]: Ready me and give me +1 might this turn. Use only if you've chosen an enemy unit this turn and

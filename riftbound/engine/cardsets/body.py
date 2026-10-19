@@ -111,8 +111,8 @@ def _spend_buff(g, o):
     return g.spend_buff(o)                           # emits 'spend_buff' (Fae Dragon)
 
 
-def _dests(u):
-    return [d for d in ("base", 0, 1) if d != u.loc]
+def _dests(g, u):
+    return [d for d in g.locs() if d != u.loc]
 
 
 def _unit_play_choices(g, pid, c, locs, src):
@@ -413,7 +413,7 @@ card("Gentle Gemdragon", on_event=_gemdragon)
 # Imposing Challenger — "When I move, you may move an enemy unit here with less Might than me to a different
 # battlefield." ("here" and "me" are checked again on resolution, rule 359.3.f)
 def _challenger(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and o.loc in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(o.loc):
         here = o.loc
 
         def ok(g_, it, u):
@@ -429,8 +429,9 @@ def _challenger(g, o, ev, info):
 
         def res(g_, it):
             u = g_.legal(it, 0)
-            if u is not None:
-                g_.move([u], 1 - here, it.ctrl)
+            if u is not None:          # "a different battlefield": the player chooses one with the Baron Pit (187.9)
+                dest = g_.ask(it.ctrl, "move_destination", [b for b in g_.bf_locs if b != here], item=it)
+                g_.move([u], dest, it.ctrl)
         _trig(g, o, "Imposing Challenger", res, may=True, choose=_pick(opts, ok, kind="target"))
 
 
@@ -439,7 +440,7 @@ card("Imposing Challenger", on_event=_challenger)
 
 # Irresistible Faefolk — "When I move to a battlefield, you may move an enemy unit to that battlefield."
 def _faefolk(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         dest = info["to"]
 
         def res(g_, it):
@@ -491,7 +492,7 @@ _KWS = ("Assault", "Backline", "Deflect", "Ganking", "Hunt", "Shield", "Tank", "
 
 
 def _kato(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         def res(g_, it):
             me = _src(g_, it)
             u = g_.legal(it, 0)
@@ -504,7 +505,7 @@ def _kato(g, o, ev, info):
             g_.mod(u, max(0, g_.might(me)))
 
         def opts(g_, it):
-            return sorted(g_.units(it.ctrl), key=lambda u: (u.uid == it.src, u.loc not in (0, 1), -value(g_, u)))
+            return sorted(g_.units(it.ctrl), key=lambda u: (u.uid == it.src, not is_bf(u.loc), -value(g_, u)))
         _trig(g, o, "Kato the Arm", res, choose=_pick(opts, P_friend, kind="kato_target", deflect=False))
 
 
@@ -587,7 +588,7 @@ card("Laurent Bladekeeper", kw={"Ganking": 1})
 
 # Lee Sin, Centered — "[Accelerate] Other buffed friendly units at my battlefield have +2 might."
 def _lee_aura(g, src, o):
-    if src.loc in (0, 1) and o is not src and o.loc == src.loc and o.ctrl == src.ctrl and o.buff > 0 \
+    if is_bf(src.loc) and o is not src and o.loc == src.loc and o.ctrl == src.ctrl and o.buff > 0 \
             and o.spec["type"] == "Unit":
         return 2
     return 0
@@ -907,7 +908,7 @@ card("Udyr, Wildman",
 # Volibear, Imposing — "[Shield 3] [Tank] When an opponent moves to a battlefield other than mine, draw 1."
 # Rules decision: one trigger per move performed by an opponent (units moved together count once).
 def _volibear(g, o, ev, info):
-    if ev == "move" and info["by"] == 1 - o.ctrl and info["to"] in (0, 1) and info["to"] != o.loc:
+    if ev == "move" and info["by"] == 1 - o.ctrl and is_bf(info["to"]) and info["to"] != o.loc:
         for t in g.trigq:
             if t.src == o.uid and t.name == "Volibear, Imposing" and t.data.get("to") == info["to"]:
                 return
@@ -1265,7 +1266,7 @@ card("Disposal Order", timing="reaction", resolve=_disposal, choices=_disposal_c
 
 # Flurry of Blades — "[Reaction] Deal 1 to all units at battlefields."
 card("Flurry of Blades", timing="reaction",
-     resolve=lambda g, it: [g.deal(u, 1, "spell", it.ctrl) for u in g.units() if u.loc in (0, 1)])
+     resolve=lambda g, it: [g.deal(u, 1, "spell", it.ctrl) for u in g.units() if is_bf(u.loc)])
 
 
 # Gentlemen's Duel — "[Action] Give a friendly unit +3 might this turn. Then choose an enemy unit. They deal damage
@@ -1586,10 +1587,10 @@ def _void_assault(g, it):
 def _void_assault_choices(g, pid, ctx):
     out = []
     for f in cap(g, friends(g, pid, False, ctx["hidden_bf"]), 2, pid):
-        for d1 in _dests(f):
+        for d1 in _dests(g, f):
             for e in cap(g, enemies(g, pid, False, ctx["hidden_bf"]), 2, pid):
-                for d2 in _dests(e):
-                    sc = (d1 not in (0, 1)) + (d2 != "base") - (d1 in (0, 1) and d1 == d2)
+                for d2 in _dests(g, e):
+                    sc = (not is_bf(d1)) + (d2 != "base") - (is_bf(d1) and d1 == d2)
                     out.append((sc, len(out), dict(tg=(f.uid, e.uid), d1=d1, d2=d2)))
     out.sort(key=lambda x: (x[0], x[1]))
     return [c for _, _, c in out]
@@ -1716,7 +1717,7 @@ card("Unyielding Spirit", timing="reaction",
 # Elder Dragon — "Any amount of your damage is enough to kill enemy units. When you play me, choose up to one enemy
 # unit at each location. Deal 1 to them." (rule 142.4.c: Game.lethal / lethal_need with Impl.lethal_any)
 def _elder_choose(g, it):
-    for loc in ["base", 0, 1]:
+    for loc in g.locs():
         es = sorted([u for u in g.units(1 - it.ctrl, loc) if g.targetable(u, it.ctrl) and _payable(g, it, u)],
                     key=lambda u: (-value(g, u), u.uid))
         if not es:

@@ -117,7 +117,7 @@ ASK_EN = dict(
     wild_claw="Which unit do you play?", zed_discard="Zed: which card do you discard?",
     zilean_copy="Zilean: play an extra copy of the token?",
     # Radiance (moteur : Deploy, Disarm, jetons)
-    deploy_location="On which battlefield do you play this gear?", disarm_target="Disarm: which enemy unit do you weaken?",
+    deploy_location="On which battlefield do you play this gear?", move_destination="Move this unit to which other battlefield?", disarm_target="Disarm: which enemy unit do you weaken?",
     token_swap="Play a Mech token instead?",
     # Radiance (cardsets/radiance.py)
     bomb_location="On which battlefield do you play the Bomb token?", bomb_target="Bomb: which enemy unit does it hit?",

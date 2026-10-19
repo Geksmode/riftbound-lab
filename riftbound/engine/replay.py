@@ -10,7 +10,7 @@ envisagée. record(seed, deck_akali, deck_leblanc, ...) renvoie un dict JSON pr�
 """
 import json, re, sys, random
 from pathlib import Path
-from game import Game, Obj, Item, SPEC, EQUIP_BONUS
+from game import Game, Obj, Item, SPEC, EQUIP_BONUS, is_bf
 from ai import SearchAgent, determinize, PolicyAgent, rollout_policy, evaluate
 import game as _game
 from lang import tr, en
@@ -28,7 +28,7 @@ def short(x):
 def fr_line(g, line):
     """Traduction française d'une ligne du journal du moteur."""
     s = line.strip()
-    bf = lambda m: g.bfs[int(m)].name if m in ("0", "1") else ("la base" if m == "base" else m)
+    bf = lambda m: g.bfs[int(m)].name if m in [str(i) for i in g.bf_locs] else ("la base" if m == "base" else m)
     rules = [
         (r"^P(\d) plays (.+?) from (hand|champ|facedown|trash) ?(.*)$",
          lambda m: f"{NAMES[int(m[1])]} joue {m[2]}" + {"hand": "", "champ": " (zone champion)",
@@ -80,7 +80,7 @@ def en_line(g, line):
     noms des joueurs, les noms des battlefields et sans les identifiants internes."""
     s = line.strip()
     N = lambda m: NAMES[int(m)]
-    bf = lambda m: g.bfs[int(m)].name if m in ("0", "1") else m
+    bf = lambda m: g.bfs[int(m)].name if m in [str(i) for i in g.bf_locs] else m
     rules = [
         (r"^P(\d) plays (.+?) from (hand|champ|facedown|trash) ?(.*)$",
          lambda m: f"{N(m[1])} plays {m[2]}" + {"hand": "", "champ": " (champion zone)",
@@ -136,9 +136,9 @@ def fmt_args(g, a):
             if v:
                 parts.append(tr("cible ", "target ") + v)
         elif k == "loc":
-            parts.append(tr("à ", "at ") + (g.bfs[int(v)].name if v in ("0", "1") else tr("la base", "base")))
+            parts.append(tr("à ", "at ") + (g.bfs[int(v)].name if v in [str(i) for i in g.bf_locs] else tr("la base", "base")))
         elif k == "dest":
-            parts.append(tr("vers ", "to ") + (g.bfs[int(v)].name if v in ("0", "1") else tr("la base", "base")))
+            parts.append(tr("vers ", "to ") + (g.bfs[int(v)].name if v in [str(i) for i in g.bf_locs] else tr("la base", "base")))
         elif k in ("mover", "mover_oid", "kill", "xp"):
             continue
         else:
@@ -162,9 +162,9 @@ def describe(g, a, pid, viewer=None):
             if kk in ("tg", "tg2") and v:
                 extra.append(tr("cible ", "target ") + tr(" et ", " and ").join(_tname(g, u, pid, viewer) for u in v))
             elif kk == "loc":
-                extra.append(tr("à ", "at ") + (g.bfs[v].name if v in (0, 1) else tr("la base", "base")))
+                extra.append(tr("à ", "at ") + (g.bfs[v].name if is_bf(v) else tr("la base", "base")))
             elif kk == "dest" and v is not None:
-                extra.append(tr("vers ", "to ") + (g.bfs[v].name if v in (0, 1) else tr("la base", "base")))
+                extra.append(tr("vers ", "to ") + (g.bfs[v].name if is_bf(v) else tr("la base", "base")))
             elif kk in ("accelerate", "repeat") and v:
                 extra.append(kk)
         if c is not None:
@@ -184,7 +184,7 @@ def describe(g, a, pid, viewer=None):
     if k == "move":
         us = ", ".join(g.label(g.obj(u)) if g.obj(u) is not None else str(u) for u in a[1])
         d = a[2]
-        return tr(f"déplace {us} vers ", f"moves {us} to ") + (g.bfs[d].name if d in (0, 1) else tr("la base", "base"))
+        return tr(f"déplace {us} vers ", f"moves {us} to ") + (g.bfs[d].name if is_bf(d) else tr("la base", "base"))
     return str(a)
 
 
@@ -227,13 +227,13 @@ def snap(g):
         return d
 
     st = dict(t=g.turn_no, tp=g.tp, pts=[p.points for p in g.p], v=g.victory)
-    locs = {"base": [[], []], 0: [], 1: []}
+    locs = {"base": [[], []], **{i: [] for i in g.bf_locs}}
     loose_gear = [[], []]
     for o in g.board:
         if o.spec["type"] == "Unit":
             if o.loc == "base":
                 locs["base"][o.ctrl].append(unit(o))
-            elif o.loc in (0, 1):
+            elif is_bf(o.loc):
                 locs[o.loc].append(unit(o))
         elif o.attached_to is None:
             loose_gear[o.ctrl].append(dict(u=o.uid, n=o.cname, x=1 if o.exhausted else 0))

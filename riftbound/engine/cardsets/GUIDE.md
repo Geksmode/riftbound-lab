@@ -137,6 +137,7 @@ fn=fn(g, eff, info), dur="turn"))` (removed at end of turn).
 | `g.units(pid=None, loc="any")`, `g.gear(pid)`, `g.obj(uid)`, `g.board` | permanents |
 | `g.p[pid]`: `.hand .deck .trash .banish .champ .runes .rune_deck .legend .legend_name .xp .points .pool_e .pool_p` | player |
 | `g.tp`, `g.turn_no`, `g.stage`, `g.sd` (showdown: `.bf .combat .attacker .defender .assigned`), `g.bfs[i]` | state |
+| `is_bf(loc)` (a battlefield location), `g.bf_locs` (indexes of `g.bfs`: 2, or 3 with the Baron Pit), `g.locs()` (base + battlefields), `g.add_battlefield(name)`. Never write `loc in (0, 1)` or `for b in (0, 1)` | locations |
 | `g.might(o)`, `g.mighty(o)`, `g.has_kw(o, kw)`, `g.kw_value(o, kw)`, `g.alone(o)`, `g.in_combat(o)`, `g.targetable(o, pid)` | queries |
 | `g.deal(o, n, "spell"/"ability", pid)`, `g.kill([objs], pid)`, `g.stun(o, pid)`, `g.buff(o)`, `g.mod(o, n, "turn", minimum=None)`, `g.grant(o, kw, n, "turn"/None)` | effects |
 | `g.move([objs], dest, pid)`, `g.recall(o)`, `g.ready_obj(o)`, `o.exhausted = True`, `g.empower(o)`, `g.disempower(o)` | |

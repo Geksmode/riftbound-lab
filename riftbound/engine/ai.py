@@ -9,7 +9,7 @@ All choices made during resolution (targets, "you may", damage assignment...) us
 import os
 import random
 import re
-from game import SPEC, Obj, Item
+from game import SPEC, Obj, Item, is_bf
 from cards import value as unit_value
 
 REACTIVE = {"Discipline", "Defy", "Not So Fast", "Back Off", "Block", "En Garde", "Ki Barrier", "Deathgrip",
@@ -135,7 +135,7 @@ def unit_eval(g, u, w=EV):
         v += 2.5
     if u.empowered:
         v += 0.5
-    if u.loc in (0, 1):
+    if is_bf(u.loc):
         v += w["on_bf"]
     return v
 
@@ -238,7 +238,7 @@ class Heuristics:
             dmg = it.data.get("dmg", 0) if it is not None else 0
             enemies = [o for o in options if o.ctrl != pid]
             if dmg:
-                kills = [o for o in enemies if g.might(o) - o.damage <= dmg + (1 if o.loc in (0, 1) and g.bfs[o.loc].name == "Void Gate" else 0)]
+                kills = [o for o in enemies if g.might(o) - o.damage <= dmg + (1 if is_bf(o.loc) and g.bfs[o.loc].name == "Void Gate" else 0)]
                 if kills:
                     return max(kills, key=lambda o: unit_value(g, o))
             if enemies:
@@ -270,7 +270,7 @@ class Heuristics:
             ex = [r for r in options if r.exhausted] or options
             return max(ex, key=lambda r: cnt[r.domain])
         if kind == "equip_target":
-            return max(options, key=lambda u: (u.loc in (0, 1), g.might(u)))
+            return max(options, key=lambda u: (is_bf(u.loc), g.might(u)))
         if kind == "star_spring":
             return options[0]
         if kind == "ashe_pick":

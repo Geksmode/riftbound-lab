@@ -187,7 +187,7 @@ card("Ahri, Alluring", on_event=_ahri)
 
 # Allay, Eager Admirer — "[Deflect] While I'm at a battlefield, your other units here have [Deflect]."
 card("Allay, Eager Admirer", kw={"Deflect": 1},
-     aura_kw=lambda g, src, o: ({"Deflect": 1} if src in g.board and src.loc in (0, 1) and o is not src
+     aura_kw=lambda g, src, o: ({"Deflect": 1} if src in g.board and is_bf(src.loc) and o is not src
                                 and o.ctrl == src.ctrl and o.loc == src.loc and o.spec["type"] == "Unit" else None))
 
 
@@ -272,7 +272,7 @@ def _azir_res(g, it):
 
 def _azir_choices(g, pid, o):
     us = [u for u in friends(g, pid) if u is not o and (u.loc != o.loc or u.attached)]
-    us.sort(key=lambda u: (u.loc in (0, 1), len(u.attached)), reverse=True)
+    us.sort(key=lambda u: (is_bf(u.loc), len(u.attached)), reverse=True)
     return [dict(tg=(u.uid,)) for u in us]
 
 
@@ -298,7 +298,7 @@ def _cait_res(g, it):
 
 card("Caitlyn, Patrolling", kw={"Backline": 1}, abilities=[ability(
     "Shoot", exhaust=True, preds=[P_unit_bf], resolve=_cait_res,
-    can=lambda g, pid, o: o.loc in (0, 1),
+    can=lambda g, pid, o: is_bf(o.loc),
     choices=lambda g, pid, o: tg_choices(all_units(g, pid, True)))])
 
 
@@ -481,7 +481,7 @@ def _janna(g, o, ctx):
             g_.move([u], "base", it.ctrl)
 
     def choose(g_, it):
-        es = [u for u in enemies(g_, it.ctrl) if u.loc == here and here in (0, 1)]
+        es = [u for u in enemies(g_, it.ctrl) if u.loc == here and is_bf(here)]
         es = [u for u in es if g_.can_pay(it.ctrl, 0, deflect_reqs(g_, it.ctrl, dict(tg=(u.uid,))))]
         if es:
             u = g_.ask(it.ctrl, "target", es, item=it)
@@ -640,7 +640,7 @@ card("Legion Quartermaster", pay_extra=_qm_pay,
 
 # Ribbon Dancer — "When I move to a battlefield, give another friendly unit +1 might this turn."
 def _ribbon(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         g.queue_trigger(o.ctrl, "Ribbon Dancer", lambda g_, it: g_.legal(it, 0) is not None and
                         g_.mod(g_.legal(it, 0), 1), src=o.uid,
                         choose=trig_target(lambda g_, it: [u for u in friends(g_, it.ctrl) if u.uid != it.src],
@@ -706,7 +706,7 @@ def _shadow_pred(g, it, o):
     return me is not None and o.spec["type"] == "Unit" and o.ctrl != it.ctrl and o.desig == "att" and o.loc == me.loc
 
 
-card("Shadow", enter_ready=lambda g, pid, c, ch: ch.get("loc") in (0, 1), abilities=[ability(
+card("Shadow", enter_ready=lambda g, pid, c, ch: is_bf(ch.get("loc")), abilities=[ability(
     "Stun", cost="1 energy and 1 rune of any type", timing="action", exhaust=True, preds=[_shadow_pred],
     resolve=lambda g, it: g.stun(g.legal(it, 0), it.ctrl),
     choices=lambda g, pid, o: tg_choices([u for u in enemies(g, pid) if u.desig == "att" and u.loc == o.loc
@@ -755,7 +755,7 @@ card("Solari Shieldbearer", on_play=_shieldbearer)
 
 # Sona, Harmonious — "While I'm at a battlefield, ready 4 friendly runes at the end of your turn."
 def _sona(g, o, ev, info):
-    if ev == "end_turn" and info["pid"] == o.ctrl and o.loc in (0, 1):
+    if ev == "end_turn" and info["pid"] == o.ctrl and is_bf(o.loc):
         g.queue_trigger(o.ctrl, "Sona, Harmonious", lambda g_, it: _ready_runes(g_, it.ctrl, 4), src=o.uid)
 
 
@@ -786,7 +786,7 @@ card("Trevor Snoozebottom", kw={"Shield": 1}, on_event=_trevor)
 # battlefield."
 def _vex(g, o, ev, info):
     u = info.get("obj") if ev == "stun" else None
-    if u is not None and info["by"] == o.ctrl and u.ctrl != o.ctrl and u.loc in (0, 1) and o.loc != u.loc:
+    if u is not None and info["by"] == o.ctrl and u.ctrl != o.ctrl and is_bf(u.loc) and o.loc != u.loc:
         bf = u.loc
 
         def res(g_, it):
@@ -874,7 +874,7 @@ card("Doran's Shield", equip="1 calm rune", bonus=1, equip_kw={"Tank": 1})
 # Hand Hammer — "[Equip] [Calm]" ; Might Bonus +1 ; Effect Text: "I have +2 might while I'm at a battlefield with
 # exactly one other unit you control."
 def _hammer_aura(g, src, o):
-    if src.attached_to != o.uid or src not in g.board or o.loc not in (0, 1):
+    if src.attached_to != o.uid or src not in g.board or not is_bf(o.loc):
         return 0
     return 2 if len([u for u in g.units(src.ctrl, o.loc) if u is not o]) == 1 else 0
 
@@ -987,7 +987,7 @@ def _signpost_choices(g, pid, o):
         for m in friends(g, pid):
             if m is not e and m.loc != e.loc:
                 out.append(dict(exh=e.uid, exh_oid=e.oid, tg=(m.uid,)))
-    out.sort(key=lambda c: (g.obj(c["exh"]).loc not in (0, 1), value(g, g.obj(c["exh"]))))
+    out.sort(key=lambda c: (not is_bf(g.obj(c["exh"]).loc), value(g, g.obj(c["exh"]))))
     return out
 
 
@@ -1123,7 +1123,7 @@ def _rage_choices(g, pid, ctx):
     es = enemies(g, pid)
     out = []
     for a in cap(g, es, 4, pid):
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if d == a.loc:
                 continue
             for b in es:
@@ -1156,7 +1156,7 @@ def _divide(g, it):
 def _divide_choices(g, pid, ctx):
     hb = ctx["hidden_bf"]
     out = []
-    for b in (0, 1):
+    for b in g.bf_locs:
         if hb is not None and b != hb:
             continue
         us = friends(g, pid, True, b)
@@ -1201,7 +1201,7 @@ card("Flurry of Feathers", timing="reaction", resolve=_flurry,
 # Group targeting (rule 355.11.b): if the targets no longer qualify as it resolves, the controller chooses a subset
 # of them that does.
 def _foxfire_ok(g, grp):
-    return grp and len(set(u.loc for u in grp)) == 1 and grp[0].loc in (0, 1) and sum(g.might(u) for u in grp) <= 4
+    return grp and len(set(u.loc for u in grp)) == 1 and is_bf(grp[0].loc) and sum(g.might(u) for u in grp) <= 4
 
 
 def _foxfire(g, it):
@@ -1226,7 +1226,7 @@ def _foxfire(g, it):
 def _foxfire_choices(g, pid, ctx):
     hb = ctx["hidden_bf"]
     out = []
-    for b in (0, 1):
+    for b in g.bf_locs:
         if hb is not None and b != hb:
             continue
         # "units": a human may also choose friendly ones; the AI only enemies
@@ -1442,7 +1442,7 @@ def _dash(g, it):
 def _dash_choices(g, pid, ctx):
     out = []
     for u in enemies(g, pid):
-        for b in (0, 1):
+        for b in g.bf_locs:
             if u.loc != b and g.units(pid, b):
                 out.append(dict(tg=(u.uid,), dest=b))
     out.sort(key=lambda c: (len(g.units(pid, c["dest"])) != 2, -value(g, g.obj(c["tg"][0]))))
@@ -1489,7 +1489,7 @@ def _skyward_choices(g, pid, ctx):
     lv = g.level(pid, 6)
     out = []
     for u in cap(g, es, 4, pid):
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if d == u.loc:
                 continue
             if lv:
@@ -1537,10 +1537,10 @@ def _tricksy_choices(g, pid, ctx):
         for grp in combinations(es, k):
             if sum(g.might(u) for u in grp) <= 8:
                 grps.append(grp)
-    grps.sort(key=lambda grp: -sum(value(g, u) for u in grp if u.loc in (0, 1)))
+    grps.sort(key=lambda grp: -sum(value(g, u) for u in grp if is_bf(u.loc)))
     out = []
     for grp in cap(g, grps, 3, pid):
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if any(u.loc != d for u in grp):
                 out.append(dict(tg=tuple(u.uid for u in grp), dest=d))
     out.sort(key=lambda c: c["dest"] != "base")
@@ -1562,7 +1562,7 @@ def _zenith(g, it):
         return
     g.stun(e, it.ctrl)
     m = g.legal(it, 1)
-    if m is not None and e.loc in (0, 1) and m.loc != e.loc:
+    if m is not None and is_bf(e.loc) and m.loc != e.loc:
         g.move([m], e.loc, it.ctrl)
 
 
@@ -1683,7 +1683,7 @@ def _vilemaw_event(g, o, ev, info):
 
 
 card("Vilemaw", ambush=True, on_event=_vilemaw_event,
-     aura_no_combat=lambda g, src, o: o.ctrl != src.ctrl and o.loc == src.loc and src.loc in (0, 1)
+     aura_no_combat=lambda g, src, o: o.ctrl != src.ctrl and o.loc == src.loc and is_bf(src.loc)
      and g.might(o) < g.might(src))
 
 
@@ -1718,9 +1718,9 @@ card("Lilting Lullaby", timing="reaction", resolve=_lullaby,
 # Mageseeker Warden — "While I'm at a battlefield, opponents can only play units to their base. While I'm at a
 # battlefield, spells and abilities can't ready enemy units and gear." (not the Awaken readying, a game action)
 card("Mageseeker Warden",
-     loc_veto=lambda g, src, pid, c, loc: src.loc in (0, 1) and pid != src.ctrl and c.spec["type"] == "Unit"
+     loc_veto=lambda g, src, pid, c, loc: is_bf(src.loc) and pid != src.ctrl and c.spec["type"] == "Unit"
      and loc != "base",
-     aura_no_ready=lambda g, src, o, by, kind: src.loc in (0, 1) and o.ctrl != src.ctrl and kind != "awaken")
+     aura_no_ready=lambda g, src, o, by, kind: is_bf(src.loc) and o.ctrl != src.ctrl and kind != "awaken")
 
 
 # Jax, Unmatched — "[Deflect] Each Equipment in your hand has [Quick-Draw]."
@@ -1762,12 +1762,12 @@ card("Lillia, Protector of Dreams", on_event=_lillia_event,
 
 
 # Sandstone Chimera — "While I'm at a battlefield, players only channel 1 rune at the start of their Channel Phase."
-card("Sandstone Chimera", channel_mod=lambda g, src, pid, n: min(n, 1) if src.loc in (0, 1) else n)
+card("Sandstone Chimera", channel_mod=lambda g, src, pid, n: min(n, 1) if is_bf(src.loc) else n)
 
 
 # Tianna Crownguard — "[Deflect] While I'm at a battlefield, opponents can't score points."
 card("Tianna Crownguard", kw={"Deflect": 1},
-     score_veto=lambda g, src, pid, why: src.loc in (0, 1) and pid != src.ctrl)
+     score_veto=lambda g, src, pid, why: is_bf(src.loc) and pid != src.ctrl)
 
 
 # Needlessly Large Yordle — "[Shield 5] [Tank] I cost 2 energy and 1 calm rune less for each point you scored from
