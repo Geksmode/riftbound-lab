@@ -1027,20 +1027,28 @@ def honest_broker_gold_pays_power():
 
 
 @test
-def gold_pays_power_before_recycling_a_rune():
-    # a ready Gold pays the power before a rune is recycled (rule 429.3); an exhausted Gold does not
+def gold_or_rune_is_the_players_choice():
+    # a ready Gold or a rune can pay the power: the player chooses (rule 429.3); an exhausted Gold does not count
     from cards import make_token
-    g, _ = new()
-    runes(g, 0, ["Fury", "Fury"])
-    gold = make_token(g, "Gold", 0, "base", ready=True)
-    assert g.pay(0, 1, [frozenset({"Fury"})])
-    assert gold not in g.board and len(g.p[0].runes) == 2
-    assert sum(r.exhausted for r in g.p[0].runes) == 1
-    g, _ = new()
+    seen = []
+    def pick(n):
+        return lambda opts, ctx: seen.append(list(opts)) or n
+    for n in (1, 0):
+        g, _ = new(answers0=dict(pay_gold=pick(n)))
+        runes(g, 0, ["Fury", "Fury"])
+        gold = make_token(g, "Gold", 0, "base", ready=True)
+        assert g.pay(0, 1, [frozenset({"Fury"})])
+        assert seen[-1] == [0, 1]
+        if n:
+            assert gold not in g.board and len(g.p[0].runes) == 2
+        else:
+            assert gold in g.board and len(g.p[0].runes) == 1
+    g, _ = new(answers0=dict(pay_gold=pick(1)))
     runes(g, 0, ["Fury", "Fury"])
     gold = make_token(g, "Gold", 0, "base", ready=False)
+    k = len(seen)
     assert g.pay(0, 1, [frozenset({"Fury"})])
-    assert gold in g.board and len(g.p[0].runes) == 1
+    assert len(seen) == k and gold in g.board and len(g.p[0].runes) == 1
 
 
 @test
