@@ -79,8 +79,17 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await tap("#cGlos"); await waitFor("!!document.querySelector('#mbox .glist')"); await tap("#mClose");
   ok(`${w} px : lexique ouvert depuis le coach puis fermé`, await ev("$('modal').hidden"));
   // agrandi d'une carte : ses mots-clés expliqués (Punch First : Action)
-  await ev("showZoom(document.querySelector('#board .half.p0 .hand [data-card=\"Punch First\"]'))");
-  ok(`${w} px : l'agrandi de Punch First explique Action`, await ev("!$('zoom').hidden && [...$('zoom').querySelectorAll('.zkw .gl b')].some(b => b.textContent === 'Action')"));
+  // à la souris, on survole vraiment la carte : tout autre survol cache l'agrandi (src.html, « mouseover »), et sur une
+  // machine lente (CI) un rendu tardif de la page le cachait entre showZoom et le contrôle (échec CI du 2026-10-19)
+  const punch = "#board .half.p0 .hand [data-card=\"Punch First\"]";
+  const zoomOk = "!$('zoom').hidden && [...$('zoom').querySelectorAll('.zkw .gl b')].some(b => b.textContent === 'Action')";
+  let zok = false;
+  for (let k = 0; k < 3 && !zok; k++) {
+    if (mob) await ev(`showZoom(document.querySelector('${punch.replace(/"/g, '\\"')}'))`);
+    else { await pg.mouse.move(0, 0); await pg.hover(punch); }
+    zok = await waitFor(zoomOk, 3000).then(() => true, () => false);
+  }
+  ok(`${w} px : l'agrandi de Punch First explique Action`, zok);
   await pg.screenshot({ path: `${OUT}/tuto-${w}-agrandi.png` });
   await ev("$('zoom').hidden = true");
   await tap("#cOk");
