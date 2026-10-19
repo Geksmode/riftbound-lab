@@ -1673,7 +1673,7 @@ function showZoom(el) {
   const c = CARDS[n] || {};
   const typ = [c.s, c.t].filter(Boolean).join(" ") + (c.d && c.d.length ? " · " + c.d.join("/") : "");
   const cost = c.t === "Battlefield" || c.t === "Legend" || c.e === undefined ? "" : ` · coût ${c.e}${c.p ? " + " + c.p + " power" : ""}${c.m != null ? " · might " + c.m : ""}${c.eb ? " · bonus +" + c.eb : ""}`;
-  Z.innerHTML = `${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}<h4>${esc(n)}</h4><div class="small">${esc(typ)}${esc(cost)}</div><div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div>${(() => { const ks = glossFor(c.tx); return ks.length ? `<div class="zkw">${ks.map(glossRow).join("")}</div>` : ""; })()}`;
+  Z.innerHTML = `${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}<div class="zhd"><h4>${esc(n)}</h4><div class="small">${esc(typ)}${esc(cost)}</div><div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div></div>${(() => { const ks = glossFor(c.tx); return ks.length ? `<div class="zkw">${ks.map(glossRow).join("")}</div>` : ""; })()}`;
   Z.hidden = false;
   const r = el.getBoundingClientRect(), w = 250, h = Z.offsetHeight;
   let x = r.right + 10; if (x + w > innerWidth - 8) x = r.left - w - 10; if (x < 8) x = Math.max(8, Math.min(innerWidth - w - 8, r.left));
