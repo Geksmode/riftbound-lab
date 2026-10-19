@@ -1615,8 +1615,12 @@ function rowHTML(st, pid, srcs) {
 }
 function bfHTML(st, i, srcs) {
   const b = st.bfs[i], sd = st.sd && st.sd.bf === i;
-  const top = b.u.filter(u => u.c !== MEP).map(u => unitCard(u, srcs)).join("");
-  const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("");
+  // équipements posés sur ce champ de bataille ([Deploy], règle 830), du côté de leur contrôleur, après les unités
+  const bg = b.g || [], gearC = (mine) => bg.filter(x => (x.c === MEP) === mine).map(x => card(x.n, { p: vp(x.c), x: x.x, uid: x.u, can: can(srcs, x.u), sel: sel === String(x.u) })).join("");
+  const nT = b.u.filter(u => u.c !== MEP).length + bg.filter(x => x.c !== MEP).length, nB = b.u.filter(u => u.c === MEP).length + bg.filter(x => x.c === MEP).length;
+  const xT = b.u.filter(u => u.c !== MEP && u.x).length + bg.filter(x => x.c !== MEP && x.x).length, xB = b.u.filter(u => u.c === MEP && u.x).length + bg.filter(x => x.c === MEP && x.x).length;
+  const top = b.u.filter(u => u.c !== MEP).map(u => unitCard(u, srcs)).join("") + gearC(false);
+  const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("") + gearC(true);
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
   let fd = "";
   const fds = b.fds || (b.fd ? [b.fd] : []), fdus = b.fdus || [b.fdu];   // Bandle Tree : deux cartes cachées, chacune visible
@@ -1624,10 +1628,10 @@ function bfHTML(st, i, srcs) {
     fd = `<span class="fd">${fds.map((f, k) => { const mine = f[0] === MEP, seen = mine || (f[1] && f[1] !== "?"), u = fdus[k];   // Scuttle Crab : cartes cachées adverses visibles ce tour
       return card(seen ? f[1] : "", { back: !seen, raw: true, style: "width:22px;height:31px;", uid: mine ? u : undefined, can: mine && can(srcs, u) }); }).join("")}${fds.length > 1 ? fds.length + " cachées" : "cachée"}</span>`; }
   return `<div class="bf ${b.c === 0 || b.c === 1 ? "c" + vp(b.c) : ""} ${sd ? "sd" : ""}" data-drop="${i}">
-    <div class="side top" style="--n:${b.u.filter(u => u.c !== MEP).length};--nx:${b.u.filter(u => u.c !== MEP && u.x).length}">${top}</div>
+    <div class="side top" style="--n:${nT};--nx:${xT}">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
       <span class="bname">${esc(b.n)}</span>${sd ? `<span class="sdtag">${st.sd.combat ? "Combat" : "Showdown"}</span>` : ""}${fd}${ctrl}</div>
-    <div class="side" style="--n:${b.u.filter(u => u.c === MEP).length};--nx:${b.u.filter(u => u.c === MEP && u.x).length}">${bot}</div>
+    <div class="side" style="--n:${nB};--nx:${xB}">${bot}</div>
   </div>`;
 }
 const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vision|Ambush) /;

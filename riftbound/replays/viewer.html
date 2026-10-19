@@ -428,8 +428,9 @@ function rowHTML(st, pid, hl) {
 
 function bfHTML(st, i, hl) {
   const b = st.bfs[i], sd = st.sd && st.sd.bf === i;
-  const top = b.u.filter(u => u.c === 1).map(u => unitCard(u, hl)).join("");
-  const bot = b.u.filter(u => u.c === 0).map(u => unitCard(u, hl)).join("");
+  const gearC = c => (b.g || []).filter(x => x.c === c).map(x => card(x.n, { p: c, x: x.x, hl: hl.has(x.u) })).join("");   // [Deploy] (règle 830)
+  const top = b.u.filter(u => u.c === 1).map(u => unitCard(u, hl)).join("") + gearC(1);
+  const bot = b.u.filter(u => u.c === 0).map(u => unitCard(u, hl)).join("") + gearC(0);
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${b.c}">${PN[b.c]}</span>`;
   let fd = "";
   const fds = b.fds || (b.fd ? [b.fd] : []);   // Bandle Tree : deux cartes cachées, chacune visible

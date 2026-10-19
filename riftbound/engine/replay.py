@@ -229,6 +229,7 @@ def snap(g):
     st = dict(t=g.turn_no, tp=g.tp, pts=[p.points for p in g.p], v=g.victory)
     locs = {"base": [[], []], **{i: [] for i in g.bf_locs}}
     loose_gear = [[], []]
+    bf_gear = {i: [] for i in g.bf_locs}     # gear on a battlefield ([Deploy], rule 830; hidden gear played there)
     for o in g.board:
         if o.spec["type"] == "Unit":
             if o.loc == "base":
@@ -236,7 +237,11 @@ def snap(g):
             elif is_bf(o.loc):
                 locs[o.loc].append(unit(o))
         elif o.attached_to is None:
-            loose_gear[o.ctrl].append(dict(u=o.uid, n=o.cname, x=1 if o.exhausted else 0))
+            gd = dict(u=o.uid, n=o.cname, x=1 if o.exhausted else 0)
+            if is_bf(o.loc) and o.loc in bf_gear:
+                bf_gear[o.loc].append(dict(gd, c=o.ctrl))
+            else:
+                loose_gear[o.ctrl].append(gd)
     pl = []
     for i, p in enumerate(g.p):
         pl.append(dict(
@@ -250,7 +255,7 @@ def snap(g):
     st["p"] = pl
     # fd : la première carte cachée (anciens replays) ; fds : toutes, une par carte (Bandle Tree en autorise deux)
     st["bfs"] = [dict(n=b.name, c=b.ctrl, fd=(None if b.facedown is None else [b.facedown.owner, b.facedown.cname]),
-                      fds=[[c.owner, c.cname] for c in b.facedowns], u=locs[b.idx]) for b in g.bfs]
+                      fds=[[c.owner, c.cname] for c in b.facedowns], u=locs[b.idx], g=bf_gear[b.idx]) for b in g.bfs]
     st["chain"] = [dict(n=short(it.name), c=it.ctrl, k=it.kind) for it in g.chain]
     if g.sd is not None:
         st["sd"] = dict(bf=g.sd.bf.idx if hasattr(g.sd.bf, "idx") else g.sd.bf, combat=g.sd.combat, a=g.sd.attacker)
