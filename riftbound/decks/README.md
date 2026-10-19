@@ -32,8 +32,8 @@ Contrôle : 106 parties (chaque deck des deux côtés), 0 erreur, 0 partie sans 
   Lille et Atlanta (avril 2026) sont écartés : format Spiritforged.
 - **3 légendes Vendetta** (absentes d'Unleashed) : Best-Of Vendetta. Mel (Barcelona 19e, Stacked Deck), Zed (Barcelona 164e,
   Stacked Deck), Renekton (Singapore 384e).
-- Listes écartées pour une carte non modélisée (Baron Nashor) : Teemo Sydney 6e, Yasuo Utrecht 112e, Miss Fortune Hartford 13e,
-  Draven Sydney 10e.
+- Listes écartées pour une carte alors non modélisée (Baron Nashor, modélisé depuis le 2026-10-19 : elles peuvent être
+  ajoutées) : Teemo Sydney 6e, Yasuo Utrecht 112e, Miss Fortune Hartford 13e, Draven Sydney 10e.
 
 **Transcriptions à vérifier** (une ligne `# note:` dans le fichier) :
 - Ligne incertaine retirée plutôt que devinée : Yi Bladesman (sideboard 9), Renekton (sideboard 4), Miss Fortune (sideboard 7),

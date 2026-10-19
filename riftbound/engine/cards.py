@@ -24,7 +24,7 @@ text is only keywords and reminder text are registered by auto_keywords() after 
 """
 import re
 from lang import tr
-from game import ANY, SPEC, DOMAINS, EQUIP_BONUS, Item, Obj, Opt
+from game import ANY, SPEC, DOMAINS, EQUIP_BONUS, Item, Obj, Opt, is_bf, BARON_PIT
 from actions import full_choices  # noqa: E402
 from actions import (play_card, attach, equip_cost, deflect_reqs, loc_allowed, open_bf, card_kw, flow_of,
                      abilities_of, others_enter_ready, keyword_play_triggers, total_cost, card_choices, pay_ctx)
@@ -55,6 +55,8 @@ class Impl:
         s.equip_kw = None       # {kw: value} given to the unit this Equipment is attached to (Effect Text)
         s.enter_ready = False   # True | fn(g, pid, card, choice): "I enter ready"
         s.enter_exhausted = False   # gear: "This enters exhausted"
+        s.enter_loc = None      # fn(g, pid, card, loc) -> loc: replacement of the location a played card enters
+        #                         (rule 369.3: Baron Nashor enters at the Baron Pit it added)
         s.add = []              # [dict(e=, p=[domain|'A'], exhaust=True, kill=False, can=fn(g, pid, o, ctx))] Add
         s.track_mighty = False  # this card listens to 'becomes_mighty'
         s.ignore_deflect = False    # "Ignore [Deflect] while paying this spell's cost"
@@ -136,6 +138,7 @@ def ask_text(**kinds):
 ask_text(
     choose="Choisis une cible :", add_kill="Quelle unité détruire pour produire la ressource ?",
     deploy_location="Sur quel champ de bataille jouer cet équipement ?",
+    move_destination="Vers quel autre champ de bataille déplacer cette unité ?",
     disarm_target="Disarm : quelle unité ennemie affaiblir ?", token_swap="Jouer un jeton Mech à la place ?",
     altar_card="Quelle carte de ta main placer ?", altar_where="Sur le dessus ou sous ton deck ?",
     aphelios_mode="Quel mode ?", apothecary_pick="Quelle unité soigner ?", ava_play="Quelle carte jouer ?",
@@ -239,7 +242,7 @@ def value(g, o):
 
 
 def enemies(g, pid, at_bf=False, hidden_bf=None, targetable=True):
-    us = [u for u in g.units(1 - pid) if (not at_bf or u.loc in (0, 1))]
+    us = [u for u in g.units(1 - pid) if (not at_bf or is_bf(u.loc))]
     if hidden_bf is not None:
         us = [u for u in us if u.loc == hidden_bf]
     if targetable:
@@ -248,14 +251,14 @@ def enemies(g, pid, at_bf=False, hidden_bf=None, targetable=True):
 
 
 def friends(g, pid, at_bf=False, hidden_bf=None):
-    us = [u for u in g.units(pid) if (not at_bf or u.loc in (0, 1))]
+    us = [u for u in g.units(pid) if (not at_bf or is_bf(u.loc))]
     if hidden_bf is not None:
         us = [u for u in us if u.loc == hidden_bf]
     return sorted(us, key=lambda u: -value(g, u))
 
 
 def all_units(g, pid, at_bf=False, hidden_bf=None):
-    us = [u for u in g.units() if (not at_bf or u.loc in (0, 1))]
+    us = [u for u in g.units() if (not at_bf or is_bf(u.loc))]
     if hidden_bf is not None:
         us = [u for u in us if u.loc == hidden_bf]
     us = [u for u in us if g.targetable(u, pid)]
@@ -272,7 +275,7 @@ def P_unit(g, it, o):
 
 
 def P_unit_bf(g, it, o):
-    return o.spec["type"] == "Unit" and o.loc in (0, 1) and hb_ok(it, o)
+    return o.spec["type"] == "Unit" and is_bf(o.loc) and hb_ok(it, o)
 
 
 def P_enemy(g, it, o):
@@ -280,7 +283,7 @@ def P_enemy(g, it, o):
 
 
 def P_enemy_bf(g, it, o):
-    return P_enemy(g, it, o) and o.loc in (0, 1)
+    return P_enemy(g, it, o) and is_bf(o.loc)
 
 
 def P_friend(g, it, o):
@@ -288,7 +291,7 @@ def P_friend(g, it, o):
 
 
 def P_friend_bf(g, it, o):
-    return P_friend(g, it, o) and o.loc in (0, 1)
+    return P_friend(g, it, o) and is_bf(o.loc)
 
 
 def P_gear(g, it, o):
@@ -539,7 +542,7 @@ def _choice_label(g, ch):
             x = item_by_id(g, v)
             parts.append(tr(f"sort {x.name}", f"spell {x.name}") if x is not None else tr("un sort", "a spell"))
         elif k in ("loc", "dest"):
-            if v == "base" or v in (0, 1):
+            if v == "base" or is_bf(v):
                 parts.append(tr("à la base", "to base") if v == "base" else g.bfs[v].name)
         elif k == "mover" and g.obj(v) is not None:
             parts.append(tr(f"déplace {g.label(g.obj(v))}", f"moves {g.label(g.obj(v))}"))
@@ -782,7 +785,7 @@ def _dw_event(g, o, ev, info):
     # Akali, Deadly Weapon — "When I move, you may deal 1 to a unit at a battlefield I moved to or from.
     # If I'm [Empowered], deal 2 instead."
     if ev == "move" and info["obj"] is o:
-        locs = [l for l in (info["frm"], info["to"]) if l in (0, 1)]
+        locs = [l for l in (info["frm"], info["to"]) if is_bf(l)]
         if not locs:
             return
         dmg = 2 if o.empowered else 1
@@ -807,7 +810,7 @@ card("Akali, Deadly Weapon", on_event=_dw_event,
 
 def _silent_event(g, o, ev, info):
     # Akali, Silent — "When I move to a battlefield, give me +2 might this turn."
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         g.queue_trigger(o.ctrl, "Akali, Silent", lambda g_, it: g_.obj(it.src) is not None and g_.mod(g_.obj(it.src), 2),
                         src=o.uid)
 
@@ -849,7 +852,7 @@ def _heron_event(g, o, ev, info):
     # Astral Heron — "When you play your first card each turn, if I'm at a battlefield, the next card you play this
     # turn costs [2] and [A][A] less." (errata du 2026-08-03 : « this turn » ; avant, la réduction attendait la carte
     # suivante même au tour adverse). dur="turn" : retirée à la fin du tour (expire).
-    if ev == "played" and info["pid"] == o.ctrl and info["n"] == 1 and o.loc in (0, 1) and not info["card"].token:
+    if ev == "played" and info["pid"] == o.ctrl and info["n"] == 1 and is_bf(o.loc) and not info["card"].token:
         pid = o.ctrl
         g.queue_trigger(pid, "Astral Heron", lambda g_, it: g_.effects.append(dict(kind="heron", pid=pid, dur="turn")),
                         src=o.uid)
@@ -882,7 +885,7 @@ card("Back Off", timing="action", hidden=True, preds=[P_unit], resolve=_back_off
 # Blitzcrank, Impassive — "[Tank] When you play me to a battlefield, you may move an enemy unit to here.
 # When I hold, return me to my owner's hand."
 def _blitz_play(g, o, ctx):
-    if o.loc not in (0, 1):
+    if not is_bf(o.loc):
         return
     here = o.loc
 
@@ -937,7 +940,7 @@ def _charm(g, it):
 def _charm_choices(g, pid, ctx):
     out = []
     for u in enemies(g, pid):
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if d != u.loc:
                 out.append(dict(tg=(u.uid,), dest=d))
     out.sort(key=lambda c: (c["dest"] != "base",))
@@ -1133,7 +1136,7 @@ card("Sterak's Gage", timing="reaction", quickdraw=True, abilities=[equip_abilit
 
 def _pendulum_effect(g, gear, unit, ev, info):
     # Effect text (attached): the equipped unit gets +2 might this turn when it moves to a battlefield.
-    if ev == "move" and info["obj"] is unit and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is unit and is_bf(info["to"]):
         g.queue_trigger(unit.ctrl, "Pendulum Blade", lambda g_, it: g_.obj(it.src) is not None and
                         g_.mod(g_.obj(it.src), 2), src=unit.uid)
 
@@ -1143,7 +1146,7 @@ card("Pendulum Blade", abilities=[equip_ability("Fury")], effect_event=_pendulum
 
 # Mischievous Marai — "[Hidden] When you play me to a battlefield, deal 2 to an enemy unit here."
 def _marai(g, o, ctx):
-    if o.loc not in (0, 1):
+    if not is_bf(o.loc):
         return
     here = o.loc
 
@@ -1224,7 +1227,7 @@ def _flip_choices(g, pid, ctx):
         fr = [u for u in fr if u.loc == hb] or fr
     moves = []
     for u in fr:
-        for d in ("base", 0, 1):
+        for d in g.locs():
             if d != u.loc:
                 moves.append((u.uid, u.oid, d))
     out = []
@@ -1241,7 +1244,7 @@ def _flip_choices(g, pid, ctx):
             s -= value(g, e) * (g.might(e) - e.damage <= 2) + 1
         if c.get("mover"):
             m = g.obj(c["mover"])
-            if c["dest"] in (0, 1) and g.bfs[c["dest"]].ctrl != pid:
+            if is_bf(c["dest"]) and g.bfs[c["dest"]].ctrl != pid:
                 s -= 2 + g.might(m) / 2
             if m.cname in ("Akali, Deadly Weapon", "Stellacorn Herder"):
                 s -= 1
@@ -1548,7 +1551,7 @@ card("Mirror Image", preds=[P_unit], resolve=_mirror,
 # from among them and draw it. Recycle the rest. [Deathknell] Play a unit from your hand to your base, ignoring
 # its Energy cost. (You must still pay its Power cost.)"
 def _herald_move(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         def res(g_, it):
             pl = g_.p[it.ctrl]
             top = g_.look(it.ctrl, pl.deck[:3])
@@ -1851,7 +1854,7 @@ def when_legion(g, o):
 
 
 def when_at_bf(g, o):
-    return o.loc in (0, 1)
+    return is_bf(o.loc)
 
 
 def repeatable(fn):
@@ -2031,7 +2034,7 @@ def auto_keywords(name, register=True):
 # Printed in the card database but not playable cards: the "Buff" reminder card and the XP Tracker.
 NOT_CARDS = {"Buff", "XP Tracker"}
 # Token printings without the Token supertype in the database
-TOKEN_NAMES = {"Bird", "Sprite", "Gold", "Reflection", "Recruit (NX)", "Mech", "Brush", "Bomb"}
+TOKEN_NAMES = {"Bird", "Sprite", "Gold", "Reflection", "Recruit (NX)", "Mech", "Brush", "Bomb", "Baron Pit"}
 
 
 def is_token(name):
@@ -2065,7 +2068,7 @@ reflection_token = _reflection
 # ====================================================================== card modules
 # Names a card module gets with `from cards import *`.
 __all__ = [
-    "Impl", "IMPL", "card", "SPEC", "ANY", "DOMAINS", "EQUIP_BONUS", "Item", "Obj", "Opt", "play_card", "attach",
+    "Impl", "IMPL", "card", "SPEC", "ANY", "DOMAINS", "is_bf", "BARON_PIT", "EQUIP_BONUS", "Item", "Obj", "Opt", "play_card", "attach",
     "equip_cost", "deflect_reqs", "loc_allowed", "open_bf", "card_kw", "flow_of", "abilities_of",
     "others_enter_ready", "keyword_play_triggers", "full_choices", "cap", "total_cost", "card_choices", "pay_ctx", "ASK_TEXT", "ask_text",
     # choice / target helpers

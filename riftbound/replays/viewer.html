@@ -104,7 +104,7 @@ h1, h3, h4 { font-family: var(--f-display); font-weight: 400; margin: 0; text-wr
 .res-line b { color: var(--ink); }
 
 /* battlefields */
-.bfrow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bfrow { display: grid; grid-template-columns: repeat(var(--nb, 2), minmax(0, 1fr)); gap: 10px; }
 .bf { display: grid; grid-template-rows: minmax(100px, auto) auto minmax(100px, auto); border-radius: 10px; overflow: hidden; border: 2px solid var(--zone-line); background: var(--zone); }
 .bf.c0 { border-color: var(--akali); } .bf.c1 { border-color: var(--leblanc); }
 .bf.sd { box-shadow: 0 0 0 2px var(--brass), 0 0 22px rgba(214,178,94,.45); }
@@ -500,7 +500,7 @@ function go(k) {
   const f = rep.frames[fi], st = f.st, hl = new Set(f.hl || []);
   $("board").innerHTML =
     `<div class="half p1 ${st.tp === 1 ? "active" : ""}">${handHTML(st, 1, hl)}${rowHTML(st, 1, hl)}</div>` +
-    `<div class="bfrow">${bfHTML(st, 0, hl)}${bfHTML(st, 1, hl)}</div>` +
+    `<div class="bfrow" style="--nb:${st.bfs.length}">${st.bfs.map((_, i) => bfHTML(st, i, hl)).join("")}</div>` +
     `<div class="half p0 ${st.tp === 0 ? "active" : ""}">${rowHTML(st, 0, hl)}${handHTML(st, 0, hl)}</div>`;
   $("stack").innerHTML = stackHTML(f);
   fitBoard();

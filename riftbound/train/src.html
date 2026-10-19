@@ -642,7 +642,7 @@ body.dkopen { overflow: hidden; }
   .zone.pile .score { font-size: 17px; padding: 1px 0; }
   .zone.pile .piles { gap: 6px; padding: 0; }
   .zone.pile .pl { width: 22px; height: 31px; }
-  .bfrow { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .bfrow { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(var(--nb, 2), minmax(0, 1fr)); gap: 4px; }
   .bf { min-height: 0; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); }
   .bf .side { flex-wrap: wrap; align-content: center; justify-content: center; overflow: hidden; }
   .bf .mid { flex-wrap: nowrap; padding: 3px 4px; }
@@ -680,6 +680,10 @@ body.dkopen { overflow: hidden; }
   .bf .side, .zrow > .zone:nth-child(3) { justify-content: safe center; }
   .bf .mid { overflow: hidden; }
   .bf .mid .sdtag { flex: none; }
+  /* trois battlefields (Baron Pit) : colonnes de ~125 px, la bande du milieu se resserre pour garder l'étiquette lisible */
+  .bfrow.n3 .bfcard { width: 30px; height: 17px; }
+  .bfrow.n3 .bf .mid { gap: 3px; padding: 3px 2px; }
+  .bfrow.n3 .sdtag { font-size: 8px; letter-spacing: 0; padding: 1px 3px; }
   /* main agrandie : rangée de grandes cartes au-dessus de ta zone, défilement horizontal au doigt (pan-x), un geste
      vers le haut glisse la carte sur le plateau */
   .half.p0 { position: relative; }
@@ -1348,7 +1352,7 @@ function show(v) {
   for (const [k, t] of Object.entries(v.alias || {})) if (srcs.has(String(t))) srcs.add(k);
   $("board").innerHTML =
     `<div class="half p1 ${st.tp === OPP() ? "active" : ""}">${handHTML(st, OPP(), srcs)}${rowHTML(st, OPP(), srcs)}</div>` +
-    `<div class="bfrow">${bfHTML(st, 0, srcs)}${bfHTML(st, 1, srcs)}</div>` +
+    `<div class="bfrow${st.bfs.length > 2 ? " n3" : ""}" style="--nb:${st.bfs.length}">${st.bfs.map((_, i) => bfHTML(st, i, srcs)).join("")}</div>` +   // 3 avec le Baron Pit (Baron Nashor)
     `<div class="half p0 ${st.tp === MEP ? "active" : ""}">${rowHTML(st, MEP, srcs)}${handHTML(st, MEP, srcs)}</div>`;
   chainFocus = null;   // la chaîne change : on revient à ses cibles du haut
   $("stack").innerHTML = st.chain.length ? st.chain.slice().reverse().map((c, j) => `<div class="sitem c${vp(c.c)} ${j ? "old" : ""}" data-ch="${st.chain.length - 1 - j}"><div class="shead"><span class="k">${c.k === "trigger" ? "Déclenchement" : "Sur la chaîne"} · ${PN[c.c]}</span></div>${card(cardFor(c.n) || c.n, { raw: true })}<div class="stgt">${esc(c.n)}</div></div>`).join("") : `<div class="empty">Chaîne vide</div>`;

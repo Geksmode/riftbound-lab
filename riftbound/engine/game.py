@@ -43,6 +43,13 @@ EQUIP_BONUS = {"Long Sword": 2, "Sterak's Gage": 3, "Pendulum Blade": 1}
 DOMAINS = ("Fury", "Calm", "Mind", "Body", "Chaos", "Order")
 VICTORY = 8
 ANY = frozenset(DOMAINS)
+BARON_PIT = "Baron Pit"
+
+
+def is_bf(loc):
+    """A battlefield location: an index of Game.bfs (0 and 1, plus 2 once Baron Nashor has added the Baron Pit
+    battlefield token, rule 187.9). Other locations are "base" and None (not on the board)."""
+    return type(loc) is int
 
 
 class GameOver(Exception):
@@ -362,7 +369,27 @@ class Game:
         return o.spec["type"] == "Gear" or o.__dict__.get("ugear", False)
 
     def at_bf(s, o):
-        return o.loc in (0, 1)
+        return is_bf(o.loc)
+
+    @property
+    def bf_locs(s):
+        """Indexes of the battlefields on the board (two, or three with the Baron Pit: rule 187.9)."""
+        return tuple(range(len(s.bfs)))
+
+    def locs(s):
+        """Every board location: the base and each battlefield."""
+        return ("base",) + s.bf_locs
+
+    def add_battlefield(s, name):
+        """Add a battlefield token to the board (Baron Nashor adds the Baron Pit, rule 187.9). It is a new location,
+        uncontrolled, with no owner (a token battlefield, rule 185.2.e). Returns its index. Every battlefield on the
+        board counts for the Final Point (rule 471.1.b.1: "Scored every Battlefield this turn")."""
+        b = Battlefield(len(s.bfs), name, None)
+        s.bfs.append(b)
+        s.need_cleanup = True
+        s.log(f"  the {name} battlefield token is added to the board")
+        s.emit("bf_added", bf=b.idx, name=name)
+        return b.idx
 
     def impl(s, o_or_name):
         IMPL = (_CARDS[0] if _CARDS else _cards()).IMPL
@@ -403,7 +430,7 @@ class Game:
                     d = ia.aura_kw(s, src, o)
                     if d:
                         v += d.get(kw, 0)
-        if kw == "Ganking" and o.loc in (0, 1) and s.bfs[o.loc].name == "Windswept Hillock":
+        if kw == "Ganking" and is_bf(o.loc) and s.bfs[o.loc].name == "Windswept Hillock":
             v += 1
         if kw == "Temporary" and o.token and o.name == "Reflection" and o.copy is None:
             pass
@@ -637,7 +664,7 @@ class Game:
                     elif m < 0:
                         dec += m
         # Forbidding Waste: "While a unit here is defending alone, it has -2 might."
-        if o.loc in (0, 1) and s.bfs[o.loc].name == "Forbidding Waste" and o.desig == "def" and s.alone(o):
+        if is_bf(o.loc) and s.bfs[o.loc].name == "Forbidding Waste" and o.desig == "def" and s.alone(o):
             dec -= 2
         return base + inc + dec
 
@@ -800,7 +827,7 @@ class Game:
         o.entered_turn = s.turn_no
         s.board.append(o)
         s.need_cleanup = True
-        if o.spec["type"] == "Unit" and loc in (0, 1):
+        if o.spec["type"] == "Unit" and is_bf(loc):
             b = s.bfs[loc]
             # rule 323.11.a (applied at cleanup) — units at a battlefield their controller doesn't control
         return o
@@ -1335,7 +1362,7 @@ class Game:
             src_pid = item.ctrl
         ctx = dict(kind=src_kind, by=src_pid, item=item, target=target)
         if src_kind in ("spell", "ability"):
-            if target.loc in (0, 1) and s.bfs[target.loc].name == "Void Gate":
+            if is_bf(target.loc) and s.bfs[target.loc].name == "Void Gate":
                 amount += 1
             amount += s.bonus_damage(ctx)
         amount = s.damage_replace(target, amount, ctx)
@@ -1668,7 +1695,7 @@ class Game:
             s.log(f"  {o} moves {frm}->{dest}")
         units_moved = [o for o, _ in moved if o.spec["type"] == "Unit"]     # gear with [Deploy] can move too (830)
         s.hist["moved"] += [(o.uid, o.oid) for o in units_moved]
-        if dest in (0, 1) and units_moved:
+        if is_bf(dest) and units_moved:
             b = s.bfs[dest]
             mover = units_moved[0].ctrl
             if b.contested is None and b.ctrl != mover:
@@ -1851,7 +1878,7 @@ class Game:
             # don't trigger."
             for o in list(s.board):
                 if o.ctrl == info["pid"] and s.has_kw(o, "Temporary"):
-                    if o.loc in (0, 1) and any(u.cname == "LeBlanc, Everywhere At Once" and u.ctrl == o.ctrl
+                    if is_bf(o.loc) and any(u.cname == "LeBlanc, Everywhere At Once" and u.ctrl == o.ctrl
                                                and u.loc == o.loc for u in s.units()):
                         continue
                     s.queue_trigger(o.ctrl, f"Temporary {o}", _temporary_kill, dict(uid=o.uid, oid=o.oid), src=o.uid)
@@ -2075,7 +2102,7 @@ class Game:
     def played_event(s, pid, card, item=None):
         """A card's play completed (rule 419.4.a). Tokens are played too (rule 185.2.a) but are not cards: they
         emit 'played' with n=0 and token=True and are not added to g.played."""
-        if card.zone == "board" and card.loc in (0, 1):
+        if card.zone == "board" and is_bf(card.loc):
             s.hist["to_bf"][pid] += 1
         if card.token:
             s.hist["tokens"][pid] += 1
@@ -2132,7 +2159,7 @@ class Game:
                     b.ctrl = None
         # 5. recall unattached gear at battlefields; trash hidden cards at battlefields not controlled by owner
         for g in s.gear():
-            if g.loc in (0, 1) and g.attached_to is None and g.spec["type"] != "Unit" and not s.has_kw(g, "Deploy"):
+            if is_bf(g.loc) and g.attached_to is None and g.spec["type"] != "Unit" and not s.has_kw(g, "Deploy"):
                 g.loc = "base"              # non-unit gear without [Deploy] (rules 323.6, 830.1.b.3)
         for b in s.bfs:
             for c in list(b.facedowns):

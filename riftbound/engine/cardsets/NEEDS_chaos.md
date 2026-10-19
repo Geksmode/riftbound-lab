@@ -1,18 +1,20 @@
 # Batch chaos: cards left out of IMPL
 
-121 of the 122 cards of `batches/chaos.txt` are registered in `cardsets/chaos.py` (tests in `test_chaos.py`). The 17
+All 122 cards of `batches/chaos.txt` are registered in `cardsets/chaos.py` (tests in `test_chaos.py`). The 17
 cards that needed engine hooks (Miss Fortune, Buccaneer, Ocean Drake, Sai Scout, Sneaky Deckhand, Irelia, Graceful,
 Stargazer, Vex, Cheerless, Ezreal, Prodigy, Syndra, Transcendent, Kennen, Storm of Shuriken, Mask Mother, Scrapheap,
 Treasure Trove, Maduli the Gatekeeper, Vex, Apathetic, Sivir, Mercenary, Nocturne, Horrifying) use the hooks
 described in `GUIDE.md`.
 
-## Still not registered
+## Baron Nashor (registered 2026-10-19)
 
-- **Baron Nashor** — "As you play me, add the Baron Pit battlefield token to the board if it's not there already. If
-  you do, I enter there. (It has "Units can move here from anywhere.") I can't be chosen by enemy spells and
-  abilities. Other friendly units have +2 might." The engine has exactly two battlefields (`g.bfs`, locations 0/1 in
-  every rule, the AI, the replays and the interface); a third battlefield token (rule 187.9) needs a variable number
-  of battlefields everywhere. Baron Pit (battlefield token) is blocked for the same reason.
+- "As you play me, add the Baron Pit battlefield token to the board if it's not there already. If you do, I enter
+  there." `Impl.enter_loc` (replacement of the entering location, rule 369.3 whose example is this card) calls
+  `Game.add_battlefield("Baron Pit")`: `g.bfs` gets a third battlefield (index 2, no owner). Entering it applies
+  Contested (190.3.a.1), so he usually conquers it. A second Nashor (the Baron Pit already there) enters where it
+  was played. "I can't be chosen by enemy spells and abilities": `untargetable`. "+2 might": `aura_might`.
+- Final Point (471.1.b.1): "Scored every Battlefield this turn" counts the Baron Pit once it is on the board, so a
+  player at 7 points must score all three battlefields that turn to win by conquer (otherwise they draw a card).
 
 ## Rulings of the registered cards
 

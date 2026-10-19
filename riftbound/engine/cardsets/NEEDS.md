@@ -28,8 +28,6 @@ The engine maintainer will add the hook and the card can then be modelled.
 - **Tokens played by effects** (`make_token`) do not emit `played` and do not get Vision/Weaponmaster play
   triggers (same as the old Mech/Gold/Reflection code).
 - **Hidden restrictions** of Weaponmaster's choice and of keyword triggers are not applied (rule 811.1.d.2).
-- **Baron Nashor / Baron Pit** — need a third battlefield (battlefields are a pair everywhere in the engine):
-  see `NEEDS_battlefields.md`.
 - 3-4 player modes are not implemented.
 
 ## Requests from card modules

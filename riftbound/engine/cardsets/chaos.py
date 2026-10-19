@@ -91,8 +91,8 @@ def _from_facedown(info):
     return getattr(info["card"], "played_from", None) == "facedown"
 
 
-def _dests(u):
-    return [d for d in ("base", 0, 1) if d != u.loc]
+def _dests(g, u):
+    return [d for d in g.locs() if d != u.loc]
 
 
 def _deflect_ok(g, pid, u):
@@ -175,7 +175,7 @@ card("Acceptable Losses", timing="action", resolve=_acceptable)
 # Ancient Warmonger — "[Accelerate] I have [Assault] equal to the number of enemy units here."
 card("Ancient Warmonger", accelerate=True,
      aura_kw=lambda g, src, o: ({"Assault": len(g.units(1 - o.ctrl, o.loc))}
-                                if o is src and o.loc in (0, 1) else None))
+                                if o is src and is_bf(o.loc) else None))
 
 
 # Angler Beast — "When you play me, return all units with 2 might or less to their owners' hands."
@@ -242,7 +242,7 @@ card("Black Market Broker", on_event=lambda g, o, ev, info: (
 # to [Stun] it."
 def _cone_play(g, o, ctx):
     def choose(g_, it):
-        opts = [(u, d) for u in enemies(g_, it.ctrl) if _deflect_ok(g_, it.ctrl, u) for d in _dests(u)]
+        opts = [(u, d) for u in enemies(g_, it.ctrl) if _deflect_ok(g_, it.ctrl, u) for d in _dests(g_, u)]
         if not opts:
             return False
         opts.sort(key=lambda x: (x[1] != "base", -value(g_, x[0])))
@@ -303,7 +303,7 @@ def _skewer(g, it):
 
 def _skewer_choices(g, pid, ctx):
     hb = ctx["hidden_bf"]
-    bfs = [hb] if hb is not None else [0, 1]          # rule 811.1.d.2-3: from Hidden, that battlefield
+    bfs = [hb] if hb is not None else list(g.bf_locs)          # rule 811.1.d.2-3: from Hidden, that battlefield
     bfs = sorted(bfs, key=lambda i: -sum(g.might(u) for u in g.units(pid, i)))
     return [dict(bf=i) for i in bfs]
 
@@ -370,7 +370,7 @@ card("Conscription", preds=[_consc_pred], resolve=_conscription, choices=_consc_
 
 # Corrupt Enforcer — "When I move to a battlefield, discard 1. When I win a combat, draw 1."
 def _enforcer(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         _q(g, o, "Corrupt Enforcer", lambda g_, it: _discard(g_, it.ctrl, 1))
     elif ev == "combat_won" and _won_combat(g, o, info):
         _q(g, o, "Corrupt Enforcer (win)", lambda g_, it: g_.draw(it.ctrl, 1))
@@ -552,7 +552,7 @@ def _evelynn(g, o, ctx):
 
     def res(g_, it):
         u, me = g_.legal(it, 0), _me(g_, it)
-        if u is not None and me is not None and me.loc in (0, 1) and u.loc != me.loc:
+        if u is not None and me is not None and is_bf(me.loc) and u.loc != me.loc:
             g_.move([u], me.loc, it.ctrl)
     _q(g, o, "Evelynn, Entrancing", res, may=True,
        choose=trig_target(lambda g_, it: [u for u in enemies(g_, it.ctrl) if u.loc != _loc_now(g_, it, here)],
@@ -596,7 +596,7 @@ card("Factory Recall", timing="action", preds=[P_gear], resolve=lambda g, it: _t
 
 # Fading Memories — "Give a unit at a battlefield or a gear [Temporary]."
 def _fading_pred(g, it, o):
-    return (o.spec["type"] == "Unit" and o.loc in (0, 1)) or o.spec["type"] == "Gear"
+    return (o.spec["type"] == "Unit" and is_bf(o.loc)) or o.spec["type"] == "Gear"
 
 
 card("Fading Memories", preds=[_fading_pred],
@@ -609,7 +609,7 @@ card("Fading Memories", preds=[_fading_pred],
 # Fae Porter — "When I move to a battlefield, you may pay [Chaos] to move a unit you control to the same
 # battlefield."
 def _porter(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         dest = info["to"]
 
         def res(g_, it):
@@ -792,7 +792,7 @@ card("Hard Bargain", timing="reaction", resolve=_bargain, choices=_bargain_choic
 
 # Harpoon Squad — "When I move from a battlefield, give me +2 might this turn."
 card("Harpoon Squad", on_event=lambda g, o, ev, info: (
-    ev == "move" and info["obj"] is o and info["frm"] in (0, 1) and _q(g, o, "Harpoon Squad", _buff_me(2))))
+    ev == "move" and info["obj"] is o and is_bf(info["frm"]) and _q(g, o, "Harpoon Squad", _buff_me(2))))
 
 
 # Heedless Resurrection — "[Reaction] As an additional cost to play this, kill a friendly unit. Play a unit from
@@ -915,7 +915,7 @@ card("Kayn, Unleashed", kw={"Ganking": 1}, on_event=_kayn)
 # Kha'Zix, Mutating Horror — "[Ambush] When I attack or defend, if an enemy unit is alone here, give me +2 might
 # this turn and gain 2 XP."  (intervening if: checked again on resolution)
 def _enemy_alone_here(g, o):
-    return o.loc in (0, 1) and any(g.alone(e) for e in g.units(1 - o.ctrl, o.loc))
+    return is_bf(o.loc) and any(g.alone(e) for e in g.units(1 - o.ctrl, o.loc))
 
 
 def _khazix(g, o, ev, info):
@@ -953,7 +953,7 @@ card("Kinkou Lifeblade", empower="2 energy", might_if=[(when_empowered, 1)], kw_
 # Kog'Maw, Caustic — "[Deathknell] Deal 4 to all units at my battlefield."
 def _kogmaw(g, it):
     loc = it.data["info"]["loc"]
-    if loc in (0, 1):
+    if is_bf(loc):
         for u in g.units(loc=loc):
             g.deal(u, 4, "ability", it.ctrl)
 
@@ -1077,7 +1077,7 @@ card("Mel, Defiant Soul", on_event=_mel_event, abilities=[ability(
 
 # Minah Swiftfoot — "When I move to a battlefield, choose one — Each player discards 1. / Each player draws 1."
 def _minah(g, o, ev, info):
-    if ev == "move" and info["obj"] is o and info["to"] in (0, 1):
+    if ev == "move" and info["obj"] is o and is_bf(info["to"]):
         def choose(g_, it):
             it.data["mode"] = g_.ask(it.ctrl, "minah_mode", ["draw", "discard"], item=it)
             return True
@@ -1108,7 +1108,7 @@ card("Mindsplitter", on_play=lambda g, o, ctx: _q(g, o, "Mindsplitter", _mindspl
 
 # Mister Root — "[Accelerate] When I move to a battlefield, gain 2 XP."
 card("Mister Root", accelerate=True, on_event=lambda g, o, ev, info: (
-    ev == "move" and info["obj"] is o and info["to"] in (0, 1)
+    ev == "move" and info["obj"] is o and is_bf(info["to"])
     and _q(g, o, "Mister Root", lambda g_, it: g_.gain_xp(it.ctrl, 2))))
 
 
@@ -1180,7 +1180,7 @@ card("Possession", timing="action", preds=[P_enemy_bf],
 # Pyke, Returned — "[Hidden] [Backline] Once each turn, when an enemy unit dies while I'm at a battlefield, play a
 # Gold gear token exhausted."
 def _pyke(g, o, ev, info):
-    if ev == "die" and o.loc in (0, 1):
+    if ev == "die" and is_bf(o.loc):
         inf = info["info"]
         if inf["ctrl"] != o.ctrl and inf["spec"]["type"] == "Unit":
             key = ("pyke", o.uid, o.oid, g.turn_no)
@@ -1236,8 +1236,8 @@ def _ride(g, it):
 
 
 def _ride_choices(g, pid, ctx):
-    out = [dict(tg=(u.uid,), dest=d) for u in friends(g, pid) for d in _dests(u)]
-    out.sort(key=lambda c: (not (c["dest"] in (0, 1) and g.bfs[c["dest"]].ctrl != pid), -value(g, g.obj(c["tg"][0]))))
+    out = [dict(tg=(u.uid,), dest=d) for u in friends(g, pid) for d in _dests(g, u)]
+    out.sort(key=lambda c: (not (is_bf(c["dest"]) and g.bfs[c["dest"]].ctrl != pid), -value(g, g.obj(c["tg"][0]))))
     return out
 
 
@@ -1387,7 +1387,7 @@ card("Stealthy Pursuer", on_event=_pursuer)
 # Switcheroo — "[Hidden] [Action] Swap the Might of two units at the same battlefield this turn." (rule 433)
 def _swap(g, it):
     a, b = g.legal(it, 0), g.legal(it, 1)
-    if a is None or b is None or a.loc != b.loc or a.loc not in (0, 1):
+    if a is None or b is None or a.loc != b.loc or not is_bf(a.loc):
         return
     ma, mb = g.might(a), g.might(b)
     if ma == mb:
@@ -1401,7 +1401,7 @@ def _swap(g, it):
 def _swap_choices(g, pid, ctx):
     hb = ctx["hidden_bf"]
     out = []
-    for bf in ([hb] if hb is not None else [0, 1]):
+    for bf in ([hb] if hb is not None else g.bf_locs):
         us = [u for u in g.units(loc=bf) if g.targetable(u, pid)]
         for a, b in combinations(us, 2):
             # deux unités de même Might sont des cibles légales (l'échange ne change rien) : proposées au joueur humain,
@@ -1445,7 +1445,7 @@ card("Teemo, Scout", hidden=True, on_play=lambda g, o, ctx: _q(g, o, "Teemo, Sco
 # The repetition chooses its own unit and destination (rule 820.2.a): choice keys rep2 / tg2 / dest2, priced by
 # extra_cost_fn (with the Deflect of the second target).
 def _tempt_dests(g, u):
-    return [d for d in ("base", 0, 1) if d != u.loc and any(x is not u for x in g.units(u.ctrl, d))]
+    return [d for d in g.locs() if d != u.loc and any(x is not u for x in g.units(u.ctrl, d))]
 
 
 def _tempt_once(g, it, u, dest):
@@ -1591,11 +1591,11 @@ card("Treasure Hunter", on_event=lambda g, o, ev, info: (
 
 # Twilight Step — "Move a unit with 3 might or less. [Flow] [4][Chaos]"
 def _twilight_choices(g, pid, ctx):
-    out = [dict(tg=(u.uid,), dest=d) for u in friends(g, pid) + enemies(g, pid) if g.might(u) <= 3 for d in _dests(u)]
+    out = [dict(tg=(u.uid,), dest=d) for u in friends(g, pid) + enemies(g, pid) if g.might(u) <= 3 for d in _dests(g, u)]
 
     def good(c):
         u = g.obj(c["tg"][0])
-        return (u.ctrl == pid and c["dest"] in (0, 1)) or (u.ctrl != pid and c["dest"] == "base")
+        return (u.ctrl == pid and is_bf(c["dest"])) or (u.ctrl != pid and c["dest"] == "base")
     out.sort(key=lambda c: not good(c))
     return out
 
@@ -1704,7 +1704,7 @@ def _windsinger(g, o, ctx):
     hb = ctx.get("hidden_bf")
 
     def ok(g_, it, u):
-        return u.uid != it.src and u.loc in (0, 1) and g_.might(u) <= 3 and (hb is None or u.loc == hb)
+        return u.uid != it.src and is_bf(u.loc) and g_.might(u) <= 3 and (hb is None or u.loc == hb)
 
     _q(g, o, "Windsinger", lambda g_, it: _to_hand(g_, g_.legal(it, 0)), may=True,
        choose=trig_target(lambda g_, it: [u for u in enemies(g_, it.ctrl, True) + friends(g_, it.ctrl, True)
@@ -1732,7 +1732,7 @@ card("Zaunite Bouncer", on_play=lambda g, o, ctx: _q(
     g, o, "Zaunite Bouncer", lambda g_, it: _to_hand(g_, g_.legal(it, 0)),
     choose=trig_target(lambda g_, it: [u for u in enemies(g_, it.ctrl, True) + friends(g_, it.ctrl, True)
                                        if u.uid != it.src],
-                       lambda g_, it, u: u.uid != it.src and u.loc in (0, 1), deflect=True)))
+                       lambda g_, it, u: u.uid != it.src and is_bf(u.loc), deflect=True)))
 
 
 # Zed, Without a Sound — "When I conquer, play a 0 might Shadow Clone unit token to your base. [Action] [1][Chaos]:
@@ -1943,7 +1943,7 @@ def _vex_ap_res(g, it):
 
 def _vex_ap_event(g, o, ev, info):
     c = info.get("card") if ev == "played" else None
-    if c is not None and info["pid"] != o.ctrl and c.spec["type"] == "Unit" and o.loc in (0, 1) and c in g.board:
+    if c is not None and info["pid"] != o.ctrl and c.spec["type"] == "Unit" and is_bf(o.loc) and c in g.board:
         _q(g, o, "Vex, Apathetic", _vex_ap_res, dict(u=c.uid, uoid=c.oid))
 
 
@@ -1988,3 +1988,21 @@ def _nocturne_seen(g, c, pid):
 
 
 card("Nocturne, Horrifying", kw={"Ganking": 1}, on_seen=_nocturne_seen)
+
+
+# Baron Nashor — "As you play me, add the Baron Pit battlefield token to the board if it's not there already. If you
+# do, I enter there. (It has "Units can move here from anywhere.") I can't be chosen by enemy spells and abilities.
+# Other friendly units have +2 might." The last sentence of the first ability replaces where he enters (rule 369.3,
+# whose example is this card): only when the token was added by this play. Entering there applies Contested (rule
+# 190.3.a.1), so he usually conquers the Baron Pit. With three battlefields on the board, the Final Point by conquer
+# needs all three scored that turn (rule 471.1.b.1).
+def _nashor_enter(g, pid, card, loc):
+    if any(b.name == BARON_PIT for b in g.bfs):
+        return loc
+    return g.add_battlefield(BARON_PIT)
+
+
+card("Baron Nashor", enter_loc=_nashor_enter,
+     untargetable=lambda g, o, by: by != o.ctrl,
+     aura_might=lambda g, src, o: 2 if (src.spec["type"] == "Unit" and o is not src and o.ctrl == src.ctrl
+                                         and o.spec["type"] == "Unit") else 0)

@@ -81,7 +81,7 @@ def _recital(g, b, ev, info):
                 g_.move([u], "base", it.ctrl)
         g.queue_trigger(info["pid"], "Amateur Recital", res, may=True,
                         choose=trig_target(lambda g_, it: all_units(g_, it.ctrl, True),
-                                           lambda g_, it, o: o.loc in (0, 1), deflect=True))
+                                           lambda g_, it, o: is_bf(o.loc), deflect=True))
 
 
 card("Amateur Recital", bf_event=_recital)
@@ -811,3 +811,10 @@ card("The Academy", bf_event=_academy)
 
 # Bandle Tree — "You may hide an additional card here."
 card("Bandle Tree", hide_slots=1)
+
+
+# Baron Pit (battlefield token, rule 187.9) — "(You can't start the game with a token battlefield.) Units can move here
+# from anywhere." Added to the board by Baron Nashor (Game.add_battlefield): a third battlefield, which the Final Point
+# then requires too (rule 471.1.b.1). "From anywhere" is read in the Standard Move (actions.move_options): a unit at
+# another battlefield may move here without [Ganking]. The deck editor refuses it as a starting battlefield.
+card("Baron Pit")

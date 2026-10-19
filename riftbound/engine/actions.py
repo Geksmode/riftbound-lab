@@ -7,7 +7,7 @@ Actions are tuples that only reference objects by uid, so the same action can be
   ('act', src_uid, ability_index, choice)   src_uid = 'legend' for the player's legend
   ('move', (uids...), dest)
 """
-from game import Item, ANY, SPEC, EQUIP_BONUS
+from game import Item, ANY, SPEC, EQUIP_BONUS, is_bf, BARON_PIT
 from itertools import count
 
 _ids = count(1)
@@ -308,7 +308,7 @@ def deflect_reqs(g, pid, choice):
     for uid in choice.get("tg", ()):
         o = g.obj(uid) if isinstance(uid, int) else None
         if o is not None and o.ctrl != pid:
-            if o.loc in (0, 1) and g.bfs[o.loc].name == "Heisho, Shell of the World":
+            if is_bf(o.loc) and g.bfs[o.loc].name == "Heisho, Shell of the World":
                 continue
             out += [ANY] * g.kw_value(o, "Deflect")
     return out
@@ -663,16 +663,19 @@ def ability_cost(g, pid, obj, ab, ch):
 
 def move_options(g, pid):
     """Standard Move (rule 144/420.3): exhaust ready units to move them to one destination.
-    base -> battlefield, battlefield -> base, battlefield -> battlefield only with Ganking. Movement restrictions
+    base -> battlefield, battlefield -> base, battlefield -> battlefield only with Ganking (or to the Baron Pit,
+    rule 187.9). Movement restrictions
     (Game.can_move) and move costs of several units (Game.move_tax) apply."""
     ready = [u for u in g.units(pid) if not u.exhausted]
     opts = []
-    dests = ["base", 0, 1]
+    dests = list(g.locs())
     for d in dests:
-        movers = [u for u in ready if u.loc != d and (d == "base" or u.loc == "base" or g.has_kw(u, "Ganking"))
+        # Baron Pit (rule 187.9): "Units can move here from anywhere" (from another battlefield without Ganking)
+        anywhere = d != "base" and g.bfs[d].name == BARON_PIT
+        movers = [u for u in ready if u.loc != d and (d == "base" or u.loc == "base" or anywhere or g.has_kw(u, "Ganking"))
                   and g.can_move(u, d, pid, True)]
         if d == "base":
-            movers = [u for u in movers if u.loc in (0, 1)]
+            movers = [u for u in movers if is_bf(u.loc)]
         if not movers:
             continue
         groups = set()
@@ -903,10 +906,10 @@ def play_card(g, pid, card, src, ch, limited=False):
         loc = ch.get("loc", "base")
         if sp["type"] == "Gear" and not from_facedown:
             if has_deploy(g, card):                    # "Play this only to a battlefield" (rule 830.1.b)
-                if loc not in (0, 1):
+                if not is_bf(loc):
                     locs = gear_locations(g, pid, card)
                     if not locs:
-                        locs = [0, 1]
+                        locs = list(g.bf_locs)
                     loc = g.ask(pid, "deploy_location", locs, card=card)
             else:
                 loc = "base"
@@ -914,6 +917,8 @@ def play_card(g, pid, card, src, ch, limited=False):
         ready = (sp["type"] == "Gear" and not im.enter_exhausted) or bool(ch.get("acc")) or ch.get("ready", False)
         if not ready and (enters_ready(g, pid, card, ch) or others_enter_ready(g, pid, card)):
             ready = True
+        if im.enter_loc is not None:                   # "As you play me ... I enter there" (Baron Nashor, rule 369.3)
+            loc = im.enter_loc(g, pid, card, loc)
         g.enter_board(card, pid, loc, ready=ready)
         if ch.get("tag"):
             card.chosen_tag = ch["tag"]                # "As you play me, choose ... I gain that tag."
