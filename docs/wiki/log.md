@@ -257,3 +257,6 @@ Demande de l'utilisateur. Python précompilé au build (`train/precompile.mjs` :
 
 ## [2026-10-19] ingest | Extension Radiance : 166 cartes sur 167 modélisées
 Demande de l'utilisateur. Set RAD ajouté à la base (108 cartes corrigées d'après les images : domaines et tags faux dans la source), Core Rules du 2026-10-09 enregistrées, moteur : Deploy, Disarm, Show Off, jeton Bomb, évènement « devient épuisé », unit gear ; module `cardsets/radiance.py` + 180 tests, planches d'images a16-a18. Neeko, Blending In bloquée (plusieurs légendes). Détail : `pages/radiance.md`.
+
+## [2026-10-19] ingest | Fiche de carte agrandie alignée sur mobile
+Sur téléphone, le titre, le type et le texte de la fiche (`#zoom`, table et replays) forment un seul bloc `.zhd` à droite de l'image ; avant, l'image s'étendait sur trois lignes de grille et le texte partait sous elle.
