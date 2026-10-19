@@ -56,7 +56,7 @@ def runes(g, pid, doms):
 def put(g, pid, name, loc="base", ready=True, bf_control=True):
     o = Obj(name, pid)
     g.enter_board(o, pid, loc, ready=ready)
-    if loc in (0, 1) and bf_control and g.bfs[loc].ctrl is None:
+    if type(loc) is int and bf_control and g.bfs[loc].ctrl is None:
         g.bfs[loc].ctrl = pid
     return o
 

@@ -42,8 +42,8 @@ def _discard(g, pid, n):
         g.discard(pid, g.ask(pid, "discard", sorted(h, key=lambda c: (_cval(c), c.uid))))
 
 
-def _bf_ask(g, pid, kind, locs=(0, 1)):
-    locs = list(locs)
+def _bf_ask(g, pid, kind, locs=None):
+    locs = list(g.bf_locs if locs is None else locs)
     if not locs:
         return None
     return g.ask(pid, kind, locs) if len(locs) > 1 else locs[0]
@@ -281,7 +281,7 @@ card("Amateur Demolitionist", on_play=lambda g, o, ctx: _q(g, o, "Amateur Demoli
 
 # Banner of Conquest — "[Deploy] Friendly units here have [Assault]."
 def _here_friend(g, src, o):
-    return o is not src and o.spec["type"] == "Unit" and o.ctrl == src.ctrl and src.loc in (0, 1) and o.loc == src.loc
+    return o is not src and o.spec["type"] == "Unit" and o.ctrl == src.ctrl and is_bf(src.loc) and o.loc == src.loc
 
 
 card("Banner of Conquest", kw={"Deploy": 1},
@@ -359,7 +359,7 @@ def _split_opts(g, pid, us, total):
 def _scorched_choices(g, pid, ctx):
     out = []
     hb = ctx["hidden_bf"]
-    for b in (0, 1):
+    for b in g.bf_locs:
         if hb is not None and b != hb:
             continue
         us = [u for u in g.units() if u.loc == b and g.targetable(u, pid)]
@@ -548,7 +548,7 @@ def _amp_play(g, o, ctx):
 
 
 card("Detonation Amplifier", kw={"Deploy": 1}, on_play=_amp_play,
-     dk_extra=lambda g, src, inf: 1 if (src.zone == "board" and src.loc in (0, 1) and inf["ctrl"] == src.ctrl
+     dk_extra=lambda g, src, inf: 1 if (src.zone == "board" and is_bf(src.loc) and inf["ctrl"] == src.ctrl
                                          and inf["loc"] == src.loc and inf["uid"] != src.uid) else 0)
 
 
@@ -733,7 +733,7 @@ card("Sanctum Conservator", on_event=lambda g, o, ev, info: (
 # Stoic Ferryman — "[Shield 3] When you play me to a battlefield, you may move another unit you control here to your
 # base."
 def _ferryman(g, o, ctx):
-    if o.loc not in (0, 1):
+    if not is_bf(o.loc):
         return
     here = o.loc
 
@@ -797,7 +797,7 @@ def _ca_choices(g, pid, ctx):
     out = [dict(mode="look")]
     for x in g.gear(pid):
         if has_deploy(g, x):
-            out += [dict(mode="move", tg=(x.uid,), dest=b) for b in (0, 1) if b != x.loc]
+            out += [dict(mode="move", tg=(x.uid,), dest=b) for b in g.bf_locs if b != x.loc]
     return out
 
 
@@ -837,7 +837,7 @@ card("Invigorating Bloom",
 
 # Storm Raptor — "[Deflect] When a stunned enemy unit dies here, draw 1."
 card("Storm Raptor", kw={"Deflect": 1}, on_event=lambda g, o, ev, info: (
-    ev == "die" and info["info"]["ctrl"] != o.ctrl and info["info"]["stunned"] and o.loc in (0, 1)
+    ev == "die" and info["info"]["ctrl"] != o.ctrl and info["info"]["stunned"] and is_bf(o.loc)
     and info["info"]["loc"] == o.loc and info["info"]["spec"]["type"] == "Unit"
     and _q(g, o, "Storm Raptor", lambda g_, it: g_.draw(it.ctrl, 1))))
 
@@ -850,7 +850,7 @@ card("Watchful Curator", aura_kw=lambda g, src, o: {"Deflect": 1} if (
 # Ahri, Confident — "[Disarm] When you reduce the Might of an enemy unit here by 1 or more, give me +1 might this
 # turn." ('might_reduced' event: a -might given by a spell or ability you control)
 card("Ahri, Confident", kw={"Disarm": 1}, on_event=lambda g, o, ev, info: (
-    ev == "might_reduced" and info["by"] == o.ctrl and info["obj"].ctrl != o.ctrl and o.loc in (0, 1)
+    ev == "might_reduced" and info["by"] == o.ctrl and info["obj"].ctrl != o.ctrl and is_bf(o.loc)
     and info["obj"].loc == o.loc and info["amount"] >= 1
     and _q(g, o, "Ahri, Confident", lambda g_, it: _me(g_, it) is not None and g_.mod(_me(g_, it), 1))))
 
@@ -955,7 +955,7 @@ card("Riven, Broken Blade", on_event=_riven_bb)
 def _blind_play(g, o, ctx):
     def res(g_, it):
         u, me = g_.legal(it, 0), g_.obj(it.src)
-        if u is not None and me is not None and me.loc in (0, 1) and u.loc != me.loc:
+        if u is not None and me is not None and is_bf(me.loc) and u.loc != me.loc:
             g_.move([u], me.loc, it.ctrl)
     _q(g, o, "Hunting Blind", res, may=True, choose=trig_target(
         lambda g_, it: [u for u in enemies(g_, it.ctrl) if g_.obj(it.src) is not None and u.loc != g_.obj(it.src).loc],
@@ -1059,7 +1059,7 @@ card("Parallel Convergence", preds=[P_unit_bf], pay_extra=_pay_ret,
 # Resource Extractor — "[Deploy] At the end of your turn, if you control this battlefield, play a Gold gear token
 # exhausted."
 card("Resource Extractor", kw={"Deploy": 1}, on_event=lambda g, o, ev, info: (
-    ev == "end_turn" and info["pid"] == o.ctrl and o.loc in (0, 1) and g.bfs[o.loc].ctrl == o.ctrl
+    ev == "end_turn" and info["pid"] == o.ctrl and is_bf(o.loc) and g.bfs[o.loc].ctrl == o.ctrl
     and _q(g, o, "Resource Extractor", lambda g_, it: _gold(g_, it.ctrl))))
 
 
@@ -1149,7 +1149,7 @@ card("Ekko, Ingenious", kw={"Ganking": 1}, pay_extra=_pay_ret,
 # Draw 1."
 card("Gravity Field", kw={"Deploy": 1}, deathknell=lambda g, it: g.draw(it.ctrl, 1),
      move_cost=lambda g, src, pid, units, dest: (1, [ANY]) if (
-         src.zone == "board" and src.loc in (0, 1) and dest == src.loc and pid != src.ctrl) else None)
+         src.zone == "board" and is_bf(src.loc) and dest == src.loc and pid != src.ctrl) else None)
 
 
 # Kai'Sa, Rebel — "[Disarm] While I'm in a showdown, your spells have [Reaction]."
@@ -1238,7 +1238,7 @@ def _om_key(g, src):
 
 
 def _om_aura(g, src, pid, what):
-    if src.zone == "board" and src.loc in (0, 1) and pid == src.ctrl and what["kind"] == "gear" \
+    if src.zone == "board" and is_bf(src.loc) and pid == src.ctrl and what["kind"] == "gear" \
             and what["card"] is not None and not g.stats[_om_key(g, src)]:
         return [dict(e=-1, rm=1)]
     return []
@@ -1246,7 +1246,7 @@ def _om_aura(g, src, pid, what):
 
 def _om_event(g, o, ev, info):
     if ev == "played" and info["pid"] == o.ctrl and _played_card(info) and info["card"].spec["type"] == "Gear" \
-            and o.loc in (0, 1) and not getattr(info["card"], "limited_play", True):
+            and is_bf(o.loc) and not getattr(info["card"], "limited_play", True):
         g.stats[_om_key(g, o)] = 1
 
 
@@ -1290,7 +1290,7 @@ card("Nazuman Ntofo", equip="1 energy", bonus=0, equip_kw={"Shield": 2})
 
 
 # Overloaded Traveler — "While there's a friendly gear with [Deploy] at my battlefield, I have +1 might."
-card("Overloaded Traveler", might_mod=lambda g, o: 1 if o.loc in (0, 1) and any(
+card("Overloaded Traveler", might_mod=lambda g, o: 1 if is_bf(o.loc) and any(
     x.ctrl == o.ctrl and x.loc == o.loc and has_deploy(g, x) for x in g.gear()) else 0)
 
 
@@ -1551,12 +1551,12 @@ def _satchel(g, it):
     _bomb(g, it.ctrl)
 
 
-def _move_choices(us):
-    return [dict(tg=(u.uid,), dest=d) for u in us for d in ("base", 0, 1) if d != u.loc]
+def _move_choices(g, us):
+    return [dict(tg=(u.uid,), dest=d) for u in us for d in g.locs() if d != u.loc]
 
 
 card("Satchel Charge", timing="action", preds=[P_friend], resolve=_satchel,
-     choices=lambda g, pid, ctx: _move_choices(friends(g, pid, False, ctx["hidden_bf"])),
+     choices=lambda g, pid, ctx: _move_choices(g, friends(g, pid, False, ctx["hidden_bf"])),
      max_choices=12)
 
 
@@ -1570,7 +1570,7 @@ def _moved(g, u):
 card("Siren's Song", timing="reaction", preds=[lambda g, it, o: P_enemy(g, it, o) and _moved(g, o)],
      resolve=lambda g, it: g.legal(it, 0) is not None and g.legal(it, 0).loc != it.data["dest"] and g.move(
          [g.legal(it, 0)], it.data["dest"], it.ctrl),
-     choices=lambda g, pid, ctx: sorted(_move_choices([u for u in enemies(g, pid, False, ctx["hidden_bf"]) if _moved(g, u)]),
+     choices=lambda g, pid, ctx: sorted(_move_choices(g, [u for u in enemies(g, pid, False, ctx["hidden_bf"]) if _moved(g, u)]),
                                         key=lambda ch: ch["dest"] != "base"), max_choices=10)
 
 
@@ -1716,7 +1716,7 @@ card("Bushwhack Trap", kw={"Deploy": 1}, extra_hide_slots=lambda g, src, b: 1 if
 card("Evelynn, In Control", kw={"Disarm": 1}, on_event=lambda g, o, ev, info: (
     ev == "hold" and info["pid"] == o.ctrl and o in info["units"] and _q(
         g, o, "Evelynn, In Control", lambda g_, it: _me(g_, it) is not None and any(
-            c.owner == it.ctrl for c in g_.bfs[_me(g_, it).loc].facedowns if _me(g_, it).loc in (0, 1))
+            c.owner == it.ctrl for c in g_.bfs[_me(g_, it).loc].facedowns if is_bf(_me(g_, it).loc))
         and g_.gain_point(it.ctrl, "Evelynn, In Control"))))
 
 
@@ -1778,7 +1778,7 @@ card("Ziggs, Explosive", on_event=_ziggs_def,
 # Angler Wyrm — "[Deflect] [E]: Choose an opponent. They must move a unit they control to my battlefield."
 def _wyrm(g, it):
     me = g.obj(it.src)
-    if me is None or me.loc not in (0, 1):
+    if me is None or not is_bf(me.loc):
         return
     opp = 1 - it.ctrl
     us = [u for u in g.units(opp) if u.loc != me.loc and g.can_move(u, me.loc, opp)]
@@ -1788,7 +1788,7 @@ def _wyrm(g, it):
 
 
 card("Angler Wyrm", kw={"Deflect": 1}, abilities=[ability(
-    "Lure", None, exhaust=True, resolve=_wyrm, can=lambda g, pid, o: o.loc in (0, 1))])
+    "Lure", None, exhaust=True, resolve=_wyrm, can=lambda g, pid, o: is_bf(o.loc))])
 
 
 # Riven, Deserter — "When another friendly unit becomes exhausted, give me +1 might this turn. Exhaust a friendly unit:
@@ -1861,7 +1861,7 @@ def _for_demacia(g, it):
 
 
 card("For Demacia!", timing="reaction", resolve=_for_demacia,
-     choices=lambda g, pid, ctx: sorted([dict(bf=b) for b in (0, 1) if ctx["hidden_bf"] is None or b == ctx["hidden_bf"]],
+     choices=lambda g, pid, ctx: sorted([dict(bf=b) for b in g.bf_locs if ctx["hidden_bf"] is None or b == ctx["hidden_bf"]],
                                         key=lambda ch: -len([u for u in g.units(pid) if u.loc == ch["bf"]])))
 
 
@@ -1977,7 +1977,7 @@ card("Rousing Display", resolve=_rousing, show_off=lambda g, pid, c, x: not x.to
 
 # Steadfast Outrider — "[Tank] While there are 2 or more other friendly units and/or gear at my battlefield, I have +2
 # might."
-card("Steadfast Outrider", kw={"Tank": 1}, might_mod=lambda g, o: 2 if o.loc in (0, 1) and sum(
+card("Steadfast Outrider", kw={"Tank": 1}, might_mod=lambda g, o: 2 if is_bf(o.loc) and sum(
     1 for x in g.board if x is not o and x.ctrl == o.ctrl and x.loc == o.loc
     and (x.spec["type"] == "Unit" or g.is_gear(x))) >= 2 else 0)
 
@@ -2006,7 +2006,7 @@ card("Trifarian Captain", on_play=lambda g, o, ctx: _q(g, o, "Trifarian Captain"
 def _armorer(g, o, ev, info):
     if ev == "die":
         inf = info["info"]
-        if inf["ctrl"] == o.ctrl and inf["spec"]["type"] == "Gear" and inf["loc"] in (0, 1) and not inf["token"]:
+        if inf["ctrl"] == o.ctrl and inf["spec"]["type"] == "Gear" and is_bf(inf["loc"]) and not inf["token"]:
             c = inf["obj"]
 
             def res(g_, it):
@@ -2037,7 +2037,7 @@ card("Demacian Illuminators", on_event=_illum)
 # Heimerdinger, Academy Instructor — "If you would play a unit token to a location while I'm at a battlefield, you may
 # play a 3 might Mech unit token to that same location instead."
 card("Heimerdinger, Academy Instructor", token_swap=lambda g, src, pid, name, loc: "Mech" if (
-    src.zone == "board" and src.loc in (0, 1) and pid == src.ctrl and name != "Mech") else None)
+    src.zone == "board" and is_bf(src.loc) and pid == src.ctrl and name != "Mech") else None)
 
 
 # Jarvan IV, Royal Heir — "[Assault] [Tank] When I attack, you may move a unit you control to my battlefield."
@@ -2215,7 +2215,7 @@ def _chronobreak(g, it):
             back.remove((u, loc, owner))
         c = next((x for x in g.p[owner].banish if x.uid == u.uid), None)
         if c is not None:
-            locs = ["base"] + ([loc] if loc in (0, 1) else [])
+            locs = ["base"] + ([loc] if is_bf(loc) else [])
             play_unit_free(g, owner, c, "banish", loc_choices=locs)
 
 
@@ -2340,7 +2340,7 @@ card("Orianna, Lady of Clockwork", legend_event=_ori_legend)
 def _ball_trig(g, o):
     def choose(g_, it):
         me = g_.obj(it.src)
-        n = len([u for u in g_.units(1 - it.ctrl) if me is not None and u.loc == me.loc and u.loc in (0, 1)])
+        n = len([u for u in g_.units(1 - it.ctrl) if me is not None and u.loc == me.loc and is_bf(u.loc)])
         opts = [Opt(tr("piocher 1", "draw 1"), "draw"), Opt(tr("2 dégâts aux ennemis ici", "deal 2 to enemy units here"), "deal")]
         if n >= 2:
             opts.reverse()
@@ -2351,7 +2351,7 @@ def _ball_trig(g, o):
         me = g_.obj(it.src)
         if it.data["mode"] == "draw":
             g_.draw(it.ctrl, 1)
-        elif me is not None and me.loc in (0, 1):
+        elif me is not None and is_bf(me.loc):
             for u in [u for u in g_.units(1 - it.ctrl) if u.loc == me.loc]:
                 g_.deal(u, 2, "ability", it.ctrl)
     _q(g, o, "The Ball", res, choose=choose)
@@ -2404,7 +2404,7 @@ card("Ntofo Strikes", timing="action", preds=[P_friend, P_enemy], resolve=_ntofo
 # Riven, The Exile — "Units you play to battlefields you control enter ready." (card.played_to: where it is played)
 card("Riven, The Exile", units_enter_ready=lambda g, src, pid, c: (
     pid == src.owner and getattr(src, "zone", None) == "legend" and c.spec["type"] == "Unit"
-    and getattr(c, "played_to", None) in (0, 1) and g.bfs[c.played_to].ctrl == pid))
+    and is_bf(getattr(c, "played_to", None)) and g.bfs[c.played_to].ctrl == pid))
 
 
 # Blade of the Exile — "[Equip] — [A] or exhaust a friendly unit" ; Effect Text and Might Bonus read on the card:
@@ -2535,7 +2535,7 @@ def _caress(g, it):
     key = ("caress", it.id)
 
     def locs(g_, eff, card, closed):
-        return [0, 1] if card.spec["type"] == "Unit" else []
+        return list(g_.bf_locs) if card.spec["type"] == "Unit" else []
 
     def fire(g_, eff, info):
         if info["pid"] == pid and not info.get("token") and info["card"].spec["type"] == "Unit":
@@ -2556,7 +2556,7 @@ def _jarvan_ex(g, pid, ev, info):
     if ev != "played" or info["pid"] != pid or not g.is_gear(info["card"]) or not has_deploy(g, info["card"]):
         return
     x = info["card"]
-    if x.loc not in (0, 1):
+    if not is_bf(x.loc):
         return
     dest = x.loc
 

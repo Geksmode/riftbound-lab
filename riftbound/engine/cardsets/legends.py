@@ -240,7 +240,7 @@ def _jax_choices(attached):
         gears = [x for x in g.gear(pid) if _is_equipment(x) and (x.attached_to is not None) == attached]
         gears.sort(key=lambda x: (-EQUIP_BONUS.get(x.cname, 0), x.uid))
         out = []
-        for u in sorted(friends(g, pid), key=lambda u: (u.loc not in (0, 1), -value(g, u))):
+        for u in sorted(friends(g, pid), key=lambda u: (not is_bf(u.loc), -value(g, u))):
             for x in gears:
                 if x.attached_to != u.uid:
                     out.append(dict(tg=(x.uid, u.uid)))
@@ -331,7 +331,7 @@ def _kennen(g, pid, ev, info):
 
 def _kennen_choices(g, pid, o):
     us = [u for u in g.units() if g.targetable(u, pid)]
-    return tg_choices(_friends_first(g, pid, us, key=lambda u: (u.loc not in (0, 1), -value(g, u))))
+    return tg_choices(_friends_first(g, pid, us, key=lambda u: (not is_bf(u.loc), -value(g, u))))
 
 
 card("Kennen, Heart of the Tempest", legend_event=_kennen, abilities=[
@@ -452,7 +452,7 @@ card("Master Yi, Wuju Bladesman", aura_might=_yi_aura)
 # "[E]: Give a unit [Ganking] this turn."
 def _mf_choices(g, pid, o):
     us = [u for u in g.units() if g.targetable(u, pid)]
-    return tg_choices(_friends_first(g, pid, us, key=lambda u: (g.has_kw(u, "Ganking"), u.loc not in (0, 1),
+    return tg_choices(_friends_first(g, pid, us, key=lambda u: (g.has_kw(u, "Ganking"), not is_bf(u.loc),
                                                                 u.exhausted, -value(g, u))))
 
 
@@ -527,7 +527,7 @@ def _rengar(g, pid, ev, info):
     if ev == "played" and info["pid"] == pid and info["card"].spec["type"] == "Unit":
         def opts(g_, it):
             us = [u for u in g_.units() if g_.targetable(u, it.ctrl)]
-            return _friends_first(g_, it.ctrl, us, key=lambda u: (u.loc not in (0, 1), -value(g_, u)))
+            return _friends_first(g_, it.ctrl, us, key=lambda u: (not is_bf(u.loc), -value(g_, u)))
         g.queue_trigger(pid, "Rengar, Pridestalker", lambda g_, it: g_.legal(it, 0) is not None and
                         g_.mod(g_.legal(it, 0), 1), src=_leg(g, pid).uid,
                         choose=trig_target(opts, P_unit, kind="rengar_target", deflect=True))
@@ -637,7 +637,7 @@ def _yasuo_choices(g, pid, o):
     out = []
     for u in friends(g, pid):
         if u.loc == "base":
-            for b in (0, 1):
+            for b in g.bf_locs:
                 out.append(dict(tg=(u.uid,), dest=b))
         else:
             out.append(dict(tg=(u.uid,), dest="base"))
@@ -656,7 +656,7 @@ def _yasuo(g, it):
     d = it.data.get("dest")
     if u is None or d is None:
         return
-    if (d == "base" and u.loc in (0, 1)) or (d in (0, 1) and u.loc == "base"):
+    if (d == "base" and is_bf(u.loc)) or (is_bf(d) and u.loc == "base"):
         g.move([u], d, it.ctrl)
 
 
@@ -700,7 +700,7 @@ card("Ambessa, Matriarch of War", legend_event=_empower_echo("Ambessa, Matriarch
 card("Mel, Soul's Reflection", legend_event=_empower_echo("Mel, Soul's Reflection"), abilities=[ability(
     "-2 might", None, exhaust=True, preds=[P_unit_bf], can=_empowered, extra_cost=_disempower_me,
     choices=lambda g, pid, o: tg_choices(sorted(
-        [u for u in g.units() if u.loc in (0, 1) and g.targetable(u, pid)],
+        [u for u in g.units() if is_bf(u.loc) and g.targetable(u, pid)],
         key=lambda u: (u.ctrl == pid, -value(g, u), u.uid))),
     resolve=lambda g, it: g.legal(it, 0) is not None and g.mod(g.legal(it, 0), -2))])
 

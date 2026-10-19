@@ -489,7 +489,7 @@ def integration_battlefields_registered():
               "Vilemaw's Lair", "Forge of the Fluft", "Gardens of Becoming", "Altar of Blood", "Ripper's Bay",
               "Forgotten Library", "The Academy", "Bandle Tree"):
         assert n in IMPL and IMPL[n].module == "cardsets.battlefields", n
-    assert "Baron Pit" not in IMPL
+    assert IMPL["Baron Pit"].module == "cardsets.battlefields"
 
 
 def _costs(g, pid, c, src="hand", pred=lambda ch: True, closed=False):
@@ -846,6 +846,22 @@ def star_spring_never_offers_the_unit_just_played_to_a_human():
     g = train.W["g"]
     assert not offered, offered                       # une seule unité possible (l'autre) : rien à demander
     assert g.obj(c.uid).loc == 0 and g.obj(other.uid).loc == "base", (offered, g.obj(c.uid).loc, g.obj(other.uid).loc)
+
+
+@T.test
+def no_two_battlefield_assumption_in_engine_code():
+    """Battlefields are a list of any size (Baron Pit, rule 187.9): locations are tested with is_bf / g.bf_locs."""
+    import glob, re
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bad = []
+    pat = re.compile(r'(loc|"to"\]|"frm"\]|dest|here)\)? (not )?in \(0, 1\)|for (b|bf|d|i) in \(0, 1\)|\("base", 0, 1\)')
+    for f in sorted(glob.glob(os.path.join(root, "*.py")) + glob.glob(os.path.join(root, "cardsets", "*.py"))):
+        if os.path.basename(f).startswith("test_"):
+            continue
+        for k, line in enumerate(open(f, encoding="utf-8"), 1):
+            if pat.search(line):
+                bad.append(f"{os.path.relpath(f, root)}:{k}")
+    assert not bad, bad
 
 
 if __name__ == "__main__":

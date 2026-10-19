@@ -1536,5 +1536,107 @@ def nocturne_played_when_seen_on_top():
     assert [c.cname for c in g2.p[0].hand] == ["Nocturne, Horrifying"]
 
 
+# ------------------------------------------------------------------ Baron Nashor / Baron Pit (rules 187.9, 369.3, 471.1.b)
+def _nashor(g, pid=0, **kw):
+    R(g, pid, 13)
+    hand(g, pid, "Baron Nashor")
+    return play(g, pid, "Baron Nashor", **kw)
+
+
+def _named(g, name):
+    return [u for u in g.units() if u.cname == name]
+
+
+@T.test
+def baron_nashor_adds_the_baron_pit_and_enters_there():
+    g, _ = N()
+    _nashor(g, pred=base)
+    assert [b.name for b in g.bfs] == ["Test Field A", "Test Field B", "Baron Pit"]
+    n = _named(g, "Baron Nashor")[0]
+    assert n.loc == 2 and g.bfs[2].owner is None
+    # entering an uncontrolled battlefield applies Contested (190.3.a.1): he conquers it (one point)
+    assert g.bfs[2].ctrl == 0 and g.p[0].points == 1 and 0 in g.bfs[2].scored
+
+
+@T.test
+def baron_nashor_second_copy_enters_where_played():
+    g, _ = N()
+    g.add_battlefield("Baron Pit")
+    _nashor(g, pred=base)
+    assert len(g.bfs) == 3 and _named(g, "Baron Nashor")[0].loc == "base"
+
+
+@T.test
+def baron_nashor_untargetable_by_enemies_and_aura():
+    g, _ = N()
+    a = put(g, 0, V3)
+    e = put(g, 1, V3)
+    n = put(g, 0, "Baron Nashor", 0)
+    assert g.might(a) == g.might(e) + 2 and g.might(n) == 12
+    assert not g.targetable(n, 1) and g.targetable(n, 0)
+
+
+@T.test
+def baron_pit_units_move_here_from_another_battlefield():
+    g, _ = N()
+    g.add_battlefield("Baron Pit")
+    u = put(g, 0, V3, 0)
+    dests = [o[2] for o in options_of(g, "move") if o[1] == (u.uid,)]
+    assert 2 in dests and 1 not in dests and "base" in dests
+    g.apply(("move", (u.uid,), 2))
+    settle(g)
+    assert u.loc == 2 and g.bfs[2].ctrl == 0
+
+
+@T.test
+def final_point_needs_the_baron_pit_too():
+    # 7 points, both starting battlefields scored this turn but not the Baron Pit: the conquer draws a card instead
+    g, _ = N()
+    g.add_battlefield("Baron Pit")
+    g.p[0].points = 7
+    g.bfs[0].scored.add(0)
+    u = put(g, 0, V3)
+    g.p[0].deck = [Obj(V3, 0) for _ in range(3)]
+    h = len(g.p[0].hand)
+    g.apply(("move", (u.uid,), 1))
+    settle(g)
+    assert g.p[0].points == 7 and len(g.p[0].hand) == h + 1 and g.winner is None
+    # the Baron Pit scored next: every battlefield scored this turn, the Final Point is gained
+    v = put(g, 0, V3)
+    g.apply(("move", (v.uid,), 2))
+    settle(g)
+    assert g.winner == 0
+
+
+@T.test
+def final_point_with_all_three_battlefields_scored():
+    g, _ = N()
+    g.add_battlefield("Baron Pit")
+    g.p[0].points = 7
+    g.bfs[0].scored.add(0)
+    g.bfs[2].scored.add(0)
+    u = put(g, 0, V3)
+    g.apply(("move", (u.uid,), 1))
+    settle(g)
+    assert g.winner == 0
+
+
+@T.test
+def baron_nashor_at_seven_points_without_other_scores_draws():
+    # Nashor conquers the Baron Pit he added; the two other battlefields were not scored this turn
+    g, _ = N()
+    g.p[0].points = 7
+    g.p[0].deck = [Obj(V3, 0) for _ in range(3)]
+    _nashor(g, pred=base)
+    assert g.bfs[2].ctrl == 0 and g.p[0].points == 7 and g.winner is None
+
+
+@T.test
+def baron_pit_refused_as_starting_battlefield():
+    import train
+    d = dict(legend="Kai'Sa, Daughter of the Void", champion=None, main=[], runes=[], battlefields=["Baron Pit"])
+    assert any("jeton" in e or "token" in e for e in train.validate(d))
+
+
 if __name__ == "__main__":
     T.main()

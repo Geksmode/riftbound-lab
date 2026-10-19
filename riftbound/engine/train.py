@@ -11,7 +11,7 @@ API (renvoie du JSON) : new(seed, bf, first, level) ; step() ; act(i) ; answer(x
 import copy, json, random, itertools
 import actions as _act
 import game as _game
-from game import Game, Obj, Item
+from game import Game, Obj, Item, is_bf
 from decks import load, edit, with_bf, DECKS
 import plans as P
 import replay as _rp
@@ -435,6 +435,9 @@ def validate(d):
     for b in bfs:
         if S.get(b, {}).get("type") != "Battlefield":
             err.append(tr(f"{b} n'est pas un battlefield", f"{b} is not a battlefield"))
+        elif _cards.is_token(b):           # Baron Pit, Brush : « You can't start the game with a token battlefield. »
+            err.append(tr(f"{b} est un jeton : on ne peut pas commencer la partie avec",
+                          f"{b} is a token: you can't start the game with it"))
     todo = sorted(n for n in set(cnt) | set(side) | set(bfs) | ({lg} if lg else set()) if n in S and n not in _cards.IMPL)
     if todo:
         err.append(tr("pas encore modélisées : ", "not modelled yet: ") + ", ".join(todo))
@@ -567,7 +570,7 @@ def _expand(g, d):
         extra = {k: v for k, v in lst[0][3].items() if k not in ("tg", "mover", "mover_oid", "dest")}
         for t in [(e.uid,) for e in ens] + [()]:
             for u in fr:
-                for dst in ("base", 0, 1):
+                for dst in g.locs():
                     if dst == u.loc:
                         continue
                     ch = dict(extra, tg=t, mover=u.uid, mover_oid=u.oid, dest=dst)
@@ -786,14 +789,14 @@ def _olabel(g, o):
         return tr("non", "no")
     if hasattr(o, "cname"):
         loc = getattr(o, "loc", None)
-        where = "" if loc is None else " (" + (g.bfs[loc].name if loc in (0, 1) else "base") + ")" if hasattr(o, "uid") and g.obj(o.uid) is not None else ""
+        where = "" if loc is None else " (" + (g.bfs[loc].name if is_bf(loc) else "base") + ")" if hasattr(o, "uid") and g.obj(o.uid) is not None else ""
         mine = "" if getattr(o, "ctrl", ME) == ME else tr(" adverse", " (enemy)")
         return f"{g.label(o) if hasattr(o, 'uid') and g.obj(o.uid) is not None else o.cname}{mine}{where}"
     if hasattr(o, "domain"):
         return f"rune {o.domain}"
     if hasattr(o, "label") and hasattr(o, "value"):       # game.Opt
         return str(o.label)
-    if isinstance(o, int) and not isinstance(o, bool) and o in (0, 1):
+    if isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs:
         return g.bfs[o].name
     if o == "base":
         return tr("la base", "base")
@@ -1051,7 +1054,7 @@ def _view(ask=None):
         out["ask"] = dict(kind=ask.kind, title=_ask_title(g, ask),
                           options=[_alabel(g, ask, o) for o in ask.options],
                           uids=[_ask_uid(g, o) for o in ask.options],
-                          zs=[("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in (0, 1))) else None
+                          zs=[("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs)) else None
                               for o in ask.options],
                           src=_ask_src(g, ask),
                           item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None)

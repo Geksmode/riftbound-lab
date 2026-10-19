@@ -81,7 +81,7 @@ def _trig(g, o, name, fn, data=None, **kw):
 
 def _is_here(u, loc, pid):
     """u is at loc: a battlefield, or pid's own base (bases are per player)."""
-    return u.loc == loc and (loc in (0, 1) or u.ctrl == pid)
+    return u.loc == loc and (is_bf(loc) or u.ctrl == pid)
 
 
 def _target_here(any_unit=False):
@@ -183,7 +183,7 @@ def _ava(g, o, ev, info):
 
         def res(g_, it):
             here = _here(g_, it)
-            if here not in (0, 1):
+            if not is_bf(here):
                 return
             plays = _ava_plays(g_, it.ctrl, here)
             if not plays:
@@ -571,7 +571,7 @@ card("Lux, Illuminated", on_event=_lux)
 def _nasus(g, o, ev, info):
     if ev == "die":
         inf = info["info"]
-        if inf["spec"]["type"] == "Unit" and inf["ctrl"] != o.ctrl and inf["loc"] == o.loc and o.loc in (0, 1):
+        if inf["spec"]["type"] == "Unit" and inf["ctrl"] != o.ctrl and inf["loc"] == o.loc and is_bf(o.loc):
             key = ("nasus", o.uid, o.oid, g.turn_no)
             if key in g.stats:                       # rule 383.3.e
                 return
@@ -596,7 +596,7 @@ card("Patched Porobot", on_play=_porobot)
 
 
 # Petal Pixie — "I have +1 might for each of your units with [Temporary] at my battlefield."
-card("Petal Pixie", might_mod=lambda g, o: 0 if o.loc not in (0, 1) else
+card("Petal Pixie", might_mod=lambda g, o: 0 if not is_bf(o.loc) else
      sum(1 for u in g.units(o.ctrl, o.loc) if g.has_kw(u, "Temporary")))
 
 
@@ -658,9 +658,9 @@ card("Ravenbloom Student", on_event=_ravenbloom)
 # Use my abilities only while I'm at a battlefield."  (a point scored by an effect, not a Conquer: no Final
 # Point restriction, rule 471.1.b)
 card("Renata Glasc, Mastermind", abilities=[
-    ability("Draw", "1 energy and 1 mind rune", can=lambda g, pid, o: o.loc in (0, 1),
+    ability("Draw", "1 energy and 1 mind rune", can=lambda g, pid, o: is_bf(o.loc),
             resolve=lambda g, it: g.draw(it.ctrl, 1)),
-    ability("Score", "4 energy and 4 mind runes", exhaust=True, can=lambda g, pid, o: o.loc in (0, 1),
+    ability("Score", "4 energy and 4 mind runes", exhaust=True, can=lambda g, pid, o: is_bf(o.loc),
             resolve=lambda g, it: g.gain_point(it.ctrl, "Renata Glasc, Mastermind")),
 ])
 
@@ -863,7 +863,7 @@ card("Garbage Grabber", abilities=[
 # Gutter Palace — "At the start of your Beginning Phase, if you have exactly 4 cards in hand and exactly 4 units at
 # battlefields, you win the game. Discard 1, exhaust: Play a 1 might Bird unit token with [Deflect]."
 def _palace_ok(g, pid):
-    return len(g.p[pid].hand) == 4 and sum(1 for u in g.units(pid) if u.loc in (0, 1)) == 4
+    return len(g.p[pid].hand) == 4 and sum(1 for u in g.units(pid) if is_bf(u.loc)) == 4
 
 
 def _palace(g, o, ev, info):
@@ -1255,7 +1255,7 @@ def _moonfall(g, it):
 
 def _moonfall_choices(g, pid, ctx):
     out = []
-    for bf in (0, 1):
+    for bf in g.bf_locs:
         if not any(u.loc == bf for u in g.units(pid)):
             continue
         out += cap(g, [dict(bf=bf, tg=(u.uid,)) for u in enemies(g, pid) if u.loc != bf], 3, pid)
@@ -1499,7 +1499,7 @@ card("Temporal Breach", hidden=True, preds=[P_unit], resolve=_breach,
 def _unchecked(g, it):
     for u in g.units(it.ctrl):
         u.exhausted = True
-    for u in [x for x in g.units() if x.loc in (0, 1)]:
+    for u in [x for x in g.units() if is_bf(x.loc)]:
         g.deal(u, 12, "spell", it.ctrl)
 
 
@@ -1561,7 +1561,7 @@ card("Applied Researchers", abilities=[empower_ability("3 energy")],
 # minimum of 1 energy."
 card("Eager Apprentice",
      cost_aura=lambda g, src, pid, what: [dict(e=-1, min_e=1)]
-     if src.loc in (0, 1) and pid == src.ctrl and what["kind"] == "spell" and what["card"] is not None else [])
+     if is_bf(src.loc) and pid == src.ctrl and what["kind"] == "spell" and what["card"] is not None else [])
 
 
 # Jayce, Man of Progress — "When you play me, you may kill a friendly gear. If you do, you may play a gear with Energy
@@ -1630,7 +1630,7 @@ card("Guerilla Warfare", resolve=_guerilla)
 # the number of cards that player drew this turn)
 card("Frigid Jewel", on_event=lambda g, o, ev, info: ev == "draw" and info["pid"] == o.ctrl and info["n"] == 2 and _trig(
     g, o, "Frigid Jewel", lambda g_, it: g_.legal(it, 0) is not None and g_.mod(g_.legal(it, 0), 2),
-    choose=trig_target(lambda g_, it: sorted(g_.units(it.ctrl), key=lambda u: (u.loc not in (0, 1), -value(g_, u))),
+    choose=trig_target(lambda g_, it: sorted(g_.units(it.ctrl), key=lambda u: (not is_bf(u.loc), -value(g_, u))),
                        P_friend, kind="buff_target")))
 
 
@@ -1703,7 +1703,7 @@ card("Blue Sentinel", kw={"Shield": 2},
 # Zilean, Time Mage — "Once each turn, if you would play a token unit while I'm at a battlefield, you may play that
 # token and an additional copy of it instead." (make_token)
 def _zilean(g, src, pid, name):
-    if pid != src.ctrl or src.loc not in (0, 1):
+    if pid != src.ctrl or not is_bf(src.loc):
         return False
     if any(e.get("kind") == "zilean_used" and e["uid"] == src.uid and e["oid"] == src.oid for e in g.effects):
         return False

@@ -8,7 +8,7 @@ Aucun ordre de set ne compte ici.
 """
 import os
 from plans import Plan, PLANS
-from game import SPEC
+from game import SPEC, is_bf
 
 GENERAL = os.environ.get("RB_GENERAL", "0") == "1"
 W_MIGHT = float(os.environ.get("RB_GEN_WM", "0.3"))   # poids de la might sur battlefield (aggro)
@@ -53,7 +53,7 @@ class GeneralPlan(Plan):
         if g.winner is not None:
             return 0.0
         if s.role == "aggro":
-            return W_MIGHT * sum(max(0, g.might(u)) for u in g.units(me) if u.loc in (0, 1))
+            return W_MIGHT * sum(max(0, g.might(u)) for u in g.units(me) if is_bf(u.loc))
         if s.role == "controle":
             return W_HAND * len(g.p[me].hand)
         return 0.0

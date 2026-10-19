@@ -5,8 +5,9 @@ maj: 2026-10-19
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **Baron Nashor et Baron Pit (2026-10-19)** : modélisés. Les battlefields sont une liste de taille variable (`g.bfs`, `is_bf`, `g.bf_locs`) ; Nashor ajoute le jeton Baron Pit (3e battlefield, règle 187.9) et y entre (369.3) ; le point final par conquête exige alors les 3 battlefields marqués dans le tour (471.1.b.1), sinon on pioche. Unités vers le Baron Pit depuis n'importe où (sans Ganking). Les jetons ne peuvent plus être un battlefield de départ (Brush compris). Table et lecteur de replays : 3 battlefields côte à côte. Détail : `cardsets/NEEDS_chaos.md`, `NEEDS_battlefields.md`.
 - **Radiance (2026-10-19)** : 166 des 167 cartes de l'extension modélisées (Neeko bloquée), voir [radiance.md](radiance.md).
-- Moteur : 917 cartes jouables sur 919 (bloquées : Baron Nashor et Baron Pit, il faut un troisième battlefield). `test_all.py` = 968/968, `t_rand.py 20` = 0 erreur (2026-10-07).
+- Moteur (2026-10-07) : 917 cartes jouables sur 919 à cette date ; Baron Nashor et Baron Pit débloqués le 2026-10-19 (ci-dessus).
 - CI GitHub Actions sur `main` : tests et build de la table, tous verts ; publication sur Pages configurée (adresse attendue https://geksmode.github.io/riftbound-lab/, ouverture de la page **non vérifiée**).
 - Équipe d'agents en place ([equipe.md](equipe.md)).
 - **IA générale (2026-10-09)** : recherche « sh » (tirages communs + élimination en passes) par défaut, +15 points contre l'ancienne sur les decks par défaut (65,3 % ± 2,3, 160 paires), 62,5 % ± 2,9 en Akali contre LeBlanc ; temps Pyodide 417 → 503 ms par décision. Détails : [recherche de l'IA](../../memoire/riftbound-search-ai.md).

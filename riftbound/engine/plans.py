@@ -12,6 +12,7 @@ PlanAgent = SearchAgent + plan ; mêmes simulations, seul le score change.
 """
 import random
 from ai import SearchAgent, PolicyAgent, Heuristics, determinize, rollout_policy, evaluate, card_value, danger
+from game import is_bf
 import ai as _ai
 import os
 
@@ -103,7 +104,7 @@ class AkaliGorica(Plan):
                     v += 4.0
                 elif u is not None and u.cname == "Astral Heron":
                     v -= 3.0                                  # Heron reste sur le battlefield
-        elif k == "move" and a[2] in (0, 1):
+        elif k == "move" and is_bf(a[2]):
             units = [g.obj(u) for u in a[1]]
             names = {u.cname for u in units if u is not None}
             enemies = g.units(1 - me, a[2])
@@ -117,7 +118,7 @@ class AkaliGorica(Plan):
         elif k == "play":
             c = card_of(g, a[1])
             loc = dict(a[3]).get("loc")
-            if c is not None and c.cname == "Astral Heron" and loc in (0, 1):
+            if c is not None and c.cname == "Astral Heron" and is_bf(loc):
                 # Metafy : Heron sur un battlefield seulement avec une carte cachée pour la déclencher
                 v += 3.0 if g.bfs[loc].facedown is not None and g.bfs[loc].facedown.owner == me else -2.0
             if c is not None and c.cname == "Stellacorn Herder":
@@ -135,9 +136,9 @@ class AkaliGorica(Plan):
             if u.cname == "Stellacorn Herder":
                 v += 2.0
             elif u.cname == "Astral Heron":
-                v += 3.0 if u.loc in (0, 1) else 1.0
+                v += 3.0 if is_bf(u.loc) else 1.0
         v += 0.4 * len(g.p[me].hand)                          # avance de ressources
-        if not any(u.loc == "base" for u in g.units(me)) and any(u.loc in (0, 1) for u in g.units(me)):
+        if not any(u.loc == "base" for u in g.units(me)) and any(is_bf(u.loc) for u in g.units(me)):
             v -= 1.5                                          # ne jamais engager toutes ses unités
         return v
 
@@ -177,9 +178,9 @@ class AkaliGoricaAggro(AkaliGorica):
         if k == "act" and not isinstance(a[1], tuple):
             o = g.obj(a[1])
             if o is not None and o.cname == "Akali, Deadly Weapon" and a[2] == 0:
-                if any(u.loc in (0, 1) for u in g.units(1 - me)):
+                if any(is_bf(u.loc) for u in g.units(1 - me)):
                     v += 4.0                                  # empower pour tuer les unités sur les battlefields
-        elif k == "move" and a[2] in (0, 1) and 3 <= pl.turns:
+        elif k == "move" and is_bf(a[2]) and 3 <= pl.turns:
             v += 1.5                                          # pression en milieu de partie
         return v
 
@@ -189,7 +190,7 @@ class AkaliGoricaAggro(AkaliGorica):
         v = super().shape(g, me)
         if any(u.cname == "Karthus, Eternal" for u in g.units(1 - me)):
             v -= 6.0
-        v += 0.3 * sum(max(0, g.might(u)) for u in g.units(me) if u.loc in (0, 1))
+        v += 0.3 * sum(max(0, g.might(u)) for u in g.units(me) if is_bf(u.loc))
         return v
 
 
@@ -243,20 +244,20 @@ class LeBlancDeathknell(Plan):
                                        "Honest Broker", "Watchful Sentry"):
                 v += 3.0                                      # toujours jouer au tour 1
             if VIDEO and n == "Thousand-Tailed Watcher":
-                opp_bf = sum(1 for u in g.units(1 - me) if u.loc in (0, 1))
+                opp_bf = sum(1 for u in g.units(1 - me) if is_bf(u.loc))
                 if opp_bf >= 2 and not any(b.ctrl == me for b in g.bfs):
                     v += 2.0                                  # closer : l'adversaire a tout poussé, on est dehors
             if n == "Karthus, Eternal":
                 if not any(u.cname in DK or u.cname == "Reflection" for u in g.units(me)):
                     v -= 3.0                                  # corps Deathknell d'abord
-                if loc in (0, 1):
+                if is_bf(loc):
                     v -= 3.0                                  # Karthus reste à la base
-        elif k == "move" and a[2] in (0, 1):
+        elif k == "move" and is_bf(a[2]):
             units = [g.obj(u) for u in a[1]]
             if any(u is not None and u.cname == "Karthus, Eternal" for u in units):
                 v -= 4.0
             if VIDEO and g.bfs[a[2]].ctrl != me and any(u is not None and u.token and u.name == "Reflection"
-                                                         and u.loc in (0, 1) and u.loc != a[2] for u in units):
+                                                         and is_bf(u.loc) and u.loc != a[2] for u in units):
                 v += 2.0                                      # Riftlab : le Reflet prêt gank l'autre battlefield
         elif k == "hide" and KEEP_REFLECTION:
             # joueurs réels (utilisateur, 3 oct.) : LeBlanc cache une carte là où il tient, même avec un seul Reflet
@@ -265,7 +266,7 @@ class LeBlancDeathknell(Plan):
                 v += 1.5
         elif k == "move" and a[2] == "base" and KEEP_REFLECTION:
             # joueurs réels (utilisateur, 3 oct.) : le Reflet et l'unité copiée restent sur le battlefield
-            refl = [u for u in g.units(me) if u.token and u.name == "Reflection" and u.loc in (0, 1)]
+            refl = [u for u in g.units(me) if u.token and u.name == "Reflection" and is_bf(u.loc)]
             for u in (g.obj(x) for x in a[1]):
                 if u is not None and any(u is r or (u.cname == r.copy and u.loc == r.loc) for r in refl):
                     v -= 8.0
@@ -341,7 +342,7 @@ class LeBlancHookTempo(LeBlancDeathknell):
     def prior(s, g, me, a):
         v = super().prior(g, me, a)
         k = a[0]
-        if k == "move" and a[2] in (0, 1):
+        if k == "move" and is_bf(a[2]):
             units = [g.obj(u) for u in a[1]]
             if all(u is not None and u.cname != "Karthus, Eternal" for u in units):
                 v += 2.0 if g.p[me].turns <= 6 else 1.0       # conquérir pour déclencher la légende
