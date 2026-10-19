@@ -264,6 +264,8 @@ class Heuristics:
             return max(options, key=lambda u: unit_value(g, u))
         if kind == "play_location":
             return "base" if "base" in options else options[0]
+        if kind == "pay_gold":
+            return options[0]                  # the planner's payment (Gold kept when a rune can pay)
         if kind == "recycle_rune":
             from collections import Counter
             cnt = Counter(r.domain for r in g.p[pid].runes)

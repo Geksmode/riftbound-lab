@@ -834,6 +834,12 @@ def _alabel(g, ask, o):
     try:
         if k == "predict_recycle":
             return tr("la recycler (sous le deck)", "recycle it (bottom of the deck)") if o else tr("la garder sur le dessus", "keep it on top")
+        if k == "pay_gold":
+            pl = ask.ctx["plans"][o]
+            rs = ", ".join(sorted(r.domain for r in pl["recycle"]))
+            gold = tr(f"utiliser {o} Gold", f"use {o} Gold") if o else ""
+            rec = tr(f"recycler {len(pl['recycle'])} rune(s) ({rs})", f"recycle {len(pl['recycle'])} rune(s) ({rs})") if rs else ""
+            return " + ".join(x for x in (gold, rec) if x)
         if k == "damage_pick":
             need = ask.ctx.get('need', {}).get(o.uid, '?')
             return tr(f"{_olabel(g, o)} (mortel : {need} dégâts)", f"{_olabel(g, o)} (lethal: {need} damage)")
@@ -870,6 +876,7 @@ def _alabel(g, ask, o):
 ASKS = dict(mulligan="Mulligan : choisis jusqu'à 2 cartes à remettre", may="Utiliser cet effet optionnel ?",
             play_location="Où poser l'unité ?", equip_target="Équiper quelle unité ?", discard="Défausser quelle carte ?",
             copy_target="Copier quelle unité ?", sacrifice="Sacrifier quelle unité ?", recycle_rune="Recycler quelle rune ?",
+            pay_gold="Payer la puissance : avec un Gold ou en recyclant une rune ?",
             hook_pick="Baited Hook : quelle unité prendre ?", zhonya_save="Zhonya : sauver quelle unité ?",
             star_spring="Star Spring : quelle unité ?", dusk_kill="Détruire quelle unité ?",
             herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",

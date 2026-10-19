@@ -261,5 +261,7 @@ Demande de l'utilisateur. Set RAD ajouté à la base (108 cartes corrigées d'ap
 ## [2026-10-19] ingest | Fiche de carte agrandie alignée sur mobile
 Sur téléphone, le titre, le type et le texte de la fiche (`#zoom`, table et replays) forment un seul bloc `.zhd` à droite de l'image ; avant, l'image s'étendait sur trois lignes de grille et le texte partait sous elle.
 
+## [2026-10-19] decision | Paiement : choisir entre un Gold et le recyclage d'une rune
+Demande de l'utilisateur (« il faut faire le choix », pas de priorité automatique). Quand un Gold prêt (non épuisé) peut payer une puissance à la place d'une rune recyclée, `Game.pay` pose la question `pay_gold` (règle 429.3) : « recycler 1 rune(s) (Fury) » ou « utiliser 1 Gold » (avec 2 Gold et 2 puissances, aussi 2 Gold). L'IA répond la première option, le paiement d'avant. Tests `gold_or_rune_is_the_players_choice` et `cardsets/test_paiement_gold.py` (par la table).
 ## [2026-10-19] decision | Baron Nashor, Baron Pit et point final à 3 battlefields
 Demande de l'utilisateur. `g.bfs` devient une liste de taille variable (`is_bf(loc)`, `g.bf_locs`, `g.locs()`, `Game.add_battlefield` ; test-garde contre `loc in (0, 1)`), Nashor ajoute le Baron Pit et y entre (369.3) ; point final par conquête = tous les battlefields marqués ce tour, 3 avec le Baron Pit (471.1.b.1), sinon pioche. Parties sans Nashor identiques coup pour coup (25 graines). Table : `train/verif_nashor.mjs`.

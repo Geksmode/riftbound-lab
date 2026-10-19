@@ -1148,7 +1148,8 @@ class Game:
                     return sub
         return None
 
-    def _plan_payment(s, pid, e, reqs, ctx=None, _skip=()):
+    def _plan_payment(s, pid, e, reqs, ctx=None, _skip=(), gold_first=0):
+        """gold_first: number of ready Gold spent for power before any rune is recycled (the player's choice, pay)."""
         pl = s.p[pid]
         pool_e = pl.pool_e
         if pl.pool_r:
@@ -1205,6 +1206,9 @@ class Game:
             if a is not None:
                 use(a)
                 from_pool(req)
+                continue
+            if use_gold < min(gold_first, len(golds)):
+                use_gold += 1
                 continue
             cands = [r for r in exh if r.domain in req and r not in recycle]
             if not cands:
@@ -1271,10 +1275,25 @@ class Game:
     def can_pay(s, pid, e, reqs, ctx=None):
         return s.plan_payment(pid, e, reqs, ctx) is not None
 
+    def gold_choices(s, pid, e, reqs, ctx, plan):
+        """The ways to pay with a ready Gold instead of recycling a rune (rule 429.3: the player chooses which [Add]
+        abilities pay a cost): {number of Gold: plan}, the default plan first; one entry when there is no choice."""
+        alts = {plan["gold"]: plan}
+        if plan.get("conv") or not plan["recycle"] or plan["gold"] >= len(s.golds(pid)):
+            return alts
+        for k in range(plan["gold"] + 1, min(len(s.golds(pid)), len(reqs)) + 1):
+            alt = s._plan_payment(pid, e, reqs, ctx, gold_first=k)
+            if alt is not None and len(alt["recycle"]) < len(alts[max(alts)]["recycle"]):
+                alts[k] = alt
+        return alts
+
     def pay(s, pid, e, reqs, ctx=None):
         plan = s.plan_payment(pid, e, reqs, ctx)
         if plan is None:
             return False
+        alts = s.gold_choices(pid, e, reqs, ctx, plan)
+        if len(alts) > 1:
+            plan = alts[s.ask(pid, "pay_gold", list(alts), plans=alts)]
         pl = s.p[pid]
         # restricted energy is spent first when it may pay this cost (the plan counted it in its pool)
         took = plan.get("took", 0)
