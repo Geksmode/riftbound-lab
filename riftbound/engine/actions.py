@@ -16,7 +16,7 @@ MAX_CHOICES = 8
 
 def card_obj(g, pid, uid, src):
     pl = g.p[pid]
-    zone = {"hand": pl.hand, "champ": pl.champ, "trash": pl.trash}.get(src)
+    zone = {"hand": pl.hand, "champ": pl.champ, "trash": pl.trash, "banish": pl.banish}.get(src)
     if src == "facedown":
         for b in g.bfs:
             for c in b.facedowns:
@@ -73,7 +73,65 @@ def card_kw(g, pid, card, kw, src=None):
     for so, ia in g.providers("card_kw"):
         if ia.card_kw(g, so, pid, card, kw, src):
             return True
+    for ef in g.effects:                 # granted by an effect (Firelights' Hideout: "the next unit you play this
+        if ef.get("kind") == "card_kw" and ef["pid"] == pid and ef["fn"](g, ef, card, kw, src):   # turn has ...")
+            return True
     return False
+
+
+def eff_timing(g, pid, card, im, src=None):
+    """Timing of a card with the [Action] / [Reaction] it is given by other objects or effects (card_kw: Kai'Sa,
+    Rebel "your spells have [Reaction]", Jarvan IV, Martial Paragon "your gear with [Deploy] have [Action]")."""
+    t = im.timing
+    if t != "reaction" and card_kw(g, pid, card, "Reaction", src):
+        return "reaction"
+    if t is None and card_kw(g, pid, card, "Action", src):
+        return "action"
+    return t
+
+
+def has_deploy(g, card):
+    """[Deploy] (rule 830): printed on the gear (Impl.kw) or granted."""
+    im = g.impl(card)
+    return im is not None and (im.kw.get("Deploy", 0) > 0 or g.has_kw(card, "Deploy"))
+
+
+def gear_locations(g, pid, card, hidden_bf=None):
+    """Where a gear can be played: its base, or with [Deploy] "only to a battlefield", any battlefield (rule
+    830.1.b.1, enemy-occupied and open ones too); from facedown, the battlefield it was hidden at."""
+    if hidden_bf is not None:
+        return [hidden_bf]
+    if has_deploy(g, card):
+        return [b.idx for b in g.bfs if loc_allowed(g, pid, card, b.idx)]
+    return ["base"]
+
+
+def show_options(g, pid, card, im):
+    """[Show Off] (rule 832): "As you play me, you may reveal [Object] from your hand and/or pick [Object] from among
+    friendly game objects on the board" (Impl.show_off(g, pid, card, x) -> bool). Choices: [{}] (no show) plus one
+    dict(show=uid) per eligible object, best first; the AI keeps only the best one (cards.cap)."""
+    if im is None or im.show_off is None:
+        return [{}]
+    cands = [c for c in g.p[pid].hand if c is not card and im.show_off(g, pid, card, c)]
+    cands += [o for o in g.board if o.ctrl == pid and o is not card and im.show_off(g, pid, card, o)]
+    key = im.show_key or (lambda g_, x: -(x.spec["e"] + 2 * x.spec["p"] + (x.spec["might"] or 0)))
+    cands.sort(key=lambda x: (key(g, x), x.uid))
+    if not full_choices(g, pid):
+        cands = cands[:1]
+    return [dict(show=x.uid) for x in cands] + [{}]
+
+
+def shown_info(g, pid, uid):
+    """Information about the shown off object, checked as it is shown (rule 832.1.d.1)."""
+    o = g.obj(uid)
+    where = "board"
+    if o is None:
+        o = next((c for c in g.p[pid].hand if c.uid == uid), None)
+        where = "hand"
+    if o is None:
+        return None
+    return dict(uid=o.uid, name=o.cname, e=o.spec["e"], p=o.spec["p"], type=o.spec["type"], where=where,
+                might=g.might(o) if where == "board" and o.spec["type"] == "Unit" else (o.spec["might"] or 0))
 
 
 def repeat_instances(g, pid, card):
@@ -280,10 +338,12 @@ def affordable(g, pid, card, choice, src):
     return g.can_pay(pid, e, reqs, pay_ctx(card))
 
 
-def unit_timing_ok(im, closed):
+def unit_timing_ok(im, closed, timing=False):
     """A unit or gear with [Reaction] (or [Action] outside Closed states) can be played at that timing,
-    still only to its normal locations (rules 806.3, 813.3.a)."""
-    return im.timing == "reaction" or (im.timing == "action" and not closed)
+    still only to its normal locations (rules 806.3, 813.3.a). timing: its timing with granted keywords
+    (eff_timing), default its printed one."""
+    t = im.timing if timing is False else timing
+    return t == "reaction" or (t == "action" and not closed)
 
 
 # ---------------------------------------------------------------- enumeration
@@ -330,6 +390,11 @@ def unit_locations(g, pid, card, src, closed_or_focus, with_extra=False):
                 l, ex = (l if isinstance(l, tuple) else (l, {}))
                 if (l, ex) not in locs:
                     locs.append((l, ex))
+        for ef in g.effects:                # Last Caress: "The next unit you play this turn can be played to any
+            if ef.get("kind") == "aura_locs" and ef["pid"] == pid:              # battlefield."
+                for l in ef["fn"](g, ef, card, closed_or_focus) or ():
+                    if (l, {}) not in locs:
+                        locs.append((l, {}))
     locs = [(l, ex) for l, ex in locs if loc_allowed(g, pid, card, l)]
     return locs if with_extra else [l for l, ex in locs if not ex]
 
@@ -375,8 +440,10 @@ def _card_choices(g, pid, card, src, timing_closed, timing_showdown, every):
     out = []
     hidden_bf = card.hidden_bf if src == "facedown" else None
     qd = typ == "Gear" and card_kw(g, pid, card, "Quick-Draw", src)
+    shows = show_options(g, pid, card, im)
+    timing = eff_timing(g, pid, card, im, src)
     if typ == "Unit":
-        timed = unit_timing_ok(im, timing_closed)
+        timed = unit_timing_ok(im, timing_closed, timing)
         amb = im.ambush or card_kw(g, pid, card, "Ambush", src)
         if restricted and src != "facedown" and not amb and not timed:
             return []
@@ -385,20 +452,23 @@ def _card_choices(g, pid, card, src, timing_closed, timing_showdown, every):
         acc = card_kw(g, pid, card, "Accelerate", src) and src != "facedown"
         for loc, lx in locs:
             for ex in extra:
-                for a in ([False, True] if acc else [False]):
-                    out.append(dict(ex, loc=loc, acc=a, **lx))
+                for sh in shows:
+                    for a in ([False, True] if acc else [False]):
+                        out.append(dict(ex, loc=loc, acc=a, **lx, **sh))
     elif typ == "Gear":
-        if restricted and not (qd or src == "facedown" or unit_timing_ok(im, timing_closed)):
+        if restricted and not (qd or src == "facedown" or unit_timing_ok(im, timing_closed, timing)):
             return []
         extra = im.as_played(g, pid, card) if im.as_played else [{}]
-        for ex in extra:
-            out.append(dict(ex, loc=hidden_bf if hidden_bf is not None else "base"))
-            if src == "trash" and flow_of(g, pid, card):
-                out[-1]["flow"] = True
+        for loc in gear_locations(g, pid, card, hidden_bf):
+            for ex in extra:
+                for sh in shows:
+                    out.append(dict(ex, loc=loc, **sh))
+                    if src == "trash" and flow_of(g, pid, card):
+                        out[-1]["flow"] = True
     elif typ == "Spell":
-        if restricted and src != "facedown" and im.timing not in ("action", "reaction"):
+        if restricted and src != "facedown" and timing not in ("action", "reaction"):
             return []
-        if timing_closed and src != "facedown" and im.timing != "reaction":
+        if timing_closed and src != "facedown" and timing != "reaction":
             return []
         ctx = dict(hidden_bf=hidden_bf, card=card, src=src)
         if every and im.all_choices is not None:
@@ -408,6 +478,12 @@ def _card_choices(g, pid, card, src, timing_closed, timing_showdown, every):
             base = base if every else base[:MAX_CHOICES]
         if src == "trash" and flow_of(g, pid, card) is not None:
             base = [dict(ch, flow=True) for ch in base]
+        if len(shows) > 1:
+            base = [dict(ch, **sh) for ch in base for sh in shows]
+        for so, ia in g.providers("spell_opts"):        # optional additional costs given by other objects
+            opts = ia.spell_opts(g, so, pid, card) or []                    # (Seraphine, Starry-Eyed Songstress)
+            if opts:
+                base = base + [dict(ch, **o) for ch in base for o in opts]
         out += spell_variants(g, pid, card, im, base, ctx, every)
     if g.effects:
         # play permissions created by effects (g.effects kind='play_perm', pid, key, fn(g, eff, card, src) -> bool,
@@ -480,6 +556,11 @@ def playable_cards(g, pid, closed, showdown):
         for c in b.facedowns:
             if c.owner == pid and c.hidden_turn is not None and c.hidden_turn < g.turn_no:
                 cands.append((c, "facedown"))
+    for ef in g.effects:            # "Until your next Ending Phase, you may play that card." (Runeblade Anvil, Akali)
+        if ef.get("kind") == "play_banished" and ef["pid"] == pid:
+            c = next((x for x in pl.banish if x.uid == ef["uid"] and x.oid == ef["oid"]), None)
+            if c is not None and (c, "banish") not in cands:
+                cands.append((c, "banish"))
     any_trash = bool(g.effects_of("play_from_trash", pid))      # Endless Riches: "You may play cards from your trash."
     for c in pl.trash:
         im = g.impl(c)
@@ -615,10 +696,14 @@ def move_options(g, pid):
         if len(by_loc) > 1:
             groups.add(tuple(sorted(u.uid for u in movers)))
         for grp in sorted(groups):   # ordre fixe : un set de tuples n'itère pas pareil en 32 et 64 bits (Pyodide)
+            e, reqs = 0, []
             if len(grp) > 1 and cards_hooks().get("move_tax"):
                 reqs = g.move_tax(pid, [g.obj(u) for u in grp], d)
-                if reqs and not g.can_pay(pid, 0, reqs, dict(kind="move")):
-                    continue
+            if cards_hooks().get("move_cost"):
+                e2, r2 = g.move_cost(pid, [g.obj(u) for u in grp], d)
+                e, reqs = e + e2, list(reqs) + list(r2)
+            if (e or reqs) and not g.can_pay(pid, e, reqs, dict(kind="move")):
+                continue
             opts.append(("move", grp, d))
     return opts
 
@@ -640,7 +725,10 @@ def hide_costs(g, pid):
 def hide_slots(g, b):
     """Number of facedown cards a battlefield can hold (Bandle Tree: "You may hide an additional card here")."""
     im = g.impl(b.name)
-    return 1 + (im.hide_slots if im is not None and im.hide_slots else 0)
+    n = 1 + (im.hide_slots if im is not None and im.hide_slots else 0)
+    for so, ia in g.providers("extra_hide_slots"):          # Bushwhack Trap
+        n += ia.extra_hide_slots(g, so, b) or 0
+    return n
 
 
 def hide_options(g, pid):
@@ -685,6 +773,8 @@ def do_action(g, a):
     if kind == "play":
         _, uid, src, ch = a
         pid = owner_of(g, uid, src)
+        if src == "banish":
+            pid = next((ef["pid"] for ef in g.effects if ef.get("kind") == "play_banished" and ef["uid"] == uid), pid)
         card = card_obj(g, pid, uid, src)
         play_card(g, pid, card, src, dict(ch))
     elif kind == "hide":
@@ -698,10 +788,14 @@ def do_action(g, a):
         _, uids, dest = a
         units = [g.obj(u) for u in uids]
         pid = units[0].ctrl
+        e, reqs = 0, []
         if len(units) > 1 and cards_hooks().get("move_tax"):
             reqs = g.move_tax(pid, units, dest)      # Mageseeker Investigator
-            if reqs and not g.pay(pid, 0, reqs, dict(kind="move")):
-                raise RuntimeError("cannot pay the move cost")
+        if cards_hooks().get("move_cost"):
+            e2, r2 = g.move_cost(pid, units, dest)   # Gravity Field
+            e, reqs = e + e2, list(reqs) + list(r2)
+        if (e or reqs) and not g.pay(pid, e, reqs, dict(kind="move")):
+            raise RuntimeError("cannot pay the move cost")
         for u in units:
             u.exhausted = True                       # cost of the Standard Move
         g.log(f"P{pid} moves {units} -> {dest}")
@@ -712,7 +806,7 @@ def do_action(g, a):
 
 def owner_of(g, uid, src):
     for pl in g.p:
-        for z in (pl.hand, pl.champ, pl.trash):
+        for z in (pl.hand, pl.champ, pl.trash, pl.banish):
             for c in z:
                 if c.uid == uid:
                     return pl.pid
@@ -782,8 +876,14 @@ def play_card(g, pid, card, src, ch, limited=False):
             g.kill([k], pid, cost=True)
     if ch.get("xp"):
         g.spend_xp(pid, ch["xp"] if not isinstance(ch["xp"], bool) else 3)
+    if ch.get("show") is not None and ch.get("shown") is None:
+        ch["shown"] = shown_info(g, pid, ch["show"])   # [Show Off]: checked as it is shown (rule 832.1.d.1)
+        if ch["shown"] is not None:
+            g.log(f"  P{pid} shows off {ch['shown']['name']}")
     if im.pay_extra is not None:
         im.pay_extra(g, pid, card, ch)                 # non-resource additional costs of the card (discard...)
+    for so, ia in g.providers("opt_pay"):              # optional additional costs given by other objects
+        ia.opt_pay(g, so, pid, card, ch)
     g.remove_from_zone(card)
     from_facedown = src == "facedown"
     hidden_bf = card.hidden_bf if from_facedown else None
@@ -793,6 +893,7 @@ def play_card(g, pid, card, src, ch, limited=False):
     elif sp["type"] == "Gear" and not card.token:
         g.hist["gear_played"][pid] += 1
     card.paid_e = paid_e
+    card.limited_play = limited
     g.finalized[pid].append(card.cname)
     g.log(f"P{pid} plays {card.cname} from {src} {fmt_choice(g, ch)}")
     g.stats[f"play_{card.cname}"] += 1
@@ -801,7 +902,15 @@ def play_card(g, pid, card, src, ch, limited=False):
     if sp["type"] in ("Unit", "Gear"):
         loc = ch.get("loc", "base")
         if sp["type"] == "Gear" and not from_facedown:
-            loc = "base"
+            if has_deploy(g, card):                    # "Play this only to a battlefield" (rule 830.1.b)
+                if loc not in (0, 1):
+                    locs = gear_locations(g, pid, card)
+                    if not locs:
+                        locs = [0, 1]
+                    loc = g.ask(pid, "deploy_location", locs, card=card)
+            else:
+                loc = "base"
+        card.played_to = loc                           # where it is being played (Riven, The Exile)
         ready = (sp["type"] == "Gear" and not im.enter_exhausted) or bool(ch.get("acc")) or ch.get("ready", False)
         if not ready and (enters_ready(g, pid, card, ch) or others_enter_ready(g, pid, card)):
             ready = True

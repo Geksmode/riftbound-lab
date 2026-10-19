@@ -1,10 +1,11 @@
 import json,csv,re,html,collections
 import errata
+import corrections_rad   # domaines/tags faux de la source pour Radiance
 # curl -o bulk.json https://api.rifthunt.com/bulk/cards
 SRC='bulk.json'; import os; OUT=os.path.dirname(os.path.abspath(__file__)) + '/'
 d=json.load(open(SRC))
-SETS={'OGN':'Origins','OGS':'Origins: Proving Grounds','SFD':'Spiritforged','UNL':'Unleashed','VEN':'Vendetta'}
-ORDER=['OGN','SFD','UNL','VEN','OGS']
+SETS={'OGN':'Origins','RAD':'Radiance','OGS':'Origins: Proving Grounds','SFD':'Spiritforged','UNL':'Unleashed','VEN':'Vendetta'}
+ORDER=['OGN','SFD','UNL','VEN','RAD','OGS']
 # bans (Standard) : ancienne base + table du résumé des règles
 bans={}
 for o in csv.DictReader(open(OUT+'cards_all_printings.csv')):
@@ -34,14 +35,19 @@ def kws(t):
         k=re.sub(r'\s*\d+$','',k).strip()
         if k and k[0].isalpha() and k not in ks: ks.append(k)
     return '|'.join(ks)
+# noms gardés stables quand la source les renomme (le moteur s'y réfère)
+KEEP_NAMES={'ven-t04':'Recruit (NX)'}
 rows=[]
 for x in d['cards']:
     if x['set'] not in SETS: continue
     rid=x['riftboundId']; parts=rid.split('-')
     cid='-'.join(parts[:2]); num=parts[1]
     variant=bool(x['alt'] or x['over'] or x['sig'] or x['rarity']=='Showcase' or not num.isdigit())
-    name=re.sub(r'\s*\((Alternate Art|Overnumbered|Signature|Metal|Champion|Top 8|Starter|GG EZ|Launch Exclusive|Ultimate)\)$','',x['name'])
-    text=errata.apply(name,clean(x))   # errata absents de la source (errata.py)
+    name=re.sub(r'\s*\((Alternate Art|Overnumbered|Signature|Metal|Champion|Top 8|Starter|GG EZ|Launch Exclusive|Ultimate|Heartsteel Overnumbered|K/DA Special Art Card)\)$','',x['name'])
+    name=KEEP_NAMES.get(cid,name)
+    text=errata.apply(name,clean(x))
+    for n_,a_,b_ in corrections_rad.TEXT:
+        if n_==name: text=text.replace(a_,b_)   # errata absents de la source (errata.py)
     pw=x['power']
     if pw is None and x['type'] in ('Unit','Spell','Gear'): pw=0
     rows.append(dict(id=cid,set=SETS[x['set']],set_code=x['set'],collector_number=num,name=name,type=x['type'],
@@ -49,6 +55,9 @@ for x in d['cards']:
         power_cost='' if pw is None else pw,might='' if x['might'] is None else x['might'],tags='|'.join(x['tags'] or []),
         keywords=kws(text),is_variant=variant,banned_standard=bans.get(name,''),supertype=x['supertype'] or '',
         text=text,image_url=(x['imgUrl'] or '').split('?')[0]))
+for r in rows:
+    r.update(corrections_rad.FIX.get(r['id'],{}))
+    r['keywords']=kws(r['text'])
 rows.sort(key=lambda r:(ORDER.index(r['set_code']),r['collector_number'].zfill(4),r['id']))
 assert len({r['id'] for r in rows})==len(rows)
 COLS=['id','set','set_code','collector_number','name','type','rarity','domain','energy_cost','power_cost','might','tags','keywords','is_variant','banned_standard','supertype','text']

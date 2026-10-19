@@ -32,6 +32,7 @@ EXCEPTIONS = {
     "Curtain Call": "sort modal : le mode « Draw 1 » n'a pas de cible",
     "Piercing Light": "« Deal 2 to a unit at a battlefield » est obligatoire ; seule la 2e cible est « up to »",
     "Moonfall": "« Choose a battlefield where you have units » : injouable sans unité, malgré « up to one enemy unit »",
+    "Battle Preparations": "« Give a unit +2 » est obligatoire ; « up to 2 » porte sur des runes (Radiance, 2026-10-19)",
 }
 
 

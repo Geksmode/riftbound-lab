@@ -78,6 +78,9 @@ class Impl:
         s.repeat_all = None     # fn(g, pid, card, ctx) -> [choice]: choices of a repetition (default: choices)
         s.all_choices = None    # fn(g, pid, ctx) -> [choice]: every legal choice, for a human player (train.py)
         s.alt_costs = None      # fn(g, pid, card, src) -> [dict(key=, e=, reqs=)]: alternative costs (rule 356.1.b)
+        s.show_off = None       # fn(g, pid, card, x) -> bool: [Show Off] [Object] (rule 832); x a card in hand or a
+        #                         friendly object on the board. The play choice gets show=uid and shown=info dict
+        s.show_key = None       # fn(g, x) -> sort key of the objects to show off (best first, for the AI)
         equip = kw.pop("equip", None)
         bonus = kw.pop("bonus", None)
         empower = kw.pop("empower", None)
@@ -107,6 +110,14 @@ HOOK_FIELDS = (
     "choice_rep", "minus_extra", "no_counter", "gold_extra", "hide_cost", "hide_slots", "token_rep",
     "grant_add",
     "zone_event", "on_seen", "on_reveal", "reveal_rep",
+    # Radiance (Core Rules 2026-10-09)
+    "dk_extra",          # fn(g, src, info) -> n: Deathknell effects of a dying permanent trigger n more times
+    "channel_rep",       # fn(g, src, pid) -> n: "channel that many runes plus n exhausted runes instead"
+    "move_cost",         # fn(g, src, pid, units, dest) -> (e, reqs) | None: cost to move units (Gravity Field)
+    "extra_hide_slots",  # fn(g, src, b) -> n: additional cards that can be hidden at battlefield b
+    "spell_opts",        # fn(g, src, pid, card) -> [dict]: optional additional costs given to a spell
+    "opt_pay",           # fn(g, src, pid, card, choice): pays them as the card is played
+    "token_swap",        # fn(g, src, pid, name, loc) -> new name | None: "play a ... token instead" (may)
 )
 IMPL = {}
 # French question titles of the g.ask kinds, for a human player (train.py). Modules declare theirs with ask_text().
@@ -124,6 +135,8 @@ def ask_text(**kinds):
 # French titles of the shared and per-card g.ask kinds (train.py prefixes the asking card's name when it is known).
 ask_text(
     choose="Choisis une cible :", add_kill="Quelle unité détruire pour produire la ressource ?",
+    deploy_location="Sur quel champ de bataille jouer cet équipement ?",
+    disarm_target="Disarm : quelle unité ennemie affaiblir ?", token_swap="Jouer un jeton Mech à la place ?",
     altar_card="Quelle carte de ta main placer ?", altar_where="Sur le dessus ou sous ton deck ?",
     aphelios_mode="Quel mode ?", apothecary_pick="Quelle unité soigner ?", ava_play="Quelle carte jouer ?",
     azir_attach="Quel équipement attacher ?", azir_move="Déplacer cette unité ?",
@@ -279,7 +292,7 @@ def P_friend_bf(g, it, o):
 
 
 def P_gear(g, it, o):
-    return o.spec["type"] == "Gear"
+    return g.is_gear(o)
 
 
 def tg_choices(units, n=1):
@@ -1876,6 +1889,12 @@ def make_token(g, name, pid, loc="base", ready=False, _copy=True):
     (n=0, token=True: tokens are not cards). Replacement "play that token and an additional copy of it instead"
     (Impl.token_rep: Zilean, Time Mage) is offered here. Returns the token (the first one)."""
     from actions import loc_allowed, others_enter_ready, keyword_play_triggers
+    if _copy and SPEC[name]["type"] == "Unit":
+        for src, im in g.providers("token_swap"):      # Heimerdinger, Academy Instructor (a "may" replacement)
+            nn = im.token_swap(g, src, pid, name, loc)
+            if nn and nn != name and g.ask(pid, "token_swap", [True, False], token=name, new=nn):
+                name = nn
+                break
     t = g.new_token(name, pid)
     if SPEC[name]["type"] == "Unit" and not loc_allowed(g, pid, t, loc):
         g.log(f"  a {name} token can't be played at {loc}")
@@ -1884,6 +1903,7 @@ def make_token(g, name, pid, loc="base", ready=False, _copy=True):
     if _copy and SPEC[name]["type"] == "Unit":
         for src, im in g.providers("token_rep"):
             extra += 1 if im.token_rep(g, src, pid, name) else 0
+    t.played_to = loc
     if not ready and others_enter_ready(g, pid, t):          # "Your tokens enter ready" (rule 369.3)
         ready = True
     g.enter_board(t, pid, loc, ready=ready)
@@ -1893,6 +1913,20 @@ def make_token(g, name, pid, loc="base", ready=False, _copy=True):
     for _ in range(extra):
         make_token(g, name, pid, loc, ready, _copy=False)
     return t
+
+
+def disarm_trigger(g, u, n):
+    """[Disarm X] (rule 831): "When I attack, give an enemy unit here -X might this turn" (one trigger with the total
+    Disarm value, 831.1.d.1). The enemy unit is chosen as the trigger is finalized (Deflect paid, rule 809)."""
+    here = u.loc
+
+    def res(g_, it):
+        e = g_.legal(it, 0)
+        if e is not None:
+            g_.mod(e, -it.data["n"])
+    g.queue_trigger(u.ctrl, f"Disarm {u.cname}", res, dict(n=n), src=u.uid,
+                    choose=trig_target(lambda g_, it: [e for e in enemies(g_, it.ctrl) if e.loc == here],
+                                       lambda g_, it, e: e.ctrl != it.ctrl and e.loc == here, kind="disarm_target"))
 
 
 def pay_deflect(g, it, o):
@@ -1935,8 +1969,8 @@ def keywords_of(name):
 
 # ---------------------------------------------------------------------- auto-modelling of keyword-only cards
 _KW_SIMPLE = ("Action", "Reaction", "Accelerate", "Hidden", "Tank", "Ganking", "Backline", "Temporary", "Ambush",
-              "Unique", "Vision", "Weaponmaster", "Quick-Draw")
-_KW_VALUE = ("Assault", "Shield", "Deflect", "Hunt")
+              "Unique", "Vision", "Weaponmaster", "Quick-Draw", "Deploy")
+_KW_VALUE = ("Assault", "Shield", "Deflect", "Hunt", "Disarm")
 _KW_TOKEN = re.compile(r"\[(%s)\]|\[(%s)(?: (\d+))?\]" % ("|".join(_KW_SIMPLE), "|".join(_KW_VALUE)))
 
 
@@ -1997,7 +2031,7 @@ def auto_keywords(name, register=True):
 # Printed in the card database but not playable cards: the "Buff" reminder card and the XP Tracker.
 NOT_CARDS = {"Buff", "XP Tracker"}
 # Token printings without the Token supertype in the database
-TOKEN_NAMES = {"Bird", "Sprite", "Gold", "Reflection", "Recruit (NX)", "Mech", "Brush"}
+TOKEN_NAMES = {"Bird", "Sprite", "Gold", "Reflection", "Recruit (NX)", "Mech", "Brush", "Bomb"}
 
 
 def is_token(name):
@@ -2043,6 +2077,7 @@ __all__ = [
     "parse_cost", "power_list", "repeat_cost", "flow_cost", "ability", "add_ability", "equip_ability",
     "equip_ability_cost", "empower_ability", "repeatable", "when_level", "when_empowered", "when_mighty",
     "when_legion", "when_at_bf", "keywords_of", "parse_keywords", "auto_keywords", "deck_problems", "is_token",
+    "disarm_trigger",
 ]
 
 

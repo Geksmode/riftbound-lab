@@ -27,6 +27,9 @@ for r in csv.DictReader(open(ROOT / "cards" / "cards_unique.csv", encoding="utf-
 SPEC["Mech"] = dict(name="Mech", type="Unit", super="Token", domains=(), e=0, p=0, might=3, tags={"Mech"}, text="")
 SPEC["Reflection"] = dict(name="Reflection", type="Unit", super="Token", domains=(), e=0, p=0, might=0, tags=set(), text="")
 SPEC["Gold"] = dict(name="Gold", type="Gear", super="Token", domains=(), e=0, p=0, might=None, tags=set(), text="")
+# rule 187.12 (Core Rules 2026-10-09, Radiance)
+SPEC["Bomb"] = dict(name="Bomb", type="Gear", super="Token", domains=(), e=0, p=0, might=None, tags={"Bomb"},
+                    text="[Deploy] [Deathknell][>] Deal 2 to an enemy unit here and kill all other Bombs you control here.")
 # token names printed in card texts ("Play a 1 might Recruit unit token") that have no row of their own
 for _n, _m, _t, _x in (("Recruit", 1, {"Recruit"}, ""), ("Sand Soldier", 2, set(), ""), ("Tentacle", 1, {"Bilgewater"}, ""),
                        ("Shadow Clone", 0, set(), "When I attack, you may banish a unit from your trash. If you do, give me "
@@ -73,9 +76,24 @@ class Obj:
         s.drawn_at = None        # draw sequence number of its last draw (Game.draw / draw_card)
         s.reset()
 
+    @property
+    def exhausted(s):
+        return s.__dict__.get("_exh", False)
+
+    @exhausted.setter
+    def exhausted(s, v):
+        """Exhausting a permanent on the board (rule 415) is recorded for the 'exhausted' event ("When I become
+        exhausted", Radiance), emitted by Game._advance with every object exhausted since the last check."""
+        if v and not s.__dict__.get("_exh", False) and s.__dict__.get("zone") == "board":
+            g = s.__dict__.get("_g")
+            if g is not None:
+                g._exh_pending.append(s)
+        s.__dict__["_exh"] = v
+
     def reset(s):
         s.loc = None             # 'base' or battlefield index (0/1)
         s.exhausted = False
+        s.ugear = False          # a gear that is also a unit ("unit gear", Orianna, Lady of Clockwork)
         s.damage = 0
         s.buff = 0
         s.stunned = False
@@ -110,6 +128,9 @@ class Obj:
 
     @property
     def spec(s):
+        if s.__dict__.get("ugear"):
+            sp = SPEC[s.cname]                      # unit gear: a Unit with Might equal to its Energy cost
+            return dict(sp, type="Unit", might=sp["e"], gear=True)
         return SPEC[s.cname]
 
     def __repr__(s):
@@ -277,6 +298,7 @@ class Game:
         s.phase = None            # turn step being executed (the effects it causes happen in it): 'beginning',
         #                           'scoring' (both the Beginning Phase), 'channel', 'draw', 'main_start' (Main)...
         s.zone_listen = True      # cards outside the board may listen to events (Impl.zone_event); see emit
+        s._exh_pending = []       # objects exhausted since the last 'exhausted' event (Obj.exhausted)
         s.reset_hist()
 
     def reset_hist(s):
@@ -289,7 +311,9 @@ class Game:
                       chose_enemy=[False, False],   # chose an enemy unit with a spell, ability or trigger
                       gear_abs=[0, 0],          # activated abilities of gear played
                       gear_played=[0, 0],       # non-token gear played
-                      tokens=[0, 0])            # token units played
+                      tokens=[0, 0],            # token units played
+                      to_bf=[0, 0],             # units and gear (tokens too) played to a battlefield (Hold 'Em)
+                      moved=[])                 # (uid, oid) of the units that moved (Siren's Song)
 
     # ------------------------------------------------------------------ utilities
     def log(s, *a):
@@ -331,7 +355,11 @@ class Game:
                 and (loc == "any" or o.loc == loc)]
 
     def gear(s, pid=None):
-        return [o for o in s.board if o.spec["type"] == "Gear" and (pid is None or o.ctrl == pid)]
+        return [o for o in s.board if (o.spec["type"] == "Gear" or o.ugear) and (pid is None or o.ctrl == pid)]
+
+    def is_gear(s, o):
+        """A gear, unit gear included (Orianna, Lady of Clockwork: "a unit gear")."""
+        return o.spec["type"] == "Gear" or o.__dict__.get("ugear", False)
 
     def at_bf(s, o):
         return o.loc in (0, 1)
@@ -664,6 +692,9 @@ class Game:
             amount = -min(-amount, max(0, cur - minimum))
         if amount:
             o.mods.append([amount, duration])
+            if amount < 0 and s.resolving is not None:
+                # "When you reduce the Might of an enemy unit by 1 or more" (Ahri, Confident)
+                s.emit("might_reduced", obj=o, amount=-amount, by=s.resolving.ctrl)
 
     def grant(s, o, kw, value=1, duration="turn"):
         o.grants.append([kw, value, duration])
@@ -764,7 +795,8 @@ class Game:
         o.zone = "board"
         o.ctrl = pid
         o.loc = loc
-        o.exhausted = not ready
+        o.__dict__["_exh"] = not ready          # entering exhausted is not the Exhaust action (rule 415)
+        o._g = s
         o.entered_turn = s.turn_no
         s.board.append(o)
         s.need_cleanup = True
@@ -982,11 +1014,15 @@ class Game:
         """Channel n runes (rule 430); emits 'channel' (pid, runes) when at least one was channeled."""
         pl = s.p[pid]
         got = []
-        for _ in range(n):
+        extra = 0
+        if n > 0 and s.stage != "setup":
+            # "If you would channel runes, channel that many runes plus 1 exhausted rune instead." (Seraphic Wyvern)
+            extra = sum(im.channel_rep(s, src, pid) or 0 for src, im in s.providers("channel_rep"))
+        for i in range(n + extra):
             if not pl.rune_deck:
                 break
             r = pl.rune_deck.pop(0)
-            r.exhausted = exhausted
+            r.exhausted = exhausted or i >= n
             pl.runes.append(r)
             got.append(r)
         if got and s.stage != "setup":
@@ -1253,6 +1289,8 @@ class Game:
             if ad.get("exhaust", True):
                 o.exhausted = True
             s.log(f"  P{pid} uses {o.cname}: Add")
+            if ad.get("on_use") is not None:
+                ad["on_use"](s, pid, o)              # other costs of the [Add] ability (Mordekaiser, Iron Revenant)
             s.ability_used(pid, o, "Add")
             if ad.get("kill"):
                 s.kill([o], pid, cost=True)
@@ -1390,8 +1428,10 @@ class Game:
             return []
         # lookback info before leaving the board (rules 359.3.e.13, 808.1.d.3)
         infos = []
+        s.stats["kill_batch"] += 1                    # one kill event (Demacian Illuminators: "one or more die")
         for o in objs:
             inf = s.lookback(o)
+            inf["batch"] = s.stats["kill_batch"]
             by, kind = by_pid, (it.kind if it is not None else None)
             if o.last_dmg is not None and s.lethal(o) and not cost:
                 by, kind = o.last_dmg                 # dies of lethal damage: attributed to its source
@@ -1420,6 +1460,8 @@ class Game:
                     dks.append((f"{inf['name']} ({n})", ig.fx_deathknell, None))
             if dks:
                 k = 1 + sum(1 for u in s.units(inf["ctrl"]) if u.cname == "Karthus, Eternal")
+                for src, im in s.providers("dk_extra"):     # Detonation Amplifier: "Friendly [Deathknell]
+                    k += im.dk_extra(s, src, inf) or 0      # effects here trigger an additional time."
                 for name, fn, choose in dks:
                     for _ in range(k):
                         s.queue_trigger(inf["ctrl"], f"Deathknell {name}", fn, dict(info=inf), src=None,
@@ -1586,11 +1628,27 @@ class Game:
             reqs += im.move_tax(s, src, pid, units, dest) or []
         return reqs
 
+    def move_cost(s, pid, units, dest):
+        """Cost pid must pay to move these units to dest (Impl.move_cost(g, src, pid, units, dest) -> (e, reqs) or
+        None: Gravity Field), added for a Standard Move and for a move made by an effect (paid by the player moving
+        them: if they can't pay, nothing moves)."""
+        e, reqs = 0, []
+        for src, im in s.providers("move_cost"):
+            c = im.move_cost(s, src, pid, units, dest)
+            if c:
+                e += c[0]
+                reqs += list(c[1])
+        return e, reqs
+
     def move(s, objs, dest, by_pid, standard=False):
         """Move units (rule 445). dest: 'base' or battlefield index. Forbidden moves are skipped (can_move); a
         move cost of several units (move_tax) is paid by the moving player for a move made by an effect, units
         beyond what they can pay for staying where they are."""
         objs = [o for o in objs if o in s.board and o.loc != dest and s.can_move(o, dest, by_pid, standard)]
+        if not standard and objs and by_pid is not None and _cards().HOOKS.get("move_cost"):
+            e, reqs = s.move_cost(by_pid, objs, dest)       # Gravity Field: "Opponents must pay ... to move one
+            if (e or reqs) and not s.pay(by_pid, e, reqs, dict(kind="move")):     # or more units here"
+                return []
         if not standard and len(objs) > 1 and _cards().HOOKS.get("move_tax"):
             mover = objs[0].ctrl
             while len(objs) > 1:
@@ -1608,9 +1666,11 @@ class Game:
                     go.loc = dest
             moved.append((o, frm))
             s.log(f"  {o} moves {frm}->{dest}")
-        if dest in (0, 1) and moved:
+        units_moved = [o for o, _ in moved if o.spec["type"] == "Unit"]     # gear with [Deploy] can move too (830)
+        s.hist["moved"] += [(o.uid, o.oid) for o in units_moved]
+        if dest in (0, 1) and units_moved:
             b = s.bfs[dest]
-            mover = moved[0][0].ctrl
+            mover = units_moved[0].ctrl
             if b.contested is None and b.ctrl != mover:
                 b.contested = mover          # rule 450
         for o, frm in moved:
@@ -1847,6 +1907,12 @@ class Game:
         while True:
             if s.winner is not None:
                 return None
+            if s._exh_pending:
+                batch, s._exh_pending = s._exh_pending, []
+                batch = [o for o in batch if o in s.board]
+                if batch:
+                    s.emit("exhausted", objs=batch)
+                continue
             if s.trigq:
                 s.flush_triggers()
                 continue
@@ -2009,6 +2075,8 @@ class Game:
     def played_event(s, pid, card, item=None):
         """A card's play completed (rule 419.4.a). Tokens are played too (rule 185.2.a) but are not cards: they
         emit 'played' with n=0 and token=True and are not added to g.played."""
+        if card.zone == "board" and card.loc in (0, 1):
+            s.hist["to_bf"][pid] += 1
         if card.token:
             s.hist["tokens"][pid] += 1
             s.emit("played", pid=pid, card=card, item=item, n=0, token=True)
@@ -2064,8 +2132,8 @@ class Game:
                     b.ctrl = None
         # 5. recall unattached gear at battlefields; trash hidden cards at battlefields not controlled by owner
         for g in s.gear():
-            if g.loc in (0, 1) and g.attached_to is None:
-                g.loc = "base"
+            if g.loc in (0, 1) and g.attached_to is None and g.spec["type"] != "Unit" and not s.has_kw(g, "Deploy"):
+                g.loc = "base"              # non-unit gear without [Deploy] (rules 323.6, 830.1.b.3)
         for b in s.bfs:
             for c in list(b.facedowns):
                 if b.ctrl != c.owner:
@@ -2119,6 +2187,9 @@ class Game:
         sd = s.sd
         if u.desig == "att" and u.uid not in sd.att_seen:
             sd.att_seen.add(u.uid); sd.members.add(u.uid)
+            n = s.kw_value(u, "Disarm")
+            if n > 0:                                     # [Disarm X] (rule 831): one attack trigger, total value
+                _cards().disarm_trigger(s, u, n)
             s.emit("attack", obj=u, bf=sd.bf)
         if u.desig == "def" and u.uid not in sd.def_seen:
             sd.def_seen.add(u.uid); sd.members.add(u.uid)
@@ -2430,6 +2501,10 @@ class Game:
             b.scored.add(pid)
         units = [u for u in s.units(pid, b.idx)]
         s.scoring_event("hold", pid, b, units)
+        # [Deploy] (rule 830.1.b): "When an opponent holds here, kill this."
+        for o in list(s.board):
+            if o.loc == b.idx and o.ctrl != pid and s.is_gear(o) and s.has_kw(o, "Deploy"):
+                s.queue_trigger(o.ctrl, f"Deploy {o.cname}", _deploy_kill, dict(uid=o.uid, oid=o.oid), src=o.uid)
 
     # ------------------------------------------------------------------ turn structure (rules 315-317)
     def setup(s):
@@ -2568,6 +2643,12 @@ class _FirstChoice:
     """Agent d'essai pour Game.cost_payable : prend le premier choix proposé."""
     def choose(self, g, pid, kind, options, ctx):
         return options[0]
+
+
+def _deploy_kill(g, it):
+    o = g.obj(it.data["uid"])
+    if o is not None and o.oid == it.data["oid"]:
+        g.kill([o])
 
 
 def _temporary_kill(g, it):

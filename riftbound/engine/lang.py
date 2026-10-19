@@ -116,6 +116,21 @@ ASK_EN = dict(
     weaponmaster_pick="Which gear do you attach?", whirlwind_pick="Which unit do you return to its owner's hand?",
     wild_claw="Which unit do you play?", zed_discard="Zed: which card do you discard?",
     zilean_copy="Zilean: play an extra copy of the token?",
+    # Radiance (moteur : Deploy, Disarm, jetons)
+    deploy_location="On which battlefield do you play this gear?", disarm_target="Disarm: which enemy unit do you weaken?",
+    token_swap="Play a Mech token instead?",
+    # Radiance (cardsets/radiance.py)
+    bomb_location="On which battlefield do you play the Bomb token?", bomb_target="Bomb: which enemy unit does it hit?",
+    tracker_targets="Which units (up to 2) take 1 damage?", amp_kill="Which other friendly card do you kill to draw 1?",
+    morde_kill="Which friendly unit do you kill to save Mordekaiser?", riven_mode="Riven: which effect?",
+    gear_pick="Which gear do you reveal and draw?", scope_guess="Guess the type of the top card:",
+    innovator_mode="Reckless Innovator: which effect?", stranger_bf="Which battlefield do you choose?",
+    stranger_return="Which enemy unit do you return to its owner's hand?",
+    wyrm_move="Which unit do you move to Angler Wyrm's battlefield?",
+    transpo_pick="Which unit from your hand do you play for free?", spirit_kill="Which unit or gear do you kill?",
+    captain_pick="Which card do you reveal and draw?", remember_pick="Which card from your trash do you play?",
+    chrono_pick="Which unit do you banish?", chrono_order="Which unit do you play back now?",
+    orianna_gear="Which gear becomes a unit?", ball_mode="The Ball: which effect?",
 )
 
 

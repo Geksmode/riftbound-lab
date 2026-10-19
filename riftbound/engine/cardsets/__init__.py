@@ -12,4 +12,5 @@ MODULES = [
     "legends",
     "mind",
     "order",
+    "radiance",
 ]

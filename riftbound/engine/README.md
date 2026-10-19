@@ -53,7 +53,9 @@ d'après son texte, avec les numéros de règle cités en commentaire.
   mots-clés dépendants (`kw_if`, `might_if`), auras (`aura_kw`, `aura_might`).
 - **Cartes « mots-clés seulement »** (texte = mots-clés + texte de rappel : unités vanilla, tokens Recruit/Sprite/
   Bird/Sand Soldier/Tentacle, Sunlit Guardian, Shen Kinkou...) : modélisées automatiquement (`cards.AUTO`).
-- **Lots de cartes** (`cardsets/`) : 917 des 919 cartes jouables (hors runes et tokens) sont modélisées ; crochets
+- **Lots de cartes** (`cardsets/`) : 1083 des 1086 cartes jouables (hors runes et tokens) sont modélisées, dont 166
+  des 167 de Radiance (`cardsets/radiance.py`, mots-clés des Core Rules du 2026-10-09 : Deploy, Disarm, Show Off,
+  jeton Bomb ; bloquées : Baron Nashor, Baron Pit, Neeko, Blending In) ; crochets
   partagés (remplacements de mort, de point, de révélation, coûts alternatifs, permissions de jouer
   `play_perm`, capacités et [Add] donnés par d'autres objets, battlefield remplacé `replace_battlefield` — règle
   438, Brush d'Ivern...) décrits dans `cardsets/GUIDE.md` §9.

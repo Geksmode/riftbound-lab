@@ -1,10 +1,11 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-10-07
+maj: 2026-10-19
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **Radiance (2026-10-19)** : 166 des 167 cartes de l'extension modélisées (Neeko bloquée), voir [radiance.md](radiance.md).
 - Moteur : 917 cartes jouables sur 919 (bloquées : Baron Nashor et Baron Pit, il faut un troisième battlefield). `test_all.py` = 968/968, `t_rand.py 20` = 0 erreur (2026-10-07).
 - CI GitHub Actions sur `main` : tests et build de la table, tous verts ; publication sur Pages configurée (adresse attendue https://geksmode.github.io/riftbound-lab/, ouverture de la page **non vérifiée**).
 - Équipe d'agents en place ([equipe.md](equipe.md)).
