@@ -268,3 +268,6 @@ Demande de l'utilisateur. `g.bfs` devient une liste de taille variable (`is_bf(l
 
 ## [2026-10-19] ingest | Équipements [Deploy] affichés sur leur battlefield
 `replay.snap` : gear sur un battlefield dans `bfs[i].g` (plus dans la base) ; table et lecteur de replays les dessinent là ; test `deploy_gear_is_shown_on_its_battlefield`, robot `train/verif_deploy.mjs` dans la porte. Détail : `pages/radiance.md`.
+
+## [2026-10-20] result | Réglage Texel des poids de l'évaluation : rien de gardé
+Demande de l'utilisateur. Outils `engine/texel/` (critères linéaires égaux à `ai.evaluate`, générateur, ajustement logistique par partie). 2 004 parties sh (3100000+) : prédiction du gagnant nettement meilleure (log-loss 0,604 → 0,548), mais en partie 50,6 % ± 2,9 sur 80 paires neuves (3300000+) : on ne sait pas, `ai.EV` inchangé. Détail : `docs/memoire/ia-texel.md`.
