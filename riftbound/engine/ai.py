@@ -42,16 +42,25 @@ def lasting_might(g, o):
     return m
 
 
-# Poids de l'évaluation (valeurs historiques). SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
-EV = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
-          card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
-          pts_ramp=0.0, trick=2.0, open=1.0)
+# Poids de l'évaluation. SearchAgent(cfg={"ev": {...}}) en remplace une partie (essais d'auto-jeu).
+# 2026-10-20 : poids appris par réglage Texel (texel/fit.py, 2 004 parties sh contre sh, graines 3100000+, moteur
+# 599127a907), gardés par la règle 9 (deux tests séquentiels mesure/sprt.py, decks variés : 53,1 % ± 1,2 sur 624 paires,
+# puis 54,0 % ± 1,4 sur 408 paires neuves ; docs/memoire/ia-texel.md). Critères corrélés : un poids seul ne se lit pas
+# comme « la valeur » de la chose (on_bf négatif va avec unit0 et might élevés). leg_emp, deck_low : trop rares dans les
+# données, valeurs d'avant ; react_kw, pts_ramp, open : hors du réglage. RB_EV=old rend les poids d'avant (EV_OLD).
+EV_OLD = dict(pts=7.0, pts_hi=4.0, bf=3.0, fd=1.8, hold_win=40.0, unit0=1.0, might=0.8, cost=0.12, on_bf=0.4,
+              card0=1.4, card_e=0.05, react=2.0, react_kw=0.0, rune=0.9, leg_emp=2.0, xp=0.15, deck_low=3.0,
+              pts_ramp=0.0, trick=2.0, open=1.0)
+EV = dict(EV_OLD, pts=6.859, pts_hi=10.36, bf=1.077, fd=5.353, hold_win=4.39, unit0=5.444, might=3.137, cost=0.4435,
+          on_bf=-4.586, card0=-0.234, card_e=1.026, react=1.041, rune=6.602, xp=1.103, trick=2.371)
+if os.environ.get("RB_EV") == "old":
+    EV = dict(EV_OLD)
 
 # Sorts de combat (2026-10-10, demande de l'utilisateur : l'IA jetait Punch First dans son tour sans combat derrière) :
 # un sort [Action] ou [Reaction] (seuls jouables pendant un showdown, 308.1.a) dont le texte change la Might « this turn ».
 # Gardé en main, il vaut `trick` de plus quand son propriétaire a une unité sur le plateau et assez de runes pour le payer.
 # Gardé par décision de l'utilisateur (2026-10-10 : « ça simule le comportement humain »), quel que soit le résultat des
-# mesures ; trick=2,0 n'est pas réglé finement. Avec POL_TRICK, la politique de simulation garde aussi ces sorts pour les
+# mesures ; trick=2,0 choisi sans mesure, 2,371 depuis le réglage Texel du 2026-10-20. Avec POL_TRICK, la politique de simulation garde aussi ces sorts pour les
 # showdowns (sans elle, la valeur en main disparaît dans les simulations : la politique les jetait dans son tour).
 # open (runes laissées prêtes en fin de tour, open_count) : 1,0 par sort, choisi sans mesure (l'utilisateur : « je te fais
 # confiance pour la valeur ») : moins qu'une unité posée (≈ 2 à 5), pour ne pas garder ses runes au lieu de se développer.

@@ -91,8 +91,9 @@ def evaluation_weights_default_and_override():
     hand = len(g.p[me].hand) - len(g.p[1 - me].hand)
     w = dict(ai.EV, card0=ai.EV["card0"] + 1.0, react=ai.EV["react"] + 1.0)
     assert abs(ai.evaluate(g, me, w) - v0 - hand) < 1e-9
+    bf0 = ai.EV["bf"]
     a, b = P.PlanAgent(1, cfg={"ev": {"bf": 9.0}}), P.PlanAgent(1)
-    assert a.ev["bf"] == 9.0 and b.ev is None and ai.EV["bf"] == 3.0
+    assert a.ev["bf"] == 9.0 and b.ev is None and ai.EV["bf"] == bf0 != 9.0
 
 
 @T.test
