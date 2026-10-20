@@ -42,7 +42,7 @@
     ["Rune Pool : ressources gagnées et pas encore dépensées. L'énergie d'une rune épuisée avant d'être recyclée reste utilisable jusqu'à la fin du tour.",
      "Rune Pool: resources gained and not spent yet. The energy of a rune exhausted before being recycled stays usable until the end of the turn."],
     ["Carte cachée", "Hidden card"], ["révélée", "revealed"], ["révélée à l'adversaire", "revealed to the opponent"],
-    ["Ta main", "Your hand"], ["(épuisée)", "(exhausted)"],
+    ["Ta main", "Your hand"], ["(épuisée)", "(exhausted)"], ["Ta base", "Your base"], ["Base de ${}", "${}'s base"],
     ["Deck : ${} cartes. Dessus connu (Predict, Vision) : ${}. Touche pour voir.", "Deck: ${} cards. Known top (Predict, Vision): ${}. Tap to see."],
     ["Deck : ${} cartes", "Deck: ${} cards"], ["Défausse : touche pour voir les ${} cartes", "Trash: tap to see the ${} cards"],
     ["Prêtes", "Ready"], ["Réserve ${}", "Reserve ${}"], ["Runes", "Runes"], ["Base", "Base"], ["Légende", "Legend"],

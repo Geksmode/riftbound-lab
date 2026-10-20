@@ -702,6 +702,27 @@ body.dkopen { overflow: hidden; }
   .half.p0 .hand.open > .card { --cw: 88px; --chh: 123px; width: 88px; height: 123px; flex: none; touch-action: pan-x; }
   .half.p0 .hand.open > .card ~ .card { margin-left: 8px !important; }
   .half.p0 .hand.open > .card:hover, .half.p0 .hand.open > .card.can:hover { transform: none; }
+  /* base agrandie (baseDense) : même rangée de grandes cartes, au-dessus de ta moitié (en bas) ou de celle de
+     l'adversaire (en haut), avec un bandeau titre + nombre de cartes + « Fermer » ; les champs de bataille restent visibles */
+  .half.p1 { position: relative; }
+  /* grid-area: auto, sinon la case « base » de la grille sert de cadre au positionnement absolu */
+  .zrow > .zone.zbase.open { grid-area: auto !important; position: absolute; left: 0; right: 0; height: 150px; z-index: 30; container-type: normal;
+    overflow-x: auto !important; overflow-y: hidden !important; justify-content: flex-start; align-items: center; gap: 8px; padding: 10px 10px 12px;
+    background: rgba(14,18,48,.97); border: 0; touch-action: pan-x; scrollbar-width: none; --cw: 88px; --chh: 123px; }
+  .half.p0 .zone.zbase.open { bottom: 0; border-top: 1px solid rgba(243,213,138,.6); box-shadow: 0 -12px 30px rgba(5,7,20,.6); }
+  .half.p1 .zone.zbase.open { top: 34px; border-bottom: 1px solid rgba(243,213,138,.6); box-shadow: 0 12px 30px rgba(5,7,20,.6); border-radius: 0 0 16px 16px; }
+  .zrow > .zone.zbase.open > .slot { margin-left: 0 !important; touch-action: pan-x; }
+  .zrow > .zone.zbase.open > .slot.geared { margin-left: calc(var(--gn) * 16px) !important; }
+  .zrow > .zone.zbase.open .card { touch-action: pan-x; }
+  .zrow > .zone.zbase.open .card:hover, .zrow > .zone.zbase.open .card.can:hover { transform: none; }
+  .zrow > .zone.zbase.open .slot.x .card:hover, .zrow > .zone.zbase.open .slot.x .card.can:hover { transform: translate(-50%, -50%) rotate(90deg); }
+  .zrow > .zone.zbase.open > .label { display: none; }
+  .bhead { grid-area: auto !important; position: absolute; left: 0; right: 0; height: 34px; z-index: 31; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 12px;
+    background: rgba(14,18,48,.97); font-size: 13px; color: var(--ink-1, #E9ECFF); }
+  .half.p0 .bhead { bottom: 150px; border-top: 1px solid rgba(243,213,138,.6); border-radius: 16px 16px 0 0; }
+  .half.p1 .bhead { top: 0; }
+  .bhead .bn { color: var(--moon-3, #8A90BE); }
+  .bhead button { margin-left: auto; min-height: 30px; padding: 4px 14px; font-size: 13px; }
   /* chaîne : une ligne compacte (petite carte + nom), la zone adverse reste visible dessous */
   .main > .ctrlcol .stackcol { max-height: 84px !important; padding: 6px 8px; }
   .main > .ctrlcol .stackcol .sitem { flex-direction: row; align-items: center; gap: 8px; }
@@ -877,6 +898,7 @@ function sfxView(prev, v) {
   if (ks.length) SFX.seq(ks);
 }
 let HANDOPEN = false;   // téléphone : main serrée ouverte en grand (handDense)
+let BASEOPEN = null;    // téléphone : joueur dont la base serrée est ouverte en grand (baseDense), sinon null
 let IMG = {}, ATL = {}, CAT = null, CARDS = {}, T = null, V = null, META = null, sel = null, mode = null, ALIAS = {}, lastAI = null, drag = null, noClick = false, LOG = [], LOGSTACK = [], working = false, mullSel = new Set(), chainFocus = null;   // chainFocus : élément de la chaîne dont on montre les cibles (null : le haut)
 const rep = { get cards() { return CARDS; } };
 // Place locale (0 contre l'IA ; 0 = hôte, 1 = invité en duel) : le plateau se dessine toujours avec toi en bas.
@@ -1486,7 +1508,7 @@ const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 async function choose(i) {
   if (working || !V || !V.dec) return;
-  sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false);
+  sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false); setBaseOpen(null);
   LOGSTACK.push(LOG.length);
   const o = V.dec.options.find(x => x.i === i);
   SFX.play(o && { play: "play", hide: "hide", act: "act", move: "move", end: "end", pass: "pass" }[o.k] || "click");
@@ -1609,10 +1631,12 @@ function rowHTML(st, pid, srcs) {
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
     <div class="zone zrunes" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
-    <div class="zone zbase" style="--n:${p.base.length + p.gear.length};--nx:${p.base.filter(u => u.x).length + p.gear.filter(g => g.x).length}" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    <div class="zone zbase${BASEOPEN === pid && MOBILE.matches ? " open" : ""}" data-bz="${pid}" style="--n:${p.base.length + p.gear.length};--nx:${p.base.filter(u => u.x).length + p.gear.filter(g => g.x).length}" ${pid === MEP ? 'data-drop="base"' : ""}>${base}<span class="label">Base</span></div>
+    ${BASEOPEN === pid && MOBILE.matches ? bheadHTML(pid, p.base.length + p.gear.length) : ""}
     <div class="zone legend">${leg}<span class="label">Légende</span></div>
   </div>`;
 }
+const bheadHTML = (pid, n) => `<div class="bhead" data-bz="${pid}"><b>${pid === MEP ? "Ta base" : "Base de " + esc(PN[pid])}</b><span class="bn">${n}</span><button data-bclose="1">Fermer</button></div>`;
 function bfHTML(st, i, srcs) {
   const b = st.bfs[i], sd = st.sd && st.sd.bf === i;
   // équipements posés sur ce champ de bataille ([Deploy], règle 830), du côté de leur contrôleur, après les unités
@@ -2065,12 +2089,36 @@ function setHandOpen(on) {
   HANDOPEN = !!on;
   const h = document.querySelector("#board .half.p0 .hand"); if (h) h.classList.toggle("open", HANDOPEN);
 }
+// Téléphone : une base serrée (une carte cachée d'au moins un cinquième par sa voisine) s'ouvre de même au premier
+// toucher, en grande rangée qui défile au doigt, au-dessus de sa moitié de plateau ; on y touche ou glisse ses cartes.
+// Elle reste ouverte pendant un ciblage, un déplacement préparé ou une question ; elle se ferme après un coup, au
+// bouton « Fermer » ou en touchant ailleurs.
+function baseDense(z) {
+  if (!z || !MOBILE.matches || z.classList.contains("open")) return false;
+  const ss = [...z.querySelectorAll(":scope > .slot")].map(x => x.getBoundingClientRect());
+  return ss.some((r, k) => k > 0 && r.left - ss[k - 1].left < .8 * ss[k - 1].width);
+}
+function setBaseOpen(pid) {
+  if (pid === BASEOPEN) return;
+  BASEOPEN = pid;
+  if (pid !== null) setHandOpen(false);
+  document.querySelectorAll("#board .bhead").forEach(x => x.remove());
+  document.querySelectorAll("#board .zbase").forEach(z => {
+    const on = pid !== null && +z.dataset.bz === pid; z.classList.toggle("open", on);
+    if (on) z.insertAdjacentHTML("afterend", bheadHTML(pid, z.querySelectorAll(":scope > .slot").length));
+  });
+  if (V) decorate();
+}
 document.addEventListener("click", e => {
   if (noClick) { noClick = false; return; }
   if (MOBILE.matches && !e.target.closest("#pop, #fbar, #zoom, #hpop, #modal")) {
     const inHand = e.target.closest("#board .half.p0 .hand");
-    if (inHand && !HANDOPEN && handDense()) { setHandOpen(true); Z.hidden = true; return; }
+    if (inHand && !HANDOPEN && handDense()) { setBaseOpen(null); setHandOpen(true); Z.hidden = true; return; }
     if (!inHand && HANDOPEN && !(mode && mode.type === "target")) setHandOpen(false);
+    const inBase = e.target.closest("#board [data-bz]");
+    if (e.target.closest("#board [data-bclose]")) { setBaseOpen(null); Z.hidden = true; return; }
+    if (inBase && baseDense(inBase)) { setBaseOpen(+inBase.dataset.bz); Z.hidden = true; return; }
+    if (!inBase && BASEOPEN !== null && !(mode && ["target", "move", "ask"].includes(mode.type))) setBaseOpen(null);
   }
   if (e.target.closest("#pop, #fbar, #zoom, #hpop")) return;
   if (!$("hpop").hidden && !e.target.closest("#bHint")) $("hpop").hidden = true;
@@ -2125,7 +2173,7 @@ document.addEventListener("pointermove", e => {
   if (!drag.on) {
     if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 8) return;
     // main agrandie : un geste plutôt horizontal fait défiler la main, seul un geste vers le plateau glisse la carte
-    if (drag.el.closest(".hand.open") && Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0)) { drag = null; return; }
+    if (drag.el.closest(".hand.open, .zbase.open") && Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0)) { drag = null; return; }
     drag.on = true; Z.hidden = true; $("pop").hidden = true; SFX.play("lift");
     if (!(mode && mode.type === "move")) { mode = null; sel = drag.src; }
     const r = drag.el.getBoundingClientRect(), g = drag.el.cloneNode(true);
@@ -3154,7 +3202,7 @@ async function startReplay(g) {
   try { cards = await J(T.cards()); }
   catch (err) { working = false; closeModal(); toast("Rejeu impossible : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
   working = false;
-  closeModal(); hideMenu(); setHandOpen(false); toast("");
+  closeModal(); hideMenu(); setHandOpen(false); setBaseOpen(null); toast("");
   RP = { g, r, k: 0, timer: null, hint: {}, busy: false,
     keep: { V, LOG, LOGSTACK, META, PN, MEP, lastAI, CARDS, seenLog, gmeta: $("gmeta").textContent, gres: $("gres").hidden } };
   MEP = 0; META = r.meta; PN = r.meta.names; CARDS = cards; LOGSTACK = [];

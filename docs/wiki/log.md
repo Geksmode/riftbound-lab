@@ -280,3 +280,6 @@ Demande de l'utilisateur. Poids Texel contre poids actuels, decks variés (`mesu
 
 ## [2026-10-20] decision | Poids Texel par défaut dans ai.EV
 Demande de l'utilisateur. `ai.EV` = poids Texel, anciens dans `ai.EV_OLD` (`RB_EV=old`). Temps par décision : identique sur les mêmes positions (CPython ≈ 136 ms, Pyodide ≈ 295 ms), ≈ 20 % de plus en partie (positions plus chargées). Deux tests qui écrivaient les anciens poids en dur ajustés. Détail : `docs/memoire/ia-texel.md`.
+
+## [2026-10-20] ingest | Table : base serrée ouverte en grand au toucher (téléphone)
+Demande de l'utilisateur : base trop remplie, cartes dures à toucher. Une base serrée (sienne ou adverse) s'ouvre au premier toucher en rangée de grandes cartes qui défile, bandeau « Ta base · n · Fermer » ; robot `train/verif_base.mjs` (vérifié par robot, pas essayé sur un vrai téléphone). Détail : `docs/memoire/riftbound-training-table.md`.
