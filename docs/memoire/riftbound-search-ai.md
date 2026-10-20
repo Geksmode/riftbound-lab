@@ -63,4 +63,7 @@ qu'elle soit, le +5 « ce tour » ne compte pas (`lasting_might`), et un seul ti
   (`RB_TRICK=0 RB_TURN_FULL=0`), mêmes graines : 19 en showdown, 30 dans son tour (inutile 12 fois). Les parties divergent
   après le premier coup différent : comptes non appariés, 40 parties seulement.
 
-Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]].
+**Poids de l'évaluation** : depuis le 2026-10-20, `ai.EV` = poids Texel ([[ia-texel]], 53,5 % ± 0,9 contre les poids ci-dessus) ;
+les mesures de cette page ont été faites avec les anciens poids (`ai.EV_OLD`, `RB_EV=old`).
+
+Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]], [[ia-texel]].

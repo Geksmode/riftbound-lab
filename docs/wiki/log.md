@@ -274,3 +274,9 @@ Demande de l'utilisateur. Outils `engine/texel/` (critères linéaires égaux à
 
 ## [2026-10-20] decision | Garder un réglage de l'IA : +2 points démontré par test séquentiel
 Proposition acceptée par l'utilisateur. `engine/mesure/sprt.py` (H0 50 %, H1 52 %, 5 % / 5 %, plafond 1 600 paires), règle 9 de `CLAUDE.md`, confirmation sur graines neuves. Réglage sans effet : ≈ 1 h 30 en médiane sur ce PC. Vérifié de bout en bout (A = B rejeté après 40 paires). `results_search.json` réparé (entrée écrite en cp1252 par `exp_search.py` sous Windows). Détail : `docs/memoire/ia-sprt.md`.
+
+## [2026-10-20] result | Poids Texel gardés par deux tests séquentiels
+Demande de l'utilisateur. Poids Texel contre poids actuels, decks variés (`mesure/sprt.py`, moteur 599127a907) : gardé après 624 paires (3500000+, 53,1 % ± 1,2), confirmé après 408 paires neuves (3600000+, 54,0 % ± 1,4) ; regroupé 53,5 % ± 0,9 (légèrement surestimé par l'arrêt séquentiel). Détail : `docs/memoire/ia-texel.md`.
+
+## [2026-10-20] decision | Poids Texel par défaut dans ai.EV
+Demande de l'utilisateur. `ai.EV` = poids Texel, anciens dans `ai.EV_OLD` (`RB_EV=old`). Temps par décision : identique sur les mêmes positions (CPython ≈ 136 ms, Pyodide ≈ 295 ms), ≈ 20 % de plus en partie (positions plus chargées). Deux tests qui écrivaient les anciens poids en dur ajustés. Détail : `docs/memoire/ia-texel.md`.

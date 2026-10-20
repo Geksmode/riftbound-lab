@@ -10,7 +10,7 @@
 - [riftbound-manager](riftbound-manager.md) — 6h routine running matchup sim sessions + retex, riftbound/manager/
 - [riftbound-gameplans](riftbound-gameplans.md) — player gameplans in engine/plans.py; Gorica engine plan ~53% vs LeBlanc Hook tempo
 - [riftbound-search-ai](riftbound-search-ai.md) — IA générale 2026-10-09 : tirages communs + élimination en passes (défaut « sh »), +15 points contre l'ancienne sur 49 decks, essais d'évaluation non retenus, temps par coup ; sorts de combat gardés en main et runes ouvertes (2026-10-10)
-- [ia-texel](ia-texel.md) — 2026-10-20 : réglage Texel des poids ai.EV sur 2 004 parties sh, prédiction meilleure mais 50,6 % ± 2,9 en partie, rien de gardé ; outils engine/texel/
+- [ia-texel](ia-texel.md) — 2026-10-20 : réglage Texel des poids ai.EV sur 2 004 parties sh, gardé par deux tests séquentiels (53,5 % ± 0,9 regroupé), par défaut dans ai.EV (RB_EV=old) ; ≈ 20 % plus de réflexion en partie ; outils engine/texel/
 - [ia-sprt](ia-sprt.md) — règle 2026-10-20 : réglage gardé si +2 points démontré par test séquentiel (mesure/sprt.py), confirmé sur graines neuves ; durées réelles ; piège cp1252 sous Windows
 - [ia-tests-decks-varies](ia-tests-decks-varies.md) — règle 2026-10-10 : tester l'IA sur des decks variés (exp_search defaut, ~80 paires), plus d'Akali contre LeBlanc par défaut
 - [plans-par-legende](plans-par-legende.md) — 2026-10-11 : plan sourcé pour les 49 légendes par défaut (plans_legendes.py, gameplans/legendes.md), non mesuré, « @plan=leg » dans exp_search

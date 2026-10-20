@@ -1543,7 +1543,10 @@ def point_value_ramp_keeps_total_and_orders_points():
     """IA : pts_ramp = 0 garde l'ancienne valeur des points ; pts_ramp > 0 fait valoir moins les premiers points et plus
     les derniers, avec la même valeur totale à victoire − 1 (cible lue dans g.victory, pas en dur)."""
     import ai
-    assert [ai.point_value(p, 8) for p in (0, 5, 6, 7)] == [0.0, 35.0, 46.0, 57.0]
+    # formule historique (pts 7, pts_hi 4 : poids d'avant le réglage Texel du 2026-10-20)
+    assert [ai.point_value(p, 8, ai.EV_OLD) for p in (0, 5, 6, 7)] == [0.0, 35.0, 46.0, 57.0]
+    w = ai.EV
+    assert ai.point_value(7, 8) == 7 * w["pts"] + 2 * w["pts_hi"]
     for vic in (8, 9):
         w = dict(ai.EV, pts_ramp=2.0)
         v = [ai.point_value(p, vic, w) for p in range(vic)]

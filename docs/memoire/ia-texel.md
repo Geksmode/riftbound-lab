@@ -1,6 +1,6 @@
 ---
 name: ia-texel
-description: Réglage Texel des poids ai.EV (2026-10-20) : 2 004 parties sh, prédiction nettement meilleure, mais 50,6 % ± 2,9 en partie : rien de gardé ; outils dans engine/texel/
+description: Réglage Texel des poids ai.EV (2026-10-20) : 2 004 parties sh ; 50,6 % ± 2,9 sur 80 paires, puis GARDÉ par deux tests séquentiels (53,5 % ± 0,9 regroupé) ; outils dans engine/texel/
 metadata:
   type: project
 ---
@@ -29,11 +29,27 @@ rune 6,6 ± 0,6 ; xp 1,1 ± 1,1 ; trick 2,4 ± 1,3 (leg_emp, deck_low : trop rar
 seul ne se lit pas comme « la valeur » de la chose (ex. on_bf négatif à côté d'unit0 et might élevés).
 
 **Mesure en partie** (`exp_search.py 80 3300000 "sh@<poids appris>" sh defaut`, moteur 599127a907) : **50,6 % ± 2,9** (z 0,22),
-temps par décision 1,9 s contre 1,7 s. Sous 2 écarts-types : on ne sait pas, **rien de gardé** (`ai.EV` inchangé).
+temps par décision 1,9 s contre 1,7 s. Sous 2 écarts-types : on ne sait pas (voir les tests séquentiels plus bas).
 Prototype en politique simple (9 493 parties, 3000000+) : poids différents (bf −6,6, hold_win 9,6) : les poids dépendent de
 la façon de jouer ; non mesuré en partie.
 
-**Ce que ça indique** (hypothèse, pas mesurée) : avec le réglage à la main du 2026-10-09 (chaque poids seul ±3 %), deuxième
+**Tests séquentiels (règle 9, [[ia-sprt]], moteur 599127a907, worktree propre de main)** :
+- SPRT 1, graines 3500000-3500623 : **gardé** après 624 paires, 54 min de calcul, 53,1 % ± 1,2 (LLR 2,97) ;
+- SPRT 2 (confirmation), graines 3600000-3600407 : **gardé** après 408 paires, 29 min, 54,0 % ± 1,4 (LLR 3,16) ;
+- regroupé (`compare.py --pool`, 1 032 graines) : **53,5 % ± 0,9** ; avec les 80 paires du criblage : 53,3 % ± 0,9.
+  Un SPRT s'arrête quand il franchit sa borne : ces moyennes surestiment un peu le vrai gain.
+- Le criblage de 80 paires (50,6 % ± 2,9) n'avait pas la puissance de voir +3 points : « on ne sait pas » était juste, pas « aucun effet ».
+- **Par défaut dans `ai.EV` depuis le 2026-10-20** (demande de l'utilisateur) ; anciens poids dans `ai.EV_OLD`, `RB_EV=old` les remet.
+  Tests ajustés : `point_value_ramp_keeps_total_and_orders_points` (formule historique avec `EV_OLD`),
+  `evaluation_weights_default_and_override` (plus de `bf == 3.0` en dur).
+- **Temps par décision** : sur les mêmes 144 positions (`exp_temps.py 777003,777011`, deux passages en ordre inverse),
+  aucun écart : CPython ≈ 136 ms (p95 ≈ 390 ms), Pyodide 0.26.4 sous node ≈ 295 ms (p95 ≈ 850 ms), anciens comme nouveaux.
+  **En partie**, les nouveaux poids réfléchissent ≈ 20 % plus longtemps (40 paires, 3700000+, 24 processus en charge :
+  708 ms contre 592 ms, p95 2,58 s contre 2,17 s ; criblage : 1,9 s contre 1,7 s) : même coût de calcul, positions plus
+  chargées. Non mesuré : sur un vrai téléphone. Ce bloc de 40 paires (60,0 % ± 4,5) servait au temps, pas de preuve.
+- Non mesuré : effet sur Akali contre LeBlanc ; comportement dans la table.
+
+**Ce que ça indiquait avant les tests séquentiels** (hypothèse, pas mesurée) : avec le réglage à la main du 2026-10-09 (chaque poids seul ±3 %), deuxième
 signe que les poids de l'évaluation ne sont pas le goulot de l'IA ; plus probablement le bruit de la recherche (1 tirage par
 option) ou la politique de simulation. Une mesure de 80 paires ne voit qu'un écart d'environ 6 points ou plus.
 
