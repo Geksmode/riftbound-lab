@@ -90,3 +90,15 @@ Mesures (Chromium sans limite CPU, serveur local `http.server` sans gzip, temps 
 - node seul : `loadPyodide` ~1,8 s → ~0,6 s, `import train` ~530 → ~100 ms.
 Coût : +2,3 Mo bruts au premier chargement (bytecode.json 2,0 Mo, stdlib 3,1 → 3,9 Mo) ; avec gzip (GitHub Pages
 compresse le texte) environ +1,4 Mo. Pas essayé sur un vrai téléphone (limite CPU du worker non simulée).
+
+## Base serrée ouverte en grand (2026-10-20)
+Demande de l'utilisateur (capture : 9 cartes dans sa base, dures à toucher) : « cliquer sur la base et avoir un menu
+déroulant de toutes les cartes présentes pour interagir avec ». Sur téléphone, une base serrée (`baseDense` : une carte
+cachée d'au moins un cinquième par sa voisine), la sienne ou celle de l'adversaire, s'ouvre au premier toucher comme la
+main serrée : rangée de grandes cartes (88 px) qui défile au doigt, au-dessus de sa moitié de plateau (en bas pour toi, en
+haut pour l'adversaire), bandeau « Ta base / Base de … · nombre · Fermer » ; les champs de bataille restent visibles. On y
+touche une carte (ses actions, ou l'agrandi) ou on la glisse (un geste horizontal fait défiler). Elle reste ouverte pendant
+un ciblage, un déplacement préparé ou une question ; elle se ferme après un coup, au bouton « Fermer » ou en touchant
+ailleurs. État `BASEOPEN`, `setBaseOpen`, `bheadHTML` dans `src.html`. Piège CSS : un enfant en position absolue d'une grille
+prend sa case (`grid-area`) comme cadre, d'où `grid-area: auto !important`. Robot `train/verif_base.mjs` (393x851 et
+360x740, dans la porte) : vérifié par robot (toucher simulé), pas essayé sur un vrai téléphone.
