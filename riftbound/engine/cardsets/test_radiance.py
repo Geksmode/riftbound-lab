@@ -1871,6 +1871,23 @@ def blade_of_the_exile_equip_by_exhausting():
 
 
 @T.test
+def blade_of_the_exile_human_picks_the_exhausted_unit():
+    """Table : le joueur choisit l'unité qu'il épuise (toutes proposées, une ligne distincte par unité)."""
+    import train
+    g, _ = N()
+    g.every_choice = True                                    # joueur humain : tous les choix (actions.full_choices)
+    put(g, 0, "Blade of the Exile")
+    u = put(g, 0, V3)
+    others = [put(g, 0, V4), put(g, 0, V5), put(g, 0, V8)]
+    opts = [o for o in act_options(g, 0, "Blade of the Exile") if o[3]["tg"] == (u.uid,) and o[3].get("exh")]
+    assert sorted(o[3]["exh"] for o in opts) == sorted(x.uid for x in others + [u])
+    labels = [train._act_label(g, o).split("cible")[0] for o in opts]
+    assert len(set(labels)) == len(labels) and any(V8 in s for s in labels), labels
+    act(g, 0, "Blade of the Exile", lambda ch: ch.get("exh") == others[2].uid and ch["tg"] == (u.uid,))
+    assert others[2].exhausted and not others[0].exhausted and not others[1].exhausted
+
+
+@T.test
 def seraphine_legend_discount_by_exhausting_three():
     g, _ = N()
     legend(g, 0, "Seraphine, Starry-Eyed Songstress")

@@ -595,6 +595,14 @@ body.dkopen { overflow: hidden; }
   .topbar .savechip { flex: none; white-space: nowrap; }
   .topbar .tbtns { flex: none; margin-left: auto; display: flex; gap: 6px; }
 }
+/* liste des choix possibles dans la bulle (ciblage, question pendant un effet) */
+.pick-strip { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 4px 2px 8px; scrollbar-width: none; touch-action: pan-x; }
+.pick-strip .pk { flex: none; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 84px; padding: 6px 4px; border-radius: 14px; min-height: 44px; }
+.pick-strip .pk .card { --cw: 64px; --chh: 90px; width: 64px; height: 90px; pointer-events: none; }
+.pick-strip .pk .pkn { font-size: 11px; line-height: 1.15; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick-strip .pk .pkw { font-size: 10px; color: var(--moon-3, #8A90BE); line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick-strip .pk.on { border-color: var(--halo, #93B9FF); box-shadow: 0 0 0 2px var(--halo, #93B9FF), 0 0 18px rgba(147,185,255,.4); }
+.pick-strip .zonepk { width: auto; padding: 10px 16px; justify-content: center; }
 /* Téléphone (portrait, ou paysage bas) : plateau plein écran, SANS défilement et à taille FIXE pendant la partie, sur le
    modèle des tables en ligne. Mise en page de largeur fixe (360 à 520 px) mise à l'échelle de la largeur de l'écran ;
    la hauteur remplit l'écran, les champs de bataille prennent la place restante. Haut : main adverse, ses zones,
@@ -694,14 +702,6 @@ body.dkopen { overflow: hidden; }
   .half.p0 .hand.open > .card { --cw: 88px; --chh: 123px; width: 88px; height: 123px; flex: none; touch-action: pan-x; }
   .half.p0 .hand.open > .card ~ .card { margin-left: 8px !important; }
   .half.p0 .hand.open > .card:hover, .half.p0 .hand.open > .card.can:hover { transform: none; }
-  /* liste des choix possibles dans la bulle (ciblage, question pendant un effet) */
-  .pick-strip { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 4px 2px 8px; scrollbar-width: none; touch-action: pan-x; }
-  .pick-strip .pk { flex: none; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 84px; padding: 6px 4px; border-radius: 14px; min-height: 44px; }
-  .pick-strip .pk .card { --cw: 64px; --chh: 90px; width: 64px; height: 90px; pointer-events: none; }
-  .pick-strip .pk .pkn { font-size: 11px; line-height: 1.15; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .pick-strip .pk .pkw { font-size: 10px; color: var(--moon-3, #8A90BE); line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .pick-strip .pk.on { border-color: var(--halo, #93B9FF); box-shadow: 0 0 0 2px var(--halo, #93B9FF), 0 0 18px rgba(147,185,255,.4); }
-  .pick-strip .zonepk { width: auto; padding: 10px 16px; justify-content: center; }
   /* chaîne : une ligne compacte (petite carte + nom), la zone adverse reste visible dessous */
   .main > .ctrlcol .stackcol { max-height: 84px !important; padding: 6px 8px; }
   .main > .ctrlcol .stackcol .sitem { flex-direction: row; align-items: center; gap: 8px; }
@@ -1722,7 +1722,7 @@ function startTarget(cands, P = []) {
   const src = sel; setHandOpen(false);
   cands = cands.filter(needs);
   if (!cands.length) return;
-  mode = { type: "target", src, cands, P: [], skip: false, M: null, D: null };
+  mode = { type: "target", src, cands, P: [], skip: false, M: null, D: null, X: null };
   P.forEach(u => addTarget(u, true));
   decorate();
 }
@@ -1742,8 +1742,8 @@ function pickInfo(uid) {
   const dn = el.querySelector(":scope > .dupn");   // homonymes en jeu : même numéro que sur le plateau
   return { n: el.dataset.card || "?", dn: dn ? +dn.textContent.slice(1) : 0, w: (mine ? "à toi" : "adverse") + (where ? " · " + where : "") };
 }
-function pickStrip(items) {   // items : [{key, uid?, label?, on}]
-  if (!MOBILE.matches || !items.length) return "";
+function pickStrip(items, always) {   // items : [{key, uid?, label?, on}] ; always : aussi sur ordinateur
+  if ((!MOBILE.matches && !always) || !items.length) return "";
   return `<div class="pick-strip">${items.map(it => {
     if (it.uid === undefined) return `<button class="pk zonepk ${it.on ? "on" : ""}" data-pk="${esc(it.key)}">${esc(it.label)}</button>`;
     const inf = pickInfo(it.uid);
@@ -1755,10 +1755,11 @@ function targetItems() {
   if (ph === "t1") return [...new Set([...mode.P, ...targetable()])].map(u => ({ key: "u:" + u, uid: u, on: mode.P.includes(u) }));
   if (ph === "mover") return [...moverSet()].map(u => ({ key: "u:" + u, uid: u, on: mode.M === u }));
   if (ph === "dest" || ph === "done") return [...destSet()].map(z => ({ key: "z:" + z, label: cap(locName(z)), on: mode.D === z }));
+  if (ph === "exh") return [...exhVals()].map(u => u === "" ? { key: "x:", label: "Payer " + exhCost(), on: mode.X === "" } : { key: "x:" + u, uid: u, on: mode.X === u });
   return [];
 }
 function targetTap(uid, zone) {   // même logique que toucher la carte ou la zone sur le plateau
-  const ph = tPhase(), drop = id => { mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = null; mode.skip = false; decorate(); };
+  const ph = tPhase(), drop = id => { mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = mode.X = null; mode.skip = false; decorate(); };
   if (uid && mode.M !== null && uid === mode.M) { mode.M = mode.D = null; return decorate(); }
   if (ph === "mover" && uid && moverSet().has(uid)) { mode.M = uid; return decorate(); }
   if ((ph === "dest" || ph === "done") && zone && destSet().has(zone)) { mode.D = zone; return decorate(); }
@@ -1770,8 +1771,14 @@ function targetTap(uid, zone) {   // même logique que toucher la carte ou la zo
 const mvMode = () => mode.cands.some(hasMv);
 const maxT = () => Math.max(...mode.cands.map(o => o.t1.length));
 const matchT = () => mode.cands.filter(o => o.t1.length === mode.P.length && contains(o.t1, mode.P));
+// Coût « épuise une unité alliée » (Equip de Blade of the Exile) : une fois la cible choisie, on touche l'unité à épuiser
+// (plateau ou liste de cartes dans la bulle), ou on paie le coût normal ("" = variante sans unité épuisée).
+const exhKey = o => o.exh === null || o.exh === undefined ? "" : String(o.exh);
+const exhVals = () => new Set(matchT().map(exhKey));
+const exhPhase = () => mode.cands.some(o => exhKey(o) !== "") && matchT().length > 0 && (mode.P.length >= maxT() || !targetable().size) && exhVals().size > 1;
+function exhCost() { const o = matchT().find(x => exhKey(x) === ""), m = o && /\(([^,)]*)/.exec(o.label); return m ? m[1] : "le coût normal"; }
 function tPhase() {
-  if (!mvMode()) return "t1";
+  if (!mvMode()) return exhPhase() ? "exh" : "t1";
   if (!mode.skip && mode.P.length < maxT() && targetable().size) return "t1";
   if (mode.M === null) return "mover";
   if (mode.D === null) return "dest";
@@ -1779,7 +1786,8 @@ function tPhase() {
 }
 const moverSet = () => new Set(matchT().filter(hasMv).map(o => S(o.mover)));
 const destSet = () => new Set(matchT().filter(o => S(o.mover) === mode.M).map(o => S(o.loc)));
-const exactT = () => mvMode() ? matchT().filter(o => S(o.mover) === mode.M && S(o.loc) === mode.D) : matchT();
+const exactT = () => mvMode() ? matchT().filter(o => S(o.mover) === mode.M && S(o.loc) === mode.D)
+  : exhPhase() ? matchT().filter(o => mode.X !== null && exhKey(o) === mode.X) : matchT();
 const cname = u => { const x = srcEl(u); return x && x.dataset.card ? x.dataset.card : "?"; };
 
 // ---------- déplacements
@@ -1918,6 +1926,12 @@ function fbarHTML() {
       ${pickStrip(targetItems())}
       <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider</button>${canSkip ? `<button id="fSkip">Pas d'ennemi</button>` : ""}<button id="fNo">Annuler</button></div>`;
   }
+  if (mode.type === "target" && tPhase() === "exh") {
+    const ok = exactT().length > 0, x = mode.X === null ? null : mode.X === "" ? "Payer " + exhCost() : cname(mode.X);
+    return `<span class="ft"><b>${esc(cname(mode.src))}</b> · ${x === null ? "Touche l'unité alliée à épuiser pour payer." : `Paiement : <b>${esc(x)}</b>`}</span>
+      ${pickStrip(targetItems(), true)}
+      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider</button><button id="fNo">Annuler</button></div>`;
+  }
   if (mode.type === "target") {
     const max = Math.max(...mode.cands.map(o => o.t1.length)), ok = exactT().length > 0;
     return `<span class="ft">Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
@@ -1958,6 +1972,7 @@ $("fbar").addEventListener("click", e => {
   if (b.dataset.pk && mode) {
     const [k, v] = [b.dataset.pk.slice(0, 1), b.dataset.pk.slice(2)];
     if (k === "a" && mode.type === "ask") { const i = +v; mode.pick = mode.pick === i ? null : i; return decorate(); }
+    if (k === "x" && mode.type === "target") { SFX.play(mode.X === v ? "untick" : "target"); mode.X = mode.X === v ? null : v; return decorate(); }
     if (mode.type === "target") return targetTap(k === "u" ? v : null, k === "z" ? v : null);
     return;
   }
@@ -2017,6 +2032,7 @@ function decorate() {
     const ph = tPhase();
     if (ph === "t1") targetable().forEach(u => { const x = unitEl(u); if (x) x.classList.add("drop-ok"); });
     if (ph === "mover") moverSet().forEach(u => { const x = unitEl(u); if (x) x.classList.add("drop-ok"); });
+    if (ph === "exh") exhVals().forEach(u => { const x = u !== "" && unitEl(u); if (x) x.classList.add(u === mode.X ? "staged" : "drop-ok"); });
     if (ph === "dest" || ph === "done") destSet().forEach(z => { const x = zoneEl(z); if (x) x.classList.add(z === mode.D ? "drop-hover" : "drop-ok"); });
     if (mode.M !== null) { const x = unitEl(mode.M); if (x) { x.classList.add("staged"); } }
     mode.P.forEach((u, k) => { const x = unitEl(u); if (x) { x.classList.add("picked"); x.dataset.n = (x.dataset.n ? x.dataset.n + "+" : "") + (k + 1); } });
@@ -2072,7 +2088,8 @@ document.addEventListener("click", e => {
   if (V && V.dec && !working && e.target.closest("#board")) {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
     if (mode && mode.type === "target") {
-      const ph = tPhase(), drop = id => { SFX.play("untick"); mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = null; mode.skip = false; decorate(); };
+      const ph = tPhase(), drop = id => { SFX.play("untick"); mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = mode.X = null; mode.skip = false; decorate(); };
+      if (ph === "exh" && u && exhVals().has(u.dataset.uid)) { SFX.play(mode.X === u.dataset.uid ? "untick" : "target"); mode.X = mode.X === u.dataset.uid ? null : u.dataset.uid; decorate(); return; }
       if (mode.M !== null && u && u.dataset.uid === mode.M) { SFX.play("untick"); mode.M = mode.D = null; decorate(); return; }
       if (ph === "mover" && u && moverSet().has(u.dataset.uid)) { SFX.play("target"); mode.M = u.dataset.uid; decorate(); return; }
       if ((ph === "dest" || ph === "done") && z && destSet().has(z.dataset.drop)) { SFX.play("target"); mode.D = z.dataset.drop; decorate(); return; }

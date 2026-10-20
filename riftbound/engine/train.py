@@ -907,7 +907,7 @@ def _info(a):
                    rep=bool(ch.get("rep")), from_=a[2])
     elif k == "act":
         ch = dict(a[3]) if len(a) > 3 and isinstance(a[3], dict) else {}
-        out = dict(t1=list(ch.get("tg", ()) or ()), loc=ch.get("dest"))
+        out = dict(t1=list(ch.get("tg", ()) or ()), loc=ch.get("dest"), exh=ch.get("exh"))   # exh : unité épuisée (coût)
     elif k == "hide":
         out = dict(loc=a[2])
     elif k == "move":
@@ -942,8 +942,16 @@ def _act_label(g, a):
         ab = im.abilities[i]
         e, reqs = ab["cost"](g, ME, obj, ch)
         extra = ""
+        # Coût choisi (« en épuisant X », « en défaussant Y »…) avant la cible : la table regroupe les variantes par
+        # libellé sans la cible (inter.js uniq), elle doit donc garder une ligne par unité épuisée (Blade of the Exile).
+        from cards import _CHOICE_UIDS, _CHOICE_UIDS_EN, _uid_name
+        for k in sorted(ch):
+            if k in _CHOICE_UIDS and ch[k] is not None:
+                vs = ch[k] if isinstance(ch[k], (tuple, list)) else (ch[k],)
+                if vs:
+                    extra += ", " + tr(_CHOICE_UIDS[k], _CHOICE_UIDS_EN[k]) + " " + ", ".join(_uid_name(g, x) for x in vs)
         if ch.get("tg"):
-            extra = tr(", cible ", ", target ") + tr(" et ", " and ").join(_tname(g, u, ME) for u in ch["tg"])
+            extra += tr(", cible ", ", target ") + tr(" et ", " and ").join(_tname(g, u, ME) for u in ch["tg"])
         exh = tr(", épuise", ", exhausts") if ab.get("exhaust") else ""
         return f"{ab['name']}{tr(' : ', ': ')}{name} ({_cost_txt(e, reqs)}{exh}{extra})"
     except Exception:
