@@ -271,3 +271,6 @@ Demande de l'utilisateur. `g.bfs` devient une liste de taille variable (`is_bf(l
 
 ## [2026-10-20] result | Réglage Texel des poids de l'évaluation : rien de gardé
 Demande de l'utilisateur. Outils `engine/texel/` (critères linéaires égaux à `ai.evaluate`, générateur, ajustement logistique par partie). 2 004 parties sh (3100000+) : prédiction du gagnant nettement meilleure (log-loss 0,604 → 0,548), mais en partie 50,6 % ± 2,9 sur 80 paires neuves (3300000+) : on ne sait pas, `ai.EV` inchangé. Détail : `docs/memoire/ia-texel.md`.
+
+## [2026-10-20] decision | Garder un réglage de l'IA : +2 points démontré par test séquentiel
+Proposition acceptée par l'utilisateur. `engine/mesure/sprt.py` (H0 50 %, H1 52 %, 5 % / 5 %, plafond 1 600 paires), règle 9 de `CLAUDE.md`, confirmation sur graines neuves. Réglage sans effet : ≈ 1 h 30 en médiane sur ce PC. Vérifié de bout en bout (A = B rejeté après 40 paires). `results_search.json` réparé (entrée écrite en cp1252 par `exp_search.py` sous Windows). Détail : `docs/memoire/ia-sprt.md`.

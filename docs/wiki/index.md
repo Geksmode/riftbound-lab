@@ -11,7 +11,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md), [Radiance](pages/radiance.md) |
 | travailler sur l'IA ou les plans | [recherche de l'IA générale](../memoire/riftbound-search-ai.md), [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [réglage Texel des poids](../memoire/ia-texel.md), [plans par légende](../memoire/plans-par-legende.md) (fiches `riftbound/gameplans/legendes.md`), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
-| comparer ou regrouper des résultats | [pages/resultats.md](pages/resultats.md) |
+| comparer ou regrouper des résultats, garder un réglage de l'IA | [pages/resultats.md](pages/resultats.md), [test séquentiel](../memoire/ia-sprt.md) |
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [manager](../memoire/riftbound-manager.md) |
 | toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md), [version anglaise](pages/anglais.md) |
 | coordonner des agents | [pages/equipe.md](pages/equipe.md), `docs/MISSIONS.md`, `.claude/chef.md` |
