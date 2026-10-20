@@ -34,6 +34,9 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    Pour la table, distingue « vérifié par robot (toucher simulé) » et « essayé sur un vrai téléphone » (retex 2026-10-09).
 8. **Tests de l'IA sur des decks variés** (2026-10-10) : `exp_search.py ... defaut`, environ 80 paires ; plus d'Akali contre
    LeBlanc par défaut, seulement sur demande ou pour un plan propre à ces decks (`docs/memoire/ia-tests-decks-varies.md`).
+9. **Garder un réglage de l'IA** (2026-10-20) : seulement s'il apporte **+2 points ou plus, démontré** par le test séquentiel
+   `riftbound/engine/mesure/sprt.py` (H0 50 %, H1 52 %, 5 % / 5 %), puis confirmé par un second test sur des graines neuves.
+   80 paires d'`exp_search.py` = simple coup d'œil. Durées et détails : `docs/memoire/ia-sprt.md`.
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
