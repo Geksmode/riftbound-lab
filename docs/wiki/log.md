@@ -283,3 +283,6 @@ Demande de l'utilisateur. `ai.EV` = poids Texel, anciens dans `ai.EV_OLD` (`RB_E
 
 ## [2026-10-20] ingest | Table : base serrée ouverte en grand au toucher (téléphone)
 Demande de l'utilisateur : base trop remplie, cartes dures à toucher. Une base serrée (sienne ou adverse) s'ouvre au premier toucher en rangée de grandes cartes qui défile, bandeau « Ta base · n · Fermer » ; robot `train/verif_base.mjs` (vérifié par robot, pas essayé sur un vrai téléphone). Détail : `docs/memoire/riftbound-training-table.md`.
+
+## [2026-10-21] ingest | Runeblade Anvil : pile des bannies et jeu depuis l'exil sur la table
+Demande de l'utilisateur. Moteur déjà fidèle (5 tests ajoutés : coût payé, fin à ta Ending Phase, enclume tuée au tour adverse, deux enclumes, deck vide). Table : pile « Bann. » des deux joueurs (zone publique 108.6.e, `snap` champ `ban`), carte jouable marquée BANNIE au bout de la main, version anglaise, compteur dans le lecteur de replays ; robot `train/verif_banish.mjs` dans la porte (vérifié par robot, pas essayé sur un vrai téléphone).

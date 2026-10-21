@@ -102,3 +102,10 @@ un ciblage, un déplacement préparé ou une question ; elle se ferme après un 
 ailleurs. État `BASEOPEN`, `setBaseOpen`, `bheadHTML` dans `src.html`. Piège CSS : un enfant en position absolue d'une grille
 prend sa case (`grid-area`) comme cadre, d'où `grid-area: auto !important`. Robot `train/verif_base.mjs` (393x851 et
 360x740, dans la porte) : vérifié par robot (toucher simulé), pas essayé sur un vrai téléphone.
+
+2026-10-21, Runeblade Anvil (demande de l'utilisateur : « une pile de cartes bannies, et les utiliser avec l'effet des
+cartes ») : chaque joueur a une pile « Bann. » à côté de sa défausse (cachée si vide ; Banishment publique, 108.6.e ; champ
+`ban` de `replay.snap`), qui s'ouvre au toucher (`openBanish`, cartes encore jouables marquées JOUABLE). Une carte bannie
+que tu peux jouer (Runeblade Anvil, Akali, Brash : `banu` dans `train._view`) s'affiche au bout de la main comme un Flow,
+marquée BANNIE ; le menu dit « Jouer → … (bannie) ». Sur téléphone, trois piles se partagent la colonne (`:has`). Robot
+`train/verif_banish.mjs` (dans la porte) : vérifié par robot, pas essayé sur un vrai téléphone.

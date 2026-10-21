@@ -1044,6 +1044,7 @@ def _view(ask=None):
     st["p"][ME]["champu"] = [c.uid for c in g.p[ME].champ]
     st["p"][ME]["runeu"] = [r.uid for r in g.p[ME].runes]   # même ordre que p.runes : les runes se touchent pour répondre
     st["p"][ME]["trashu"] = [[c.uid, c.cname] for c in g.p[ME].trash]   # Flow (829) : sorts jouables depuis ta défausse
+    st["p"][ME]["banu"] = [[c.uid, c.cname] for c in g.p[ME].banish]   # bannies jouables (Runeblade Anvil, Akali, Brash)
     kt = []                                             # dessus connu (Predict, Vision) : tant qu'il reste dessus
     for c in g.p[ME].deck:
         if c.uid not in g.p[ME].seen:

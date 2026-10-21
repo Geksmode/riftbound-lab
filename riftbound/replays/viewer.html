@@ -417,7 +417,7 @@ function rowHTML(st, pid, hl) {
     <div class="zone pile">
       <div class="who">${PN[pid]}</div>
       <div class="score">${st.pts[pid]}<small>/${st.v}</small></div>
-      <div class="counts"><span title="Cartes dans le deck">Deck ${p.deck}</span><span title="${esc(p.trash.join(", "))}">Déf. ${p.trash.length}</span></div>
+      <div class="counts"><span title="Cartes dans le deck">Deck ${p.deck}</span><span title="${esc(p.trash.join(", "))}">Déf. ${p.trash.length}</span>${(p.ban || []).length ? `<span title="Bannies (zone publique) : ${esc(p.ban.join(", "))}">Bann. ${p.ban.length}</span>` : ""}</div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
     <div class="zone">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div><span class="label">Runes</span></div>

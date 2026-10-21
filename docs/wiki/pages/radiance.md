@@ -1,7 +1,7 @@
 ---
 titre: Extension Radiance (RAD)
 resume: les 167 cartes de Radiance dans la base et le moteur, les nouveaux mots-clés, les corrections de la source, ce qui manque
-maj: 2026-10-19
+maj: 2026-10-21
 sources: riftbound/engine/cardsets/radiance.py, riftbound/engine/cardsets/test_radiance.py, riftbound/cards/corrections_rad.py, riftbound/rules/source/core_rules_2026-10-09.txt, riftbound/engine/cardsets/NEEDS_radiance.md
 ---
 **Ajoutée le 2026-10-19** (demande de l'utilisateur : « toutes les cartes de Radiance et leur effet »). Sortie de
@@ -40,6 +40,10 @@ d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance 
   comptent pas (ce ne sont pas des cartes jouées de la main).
 - Seraphine, Inspiring : « trois unités épuisées en même temps » = par la même action (un déplacement, un coût).
 - Mechanical Bandit : à égalité de coût le plus bas, on pioche.
+- Runeblade Anvil (et Akali, Brash) : la carte bannie se joue en payant son coût jusqu'à **ta** prochaine Ending
+  Phase, même si l'enclume quitte le plateau au tour adverse ; deux enclumes = deux permissions séparées (427.3.a) ;
+  deck vide = rien de banni. Sur la table : pile « Bann. » (Banishment publique, 108.6.e) et carte BANNIE au bout de
+  la main (2026-10-21, robot `train/verif_banish.mjs`).
 
 **Bloquée** : Neeko, Blending In (plusieurs légendes en jeu et choix à la construction du deck ; le moteur n'a
 qu'une légende par joueur) : `cardsets/NEEDS_radiance.md`.
