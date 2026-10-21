@@ -248,6 +248,7 @@ def snap(g):
             hand=[[c.uid, c.cname] for c in p.hand],
             champ=[c.cname for c in p.champ],
             deck=len(p.deck), trash=[c.cname for c in p.trash],
+            ban=[c.cname for c in p.banish],             # Banishment : zone publique (108.6.e)
             runes=[(r.domain[:2] + ("x" if r.exhausted else "")) for r in p.runes], rdeck=len(p.rune_deck),
             leg=dict(n=p.legend_name, x=1 if p.legend.exhausted else 0, e=1 if p.legend.empowered else 0),
             base=locs["base"][i], gear=loose_gear[i], xp=p.xp, pe=p.pool_e,

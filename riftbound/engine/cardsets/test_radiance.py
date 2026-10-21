@@ -399,6 +399,79 @@ def runeblade_anvil_kill_ability_and_leave_trigger():
     assert a.zone == "trash" and top in g.p[0].banish
 
 
+def _banish_plays(g, c):
+    return [o for o in options_of(g, "play") if o[1] == c.uid and o[2] == "banish"]
+
+
+@T.test
+def runeblade_anvil_banished_card_costs_and_expires_at_ending_phase():
+    # "Until your next Ending Phase, you may play that card. (You still pay its costs.)"
+    g, _ = N()
+    runes(g, 0, ["Fury"] * 6)
+    top = deck_top(g, 0, [V3, V4])[0]
+    hand(g, 0, "Runeblade Anvil")
+    play(g, 0, "Runeblade Anvil")
+    assert top.zone == "banish" and _banish_plays(g, top)
+    ready = sum(not r.exhausted for r in g.p[0].runes)
+    end_turn(g)                                         # my Ending Phase: the permission ends
+    assert top.zone == "banish" and not _banish_plays(g, top)
+    end_turn(g)
+    assert g.tp == 0 and top.zone == "banish" and not _banish_plays(g, top), g.tp
+    assert ready < 6                                    # the Anvil itself was paid
+
+
+@T.test
+def runeblade_anvil_banished_unit_is_paid_for():
+    g, _ = N()
+    runes(g, 0, ["Fury"] * 5)
+    hand(g, 0, "Runeblade Anvil")
+    top = deck_top(g, 0, [V3])[0]
+    play(g, 0, "Runeblade Anvil")
+    e0 = sum(not r.exhausted for r in g.p[0].runes) + g.p[0].pool_e
+    g.apply(_banish_plays(g, top)[0])
+    settle(g)
+    e1 = sum(not r.exhausted for r in g.p[0].runes) + g.p[0].pool_e
+    assert top.zone == "board" and e0 - e1 == top.spec["e"] > 0, (e0, e1)
+
+
+@T.test
+def runeblade_anvil_killed_on_enemy_turn_lasts_until_my_ending_phase():
+    g, _ = N()
+    R(g, 0)
+    a = put(g, 0, "Runeblade Anvil")
+    end_turn(g)                                         # enemy turn
+    top = deck_top(g, 0, [V3])[0]
+    g.kill([a], 1)
+    settle(g)
+    assert top.zone == "banish" and not _banish_plays(g, top)   # a unit: not on the enemy turn
+    end_turn(g)                                         # the enemy's Ending Phase is not mine
+    assert g.tp == 0 and _banish_plays(g, top)
+    end_turn(g)
+    assert not _banish_plays(g, top)
+
+
+@T.test
+def two_runeblade_anvils_each_banish_their_own_card():
+    # 427.3.a: separate instances reference only the card they banished
+    g, _ = N()
+    R(g, 0)
+    tops = deck_top(g, 0, [V3, V4])
+    hand(g, 0, "Runeblade Anvil"); hand(g, 0, "Runeblade Anvil")
+    play(g, 0, "Runeblade Anvil")
+    play(g, 0, "Runeblade Anvil")
+    assert all(c.zone == "banish" and _banish_plays(g, c) for c in tops)
+
+
+@T.test
+def runeblade_anvil_with_empty_deck_banishes_nothing():
+    g, _ = N()
+    R(g, 0)
+    g.p[0].deck = []
+    hand(g, 0, "Runeblade Anvil")
+    play(g, 0, "Runeblade Anvil")
+    assert not g.p[0].banish and g.winner is None
+
+
 @T.test
 def lost_to_the_sands_two_modes():
     g, _ = N()

@@ -104,6 +104,9 @@ svg#arrows { position: fixed; inset: 0; width: 100%; height: 100%; pointer-event
 .pl.trash { cursor: pointer; }
 .pl.trash.empty { background: rgba(10,16,30,.35); border: 1.5px dashed var(--zone-line); }
 .pl.trash:hover, .pl.trash:focus-visible { outline: 2px solid var(--brass); }
+.pl.ban { cursor: pointer; filter: grayscale(.35); }
+.pl.ban.empty { display: none; }
+.pl.ban:hover, .pl.ban:focus-visible { outline: 2px solid var(--brass); }
 .pl span { position: absolute; right: -7px; bottom: -6px; min-width: 20px; padding: 1px 4px; border-radius: 9px; background: #0e1220; border: 1px solid var(--line); font: 600 11px/1.3 var(--f-mono); text-align: center; color: var(--ink); }
 .pl i { position: absolute; left: 0; right: 0; top: -13px; font: normal 9px/1 var(--f-mono); color: var(--ink-3); text-align: center; text-transform: uppercase; letter-spacing: .05em; }
 details.diag { margin: 6px 0; } details.diag summary { cursor: pointer; min-height: 32px; }
@@ -650,6 +653,10 @@ body.dkopen { overflow: hidden; }
   .zone.pile .score { font-size: 17px; padding: 1px 0; }
   .zone.pile .piles { gap: 6px; padding: 0; }
   .zone.pile .pl { width: 22px; height: 31px; }
+  /* trois piles (deck, défausse, bannies) dans une colonne de ~56 px : elles se partagent la largeur */
+  .zone.pile .piles:has(.pl.ban:not(.empty)) { gap: 3px; }
+  .zone.pile .piles:has(.pl.ban:not(.empty)) .pl { width: auto; flex: 1 1 0; min-width: 0; max-width: 22px; }
+  .zone.pile .piles:has(.pl.ban:not(.empty)) .pl span { right: -3px; }
   .bfrow { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(var(--nb, 2), minmax(0, 1fr)); gap: 4px; }
   .bf { min-height: 0; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); }
   .bf .side { flex-wrap: wrap; align-content: center; justify-content: center; overflow: hidden; }
@@ -970,6 +977,15 @@ function openTrash(pid) {
   if (!V) return;
   const t = V.st.p[pid].trash;
   openModal(`<h3>Défausse ${pid ? "de l'IA (" + esc(PN[1]) + ")" : "à toi"} (${t.length})</h3>${t.length ? `<div class="tgrid">${t.slice().reverse().map(n => card(n, { raw: true })).join("")}</div><div class="small">La plus récente en premier. Touche une carte pour la lire.</div>` : `<div class="small">Vide.</div>`}`);
+}
+
+// Banishment (108.6) : zone publique, une par joueur. Les cartes que tu peux encore jouer (Runeblade Anvil, Akali,
+// Brash : « until your next Ending Phase, you may play that card ») sont marquées et s'affichent aussi au bout de ta main.
+function openBanish(pid) {
+  if (!V) return;
+  const t = V.st.p[pid].ban || [], srcs = new Set(V.dec ? V.dec.options.filter(o => o.k === "play").map(o => S(o.src)) : []);
+  const ok = new Set(pid === MEP ? (V.st.p[MEP].banu || []).filter(([uid]) => srcs.has(S(uid))).map(([, n]) => n) : []);
+  openModal(`<h3>Cartes bannies ${pid ? "de l'IA (" + esc(PN[1]) + ")" : "à toi"} (${t.length})</h3>${t.length ? `<div class="tgrid">${t.slice().reverse().map(n => card(n, { raw: true, tags: ok.has(n) ? ["JOUABLE"] : [] })).join("")}</div><div class="small">La plus récente en premier. Zone publique (règle 108.6.e). Une carte « JOUABLE » se joue depuis le bout de ta main, en payant son coût.</div>` : `<div class="small">Vide.</div>`}`);
 }
 
 function deckOptions(selKey) {
@@ -1609,9 +1625,12 @@ function handHTML(st, pid, srcs) {
   // Flow (règle 829) : un sort de ta défausse jouable pour son coût de Flow s'affiche au bout de ta main (marqué FLOW),
   // pour le jouer comme une carte de la main (toucher, glisser, cibler) ; il est banni après.
   const flow = vis ? (p.trashu || []).filter(([uid]) => can(srcs, uid)) : [];
-  const fc = flow.map(([uid, nm]) => card(nm, { p: vp(pid), raw: true, tags: ["FLOW"], style: "--rot:0deg;--lift:0px;", uid, can: true, sel: sel === String(uid), cls: "flow" })).join("");
+  // Bannie jouable (Runeblade Anvil, Akali, Brash : « you may play that card », en payant son coût) : idem, marquée BANNIE.
+  const ban = vis ? (p.banu || []).filter(([uid]) => can(srcs, uid)) : [];
+  const fc = flow.map(([uid, nm]) => card(nm, { p: vp(pid), raw: true, tags: ["FLOW"], style: "--rot:0deg;--lift:0px;", uid, can: true, sel: sel === String(uid), cls: "flow" })).join("")
+    + ban.map(([uid, nm]) => card(nm, { p: vp(pid), raw: true, tags: ["BANNIE"], style: "--rot:0deg;--lift:0px;", uid, can: true, sel: sel === String(uid), cls: "flow ban" })).join("");
   const rv = p.rv ? ` · <b class="rvtag">${top ? "révélée" : "révélée à l'adversaire"}</b>` : "";
-  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""} ${!top && HANDOPEN ? "open" : ""}" style="--n:${n + flow.length}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || (fc ? "" : `<span class="small">main vide</span>`)}${fc}</div>`;
+  return `<div class="hand ${top ? "top" : ""} ${p.rv ? "rv" : ""} ${!top && HANDOPEN ? "open" : ""}" style="--n:${n + flow.length + ban.length}"><span class="who-hand">${top ? "Main de " + esc(PN[pid]) : "Ta main"} (${n})${rv}</span>${cards || (fc ? "" : `<span class="small">main vide</span>`)}${fc}</div>`;
 }
 function rowHTML(st, pid, srcs) {
   const p = st.p[pid];
@@ -1627,7 +1646,7 @@ function rowHTML(st, pid, srcs) {
       <div class="score">${st.pts[pid]}<small>/${st.v}</small></div>
       <div class="piles">${(() => { const kt = pid === MEP ? (p.known_top || []) : [];
         return kt.length ? `<div class="pl deck known" data-deck="1" tabindex="0" role="button" title="Deck : ${p.deck} cartes. Dessus connu (Predict, Vision) : ${esc(kt.join(", "))}. Touche pour voir." style="${art(kt[0])}"><b class="eye">👁 ${kt.length}</b><span>${p.deck}</span></div>`
-          : `<div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div>`; })()}<div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div></div>
+          : `<div class="pl deck" title="Deck : ${p.deck} cartes"><span>${p.deck}</span></div>`; })()}<div class="pl trash ${p.trash.length ? "" : "empty"}" data-trash="${pid}" tabindex="0" role="button" title="Défausse : touche pour voir les ${p.trash.length} cartes" style="${(() => { const tn = p.trash[p.trash.length - 1]; return tn ? art(tn) : ""; })()}"><span>${p.trash.length}</span></div>${(() => { const bn = p.ban || []; return `<div class="pl ban ${bn.length ? "" : "empty"}" data-ban="${pid}" tabindex="0" role="button" title="Bannies : touche pour voir les ${bn.length} cartes" style="${bn.length ? art(bn[bn.length - 1]) : ""}"><i>Bann.</i><span>${bn.length}</span></div>`; })()}</div>
       ${p.xp ? `<div class="counts"><span>XP ${p.xp}</span></div>` : ""}
     </div>
     <div class="zone zrunes" style="--n:${p.runes.length};--nx:${p.runes.length - ready}">${runes}<div class="res-line"><span>Prêtes <b>${ready}</b>/${p.runes.length}</span><span>Réserve ${p.rdeck}</span></div>${floatHTML(p)}<span class="label">Runes</span></div>
@@ -1845,14 +1864,14 @@ function popHTML() {
     const sib = o.k === "play" ? plain.filter(x => x.k === "play" && S(x.loc) === S(o.loc) && x.from_ === o.from_) : [o];
     if (o.k === "play" && sib.length > 1) {
       // plusieurs façons de jouer la carte au même endroit : une ligne de titre puis Accelerate / Normal (ou Repeat)
-      h += `<div class="pg">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : ""}</div>`;
+      h += `<div class="pg">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}</div>`;
       for (const x of sib.sort((a, b) => (b.acc ? 1 : 0) - (a.acc ? 1 : 0) || (b.rep ? 1 : 0) - (a.rep ? 1 : 0))) {
         shown.add(x.i);
         h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || "Normal")}</button>`;
       }
       continue;
     }
-    if (o.k === "play") t = `Jouer → ${locName(o.loc)}${o.acc ? " (Accelerate)" : ""}${o.rep ? " (Repeat)" : ""}${o.from_ === "trash" ? " (Flow)" : ""}`;
+    if (o.k === "play") t = `Jouer → ${locName(o.loc)}${o.acc ? " (Accelerate)" : ""}${o.rep ? " (Repeat)" : ""}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}`;
     if (o.k === "hide") t = `Cacher → ${locName(o.loc)}`;
     if (o.k === "act") t = o.label.replace(/^(\w+) : [^(]*\(/, "$1 (");
     h += `<button data-i="${o.i}">${esc(cap(t))}</button>`;
@@ -2126,6 +2145,8 @@ document.addEventListener("click", e => {
   if (e.target.closest("#modal")) { if (el && el.dataset.card) showZoom(el); else Z.hidden = true; return; }
   const tr = e.target.closest("#board [data-trash]");
   if (tr) { Z.hidden = true; return openTrash(+tr.dataset.trash); }
+  const bz = e.target.closest("#board [data-ban]");
+  if (bz) { Z.hidden = true; return openBanish(+bz.dataset.ban); }
   if (e.target.closest("#board [data-deck]")) { Z.hidden = true; return openKnownTop(); }
   if (V && V.ask && mode && mode.type === "ask" && !working && e.target.closest("#board")) {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
@@ -2304,6 +2325,7 @@ const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
+  if (e.key === "Enter" && e.target.closest && e.target.closest("[data-ban]")) return openBanish(+e.target.dataset.ban);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
   if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } }
