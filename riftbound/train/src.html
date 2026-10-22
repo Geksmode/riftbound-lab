@@ -1867,7 +1867,7 @@ function popHTML() {
       h += `<div class="pg">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}</div>`;
       for (const x of sib.sort((a, b) => (b.acc ? 1 : 0) - (a.acc ? 1 : 0) || (b.rep ? 1 : 0) - (a.rep ? 1 : 0))) {
         shown.add(x.i);
-        h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || "Normal")}</button>`;
+        h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.xc ? cap(x.xc) : "", x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || (sib.some(y => y.xc) ? "Sans coût supplémentaire" : "Normal"))}</button>`;
       }
       continue;
     }
@@ -1932,6 +1932,7 @@ function variantLabel(o, cands) {
   const locs = new Set(cands.map(x => S(x.loc)));
   const parts = [];
   if (locs.size > 1) parts.push((o.k === "hide" ? "Cacher → " : "") + cap(locName(o.loc)));
+  if (cands.some(x => x.xc)) parts.push(o.xc ? cap(o.xc) : "Sans coût supplémentaire");   // Shimmering Swimmer, Sea Monkey…
   if (cands.some(x => x.acc)) parts.push(o.acc ? accTxt(o) : "Normal");
   if (cands.some(x => x.rep)) parts.push(o.rep ? "Avec Repeat" : "Sans Repeat");
   if (cands.some(x => x.from_ === "trash")) parts.push(o.from_ === "trash" ? "Depuis la défausse" : "Depuis la main");

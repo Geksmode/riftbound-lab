@@ -272,6 +272,7 @@
     ["${} : cibler", "${}: target"],
     ["Avec Repeat", "With Repeat"],
     ["Sans Repeat", "Without Repeat"],
+    ["Sans coût supplémentaire", "Without the additional cost"],
     ["Cacher → ${}", "Hide → ${}"],
     ["Enregistrement ✓", "Saved ✓"],
     ["Stockage plein", "Storage full"],

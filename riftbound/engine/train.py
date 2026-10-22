@@ -896,8 +896,9 @@ def _src(g, a):
     return None
 
 
-def _info(a):
-    """Données structurées d'une action pour le glisser-déposer et les flèches : cibles, lieu, unité déplacée."""
+def _info(a, g=None):
+    """Données structurées d'une action pour le glisser-déposer et les flèches : cibles, lieu, unité déplacée, coût
+    supplémentaire choisi (xc : « en détruisant Recruit », une ligne par façon de payer)."""
     k = a[0]
     out = {}
     if k == "play":
@@ -905,6 +906,9 @@ def _info(a):
         out = dict(t1=list(ch.get("tg", ()) or ()), t2=list(ch.get("tg2", ()) or ()),
                    loc=ch.get("loc", ch.get("dest")), mover=ch.get("mover"), acc=bool(ch.get("acc")),
                    rep=bool(ch.get("rep")), from_=a[2])
+        if g is not None:
+            from cards import play_cost_parts
+            out["xc"] = ", ".join(play_cost_parts(g, ch))
     elif k == "act":
         ch = dict(a[3]) if len(a) > 3 and isinstance(a[3], dict) else {}
         out = dict(t1=list(ch.get("tg", ()) or ()), loc=ch.get("dest"), exh=ch.get("exh"))   # exh : unité épuisée (coût)
@@ -1085,7 +1089,7 @@ def _view(ask=None):
         out["alias"] = {str(c.uid): have[(c.cname, "hand")] for c in g.p[ME].hand
                         if (c.cname, "hand") in have and have[(c.cname, "hand")] != c.uid}
         out["dec"] = dict(kind=d.kind, options=[dict(i=i, k=a[0], src=_src(g, a), us=list(a[1]) if a[0] == "move" else None,
-                                                     label=_act_label(g, a) if a[0] == "act" else describe(g, a, ME), **_info(a))
+                                                     label=_act_label(g, a) if a[0] == "act" else describe(g, a, ME), **_info(a, g))
                                                 for i, a in enumerate(d.options)])
     elif DUEL and d is not None and d.player != ME:
         out["wait"] = "adversaire"                      # décision de l'adversaire : on attend son coup
