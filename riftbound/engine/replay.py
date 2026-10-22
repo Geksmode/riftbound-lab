@@ -167,6 +167,8 @@ def describe(g, a, pid, viewer=None):
                 extra.append(tr("vers ", "to ") + (g.bfs[v].name if is_bf(v) else tr("la base", "base")))
             elif kk in ("accelerate", "repeat") and v:
                 extra.append(kk)
+        from cards import play_cost_parts
+        extra = play_cost_parts(g, dict(ch)) + extra      # before the target (the table cuts labels at « cible »)
         if c is not None:
             from actions import deflect_total
             nd = len(deflect_total(g, pid, c, dict(ch)))

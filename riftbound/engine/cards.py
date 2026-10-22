@@ -511,10 +511,32 @@ _CHOICE_WORDS_EN = dict(acc="with Accelerate", free="for free", ignore_energy="w
                         pay_power="paying the power", rep="repeated", flow="with Flow")
 
 
-_CHOICE_UIDS = dict(kill="en détruisant", spend="en dépensant le buff de", disc="en défaussant",
-                    exh="en épuisant", rec="en recyclant", cards="cartes :", cs="cartes :")
-_CHOICE_UIDS_EN = dict(kill="killing", spend="spending the buff of", disc="discarding",
-                       exh="exhausting", rec="recycling", cards="cards:", cs="cards:")
+_CHOICE_UIDS = dict(kill="en détruisant", kills="en détruisant", spend="en dépensant le buff de", disc="en défaussant",
+                    exh="en épuisant", rec="en recyclant", ret="en renvoyant en main", ret_gear="en renvoyant en main",
+                    cards="cartes :", cs="cartes :")
+_CHOICE_UIDS_EN = dict(kill="killing", kills="killing", spend="spending the buff of", disc="discarding",
+                       exh="exhausting", rec="recycling", ret="returning to hand", ret_gear="returning to hand",
+                       cards="cards:", cs="cards:")
+
+# Optional additional costs chosen as a unit or gear is played (Impl.as_played flags, e.g. Sea Monkey 'paid').
+_PAID_FLAGS = ("akshan", "bard", "bb", "bcc", "boar", "calm_paid", "cg", "cub", "gm", "masa", "paid", "pyke", "zed")
+_PLAY_COST_UIDS = ("kill", "kills", "ret", "ret_gear", "spend")
+
+
+def play_cost_parts(g, ch):
+    """Additional cost chosen when a card is played, as text ("en détruisant Recruit", "avec le coût
+    supplémentaire"): the table shows one line per way of paying (its variants are told apart by their text)."""
+    parts = []
+    for k in _PLAY_COST_UIDS:
+        v = ch.get(k)
+        vs = () if v is None else v if isinstance(v, (tuple, list)) else (v,)
+        if vs:
+            parts.append(tr(_CHOICE_UIDS[k], _CHOICE_UIDS_EN[k]) + " " + ", ".join(_uid_name(g, x) for x in vs))
+    if any(ch.get(k) for k in _PAID_FLAGS):
+        parts.append(tr("avec le coût supplémentaire", "paying the additional cost"))
+    if ch.get("xp"):
+        parts.append(tr(f"en dépensant {ch['xp']} XP", f"spending {ch['xp']} XP"))
+    return parts
 
 
 def _uid_name(g, x):

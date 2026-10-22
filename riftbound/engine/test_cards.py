@@ -969,6 +969,28 @@ def mirror_image_copy():
 
 
 @test
+def additional_cost_variants_have_distinct_labels():
+    # Shimmering Swimmer : jouer sans coût, en détruisant une unité ou un gear allié. La table fusionne les coups de même
+    # libellé (src.html uniq) : chaque façon de payer doit avoir son texte, sinon seul « sans coût » restait (2026-10-22).
+    from replay import describe
+    from train import _info
+    g, _ = new()
+    runes(g, 0, ["Fury"] * 6)
+    u = put(g, 0, "Shipyard Skulker")
+    x = put(g, 0, "Seal of Discord")
+    k = hand(g, 0, "Shimmering Swimmer")
+    g.every_choice = True
+    plays = [a for a in g.advance().options if a[0] == "play" and a[1] == k.uid and a[3].get("loc") == "base"
+             and not a[3].get("acc")]
+    labels = sorted(describe(g, a, 0) for a in plays)
+    assert labels == ["joue Shimmering Swimmer (en détruisant Seal of Discord, à la base)",
+                      "joue Shimmering Swimmer (en détruisant Shipyard Skulker, à la base)",
+                      "joue Shimmering Swimmer (à la base)"], labels
+    assert sorted(_info(a, g)["xc"] for a in plays) == ["", "en détruisant Seal of Discord",
+                                                       "en détruisant Shipyard Skulker"]
+
+
+@test
 def duplicate_units_are_numbered_in_labels_and_snap():
     # deux unités du même nom en jeu (une par joueur) : « #1 », « #2 » sur la carte (dn) et dans les libellés
     from replay import snap, describe
