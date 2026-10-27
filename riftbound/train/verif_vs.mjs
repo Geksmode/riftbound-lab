@@ -37,6 +37,11 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   ok(`${w} px : le deck par défaut est en tête du menu, marqué ★`, await ev("$('sOpp').options[0].value === $('sOpp').value && $('sOpp').options[0].text.startsWith('★')"));
   const fit = await ev("(()=>{const m=$('mbox'),r=m.getBoundingClientRect();return {sw: document.documentElement.scrollWidth, w: innerWidth, right: r.right, bottom: [...document.querySelectorAll('.vpad')].map(x=>x.getBoundingClientRect().bottom), h: innerHeight}})()");
   ok(`${w} px : pas de défilement horizontal, les deux panneaux visibles sans défiler (${JSON.stringify(fit)})`, fit.sw <= fit.w && fit.right <= fit.w && Math.max(...fit.bottom) <= fit.h);
+  // Boutons de niveau dans le panneau de l'IA, aussi avec la police agrandie du téléphone (« Très fort » débordait, 2026-10-27)
+  const lvlIn = () => ev("(()=>{const p=document.querySelector('.vpad.cpu').getBoundingClientRect();return [...document.querySelectorAll('.vpad.cpu .vlvl button')].every(x=>{const q=x.getBoundingClientRect();return q.left>=p.left&&q.right<=p.right&&x.scrollWidth<=x.clientWidth})})()");
+  const lvlN = await lvlIn(); await ev("(()=>{const s=document.createElement('style');s.id='bigf';s.textContent='.vlvl, .vlvl button { font-size: 17px !important; }';document.head.append(s)})()");
+  const lvlG = await lvlIn(); await ev("document.getElementById('bigf').remove()");
+  ok(`${w} px : les trois boutons de niveau tiennent dans le panneau de l'IA (police normale ${lvlN}, agrandie ${lvlG})`, lvlN && lvlG);
   const art = await ev("getComputedStyle(document.querySelector('.vtile:not(.off) .vart')).backgroundImage");
   ok(`${w} px : les tuiles montrent l'image de la légende`, /atlas|img/.test(art));
   await pg.screenshot({ path: `${OUT}/vs_${w}.png` });

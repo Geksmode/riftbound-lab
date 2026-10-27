@@ -308,3 +308,6 @@ La politique de simulation ne génère plus toute la liste des coups à chaque d
 
 ## [2026-10-27] decision | Table : niveau « Très fort » de l'IA
 Demande de l'utilisateur (piste « plus de budget » choisie). Niveau 6 : recherche du tour entier avec 6 mondes et un faisceau de 6, 3 mondes pour les autres décisions (`train.LEVEL_CFG`, `cfg["react_n"]`). Coups d'œil 80 paires : Fort contre Normal 52,5 % ± 3,3 (on ne sait pas) ; 6 mondes et faisceau 6 contre Fort 55,6 % ± 2,8. SPRT 1 (4400000+) : gardé, 55,2 % ± 1,7 sur 296 paires ; SPRT 2 de confirmation (4500000+) en cours. Partie de bout en bout dans la table (navigateur intégré). Détail : `docs/memoire/riftbound-search-ai.md`. `texel/gen.py` accepte le mode `turn` (≈ 6 min par partie sous charge) ; `exp_temps.py` sépare « main » et autres décisions.
+
+## [2026-10-27] ingest | Table : boutons de niveau de l'IA sur téléphone
+« Très fort » débordait du panneau de l'IA (écrans de 360 px ou moins, ou police agrandie du téléphone) : la rangée passe à la ligne, « Niv. » au-dessus. Contrôle ajouté à `verif_vs.mjs` (vérifié par robot, pas encore essayé sur un vrai téléphone).
