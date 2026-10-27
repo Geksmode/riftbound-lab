@@ -541,7 +541,7 @@ class SearchAgent(Heuristics):
         def settle(c):
             """Avance jusqu'à la prochaine décision « main » de me (les fenêtres de réaction : politique de simulation)."""
             for _ in range(300):
-                dd = c.advance()
+                dd = c.advance(lazy=True)
                 if dd is None or (dd.kind == "main" and dd.player == me):
                     return dd
                 c.apply(pol.decide(c, dd))
@@ -569,7 +569,10 @@ class SearchAgent(Heuristics):
             c = st.clone()
             c.agents = ags
             c.apply(a)
-            return c, settle(c)
+            dd = settle(c)
+            if dd is not None:
+                dd.options = c.options_main(me)        # (value() n'en a pas besoin : settle ne les génère pas)
+            return c, dd
 
         end = ("end",)
         beam = [dict(seq=[], states=roots, options=list(opts), pri=0.0)]
@@ -646,11 +649,21 @@ class PolicyAgent(Heuristics):
         return mine, theirs
 
     def main(s, g, d):
-        pid = d.player
-        opts = d.options
-        plays = [o for o in opts if o[0] == "play"]
-        moves = [o for o in opts if o[0] == "move"]
-        acts = [o for o in opts if o[0] == "act"]
+        if d.options is None:
+            # Decision sans coups (Game.advance(lazy=True), simulations) : on génère seulement les familles de coups
+            # dont la politique a besoin, dans l'ordre où elle les regarde (capacités, déplacements, puis cartes) ;
+            # chaque liste est celle, dans le même ordre, que main_options aurait donnée (mêmes décisions).
+            return g._gen_options(s._main, g, d.player, None)
+        return s._main(g, d.player, d.options)
+
+    def _main(s, g, pid, opts):
+        if opts is None:
+            from actions import ability_options, move_options, play_options
+            acts = ability_options(g, pid, closed=False, showdown=False, main=True)
+        else:
+            plays = [o for o in opts if o[0] == "play"]
+            moves = [o for o in opts if o[0] == "move"]
+            acts = [o for o in opts if o[0] == "act"]
         # 1. free value: abilities that draw/ramp (Hook), equip
         for o in acts:
             if isinstance(o[1], int):
@@ -658,6 +671,8 @@ class PolicyAgent(Heuristics):
                 if src is not None and src.cname == "Baited Hook":
                     return o
         # 2. attack or conquer
+        if opts is None:
+            moves = move_options(g, pid)
         best, bv = None, 0.0
         for o in moves:
             units = [g.obj(u) for u in o[1]]
@@ -680,6 +695,8 @@ class PolicyAgent(Heuristics):
         if best is not None:
             return best
         # 3. play the biggest unit we can
+        if opts is None:
+            plays = play_options(g, pid, closed=False, showdown=False)
         units = [o for o in plays if s.is_unit(g, o)]
         if units:
             units.sort(key=lambda o: -(s.card_of(g, o).spec["might"] or 0))
@@ -726,7 +743,12 @@ class PolicyAgent(Heuristics):
         if g.sd is None or g.sd.stage != "open":
             return ("pass",)
         bf = g.sd.bf
-        plays = [o for o in d.options if o[0] == "play"]
+        if d.options is None:                          # Game.advance(lazy=True) : seulement les cartes (timed_options)
+            from actions import play_options
+            closed = d.kind == "priority"
+            plays = g._gen_options(play_options, g, pid, closed, True)
+        else:
+            plays = [o for o in d.options if o[0] == "play"]
         if not plays:
             return ("pass",)
         if s.cfg.get("pol_react", POL_REACT):
@@ -773,7 +795,7 @@ class PolicyAgent(Heuristics):
             for _ in range(80):
                 if not c.chain and c.chain_origin is None and not c.trigq:
                     break
-                dd = c.advance()
+                dd = c.advance(lazy=True)
                 if dd is None:
                     return 1000.0 if c.winner == pid else -1000.0
                 if dd.kind != "priority":
@@ -791,7 +813,7 @@ def rollout_policy(g, horizon=2, max_steps=600, cfg=None):
         pol.cfg = cfg
     stop = g.turn_no + horizon
     for _ in range(max_steps):
-        d = g.advance()
+        d = g.advance(lazy=True)                       # coups générés par la politique, selon son besoin
         if d is None:
             return
         if d.kind == "main" and g.turn_no > stop:
