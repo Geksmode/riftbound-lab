@@ -292,3 +292,6 @@ Signalé par l'utilisateur : la table ne demandait pas s'il voulait détruire un
 
 ## [2026-10-27] decision | Revue de performance : moteur et table
 Moteur : `Game.clone` (recherche de l'IA) passe par `game._fastcopy` (`__deepcopy__` des classes de `game.py`), `units` / `gear` sans construire `spec`, demande de domaines de `_plan_payment` calculée seulement si besoin : mêmes décisions (empreinte identique sur 6 parties « defaut » et 20 positions « turn »), −17 à −23 % de temps. Table : journal ajouté ligne à ligne (plus reconstruit à chaque coup), glisser limité à une mise à jour par image, agrandi au survol pas redessiné sur la même carte, secondes affichées quand l'IA réfléchit plus de 2 s.
+
+## [2026-10-27] ingest | Gain mesuré dans Pyodide et garde-fou « empreinte » dans la porte
+`exp_temps.mjs 777003,777011` (144 positions, Pyodide 32 bits, avant `c860ee8` / après `df24f6a`, une mesure, deux processus en parallèle sur une machine partagée) : Normal (`turn`) 1892 → 1604 ms en moyenne (p95 8,5 → 7,6 s, max 18,6 → 14,9 s) ; Fort (`turn@n=3`) 3604 → 3144 ms (p95 12,3 → 11,3 s, max 35,6 → 31,8 s) ; durée totale 14 min 01 → 12 min 07 (−14 %). Nouvelle étape `empreinte` (`engine/empreinte.py`, `empreinte.json`) : voir `pages/porte.md`. Les 5 parties de l'empreinte sont identiques dans Pyodide (Python 3.12.1, 32 bits), en Python 3.12 et 3.13.

@@ -219,6 +219,8 @@ card, plus one per rule interaction you had to decide. Then:
 python3 cardsets/test_<batch>.py      # your tests
 python3 test_all.py                   # everything (test_cards.py + every cardsets/test_*.py)
 python3 fuzz_cards.py 100 --module <batch>   # random games with your cards: 0 exceptions, deterministic
+python3 empreinte.py                  # AI decisions on fixed seeds; a card change may legitimately change them:
+                                      # then run empreinte.py --maj and commit empreinte.json with the card
 ```
 
 ## 8. Rules for every module

@@ -1,7 +1,7 @@
 ---
 titre: Porte d'intégration
 resume: le contrôle unique à passer avant d'intégrer une branche (agent ou travail) et avant main
-maj: 2026-10-21
+maj: 2026-10-27
 sources: scripts/verifier.sh, riftbound/train/verif_mobile.mjs, .github/workflows/ci.yml
 ---
 `scripts/verifier.sh [moteur|table|tout]` (défaut `tout`) imprime un résumé OK / ÉCHEC et sort avec le code 1 au moindre échec.
@@ -10,6 +10,7 @@ sources: scripts/verifier.sh, riftbound/train/verif_mobile.mjs, .github/workflow
 |---|---|
 | wiki | `scripts/wiki_lint.py` : en-têtes, longueur, liens, index |
 | tests | `riftbound/engine/test_all.py` : toute la suite |
+| empreinte | `riftbound/engine/empreinte.py` : 5 parties à graines fixes (4 avec la recherche « old », 1 avec « turn », celle de la table), une par processus ; le MD5 de toutes les décisions de chaque partie doit être celui de `empreinte.json`. Une optimisation pure ne change aucune empreinte. Changement voulu du jeu (carte, règle, IA) : `python3 riftbound/engine/empreinte.py --maj`, et committer `empreinte.json` avec ce changement (deux branches qui le réécrivent : refaire `--maj` après la fusion). Vérifié le 2026-10-27 : moteur d'avant l'optimisation du clone identique ; une copie fautive (liste `mods` partagée) changeait 4 parties sur 5 (code 1) ; même empreinte avec Python 3.12 et 3.13. ~45 s sur 4 cœurs. |
 | fuzz | `fuzz_cards.py` sur `cards.py` et chaque paquet de `cardsets/` (`RB_FUZZ` parties, défaut 200) : 0 exception |
 | hasard | `train/t_rand.py` (`RB_RAND` parties, défaut 30) avec des decks légaux au hasard : 0 erreur |
 | table | `fetch_pyodide.sh` si besoin + `build.sh` |

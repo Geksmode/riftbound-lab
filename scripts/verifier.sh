@@ -2,7 +2,7 @@
 # Porte d'intégration : rien n'entre dans une branche de travail ni dans main sans passer par là.
 #
 #   scripts/verifier.sh            tout : wiki, moteur, table (+ robot navigateur si Playwright et Chromium sont là)
-#   scripts/verifier.sh moteur     wiki + tests + fuzz de chaque paquet + parties aléatoires
+#   scripts/verifier.sh moteur     wiki + tests + empreinte du jeu de l'IA + fuzz de chaque paquet + parties aléatoires
 #   scripts/verifier.sh table      construction de la table (+ robots navigateur : téléphone, Hidden, match, duel)
 #
 # Variables : RB_FUZZ (parties par paquet, défaut 200), RB_RAND (parties t_rand, défaut 30),
@@ -28,6 +28,7 @@ etape() {   # etape <nom> <commande...> : lance, garde la sortie, note OK / ÉCH
 
 wiki()   { python3 "$ROOT/scripts/wiki_lint.py"; }
 tests()  { cd "$E" && python3 test_all.py; }
+empreinte() { cd "$E" && python3 empreinte.py; }   # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
 fuzz()   {
   cd "$E" || return 1
   local mods out bad=0
@@ -119,9 +120,9 @@ duel() {   # robot du duel entre amis (train/verif_duel.mjs) : deux navigateurs,
 }
 
 case "$QUOI" in
-  moteur) etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard ;;
+  moteur) etape wiki wiki; etape tests tests; etape empreinte empreinte; etape fuzz fuzz; etape hasard hasard ;;
   table)  etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape anglais anglais; etape duel duel ;;
-  tout)   etape wiki wiki; etape tests tests; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape anglais anglais; etape duel duel ;;
+  tout)   etape wiki wiki; etape tests tests; etape empreinte empreinte; etape fuzz fuzz; etape hasard hasard; etape table table; etape navigateur navigateur; etape cache cache; etape match match; etape anglais anglais; etape duel duel ;;
   *) sed -n '2,10p' "${BASH_SOURCE[0]}"; exit 2 ;;
 esac
 
