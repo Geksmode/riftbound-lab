@@ -419,6 +419,14 @@ class SearchAgent(Heuristics):
             opts = [a for a in opts if not s.risky_attack(g, me, a)] or opts
         if len(opts) > s.max_cands:
             opts = opts[:1] + s.rng.sample(opts[1:], s.max_cands - 1)
+        if s.cfg.get("react_n") and d.kind != "main":
+            # « Très fort » (2026-10-27) : grand budget pour préparer le tour, budget réduit (react_n tirages) pour les
+            # autres décisions (réactions, focus, cibles) : l'utilisateur accepte d'attendre un tour réfléchi, pas un petit choix.
+            n0, s.samples = s.samples, int(s.cfg["react_n"])
+            try:
+                return s.pick(g, d, opts)[0]
+            finally:
+                s.samples = n0
         return s.pick(g, d, opts)[0]
 
     def urgent(s, g, d, me, best_v):

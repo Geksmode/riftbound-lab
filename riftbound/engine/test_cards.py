@@ -1625,6 +1625,26 @@ def open_runes_count_castable_action_and_reaction_spells():
 
 
 @test
+def very_strong_level_spends_its_budget_on_the_turn():
+    """Table, niveau « Très fort » (2026-10-27) : 6 mondes et un faisceau de 6 pour préparer le tour, react_n = 3 mondes
+    pour les autres décisions (réactions, focus, cibles), le nombre de mondes revenant ensuite à 6."""
+    import json
+    import ai, train
+    from game import Decision
+    json.loads(train.new(5, level=6))
+    sa = train.W["ag"][1]
+    assert sa.samples == 6 and sa.search == "turn" and sa.cfg["turn_w"] == 6 and sa.cfg["react_n"] == 3
+    json.loads(train.new(5, level=3))
+    assert train.W["ag"][1].samples == 3 and "react_n" not in train.W["ag"][1].cfg
+    seen = []
+    sa.pick = lambda g_, d_, o_: (seen.append((d_.kind, sa.samples)), (o_[0], 0.0, []))[1]
+    g, _ = new()
+    sa.decide(g, Decision("focus", 0, ["a", "b"]))
+    sa.decide(g, Decision("main", 0, [("end",), ("x",)]))
+    assert seen == [("focus", 3), ("main", 6)] and sa.samples == 6, seen
+
+
+@test
 def turn_search_keeps_only_complete_sequences():
     """IA (2026-10-10) : la recherche du tour entier ne retient qu'une suite complète (« end », partie finie ou
     profondeur atteinte) ; avant, une suite d'un coup notée avec la politique qui finissait le tour pouvait gagner
