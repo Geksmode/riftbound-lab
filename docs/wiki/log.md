@@ -298,3 +298,4 @@ Moteur : `Game.clone` (recherche de l'IA) passe par `game._fastcopy` (`__deepcop
 
 ## [2026-10-27] decision | Mémoire des calculs pendant la génération des coups
 `Game._memo` (providers, aura_sources, can_pay) pendant la liste des coups : empreinte identique, parties « old » −16 %, recherche « turn » −14 % (mesures en série, deux fois chacune). Contrôle `RB_MEMO_CHECK=1` (recalcul de chaque réponse mémorisée) : attrape une mémoire faussée exprès ; passé sur le fuzz de chaque paquet, 30 parties `t_rand` et l'empreinte. Détails : `docs/memoire/riftbound-engine.md`.
+Pyodide (`exp_temps.mjs 777003,777011`, 144 positions, avant `42257ea` / après `8960880`, une mesure, deux processus en parallèle) : Normal 1676 → 1503 ms (p95 7,7 → 7,3 s), Fort 3389 → 3017 ms (p95 11,5 → 11,0 s, max 35,7 → 25,8 s). Le même « avant » mesuré plus tôt donnait 1604 ms : l'écart d'une mesure à l'autre est de l'ordre de 5 %, le gain d'environ 10 % reste au-dessus.
