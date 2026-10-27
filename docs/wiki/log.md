@@ -302,3 +302,4 @@ Pyodide (`exp_temps.mjs 777003,777011`, 144 positions, avant `42257ea` / après 
 
 ## [2026-10-27] decision | CI plus rapide : parallélisme et robots sur 4 machines
 Demande de l'utilisateur (CI de plus en plus longue : 15 à 26 min, dont 14 à 17 min de robots navigateur en série et jusqu'à 8 min 30 d'installation de Chromium). Mêmes contrôles : partie moteur en parallèle (≈ 11 min → 3 min 30 ici), robots répartis sur 4 machines (`RB_PART`), Chromium en cache, une seule CI par commit. Détails : `pages/porte.md`.
+Mesuré en CI : CI 312 de `main` (fusion de #69) en 6 min 07 de bout en bout, publication comprise (CI 310 avant : 15 min ; 15 à 26 min sur les CI récentes). Moteur 5 min 07 (désormais le plus long), robots 3 min 45 à 4 min 13 par machine, installation de Playwright et Chromium 9 à 13 s (cache, sans bibliothèques système : Chromium démarre). CI de la branche (311) : 4 min 52.
