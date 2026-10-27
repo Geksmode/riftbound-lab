@@ -60,6 +60,9 @@ def flow_of(g, pid, card):
     return None
 
 
+_OWN_KW = {"Quick-Draw": "quickdraw", "Accelerate": "accelerate", "Hidden": "hidden", "Ambush": "ambush"}
+
+
 def card_kw(g, pid, card, kw, src=None):
     """Keywords a card has outside the board, from its Impl or granted by other objects (Impl.card_kw(g, src_obj,
     pid, card, kw, zone) -> bool: Jax, Unmatched gives [Quick-Draw] to Equipment in hand, Rek'Sai, Breacher gives
@@ -67,8 +70,8 @@ def card_kw(g, pid, card, kw, src=None):
     im = g.impl(card)
     if im is None:
         return False
-    own = {"Quick-Draw": im.quickdraw, "Accelerate": im.accelerate, "Hidden": im.hidden, "Ambush": im.ambush}.get(kw)
-    if own:
+    own = _OWN_KW.get(kw)
+    if own is not None and getattr(im, own):
         return True
     for so, ia in g.providers("card_kw"):
         if ia.card_kw(g, so, pid, card, kw, src):

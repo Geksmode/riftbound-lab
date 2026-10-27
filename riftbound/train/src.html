@@ -1306,7 +1306,7 @@ async function pump(v) {
     while (v.busy) {
       await sleep(v.ai ? 650 : (v.log.length ? 120 : 0));
       if (gen !== GEN) return;
-      v = await J(T.step());
+      v = await thinking(J(T.step()));
       if (gen !== GEN) return;
       show(v);
     }
@@ -1321,6 +1321,13 @@ async function pump(v) {
   }
   working = false;
   show(v);
+}
+
+// Réflexion longue de l'IA (niveau Fort : jusqu'à une vingtaine de secondes) : après 2 s, les secondes écoulées
+// s'affichent à côté de « … joue », pour qu'on voie que la table n'est pas figée.
+async function thinking(p) {
+  const t0 = Date.now(), tick = setInterval(() => { const x = $("thinkSec"), n = Math.floor((Date.now() - t0) / 1000); if (x && n >= 2) x.textContent = " · " + n + " s"; }, 500);
+  try { return await p; } finally { clearInterval(tick); }
 }
 
 let seenLog = 0;
@@ -1357,11 +1364,17 @@ $("sonPop").addEventListener("click", e => {
 document.addEventListener("click", e => { if (!$("sonPop").hidden && !e.target.closest("#sonPop, #bSon")) sonPop(false); }, true);
 document.addEventListener("keydown", e => { if (e.key === "Escape") sonPop(false); });
 sonBtn();
+// Le journal n'ajoute que les lignes neuves : le reconstruire en entier à chaque coup coûtait de plus en plus cher au fil
+// de la partie (des milliers de lignes). Il est reconstruit quand LOG a été remplacé (nouvelle partie, Reprendre, replay).
+let logDom = null, logN = 0;
+const logLine = ([ind, t]) => `<div class="${/^(Tour|Turn) /.test(t) ? "turn" : ind ? "sub" : ""} ${/^(Tu|You) /.test(t) || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`;
 function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;
   for (const [ind, t] of lines) LOG.push([ind, t]);
   const el = $("log");
-  el.innerHTML = LOG.map(([ind, t]) => `<div class="${/^(Tour|Turn) /.test(t) ? "turn" : ind ? "sub" : ""} ${/^(Tu|You) /.test(t) || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`).join("");
+  if (logDom !== LOG || logN > LOG.length || el.childElementCount !== logN) { el.innerHTML = LOG.map(logLine).join(""); logDom = LOG; }
+  else if (LOG.length > logN) el.insertAdjacentHTML("beforeend", LOG.slice(logN).map(logLine).join(""));
+  logN = LOG.length;
   el.scrollTop = el.scrollHeight;
   if ($("drawer").classList.contains("open")) seenLog = LOG.length;
   badge();
@@ -1501,7 +1514,7 @@ function renderCtrl(v) {
     return;
   }
   if (v.busy) {
-    I.innerHTML = `<span class="think"><i></i>${esc(PN[OPP()])} joue…</span><span class="tn">tour ${v.st.t}</span>`;
+    I.innerHTML = `<span class="think"><i></i>${esc(PN[OPP()])} joue…<span id="thinkSec"></span></span><span class="tn">tour ${v.st.t}</span>`;
     M.textContent = "Attends ton tour"; M.disabled = true; return;
   }
   if (v.wait) {   // duel : décision ou question de l'adversaire
@@ -1719,8 +1732,10 @@ function fitBoard() {
 addEventListener("resize", fitBoard);
 
 const Z = $("zoom");
+let zoomOf = null;   // carte dont l'agrandi est affiché
 function showZoom(el) {
   const n = el.dataset.card; if (!n) return;
+  zoomOf = el;
   const c = CARDS[n] || {};
   const typ = [c.s, c.t].filter(Boolean).join(" ") + (c.d && c.d.length ? " · " + c.d.join("/") : "");
   const cost = c.t === "Battlefield" || c.t === "Legend" || c.e === undefined ? "" : ` · coût ${c.e}${c.p ? " + " + c.p + " power" : ""}${c.m != null ? " · might " + c.m : ""}${c.eb ? " · bonus +" + c.eb : ""}`;
@@ -1732,7 +1747,8 @@ function showZoom(el) {
   Z.style.left = x + "px"; Z.style.top = y + "px";
 }
 const HOVER = matchMedia("(hover: hover)").matches;
-document.addEventListener("mouseover", e => { if ((drag && drag.on) || !HOVER) return; const el = e.target.closest("[data-card]"); if (el && el.dataset.card && !el.closest(".mull:not(.mm)")) showZoom(el); else if (!e.target.closest("#zoom")) Z.hidden = true; });
+// survol : passer d'un enfant à l'autre de la même carte (coût, marqueurs) ne redessine pas l'agrandi
+document.addEventListener("mouseover", e => { if ((drag && drag.on) || !HOVER) return; const el = e.target.closest("[data-card]"); if (el && el.dataset.card && !el.closest(".mull:not(.mm)")) { if (Z.hidden || el !== zoomOf) showZoom(el); } else if (!e.target.closest("#zoom")) Z.hidden = true; });
 // ------------------------------------------------------------ interactions : sélection, cibles, déplacements, flèches
 // Une carte touchée ouvre un petit menu (jouer, Empower, Cibler…, Déplacer…). Les cibles se choisissent une à une puis
 // « Valider la cible ». Un déplacement se prépare (unités + destination, par glisser ou toucher) puis se lance par bouton :
@@ -2197,6 +2213,7 @@ document.addEventListener("pointermove", e => {
     // main agrandie : un geste plutôt horizontal fait défiler la main, seul un geste vers le plateau glisse la carte
     if (drag.el.closest(".hand.open, .zbase.open") && Math.abs(e.clientX - drag.x0) > Math.abs(e.clientY - drag.y0)) { drag = null; return; }
     drag.on = true; Z.hidden = true; $("pop").hidden = true; SFX.play("lift");
+    document.querySelectorAll(".drop-hover").forEach(x => x.classList.remove("drop-hover"));
     if (!(mode && mode.type === "move")) { mode = null; sel = drag.src; }
     const r = drag.el.getBoundingClientRect(), g = drag.el.cloneNode(true);
     g.classList.add("ghost"); g.classList.remove("isel"); g.style.width = r.width + "px"; g.style.height = r.height + "px";
@@ -2207,12 +2224,20 @@ document.addEventListener("pointermove", e => {
       else if (o.k === "move") { if (contains(o.us, [drag.src])) { const x = zoneEl(o.loc); if (x) x.classList.add("drop-ok"); } }
       else if (o.loc !== null && o.loc !== undefined) { const x = zoneEl(o.loc); if (x) x.classList.add("drop-ok"); } });
   }
-  drag.g.style.left = (e.clientX - drag.w / 2) + "px"; drag.g.style.top = (e.clientY - drag.h / 2) + "px";
-  document.querySelectorAll(".drop-hover").forEach(x => x.classList.remove("drop-hover"));
-  const over = document.elementFromPoint(e.clientX, e.clientY), t = over && over.closest(".drop-ok");
-  if (t) t.classList.add("drop-hover");
-  drawArrows(e.clientX, e.clientY);
+  // une seule mise à jour par image : un écran tactile envoie plus de pointermove que d'images, et chacune mesure toutes
+  // les cibles (flèches) ; on garde la dernière position
+  drag.px = e.clientX; drag.py = e.clientY;
+  if (!drag.raf) drag.raf = requestAnimationFrame(dragFrame);
 });
+function dragFrame() {
+  if (!drag || !drag.on) return;
+  drag.raf = 0;
+  const x = drag.px, y = drag.py;
+  drag.g.style.left = (x - drag.w / 2) + "px"; drag.g.style.top = (y - drag.h / 2) + "px";
+  const over = document.elementFromPoint(x, y), t = over && over.closest(".drop-ok");
+  if (t !== drag.hov) { if (drag.hov) drag.hov.classList.remove("drop-hover"); if (t) t.classList.add("drop-hover"); drag.hov = t; }
+  drawArrows(x, y);
+}
 document.addEventListener("pointerup", e => {
   if (!drag) return;
   const d = drag; drag = null;
