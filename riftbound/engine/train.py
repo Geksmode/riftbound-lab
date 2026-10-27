@@ -135,6 +135,12 @@ def _deck(x, default):
                 battlefield=d["battlefields"][0], sideboard=list(d.get("sideboard") or []), key=d.get("name") or "perso")
 
 
+# « Très fort » (2026-10-27) : faisceau de 6 suites au lieu de 3 pour préparer le tour, et seulement react_n tirages pour
+# les autres décisions (réactions, focus, cibles), pour ne pas faire attendre un petit choix. Équivaut à
+# exp_search « turn@n=6,turn_w=6,react_n=3 ».
+LEVEL_CFG = {6: dict(turn_w=6, react_n=3)}
+
+
 def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     duel_off()
     seed = random.randrange(10 ** 6) if seed is None else int(seed)
@@ -154,9 +160,11 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     hu = Human()
     # 2026-10-10 : l'IA de la table cherche le tour entier (search="turn"), à l'essai en direct par l'utilisateur ; gain non
     # démontré (turn contre sh : 52,9 % ± 2,5 sur 120 paires, on ne sait pas) et ~3 × plus lent que "sh". Remettre "sh" pour revenir.
-    # level 0 : IA débutante du tutoriel (Gentle).
+    # level 0 : IA débutante du tutoriel (Gentle) ; sinon level = mondes tirés par décision (1 Normal, 3 Fort, 6 Très fort),
+    # réglages en plus dans LEVEL_CFG.
     ai = (Gentle(seed + 500000, plan=pl, opp_plan=pa, samples=1, search="sh") if int(level) == 0 else
-          P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn"))
+          P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn",
+                      cfg=dict(LEVEL_CFG.get(int(level), {}))))
     coach = P.PlanAgent(seed + 900000, plan=_plan_for(MD), opp_plan=_plan_for(OD))
     g = TGame([A, B], [hu, ai], seed=seed, first=f)
     W.clear()

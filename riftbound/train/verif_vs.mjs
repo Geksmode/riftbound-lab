@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 // Radiance) + « ? » ; une légende
 // sans deck jouable est grisée et ne se choisit pas ; panneau IA actif → la légende touchée prend son deck par défaut
 // (train.default_decks) ; chaque menu ne montre que les variantes de sa légende ; panneau Toi actif → la légende va à ton deck ; « ? » tire une légende jouable au lancement ;
-// la partie démarre avec les bonnes légendes. Ordinateur et téléphone : tout tient à l'écran (pas de défilement horizontal).
+// niveau « Très fort » (2026-10-27) : bouton, réglages reçus par le moteur ; la partie démarre avec les bonnes légendes. Ordinateur et téléphone : tout tient à l'écran (pas de défilement horizontal).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_vs.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -42,10 +42,14 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.screenshot({ path: `${OUT}/vs_${w}.png` });
   await tap('.vtile[data-leg="?"]');
   ok(`${w} px : « ? » met l'IA au hasard`, await ev("document.querySelector('.vpad.cpu .vlg').textContent") === "Au hasard");
+  await tap('[data-lvl="6"]');
+  ok(`${w} px : le niveau « Très fort » se choisit (${await ev("$('sLvl').value")})`, await ev("$('sLvl').value") === "6" && await ev("document.querySelector('[data-lvl=\"6\"]').getAttribute('aria-checked')") === "true" && await ev("document.querySelector('[data-lvl=\"6\"]').textContent") === "Très fort");
   await ev("$('sSeed').value='7'"); await tap("#bStart");
   await waitFor("!!(V && !working)");
   const lg = await ev("pyExec(\"LG=[W['g'].p[i].legend_name for i in (0,1)]\", 'LG')");
   ok(`${w} px : la partie démarre, toi LeBlanc, l'IA une légende jouable tirée au hasard (${lg})`, lg[0] === "LeBlanc, Deceiver" && Object.keys(dflt).includes(lg[1]));
+  const lv = await ev("pyExec(\"LV=[W['ag'][1].samples, W['ag'][1].cfg.get('turn_w'), W['ag'][1].cfg.get('react_n')]\", 'LV')");
+  ok(`${w} px : l'IA « Très fort » a 6 mondes, un faisceau de 6, 3 mondes hors préparation du tour (${lv}), bandeau « IA très forte »`, JSON.stringify(lv) === "[6,6,3]" && (await ev("$('gmeta').textContent")).includes("IA très forte"));
   ok(`${w} px : aucune erreur JS (${errs.join(" | ")})`, !errs.length);
 }
 await b.close();

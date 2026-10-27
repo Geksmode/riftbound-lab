@@ -40,7 +40,7 @@ def main(seeds, versions):
     print(len(pos), "positions", flush=True)
     for v in versions:
         sm, n, ex, h, cfg = E.version(v)
-        tm = []
+        tm, kind = [], {}
         for k, (g, d, o, i) in enumerate(pos):
             Obj._n, Item._n = o, i
             c = g.clone()
@@ -48,9 +48,14 @@ def main(seeds, versions):
             t = time.perf_counter()
             a.decide(c, d)
             tm.append(time.perf_counter() - t)
+            kind.setdefault("main" if d.kind == "main" else "autres", []).append(tm[-1])
         tm.sort()
         print(f"{v} : moyenne {1000 * sum(tm) / len(tm):.0f} ms, p95 {1000 * tm[int(.95 * len(tm))]:.0f} ms, "
               f"max {1000 * tm[-1]:.0f} ms", flush=True)
+        for kd, xs in sorted(kind.items()):      # « main » : préparation du tour ; « autres » : réactions, focus, cibles
+            xs.sort()
+            print(f"  {kd} ({len(xs)}) : moyenne {1000 * sum(xs) / len(xs):.0f} ms, p95 {1000 * xs[int(.95 * len(xs))]:.0f} ms",
+                  flush=True)
 
 
 if __name__ == "__main__":

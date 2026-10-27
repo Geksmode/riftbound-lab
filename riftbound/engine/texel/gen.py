@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Données Texel : parties IA contre IA, critères de chaque début de tour et gagnant final (2026-10-20).
 
-    python3 texel/gen.py <parties> <graine0> <sh|pol> <sortie.jsonl> [processus]
+    python3 texel/gen.py <parties> <graine0> <sh|turn|pol> <sortie.jsonl> [processus]
 
 Parties exactement comme exp_search.play en mode « defaut » (deux decks par défaut tirés au hasard, plans génériques,
-mêmes graines d'agents) : sh = SearchAgent sh contre sh (IA Normal), pol = PolicyAgent des deux côtés (prototype rapide).
+mêmes graines d'agents) : sh = SearchAgent sh contre sh, turn = recherche du tour entier
+des deux côtés (IA Normal de la table, 2026-10-27), pol = PolicyAgent des deux côtés (prototype rapide).
 Position enregistrée = première décision « main » de chaque tour, vue par le joueur actif : c'est le moment où la
 recherche évalue ses feuilles (ai.rollout_policy s'arrête au premier « main » après l'horizon).
 Une ligne JSON par partie : seed, engine (version.engine_md5), mode, legends, first, winner, turns,
@@ -30,8 +31,8 @@ def play(seed, mode):
     Obj._n = 0
     Item._n = 0
     decks, plans, f = E.setup(seed, "defaut")
-    if mode == "sh":
-        ag = E.agents(seed, decks, plans, "sh", "sh")
+    if mode in ("sh", "turn"):
+        ag = E.agents(seed, decks, plans, mode, mode)
     else:
         ag = [ai.PolicyAgent(), ai.PolicyAgent()]
     g = Game(decks, ag, seed=seed, first=f)
@@ -64,7 +65,7 @@ def job(arg):
 def main():
     n, seed0, mode, out = int(sys.argv[1]), int(sys.argv[2]), sys.argv[3], Path(sys.argv[4])
     procs = int(sys.argv[5]) if len(sys.argv) > 5 else max(1, (os.cpu_count() or 2) - 4)
-    assert mode in ("sh", "pol")
+    assert mode in ("sh", "turn", "pol")
     ver = engine_md5()
     done = set()
     if out.exists():
