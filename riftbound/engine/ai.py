@@ -9,7 +9,7 @@ All choices made during resolution (targets, "you may", damage assignment...) us
 import os
 import random
 import re
-from game import SPEC, Obj, Item, is_bf
+from game import SPEC, Obj, Item, is_bf, Decision
 from cards import value as unit_value
 
 REACTIVE = {"Discipline", "Defy", "Not So Fast", "Back Off", "Block", "En Garde", "Ki Barrier", "Deathgrip",
@@ -72,6 +72,9 @@ POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
 # Réactions de la politique de simulation (2026-10-11, PolicyAgent.react_best) : le sort qui améliore le plus le combat,
 # essayé sur une copie, au lieu de plays[0] 8 fois sur 10. RB_REACT=0 rend l'ancienne politique.
 POL_REACT = os.environ.get("RB_REACT", "1") != "0"
+# RB_LAZY_CHECK=1 : chaque coup de la politique de simulation choisi sans la liste des coups est recalculé avec la liste
+# complète et comparé (PolicyAgent._lazy_check ; contrôle, lent)
+_LAZY_CHECK = os.environ.get("RB_LAZY_CHECK") == "1"
 REACT_CANDS = 6
 
 
@@ -637,9 +640,24 @@ class PolicyAgent(Heuristics):
         pass
 
     def decide(s, g, d):
+        if _LAZY_CHECK and d.options is None:
+            return s._lazy_check(g, d)
         if d.kind != "main":
             return s.react(g, d)
         return s.main(g, d)
+
+    def _lazy_check(s, g, d):
+        """RB_LAZY_CHECK=1 : le coup choisi sans la liste des coups (Game.advance(lazy=True)) doit être celui choisi
+        avec la liste complète (contrôle, lent ; pas pour les réactions tirées au hasard, qui consomment g.rng)."""
+        r = s.react(g, d) if d.kind != "main" else s.main(g, d)
+        if d.kind != "main" and not s.cfg.get("pol_react", POL_REACT):
+            return r
+        gen = dict(main=g.options_main, focus=g.options_focus, priority=g.options_priority)[d.kind]
+        full = Decision(d.kind, d.player, gen(d.player))
+        r2 = s.react(g, full) if d.kind != "main" else s.main(g, full)
+        if r != r2:
+            raise AssertionError(f"coup sans liste {r!r} != coup avec la liste {r2!r} ({d.kind})")
+        return r
 
     # -------- helpers
     def combat_margin(s, g, pid, bf, extra=()):
@@ -658,7 +676,7 @@ class PolicyAgent(Heuristics):
 
     def _main(s, g, pid, opts):
         if opts is None:
-            from actions import ability_options, move_options, play_options
+            from actions import ability_options, move_options
             acts = ability_options(g, pid, closed=False, showdown=False, main=True)
         else:
             plays = [o for o in opts if o[0] == "play"]
@@ -696,7 +714,10 @@ class PolicyAgent(Heuristics):
             return best
         # 3. play the biggest unit we can
         if opts is None:
-            plays = play_options(g, pid, closed=False, showdown=False)
+            o = s._play_lazy(g, pid)
+            if o is not None:
+                return o
+            plays = []
         units = [o for o in plays if s.is_unit(g, o)]
         if units:
             units.sort(key=lambda o: -(s.card_of(g, o).spec["might"] or 0))
@@ -713,6 +734,39 @@ class PolicyAgent(Heuristics):
         for o in acts:
             return o
         return ("end",)
+
+    def _play_lazy(s, g, pid):
+        """Étapes 3 et 4 de _main sans la liste complète des cartes jouables : les cartes sont prises dans l'ordre de
+        actions.play_options (mêmes cartes, mêmes doublons écartés) et on ne calcule les choix (card_choices, le plus
+        cher : coût de chaque cible) que des cartes qui peuvent encore donner le coup retenu. 3 : l'unité de plus grande
+        Might (la première dans l'ordre à égalité), son premier choix ; 4 : sinon le premier choix de la première carte
+        jouable non écartée (pol_keep, pol_trick). Même coup que les étapes 3 et 4 sur la liste complète ; None s'il n'y
+        en a pas (la liste complète n'aurait eu aucune carte retenue)."""
+        from actions import playable_cards, card_choices
+        cands, seen = [], set()
+        for c, src in playable_cards(g, pid, False, False):
+            key = (c.cname, src)
+            if key in seen and src != "facedown":
+                continue
+            seen.add(key)
+            cands.append((c, src, s.card_of(g, ("play", c.uid))))
+        units = [x for x in cands if x[2] is not None and x[2].spec["type"] == "Unit"]
+        units.sort(key=lambda x: -(x[2].spec["might"] or 0))      # tri stable : l'ordre des cartes à égalité
+        for c, src, _ in units:
+            chs = card_choices(g, pid, c, src, False, False)
+            if chs:
+                return ("play", c.uid, src, chs[0])
+        keep, trick = s.cfg.get("pol_keep"), s.cfg.get("pol_trick", POL_TRICK)
+        for c, src, k in cands:
+            if k is not None and k.spec["type"] == "Unit":
+                continue                                            # (aucun choix : vu ci-dessus)
+            o = ("play", c.uid)
+            if keep and s.reaction_card(g, o) or trick and s.trick_card(g, o):
+                continue
+            chs = card_choices(g, pid, c, src, False, False)
+            if chs:
+                return ("play", c.uid, src, chs[0])
+        return None
 
     def reaction_card(s, g, o):
         c = s.card_of(g, o)
@@ -743,6 +797,9 @@ class PolicyAgent(Heuristics):
         if g.sd is None or g.sd.stage != "open":
             return ("pass",)
         bf = g.sd.bf
+        pr = s.cfg.get("pol_react", POL_REACT)
+        if pr and not g.units(pid, bf):
+            return ("pass",)                           # (react_best passerait : inutile de générer les cartes)
         if d.options is None:                          # Game.advance(lazy=True) : seulement les cartes (timed_options)
             from actions import play_options
             closed = d.kind == "priority"
@@ -751,7 +808,7 @@ class PolicyAgent(Heuristics):
             plays = [o for o in d.options if o[0] == "play"]
         if not plays:
             return ("pass",)
-        if s.cfg.get("pol_react", POL_REACT):
+        if pr:
             return s.react_best(g, pid, bf, plays)
         mine, theirs = s.combat_margin(g, pid, bf)
         losing = mine <= theirs and g.units(pid, bf)
