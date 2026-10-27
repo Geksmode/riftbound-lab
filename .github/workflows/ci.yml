@@ -1,10 +1,11 @@
 name: Tests et table d'entraînement
 
-# Les tests et la construction de la table tournent en parallèle ; la publication sur GitHub Pages
-# n'a lieu (branche main uniquement) que si les deux ont réussi.
+# Les tests du moteur et les robots de la table tournent en parallèle ; les robots sont répartis sur 4 machines
+# (RB_PART, scripts/verifier.sh). La publication sur GitHub Pages n'a lieu (branche main uniquement) que si tout a réussi.
+# Une seule CI par commit : elle part au push, sur toutes les branches, et une PR affiche les résultats de son dernier
+# commit (plus de seconde CI identique sur l'événement pull_request).
 on:
   push:
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -22,11 +23,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Porte d'intégration, partie moteur (wiki, tests, fuzz de chaque paquet, parties aléatoires)
+      - name: Porte d'intégration, partie moteur (wiki, tests, empreinte, fuzz de chaque paquet, parties aléatoires)
         run: bash scripts/verifier.sh moteur
 
-  build-table:
+  robots:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3, 4]
+    name: table (${{ matrix.part }}/4)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,20 +43,36 @@ jobs:
           node-version: "22"
       - name: Pyodide 0.26.4 (paquet npm)
         run: bash riftbound/train/fetch_pyodide.sh
+      # Chromium de Playwright gardé d'une CI à l'autre (son téléchargement prenait parfois plusieurs minutes) ; ses
+      # bibliothèques système sont déjà sur l'image ubuntu-latest (Chrome y est installé).
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-1.56.1-chromium-${{ runner.os }}
       - name: Playwright, Chromium et serveur PeerJS local (robots navigateur)
         run: |
           cd riftbound/train
           npm install --no-save --no-package-lock playwright@1.56.1 peer@1.0.2
-          npx playwright install --with-deps chromium
-      - name: Porte d'intégration, partie table (construction + partie jouée au format téléphone)
-        run: bash scripts/verifier.sh table
+          npx playwright install chromium
+      - name: Porte d'intégration, partie table (construction + robots de la partie ${{ matrix.part }}/4)
+        run: RB_PART=${{ matrix.part }}/4 bash scripts/verifier.sh table
       - name: Page d'accueil du site
+        if: matrix.part == 1
         run: |
           cp riftbound/train/build/train.html riftbound/train/build/index.html
           touch riftbound/train/build/.nojekyll
       - uses: actions/upload-pages-artifact@v3
+        if: matrix.part == 1
         with:
           path: riftbound/train/build
+
+  # Bilan des 4 parties sous le nom de l'ancien job (build-table) : vert seulement si toutes ont réussi.
+  build-table:
+    if: always()
+    needs: [robots]
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.robots.result }}" = success
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
