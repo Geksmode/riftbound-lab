@@ -1,6 +1,6 @@
 ---
 name: riftbound-search-ai
-description: IA générale (SearchAgent) 2026-10-09 : tirages communs + élimination en passes (RB_SEARCH, défaut "sh"), mesures sur les 49 decks par défaut, essais d'évaluation et de politique non retenus, temps par coup
+description: IA générale (SearchAgent) 2026-10-09 (niveau Très fort de la table 2026-10-27, en fin de page) : tirages communs + élimination en passes (RB_SEARCH, défaut "sh"), mesures sur les 49 decks par défaut, essais d'évaluation et de politique non retenus, temps par coup
 metadata:
   type: project
 ---
@@ -65,5 +65,29 @@ qu'elle soit, le +5 « ce tour » ne compte pas (`lasting_might`), et un seul ti
 
 **Poids de l'évaluation** : depuis le 2026-10-20, `ai.EV` = poids Texel ([[ia-texel]], 53,5 % ± 0,9 contre les poids ci-dessus) ;
 les mesures de cette page ont été faites avec les anciens poids (`ai.EV_OLD`, `RB_EV=old`).
+
+**Niveaux de la table et niveau « Très fort » (2026-10-27, demande de l'utilisateur : « un niveau au-dessus, rendre l'IA
+réellement plus forte » ; piste choisie : plus de budget de recherche).** La table joue `search="turn"` avec `samples` = niveau
+(`train.new`, `train.LEVEL_CFG`) : Normal 1, Fort 3, Très fort 6 avec `turn_w=6` (faisceau de 6 suites) et `react_n=3`
+(3 mondes seulement pour les décisions hors « main » : réactions, focus, cibles ; choix de l'utilisateur : « ok qu'il prenne son
+temps pour optimiser son tour », pas pour un petit choix). Équivalent `exp_search` : `turn@n=6,turn_w=6,react_n=3`.
+Coups d'œil (80 paires, mode `defaut`, moteur a832cbbc81, graines neuves à chaque ligne) :
+
+| Comparaison | Graines | Score de A | ms par décision A / B (CPython, machine chargée) |
+|---|---|---|---|
+| Fort (`turn@n=3`) contre Normal (`turn`) | 4000000+ | 52,5 % ± 3,3 (on ne sait pas) | 4 371 / 2 173 |
+| `turn@n=6` contre Fort | 4100000+ | 53,1 % ± 3,1 (on ne sait pas) | 7 859 / 5 017 |
+| `turn@n=3,turn_w=6` contre Fort | 4200000+ | 53,1 % ± 3,0 (on ne sait pas) | 8 433 / 4 888 |
+| `turn@n=6,turn_w=6` contre Fort | 4300000+ | 55,6 % ± 2,8 (z 2,0) | 12 076 / 4 335 |
+
+Chaque levier seul rapporte peu (Fort ne bat pas Normal de façon visible) ; ensemble, l'écart devient visible.
+Test séquentiel (règle 9, [[ia-sprt]]), `turn@n=6,turn_w=6,react_n=3` contre `turn@n=3`, moteur de la branche `ia/tres-fort`
+(recherche accélérée, décisions identiques) : **SPRT 1, graines 4400000-4400295 : gardé après 296 paires, 55,2 % ± 1,7
+(LLR 2,98), 179 min.** SPRT 2 (confirmation, graines 4500000+) : en cours au moment de l'écriture, voir `docs/wiki/log.md`.
+Un SPRT s'arrête quand il franchit sa borne : la moyenne surestime un peu le vrai gain.
+Table : partie jouée de bout en bout dans le navigateur intégré (Pyodide, donne 4242, coups humains au hasard pilotés par
+script, machine chargée par 24 processus) : 12 tours, IA gagnante 8-3, attente la plus longue entre deux coups humains 22 s,
+4 attentes > 10 s, médiane 0,2 s ; aucune erreur JS. Non essayé sur un vrai téléphone ; temps Pyodide par décision non mesuré
+sur machine libre. Robot `train/verif_vs.mjs` : bouton, réglages reçus par le moteur, bandeau « IA très forte ».
 
 Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]], [[ia-texel]].
