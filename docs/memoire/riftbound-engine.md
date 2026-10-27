@@ -23,3 +23,8 @@ Related: [[akali-vs-leblanc]], [[riftbound-sources]], [[riftbound-lab-goal]].
 2026-10-19 (Radiance): Core Rules of 2026-10-09 saved (rules/source/core_rules_2026-10-09.txt). Only the rules Radiance
 needs are wired in (Deploy 830, Disarm 831, Show Off 832, Bomb token 187.12, unit gear 143.5); the other changes of that
 version are not audited in the engine. Radiance cards: docs/wiki/pages/radiance.md.
+
+2026-10-27 (performance) : `Game.clone` = `copy.deepcopy`, accéléré par `game._fastcopy`, posé en `__deepcopy__` sur Obj,
+Rune, Player, Item, Showdown, Opt, Decision, Battlefield et Game (même résultat que la copie générique, sans repasser par
+deepcopy pour chaque entier ou texte). Une nouvelle classe d'état du moteur doit recevoir `__deepcopy__ = _fastcopy`.
+Vérifier une optimisation : rejouer des parties à graines fixes avant / après et comparer le hachage des décisions.

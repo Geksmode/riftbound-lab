@@ -46,6 +46,23 @@ ANY = frozenset(DOMAINS)
 BARON_PIT = "Baron Pit"
 
 
+_ATOMIC = frozenset((type(None), int, float, bool, str, bytes, type, type(len), type(lambda: 0)))
+_deepcopy = copy.deepcopy
+
+
+def _fastcopy(s, memo):
+    """copy.deepcopy des objets du moteur, au même résultat que la copie générique (__reduce_ex__ puis copie de
+    __dict__) mais sans repasser par deepcopy pour chaque entier ou texte : Game.clone (recherche de l'IA) en fait des
+    millions par décision."""
+    cls = s.__class__
+    new = cls.__new__(cls)
+    memo[id(s)] = new
+    d = new.__dict__
+    for k, v in s.__dict__.items():
+        d[k] = v if type(v) in _ATOMIC else _deepcopy(v, memo)
+    return new
+
+
 def is_bf(loc):
     """A battlefield location: an index of Game.bfs (0 and 1, plus 2 once Baron Nashor has added the Baron Pit
     battlefield token, rule 187.9). Other locations are "base" and None (not on the board)."""
@@ -70,6 +87,8 @@ def _cards():
 class Obj:
     """A card or token, in any zone. Board-only state is reset whenever it changes zone (rule 359.3.e.4)."""
     _n = 0
+
+    __deepcopy__ = _fastcopy
 
     def __init__(s, name, owner, token=False):
         Obj._n += 1
@@ -145,6 +164,8 @@ class Obj:
 
 
 class Rune:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, domain, owner):
         Obj._n += 1
         s.uid = Obj._n
@@ -157,6 +178,8 @@ class Rune:
 
 
 class Player:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, pid, legend, champion, main, runes, battlefield):
         s.pid = pid
         s.legend_name = legend
@@ -187,6 +210,8 @@ class Item:
     """A chain item: spell, activated ability or triggered ability (rules 328-340)."""
     _n = 0
 
+    __deepcopy__ = _fastcopy
+
     def __init__(s, kind, ctrl, name, fn=None, card=None, src=None, data=None):
         Item._n += 1
         s.id = Item._n
@@ -206,6 +231,8 @@ class Item:
 
 
 class Showdown:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, bf, combat, attacker):
         s.bf = bf
         s.combat = combat
@@ -224,6 +251,8 @@ class Showdown:
 class Opt:
     """A labelled option of g.ask (when the option is not a card, a rune, a location or a boolean).
     label: French text shown to a human player (train._olabel); value: what the effect uses."""
+    __deepcopy__ = _fastcopy
+
     def __init__(s, label, value=None, obj=None):
         s.label, s.value, s.obj = label, value, obj
 
@@ -232,6 +261,8 @@ class Opt:
 
 
 class Decision:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, kind, player, options):
         s.kind, s.player, s.options = kind, player, options
 
@@ -240,6 +271,8 @@ class Decision:
 
 
 class Battlefield:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, idx, name, owner):
         s.idx, s.name, s.owner = idx, name, owner
         s.ctrl = None
@@ -267,6 +300,8 @@ class Battlefield:
 
 
 class Game:
+    __deepcopy__ = _fastcopy
+
     def __init__(s, decks, agents, first=None, seed=None, log=False, victory=VICTORY):
         """decks: list of 2 dicts(legend, champion, main(list of 39 names), runes(list of 12 domains), battlefield)"""
         s.rng = random.Random(seed)
@@ -358,11 +393,13 @@ class Game:
         return f"{o.cname} #{n}" if n else o.cname
 
     def units(s, pid=None, loc="any"):
-        return [o for o in s.board if o.spec["type"] == "Unit" and (pid is None or o.ctrl == pid)
-                and (loc == "any" or o.loc == loc)]
+        # même test que o.spec["type"] == "Unit" (Obj.spec : une unit gear est une Unit), sans construire le dict ;
+        # appelé des millions de fois par décision de l'IA
+        return [o for o in s.board if (pid is None or o.ctrl == pid) and (loc == "any" or o.loc == loc)
+                and (o.__dict__.get("ugear") or SPEC[o.cname]["type"] == "Unit")]
 
     def gear(s, pid=None):
-        return [o for o in s.board if (o.spec["type"] == "Gear" or o.ugear) and (pid is None or o.ctrl == pid)]
+        return [o for o in s.board if (pid is None or o.ctrl == pid) and (o.ugear or SPEC[o.cname]["type"] == "Gear")]
 
     def is_gear(s, o):
         """A gear, unit gear included (Orianna, Lady of Clockwork: "a unit gear")."""
@@ -1193,11 +1230,17 @@ class Game:
                 pool_p["A"] -= 1
                 return True
             return False
-        # domain demand of the rest of the hand, to keep the scarcer domain
-        need = Counter()
-        for c in pl.hand:
-            for d in c.spec["domains"]:
-                need[d] += c.spec["p"]
+        # domain demand of the rest of the hand, to keep the scarcer domain (computed only when a rune must be chosen)
+        need = []
+
+        def demand():
+            if not need:
+                c = Counter()
+                for h in pl.hand:
+                    for d in h.spec["domains"]:
+                        c[d] += h.spec["p"]
+                need.append(c)
+            return need[0]
         for req in sorted(reqs, key=lambda q: len(q)):
             # pool first
             if from_pool(req):
@@ -1214,8 +1257,8 @@ class Game:
             if not cands:
                 cands = [r for r in ready if r.domain in req and r not in recycle]
             if cands:
-                cnt = Counter(r.domain for r in pl.runes)
-                cands.sort(key=lambda r: (need[r.domain] - cnt[r.domain], r.domain))
+                cnt, nd = Counter(r.domain for r in pl.runes), demand()
+                cands.sort(key=lambda r: (nd[r.domain] - cnt[r.domain], r.domain))
                 recycle.append(cands[0])
                 continue
             if use_gold < len(golds):
@@ -1244,8 +1287,8 @@ class Game:
         for lst in (soft, None, hard):
             if lst is None:
                 others = [r for r in ready if r not in recycle]
-                cnt = Counter(r.domain for r in pl.runes)
-                others.sort(key=lambda r: (need[r.domain] - cnt[r.domain], r.domain))
+                cnt, nd = Counter(r.domain for r in pl.runes), demand()
+                others.sort(key=lambda r: (nd[r.domain] - cnt[r.domain], r.domain))
                 for r in others:
                     if e_left <= 0:
                         break
