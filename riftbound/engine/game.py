@@ -2071,13 +2071,16 @@ class Game:
                     s.zone_listen = False       # no card of the game can ever listen from a hand or a trash
 
     # ------------------------------------------------------------------ main loop
-    def advance(s):
+    def advance(s, lazy=False):
+        """lazy=True (simulations de l'IA) : même progression de la partie, mais la Decision rendue a options=None ; celui
+        qui décide génère seulement les coups dont il a besoin (ai.PolicyAgent). La génération des coups ne change pas
+        l'état : la sauter ne change rien à la suite de la partie (garde-fou : engine/empreinte.py)."""
         try:
-            return s._advance()
+            return s._advance(lazy)
         except GameOver:
             return None
 
-    def _advance(s):
+    def _advance(s, lazy=False):
         while True:
             if s.winner is not None:
                 return None
@@ -2097,7 +2100,7 @@ class Game:
                 if s.passes >= 2:
                     s.resolve_top()
                     continue
-                return Decision("priority", s.priority, s.options_priority(s.priority))
+                return Decision("priority", s.priority, None if lazy else s.options_priority(s.priority))
             if s.chain_origin is not None:
                 s.chain_closed()
                 continue
@@ -2107,11 +2110,11 @@ class Game:
                     if sd.passes >= 2:
                         s.end_showdown()
                         continue
-                    return Decision("focus", sd.focus, s.options_focus(sd.focus))
+                    return Decision("focus", sd.focus, None if lazy else s.options_focus(sd.focus))
                 s.combat_step()
                 continue
             if s.stage == "main":
-                return Decision("main", s.tp, s.options_main(s.tp))
+                return Decision("main", s.tp, None if lazy else s.options_main(s.tp))
             s.turn_step()
 
     def apply(s, action):
