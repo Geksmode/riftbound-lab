@@ -33,3 +33,10 @@ Vérifier une optimisation : `engine/empreinte.py` (étape « empreinte » de la
 None. Hypothèse : rien ne modifie la partie pendant qu'on liste les coups. Une carte dont un rappel (`can`, `cost_aura`,
 `as_played`…) modifierait l'état la casserait : `RB_MEMO_CHECK=1` recalcule chaque réponse mémorisée et lève une erreur si
 elle diffère (à lancer avec `fuzz_cards.py` sur le paquet touché après une nouvelle carte de ce genre).
+2026-10-27 (coups à la demande dans les simulations) : `Game.advance(lazy=True)` rend une Decision avec `options=None` ;
+`ai.PolicyAgent` (politique de simulation : `rollout_policy`, `settle` de la recherche « turn », `react_margin`) génère
+alors seulement ce qu'elle regarde : capacités, déplacements, puis cartes une par une (`_play_lazy` : l'unité de plus
+grande Might, sinon la première carte non écartée ; les choix et leur coût ne sont calculés que pour ces cartes) ; en
+réaction, rien hors showdown ouvert ou sans unité au battlefield. Hypothèse : générer les coups ne change pas l'état
+(la même que `_memo`). Une modification de `PolicyAgent._main` doit garder `_play_lazy` d'accord :
+`RB_LAZY_CHECK=1` recalcule chaque coup avec la liste complète (erreur si différent) ; test `cardsets/test_ai_lazy.py`.
