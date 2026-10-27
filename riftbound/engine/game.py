@@ -63,6 +63,23 @@ def _fastcopy(s, memo):
     return new
 
 
+def _frozen(v, keep):
+    """Clé de mémoire d'une valeur (Game.can_pay) : contenu des dict, listes, tuples et ensembles ; les autres objets
+    (cartes, fonctions…) par identité, gardés dans keep pour que leur id ne soit pas réutilisé."""
+    t = type(v)
+    if t in _ATOMIC:
+        return v
+    if t is dict:
+        return ("d",) + tuple(sorted(((k, _frozen(x, keep)) for k, x in v.items()), key=repr))
+    if t is list or t is tuple:
+        return (t.__name__,) + tuple(_frozen(x, keep) for x in v)
+    if t is set or t is frozenset:
+        if all(type(x) in _ATOMIC for x in v):
+            return frozenset(v)
+    keep.append(v)
+    return ("id", id(v))
+
+
 def is_bf(loc):
     """A battlefield location: an index of Game.bfs (0 and 1, plus 2 once Baron Nashor has added the Baron Pit
     battlefield token, rule 187.9). Other locations are "base" and None (not on the board)."""
@@ -301,6 +318,17 @@ class Battlefield:
 
 class Game:
     __deepcopy__ = _fastcopy
+    # Mémoire des calculs pendant la génération des coups (options_main / focus / priority) : l'état ne change pas
+    # pendant cette génération, et les mêmes questions y reviennent des milliers de fois (providers : ~80 % de
+    # répétitions, can_pay : ~40 %). None hors de cette génération. Garde-fou : engine/empreinte.py.
+    _memo = None
+
+    def _gen_options(s, f, *args):
+        prev, s._memo = s._memo, {}
+        try:
+            return f(*args)
+        finally:
+            s._memo = prev
 
     def __init__(s, decks, agents, first=None, seed=None, log=False, victory=VICTORY):
         """decks: list of 2 dicts(legend, champion, main(list of 39 names), runes(list of 12 domains), battlefield)"""
@@ -503,6 +531,11 @@ class Game:
         names = _cards().HOOKS.get(field)
         if not names:
             return []
+        m = s._memo
+        if m is not None:
+            out = m.get(("prov", field))
+            if out is not None:
+                return out
         out = []
         for x in s.board:
             if x.attached_to is None:
@@ -518,6 +551,8 @@ class Game:
         for b in s.bfs:
             if b.name in names:
                 out.append((b, s.impl(b.name)))
+        if m is not None:
+            m[("prov", field)] = out
         return out
 
     def fx_providers(s, field, unit=None):
@@ -587,6 +622,11 @@ class Game:
         out = []
         if not names:
             return out
+        m = s._memo
+        if m is not None:
+            r = m.get("aura")
+            if r is not None:
+                return r
         for x in s.board:
             if x.cname in names:
                 out.append((x, s.impl(x)))
@@ -596,6 +636,8 @@ class Game:
         for b in s.bfs:
             if b.name in names:
                 out.append((b, s.impl(b.name)))
+        if m is not None:
+            m["aura"] = out
         return out
 
     def level_value(s, o, im, field):
@@ -1105,10 +1147,8 @@ class Game:
     def golds(s, pid):
         return [o for o in s.board if o.ctrl == pid and o.cname in ("Gold", "Gold // Buff") and not o.exhausted]
 
-    def adders(s, pid, ctx=None):
-        """[Add] abilities usable while paying (rule 429.3): Impl.add = [dict(e=, p=, exhaust=, kill=, can=)]
-        on permanents the player controls and on their legend. ctx describes what is being paid
-        (dict(kind='spell'|'unit'|'gear'|'ability'|'hide', card=, obj=)) or is None."""
+    def _adder_pairs(s, pid):
+        """(source, [Add] ability) of the player, before the usability checks of adders."""
         names = _cards().ADDERS
         grants = _cards().HOOKS.get("grant_add")
         if not names and not grants:
@@ -1124,8 +1164,20 @@ class Game:
             for o, im in s.providers("grant_add"):
                 if o.ctrl == pid and getattr(o, "zone", None) == "board":
                     pairs += [(o, ad) for ad in im.grant_add(s, o) or ()]
+        return pairs
+
+    def _pay_ctx_free(s, pid):
+        """True when what is being paid (ctx) cannot change a payment plan: no energy restricted to some costs
+        (pool_r) and no [Add] ability with a condition on the cost (can). Game.can_pay then shares its memo
+        between all the cards."""
+        return not s.p[pid].pool_r and not any("can" in ad for _, ad in s._adder_pairs(pid))
+
+    def adders(s, pid, ctx=None):
+        """[Add] abilities usable while paying (rule 429.3): Impl.add = [dict(e=, p=, exhaust=, kill=, can=)]
+        on permanents the player controls and on their legend. ctx describes what is being paid
+        (dict(kind='spell'|'unit'|'gear'|'ability'|'hide', card=, obj=)) or is None."""
         out = []
-        for o, ad in pairs:
+        for o, ad in s._adder_pairs(pid):
             if ad.get("exhaust", True) and o.exhausted:
                 continue
             if ad.get("timing") == "action" and (s.chain or (s.sd is not None and s.sd.focus != pid)
@@ -1316,7 +1368,18 @@ class Game:
                     adders=used, took=took)
 
     def can_pay(s, pid, e, reqs, ctx=None):
-        return s.plan_payment(pid, e, reqs, ctx) is not None
+        m = s._memo
+        if m is None:
+            return s.plan_payment(pid, e, reqs, ctx) is not None
+        free = m.get(("ctxfree", pid))
+        if free is None:
+            free = m[("ctxfree", pid)] = s._pay_ctx_free(pid)
+        keep = []                                  # objets nommés par leur id : gardés en vie avec la réponse
+        k = ("pay", pid, e, _frozen(reqs, keep), None if free else _frozen(ctx, keep))
+        r = m.get(k)
+        if r is None:
+            r = m[k] = (s.plan_payment(pid, e, reqs, ctx) is not None, keep)
+        return r[0]
 
     def gold_choices(s, pid, e, reqs, ctx, plan):
         """The ways to pay with a ready Gold instead of recycling a rune (rule 429.3: the player chooses which [Add]
@@ -2702,15 +2765,15 @@ class Game:
     # ------------------------------------------------------------------ actions
     def options_main(s, pid):
         from actions import main_options
-        return main_options(s, pid)
+        return s._gen_options(main_options, s, pid)
 
     def options_focus(s, pid):
         from actions import timed_options
-        return [("pass",)] + timed_options(s, pid, closed=False)
+        return [("pass",)] + s._gen_options(timed_options, s, pid, False)
 
     def options_priority(s, pid):
         from actions import timed_options
-        return [("pass",)] + timed_options(s, pid, closed=True)
+        return [("pass",)] + s._gen_options(timed_options, s, pid, True)
 
     def do_action(s, a):
         from actions import do_action
@@ -2725,6 +2788,7 @@ class Game:
         finally:
             s.agents, s.lines = ag, lines
         g.logging = False
+        g.__dict__.pop("_memo", None)             # mémoire de la génération des coups : propre à l'original
         return g
 
 
