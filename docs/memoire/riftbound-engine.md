@@ -27,4 +27,4 @@ version are not audited in the engine. Radiance cards: docs/wiki/pages/radiance.
 2026-10-27 (performance) : `Game.clone` = `copy.deepcopy`, accéléré par `game._fastcopy`, posé en `__deepcopy__` sur Obj,
 Rune, Player, Item, Showdown, Opt, Decision, Battlefield et Game (même résultat que la copie générique, sans repasser par
 deepcopy pour chaque entier ou texte). Une nouvelle classe d'état du moteur doit recevoir `__deepcopy__ = _fastcopy`.
-Vérifier une optimisation : rejouer des parties à graines fixes avant / après et comparer le hachage des décisions.
+Vérifier une optimisation : `engine/empreinte.py` (étape « empreinte » de la porte) rejoue 5 parties à graines fixes et compare le hachage des décisions à `empreinte.json`.

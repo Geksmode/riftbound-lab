@@ -1,0 +1,72 @@
+{
+ "engine_md5": "e0b0770d77",
+ "python": "3.13.17",
+ "seconds": 60.6,
+ "games": [
+  {
+   "seed": 910001,
+   "search": "old",
+   "legends": [
+    "Draven, Glorious Executioner",
+    "Pyke, Bloodharbor Ripper"
+   ],
+   "decisions": 152,
+   "winner": 0,
+   "turns": 18,
+   "md5": "d0963de1917ba533d938f89bdae380c1",
+   "s": 23.6
+  },
+  {
+   "seed": 910002,
+   "search": "old",
+   "legends": [
+    "Azir, Emperor of the Sands",
+    "Master Yi, Wuju Bladesman"
+   ],
+   "decisions": 110,
+   "winner": 1,
+   "turns": 13,
+   "md5": "b6ed68d21c050c5c8a1a5ff038dc37a0",
+   "s": 7.5
+  },
+  {
+   "seed": 910003,
+   "search": "old",
+   "legends": [
+    "Jhin, Virtuoso",
+    "Jayce, Defender of Tomorrow"
+   ],
+   "decisions": 204,
+   "winner": 1,
+   "turns": 18,
+   "md5": "41249d11acd9c3c45247c33328d780b8",
+   "s": 19.4
+  },
+  {
+   "seed": 910004,
+   "search": "old",
+   "legends": [
+    "Lillia, Bashful Bloom",
+    "Nasus, Curator of the Sands"
+   ],
+   "decisions": 178,
+   "winner": 0,
+   "turns": 18,
+   "md5": "dec1c68986407300288cb35fa7522b3b",
+   "s": 15.0
+  },
+  {
+   "seed": 910005,
+   "search": "turn",
+   "legends": [
+    "Rumble, Mechanized Menace",
+    "Kennen, Heart of the Tempest"
+   ],
+   "decisions": 126,
+   "winner": 1,
+   "turns": 11,
+   "md5": "61e28f08648ea919a229da5930b53877",
+   "s": 52.6
+  }
+ ]
+}

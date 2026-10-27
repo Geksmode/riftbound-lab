@@ -1,7 +1,7 @@
 ---
 titre: Carte du dépôt et commandes
 resume: où se trouve quoi dans le dépôt, et les commandes de test, de simulation et de construction
-maj: 2026-10-07
+maj: 2026-10-27
 sources: CLAUDE.md (ancienne version), riftbound/engine/README.md
 ---
 | Dossier | Contenu |
@@ -24,6 +24,7 @@ Commandes (Python 3 standard, aucune dépendance ; le moteur tourne aussi dans P
 ```bash
 cd riftbound/engine
 python3 test_all.py                      # toute la suite (968 attendus)
+python3 empreinte.py                     # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
 python3 fuzz_cards.py 200 --module fury  # parties aléatoires avec un paquet (0 exception attendu)
 RB_CARDSETS=fury,body python3 ...        # ne charger que certains paquets
 python3 ../train/t_rand.py 40            # 40 parties avec des decks légaux au hasard
