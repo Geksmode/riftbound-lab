@@ -28,3 +28,8 @@ version are not audited in the engine. Radiance cards: docs/wiki/pages/radiance.
 Rune, Player, Item, Showdown, Opt, Decision, Battlefield et Game (même résultat que la copie générique, sans repasser par
 deepcopy pour chaque entier ou texte). Une nouvelle classe d'état du moteur doit recevoir `__deepcopy__ = _fastcopy`.
 Vérifier une optimisation : `engine/empreinte.py` (étape « empreinte » de la porte) rejoue 5 parties à graines fixes et compare le hachage des décisions à `empreinte.json`.
+2026-10-27 (mémoire de la génération des coups) : pendant `options_main` / `options_focus` / `options_priority`
+(`Game._gen_options`), `Game._memo` garde `providers(champ)`, `aura_sources()` et `can_pay(...)` ; hors de là, `_memo` vaut
+None. Hypothèse : rien ne modifie la partie pendant qu'on liste les coups. Une carte dont un rappel (`can`, `cost_aura`,
+`as_played`…) modifierait l'état la casserait : `RB_MEMO_CHECK=1` recalcule chaque réponse mémorisée et lève une erreur si
+elle diffère (à lancer avec `fuzz_cards.py` sur le paquet touché après une nouvelle carte de ce genre).

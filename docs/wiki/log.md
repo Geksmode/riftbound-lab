@@ -295,3 +295,6 @@ Moteur : `Game.clone` (recherche de l'IA) passe par `game._fastcopy` (`__deepcop
 
 ## [2026-10-27] ingest | Gain mesuré dans Pyodide et garde-fou « empreinte » dans la porte
 `exp_temps.mjs 777003,777011` (144 positions, Pyodide 32 bits, avant `c860ee8` / après `df24f6a`, une mesure, deux processus en parallèle sur une machine partagée) : Normal (`turn`) 1892 → 1604 ms en moyenne (p95 8,5 → 7,6 s, max 18,6 → 14,9 s) ; Fort (`turn@n=3`) 3604 → 3144 ms (p95 12,3 → 11,3 s, max 35,6 → 31,8 s) ; durée totale 14 min 01 → 12 min 07 (−14 %). Nouvelle étape `empreinte` (`engine/empreinte.py`, `empreinte.json`) : voir `pages/porte.md`. Les 5 parties de l'empreinte sont identiques dans Pyodide (Python 3.12.1, 32 bits), en Python 3.12 et 3.13.
+
+## [2026-10-27] decision | Mémoire des calculs pendant la génération des coups
+`Game._memo` (providers, aura_sources, can_pay) pendant la liste des coups : empreinte identique, parties « old » −16 %, recherche « turn » −14 % (mesures en série, deux fois chacune). Contrôle `RB_MEMO_CHECK=1` (recalcul de chaque réponse mémorisée) : attrape une mémoire faussée exprès ; passé sur le fuzz de chaque paquet, 30 parties `t_rand` et l'empreinte. Détails : `docs/memoire/riftbound-engine.md`.

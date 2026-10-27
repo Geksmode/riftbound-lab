@@ -9,7 +9,7 @@ Choices made while a card or ability is being played or resolved (targets, "you 
 assignment, ordering...) are asked synchronously to the players' agents through g.ask().
 Card behaviours live in cards.py (one entry per card name).
 """
-import csv, copy, random
+import csv, copy, os, random
 from lang import tr, en as _en
 from collections import Counter
 from pathlib import Path
@@ -61,6 +61,10 @@ def _fastcopy(s, memo):
     for k, v in s.__dict__.items():
         d[k] = v if type(v) in _ATOMIC else _deepcopy(v, memo)
     return new
+
+
+# RB_MEMO_CHECK=1 : chaque réponse tirée de Game._memo est recalculée sans mémoire et comparée (contrôle, lent)
+_MEMO_CHECK = os.environ.get("RB_MEMO_CHECK") == "1"
 
 
 def _frozen(v, keep):
@@ -323,6 +327,16 @@ class Game:
     # répétitions, can_pay : ~40 %). None hors de cette génération. Garde-fou : engine/empreinte.py.
     _memo = None
 
+    def _memo_check(s, what, got, f, *args):
+        """RB_MEMO_CHECK : la réponse mémorisée got doit être celle que f(*args) donne sans mémoire."""
+        prev, s._memo = s._memo, None
+        try:
+            fresh = f(*args)
+        finally:
+            s._memo = prev
+        if fresh != got:
+            raise AssertionError(f"mémoire périmée pendant la génération des coups : {what}")
+
     def _gen_options(s, f, *args):
         prev, s._memo = s._memo, {}
         try:
@@ -535,6 +549,8 @@ class Game:
         if m is not None:
             out = m.get(("prov", field))
             if out is not None:
+                if _MEMO_CHECK:
+                    s._memo_check(("providers", field), out, s.providers, field)
                 return out
         out = []
         for x in s.board:
@@ -626,6 +642,8 @@ class Game:
         if m is not None:
             r = m.get("aura")
             if r is not None:
+                if _MEMO_CHECK:
+                    s._memo_check("aura_sources", r, s.aura_sources)
                 return r
         for x in s.board:
             if x.cname in names:
@@ -1374,11 +1392,15 @@ class Game:
         free = m.get(("ctxfree", pid))
         if free is None:
             free = m[("ctxfree", pid)] = s._pay_ctx_free(pid)
+        elif _MEMO_CHECK:
+            s._memo_check(("ctx_free", pid), free, s._pay_ctx_free, pid)
         keep = []                                  # objets nommés par leur id : gardés en vie avec la réponse
         k = ("pay", pid, e, _frozen(reqs, keep), None if free else _frozen(ctx, keep))
         r = m.get(k)
         if r is None:
             r = m[k] = (s.plan_payment(pid, e, reqs, ctx) is not None, keep)
+        elif _MEMO_CHECK:
+            s._memo_check(("can_pay", pid, e, reqs, ctx), r[0], s.can_pay, pid, e, reqs, ctx)
         return r[0]
 
     def gold_choices(s, pid, e, reqs, ctx, plan):
