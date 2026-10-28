@@ -333,3 +333,6 @@ Demande de l'utilisateur (« télécharger puis déposer c'est contraignant » ;
 ## [2026-10-28] result | Premières erreurs marquées par l'utilisateur (7 parties, 14 marques)
 Demande de l'utilisateur (« apprend de mes games »). Bugs corrigés : script de l'IA écrasé entre manches de BO3, coups repris par « Reprendre » perdus (journal `W["ailog"]`). Banc humain : `spell_pre` change 9/14 coups marqués contre 6/24 témoins (IA actuelle : 6/14 contre 9/24) ; restent les unités [Ambush] jouées trop tôt et les placements. Détail : `docs/memoire/ia-banc-erreurs.md`.
 
+## [2026-10-28] decision | Table : unités Ambush gardées et réaction sans préférence (non-infériorité)
+Demande de l'utilisateur (« corriger les Ambush », test de non-infériorité). `ai` : `ambush` (politique et feuille) et `tie_react` ; `mesure/sprt.py` accepte `RB_SPRT_H0/H1`. Non-infériorité gardée deux fois (688 paires, 50,6 % ± 0,8 ; 1 448 paires neuves, 49,9 % ± 0,6). Allumé pour la table (`train.TABLE_CFG`), artefact republié. Positions marquées : Rengar gardé en base 3/3, Rengar + Punch First au combat 3/3, Vi inchangé. Détail : `docs/memoire/ia-banc-erreurs.md`.
+

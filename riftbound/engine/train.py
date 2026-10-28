@@ -230,6 +230,17 @@ def _deck(x, default):
 # les autres décisions (réactions, focus, cibles), pour ne pas faire attendre un petit choix. Équivaut à
 # exp_search « turn@n=6,turn_w=6,react_n=3 ».
 LEVEL_CFG = {6: dict(turn_w=6, react_n=3)}
+# Tous les niveaux de la table (sauf le tutoriel), 2026-10-28, demande de l'utilisateur (« corriger les Ambush », mesuré
+# par un test de non-infériorité) : unités [Ambush] gardées pour la réaction (ai.POL_AMBUSH, 0,5) et réaction sans
+# préférence suivant la politique (ai.TIE_REACT). Tests séquentiels « ne fait pas perdre » (H0 48,5 %, H1 50 %, sh,
+# decks variés) : gardé après 688 paires (5300000+, 50,6 % ± 0,8), confirmé après 1 448 paires (5400000+, 49,9 % ± 0,6).
+# Pas de gain de victoires démontré : c'est un réglage de comportement (erreurs marquées par l'utilisateur).
+TABLE_CFG = dict(ambush=0.5, tie_react=1)
+
+
+def table_cfg(level):
+    """Réglages de l'IA de la table au niveau level (≥ 1) : TABLE_CFG puis LEVEL_CFG."""
+    return dict(TABLE_CFG, **LEVEL_CFG.get(int(level), {}))
 
 
 def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
@@ -255,7 +266,7 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     # réglages en plus dans LEVEL_CFG.
     ai = (Gentle(seed + 500000, plan=pl, opp_plan=pa, samples=1, search="sh") if int(level) == 0 else
           P.PlanAgent(seed + 500000, plan=pl, opp_plan=pa, samples=int(level), search="turn",
-                      cfg=dict(LEVEL_CFG.get(int(level), {}))))
+                      cfg=table_cfg(level)))
     coach = P.PlanAgent(seed + 900000, plan=_plan_for(MD), opp_plan=_plan_for(OD))
     g = TGame([A, B], [hu, ai], seed=seed, first=f)
     W.clear()

@@ -112,6 +112,24 @@ script de l'IA d'une manche de BO3 était écrasé par celui de la manche suivan
 - Limite de la marque : elle vise le dernier vrai choix de l'IA ; une remarque sur un coup plus ancien (Rengar en base,
   marqué sur Sabotage) tombe sur le mauvais coup.
 
+**Essai 3 : unités [Ambush] et réaction sans préférence** (2026-10-28, « corriger les Ambush », mesure demandée :
+« sur mes marques et par un test de non-infériorité ») — **allumé pour la table** (`train.TABLE_CFG`, tous niveaux sauf
+le tutoriel ; coupé par défaut ailleurs : `RB_AMBUSH`, `RB_TIE_REACT`).
+- `ambush = f` : la politique de simulation garde une unité [Ambush] tant qu'elle peut servir (unité sur un
+  battlefield ; Rengar, Trophy Hunter : battlefield avec ennemis), et la feuille la compte pour f × sa valeur posée
+  (`amb_hold`, hors de `ai.EV`). La politique seule ne changeait aucun coup marqué. f = 0,5.
+- `tie_react` : réaction dont toutes les options ont la même note → la politique (`react_best`). Cause trouvée au
+  « suicide du Rengar » : la recherche du tour avait prévu Rengar + Punch First (11 contre 9) puis Emperor's Dais pour
+  gagner ; au combat, la recherche de la réaction notait tout −9550 (sa politique n'attaque pas un 5 contre 5) et
+  passait.
+- Positions marquées (IA de la table, Très fort, 3 tirages chacune) : Rengar en base T5 gardé 3/3 (avant 1/3) ;
+  combat de Rengar T17 : Punch First 3/3 (avant 0/3) ; Vi, Peacekeeper T5 : inchangé 0/3.
+- Non-infériorité (`RB_SPRT_H0=0.485 RB_SPRT_H1=0.50 mesure/sprt.py`, `sh@ambush=0.5,tie_react=1` contre `sh`, decks
+  variés) : gardé après 688 paires (5300000-5300687, 50,6 % ± 0,8), confirmé après 1 448 paires (5400000-5401447,
+  49,9 % ± 0,6). Mesuré en `sh`, pas en `turn` (table) ; pas de gain de victoires démontré. Temps par décision non mesuré.
+- Reste à faire : Vi posée pendant son showdown (garde Windswept Hillock, la recherche y voit les points de tenue) ;
+  la politique de simulation n'attaque pas quand l'égalité de Might gagne la partie.
+
 **Pistes** (non faites, chacune à mesurer sur ce banc puis par la règle 9) : asks par simulation courte (le juge lui-même, au lieu de options[0]) ; politique de simulation
 qui vise avec une note immédiate ; chaque réglage gardé seulement par la règle 9 ([[ia-sprt]]).
 
