@@ -80,6 +80,15 @@
     // ---------------------------------------------------------------- conseil, défausse, dessus connu
     ["Conseil de l'IA", "AI hint"], ["Calcul…", "Thinking…"], ["Conseil impossible : ${}", "Hint impossible: ${}"],
     ["Rien à conseiller ici.", "Nothing to suggest here."],
+    // ---------------------------------------------------------------- erreur de l'IA marquée par le joueur (2026-10-28)
+    ["⚑ Erreur de l'IA", "⚑ AI mistake"], ["Erreur de l'IA", "AI mistake"],
+    ["Marque le dernier coup de l'IA comme une erreur, pour améliorer l'IA", "Mark the AI's last move as a mistake, to improve the AI"],
+    ["Mauvaise cible", "Wrong target"], ["Mauvais moment", "Wrong timing"], ["Coup inutile", "Useless move"], ["Autre erreur", "Other mistake"],
+    ["Le coup est gardé avec la partie, pour tester l'IA corrigée sur cette position.", "The move is saved with the game, to test the fixed AI on this position."],
+    ["Marque impossible : ${}", "Cannot mark: ${}"], ["Pas de coup de l'IA à marquer", "No AI move to mark"],
+    ["Ce coup est déjà marqué", "This move is already marked"], ["Coup de l'IA marqué ✓", "AI move marked ✓"],
+    ["Quelle erreur ? (ex. il devait attaquer)", "What mistake? (e.g. it should have attacked)"], ["Quelle erreur ?", "What mistake?"],
+    ["Écris quelle erreur", "Write what the mistake is"],
     ["Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit. Touche une ligne pour la jouer.",
      "Simulation over 2 turns. Gap to the best move; 7 is worth about one point, under 2 it's noise. Tap a line to play it."],
     ["Reprise impossible : ${}", "Undo impossible: ${}"],

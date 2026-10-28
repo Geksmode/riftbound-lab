@@ -175,6 +175,9 @@ body.replay #boardHelp { display: none; }
 .zoom { z-index: 70; pointer-events: none; }
 .hpop { min-width: 260px; max-width: 340px; border-color: var(--brass); }
 .hpop .hintrow { text-align: left; }
+.flnote { display: flex; gap: 6px; } .flnote[hidden] { display: none; }
+.flnote input { flex: 1; min-width: 0; font: inherit; font-size: 13px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--brass); background: rgba(0,0,0,.25); color: inherit; }
+.flnote button { min-height: 36px; padding: 4px 10px; }
 @media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
   .boardgrid { grid-template-columns: minmax(0, 1fr); min-width: 0; }
   .track { display: none; }
@@ -678,6 +681,8 @@ body.dkopen { overflow: hidden; }
   .main > .ctrlcol .endbtn { flex: 1 1 auto; min-height: 44px; }
   .main > .ctrlcol .ctrlrow { flex: none; }
   .main > .ctrlcol .ctrlrow button { min-height: 44px; padding: 6px 10px; }
+  .main > .ctrlcol #bFlag { padding: 6px 12px; }
+  .main > .ctrlcol #bFlag .flt { display: none; }   /* barre du téléphone : le drapeau seul (titre et aria-label gardés) */
   .main > .ctrlcol .stackcol { position: fixed; left: 8px; right: 8px; top: 92px; bottom: auto; margin: 0; max-height: 30vh; overflow-y: auto;
     flex-direction: column; flex-wrap: nowrap; background: rgba(21,26,62,.96) !important; }
   /* Rangées qui ne défilent jamais : les cartes se resserrent (chevauchement) selon leur nombre --n et la largeur
@@ -760,6 +765,7 @@ body.dkopen { overflow: hidden; }
         <div class="turninfo" id="turnInfo"></div>
         <button class="endbtn" id="bMain" disabled>…</button>
         <div class="ctrlrow"><button id="bHint" disabled title="Ce que jouerait l'IA à ta place">Conseil</button><button id="bUndo" disabled title="Annule ton dernier coup">↶ Reprendre</button></div>
+        <div class="ctrlrow"><button id="bFlag" disabled title="Marque le dernier coup de l'IA comme une erreur, pour améliorer l'IA" aria-label="Erreur de l'IA">⚑<span class="flt"> Erreur de l'IA</span></button></div>
         <div class="stackcol" id="stack" aria-label="Chaîne en cours"></div>
       </div>
     </div></div>
@@ -774,6 +780,7 @@ body.dkopen { overflow: hidden; }
 <div class="zoom" id="zoom" hidden></div>
 <div class="pop" id="pop" hidden></div>
 <div class="pop hpop" id="hpop" hidden></div>
+<div class="pop hpop" id="fpop" hidden></div>
 <div class="pop sonpop" id="sonPop" hidden></div>
 <div class="prompt" id="fbar" hidden></div>
 <div class="toast" id="aiLine" aria-live="polite" hidden></div>
@@ -1393,7 +1400,7 @@ function toast(msg, cls = "") {
 }
 
 function show(v) {
-  if (v !== V) { sfxView(V, v); addLog(v.log || []); if (v.ai) toast(PN[OPP()] + " " + v.ai, "opp"); if (v.aii) lastAI = v.aii; }
+  if (v !== V) { sfxView(V, v); addLog(v.log || []); if (v.ai) { toast(PN[OPP()] + " " + v.ai, "opp"); lastAIlab = v.ai; } if (v.aii) lastAI = v.aii; }
   if (!v.dec && !v.ask) { mode = null; sel = null; }
   if (v.ask && !(mode && mode.type === "ask" && V && V.ask === v.ask)) {
     mode = { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
@@ -1428,7 +1435,9 @@ const BUILD = /*BUILD*/{ commit: null, engine: null };
 let REC = null, recT = 0, DBP = null;
 function dbh() { if (!DBP) DBP = (window.claude && claude.use ? claude.use("db") : Promise.resolve(null)).catch(() => null); return DBP; }
 function chip(txt, cls) { const c = $("saveChip"); c.hidden = !txt; c.textContent = txt || ""; c.className = "savechip " + (cls || ""); }
+let lastAIlab = null;   // dernier coup de l'IA (texte), gardé jusqu'au suivant : c'est lui que « Erreur de l'IA » marque
 function recStart(meta, bf, first, lvl, mine, opp) {
+  lastAIlab = null;
   REC = { id: Date.now().toString(36) + "-" + meta.seed, ver: PAGE_VER, seed: meta.seed, bf: bf || null, first: first === "" ? null : +first,
     mine: mine || null, opp: opp || null, names: meta.names,
     level: +lvl, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null,
@@ -1436,13 +1445,20 @@ function recStart(meta, bf, first, lvl, mine, opp) {
   chip("");
 }
 function recMove(m) { if (!REC) return; REC.moves.push(m); recSave(false); }
-function recSave(now) {
+// Coups de l'IA (2026-10-28, champ « ai » : train.ai_script) : rejeu fidèle même après un changement de l'IA, et position
+// exacte des coups marqués « Erreur de l'IA ». fresh = false (page qui se ferme) : pas d'appel au moteur, dernier script connu.
+function recSave(now, fresh = true) {
   if (!REC) return;
   clearTimeout(recT);
   if (!now) { recT = setTimeout(() => recSave(true), 2500); return; }
   const rec = REC;   // la partie visée est figée ici : un enregistrement tardif ne doit pas atterrir sous l'id de la partie suivante
   const body = { ...REC, updated: new Date().toISOString(), turn: V ? V.st.t : 0, pts: V ? V.st.pts : [0, 0],
     log: LOG.map(([ind, t]) => (ind ? "  " : "") + t).slice(-2500) };
+  if (!fresh || !T || DU || RP) return recWrite(rec, body);
+  J(T.ai_script()).then(ai => { if (REC === rec && Array.isArray(ai)) { rec.ai = ai; body.ai = ai; } }, () => {})
+    .then(() => recWrite(rec, body));
+}
+function recWrite(rec, body) {
   dbh().then(db => {
     if (!db) { chip(localSave(body) ? "Partie gardée dans ce navigateur" : "Partie non enregistrée", localSave.ok ? "ok" : "off"); return; }
     return db.collection("games").doc(rec.id).set(body).then(() => REC === rec && chip(rec.result ? "Partie enregistrée ✓" : "Enregistrement ✓", "ok"))
@@ -1475,7 +1491,7 @@ function recFinish(v) {
   REC.result = { winner: v.winner, pts: v.st.pts, turn: v.st.t };
   recSave(true);
 }
-addEventListener("pagehide", () => { if (REC && recT) recSave(true); });
+addEventListener("pagehide", () => { if (REC && recT) recSave(true, false); });
 
 // Rune Pool (règle 429) : énergie et puissance gagnées mais pas encore dépensées. Typiquement : une rune prête épuisée
 // pour 1 énergie juste avant d'être recyclée pour sa puissance (Punch First en début de tour) ; l'énergie reste jusqu'à la fin du tour.
@@ -1496,7 +1512,9 @@ const KIND = { main: "phase principale", priority: "réaction", focus: "showdown
 // Colonne de droite du plateau : état du tour, gros bouton (fin de tour / passer), conseil, reprendre.
 function renderCtrl(v) {
   const M = $("bMain"), I = $("turnInfo");
-  $("hpop").hidden = true;
+  $("hpop").hidden = true; $("fpop").hidden = true;
+  $("bFlag").hidden = !!DU || !!RP;   // pas d'IA en duel ; en replay, rien à enregistrer
+  $("bFlag").disabled = working || !REC || !lastAIlab;
   if (RP) return rpCtrl(v);
   $("bUndo").disabled = working || !(DU ? duelUndoIdx() >= 0 : v.undo);
   $("bHint").disabled = working || !v.dec;
@@ -1564,14 +1582,55 @@ $("bHint").onclick = async e => {
     `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit. Touche une ligne pour la jouer.</div>`;
   placeHint();
 };
-function placeHint() {
-  const P = $("hpop"), r = $("bHint").getBoundingClientRect(), w = P.offsetWidth, h = P.offsetHeight;
+function placeHint(P = $("hpop"), btn = $("bHint")) {
+  const r = btn.getBoundingClientRect(), w = P.offsetWidth, h = P.offsetHeight;
   let x = r.left - w - 10; if (x < 8) x = Math.max(8, Math.min(innerWidth - w - 8, r.left));
   let y = Math.max(8, Math.min(innerHeight - h - 8, r.top - 20));
   if (x === r.left || innerWidth <= 820) y = Math.max(8, r.top - h - 10);
   P.style.left = x + "px"; P.style.top = y + "px";
 }
 $("hpop").addEventListener("click", e => { e.stopPropagation(); const b = e.target.closest("[data-i]"); if (b) { $("hpop").hidden = true; choose(+b.dataset.i); } });
+
+// « Erreur de l'IA » (2026-10-28) : le joueur marque le dernier coup de l'IA, avec une raison courte. La marque
+// ["flag", raison, tour, indice du coup dans le script de l'IA, texte du coup, précision] va dans la partie ;
+// engine/banc/humain.py rejoue ces positions pour vérifier qu'une IA corrigée y joue autre chose. « Autre erreur » demande
+// une précision écrite (demande de l'utilisateur : sinon on ne sait pas quelle erreur c'est).
+const FLAGS = [["cible", "Mauvaise cible"], ["moment", "Mauvais moment"], ["inutile", "Coup inutile"], ["autre", "Autre erreur"]];
+let flagNow = null;   // coup que la bulle « Erreur de l'IA » va marquer (train.flag : dernier vrai choix de l'IA)
+$("bFlag").onclick = async e => {
+  e.stopPropagation();
+  const P = $("fpop");
+  if (!P.hidden) { P.hidden = true; return; }
+  $("hpop").hidden = true;
+  const rec = REC;
+  try { flagNow = await J(T.flag()); } catch (err) { console.error(err); toast("Marque impossible : " + errTxt(err), "flash"); return; }
+  if (REC !== rec) return;
+  if (flagNow.step === null || flagNow.step === undefined) { toast("Pas de coup de l'IA à marquer", "flash"); return; }
+  P.innerHTML = `<div class="pt">Erreur de l'IA</div><div class="small">${esc(PN[OPP()] + " " + (flagNow.label || ""))}</div>` +
+    FLAGS.map(([k, t]) => `<button class="hintrow" data-f="${k}"><span>${t}</span></button>`).join("") +
+    `<div class="flnote" hidden><input id="flNote" maxlength="200" placeholder="Quelle erreur ? (ex. il devait attaquer)" aria-label="Quelle erreur ?"><button id="flOk" data-fok="1">Valider</button></div>` +
+    `<div class="small" style="color:var(--ink-3)">Le coup est gardé avec la partie, pour tester l'IA corrigée sur cette position.</div>`;
+  P.hidden = false; placeHint(P, $("bFlag"));
+};
+$("fpop").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "flNote") { e.preventDefault(); $("flOk").click(); } });
+$("fpop").addEventListener("click", async e => {
+  e.stopPropagation();
+  if (e.target.closest("[data-f=autre]")) {           // « Autre erreur » : la précision d'abord
+    const nb = $("fpop").querySelector(".flnote"); nb.hidden = false; $("flNote").focus(); placeHint($("fpop"), $("bFlag")); return;
+  }
+  const ok = e.target.closest("[data-fok]");
+  const b = ok ? { dataset: { f: "autre" } } : e.target.closest("[data-f]");
+  if (!b || !REC) return;
+  const note = ok ? $("flNote").value.trim() : "";
+  if (ok && !note) { $("flNote").focus(); toast("Écris quelle erreur", "flash"); return; }
+  $("fpop").hidden = true;
+  const f = flagNow, lab = f && f.label;
+  if (!f || f.step === null || f.step === undefined) return;
+  if ((REC.moves || []).some(m => m[0] === "flag" && m[3] === f.step)) { toast("Ce coup est déjà marqué", "flash"); return; }
+  recMove(["flag", b.dataset.f, V ? V.st.t : 0, f.step, lab, note]);
+  SFX.play("click"); toast("Coup de l'IA marqué ✓", "flash");
+  renderCtrl(V);
+});
 
 async function answer(x) {
   if (working) return;
@@ -2150,7 +2209,7 @@ function setBaseOpen(pid) {
 }
 document.addEventListener("click", e => {
   if (noClick) { noClick = false; return; }
-  if (MOBILE.matches && !e.target.closest("#pop, #fbar, #zoom, #hpop, #modal")) {
+  if (MOBILE.matches && !e.target.closest("#pop, #fbar, #zoom, #hpop, #fpop, #modal")) {
     const inHand = e.target.closest("#board .half.p0 .hand");
     if (inHand && !HANDOPEN && handDense()) { setBaseOpen(null); setHandOpen(true); Z.hidden = true; return; }
     if (!inHand && HANDOPEN && !(mode && mode.type === "target")) setHandOpen(false);
@@ -2159,8 +2218,9 @@ document.addEventListener("click", e => {
     if (inBase && baseDense(inBase)) { setBaseOpen(+inBase.dataset.bz); Z.hidden = true; return; }
     if (!inBase && BASEOPEN !== null && !(mode && ["target", "move", "ask"].includes(mode.type))) setBaseOpen(null);
   }
-  if (e.target.closest("#pop, #fbar, #zoom, #hpop")) return;
+  if (e.target.closest("#pop, #fbar, #zoom, #hpop, #fpop")) return;
   if (!$("hpop").hidden && !e.target.closest("#bHint")) $("hpop").hidden = true;
+  if (!$("fpop").hidden && !e.target.closest("#bFlag")) $("fpop").hidden = true;
   const el = e.target.closest("[data-card]");
   if (e.target.closest("#modal")) { if (el && el.dataset.card) showZoom(el); else Z.hidden = true; return; }
   const tr = e.target.closest("#board [data-trash]");
@@ -2350,14 +2410,14 @@ document.addEventListener("pointerover", e => {
 });
 document.addEventListener("pointerdown", e => { const it = chainItem(e); if (it) setChainFocus(+it.dataset.ch); }, true);
 document.addEventListener("click", e => { const it = chainItem(e); if (it) setChainFocus(+it.dataset.ch); }, true);
-const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(() => { drawArrows(); placeFloat(); if (!$("pop").hidden) placePop(); if (!$("hpop").hidden) placeHint(); }); };
+const redraw = () => { cancelAnimationFrame(rafA); rafA = requestAnimationFrame(() => { drawArrows(); placeFloat(); if (!$("pop").hidden) placePop(); if (!$("hpop").hidden) placeHint(); if (!$("fpop").hidden) placeHint($("fpop"), $("bFlag")); }); };
 addEventListener("scroll", redraw, { passive: true }); addEventListener("resize", redraw);
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-trash]")) return openTrash(+e.target.dataset.trash);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-ban]")) return openBanish(+e.target.dataset.ban);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
-  if (e.key === "Escape") { $("hpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } }
+  if (e.key === "Escape") { $("hpop").hidden = true; $("fpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } }
   // Retour arrière = « ↶ Reprendre » (sauf dans un champ de saisie, une fenêtre, le menu ou le journal)
   if (e.key === "Backspace" && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
     const t = e.target;
@@ -3645,7 +3705,7 @@ $("gtuto").onclick = () => { if (!TUTO) return; TUTO.open = !TUTO.open; if (!TUT
 let READY = false, ENGERR = "", MENUV = "main";
 const fmtDate = iso => { try { return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
 function showMenu(view) {
-  $("hpop").hidden = true; $("pop").hidden = true; toast("");
+  $("hpop").hidden = true; $("fpop").hidden = true; $("pop").hidden = true; toast("");
   $("deckView").hidden = true;
   $("menu").hidden = false; document.body.classList.add("dkopen"); menuRender(view || "main");
 }

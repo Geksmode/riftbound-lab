@@ -60,13 +60,103 @@ class Human:
         return options[s._next(kind, options, ctx, pid)]
 
 
+_BAD = object()
+
+
+def _enc(ans, options):
+    """Réponse à un ask, codée pour être rejouée : ["i", indice], ["s", indices, tuple?] ou ["v", valeur] ; None sinon."""
+    for i, o in enumerate(options):
+        if o is ans:
+            return ["i", i]
+    for i, o in enumerate(options):
+        try:
+            if type(o) is type(ans) and o == ans:
+                return ["i", i]
+        except Exception:                               # noqa: BLE001
+            pass
+    if isinstance(ans, (list, tuple)) and all(any(x is o for o in options) for x in ans):
+        return ["s", [next(i for i, o in enumerate(options) if o is x) for x in ans], isinstance(ans, tuple)]
+    if ans is None or isinstance(ans, (bool, int, float, str)):
+        return ["v", ans]
+    return None
+
+
+def _dec(e, options):
+    if e is None:
+        return _BAD
+    if e[0] == "i":
+        return options[e[1]] if e[1] < len(options) else _BAD
+    if e[0] == "s":
+        if any(i >= len(options) for i in e[1]):
+            return _BAD
+        out = [options[i] for i in e[1]]
+        return tuple(out) if e[2] else out
+    return e[1]
+
+
+class AIDesync(Exception):
+    pass
+
+
+class ScriptAI:
+    """L'IA rejoue les coups enregistrés d'une partie (TGame.aiscript, enregistré par la table depuis le 2026-10-28) :
+    le rejeu reste fidèle même si le code de l'IA a changé depuis. La prochaine entrée est toujours la n-ième, n = longueur
+    de l'enregistrement en cours (qui suit l'état : « Reprendre » le remet à sa place). Au-delà du script : l'IA elle-même.
+    capture : indices des décisions à copier au passage (banc des erreurs marquées, banc/humain.py), rangées dans
+    W["caught"] (hors de l'état : les agents sont recopiés à chaque coup par _save / _restore)."""
+
+    def __init__(s, ag, script, capture=()):
+        s.ag, s.script, s.capture = ag, script, set(capture)
+
+    def __getattr__(s, k):
+        if k.startswith("__") or k == "ag":            # copie (deepcopy) d'un objet pas encore rempli
+            raise AttributeError(k)
+        return getattr(s.ag, k)
+
+    def _e(s, g, typ, kind, n):
+        i = len(g.aiscript)
+        if i >= len(s.script):
+            return None
+        e = s.script[i]
+        if e[0] != typ or e[2] != kind or e[3] != n:
+            raise AIDesync(f"coup {i} de l'IA : attendu {e[:1] + e[2:]}, vu {[typ, kind, n]}")
+        return e
+
+    def decide(s, g, d):
+        e = s._e(g, "d", d.kind, len(d.options))
+        if e is None:
+            return s.ag.decide(g, d)
+        i = len(g.aiscript)
+        caught = W.setdefault("caught", {})
+        if i in s.capture and i not in caught:
+            caught[i] = (g.clone(), Obj._n, Item._n, d)
+        return d.options[e[1]]
+
+    def choose(s, g, pid, kind, options, ctx):
+        e = s._e(g, "a", kind, len(options))
+        r = _BAD if e is None else _dec(e[1], options)
+        return s.ag.choose(g, pid, kind, options, ctx) if r is _BAD else r
+
+
 class TGame(Game):
-    """Journal dans la langue de la table (lang) ; les pioches de l'humain sont notées, celles de l'IA restent cachées."""
+    """Journal dans la langue de la table (lang) ; les pioches de l'humain sont notées, celles de l'IA restent cachées.
+    aiscript (2026-10-28) : chaque décision de l'IA (["d", indice, type, n]) et chaque réponse de l'IA à un ask
+    (["a", codage, type, n]), dans l'ordre ; la page l'enregistre avec la partie (champ « ai ») pour rejouer fidèlement
+    et pour les erreurs marquées par le joueur (flag). last_ai_step, last_ai_label : indice et texte du dernier vrai choix
+    de l'IA (au moins deux options, autre que passer)."""
 
     def __init__(s, *a, **k):
         s.buf = []
+        s.aiscript = []
+        s.last_ai_step = s.last_ai_label = None
         k["log"] = True
         super().__init__(*a, **k)
+
+    def ask(s, pid, kind, options, **ctx):
+        r = super().ask(pid, kind, options, **ctx)
+        if pid == AI and not DUEL and options and not (len(options) == 1 and kind not in ("may", "may_target", "order")):
+            s.aiscript.append(["a", _enc(r, options), kind, len(options)])
+        return r
 
     def log(s, *a):
         if not s.logging:
@@ -92,10 +182,11 @@ class TGame(Game):
 
     def clone(s):
         b, s.buf = s.buf, []
+        sc, s.aiscript = s.aiscript, []                 # pas copié dans les copies de la recherche de l'IA
         try:
             return super().clone()
         finally:
-            s.buf = b
+            s.buf, s.aiscript = b, sc
 
 
 W = {}
@@ -603,10 +694,36 @@ def _tick():
         return
     if d.player == AI and not DUEL:
         a = W["ag"][AI].decide(g, d)
+        g.aiscript.append(["d", d.options.index(a), d.kind, len(d.options)])
         W["last_ai"] = _opp_describe(g, a, AI) if a[0] not in ("pass",) else None
+        if a[0] != "pass" and len(d.options) > 1:      # un vrai choix de l'IA : c'est lui que « Erreur de l'IA » marque
+            g.last_ai_step, g.last_ai_label = len(g.aiscript) - 1, W["last_ai"]
         W["last_ai_info"] = _opp_info(g, a) if a[0] not in ("pass", "end") else None
         g.apply(a)
         W["d"] = None
+
+
+def ai_script():
+    """Coups de l'IA depuis le début de la partie (TGame.aiscript), pour l'enregistrement de la page."""
+    g = W.get("g")
+    return json.dumps(g.aiscript if g is not None else [])
+
+
+def flag():
+    """Dernier vrai choix de l'IA (celui que le joueur peut marquer comme une erreur) : indice dans aiscript et texte, None
+    s'il n'y en a pas."""
+    g = W.get("g")
+    return json.dumps(dict(step=getattr(g, "last_ai_step", None), label=getattr(g, "last_ai_label", None),
+                           n=len(getattr(g, "aiscript", []))), ensure_ascii=False)
+
+
+def ai_replay(script, capture=()):
+    """Après new() : l'IA suit les coups enregistrés (ScriptAI) au lieu de les recalculer."""
+    sc = json.loads(script) if isinstance(script, str) else script
+    W["caught"] = {}
+    W["ag"][AI] = ScriptAI(W["ag"][AI], sc, capture)
+    W["g"].agents = W["ag"]
+    return W["ag"][AI]
 
 
 def _opp_describe(g, a, pid):
@@ -708,6 +825,8 @@ def replay_load(game_json):
     prev = _save() if W.get("g") is not None else None
     base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
     meta = json.loads(new(*base, game.get("mine"), game.get("opp"), game.get("obf")))
+    if game.get("ai"):
+        ai_replay(game["ai"])                           # coups de l'IA enregistrés : fidèle même si l'IA a changé
     frames, svs, logs, mine, out = [], {}, [], [], dict(desync=None)
 
     def push(v, lab, who):
@@ -728,7 +847,7 @@ def replay_load(game_json):
     v = drain(json.loads(step()), tr("Début de la partie", "Start of the game"), "jeu")
     for m in game.get("moves") or []:
         k = m[0]
-        if k == "hint":
+        if k in ("hint", "flag"):
             continue
         if k == "undo":
             v = drain(json.loads(undo()), tr("Tu reprends ton dernier coup", "You take back your last move"), "moi")

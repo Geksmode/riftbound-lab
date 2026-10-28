@@ -30,6 +30,30 @@ SH_EXTRA = float(os.environ.get("RB_SH_EXTRA", "1.0"))
 # Mode "turn" : ne retenir que des suites complètes (voir turn_search). RB_TURN_FULL=0 rend l'ancien choix.
 TURN_FULL = os.environ.get("RB_TURN_FULL", "1") != "0"
 
+# Choix pendant la résolution par simulation courte (2026-10-28, banc d'erreurs docs/memoire/ia-banc-erreurs.md : les
+# choix de Game.ask suivent des règles fixes, souvent options[0] ; Irresistible Faefolk tirait toujours une grosse unité
+# adverse, Promising Future prenait la première carte). Avec ask_sim, SearchAgent.choose rejoue le coup en cours depuis
+# le point de reprise de la partie réelle (Game.checkpoint) avec chaque option à la place de la règle, dans un monde où
+# la main et les cartes cachées adverses sont retirées au hasard (determinize ; son propre deck garde son ordre, voir
+# ask_sim), les deux joueurs passent jusqu'au prochain « main », et garde la meilleure note (value) ; égalité : la règle.
+# Banc : erreurs de résolution 40 -> 8 sur les mêmes positions. Règle 9 : REJETÉ le 2026-10-28 (sh@ask_sim=1 contre sh,
+# decks variés, 648 paires, graines 5100000-5100647 : 49,3 % ± 1,1). Désactivé par défaut ; RB_ASK_SIM=1 ou cfg ask_sim=1.
+ASK_SIM = os.environ.get("RB_ASK_SIM", "0") != "0"
+ASK_SIM_MAX = 12
+ASK_SIM_SKIP = frozenset(("pay_gold", "recycle_rune"))      # paiements : pas des cibles (rune contre Gold : ia-texel)
+
+# Cibles et timing des sorts (2026-10-28, banc d'erreurs : 31 erreurs de cible sur 518, la bonne cible était dans la
+# liste 30 fois ; rejouée, l'IA change de coup 42 % du temps : bruit de la recherche à 1 tirage). Avec spell_pre, avant
+# la recherche, chaque variante d'un même sort (autre cible, Repeat…) est résolue sur une copie (un monde tiré, les deux
+# joueurs passent jusqu'au « main ») ; on garde la meilleure pour EV et la meilleure pour EV_OLD (une ou deux) : la
+# recherche ne choisit plus que s'il faut jouer le sort, plus sa cible. En showdown (combat compris dans la résolution),
+# un sort sans effet (≤ SPELL_NOEFF pour les deux poids, contre le même sort contré) est retiré.
+# Banc : erreurs de cible 19 -> 0 sur les mêmes positions (IA rejouée). Règle 9 : ON NE SAIT PAS le 2026-10-28
+# (sh@spell_pre=1 contre sh, decks variés, 1 600 paires, graines 5200000-5201599 : 50,8 % ± 0,7). Désactivé par défaut ;
+# RB_SPELL_PRE=1 ou cfg spell_pre=1.
+SPELL_PRE = os.environ.get("RB_SPELL_PRE", "0") != "0"
+SPELL_NOEFF = 0.25
+
 DK_FODDER = {"Soaring Scout", "Honest Broker", "Watchful Sentry", "Black Rose Dignitary", "LeBlanc, Fragmented",
              "Lonely Poro", "Scuttle Crab"}
 
@@ -335,6 +359,127 @@ def determinize(g, me, rng):
     rng.shuffle(g.p[me].deck)
 
 
+class _AskReplay(Heuristics):
+    """Rejeu d'ask_sim : les asks d'avant le j-ième comme dans la partie réelle (Game._asklog), le j-ième sur `alt`,
+    ceux d'après par les règles (Heuristics). seen = signature (opt_sig) du j-ième, pour vérifier que le rejeu retombe
+    sur les mêmes options (une main adverse révélée par l'effet, Sabotage, est retirée au hasard par determinize)."""
+
+    def __init__(s, log, j, alt):
+        s.log, s.j, s.alt, s.k, s.seen = log, j, alt, 0, None
+
+    def choose(s, g, pid, kind, options, ctx):
+        k, s.k = s.k, s.k + 1
+        if k == s.j:
+            s.seen = opt_sig(kind, options)
+            return options[s.alt]
+        if k < len(s.log):
+            kd, n, i, v = s.log[k]
+            if kd == kind and n == len(options):
+                if i is not None:
+                    return options[i]
+                if v is not None:
+                    return v[0]
+        return Heuristics.choose(s, g, pid, kind, options, ctx)
+
+
+def keep_played(c, opp, a):
+    """Le coup rejoué par ask_sim est une carte jouée (ou cachée) par l'adversaire depuis sa main : elle est publique,
+    determinize ne doit pas l'avoir renvoyée dans son deck. On la remet en main à la place d'une carte tirée."""
+    if a[0] not in ("play", "hide"):
+        return
+    po = c.p[opp]
+    if any(x.uid == a[1] for x in po.hand):
+        return
+    card = next((x for x in po.deck if x.uid == a[1]), None)
+    if card is None or not po.hand:
+        return
+    i = po.deck.index(card)
+    out = po.hand.pop()
+    po.deck[i], out.zone = out, "deck"
+    card.zone = "hand"
+    po.hand.append(card)
+
+
+def opt_sig(kind, options):
+    return (kind,) + tuple(getattr(o, "uid", None) if hasattr(o, "uid") else repr(o) for o in options)
+
+
+def _imm(g, me, a, cnt, seed, determ, ev, fizzle=False):
+    """(note EV, note EV_OLD) de me après le coup a résolu, les deux joueurs passant (spell_prefilter) ; fizzle : le sort
+    est contré sans effet (mêmes coûts). None si le coup ne se joue pas dans ce monde."""
+    Obj._n, Item._n = cnt
+    c = g.clone()
+    if determ:
+        determinize(c, me, random.Random(seed))
+        c.rng = random.Random(seed * 2 + 1)
+    h = Heuristics()
+    c.agents = [h, h]
+    try:
+        c.apply(a)
+        if fizzle:
+            it = next((x for x in c.chain if x.kind == "spell" and x.card is not None and x.card.uid == a[1]), None)
+            if it is None:
+                return None
+            c.chain.remove(it)
+            c.card_leaves_chain(it.card, "trash", it.ctrl)
+        settle_pass(c)
+    except Exception:                          # noqa: BLE001 — coup qui ne se rejoue pas dans ce monde
+        return None
+    if c.winner is not None:
+        v = 1e4 if c.winner == me else -1e4
+        return (v, v)
+    return (evaluate(c, me, ev), evaluate(c, me, EV_OLD))
+
+
+def spell_prefilter(g, me, opts, seed, determ=True, ev=None):
+    """Options de me sans les variantes de sort qu'une résolution immédiate juge moins bonnes (voir SPELL_PRE)."""
+    pol = PolicyAgent()
+    groups = {}
+    for a in opts:
+        if a[0] != "play":
+            continue
+        c = pol.card_of(g, a)
+        if c is not None and c.spec["type"] == "Spell":
+            groups.setdefault((a[1], a[2]), []).append(a)
+    showdown = g.sd is not None
+    if not groups:
+        return opts
+    ev = ev or EV
+    drop = set()
+    cnt = (Obj._n, Item._n)
+    try:
+        for vs in groups.values():
+            if len(vs) < 2 and not showdown:
+                continue
+            vals = [_imm(g, me, a, cnt, seed, determ, ev) for a in vs]
+            if any(v is None for v in vals):
+                continue
+            keep = {max(range(len(vs)), key=lambda i: (vals[i][0], -i)),
+                    max(range(len(vs)), key=lambda i: (vals[i][1], -i))}
+            if showdown:
+                useless = True
+                for k in keep:
+                    fz = _imm(g, me, vs[k], cnt, seed, determ, ev, fizzle=True)
+                    if fz is None or max(vals[k][0] - fz[0], vals[k][1] - fz[1]) > SPELL_NOEFF:
+                        useless = False
+                if useless:
+                    keep = set()
+            drop.update(repr(vs[i]) for i in range(len(vs)) if i not in keep)
+    finally:
+        Obj._n, Item._n = cnt
+    out = [a for a in opts if repr(a) not in drop]
+    return out or opts
+
+
+def settle_pass(c, max_steps=400):
+    """Les deux joueurs passent jusqu'à la prochaine décision « main » (chaîne résolue, combat du showdown compris)."""
+    for _ in range(max_steps):
+        d = c.advance()
+        if d is None or d.kind == "main":
+            return
+        c.apply(("pass",) if ("pass",) in d.options else d.options[0])
+
+
 def rollout(g, max_steps=300):
     fa = g.agents[0]
     for _ in range(max_steps):
@@ -360,6 +505,52 @@ class SearchAgent(Heuristics):
 
     def start(s, g):
         pass
+
+    def choose(s, g, pid, kind, options, ctx):
+        base = Heuristics.choose(s, g, pid, kind, options, ctx)
+        if s.cfg.get("ask_sim", ASK_SIM):
+            return s.ask_sim(g, pid, kind, options, base)
+        return base
+
+    def ask_sim(s, g, pid, kind, options, base):
+        """Meilleure option du choix en cours par simulation courte (voir ASK_SIM) ; `base` (la règle) si pas de point de
+        reprise, trop d'options, paiement, ou rejeu qui ne retombe pas sur ce choix. Un seul monde, le même pour toutes
+        les options. Limite : l'ordre de son propre deck est gardé (les cartes regardées pour ce choix, Predict ou
+        Promising Future, doivent rester les mêmes) : une pioche pendant la résolution est vue d'avance."""
+        ck, n = getattr(g, "_ckpt", None), len(options)
+        if ck is None or not g.checkpoint or n < 2 or n > ASK_SIM_MAX or kind in ASK_SIM_SKIP:
+            return base
+        hi = next((i for i, o in enumerate(options) if o is base), None)
+        if hi is None:
+            return base
+        pre, on, inn, a = ck
+        log, j, sig = list(g._asklog), len(g._asklog), opt_sig(kind, options)
+        w = s.rng.getrandbits(30)
+        n0, i0 = Obj._n, Item._n
+        vals = []
+        try:
+            for alt in range(n):
+                Obj._n, Item._n = on, inn
+                c = pre.clone()
+                own = {x.uid: k for k, x in enumerate(c.p[pid].deck)}
+                determinize(c, pid, random.Random(w))
+                c.p[pid].deck.sort(key=lambda x: own.get(x.uid, len(own)))
+                keep_played(c, 1 - pid, a)
+                c.rng = random.Random(w * 2 + 1)
+                f = _AskReplay(log, j, alt)
+                c.agents = [f, f]
+                try:
+                    c.apply(a)
+                    settle_pass(c)
+                except Exception:                  # noqa: BLE001 — monde simulé où le coup ne se rejoue pas : la règle
+                    return base
+                if f.seen != sig:
+                    return base
+                vals.append(s.value(c, pid) if c.winner is None else (1e4 if c.winner == pid else -1e4))
+        finally:
+            Obj._n, Item._n = n0, i0
+        b = max(range(n), key=lambda i: (vals[i], i == hi))
+        return options[b] if vals[b] > vals[hi] + 1e-9 else base
 
     def risky_attack(s, g, me, a):
         """Attacking a battlefield where the opponent has units and enough resources for an Ambush unit."""
@@ -413,6 +604,8 @@ class SearchAgent(Heuristics):
         if len(opts) == 1:
             return opts[0]
         me = d.player
+        if s.cfg.get("ask_sim", ASK_SIM):
+            g.checkpoint = True                 # point de reprise de la partie réelle pour ask_sim (Game.apply)
         base_now = None
         if s.search == "turn" and d.kind == "main" and not s.cfg.get("turn_replan"):
             tp = s.tplan                # on suit la suite choisie tant que son prochain coup est légal
@@ -420,6 +613,10 @@ class SearchAgent(Heuristics):
                 return tp[1].pop(0)
         if s.cfg.get("respect_ambush") and d.kind == "main":
             opts = [a for a in opts if not s.risky_attack(g, me, a)] or opts
+        if s.cfg.get("spell_pre", SPELL_PRE):
+            opts = spell_prefilter(g, me, opts, s.rng.getrandbits(30), ev=s.ev)
+            if len(opts) == 1:
+                return opts[0]
         if len(opts) > s.max_cands:
             opts = opts[:1] + s.rng.sample(opts[1:], s.max_cands - 1)
         if s.cfg.get("react_n") and d.kind != "main":
@@ -592,6 +789,9 @@ class SearchAgent(Heuristics):
             kids = []
             for nd in beam:
                 acts = nd["options"]
+                if lvl and s.cfg.get("spell_pre", SPELL_PRE):
+                    # coups suivants de la suite : même pré-sélection, dans le premier monde du nœud (déjà tiré)
+                    acts = spell_prefilter(nd["states"][0], me, acts, 0, determ=False, ev=s.ev)
                 if lvl:
                     acts = acts[:s.max_cands]
                 for a in acts:
