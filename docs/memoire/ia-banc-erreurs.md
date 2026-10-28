@@ -98,6 +98,20 @@ bouton ») : les erreurs que **le joueur** marque sur la table remplacent la not
 réglage qui corrige des erreurs marquées s'il est démontré qu'il ne fait pas perdre : test de non-infériorité) proposée,
 pas encore décidée par l'utilisateur.
 
+**Premières parties marquées** (2026-10-28, artefact, niveau Très fort, 7 parties Akali contre LeBlanc et Master Yi,
+14 erreurs marquées, toutes dans `riftbound/train/games/games/mvs*.json`). Deux bugs trouvés et corrigés en route : le
+script de l'IA d'une manche de BO3 était écrasé par celui de la manche suivante (6 parties sur 7 sans coups de l'IA) ;
+« Reprendre » effaçait des coups de l'IA que le rejeu rejoue (3 parties non rejouables) → journal en temps réel
+`W["ailog"]`. Coups de l'IA recalculés avec le moteur exact (d014de4a0a), 7 rejeux fidèles.
+- Banc humain (`humain.py --ver table --ver "table@spell_pre=1" --temoins 4`, 14 marques, 24 témoins) : IA de la table
+  change 6/14 marques (43 % [21 ; 67]) et 9/24 témoins (38 % [21 ; 57]) : bruit. Avec `spell_pre` : 9/14 marques
+  (64 % [39 ; 84]) contre 6/24 témoins (25 % [12 ; 45]) ; corrige Charm qui envoie Akali conquérir Seat of Power
+  (la recherche notait −53,8 contre −62,8 pour la renvoyer en base ; la note immédiate dit l'inverse) et En Garde en
+  showdown vide. Ne corrige pas : unités [Ambush] (Vi Peacekeeper, Rengar Trophy Hunter) jouées dans son tour ou en
+  base au lieu d'être gardées, Rengar envoyé mourir, Karthus posé sur un battlefield, déplacements.
+- Limite de la marque : elle vise le dernier vrai choix de l'IA ; une remarque sur un coup plus ancien (Rengar en base,
+  marqué sur Sabotage) tombe sur le mauvais coup.
+
 **Pistes** (non faites, chacune à mesurer sur ce banc puis par la règle 9) : asks par simulation courte (le juge lui-même, au lieu de options[0]) ; politique de simulation
 qui vise avec une note immédiate ; chaque réglage gardé seulement par la règle 9 ([[ia-sprt]]).
 
