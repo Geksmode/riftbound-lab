@@ -327,3 +327,6 @@ Demande de l'utilisateur. `banc/cout.py` : 71 erreurs jouées jusqu'au bout, 16 
 ## [2026-10-28] ingest | Table : bouton « Erreur de l'IA » et coups de l'IA enregistrés
 Demande de l'utilisateur (« oui, le bouton » ; « autre erreur » doit être précisée). La partie garde les coups de l'IA (champ `ai`, rejeu fidèle même après un changement de l'IA : `train.ScriptAI`) et les erreurs marquées (raison, précision). Banc humain `engine/banc/humain.py`. Tests `cardsets/test_drapeau.py` (4) ; vérifié dans le navigateur intégré ; robot `train/verif_drapeau.mjs` dans la porte, pas encore lancé ici. `build.sh` : chemin lisible par Python sous Git Bash (Windows). Détail : `docs/wiki/pages/parties.md`.
 
+## [2026-10-28] ingest | Table republiée en artefact claude.ai (GitHub Pages gardé)
+Demande de l'utilisateur (« télécharger puis déposer c'est contraignant » ; « une version artefact et garder la version GitHub Page »). https://claude.ai/artifact/5FfNwvwKnVbFY4dbQbxjwR, capacité `db` : parties, coups de l'IA et erreurs marquées enregistrés seuls (collection `games`), lus par Claude avec ArtifactData. Deux passes de publication (142 + 126 fichiers). Chargement dans l'artefact non vérifié par Claude (pas de session claude.ai dans le navigateur intégré). Détail : `pages/publication.md`.
+
