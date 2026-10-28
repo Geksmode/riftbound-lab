@@ -7,7 +7,7 @@ metadata:
 ---
 2026-10-05: user asked "un outil d'entraînement où je joue contre toi". Built artifact https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC "Riftbound Entraînement" (separate from replay viewer [[riftbound-replays]]).
 
-- User plays Akali G2 vs LeBlanc IQ#5 AI (PlanAgent, plan Hook tempo, tempo AI [[riftbound-tempo-ai]]); level Normal samples=1 / Fort samples=3.
+- User plays Akali G2 vs LeBlanc IQ#5 AI (PlanAgent, plan Hook tempo, tempo AI [[riftbound-tempo-ai]]); level Normal samples=1 / Fort samples=3 / Très fort samples=6 + turn_w=6, react_n=3 (2026-10-27, [[riftbound-search-ai]]).
 - Real Python engine in browser via Pyodide 0.26.4 hosted inside the artifact (python_stdlib.zip published as base64 .txt because .zip isn't served; blob URL as stdLibURL). jsdelivr is blocked in the container, npm registry works (npm pack pyodide@0.26.4).
 - engine/train.py: Human agent raises NeedChoice for g.ask/mulligan; state deep-copied before each op and restored, then op replayed with answers (engine deterministic). undo (40 deep), hint = Akali Gorica-plan AI top options. AI hand/facedown masked.
 - Sources riftbound/train/ (src.html, base.css, build.sh, tr.py Playwright bot). Engine edits must be re-copied via build.sh and republished.

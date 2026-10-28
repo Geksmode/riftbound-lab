@@ -422,8 +422,8 @@ body.dkopen { overflow: hidden; }
 .vpad.p1 .vtag { color: var(--akali); } .vpad.cpu .vtag { color: var(--leblanc); }
 .vlg { font: 400 24px/1.05 var(--f-display, serif); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .vpad select { min-height: 36px; font-size: 12.5px; width: 100%; min-width: 0; }
-.vlvl { display: flex; gap: 4px; align-items: center; font-size: 12px; color: var(--ink-2); }
-.vlvl button { flex: 1; min-height: 32px; padding: 2px 6px; font-size: 12px; }
+.vlvl { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.vlvl button { flex: 1 1 auto; min-width: 0; min-height: 32px; padding: 2px 6px; font-size: 12px; white-space: nowrap; }
 .vlvl button[aria-checked="true"] { border-color: var(--leblanc); color: var(--ink); background: rgba(255,143,126,.14); }
 .vopt summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; padding: 4px 0; }
 .vopt[open] { display: grid; gap: 8px; }
@@ -444,6 +444,7 @@ body.dkopen { overflow: hidden; }
   .vpad .vpart { --aw: calc(100cqw - 12px); width: 100%; height: 64px; }
   .vlg { font-size: 19px; }
   .vpad select { min-height: 34px; font-size: 12px; }
+  .vlvl > span { width: 100%; }
 }
 .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
 .seg .segl { width: 100%; font-size: 12px; color: var(--ink-2); }
@@ -1054,12 +1055,12 @@ async function setupForm(msg) {
   const pad = (who, lbl) => `<div class="vpad ${who}" data-side="${who}" role="button" tabindex="0" aria-label="Choisir pour ${who === "p1" ? "toi" : "l'IA"}">
       <div class="vpart"></div><div class="vpinfo"><div class="vtag">${lbl}</div><div class="vlg"></div>
       <select id="${who === "p1" ? "sMine" : "sOpp"}" aria-label="${who === "p1" ? "Ton deck (variantes de la légende)" : "Deck de l'IA (variantes de la légende)"}">${legendOptions(deckLegend(who === "p1" ? mk : ok), who === "p1" ? mk : ok)}</select>
-      ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><span>Niv.</span><button role="radio" data-lvl="1">Normal</button><button role="radio" data-lvl="3">Fort</button></div>` : ""}<div class="small vdk"></div></div></div>`;
+      ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><span>Niv.</span><button role="radio" data-lvl="1">Normal</button><button role="radio" data-lvl="3">Fort</button><button role="radio" data-lvl="6">Très fort</button></div>` : ""}<div class="small vdk"></div></div></div>`;
   openModal(`<h3>Contre l'IA</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup vs">
     <div class="small vhelp">Touche ton panneau ou celui de l'IA, puis une légende. Chaque légende arrive avec son deck par défaut (meilleure liste de tournoi jouable, sideboard compris).</div>
     <div class="roster" role="group" aria-label="Légendes">${tiles}</div>
     <div class="vpads">${pad("p1", "Toi")}<div class="vsx">VS</div>${pad("cpu", "IA")}</div>
-    <input type="hidden" id="sLvl" value="${last("lvl") === "3" ? "3" : "1"}">
+    <input type="hidden" id="sLvl" value="${["3", "6"].includes(last("lvl")) ? last("lvl") : "1"}">
     <div class="seg" role="radiogroup" aria-label="Mode de match"><span class="segl">Mode</span>
       <button role="radio" id="sBo1" data-mode="bo1" aria-checked="${lm === "bo1"}">BO1<small>une manche</small></button>
       <button role="radio" id="sBo3" data-mode="bo3" aria-checked="${lm === "bo3"}">BO3<small>2 manches gagnantes, sideboard</small></button></div>
@@ -1266,7 +1267,7 @@ async function launchGame(nx, bf, first) {
   // bf et first enregistrés tels que joués : la partie se rejoue à l'identique avec obf (battlefield de l'IA).
   recStart(META, META.bf[0], String(META.first), lvl, MATCH.mine, MATCH.opp);
   REC.obf = nx.ai_bf; REC.match = { id: MATCH.id, mode: MATCH.mode, game: nx.game, seed: MATCH.st.seed };
-  $("gmeta").textContent = `Donne ${MATCH.st.seed}${bo3() ? " · BO3" : ""} · ${PN[0]} contre ${PN[1]} · ${META.first === 0 ? "tu commences" : PN[1] + " commence"} · ${META.bf[0]} / ${META.bf[1]} · IA ${lvl === "3" ? "forte" : "normale"}`;
+  $("gmeta").textContent = `Donne ${MATCH.st.seed}${bo3() ? " · BO3" : ""} · ${PN[0]} contre ${PN[1]} · ${META.first === 0 ? "tu commences" : PN[1] + " commence"} · ${META.bf[0]} / ${META.bf[1]} · IA ${lvlName(lvl)}`;
   $("gres").hidden = true;
   matchChip();
   if (bo3()) toast(`Battlefields révélés : toi ${META.bf[0]} · IA ${META.bf[1]}`);
@@ -1330,8 +1331,10 @@ async function pump(v) {
   show(v);
 }
 
-// Réflexion longue de l'IA (niveau Fort : jusqu'à une vingtaine de secondes) : après 2 s, les secondes écoulées
+// Réflexion longue de l'IA (niveaux Fort et Très fort : jusqu'à plusieurs dizaines de secondes) : après 2 s, les secondes écoulées
 // s'affichent à côté de « … joue », pour qu'on voie que la table n'est pas figée.
+// Nom du niveau de l'IA (train.new : level = nombre de mondes tirés par décision).
+const lvlName = l => ({ 3: "forte", 6: "très forte" })[+l] || "normale";
 async function thinking(p) {
   const t0 = Date.now(), tick = setInterval(() => { const x = $("thinkSec"), n = Math.floor((Date.now() - t0) / 1000); if (x && n >= 2) x.textContent = " · " + n + " s"; }, 500);
   try { return await p; } finally { clearInterval(tick); }
@@ -3816,7 +3819,7 @@ function menuRender(view) {
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace, qui répond aussi « Oui » aux questions oui / non (« Utiliser cet effet ? »).</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
-      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente. Flèches corail : ses derniers coups.</li>
+      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente ; « Très fort » : 6 simulations par coup, encore plus lente. Flèches corail : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
       <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de conseil en duel ; « Reprendre » tant que tu gardes la main. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
@@ -3858,7 +3861,7 @@ async function loadGames() {
     const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
     const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
     const canRp = !g.duel && g.kind !== "duel" && Array.isArray(g.moves);
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + (g.level === 3 ? "forte" : "normale")}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + lvlName(g.level)}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les (toutes, ou une seule avec ⤓) puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
