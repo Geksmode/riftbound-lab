@@ -3,7 +3,7 @@
 # Prérequis une fois : bash fetch_pyodide.sh (télécharge Pyodide 0.26.4 depuis npm dans pyodide-cache/).
 set -e
 cd "$(dirname "$0")"
-E=$(cd .. && pwd)            # dossier riftbound/
+E=$(cd .. && { pwd -W 2>/dev/null || pwd; })   # dossier riftbound/ (pwd -W : chemin C:/… lisible par Python sous Git Bash)
 B=build
 [ -f pyodide-cache/package/pyodide.js ] || { echo "Lance d'abord : bash fetch_pyodide.sh"; exit 1; }
 rm -rf $B && mkdir -p $B/py/cardsets $B/data $B/pyodide $B/img $B/atlas

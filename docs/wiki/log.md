@@ -302,3 +302,19 @@ Pyodide (`exp_temps.mjs 777003,777011`, 144 positions, avant `42257ea` / après 
 
 ## [2026-10-27] decision | CI plus rapide : parallélisme et robots sur 4 machines
 Demande de l'utilisateur (CI de plus en plus longue : 15 à 26 min, dont 14 à 17 min de robots navigateur en série et jusqu'à 8 min 30 d'installation de Chromium). Mêmes contrôles : partie moteur en parallèle (≈ 11 min → 3 min 30 ici), robots répartis sur 4 machines (`RB_PART`), Chromium en cache, une seule CI par commit. Détails : `pages/porte.md`.
+
+## [2026-10-28] result | Banc d'erreurs de cible et de timing de l'IA
+Demande de l'utilisateur (« l'IA joue au mauvais timing ou sur la mauvaise cible » ; « oui, le banc »). Outil `engine/banc/banc.py` (gen, rejuge, rejoue, bilan) et `banc/test_banc.py` : juge qui rejoue chaque autre option sur une copie, deux jeux de poids (Texel et anciens) qui doivent être d'accord. 96 parties `turn` (IA Normal), decks variés, 4100000+, moteur a832cbbc81 : 3,4 % ± 0,4 de choix nettement mauvais, 11,1 % ± 1,0 de sorts sans effet visible ; erreurs de résolution systématiques (Faefolk, Promising Future), cibles et timing surtout bruit (42 % de coups différents au rejeu). Détail : `docs/memoire/ia-banc-erreurs.md`.
+
+## [2026-10-28] result | Choix de résolution par simulation (ask_sim) : rejeté par la règle 9
+Demande de l'utilisateur (« oui, la résolution »). Point de reprise dans `Game.apply` (drapeau `checkpoint`, jamais copié) et `ai.ask_sim` (chaque option rejouée dans un monde tiré, sans voir la main adverse). Banc : erreurs de résolution 40 -> 8 sur les mêmes positions. SPRT `sh@ask_sim=1` contre `sh`, decks variés, graines 5100000-5100647 : rejeté, 49,3 % ± 1,1 sur 648 paires. Défaut inchangé (coupé, `RB_ASK_SIM=1`). Détail : `docs/memoire/ia-banc-erreurs.md`.
+
+## [2026-10-28] result | Pré-sélection des cibles de sorts (spell_pre) : on ne sait pas
+Demande de l'utilisateur (« cibles des sorts »). `ai.spell_prefilter` (variantes d'un sort résolues sur une copie, la meilleure gardée ; sort sans effet retiré en showdown). Banc : erreurs de cible 19 -> 0. SPRT `sh@spell_pre=1` contre `sh`, graines 5200000-5201599 : on ne sait pas, 50,8 % ± 0,7 sur 1 600 paires. Défaut inchangé (coupé, `RB_SPELL_PRE=1`).
+
+## [2026-10-28] result | Coût d'une erreur du banc en victoires : on ne sait pas
+Demande de l'utilisateur. `banc/cout.py` : 71 erreurs jouées jusqu'au bout, 16 paires appariées chacune (choix de l'IA contre meilleure option du juge), suite `sh`. Coût moyen −0,8 ± 2,4 points de victoire ; quelques erreurs coûteuses (Punch First +69, Wages of Pain +38), mais 7 « erreurs » font mieux que la « bonne » option (Irresistible Faefolk). La note immédiate juge mal ce qui fait gagner. Détail : `docs/memoire/ia-banc-erreurs.md`.
+
+## [2026-10-28] ingest | Table : bouton « Erreur de l'IA » et coups de l'IA enregistrés
+Demande de l'utilisateur (« oui, le bouton » ; « autre erreur » doit être précisée). La partie garde les coups de l'IA (champ `ai`, rejeu fidèle même après un changement de l'IA : `train.ScriptAI`) et les erreurs marquées (raison, précision). Banc humain `engine/banc/humain.py`. Tests `cardsets/test_drapeau.py` (4) ; vérifié dans le navigateur intégré ; robot `train/verif_drapeau.mjs` dans la porte, pas encore lancé ici. `build.sh` : chemin lisible par Python sous Git Bash (Windows). Détail : `docs/wiki/pages/parties.md`.
+

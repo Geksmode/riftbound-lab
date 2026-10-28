@@ -1,0 +1,1449 @@
+[
+ {
+  "play": {
+   "n": 1015,
+   "scored": 627,
+   "old_errors": 31,
+   "new_errors": 19,
+   "fixed": 6,
+   "broken": 4,
+   "changed": 429,
+   "other_move": 388
+  },
+  "ask": {
+   "n": 1603,
+   "scored": 1603,
+   "old_errors": 40,
+   "new_errors": 40,
+   "fixed": 0,
+   "broken": 0,
+   "changed": 0,
+   "other_move": 0
+  },
+  "spells": {
+   "n": 935,
+   "old_no_effect": 104,
+   "new_no_effect": 50,
+   "new_not_played": 368
+  },
+  "label": "banc rejoué turn sur pos-4100000.jsonl",
+  "ver": "turn",
+  "file": "pos-4100000.jsonl",
+  "errors": 0,
+  "engine_md5": "a832cbbc81",
+  "games_engine": [
+   "a832cbbc81"
+  ],
+  "seconds": 349
+ },
+ {
+  "label": "banc turn · defaut (rejugé)",
+  "mode": "defaut",
+  "ver": "turn",
+  "file": "parties-4100000.jsonl",
+  "regret": 2.0,
+  "games": 96,
+  "positions": 2618,
+  "play": {
+   "n": 518,
+   "errors": 31,
+   "rate": 0.0598,
+   "se": 0.0109
+  },
+  "ask": {
+   "n": 1603,
+   "errors": 40,
+   "rate": 0.025,
+   "se": 0.0042
+  },
+  "tout": {
+   "n": 2121,
+   "errors": 71,
+   "rate": 0.0335,
+   "se": 0.004
+  },
+  "play_best_unseen": 1,
+  "spells": {
+   "n": 935,
+   "no_effect": 187,
+   "before_attack": 83,
+   "rate_no_effect": 0.1112,
+   "se": 0.0103
+  },
+  "errors_by": [
+   [
+    "ask:may",
+    13
+   ],
+   [
+    "ask:promising_pick",
+    8
+   ],
+   [
+    "Falling Star",
+    6
+   ],
+   [
+    "ask:predict_recycle",
+    3
+   ],
+   [
+    "ask:pay_gold",
+    3
+   ],
+   [
+    "Hidden Blade",
+    2
+   ],
+   [
+    "ask:target",
+    2
+   ],
+   [
+    "Gust",
+    2
+   ],
+   [
+    "Challenge",
+    2
+   ],
+   [
+    "ask:fizz_pick",
+    2
+   ],
+   [
+    "Bellows Breath",
+    2
+   ],
+   [
+    "Punch First",
+    2
+   ],
+   [
+    "Desert's Call",
+    2
+   ],
+   [
+    "ask:sabotage",
+    1
+   ],
+   [
+    "Back Off",
+    1
+   ],
+   [
+    "ask:faefolk_target",
+    1
+   ],
+   [
+    "Void Assault",
+    1
+   ],
+   [
+    "ask:dusk_kill",
+    1
+   ],
+   [
+    "Charm",
+    1
+   ],
+   [
+    "Rampage",
+    1
+   ],
+   [
+    "ask:equip_target",
+    1
+   ],
+   [
+    "Singularity",
+    1
+   ],
+   [
+    "Wages of Pain",
+    1
+   ],
+   [
+    "ask:mindsplitter_pick",
+    1
+   ],
+   [
+    "Discipline",
+    1
+   ]
+  ],
+  "no_effect_by": [
+   [
+    "Bellows Breath",
+    14
+   ],
+   [
+    "Flurry of Blades",
+    13
+   ],
+   [
+    "Eclipse",
+    7
+   ],
+   [
+    "Punch First",
+    6
+   ],
+   [
+    "Defy",
+    6
+   ],
+   [
+    "Promising Future",
+    6
+   ],
+   [
+    "Charm",
+    5
+   ],
+   [
+    "En Garde",
+    5
+   ],
+   [
+    "Time Warp",
+    4
+   ],
+   [
+    "Emperor's Divide",
+    4
+   ],
+   [
+    "Retreat",
+    4
+   ],
+   [
+    "Sabotage",
+    3
+   ],
+   [
+    "Call to Glory",
+    2
+   ],
+   [
+    "Smoke Screen",
+    2
+   ],
+   [
+    "Cleave",
+    2
+   ],
+   [
+    "Acceptable Losses",
+    2
+   ],
+   [
+    "Stupefy",
+    2
+   ],
+   [
+    "Hextech Ray",
+    1
+   ],
+   [
+    "Blood Rush",
+    1
+   ],
+   [
+    "Temporal Breach",
+    1
+   ],
+   [
+    "Invert Timelines",
+    1
+   ],
+   [
+    "Switcheroo",
+    1
+   ],
+   [
+    "Star-Crossed",
+    1
+   ],
+   [
+    "Abandon",
+    1
+   ],
+   [
+    "Tactical Retreat",
+    1
+   ]
+  ],
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "a832cbbc81"
+ },
+ {
+  "label": "banc turn · defaut (rejugé)",
+  "mode": "defaut",
+  "ver": "turn",
+  "file": "parties-4100000.jsonl",
+  "regret": 2.0,
+  "games": 96,
+  "positions": 2618,
+  "play": {
+   "n": 518,
+   "errors": 31,
+   "rate": 0.0598,
+   "se": 0.0109
+  },
+  "ask": {
+   "n": 1603,
+   "errors": 40,
+   "rate": 0.025,
+   "se": 0.0042
+  },
+  "tout": {
+   "n": 2121,
+   "errors": 71,
+   "rate": 0.0335,
+   "se": 0.004
+  },
+  "play_best_unseen": 1,
+  "spells": {
+   "n": 935,
+   "no_effect": 187,
+   "before_attack": 83,
+   "rate_no_effect": 0.1112,
+   "se": 0.0103
+  },
+  "errors_by": [
+   [
+    "ask:may",
+    13
+   ],
+   [
+    "ask:promising_pick",
+    8
+   ],
+   [
+    "Falling Star",
+    6
+   ],
+   [
+    "ask:predict_recycle",
+    3
+   ],
+   [
+    "ask:pay_gold",
+    3
+   ],
+   [
+    "Hidden Blade",
+    2
+   ],
+   [
+    "ask:target",
+    2
+   ],
+   [
+    "Gust",
+    2
+   ],
+   [
+    "Challenge",
+    2
+   ],
+   [
+    "ask:fizz_pick",
+    2
+   ],
+   [
+    "Bellows Breath",
+    2
+   ],
+   [
+    "Punch First",
+    2
+   ],
+   [
+    "Desert's Call",
+    2
+   ],
+   [
+    "ask:sabotage",
+    1
+   ],
+   [
+    "ask:faefolk_target",
+    1
+   ],
+   [
+    "Void Assault",
+    1
+   ],
+   [
+    "Back Off",
+    1
+   ],
+   [
+    "ask:dusk_kill",
+    1
+   ],
+   [
+    "Charm",
+    1
+   ],
+   [
+    "Rampage",
+    1
+   ],
+   [
+    "Wages of Pain",
+    1
+   ],
+   [
+    "ask:equip_target",
+    1
+   ],
+   [
+    "Singularity",
+    1
+   ],
+   [
+    "ask:elder_dragon",
+    1
+   ],
+   [
+    "ask:discard",
+    1
+   ]
+  ],
+  "no_effect_by": [
+   [
+    "Bellows Breath",
+    14
+   ],
+   [
+    "Flurry of Blades",
+    13
+   ],
+   [
+    "Eclipse",
+    7
+   ],
+   [
+    "Punch First",
+    6
+   ],
+   [
+    "Defy",
+    6
+   ],
+   [
+    "Promising Future",
+    6
+   ],
+   [
+    "Charm",
+    5
+   ],
+   [
+    "En Garde",
+    5
+   ],
+   [
+    "Time Warp",
+    4
+   ],
+   [
+    "Emperor's Divide",
+    4
+   ],
+   [
+    "Retreat",
+    4
+   ],
+   [
+    "Sabotage",
+    3
+   ],
+   [
+    "Call to Glory",
+    2
+   ],
+   [
+    "Smoke Screen",
+    2
+   ],
+   [
+    "Cleave",
+    2
+   ],
+   [
+    "Acceptable Losses",
+    2
+   ],
+   [
+    "Stupefy",
+    2
+   ],
+   [
+    "Hextech Ray",
+    1
+   ],
+   [
+    "Blood Rush",
+    1
+   ],
+   [
+    "Temporal Breach",
+    1
+   ],
+   [
+    "Invert Timelines",
+    1
+   ],
+   [
+    "Switcheroo",
+    1
+   ],
+   [
+    "Star-Crossed",
+    1
+   ],
+   [
+    "Abandon",
+    1
+   ],
+   [
+    "Primal Strength",
+    1
+   ]
+  ],
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "46b964183a"
+ },
+ {
+  "play": {
+   "n": 0,
+   "scored": 0,
+   "old_errors": 0,
+   "new_errors": 0,
+   "fixed": 0,
+   "broken": 0,
+   "changed": 0,
+   "other_move": 0
+  },
+  "ask": {
+   "n": 1603,
+   "scored": 1603,
+   "old_errors": 40,
+   "new_errors": 8,
+   "fixed": 32,
+   "broken": 0,
+   "changed": 180,
+   "other_move": 0
+  },
+  "spells": {
+   "n": 0,
+   "old_no_effect": 0,
+   "new_no_effect": 0,
+   "new_not_played": 0
+  },
+  "label": "banc rejoué turn@ask_sim=1 sur pos-4100000.jsonl",
+  "ver": "turn@ask_sim=1",
+  "file": "pos-4100000.jsonl",
+  "errors": 0,
+  "engine_md5": "46b964183a",
+  "games_engine": [
+   "46b964183a"
+  ],
+  "seconds": 3
+ },
+ {
+  "label": "banc turn · defaut (rejugé)",
+  "mode": "defaut",
+  "ver": "turn",
+  "file": "parties-4100000.jsonl",
+  "regret": 2.0,
+  "games": 96,
+  "positions": 2618,
+  "play": {
+   "n": 518,
+   "errors": 31,
+   "rate": 0.0598,
+   "se": 0.0109
+  },
+  "ask": {
+   "n": 1603,
+   "errors": 40,
+   "rate": 0.025,
+   "se": 0.0042
+  },
+  "tout": {
+   "n": 2121,
+   "errors": 71,
+   "rate": 0.0335,
+   "se": 0.004
+  },
+  "play_best_unseen": 1,
+  "spells": {
+   "n": 935,
+   "no_effect": 187,
+   "before_attack": 83,
+   "rate_no_effect": 0.1112,
+   "se": 0.0103
+  },
+  "errors_by": [
+   [
+    "ask:may",
+    13
+   ],
+   [
+    "ask:promising_pick",
+    8
+   ],
+   [
+    "Falling Star",
+    6
+   ],
+   [
+    "ask:predict_recycle",
+    3
+   ],
+   [
+    "ask:pay_gold",
+    3
+   ],
+   [
+    "Hidden Blade",
+    2
+   ],
+   [
+    "ask:target",
+    2
+   ],
+   [
+    "Gust",
+    2
+   ],
+   [
+    "Challenge",
+    2
+   ],
+   [
+    "ask:fizz_pick",
+    2
+   ],
+   [
+    "Bellows Breath",
+    2
+   ],
+   [
+    "Punch First",
+    2
+   ],
+   [
+    "Desert's Call",
+    2
+   ],
+   [
+    "ask:faefolk_target",
+    1
+   ],
+   [
+    "Void Assault",
+    1
+   ],
+   [
+    "ask:sabotage",
+    1
+   ],
+   [
+    "Back Off",
+    1
+   ],
+   [
+    "ask:mindsplitter_pick",
+    1
+   ],
+   [
+    "Discipline",
+    1
+   ],
+   [
+    "En Garde",
+    1
+   ],
+   [
+    "Wages of Pain",
+    1
+   ],
+   [
+    "ask:equip_target",
+    1
+   ],
+   [
+    "Singularity",
+    1
+   ],
+   [
+    "ask:dusk_kill",
+    1
+   ],
+   [
+    "Charm",
+    1
+   ]
+  ],
+  "no_effect_by": [
+   [
+    "Bellows Breath",
+    14
+   ],
+   [
+    "Flurry of Blades",
+    13
+   ],
+   [
+    "Eclipse",
+    7
+   ],
+   [
+    "Punch First",
+    6
+   ],
+   [
+    "Defy",
+    6
+   ],
+   [
+    "Promising Future",
+    6
+   ],
+   [
+    "Charm",
+    5
+   ],
+   [
+    "En Garde",
+    5
+   ],
+   [
+    "Time Warp",
+    4
+   ],
+   [
+    "Emperor's Divide",
+    4
+   ],
+   [
+    "Retreat",
+    4
+   ],
+   [
+    "Sabotage",
+    3
+   ],
+   [
+    "Cleave",
+    2
+   ],
+   [
+    "Call to Glory",
+    2
+   ],
+   [
+    "Smoke Screen",
+    2
+   ],
+   [
+    "Acceptable Losses",
+    2
+   ],
+   [
+    "Stupefy",
+    2
+   ],
+   [
+    "Blood Rush",
+    1
+   ],
+   [
+    "Invert Timelines",
+    1
+   ],
+   [
+    "Hextech Ray",
+    1
+   ],
+   [
+    "Temporal Breach",
+    1
+   ],
+   [
+    "Abandon",
+    1
+   ],
+   [
+    "Falling Star",
+    1
+   ],
+   [
+    "Star-Crossed",
+    1
+   ],
+   [
+    "Switcheroo",
+    1
+   ]
+  ],
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "0829a0dfa3"
+ },
+ {
+  "play": {
+   "n": 0,
+   "scored": 0,
+   "old_errors": 0,
+   "new_errors": 0,
+   "fixed": 0,
+   "broken": 0,
+   "changed": 0,
+   "other_move": 0
+  },
+  "ask": {
+   "n": 1603,
+   "scored": 1603,
+   "old_errors": 40,
+   "new_errors": 8,
+   "fixed": 32,
+   "broken": 0,
+   "changed": 178,
+   "other_move": 0
+  },
+  "spells": {
+   "n": 0,
+   "old_no_effect": 0,
+   "new_no_effect": 0,
+   "new_not_played": 0
+  },
+  "label": "banc rejoué turn@ask_sim=1 sur pos-4100000.jsonl",
+  "ver": "turn@ask_sim=1",
+  "file": "pos-4100000.jsonl",
+  "errors": 0,
+  "engine_md5": "0829a0dfa3",
+  "games_engine": [
+   "0829a0dfa3"
+  ],
+  "seconds": 3
+ },
+ {
+  "label": "banc turn · defaut (rejugé)",
+  "mode": "defaut",
+  "ver": "turn",
+  "file": "parties-4100000.jsonl",
+  "regret": 2.0,
+  "games": 96,
+  "positions": 2618,
+  "play": {
+   "n": 518,
+   "errors": 31,
+   "rate": 0.0598,
+   "se": 0.0109
+  },
+  "ask": {
+   "n": 1603,
+   "errors": 40,
+   "rate": 0.025,
+   "se": 0.0042
+  },
+  "tout": {
+   "n": 2121,
+   "errors": 71,
+   "rate": 0.0335,
+   "se": 0.004
+  },
+  "play_best_unseen": 1,
+  "spells": {
+   "n": 935,
+   "no_effect": 187,
+   "before_attack": 83,
+   "rate_no_effect": 0.1112,
+   "se": 0.0103
+  },
+  "errors_by": [
+   [
+    "ask:may",
+    13
+   ],
+   [
+    "ask:promising_pick",
+    8
+   ],
+   [
+    "Falling Star",
+    6
+   ],
+   [
+    "ask:predict_recycle",
+    3
+   ],
+   [
+    "ask:pay_gold",
+    3
+   ],
+   [
+    "Hidden Blade",
+    2
+   ],
+   [
+    "ask:target",
+    2
+   ],
+   [
+    "Gust",
+    2
+   ],
+   [
+    "Challenge",
+    2
+   ],
+   [
+    "ask:fizz_pick",
+    2
+   ],
+   [
+    "Bellows Breath",
+    2
+   ],
+   [
+    "Punch First",
+    2
+   ],
+   [
+    "Desert's Call",
+    2
+   ],
+   [
+    "ask:faefolk_target",
+    1
+   ],
+   [
+    "Void Assault",
+    1
+   ],
+   [
+    "ask:sabotage",
+    1
+   ],
+   [
+    "Back Off",
+    1
+   ],
+   [
+    "ask:mindsplitter_pick",
+    1
+   ],
+   [
+    "Discipline",
+    1
+   ],
+   [
+    "En Garde",
+    1
+   ],
+   [
+    "ask:equip_target",
+    1
+   ],
+   [
+    "Singularity",
+    1
+   ],
+   [
+    "Wages of Pain",
+    1
+   ],
+   [
+    "ask:dusk_kill",
+    1
+   ],
+   [
+    "ask:death_replace",
+    1
+   ]
+  ],
+  "no_effect_by": [
+   [
+    "Bellows Breath",
+    14
+   ],
+   [
+    "Flurry of Blades",
+    13
+   ],
+   [
+    "Eclipse",
+    7
+   ],
+   [
+    "Punch First",
+    6
+   ],
+   [
+    "Defy",
+    6
+   ],
+   [
+    "Promising Future",
+    6
+   ],
+   [
+    "Charm",
+    5
+   ],
+   [
+    "En Garde",
+    5
+   ],
+   [
+    "Time Warp",
+    4
+   ],
+   [
+    "Emperor's Divide",
+    4
+   ],
+   [
+    "Retreat",
+    4
+   ],
+   [
+    "Sabotage",
+    3
+   ],
+   [
+    "Call to Glory",
+    2
+   ],
+   [
+    "Smoke Screen",
+    2
+   ],
+   [
+    "Cleave",
+    2
+   ],
+   [
+    "Acceptable Losses",
+    2
+   ],
+   [
+    "Stupefy",
+    2
+   ],
+   [
+    "Blood Rush",
+    1
+   ],
+   [
+    "Abandon",
+    1
+   ],
+   [
+    "Invert Timelines",
+    1
+   ],
+   [
+    "Hextech Ray",
+    1
+   ],
+   [
+    "Temporal Breach",
+    1
+   ],
+   [
+    "Falling Star",
+    1
+   ],
+   [
+    "Star-Crossed",
+    1
+   ],
+   [
+    "Switcheroo",
+    1
+   ]
+  ],
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "ac320dd88e"
+ },
+ {
+  "play": {
+   "n": 0,
+   "scored": 0,
+   "old_errors": 0,
+   "new_errors": 0,
+   "fixed": 0,
+   "broken": 0,
+   "changed": 0,
+   "other_move": 0
+  },
+  "ask": {
+   "n": 1603,
+   "scored": 1603,
+   "old_errors": 40,
+   "new_errors": 8,
+   "fixed": 32,
+   "broken": 0,
+   "changed": 178,
+   "other_move": 0
+  },
+  "spells": {
+   "n": 0,
+   "old_no_effect": 0,
+   "new_no_effect": 0,
+   "new_not_played": 0
+  },
+  "label": "banc rejoué turn@ask_sim=1 sur pos-4100000.jsonl",
+  "ver": "turn@ask_sim=1",
+  "file": "pos-4100000.jsonl",
+  "errors": 0,
+  "engine_md5": "ac320dd88e",
+  "games_engine": [
+   "ac320dd88e"
+  ],
+  "seconds": 3
+ },
+ {
+  "label": "banc turn · defaut (rejugé)",
+  "mode": "defaut",
+  "ver": "turn",
+  "file": "parties-4100000.jsonl",
+  "regret": 2.0,
+  "games": 96,
+  "positions": 2618,
+  "play": {
+   "n": 518,
+   "errors": 31,
+   "rate": 0.0598,
+   "se": 0.0109
+  },
+  "ask": {
+   "n": 1603,
+   "errors": 40,
+   "rate": 0.025,
+   "se": 0.0042
+  },
+  "tout": {
+   "n": 2121,
+   "errors": 71,
+   "rate": 0.0335,
+   "se": 0.004
+  },
+  "play_best_unseen": 1,
+  "spells": {
+   "n": 935,
+   "no_effect": 187,
+   "before_attack": 83,
+   "rate_no_effect": 0.1112,
+   "se": 0.0103
+  },
+  "errors_by": [
+   [
+    "ask:may",
+    13
+   ],
+   [
+    "ask:promising_pick",
+    8
+   ],
+   [
+    "Falling Star",
+    6
+   ],
+   [
+    "ask:predict_recycle",
+    3
+   ],
+   [
+    "ask:pay_gold",
+    3
+   ],
+   [
+    "Hidden Blade",
+    2
+   ],
+   [
+    "ask:target",
+    2
+   ],
+   [
+    "Gust",
+    2
+   ],
+   [
+    "Challenge",
+    2
+   ],
+   [
+    "ask:fizz_pick",
+    2
+   ],
+   [
+    "Bellows Breath",
+    2
+   ],
+   [
+    "Punch First",
+    2
+   ],
+   [
+    "Desert's Call",
+    2
+   ],
+   [
+    "ask:sabotage",
+    1
+   ],
+   [
+    "ask:faefolk_target",
+    1
+   ],
+   [
+    "Void Assault",
+    1
+   ],
+   [
+    "Back Off",
+    1
+   ],
+   [
+    "ask:mindsplitter_pick",
+    1
+   ],
+   [
+    "Discipline",
+    1
+   ],
+   [
+    "En Garde",
+    1
+   ],
+   [
+    "ask:equip_target",
+    1
+   ],
+   [
+    "Singularity",
+    1
+   ],
+   [
+    "Wages of Pain",
+    1
+   ],
+   [
+    "ask:dusk_kill",
+    1
+   ],
+   [
+    "Charm",
+    1
+   ]
+  ],
+  "no_effect_by": [
+   [
+    "Bellows Breath",
+    14
+   ],
+   [
+    "Flurry of Blades",
+    13
+   ],
+   [
+    "Eclipse",
+    7
+   ],
+   [
+    "Punch First",
+    6
+   ],
+   [
+    "Defy",
+    6
+   ],
+   [
+    "Promising Future",
+    6
+   ],
+   [
+    "Charm",
+    5
+   ],
+   [
+    "En Garde",
+    5
+   ],
+   [
+    "Time Warp",
+    4
+   ],
+   [
+    "Emperor's Divide",
+    4
+   ],
+   [
+    "Retreat",
+    4
+   ],
+   [
+    "Sabotage",
+    3
+   ],
+   [
+    "Cleave",
+    2
+   ],
+   [
+    "Call to Glory",
+    2
+   ],
+   [
+    "Smoke Screen",
+    2
+   ],
+   [
+    "Acceptable Losses",
+    2
+   ],
+   [
+    "Stupefy",
+    2
+   ],
+   [
+    "Blood Rush",
+    1
+   ],
+   [
+    "Temporal Breach",
+    1
+   ],
+   [
+    "Invert Timelines",
+    1
+   ],
+   [
+    "Hextech Ray",
+    1
+   ],
+   [
+    "Abandon",
+    1
+   ],
+   [
+    "Falling Star",
+    1
+   ],
+   [
+    "Star-Crossed",
+    1
+   ],
+   [
+    "Switcheroo",
+    1
+   ]
+  ],
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "0ad625cff7"
+ },
+ {
+  "play": {
+   "n": 1015,
+   "scored": 554,
+   "old_errors": 31,
+   "new_errors": 0,
+   "fixed": 13,
+   "broken": 0,
+   "changed": 511,
+   "other_move": 461
+  },
+  "ask": {
+   "n": 0,
+   "scored": 0,
+   "old_errors": 0,
+   "new_errors": 0,
+   "fixed": 0,
+   "broken": 0,
+   "changed": 0,
+   "other_move": 0
+  },
+  "spells": {
+   "n": 935,
+   "old_no_effect": 104,
+   "new_no_effect": 35,
+   "new_not_played": 433
+  },
+  "label": "banc rejoué turn@spell_pre=1 sur pos-4100000.jsonl",
+  "ver": "turn@spell_pre=1",
+  "file": "pos-4100000.jsonl",
+  "errors": 0,
+  "engine_md5": "0ad625cff7",
+  "games_engine": [
+   "0ad625cff7"
+  ],
+  "seconds": 185
+ },
+ {
+  "label": "coût des erreurs du banc, suite sh, 16 tirages",
+  "file": "pos-4100000.jsonl",
+  "ver": "sh",
+  "K": 16,
+  "regret": 2.0,
+  "errors_measured": 71,
+  "playout_errors": 22,
+  "seconds": 8468,
+  "tout": {
+   "n": 71,
+   "cost": -0.0083,
+   "se": 0.0242,
+   "good": 0.4549,
+   "bad": 0.4632
+  },
+  "play": {
+   "n": 31,
+   "cost": 0.0202,
+   "se": 0.0336,
+   "good": 0.5181,
+   "bad": 0.498
+  },
+  "ask": {
+   "n": 40,
+   "cost": -0.0304,
+   "se": 0.0339,
+   "good": 0.4059,
+   "bad": 0.4362
+  },
+  "seeds": {
+   "first": 4100000,
+   "last": 4100095,
+   "n": 96
+  },
+  "engine_md5": "93e1e7acc0"
+ }
+]

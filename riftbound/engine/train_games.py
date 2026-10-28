@@ -44,8 +44,9 @@ def _state(v):
                 base=[u["n"] for u in me["base"]], opp_base=[u["n"] for u in op["base"]])
 
 
-def replay(game, coach=False):
-    """Rejoue une partie ; renvoie (journal, coups du joueur avec leur état, vue finale)."""
+def replay(game, coach=False, capture=()):
+    """Rejoue une partie ; renvoie (journal, coups du joueur avec leur état, vue finale). capture : coups de l'IA dont
+    la position est copiée au passage (train.ScriptAI, banc/humain.py)."""
     base = (game["seed"], game.get("bf"), game.get("first"), game.get("level", 1))
     if game.get("obf"):                                 # match BO1/BO3 : battlefield de l'IA choisi avant la manche
         train.new(*base, game.get("mine"), game.get("opp"), game["obf"])
@@ -53,6 +54,8 @@ def replay(game, coach=False):
         train.new(*base, game.get("mine"), game.get("opp"))
     else:
         train.new(*base)                                # moteurs figés v10 : pas de decks personnalisés
+    if game.get("ai") and hasattr(train, "ai_replay"):
+        train.ai_replay(game["ai"], capture)           # coups de l'IA enregistrés (table depuis le 2026-10-28)
     v = json.loads(train.step())
     log, mine = [], []
 
@@ -67,6 +70,8 @@ def replay(game, coach=False):
         k = m[0]
         if k == "hint":
             train.hint(m[1])
+            continue
+        if k == "flag":                                 # coup de l'IA marqué comme une erreur (banc/humain.py)
             continue
         if k == "undo":
             v = drain(json.loads(train.undo()))

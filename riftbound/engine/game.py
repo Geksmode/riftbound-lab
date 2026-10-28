@@ -320,8 +320,29 @@ class Battlefield:
             s.facedowns = [c]
 
 
+def _game_copy(s, memo):
+    """_fastcopy sans le point de reprise (checkpoint, _ckpt, _asklog : propres à la partie réelle, voir Game.apply)."""
+    cls = s.__class__
+    new = cls.__new__(cls)
+    memo[id(s)] = new
+    d = new.__dict__
+    for k, v in s.__dict__.items():
+        if k in _CKPT_KEYS:
+            continue
+        d[k] = v if type(v) in _ATOMIC else _deepcopy(v, memo)
+    return new
+
+
+_CKPT_KEYS = ("checkpoint", "_ckpt", "_asklog")
+
+
 class Game:
-    __deepcopy__ = _fastcopy
+    __deepcopy__ = _game_copy
+    # Point de reprise (2026-10-28, ai.ask_sim) : quand checkpoint est vrai (posé par l'IA sur la partie réelle), apply
+    # garde une copie de l'état d'avant le coup (_ckpt) et ask note chaque réponse donnée depuis (_asklog). L'IA peut
+    # alors rejouer le coup avec une autre réponse au choix en cours. Jamais copiés (_game_copy).
+    checkpoint = False
+    _ckpt = None
     # Mémoire des calculs pendant la génération des coups (options_main / focus / priority) : l'état ne change pas
     # pendant cette génération, et les mêmes questions y reviennent des milliers de fois (providers : ~80 % de
     # répétitions, can_pay : ~40 %). None hors de cette génération. Garde-fou : engine/empreinte.py.
@@ -410,7 +431,12 @@ class Game:
             return None
         if len(options) == 1 and kind not in ("may", "may_target", "order"):
             return options[0]
-        return s.agents[pid].choose(s, pid, kind, options, ctx)
+        r = s.agents[pid].choose(s, pid, kind, options, ctx)
+        if s.checkpoint and s._ckpt is not None:
+            # (type, nombre d'options, indice de la réponse ou None, (valeur,) si simple : None, True, nombre, texte)
+            s._asklog.append((kind, len(options), next((i for i, o in enumerate(options) if o is r), None),
+                              (r,) if r is None or type(r) in (bool, int, float, str) else None))
+        return r
 
     def opp(s, pid):
         return 1 - pid
@@ -2115,6 +2141,9 @@ class Game:
             s.turn_step()
 
     def apply(s, action):
+        if s.checkpoint:
+            s._ckpt = (s.clone(), Obj._n, Item._n, action)
+            s._asklog = []
         try:
             s._apply(action)
         except GameOver:
