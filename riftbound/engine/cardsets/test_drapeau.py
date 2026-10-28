@@ -33,7 +33,7 @@ def game(seed=5, turns=6):
     f = json.loads(train.flag())
     moves.append(["flag", "cible", v["st"]["t"], f["step"], "?"])
     v = drive(rr, v, moves, turns + 2)
-    return dict(seed=seed, level=0, moves=moves, ai=json.loads(train.ai_script()), pts=v["st"]["pts"]), f
+    return dict(seed=seed, level=0, moves=moves, ai=json.loads(train.ai_script())["ai"], pts=v["st"]["pts"]), f
 
 
 @T.test
@@ -60,7 +60,7 @@ def recorded_game_replays_identically_even_with_another_ai():
     while v.get("busy"):
         v = json.loads(train.step())
     assert v["st"]["pts"] == g["pts"], (v["st"]["pts"], g["pts"])
-    assert json.loads(train.ai_script())[:len(g["ai"])] == g["ai"]
+    assert json.loads(train.ai_script())["ai"][:len(g["ai"])] == g["ai"]
     assert f["step"] in train.W["caught"]               # position du coup marqué copiée au passage
 
 
@@ -71,12 +71,12 @@ def undo_takes_back_the_ai_moves_too():
     v = drive(rr, json.loads(train.step()), [], 4)
     while not v.get("dec"):
         v = drive(rr, v, [], v["st"]["t"] + 1)
-    n0 = len(json.loads(train.ai_script()))
+    n0 = len(json.loads(train.ai_script())["ai"])
     v = json.loads(train.act(len(v["dec"]["options"]) - 1))
     while v.get("busy"):
         v = json.loads(train.step())
     json.loads(train.undo())
-    assert len(json.loads(train.ai_script())) == n0
+    assert len(json.loads(train.ai_script())["ai"]) == n0
 
 
 @T.test

@@ -38,7 +38,7 @@ for (const phone of [true, false]) {
   const f = await ev("J(T.flag())");
   const shown = await ev("document.querySelector('#fpop .small').textContent");
   ok(`${tag} : la bulle montre le coup qui sera marqué (${shown})`, !!f.label && shown.endsWith(f.label));
-  ok(`${tag} : ce coup est un vrai choix de l'IA`, await ev(`J(T.ai_script()).then(a => a[${f.step}][0] === "d" && a[${f.step}][3] > 1)`));
+  ok(`${tag} : ce coup est un vrai choix de l'IA`, await ev(`J(T.ai_script()).then(r => r.ai[${f.step}][0] === "d" && r.ai[${f.step}][3] > 1)`));
   ok(`${tag} : la bulle tient à l'écran`, await ev("(()=>{ const r = document.getElementById('fpop').getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 })()"));
   await pg.screenshot({ path: `${OUT}/drapeau-${phone ? 360 : 1366}.png` });
   await tap("#fpop [data-f=autre]");
