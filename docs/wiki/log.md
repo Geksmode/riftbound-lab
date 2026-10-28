@@ -330,3 +330,6 @@ Demande de l'utilisateur (« oui, le bouton » ; « autre erreur » doit être p
 ## [2026-10-28] ingest | Table republiée en artefact claude.ai (GitHub Pages gardé)
 Demande de l'utilisateur (« télécharger puis déposer c'est contraignant » ; « une version artefact et garder la version GitHub Page »). https://claude.ai/artifact/5FfNwvwKnVbFY4dbQbxjwR, capacité `db` : parties, coups de l'IA et erreurs marquées enregistrés seuls (collection `games`), lus par Claude avec ArtifactData. Deux passes de publication (142 + 126 fichiers). Chargement dans l'artefact non vérifié par Claude (pas de session claude.ai dans le navigateur intégré). Détail : `pages/publication.md`.
 
+## [2026-10-28] result | Premières erreurs marquées par l'utilisateur (7 parties, 14 marques)
+Demande de l'utilisateur (« apprend de mes games »). Bugs corrigés : script de l'IA écrasé entre manches de BO3, coups repris par « Reprendre » perdus (journal `W["ailog"]`). Banc humain : `spell_pre` change 9/14 coups marqués contre 6/24 témoins (IA actuelle : 6/14 contre 9/24) ; restent les unités [Ambush] jouées trop tôt et les placements. Détail : `docs/memoire/ia-banc-erreurs.md`.
+
