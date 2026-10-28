@@ -5,3 +5,7 @@ riftbound/train/pyodide-cache/
 riftbound/train/thumbs/
 riftbound/puzzles/build_table/
 riftbound/train/node_modules/
+
+# autoharness : état et skills générés automatiquement (non versionnés)
+.claude/autoharness/
+.claude/skills/
