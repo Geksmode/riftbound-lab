@@ -99,9 +99,10 @@ class AIDesync(Exception):
 
 
 class ScriptAI:
-    """L'IA rejoue les coups enregistrés d'une partie (TGame.aiscript, enregistré par la table depuis le 2026-10-28) :
-    le rejeu reste fidèle même si le code de l'IA a changé depuis. La prochaine entrée est toujours la n-ième, n = longueur
-    de l'enregistrement en cours (qui suit l'état : « Reprendre » le remet à sa place). Au-delà du script : l'IA elle-même.
+    """L'IA rejoue les coups enregistrés d'une partie (journal W["ailog"], enregistré par la table depuis le 2026-10-28) :
+    le rejeu reste fidèle même si le code de l'IA a changé depuis. Le journal suit le temps réel (coups repris par
+    « Reprendre » compris, jamais raccourci) : la prochaine entrée est la n-ième, n = longueur du journal en cours, qui se
+    remplit dans le même ordre pendant le rejeu. Au-delà du script : l'IA elle-même.
     capture : indices des décisions à copier au passage (banc des erreurs marquées, banc/humain.py), rangées dans
     W["caught"] (hors de l'état : les agents sont recopiés à chaque coup par _save / _restore)."""
 
@@ -114,7 +115,7 @@ class ScriptAI:
         return getattr(s.ag, k)
 
     def _e(s, g, typ, kind, n):
-        i = len(g.aiscript)
+        i = len(W.get("ailog", ()))
         if i >= len(s.script):
             return None
         e = s.script[i]
@@ -126,7 +127,7 @@ class ScriptAI:
         e = s._e(g, "d", d.kind, len(d.options))
         if e is None:
             return s.ag.decide(g, d)
-        i = len(g.aiscript)
+        i = len(W.get("ailog", ()))
         caught = W.setdefault("caught", {})
         if i in s.capture and i not in caught:
             caught[i] = (g.clone(), Obj._n, Item._n, d)
@@ -140,22 +141,22 @@ class ScriptAI:
 
 class TGame(Game):
     """Journal dans la langue de la table (lang) ; les pioches de l'humain sont notées, celles de l'IA restent cachées.
-    aiscript (2026-10-28) : chaque décision de l'IA (["d", indice, type, n]) et chaque réponse de l'IA à un ask
-    (["a", codage, type, n]), dans l'ordre ; la page l'enregistre avec la partie (champ « ai ») pour rejouer fidèlement
-    et pour les erreurs marquées par le joueur (flag). last_ai_step, last_ai_label : indice et texte du dernier vrai choix
-    de l'IA (au moins deux options, autre que passer)."""
+    Journal de l'IA (2026-10-28, W["ailog"], hors de l'état : « Reprendre » ne l'efface pas) : chaque décision de l'IA
+    (["d", indice, type, n]) et chaque réponse de l'IA à un ask (["a", codage, type, n]) dans l'ordre où elles ont eu
+    lieu ; la page l'enregistre avec la partie (champ « ai ») pour rejouer fidèlement et pour les erreurs marquées par le
+    joueur (flag). last_ai_step, last_ai_label (dans l'état) : indice dans le journal et texte du dernier vrai choix de
+    l'IA (au moins deux options, autre que passer)."""
 
     def __init__(s, *a, **k):
         s.buf = []
-        s.aiscript = []
         s.last_ai_step = s.last_ai_label = None
         k["log"] = True
         super().__init__(*a, **k)
 
     def ask(s, pid, kind, options, **ctx):
         r = super().ask(pid, kind, options, **ctx)
-        if pid == AI and not DUEL and options and not (len(options) == 1 and kind not in ("may", "may_target", "order")):
-            s.aiscript.append(["a", _enc(r, options), kind, len(options)])
+        if pid == AI and not DUEL and s is W.get("g") and options and                 not (len(options) == 1 and kind not in ("may", "may_target", "order")):
+            W.setdefault("ailog", []).append(["a", _enc(r, options), kind, len(options)])
         return r
 
     def log(s, *a):
@@ -182,11 +183,10 @@ class TGame(Game):
 
     def clone(s):
         b, s.buf = s.buf, []
-        sc, s.aiscript = s.aiscript, []                 # pas copié dans les copies de la recherche de l'IA
         try:
             return super().clone()
         finally:
-            s.buf, s.aiscript = b, sc
+            s.buf = b
 
 
 W = {}
@@ -694,29 +694,29 @@ def _tick():
         return
     if d.player == AI and not DUEL:
         a = W["ag"][AI].decide(g, d)
-        g.aiscript.append(["d", d.options.index(a), d.kind, len(d.options)])
+        log = W.setdefault("ailog", [])
+        log.append(["d", d.options.index(a), d.kind, len(d.options)])
         W["last_ai"] = _opp_describe(g, a, AI) if a[0] not in ("pass",) else None
         if a[0] != "pass" and len(d.options) > 1:      # un vrai choix de l'IA : c'est lui que « Erreur de l'IA » marque
-            g.last_ai_step, g.last_ai_label = len(g.aiscript) - 1, W["last_ai"]
+            g.last_ai_step, g.last_ai_label = len(log) - 1, W["last_ai"]
         W["last_ai_info"] = _opp_info(g, a) if a[0] not in ("pass", "end") else None
         g.apply(a)
         W["d"] = None
 
 
 def ai_script():
-    """Coups de l'IA depuis le début de la partie (TGame.aiscript), pour l'enregistrement de la page, avec la graine de
-    la partie : la page n'accepte que le script de SA partie (2026-10-28 : le dernier enregistrement d'une manche de BO3
-    partait au lancement de la manche suivante et prenait son script vide)."""
-    g = W.get("g")
-    return json.dumps(dict(seed=W.get("seed"), ai=g.aiscript if g is not None else []))
+    """Journal de l'IA de la partie (W["ailog"]), pour l'enregistrement de la page, avec la graine de la partie : la page
+    n'accepte que le script de SA partie (2026-10-28 : le dernier enregistrement d'une manche de BO3 partait au lancement
+    de la manche suivante et prenait son script vide)."""
+    return json.dumps(dict(seed=W.get("seed"), ai=W.get("ailog", [])))
 
 
 def flag():
-    """Dernier vrai choix de l'IA (celui que le joueur peut marquer comme une erreur) : indice dans aiscript et texte, None
+    """Dernier vrai choix de l'IA (celui que le joueur peut marquer comme une erreur) : indice dans le journal W["ailog"] et texte, None
     s'il n'y en a pas."""
     g = W.get("g")
     return json.dumps(dict(step=getattr(g, "last_ai_step", None), label=getattr(g, "last_ai_label", None),
-                           n=len(getattr(g, "aiscript", []))), ensure_ascii=False)
+                           n=len(W.get("ailog", []))), ensure_ascii=False)
 
 
 def ai_replay(script, capture=()):
