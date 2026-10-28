@@ -60,13 +60,13 @@ def positions(game, n_ctrl, seed=0):
 
 def agent(game, ver):
     """« table » (ou « table@réglages ») : l'IA de la table au niveau de la partie (train.new : samples = niveau,
-    recherche du tour entier, train.LEVEL_CFG) ; sinon une version d'exp_search."""
+    recherche du tour entier, train.table_cfg) ; sinon une version d'exp_search."""
     A, B = train.W["decks"]
     nm, _, opts = ver.partition("@")
     if nm == "table":
         lvl = int(game.get("level", 1))
         _, _, _, _, extra = E.version("turn@" + opts) if opts else (None, None, None, None, {})
-        cfg = dict(train.LEVEL_CFG.get(lvl, {}), **extra)
+        cfg = dict(train.table_cfg(lvl), **extra)
         return P.PlanAgent(game["seed"] + 500000, plan=train._plan_for(B), opp_plan=train._plan_for(A), samples=lvl,
                            search="turn", cfg=cfg)
     sm, n, ex, h, cfg = E.version(ver)
