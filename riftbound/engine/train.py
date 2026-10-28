@@ -704,9 +704,11 @@ def _tick():
 
 
 def ai_script():
-    """Coups de l'IA depuis le début de la partie (TGame.aiscript), pour l'enregistrement de la page."""
+    """Coups de l'IA depuis le début de la partie (TGame.aiscript), pour l'enregistrement de la page, avec la graine de
+    la partie : la page n'accepte que le script de SA partie (2026-10-28 : le dernier enregistrement d'une manche de BO3
+    partait au lancement de la manche suivante et prenait son script vide)."""
     g = W.get("g")
-    return json.dumps(g.aiscript if g is not None else [])
+    return json.dumps(dict(seed=W.get("seed"), ai=g.aiscript if g is not None else []))
 
 
 def flag():
