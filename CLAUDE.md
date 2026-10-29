@@ -37,6 +37,11 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 9. **Garder un réglage de l'IA** (2026-10-20) : seulement s'il apporte **+2 points ou plus, démontré** par le test séquentiel
    `riftbound/engine/mesure/sprt.py` (H0 50 %, H1 52 %, 5 % / 5 %), puis confirmé par un second test sur des graines neuves.
    80 paires d'`exp_search.py` = simple coup d'œil. Durées et détails : `docs/memoire/ia-sprt.md`.
+10. **Réalisme de l'IA** (2026-10-29) : un réglage qui corrige des erreurs **marquées par l'utilisateur** sur la table
+   (bouton « Erreur de l'IA », vérifié sur ces positions avec `riftbound/engine/banc/humain.py`) est gardé, même sans
+   gain de victoires, s'il **ne fait pas perdre** : test séquentiel de non-infériorité (`RB_SPRT_H0=0.485 RB_SPRT_H1=0.50
+   mesure/sprt.py`, « garde ») puis confirmé sur des graines neuves. Les erreurs jugées par la note automatique du banc
+   ne comptent pas (elle se trompe sur ce qui fait gagner). Détails : `docs/memoire/ia-realisme.md`.
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
