@@ -1455,7 +1455,10 @@ function recSave(now, fresh = true) {
   const body = { ...REC, updated: new Date().toISOString(), turn: V ? V.st.t : 0, pts: V ? V.st.pts : [0, 0],
     log: LOG.map(([ind, t]) => (ind ? "  " : "") + t).slice(-2500) };
   if (!fresh || !T || DU || RP) return recWrite(rec, body);
-  J(T.ai_script()).then(ai => { if (REC === rec && Array.isArray(ai)) { rec.ai = ai; body.ai = ai; } }, () => {})
+  J(T.ai_script()).then(r => {
+    // seulement le script de cette partie (la manche suivante d'un BO3 peut déjà être lancée dans le moteur)
+    if (REC === rec && r && r.seed === rec.seed && Array.isArray(r.ai)) { rec.ai = r.ai; body.ai = r.ai; }
+  }, () => {})
     .then(() => recWrite(rec, body));
 }
 function recWrite(rec, body) {

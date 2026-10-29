@@ -327,3 +327,15 @@ Demande de l'utilisateur. `banc/cout.py` : 71 erreurs jouées jusqu'au bout, 16 
 ## [2026-10-28] ingest | Table : bouton « Erreur de l'IA » et coups de l'IA enregistrés
 Demande de l'utilisateur (« oui, le bouton » ; « autre erreur » doit être précisée). La partie garde les coups de l'IA (champ `ai`, rejeu fidèle même après un changement de l'IA : `train.ScriptAI`) et les erreurs marquées (raison, précision). Banc humain `engine/banc/humain.py`. Tests `cardsets/test_drapeau.py` (4) ; vérifié dans le navigateur intégré ; robot `train/verif_drapeau.mjs` dans la porte, pas encore lancé ici. `build.sh` : chemin lisible par Python sous Git Bash (Windows). Détail : `docs/wiki/pages/parties.md`.
 
+## [2026-10-28] ingest | Table republiée en artefact claude.ai (GitHub Pages gardé)
+Demande de l'utilisateur (« télécharger puis déposer c'est contraignant » ; « une version artefact et garder la version GitHub Page »). https://claude.ai/artifact/5FfNwvwKnVbFY4dbQbxjwR, capacité `db` : parties, coups de l'IA et erreurs marquées enregistrés seuls (collection `games`), lus par Claude avec ArtifactData. Deux passes de publication (142 + 126 fichiers). Chargement dans l'artefact non vérifié par Claude (pas de session claude.ai dans le navigateur intégré). Détail : `pages/publication.md`.
+
+## [2026-10-28] result | Premières erreurs marquées par l'utilisateur (7 parties, 14 marques)
+Demande de l'utilisateur (« apprend de mes games »). Bugs corrigés : script de l'IA écrasé entre manches de BO3, coups repris par « Reprendre » perdus (journal `W["ailog"]`). Banc humain : `spell_pre` change 9/14 coups marqués contre 6/24 témoins (IA actuelle : 6/14 contre 9/24) ; restent les unités [Ambush] jouées trop tôt et les placements. Détail : `docs/memoire/ia-banc-erreurs.md`.
+
+## [2026-10-28] decision | Table : unités Ambush gardées et réaction sans préférence (non-infériorité)
+Demande de l'utilisateur (« corriger les Ambush », test de non-infériorité). `ai` : `ambush` (politique et feuille) et `tie_react` ; `mesure/sprt.py` accepte `RB_SPRT_H0/H1`. Non-infériorité gardée deux fois (688 paires, 50,6 % ± 0,8 ; 1 448 paires neuves, 49,9 % ± 0,6). Allumé pour la table (`train.TABLE_CFG`), artefact republié. Positions marquées : Rengar gardé en base 3/3, Rengar + Punch First au combat 3/3, Vi inchangé. Détail : `docs/memoire/ia-banc-erreurs.md`.
+
+## [2026-10-29] decision | Règle 10 : réalisme de l'IA
+Demande de l'utilisateur (« oui, l'ajouter »). Un réglage qui corrige des erreurs marquées par l'utilisateur est gardé s'il ne fait pas perdre : deux tests séquentiels de non-infériorité (H0 48,5 %, H1 50 %) sur graines neuves. `CLAUDE.md` règle 10, `docs/memoire/ia-realisme.md`.
+

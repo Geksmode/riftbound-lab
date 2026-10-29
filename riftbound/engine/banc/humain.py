@@ -59,8 +59,17 @@ def positions(game, n_ctrl, seed=0):
 
 
 def agent(game, ver):
-    sm, n, ex, h, cfg = E.version(ver)
+    """« table » (ou « table@réglages ») : l'IA de la table au niveau de la partie (train.new : samples = niveau,
+    recherche du tour entier, train.table_cfg) ; sinon une version d'exp_search."""
     A, B = train.W["decks"]
+    nm, _, opts = ver.partition("@")
+    if nm == "table":
+        lvl = int(game.get("level", 1))
+        _, _, _, _, extra = E.version("turn@" + opts) if opts else (None, None, None, None, {})
+        cfg = dict(train.table_cfg(lvl), **extra)
+        return P.PlanAgent(game["seed"] + 500000, plan=train._plan_for(B), opp_plan=train._plan_for(A), samples=lvl,
+                           search="turn", cfg=cfg)
+    sm, n, ex, h, cfg = E.version(ver)
     return P.PlanAgent(game["seed"] + 500000, plan=train._plan_for(B), opp_plan=train._plan_for(A), samples=n,
                        search=sm, sh_extra=ex, horizon=h, cfg=cfg)
 
@@ -75,7 +84,7 @@ def main(args):
             n_ctrl = int(next(it))
         else:
             files.append(a)
-    vers = vers or ["turn"]
+    vers = vers or ["table"]
     games = [g for g in TG.load_games(files) if g.get("ai") and any(m[0] == "flag" for m in g.get("moves", []))]
     if not games:
         sys.exit("aucune partie avec des coups de l'IA enregistrés et des erreurs marquées (table du 2026-10-28 ou après)")

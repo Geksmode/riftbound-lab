@@ -14,7 +14,7 @@ Durée simulée (écart-type par paire 0,24, 2 410 paires « defaut ») : vrai 4
 52 % -> ≈ 650 ; 55 % -> ≈ 200. À ≈ 870 parties/h (24 processus, i7-14700HX) : 1 paire ≈ 8 s.
 Résultat ajouté à results_search.json (UTF-8, version du moteur, per_pair : compare.py le relit).
 Hors de engine/*.py : ne change pas version.engine_md5."""
-import json, math, sys, time
+import json, math, os, sys, time
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -25,7 +25,11 @@ _argv, sys.argv = sys.argv, sys.argv[:1]      # exp.py (importé par exp_search)
 import exp_search as E
 sys.argv = _argv
 
-M0, M1, ALPHA, BETA = 0.50, 0.52, 0.05, 0.05
+# Hypothèses : par défaut la règle 9 (H0 50 %, H1 52 %). Test de non-infériorité (2026-10-28, réglages « réalisme » :
+# démontrer qu'un réglage ne fait pas perdre) : RB_SPRT_H0=0.485 RB_SPRT_H1=0.50 ; « garde » = pas pire que −1,5 point.
+M0 = float(os.environ.get("RB_SPRT_H0", "0.50"))
+M1 = float(os.environ.get("RB_SPRT_H1", "0.52"))
+ALPHA, BETA = 0.05, 0.05
 LOW, HIGH = math.log(BETA / (1 - ALPHA)), math.log((1 - BETA) / ALPHA)
 MIN_PAIRS, EVERY = 40, 8
 

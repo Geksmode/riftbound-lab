@@ -33,7 +33,7 @@ def game(seed=5, turns=6):
     f = json.loads(train.flag())
     moves.append(["flag", "cible", v["st"]["t"], f["step"], "?"])
     v = drive(rr, v, moves, turns + 2)
-    return dict(seed=seed, level=0, moves=moves, ai=json.loads(train.ai_script()), pts=v["st"]["pts"]), f
+    return dict(seed=seed, level=0, moves=moves, ai=json.loads(train.ai_script())["ai"], pts=v["st"]["pts"]), f
 
 
 @T.test
@@ -60,32 +60,53 @@ def recorded_game_replays_identically_even_with_another_ai():
     while v.get("busy"):
         v = json.loads(train.step())
     assert v["st"]["pts"] == g["pts"], (v["st"]["pts"], g["pts"])
-    assert json.loads(train.ai_script())[:len(g["ai"])] == g["ai"]
+    assert json.loads(train.ai_script())["ai"][:len(g["ai"])] == g["ai"]
     assert f["step"] in train.W["caught"]               # position du coup marqué copiée au passage
 
 
 @T.test
-def undo_takes_back_the_ai_moves_too():
+def game_with_undo_replays_identically():
+    # 2026-10-28 (parties de l'utilisateur) : avec « Reprendre », l'ancien enregistrement (dans l'état) perdait les coups
+    # de l'IA repris ; le rejeu les rejoue pourtant avant le « Reprendre ». Le journal garde tout, dans l'ordre réel.
     rr = random.Random(9)
     train.new(9, None, None, 0)
-    v = drive(rr, json.loads(train.step()), [], 4)
-    while not v.get("dec"):
-        v = drive(rr, v, [], v["st"]["t"] + 1)
-    n0 = len(json.loads(train.ai_script()))
-    v = json.loads(train.act(len(v["dec"]["options"]) - 1))
+    moves = []
+    v = drive(rr, json.loads(train.step()), moves, 4)
+    n0 = len(json.loads(train.ai_script())["ai"])
+    for _ in range(2):                                  # deux coups puis « Reprendre » : l'IA a pu jouer entre-temps
+        while not v.get("dec"):
+            v = drive(rr, v, moves, v["st"]["t"] + 1)
+        i = len(v["dec"]["options"]) - 1
+        moves.append(["act", i])
+        v = json.loads(train.act(i))
+        while v.get("busy"):
+            v = json.loads(train.step())
+        moves.append(["undo"])
+        v = json.loads(train.undo())
+    v = drive(rr, v, moves, 8)
+    g = dict(seed=9, level=0, moves=moves, ai=json.loads(train.ai_script())["ai"], result=dict(pts=v["st"]["pts"]))
+    assert len(g["ai"]) >= n0                           # « Reprendre » n'efface rien du journal
+    train.new(9, None, None, 1)                         # autre IA : les coups viennent du journal
+    train.ai_replay(g["ai"])
+    v = json.loads(train.step())
+    for m in moves:
+        while v.get("busy") or not (v.get("ask") or v.get("dec") or m[0] == "undo"):
+            v = json.loads(train.step())
+        v = json.loads(train.undo() if m[0] == "undo" else train.answer(json.dumps(m[1])) if m[0] == "ans" else train.act(m[1]))
     while v.get("busy"):
         v = json.loads(train.step())
-    json.loads(train.undo())
-    assert len(json.loads(train.ai_script())) == n0
+    assert v["st"]["pts"] == g["result"]["pts"] and json.loads(train.ai_script())["ai"] == g["ai"]
 
 
 @T.test
-def search_copies_do_not_carry_the_script():
-    train.new(3, None, None, 0)
-    json.loads(train.step())
-    g = train.W["g"]
-    g.aiscript.append(["d", 0, "main", 1])
-    assert g.clone().aiscript == [] and g.aiscript
+def search_copies_and_hints_do_not_write_the_log():
+    train.new(3, None, None, 1)
+    v = json.loads(train.step())
+    while not v.get("dec"):
+        v = json.loads(train.step()) if v.get("busy") or not v.get("ask") else json.loads(train.answer("[]"))
+    n = len(json.loads(train.ai_script())["ai"])
+    train.hint(2)                                       # le conseil cherche sur des copies où l'IA répond aux asks
+    assert len(json.loads(train.ai_script())["ai"]) == n
 
 
 if __name__ == "__main__":

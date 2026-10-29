@@ -96,6 +96,33 @@ POL_TRICK = os.environ.get("RB_TRICK", "1") != "0"
 # Réactions de la politique de simulation (2026-10-11, PolicyAgent.react_best) : le sort qui améliore le plus le combat,
 # essayé sur une copie, au lieu de plays[0] 8 fois sur 10. RB_REACT=0 rend l'ancienne politique.
 POL_REACT = os.environ.get("RB_REACT", "1") != "0"
+# Unités [Ambush] gardées pour les jouer en réaction (2026-10-28, erreurs marquées par l'utilisateur : Vi, Peacekeeper posée
+# dans son tour, Rengar, Trophy Hunter en base ; « on préfère garder la mana up pour ambush »). Avec ambush, la politique
+# de simulation ne pose plus une unité [Ambush] dans son tour tant qu'elle a une unité sur un battlefield (là où l'Ambush
+# peut servir, 822) : elle la garde pour la jouer en réaction pendant un combat (react_best). La recherche voit alors ce
+# que vaut une Ambush gardée dans la suite des parties simulées, au lieu de la voir toujours jetée au tour suivant.
+# Une politique seule ne suffit pas (positions marquées : même coup) : la feuille de la recherche voit une Ambush en main
+# comme une carte quelconque (≈ 1) et posée comme une unité (≈ 20). Avec ambush = f > 0, evaluate compte aussi une unité
+# [Ambush] gardée là où elle peut servir, et payable, pour f × sa valeur posée (clé amb_hold des poids, hors de ai.EV :
+# les poids Texel et texel/features.py restent tels quels).
+# Désactivé par défaut tant que les mesures ne l'ont pas gardé : RB_AMBUSH=<f> ou cfg ambush=<f> (ex. 0.9).
+POL_AMBUSH = float(os.environ.get("RB_AMBUSH", "0") or 0)
+# Réaction sans préférence (2026-10-28, erreur marquée « suicide du Rengar ») : la recherche du tour entier avait prévu
+# Rengar en Ambush + Punch First (11 contre 9) puis l'attaque d'Emperor's Dais pour gagner ; au combat, la recherche de la
+# réaction (simulations par la politique, qui n'attaque pas un 5 contre 5) notait les 4 options pareil (toutes perdues),
+# et « passe » (la première) laissait mourir Rengar. Avec tie_react, une réaction dont toutes les options ont la même
+# note suit la politique (react_best), comme la simulation qui a préparé le coup. RB_TIE_REACT=1 ou cfg tie_react=1.
+TIE_REACT = os.environ.get("RB_TIE_REACT", "0") != "0"
+
+
+def holds_ambush(g, pid, spec):
+    """La politique garde cette carte : unité [Ambush] et pid a une unité sur un battlefield (voir POL_AMBUSH)."""
+    if spec["type"] != "Unit" or "Ambush" not in spec["keywords"]:
+        return False
+    # Rengar, Trophy Hunter : « I can be played to a battlefield where there are enemy units »
+    enemy_ok = "where there are enemy units" in (spec["text"] or "")
+    return any(o.spec["type"] == "Unit" and is_bf(o.loc) and (o.ctrl == pid or enemy_ok and o.ctrl != pid)
+               for o in g.board)
 # RB_LAZY_CHECK=1 : chaque coup de la politique de simulation choisi sans la liste des coups est recalculé avec la liste
 # complète et comparé (PolicyAgent._lazy_check ; contrôle, lent)
 _LAZY_CHECK = os.environ.get("RB_LAZY_CHECK") == "1"
@@ -219,6 +246,14 @@ def evaluate(g, me, w=None):
         if w["trick"] and any(o.ctrl == pid and o.spec["type"] == "Unit" for o in g.board):
             nr = len(pl.runes)
             v += w["trick"] * sum(1 for c in pl.hand if is_trick(c.spec) and c.spec["e"] + c.spec["p"] <= nr)
+        if w.get("amb_hold"):
+            # (2026-10-28, voir POL_AMBUSH) une unité [Ambush] gardée en main là où elle peut servir, et payable, vaut
+            # amb_hold × ce qu'elle vaudrait posée (sans on_bf) : une menace en réaction, pas une carte quelconque
+            nr = len(pl.runes)
+            for c in pl.hand:
+                sp = c.spec
+                if sp["e"] + sp["p"] <= nr and holds_ambush(g, pid, sp):
+                    v += w["amb_hold"] * (w["unit0"] + w["might"] * (sp["might"] or 0) + w["cost"] * (sp["e"] + 1.5 * sp["p"]))
         v += w["rune"] * len(pl.runes)
         if pl.legend.empowered:
             v += w["leg_emp"]
@@ -500,6 +535,8 @@ class SearchAgent(Heuristics):
         s.fast = FastAgent()
         s.search = search or SEARCH
         s.ev = dict(EV, **s.cfg["ev"]) if s.cfg.get("ev") else None
+        if s.cfg.get("ambush", POL_AMBUSH):
+            s.ev = dict(s.ev or EV, amb_hold=float(s.cfg.get("ambush", POL_AMBUSH)))
         s.sh_extra = SH_EXTRA if sh_extra is None else sh_extra
         s.tplan = None                 # mode "turn" : ((tour, joueur), coups restants de la suite choisie)
 
@@ -624,10 +661,24 @@ class SearchAgent(Heuristics):
             # autres décisions (réactions, focus, cibles) : l'utilisateur accepte d'attendre un tour réfléchi, pas un petit choix.
             n0, s.samples = s.samples, int(s.cfg["react_n"])
             try:
-                return s.pick(g, d, opts)[0]
+                return s.tie_break(g, d, opts, s.pick(g, d, opts))
             finally:
                 s.samples = n0
-        return s.pick(g, d, opts)[0]
+        return s.tie_break(g, d, opts, s.pick(g, d, opts))
+
+    def tie_break(s, g, d, opts, picked):
+        """Coup retenu par pick ; avec tie_react (TIE_REACT), une réaction dont toutes les options ont la même note suit
+        la politique (react_best), comme la simulation de la recherche du tour entier qui a préparé le coup en cours."""
+        best, _, scored = picked
+        if d.kind != "main" and s.cfg.get("tie_react", TIE_REACT):
+            vals = [x[0] for x in scored if x]
+            if len(vals) == len(opts) > 1 and max(vals) - min(vals) < 1e-6:
+                pol = PolicyAgent()
+                pol.cfg = s.cfg
+                a = pol.decide(g, d)
+                if a in opts:
+                    return a
+        return best
 
     def urgent(s, g, d, me, best_v):
         return TEMPO and d.kind == "main" and s.samples < URGENT_SAMPLES and (best_v < -5000 or danger(g, me))
@@ -926,6 +977,8 @@ class PolicyAgent(Heuristics):
             if o is not None:
                 return o
             plays = []
+        if plays and s.cfg.get("ambush", POL_AMBUSH):
+            plays = [o for o in plays if not holds_ambush(g, pid, s.card_of(g, o).spec)]
         units = [o for o in plays if s.is_unit(g, o)]
         if units:
             units.sort(key=lambda o: -(s.card_of(g, o).spec["might"] or 0))
@@ -959,6 +1012,8 @@ class PolicyAgent(Heuristics):
             seen.add(key)
             cands.append((c, src, s.card_of(g, ("play", c.uid))))
         units = [x for x in cands if x[2] is not None and x[2].spec["type"] == "Unit"]
+        if s.cfg.get("ambush", POL_AMBUSH):
+            units = [x for x in units if not holds_ambush(g, pid, x[2].spec)]
         units.sort(key=lambda x: -(x[2].spec["might"] or 0))      # tri stable : l'ordre des cartes à égalité
         for c, src, _ in units:
             chs = card_choices(g, pid, c, src, False, False)

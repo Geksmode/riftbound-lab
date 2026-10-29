@@ -98,6 +98,38 @@ bouton ») : les erreurs que **le joueur** marque sur la table remplacent la not
 réglage qui corrige des erreurs marquées s'il est démontré qu'il ne fait pas perdre : test de non-infériorité) proposée,
 pas encore décidée par l'utilisateur.
 
+**Premières parties marquées** (2026-10-28, artefact, niveau Très fort, 7 parties Akali contre LeBlanc et Master Yi,
+14 erreurs marquées, toutes dans `riftbound/train/games/games/mvs*.json`). Deux bugs trouvés et corrigés en route : le
+script de l'IA d'une manche de BO3 était écrasé par celui de la manche suivante (6 parties sur 7 sans coups de l'IA) ;
+« Reprendre » effaçait des coups de l'IA que le rejeu rejoue (3 parties non rejouables) → journal en temps réel
+`W["ailog"]`. Coups de l'IA recalculés avec le moteur exact (d014de4a0a), 7 rejeux fidèles.
+- Banc humain (`humain.py --ver table --ver "table@spell_pre=1" --temoins 4`, 14 marques, 24 témoins) : IA de la table
+  change 6/14 marques (43 % [21 ; 67]) et 9/24 témoins (38 % [21 ; 57]) : bruit. Avec `spell_pre` : 9/14 marques
+  (64 % [39 ; 84]) contre 6/24 témoins (25 % [12 ; 45]) ; corrige Charm qui envoie Akali conquérir Seat of Power
+  (la recherche notait −53,8 contre −62,8 pour la renvoyer en base ; la note immédiate dit l'inverse) et En Garde en
+  showdown vide. Ne corrige pas : unités [Ambush] (Vi Peacekeeper, Rengar Trophy Hunter) jouées dans son tour ou en
+  base au lieu d'être gardées, Rengar envoyé mourir, Karthus posé sur un battlefield, déplacements.
+- Limite de la marque : elle vise le dernier vrai choix de l'IA ; une remarque sur un coup plus ancien (Rengar en base,
+  marqué sur Sabotage) tombe sur le mauvais coup.
+
+**Essai 3 : unités [Ambush] et réaction sans préférence** (2026-10-28, « corriger les Ambush », mesure demandée :
+« sur mes marques et par un test de non-infériorité ») — **allumé pour la table** (`train.TABLE_CFG`, tous niveaux sauf
+le tutoriel ; coupé par défaut ailleurs : `RB_AMBUSH`, `RB_TIE_REACT`).
+- `ambush = f` : la politique de simulation garde une unité [Ambush] tant qu'elle peut servir (unité sur un
+  battlefield ; Rengar, Trophy Hunter : battlefield avec ennemis), et la feuille la compte pour f × sa valeur posée
+  (`amb_hold`, hors de `ai.EV`). La politique seule ne changeait aucun coup marqué. f = 0,5.
+- `tie_react` : réaction dont toutes les options ont la même note → la politique (`react_best`). Cause trouvée au
+  « suicide du Rengar » : la recherche du tour avait prévu Rengar + Punch First (11 contre 9) puis Emperor's Dais pour
+  gagner ; au combat, la recherche de la réaction notait tout −9550 (sa politique n'attaque pas un 5 contre 5) et
+  passait.
+- Positions marquées (IA de la table, Très fort, 3 tirages chacune) : Rengar en base T5 gardé 3/3 (avant 1/3) ;
+  combat de Rengar T17 : Punch First 3/3 (avant 0/3) ; Vi, Peacekeeper T5 : inchangé 0/3.
+- Non-infériorité (`RB_SPRT_H0=0.485 RB_SPRT_H1=0.50 mesure/sprt.py`, `sh@ambush=0.5,tie_react=1` contre `sh`, decks
+  variés) : gardé après 688 paires (5300000-5300687, 50,6 % ± 0,8), confirmé après 1 448 paires (5400000-5401447,
+  49,9 % ± 0,6). Mesuré en `sh`, pas en `turn` (table) ; pas de gain de victoires démontré. Temps par décision non mesuré.
+- Reste à faire : Vi posée pendant son showdown (garde Windswept Hillock, la recherche y voit les points de tenue) ;
+  la politique de simulation n'attaque pas quand l'égalité de Might gagne la partie.
+
 **Pistes** (non faites, chacune à mesurer sur ce banc puis par la règle 9) : asks par simulation courte (le juge lui-même, au lieu de options[0]) ; politique de simulation
 qui vise avec une note immédiate ; chaque réglage gardé seulement par la règle 9 ([[ia-sprt]]).
 

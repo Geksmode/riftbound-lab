@@ -1636,6 +1636,9 @@ def very_strong_level_spends_its_budget_on_the_turn():
     assert sa.samples == 6 and sa.search == "turn" and sa.cfg["turn_w"] == 6 and sa.cfg["react_n"] == 3
     json.loads(train.new(5, level=3))
     assert train.W["ag"][1].samples == 3 and "react_n" not in train.W["ag"][1].cfg
+    # 2026-10-28 : unités [Ambush] gardées et réaction sans préférence suivant la politique, à tous les niveaux de la table
+    assert train.W["ag"][1].cfg["ambush"] == 0.5 and train.W["ag"][1].cfg["tie_react"] == 1
+    assert sa.cfg["ambush"] == 0.5 and sa.ev["amb_hold"] == 0.5
     seen = []
     sa.pick = lambda g_, d_, o_: (seen.append((d_.kind, sa.samples)), (o_[0], 0.0, []))[1]
     g, _ = new()

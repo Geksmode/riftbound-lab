@@ -26,7 +26,7 @@ les modifier. Il faut les republier (nouvelle URL) depuis les sources du dépôt
 
 | Page | Ancienne URL | Sources |
 |---|---|---|
-| Riftbound Observatory (table + éditeur de deck) | https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC | `riftbound/train/` |
+| Riftbound Observatory (table + éditeur de deck) | https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC (republiée le 2026-10-28 : https://claude.ai/artifact/5FfNwvwKnVbFY4dbQbxjwR) | `riftbound/train/` |
 | Riftbound Replays | https://claude.ai/artifact/ThZartFw9uTqb6jcjvpgFV | `riftbound/replays/` |
 | Puzzles Akali vs Yi | https://claude.ai/artifact/Ds4TSVoR6tcNRbQKBKYpcP | `riftbound/puzzles/` |
 
