@@ -336,3 +336,6 @@ Demande de l'utilisateur (« apprend de mes games »). Bugs corrigés : script d
 ## [2026-10-28] decision | Table : unités Ambush gardées et réaction sans préférence (non-infériorité)
 Demande de l'utilisateur (« corriger les Ambush », test de non-infériorité). `ai` : `ambush` (politique et feuille) et `tie_react` ; `mesure/sprt.py` accepte `RB_SPRT_H0/H1`. Non-infériorité gardée deux fois (688 paires, 50,6 % ± 0,8 ; 1 448 paires neuves, 49,9 % ± 0,6). Allumé pour la table (`train.TABLE_CFG`), artefact republié. Positions marquées : Rengar gardé en base 3/3, Rengar + Punch First au combat 3/3, Vi inchangé. Détail : `docs/memoire/ia-banc-erreurs.md`.
 
+## [2026-10-29] decision | Règle 10 : réalisme de l'IA
+Demande de l'utilisateur (« oui, l'ajouter »). Un réglage qui corrige des erreurs marquées par l'utilisateur est gardé s'il ne fait pas perdre : deux tests séquentiels de non-infériorité (H0 48,5 %, H1 50 %) sur graines neuves. `CLAUDE.md` règle 10, `docs/memoire/ia-realisme.md`.
+
