@@ -54,3 +54,10 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 - Avant de committer sur la branche de travail : vérifier si la PR précédente est fusionnée (`git log origin/main`) ; si oui,
   repartir de `origin/main` (une PR fusionnée ne reçoit plus rien).
 - Travail en équipe (chef + agents tmux) : `docs/wiki/pages/equipe.md`, missions : `docs/MISSIONS.md`.
+
+## Garde-fous (hooks de `.claude/`, détail : `docs/wiki/pages/harness.md`)
+- Un `git push` de code est refusé tant que `scripts/verifier.sh` n'est pas vert sur ce code ; en fin de session avec du
+  code non vérifié, tu seras relancé une fois : lance la porte, ou dis clairement ce qui n'est pas vérifié.
+- Tâche non triviale : écris d'abord le contrat (livrable, contraintes, hors périmètre, critère de fin mesurable).
+- Même erreur deux fois de suite : arrête d'éditer, montre la sortie exacte, propose la cause, attends l'utilisateur.
+- Fin de travail : mets à jour `docs/wiki/pages/etat.md` (date `maj`) si l'état du projet a changé.

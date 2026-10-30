@@ -339,3 +339,5 @@ Demande de l'utilisateur (« corriger les Ambush », test de non-infériorité).
 ## [2026-10-29] decision | Règle 10 : réalisme de l'IA
 Demande de l'utilisateur (« oui, l'ajouter »). Un réglage qui corrige des erreurs marquées par l'utilisateur est gardé s'il ne fait pas perdre : deux tests séquentiels de non-infériorité (H0 48,5 %, H1 50 %) sur graines neuves. `CLAUDE.md` règle 10, `docs/memoire/ia-realisme.md`.
 
+## [2026-10-30] harness | Garde-fous automatiques (hooks, worktrees)
+Demande de l'utilisateur (état des lieux « harness engineering » puis mise en œuvre). `.claude/settings.json` : hooks Node de démarrage, de push (porte verte exigée sur le code poussé) et de fin de session, `pkill -f` interdit ; `scripts/porte_etat.mjs` appelé par `verifier.sh` ; `.worktreeinclude`, `.claude/worktrees/` ignoré ; contrat de tâche et escalade dans `CLAUDE.md`. Détail : [harness](pages/harness.md).

@@ -14,6 +14,7 @@
 #             répartition dans PARTIE ci-dessous ; un robot qui n'y figure pas tourne dans la partie 1).
 # Code de sortie 0 seulement si tout passe ; un résumé est imprimé à la fin.
 set -uo pipefail
+export PYTHONUTF8=1   # Windows lit en cp1252 par défaut : wiki_lint et test_duel plantent sur les accents
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 E="$ROOT/riftbound/engine"; TR="$ROOT/riftbound/train"
 QUOI="${1:-tout}"; FUZZ="${RB_FUZZ:-200}"; RAND="${RB_RAND:-30}"; PORT="${RB_PORT:-8771}"
@@ -161,4 +162,6 @@ esac
 
 echo; echo "=== Porte d'intégration ($QUOI) ==="; printf '%s\n' "${RES[@]}"
 [ $ECHEC = 0 ] && echo "=== TOUT PASSE ===" || echo "=== ÉCHEC : ne pas intégrer ==="
+# État noté pour les hooks de .claude/ (push et fin de session) : voir scripts/porte_etat.mjs
+command -v node >/dev/null 2>&1 && (cd "$ROOT" && node scripts/porte_etat.mjs ecrire "$QUOI" "$ECHEC" "$PART" "${RB_NAV:-1}" "$FUZZ" "$RAND") || true
 exit $ECHEC

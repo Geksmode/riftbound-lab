@@ -9,3 +9,9 @@ riftbound/train/node_modules/
 # autoharness : état et skills générés automatiquement (non versionnés)
 .claude/autoharness/
 .claude/skills/
+
+# harness : worktrees natifs de Claude Code (claude -w, sous-agents) et état local de la porte (scripts/porte_etat.mjs)
+.claude/worktrees/
+.claude/state/
+.claude/settings.local.json
+riftbound/engine/*.log
