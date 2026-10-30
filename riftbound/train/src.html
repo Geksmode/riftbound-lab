@@ -130,6 +130,7 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .prompt .mull button { padding: 0; }
 .prompt .mull button .card { --cw: 78px; --chh: 109px; width: 78px; height: 109px; }
 .prompt .mull .mc { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.prompt .mull.show .sw { font-size: 11px; opacity: .8; max-width: 90px; text-align: center; }
 .prompt .mull button.rd { min-height: 30px; padding: 3px 12px; font-size: 12px; font-weight: 600; border: 1px solid var(--trait-2, #556); border-radius: 8px; background: rgba(255,255,255,.06); color: inherit; }
 .prompt .mull.pick button:hover .card { box-shadow: 0 0 0 3px var(--akali); }
 .toast { position: fixed; z-index: 45; pointer-events: none; max-width: min(560px, calc(100vw - 24px)); background: rgba(16,19,30,.95); border: 1px solid var(--leblanc); color: var(--leblanc); border-radius: 20px; padding: 6px 14px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
@@ -1831,7 +1832,7 @@ const locName = l => l === "base" || l === null || l === undefined ? "base" : (V
 const unitEl = u => document.querySelector(`#board .bf [data-uid="${u}"], #board .zone [data-uid="${u}"]`);
 const srcEl = u => document.querySelector(`#board [data-uid="${u}"]`);
 const zoneEl = z => document.querySelector(`#board [data-drop="${z}"]`);
-function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
+function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, S(o.show), S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
 function flash(msg) { SFX.play("nope"); toast(msg, "flash"); }
 function reset() { sel = null; mode = null; }
 function run(m) {
@@ -1925,7 +1926,9 @@ function startMove(u, dest = null) {
 const canMove = u => optsFor(u).some(o => o.k === "move");
 
 // ---------- menu d'une carte
+let popLists = {};   // menu de la carte → variantes à choisir dans la bulle ([Show Off])
 function popHTML() {
+  popLists = {};
   const ops = optsFor(sel).filter(o => o.k !== "move" || false);
   const name = (srcEl(sel) || {}).dataset ? srcEl(sel).dataset.card : "";
   let h = `<div class="pt">${esc(name || "Carte")}</div>`;
@@ -1943,9 +1946,15 @@ function popHTML() {
     if (shown.has(o.i)) continue;
     let t = o.label;
     const sib = o.k === "play" ? plain.filter(x => x.k === "play" && S(x.loc) === S(o.loc) && x.from_ === o.from_) : [o];
-    if (o.k === "play" && sib.length > 1) {
+    if (o.k === "play" && sib.length > 1 || o.k === "play" && o.show !== undefined) {
       // plusieurs façons de jouer la carte au même endroit : une ligne de titre puis Accelerate / Normal (ou Repeat)
       h += `<div class="pg">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}</div>`;
+      if (sib.some(x => x.show !== undefined)) {
+        // [Show Off] : le choix se fait sur les images des cartes montrables, dans la bulle (showHTML)
+        sib.forEach(x => shown.add(x.i)); popLists[o.i] = sib;
+        h += `<button data-sl="${o.i}">Jouer → ${esc(locName(o.loc))}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""} : Show Off…</button>`;
+        continue;
+      }
       for (const x of sib.sort((a, b) => (b.acc ? 1 : 0) - (a.acc ? 1 : 0) || (b.rep ? 1 : 0) - (a.rep ? 1 : 0))) {
         shown.add(x.i);
         h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.xc ? cap(x.xc) : "", x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || (sib.some(y => y.xc) ? "Sans coût supplémentaire" : "Normal"))}</button>`;
@@ -1976,6 +1985,7 @@ $("pop").addEventListener("click", e => {
   if (b.dataset.i) { $("pop").hidden = true; return choose(+b.dataset.i); }
   if (b.dataset.tg) { const k = b.dataset.tg; return startTarget(optsFor(sel).filter(o => needs(o) && (o.k === "act" ? o.label.split(" : ")[0] === k : k === "Jouer"))); }
   if (b.dataset.mv) return startMove(sel);
+  if (b.dataset.sl) { $("pop").hidden = true; mode = { type: "list", cands: popLists[b.dataset.sl] }; return decorate(); }
   if (b.dataset.read) { const el = srcEl(sel); if (el) showZoom(el); }
 });
 
@@ -2014,10 +2024,23 @@ function variantLabel(o, cands) {
   const parts = [];
   if (locs.size > 1) parts.push((o.k === "hide" ? "Cacher → " : "") + cap(locName(o.loc)));
   if (cands.some(x => x.xc)) parts.push(o.xc ? cap(o.xc) : "Sans coût supplémentaire");   // Shimmering Swimmer, Sea Monkey…
+  if (cands.some(x => x.show !== undefined)) parts.push(showTxt(o));
   if (cands.some(x => x.acc)) parts.push(o.acc ? accTxt(o) : "Normal");
   if (cands.some(x => x.rep)) parts.push(o.rep ? "Avec Repeat" : "Sans Repeat");
   if (cands.some(x => x.from_ === "trash")) parts.push(o.from_ === "trash" ? "Depuis la défausse" : "Depuis la main");
   return parts.length ? parts.join(" · ") : cap(o.label);
+}
+// [Show Off] (règle 832) : la carte de ta main ou l'objet à toi en jeu montré en jouant la carte, ou rien (« you may »)
+const showTxt = o => o.show === undefined ? "Sans Show Off" : `Show Off : ${o.showN} (${o.showW === "hand" ? "main" : "en jeu"})`;
+// Bulle du [Show Off] : une image par carte montrable (touchée = jouée en la montrant), puis « Sans Show Off ». Les
+// autres façons de jouer (zone, Accelerate…) sont écrites sous chaque carte.
+function showHTML() {
+  const nmx = (srcEl(sel) || {}).dataset, cs = mode.cands;
+  const rest = o => { const t = variantLabel(o, cs).split(" · ").filter(x => !/Show Off/.test(x)); return t.length && t.join("") !== cap(o.label) ? t.join(" · ") : ""; };
+  const yes = cs.filter(o => o.show !== undefined), no = cs.filter(o => o.show === undefined);
+  return `<span class="ft">${nmx && nmx.card ? `<b>${esc(nmx.card)}</b> : ` : ""}touche la carte à montrer (Show Off)</span>
+    <div class="mull pick show">${yes.map(o => `<div class="mc"><button data-i="${o.i}" title="${esc(showTxt(o))}">${card(o.showN, { raw: true, cost: true })}</button><span class="sw">${o.showW === "hand" ? "main" : "en jeu"}${rest(o) ? " · " + esc(rest(o)) : ""}</span></div>`).join("")}</div>
+    <div class="prow col">${no.map(o => `<button class="go" data-i="${o.i}">${esc(["Sans Show Off", rest(o)].filter(Boolean).join(" · "))}</button>`).join("")}<button id="fNo">Annuler</button></div>`;
 }
 function accTxt(o) {
   const n = (srcEl(S(ALIAS[o.src] ?? o.src)) || {}).dataset; const c = CARDS[n ? n.card : ""] || {};
@@ -2071,6 +2094,7 @@ function fbarHTML() {
     return `<span class="ft">${esc(txt)}. Touche d'autres unités pour les ajouter.</span>${why}
       <div class="prow"><button class="${enemy ? "fight" : "go"}" id="fOk" ${o ? "" : "disabled"}>${enemy ? "⚔ Lancer le combat" : "Lancer le déplacement"}</button><button id="fNo">Annuler</button></div>`;
   }
+  if (mode.type === "list" && mode.cands.some(o => o.show !== undefined)) return showHTML();
   if (mode.type === "list") {
     const nmx = (srcEl(sel) || {}).dataset;
     return `<span class="ft">${nmx && nmx.card ? `<b>${esc(nmx.card)}</b> : ` : ""}comment le jouer ?</span><div class="prow col">${mode.cands.map(o => `<button class="go" data-i="${o.i}">${esc(variantLabel(o, mode.cands))}</button>`).join("")}<button id="fNo">Annuler</button></div>`;

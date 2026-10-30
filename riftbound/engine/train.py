@@ -621,11 +621,12 @@ def _expand(g, d):
     """Sorts à cibles : le moteur ne propose que quelques combinaisons (ennemis les mieux classés, 8 au plus) pour
     l'IA. Pour le joueur humain, on ajoute toutes les combinaisons légales (prédicats de la carte, Deflect payé)."""
     pid = d.player                                    # le joueur qui décide (en duel : pas forcément ME)
-    opts, seen, groups = list(d.options), {repr(a) for a in d.options}, {}
+    key = lambda a: repr(a[:3] + (sorted(a[3].items()),)) if len(a) > 3 and isinstance(a[3], dict) else repr(a)
+    opts, seen, groups = list(d.options), {key(a) for a in d.options}, {}
     for a in opts:
-        if a[0] == "play" and "tg" in a[3] and set(a[3]) <= {"tg", "flow"}:
-            groups.setdefault((a[1], a[2]), []).append(a)
-    for (uid, src), lst in groups.items():
+        if a[0] == "play" and "tg" in a[3] and set(a[3]) <= {"tg", "flow", "show"}:
+            groups.setdefault((a[1], a[2], a[3].get("show")), []).append(a)   # [Show Off] : une variante par objet montré
+    for (uid, src, _show), lst in groups.items():
         n = len(lst[0][3]["tg"])
         if n == 0 or any(len(a[3]["tg"]) != n or not all(isinstance(x, int) for x in a[3]["tg"]) for a in lst):
             continue
@@ -655,9 +656,9 @@ def _expand(g, d):
         for c in combos:
             ch = dict(extra, tg=tuple(o.uid for o in c))
             a = ("play", uid, src, ch)
-            if repr(a) in seen or not _act.affordable(g, pid, card, ch, src):
+            if key(a) in seen or not _act.affordable(g, pid, card, ch, src):
                 continue
-            seen.add(repr(a))
+            seen.add(key(a))
             opts.append(a)
     # Sorts « cible puis déplacement » (Shuriken Flip : 2 dégâts à un ennemi au plus, puis un allié va vers une zone) :
     # le moteur ne garde que 12 combinaisons pour l'IA ; l'humain a droit à toutes (ennemi ou aucun × allié × destination).
@@ -685,9 +686,9 @@ def _expand(g, d):
                         continue
                     ch = dict(extra, tg=t, mover=u.uid, mover_oid=u.oid, dest=dst)
                     a = ("play", uid, src, ch)
-                    if repr(a) in seen or not _act.affordable(g, pid, card, ch, src):
+                    if key(a) in seen or not _act.affordable(g, pid, card, ch, src):
                         continue
-                    seen.add(repr(a))
+                    seen.add(key(a))
                     opts.append(a)
     d.options = opts
 
@@ -1049,6 +1050,11 @@ def _info(a, g=None):
         if g is not None:
             from cards import play_cost_parts
             out["xc"] = ", ".join(play_cost_parts(g, ch))
+        if g is not None and ch.get("show") is not None:
+            # [Show Off] (832) : l'objet montré, pour proposer « montrer X » ou « sans Show Off » sur la table
+            sh = _act.shown_info(g, ME, ch["show"])
+            if sh is not None:
+                out.update(show=sh["uid"], showN=sh["name"], showW=sh["where"])
     elif k == "act":
         ch = dict(a[3]) if len(a) > 3 and isinstance(a[3], dict) else {}
         out = dict(t1=list(ch.get("tg", ()) or ()), loc=ch.get("dest"), exh=ch.get("exh"))   # exh : unité épuisée (coût)
