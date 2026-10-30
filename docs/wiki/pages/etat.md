@@ -1,10 +1,11 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-10-19
+maj: 2026-10-30
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **[Show Off] sur la table (2026-10-30)** : le joueur choisit la carte montrée (main ou en jeu) ou « Sans Show Off » ; avant, la page fusionnait ces choix. Vérifié par robot (`train/verif_showoff.mjs`), pas sur un vrai téléphone. Voir [radiance.md](radiance.md).
 - **Baron Nashor et Baron Pit (2026-10-19)** : modélisés. Les battlefields sont une liste de taille variable (`g.bfs`, `is_bf`, `g.bf_locs`) ; Nashor ajoute le jeton Baron Pit (3e battlefield, règle 187.9) et y entre (369.3) ; le point final par conquête exige alors les 3 battlefields marqués dans le tour (471.1.b.1), sinon on pioche. Unités vers le Baron Pit depuis n'importe où (sans Ganking). Les jetons ne peuvent plus être un battlefield de départ (Brush compris). Table et lecteur de replays : 3 battlefields côte à côte. Détail : `cardsets/NEEDS_chaos.md`, `NEEDS_battlefields.md`.
 - **Radiance (2026-10-19)** : 166 des 167 cartes de l'extension modélisées (Neeko bloquée), voir [radiance.md](radiance.md).
 - Moteur (2026-10-07) : 917 cartes jouables sur 919 à cette date ; Baron Nashor et Baron Pit débloqués le 2026-10-19 (ci-dessus).

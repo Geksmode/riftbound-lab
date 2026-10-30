@@ -341,3 +341,6 @@ Demande de l'utilisateur (« oui, l'ajouter »). Un réglage qui corrige des err
 
 ## [2026-10-30] harness | Garde-fous automatiques (hooks, worktrees)
 Demande de l'utilisateur (état des lieux « harness engineering » puis mise en œuvre). `.claude/settings.json` : hooks Node de démarrage, de push (porte verte exigée sur le code poussé) et de fin de session, `pkill -f` interdit ; `scripts/porte_etat.mjs` appelé par `verifier.sh` ; `.worktreeinclude`, `.claude/worktrees/` ignoré ; contrat de tâche et escalade dans `CLAUDE.md`. Détail : [harness](pages/harness.md).
+
+## [2026-10-30] ingest | Table : choix du [Show Off]
+Demande de l'utilisateur (« les cartes Show Off ne s'appliquent pas, proposer de montrer ou non »). Les variantes du moteur étaient fusionnées par la page (même libellé) ; la table propose maintenant chaque carte montrable et « Sans Show Off ». Tests `test_show_off_table.py`, robot `verif_showoff.mjs`. Détail : [Radiance](pages/radiance.md).

@@ -1,7 +1,7 @@
 ---
 titre: Extension Radiance (RAD)
 resume: les 167 cartes de Radiance dans la base et le moteur, les nouveaux mots-clés, les corrections de la source, ce qui manque
-maj: 2026-10-21
+maj: 2026-10-30
 sources: riftbound/engine/cardsets/radiance.py, riftbound/engine/cardsets/test_radiance.py, riftbound/cards/corrections_rad.py, riftbound/rules/source/core_rules_2026-10-09.txt, riftbound/engine/cardsets/NEEDS_radiance.md
 ---
 **Ajoutée le 2026-10-19** (demande de l'utilisateur : « toutes les cartes de Radiance et leur effet »). Sortie de
@@ -29,6 +29,16 @@ d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance 
 - [Disarm X] (831) : déclencheur d'attaque, -X sur une unité ennemie ici ; valeurs additionnées.
 - [Show Off] (832) : montrer une carte de la main ou un objet allié en jouant ; l'information est prise au moment
   où on la montre (832.1.d.1).
+  Table (corrigé le 2026-10-30, demande de l'utilisateur « les cartes à effet Show Off ne s'appliquent pas ») : le
+  moteur proposait bien une option par objet montrable et « sans Show Off », mais elles avaient le même libellé et la
+  page (`src.html`, `uniq`) n'en gardait qu'une : le joueur ne choisissait jamais. Maintenant `train._info` envoie
+  `show` / `showN` / `showW`, le libellé dit « Show Off : X » (`replay.describe`, aussi dans le journal). La table
+  ouvre une bulle (`src.html`, `showHTML`) avec l'**image** de chaque carte montrable (« main » ou « en jeu » dessous)
+  et un bouton « Sans Show Off » : par « Jouer → zone : Show Off… » dans le menu de la carte, par le glisser, ou après
+  la cible pour un sort ciblé (demande du même jour : des images plutôt que du texte). `train._expand` garde toutes les cibles pour chaque objet montré.
+  Tests `cardsets/test_show_off_table.py` (0/4 avant, 4/4 après) ; vérifié par robot (toucher simulé, 393 px) :
+  `train/verif_showoff.mjs` (Incorrigible Construct avec et sans Show Off, Primordial Roar). Pas essayé sur un vrai
+  téléphone.
 - Jeton Bomb (187.12) ; « devient épuisé » (évènement `exhausted`, une action = un évènement) ; « unit gear »
   (Orianna, Lady of Clockwork) ; jouer une carte depuis l'exil jusqu'à la prochaine Ending Phase.
 - Les autres changements des règles 2026-10-09 (cleanup, Contested, « once each turn »…) ne sont **pas** audités

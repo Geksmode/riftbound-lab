@@ -169,6 +169,11 @@ def describe(g, a, pid, viewer=None):
                 extra.append(kk)
         from cards import play_cost_parts
         extra = play_cost_parts(g, dict(ch)) + extra      # before the target (the table cuts labels at « cible »)
+        if ch.get("show") is not None:                   # [Show Off] (832) : l'objet montré, avant la cible aussi
+            from actions import shown_info
+            sh = dict(ch).get("shown") or shown_info(g, pid, ch["show"])
+            if sh is not None:
+                extra.insert(0, tr(f"Show Off : {sh['name']}", f"Show Off: {sh['name']}"))
         if c is not None:
             from actions import deflect_total
             nd = len(deflect_total(g, pid, c, dict(ch)))

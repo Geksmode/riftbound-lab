@@ -27,7 +27,7 @@ LOG="$(mktemp -d)"; RES=(); ECHEC=0; JOBS="${RB_JOBS:-$(nproc 2>/dev/null || ech
 #   4 : duel (~90, CI seulement), match 87, mobile 47, banish 13, predict 10, mulligan 9  ≈ 256 s
 declare -A PARTIE=(
   [verif_anglais]=1 [verif_tuto]=1 [verif_charge]=1 [verif_son]=1 [verif_hidden]=1 [verif_vs]=1
-  [verif_replay]=2 [verif_nashor]=2 [verif_espace]=2 [verif_dash]=2 [verif_flow]=2 [verif_cibles]=2 [verif_drapeau]=2
+  [verif_replay]=2 [verif_nashor]=2 [verif_espace]=2 [verif_dash]=2 [verif_flow]=2 [verif_cibles]=2 [verif_drapeau]=2 [verif_showoff]=2
   [verif_fleches]=3 [verif_deploy]=3 [verif_reactif]=3 [verif_base]=3 [verif_cout]=3 [verif_revele]=3
   [verif_duel]=4 [verif_match]=4 [verif_mobile]=4 [verif_banish]=4 [verif_predict]=4 [verif_mulligan]=4
 )
@@ -86,7 +86,7 @@ navigateur() {
   [ $rc = 0 ] && ! grep -q "^ÉCHEC" <<<"$out" && echo "robot navigateur : $(grep -c '^OK' <<<"$out") contrôles OK (captures dans $LOG)"
 }
 
-cache() {   # robots : verif_hidden.mjs (cacher, jouer depuis la face cachée), verif_revele.mjs (main révélée), verif_charge.mjs (téléphone chargé), verif_cibles.mjs (ciblage par liste), verif_flow.mjs (Flow depuis la défausse), verif_vs.mjs (sélection contre l IA), verif_fleches.mjs (flèches), verif_predict.mjs (Predict), verif_replay.mjs (mode replay), verif_tuto.mjs (tutoriel), verif_dash.mjs (tableau de bord du menu), verif_espace.mjs (barre d espace), verif_son.mjs (sons et menu ♪), verif_mulligan.mjs (lire les cartes du mulligan), verif_reactif.mjs (page réactive pendant que l IA réfléchit : moteur dans un Web Worker), verif_nashor.mjs (Baron Nashor : 3e battlefield), verif_deploy.mjs (équipement [Deploy] posé sur un battlefield), verif_base.mjs (base serrée ouverte en grand au toucher), verif_banish.mjs (pile des bannies, jouer la carte de Runeblade Anvil), verif_cout.mjs (coûts supplémentaires optionnels : une ligne par façon de payer), verif_drapeau.mjs (bouton « Erreur de l IA » : marque, précision, coups de l IA gardés)
+cache() {   # robots : verif_hidden.mjs (cacher, jouer depuis la face cachée), verif_revele.mjs (main révélée), verif_charge.mjs (téléphone chargé), verif_cibles.mjs (ciblage par liste), verif_flow.mjs (Flow depuis la défausse), verif_vs.mjs (sélection contre l IA), verif_fleches.mjs (flèches), verif_predict.mjs (Predict), verif_replay.mjs (mode replay), verif_tuto.mjs (tutoriel), verif_dash.mjs (tableau de bord du menu), verif_espace.mjs (barre d espace), verif_son.mjs (sons et menu ♪), verif_mulligan.mjs (lire les cartes du mulligan), verif_reactif.mjs (page réactive pendant que l IA réfléchit : moteur dans un Web Worker), verif_nashor.mjs (Baron Nashor : 3e battlefield), verif_deploy.mjs (équipement [Deploy] posé sur un battlefield), verif_base.mjs (base serrée ouverte en grand au toucher), verif_banish.mjs (pile des bannies, jouer la carte de Runeblade Anvil), verif_cout.mjs (coûts supplémentaires optionnels : une ligne par façon de payer), verif_drapeau.mjs (bouton « Erreur de l IA » : marque, précision, coups de l IA gardés), verif_showoff.mjs ([Show Off] : choisir la carte montrée ou rien)
   if [ "${RB_NAV:-1}" = 0 ]; then echo "robot Hidden sauté (RB_NAV=0)"; return 0; fi
   [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1) \
     || { echo "robot Hidden sauté (Playwright absent)"; return 0; }
@@ -96,7 +96,7 @@ cache() {   # robots : verif_hidden.mjs (cacher, jouer depuis la face cachée), 
   local out="" o rc=0 r t n=0
   for r in verif_hidden:900 verif_revele:600 verif_charge:600 verif_cibles:600 verif_flow:600 verif_vs:600 verif_fleches:900 \
            verif_predict:600 verif_replay:1200 verif_tuto:900 verif_dash:600 verif_espace:600 verif_son:600 verif_mulligan:600 \
-           verif_reactif:1500 verif_nashor:1500 verif_deploy:1500 verif_base:900 verif_banish:900 verif_cout:900 verif_drapeau:900; do
+           verif_reactif:1500 verif_nashor:1500 verif_deploy:1500 verif_base:900 verif_banish:900 verif_cout:900 verif_drapeau:900 verif_showoff:600; do
     t=${r#*:}; r=${r%%:*}
     mine "$r" || continue
     n=$((n + 1))
