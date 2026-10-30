@@ -72,7 +72,9 @@ async function play(max, label, undo = 0) {
     else {
       const j = rnd(st.nopt), k = await me.ev(`V.dec.options[${j}].k`);
       await me.ev(`(async()=>{ await choose(V.dec.options[${j}].i) })()`);
-      if (UNDO.done < undo) {
+      // la graine change à chaque lancement : on continue d'observer tant qu'aucun « Passer » / « Terminer le tour » n'a été
+      // vu, sinon le contrôle ci-dessous dépend du hasard (CI du 2026-10-30 : 0/0 après les 6 reprises)
+      if (UNDO.done < undo || (undo && UNDO.passSeen === 0)) {
         const [a2, c2] = await settled(), mine = me === H ? a2 : c2;
         const can = await me.ev("duelUndoIdx() >= 0 && !document.getElementById('bUndo').disabled");
         if (k === "pass" || k === "end") { UNDO.passSeen++; if (!can) UNDO.passBlocked++; }
