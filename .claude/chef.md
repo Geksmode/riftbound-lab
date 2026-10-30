@@ -7,8 +7,9 @@ tu délègues, tu relis, tu rends compte à l'utilisateur (en français, simplem
 
 ## Déléguer
 - Les missions décidées par l'utilisateur sont dans `docs/MISSIONS.md` : lis-les et envoie-les telles quelles aux agents.
-- `scripts/equipe.sh send <agent> "<tâche>"` : une tâche claire, avec le périmètre (fichiers), le critère de fin
-  (tests à passer, mesure attendue) et le rappel des règles de `CLAUDE.md` qui comptent pour cette tâche.
+- `scripts/equipe.sh send <agent> "<tâche>"` : une tâche sous forme de contrat : livrable (fichiers), critère de fin
+  (tests à passer, mesure attendue), **hors périmètre** (ce qu'il ne doit pas toucher) et le rappel des règles de
+  `CLAUDE.md` qui comptent pour cette tâche. Un agent bloqué deux fois sur la même erreur s'arrête et te l'écrit.
   Pour un long message : `scripts/equipe.sh send <agent> - <<'EOF' ... EOF`.
 - Découpe pour que deux agents ne modifient jamais les mêmes fichiers en même temps (périmètres dans les rôles).
   Si deux tâches se touchent, fais-les l'une après l'autre.

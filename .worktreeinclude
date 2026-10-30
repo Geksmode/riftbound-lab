@@ -1,0 +1,3 @@
+# Fichiers ignorés par git que Claude Code recopie dans chaque nouveau worktree (claude -w, sous-agents isolés).
+# Pyodide 0.26.4 (paquet npm, ~ quelques dizaines de Mo) : évite un fetch_pyodide.sh par worktree.
+riftbound/train/pyodide-cache/

@@ -1,7 +1,7 @@
 ---
 titre: Porte d'intégration
 resume: le contrôle unique à passer avant d'intégrer une branche (agent ou travail) et avant main
-maj: 2026-10-27
+maj: 2026-10-30
 sources: scripts/verifier.sh, riftbound/train/verif_mobile.mjs, .github/workflows/ci.yml
 ---
 `scripts/verifier.sh [moteur|table|tout]` (défaut `tout`) imprime un résumé OK / ÉCHEC et sort avec le code 1 au moindre échec.
@@ -25,4 +25,5 @@ sources: scripts/verifier.sh, riftbound/train/verif_mobile.mjs, .github/workflow
 - `RB_PART=k/4` : seulement les robots de la partie k (table `PARTIE` de `verifier.sh`, ≈ 4 min 20 chacune, équilibrée sur les durées mesurées). Un robot absent de la table tourne dans la partie 1 (jamais sauté). En ajouter un : l'inscrire dans `PARTIE`, dans la partie la plus légère.
 - CI : `tests` = `verifier.sh moteur` ; `robots` = 4 machines en parallèle, chacune construit la table et lance `RB_PART=k/4 verifier.sh table` (Chromium de Playwright 1.56.1 en cache) ; `build-table` = bilan des 4 (même nom qu'avant) ; publication sur Pages (construction de la partie 1) seulement si `tests` et `build-table` passent. Une CI par commit, au push, sur toutes les branches (`agent/*` comprises) ; une PR affiche les résultats de son dernier commit (plus de seconde CI sur l'événement `pull_request`).
 - Testé : erreur injectée (fichier de mémoire orphelin) : code 1. Limite : dans le robot, les coups sont injectés (`T.act`), pas cliqués sur les cartes.
+- État noté à la fin (`scripts/porte_etat.mjs`, `.claude/state/porte.json`) : les hooks de push et de fin de session s'en servent ([harness.md](harness.md)).
 - Règle d'équipe : le chef ne fusionne une branche `agent/*` qu'après `verifier.sh tout` vert sur la branche fusionnée.

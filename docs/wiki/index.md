@@ -15,6 +15,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [manager](../memoire/riftbound-manager.md) |
 | toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md), [version anglaise](pages/anglais.md) |
 | coordonner des agents | [pages/equipe.md](pages/equipe.md), `docs/MISSIONS.md`, `.claude/chef.md` |
+| comprendre un hook qui bloque, contrat de tâche, worktrees | [pages/harness.md](pages/harness.md) |
 | connaître le jeu, les règles, la méta | `docs/vault/Riftbound - Accueil.md` (index du vault), `riftbound/rules/` |
 | reprendre le compte, la routine, les artefacts | `docs/REPRISE.md` (§2 artefacts, §3 publication, §4 routine) |
 
@@ -22,6 +23,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [État du travail](pages/etat.md) : fait, en cours, à faire (2026-10-07)
 - [Carte du dépôt et commandes](pages/depot.md) : dossiers, tests, build
 - [Équipe d'agents](pages/equipe.md) : chef, agents tmux, intégration
+- [Garde-fous automatiques](pages/harness.md) : hooks (push, fin de session, démarrage), contrat de tâche, escalade, worktrees
 - [Publication de la table](pages/publication.md) : Pages, artefact, pièges
 - [Chiffres versionnés](pages/resultats.md) : version du moteur dans chaque résultat, `compare.py`
 - [Duel entre amis](pages/duel.md) : room avec code (PeerJS), BO1 / BO3, ce qui est testé et ce qui ne l'est pas
