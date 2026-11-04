@@ -969,6 +969,39 @@ def mirror_image_copy():
 
 
 @test
+def table_marks_every_repeat_variant():
+    # La table (train._info) ne reconnaissait que « rep » : les répétitions codées autrement (Square Up sq, Curtain Call rc,
+    # Repeat accordé reps de The Academy / Temporal Portal) étaient fusionnées avec le sort normal (src.html uniq) et la
+    # table ne proposait pas de répéter le sort (retour utilisateur 2026-11-04).
+    from train import _info
+    from cardsets.battlefields import _academy_cost
+    g, _ = new()
+    runes(g, 0, ["Fury"] * 8)
+    u = put(g, 0, "Lonely Poro")
+    hand(g, 0, "Discipline")
+    g.effects.append(dict(kind="grant_repeat", pid=0, cost=_academy_cost, next=True, key="academy-t", dur="turn"))
+    g.every_choice = True
+    for name, key in (("Blood Rush", "reps"), ("Square Up", "sq")):
+        c = hand(g, 0, name)
+        plays = [a for a in g.advance().options if a[0] == "play" and a[1] == c.uid]
+        r = [a for a in plays if a[3].get(key)]
+        assert r, name
+        for a in r:
+            inf = _info(a, g)
+            assert inf["rep"] >= 1 and u.uid in inf["t2"] and inf["t2n"], (name, inf)
+        assert all(not _info(a, g)["rep"] for a in plays if not any(a[3].get(k) for k in ("rep", "reps", "sq")))
+        assert any(_info(a, g)["rep"] == 2 for a in plays), name      # Repeat imprimé + celui de The Academy (820.3)
+        c.zone = None
+        g.p[0].hand.remove(c)
+    g.effects = []
+    put(g, 1, "Lonely Poro")
+    c = hand(g, 0, "Curtain Call")
+    plays = [a for a in g.advance().options if a[0] == "play" and a[1] == c.uid]
+    assert any(_info(a, g)["rep"] for a in plays if a[3].get("rc"))
+    assert any(not _info(a, g)["rep"] for a in plays if not a[3].get("rc"))
+
+
+@test
 def additional_cost_variants_have_distinct_labels():
     # Shimmering Swimmer : jouer sans coût, en détruisant une unité ou un gear allié. La table fusionne les coups de même
     # libellé (src.html uniq) : chaque façon de payer doit avoir son texte, sinon seul « sans coût » restait (2026-10-22).

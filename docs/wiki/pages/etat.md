@@ -1,10 +1,11 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-10-30
+maj: 2026-11-04
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **[Repeat] sur la table et dans le moteur (2026-11-04)** : retour utilisateur « la table ne propose pas de répéter le sort ». La table ne reconnaissait que le Repeat imprimé codé `rep` : le Repeat accordé (The Academy, Temporal Portal) et ceux codés autrement (Square Up, Temptation, Curtain Call) étaient fusionnés avec le sort normal ; la cible de la répétition n'était jamais affichée. Le moteur ne proposait pas non plus plusieurs Repeat payés ensemble (820.1.c.2, 820.3). Corrigé : une ligne par façon de répéter (« Avec Repeat ×2 (coût total 3 énergie) → Scuttle Crab et Lonely Poro »). Tests `table_marks_every_repeat_variant`, `printed_and_granted_repeat_paid_together` ; vérifié par robot (`train/verif_repeat.mjs`, toucher simulé), pas sur un vrai téléphone.
 - **[Show Off] sur la table (2026-10-30)** : le joueur choisit la carte montrée (main ou en jeu) ou « Sans Show Off » ; avant, la page fusionnait ces choix. Vérifié par robot (`train/verif_showoff.mjs`), pas sur un vrai téléphone. Voir [radiance.md](radiance.md).
 - **Baron Nashor et Baron Pit (2026-10-19)** : modélisés. Les battlefields sont une liste de taille variable (`g.bfs`, `is_bf`, `g.bf_locs`) ; Nashor ajoute le jeton Baron Pit (3e battlefield, règle 187.9) et y entre (369.3) ; le point final par conquête exige alors les 3 battlefields marqués dans le tour (471.1.b.1), sinon on pioche. Unités vers le Baron Pit depuis n'importe où (sans Ganking). Les jetons ne peuvent plus être un battlefield de départ (Brush compris). Table et lecteur de replays : 3 battlefields côte à côte. Détail : `cardsets/NEEDS_chaos.md`, `NEEDS_battlefields.md`.
 - **Radiance (2026-10-19)** : 166 des 167 cartes de l'extension modélisées (Neeko bloquée), voir [radiance.md](radiance.md).

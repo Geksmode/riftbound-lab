@@ -1832,7 +1832,7 @@ const locName = l => l === "base" || l === null || l === undefined ? "base" : (V
 const unitEl = u => document.querySelector(`#board .bf [data-uid="${u}"], #board .zone [data-uid="${u}"]`);
 const srcEl = u => document.querySelector(`#board [data-uid="${u}"]`);
 const zoneEl = z => document.querySelector(`#board [data-drop="${z}"]`);
-function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, S(o.show), S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
+function uniq(m) { const seen = new Set(); return m.filter(o => { const k = JSON.stringify([o.k, o.label.replace(/cible .*/, ""), [...(o.t1 || [])].map(String).sort(), o.t2 || [], o.acc, o.rep, o.repc || "", S(o.show), S(o.loc)]); if (seen.has(k)) return false; seen.add(k); return true; }); }
 function flash(msg) { SFX.play("nope"); toast(msg, "flash"); }
 function reset() { sel = null; mode = null; }
 function run(m) {
@@ -1957,11 +1957,11 @@ function popHTML() {
       }
       for (const x of sib.sort((a, b) => (b.acc ? 1 : 0) - (a.acc ? 1 : 0) || (b.rep ? 1 : 0) - (a.rep ? 1 : 0))) {
         shown.add(x.i);
-        h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.xc ? cap(x.xc) : "", x.acc ? accTxt(x) : "", x.rep ? "Avec Repeat" : ""].filter(Boolean).join(" · ") || (sib.some(y => y.xc) ? "Sans coût supplémentaire" : "Normal"))}</button>`;
+        h += `<button class="${x.acc ? "acc" : ""}" data-i="${x.i}">${esc([x.xc ? cap(x.xc) : "", x.acc ? accTxt(x) : "", x.rep ? repTxt(x) : ""].filter(Boolean).join(" · ") || (sib.some(y => y.xc) ? "Sans coût supplémentaire" : "Normal"))}</button>`;
       }
       continue;
     }
-    if (o.k === "play") t = `Jouer → ${locName(o.loc)}${o.acc ? " (Accelerate)" : ""}${o.rep ? " (Repeat)" : ""}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}`;
+    if (o.k === "play") t = `Jouer → ${locName(o.loc)}${o.acc ? " (Accelerate)" : ""}${o.rep ? ` (Repeat${o.rep > 1 ? " ×" + o.rep : ""})` : ""}${o.from_ === "trash" ? " (Flow)" : o.from_ === "banish" ? " (bannie)" : ""}`;
     if (o.k === "hide") t = `Cacher → ${locName(o.loc)}`;
     if (o.k === "act") t = o.label.replace(/^(\w+) : [^(]*\(/, "$1 (");
     h += `<button data-i="${o.i}">${esc(cap(t))}</button>`;
@@ -2026,10 +2026,13 @@ function variantLabel(o, cands) {
   if (cands.some(x => x.xc)) parts.push(o.xc ? cap(o.xc) : "Sans coût supplémentaire");   // Shimmering Swimmer, Sea Monkey…
   if (cands.some(x => x.show !== undefined)) parts.push(showTxt(o));
   if (cands.some(x => x.acc)) parts.push(o.acc ? accTxt(o) : "Normal");
-  if (cands.some(x => x.rep)) parts.push(o.rep ? "Avec Repeat" : "Sans Repeat");
+  if (cands.some(x => x.rep)) parts.push(o.rep ? repTxt(o) : "Sans Repeat");
   if (cands.some(x => x.from_ === "trash")) parts.push(o.from_ === "trash" ? "Depuis la défausse" : "Depuis la main");
   return parts.length ? parts.join(" · ") : cap(o.label);
 }
+// [Repeat] (règle 820) : une ligne par façon de répéter, avec la cible de la répétition (Bellows Breath, Blood Rush…) et
+// le nombre de répétitions quand plusieurs [Repeat] sont payés (Repeat imprimé + Repeat accordé par The Academy).
+const repTxt = o => (o.rep > 1 ? `Avec Repeat ×${o.rep}` : "Avec Repeat") + (o.repc ? ` (coût total ${o.repc})` : "") + (o.t2n ? ` → ${o.t2n}` : "");
 // [Show Off] (règle 832) : la carte de ta main ou l'objet à toi en jeu montré en jouant la carte, ou rien (« you may »)
 const showTxt = o => o.show === undefined ? "Sans Show Off" : `Show Off : ${o.showN} (${o.showW === "hand" ? "main" : "en jeu"})`;
 // Bulle du [Show Off] : une image par carte montrable (touchée = jouée en la montrant), puis « Sans Show Off ». Les

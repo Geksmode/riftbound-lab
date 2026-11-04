@@ -347,3 +347,6 @@ Demande de l'utilisateur (« les cartes Show Off ne s'appliquent pas, proposer d
 
 ## [2026-10-30] lint | CI : robot du duel instable
 `verif_duel.mjs` tire ses coups avec une graine qui change à chaque lancement et ne comptait « Passer » / « Terminer le tour » que pendant les 6 premières reprises : 0/0 possible, échec au hasard (CI de la PR 77). Il observe maintenant jusqu'à en voir au moins un.
+
+## [2026-11-04] decision | [Repeat] : table et moteur
+Retour utilisateur : la table ne proposait pas de répéter le sort (Repeat accordé et Repeat codé autrement fusionnés, cible de la répétition invisible) ; le moteur ne proposait pas plusieurs Repeat ensemble (820.3). Corrigé, robot `train/verif_repeat.mjs` ajouté à la porte. Voir `pages/etat.md`.
