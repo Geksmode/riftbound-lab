@@ -109,3 +109,11 @@ cartes ») : chaque joueur a une pile « Bann. » à côté de sa défausse (cac
 que tu peux jouer (Runeblade Anvil, Akali, Brash : `banu` dans `train._view`) s'affiche au bout de la main comme un Flow,
 marquée BANNIE ; le menu dit « Jouer → … (bannie) ». Sur téléphone, trois piles se partagent la colonne (`:has`). Robot
 `train/verif_banish.mjs` (dans la porte) : vérifié par robot, pas essayé sur un vrai téléphone.
+
+## Jouer une carte pendant un effet (2026-11-04)
+Demande de l'utilisateur : « si une carte demande des cibles, afficher les cartes qui peuvent être la cible, pas des textes ».
+Pour une question dont les options sont « (carte, choix) » (Fizz, Trickster, Ava Achiever…), `train._ask_play` envoie
+`ask.pc[i] = {n, u, tg}`. La bulle (`askHTML`, `playPicks`) montre chaque carte une fois en image + « Ne rien jouer » ;
+toucher une carte ouvre le mode `target` habituel avec `mode.ans` (nom de la carte) : les cibles se touchent sur le plateau
+ou dans la liste de la bulle, « Valider la cible » répond à la question (`pickI` → `answer`), « Retour » / Échap
+revient à la bulle (`unpick`). Robot `train/verif_fizz.mjs`.

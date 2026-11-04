@@ -1838,8 +1838,8 @@ function reset() { sel = null; mode = null; }
 function run(m) {
   m = uniq(m);
   if (!m.length) { flash("Ce coup n'est pas possible."); return; }
-  if (m.length === 1) return choose(m[0].i);
-  mode = { type: "list", cands: m }; decorate();
+  if (m.length === 1) return pickI(m[0].i);
+  mode = { type: "list", cands: m, ans: mode && mode.ans, back: mode && mode.ans ? (mode.back || mode) : undefined }; decorate();
 }
 
 // ---------- cibles
@@ -2001,6 +2001,14 @@ function askHTML() {
       <div class="prow"><button class="go" id="bKeep">${n ? `Remettre ${n} carte${n > 1 ? "s" : ""}` : "Garder ma main"}</button></div>`;
   }
   if (a.show && a.show.length) return `<span class="ft">${who}${esc(a.title)}</span><div class="mull seen">${a.show.map((n, i) => `<div class="seenc${a.show.length > 1 ? (i === (a.cur || 0) ? " cur" : " other") : ""}">${card(n, { raw: true, cost: true })}</div>`).join("")}</div><div class="prow">${a.options.map((o, i) => `<button class="${i ? "" : "go"}" data-a="${i}">${esc(cap(o))}</button>`).join("")}</div>`;
+  if (playPicks(a).length) {
+    // Jouer une carte pendant un effet (Fizz, Trickster : un sort de ta défausse) : l'image de chaque carte possible,
+    // puis ses cibles se touchent sur le plateau (askPlay). Deux exemplaires identiques ne s'affichent qu'une fois.
+    const ps = playPicks(a), loose = a.options.map((o, i) => i).filter(i => !(a.pc || [])[i]);
+    return `<span class="ft">${who}${esc(a.title)} Touche la carte à jouer.</span>
+      <div class="mull pick">${ps.map(p => `<button data-pp="${esc(p.n)}" title="${esc(p.n)}">${card(p.n, { raw: true, cost: true })}</button>`).join("")}</div>
+      <div class="prow">${loose.map(i => `<button data-a="${i}">${esc(a.options[i] === "None" || a.options[i] === "aucun" ? "Ne rien jouer" : cap(a.options[i]))}</button>`).join("")}</div>`;
+  }
   if (a.kind === "may") return `<span class="ft">${who}Utiliser cet effet ?</span><div class="prow"><button class="go" data-a="0">Oui</button><button data-a="1">Non</button></div>`;
   const pickable = (a.uids || []).some(u => u !== null) || (a.zs || []).some(z => z !== null);
   const loose = a.options.map((o, i) => i).filter(i => !((a.uids || [])[i] !== null && (a.uids || [])[i] !== undefined) && !((a.zs || [])[i] !== null && (a.zs || [])[i] !== undefined));
@@ -2032,6 +2040,23 @@ function variantLabel(o, cands) {
 }
 // [Show Off] (règle 832) : la carte de ta main ou l'objet à toi en jeu montré en jouant la carte, ou rien (« you may »)
 const showTxt = o => o.show === undefined ? "Sans Show Off" : `Show Off : ${o.showN} (${o.showW === "hand" ? "main" : "en jeu"})`;
+// Choix « jouer telle carte » d'une question (a.pc) : une entrée par nom de carte (le premier exemplaire seulement)
+function playPicks(a) {
+  const out = [], seen = new Set();
+  (a.pc || []).forEach((p, i) => { if (!p) return; if (!seen.has(p.n)) { seen.add(p.n); out.push({ n: p.n, u: p.u, is: [] }); } const q = out.find(x => x.n === p.n); if (q.u === p.u) q.is.push(i); });
+  return out;
+}
+function askPlay(name) {
+  const a = mode.a, p = playPicks(a).find(x => x.n === name); if (!p) return;
+  const cands = p.is.map(i => ({ i, k: "ask", label: a.options[i], t1: a.pc[i].tg.map(String) }));
+  const back = mode, withT = cands.filter(hasT);
+  SFX.play("tick");
+  if (!withT.length) return run(cands);
+  mode = { type: "target", src: null, cands: withT, P: [], skip: false, M: null, D: null, X: null, ans: name, back, loose: cands.filter(o => !hasT(o)) };
+  decorate();
+}
+const pickI = i => mode && mode.ans ? answer(i) : choose(i);
+function unpick() { if (mode && mode.back) mode = mode.back; else reset(); decorate(); }
 // Bulle du [Show Off] : une image par carte montrable (touchée = jouée en la montrant), puis « Sans Show Off ». Les
 // autres façons de jouer (zone, Accelerate…) sont écrites sous chaque carte.
 function showHTML() {
@@ -2082,9 +2107,9 @@ function fbarHTML() {
   }
   if (mode.type === "target") {
     const max = Math.max(...mode.cands.map(o => o.t1.length)), ok = exactT().length > 0;
-    return `<span class="ft">Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
-      ${pickStrip(targetItems())}
-      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider la cible</button><button id="fNo">Annuler</button></div>`;
+    return `<span class="ft">${mode.ans ? `<b>${esc(mode.ans)}</b> · ` : ""}Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
+      ${pickStrip(targetItems(), !!mode.ans)}
+      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider la cible</button>${(mode.loose || []).map(o => `<button data-i="${o.i}">${esc(cap(o.label))}</button>`).join("")}<button id="fNo">${mode.ans ? "Retour" : "Annuler"}</button></div>`;
   }
   if (mode.type === "move") {
     const o = moveOpt(), d = mode.dest;
@@ -2131,10 +2156,11 @@ $("fbar").addEventListener("click", e => {
   if (b.id === "bSame") { setupForm().then(() => { if ($("sSeed")) $("sSeed").value = MATCH ? MATCH.st.seed : META.seed; }); return; }
   if (b.id === "bKeep") return answer([...mode.mull]);
   if (b.dataset.a) return answer(+b.dataset.a);
+  if (b.dataset.pp !== undefined && mode && mode.type === "ask") return askPlay(b.dataset.pp);
   if (b.id === "fOk" && mode.type === "ask") return answer(mode.pick);
-  if (b.id === "fNo") { reset(); return decorate(); }
+  if (b.id === "fNo") { if (mode && mode.ans) return unpick(); reset(); return decorate(); }
   if (b.id === "fSkip" && mode && mode.type === "target") { mode.skip = true; return decorate(); }
-  if (b.dataset.i) return choose(+b.dataset.i);
+  if (b.dataset.i) return pickI(+b.dataset.i);
   if (b.id === "fOk" && mode.type === "target") return run(exactT());
   if (b.id === "fOk" && mode.type === "move") { const o = moveOpt(); if (o) choose(o.i); }
 });
@@ -2261,7 +2287,7 @@ document.addEventListener("click", e => {
     if (i < 0 && z) i = (mode.a.zs || []).findIndex(x => x !== null && x === z.dataset.drop);
     if (i >= 0) { mode.pick = mode.pick === i ? null : i; SFX.play(mode.pick === null ? "untick" : "target"); Z.hidden = true; decorate(); return; }
   }
-  if (V && V.dec && !working && e.target.closest("#board")) {
+  if (V && (V.dec || (V.ask && mode && mode.ans)) && !working && e.target.closest("#board")) {
     const u = e.target.closest("#board [data-uid]"), z = e.target.closest("#board [data-drop]");
     if (mode && mode.type === "target") {
       const ph = tPhase(), drop = id => { SFX.play("untick"); mode.P.splice(mode.P.lastIndexOf(id), 1); mode.M = mode.D = mode.X = null; mode.skip = false; decorate(); };
@@ -2444,7 +2470,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-ban]")) return openBanish(+e.target.dataset.ban);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
-  if (e.key === "Escape") { $("hpop").hidden = true; $("fpop").hidden = true; Z.hidden = true; if ((sel !== null || mode) && V) { reset(); decorate(); } }
+  if (e.key === "Escape") { $("hpop").hidden = true; $("fpop").hidden = true; Z.hidden = true; if (mode && mode.ans) return unpick(); if ((sel !== null || mode) && V) { reset(); decorate(); } }
   // Retour arrière = « ↶ Reprendre » (sauf dans un champ de saisie, une fenêtre, le menu ou le journal)
   if (e.key === "Backspace" && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
     const t = e.target;
