@@ -1135,6 +1135,20 @@ def _ask_uid(g, o):
     return None
 
 
+def _ask_play(g, ask, o):
+    """Option « jouer telle carte avec tel choix » (Fizz, Trickster : sort de la défausse ; Ava Achiever…) : la table
+    montre l'image de la carte, puis fait toucher ses cibles sur le plateau. {n, u, tg} ou None."""
+    try:
+        if ask.kind == "ava_play" and isinstance(o, int) and not isinstance(o, bool):
+            o = ask.ctx["plays"][o]
+        if isinstance(o, tuple) and len(o) == 2 and hasattr(o[0], "cname") and isinstance(o[1], dict):
+            tg = [u for u in (o[1].get("tg") or ()) if isinstance(u, int) and not isinstance(u, bool)]
+            return dict(n=o[0].cname, u=o[0].uid, tg=tg)
+    except Exception:
+        pass
+    return None
+
+
 def _ask_src(g, ask):
     it = ask.ctx.get("item")
     src = getattr(it, "src", None)
@@ -1231,7 +1245,8 @@ def _view(ask=None):
                           zs=[("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs)) else None
                               for o in ask.options],
                           src=_ask_src(g, ask),
-                          item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None)
+                          item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None,
+                          pc=[_ask_play(g, ask, o) for o in ask.options])
         if ask.kind == "predict_recycle" and ask.ctx.get("card") is not None:
             top = ask.ctx.get("top") or [ask.ctx["card"]]          # les cartes vues (Predict N), en grand dans la question
             out["ask"]["show"] = [c.cname for c in top]
