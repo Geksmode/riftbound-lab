@@ -347,3 +347,6 @@ Demande de l'utilisateur (« les cartes Show Off ne s'appliquent pas, proposer d
 
 ## [2026-10-30] lint | CI : robot du duel instable
 `verif_duel.mjs` tire ses coups avec une graine qui change à chaque lancement et ne comptait « Passer » / « Terminer le tour » que pendant les 6 premières reprises : 0/0 possible, échec au hasard (CI de la PR 77). Il observe maintenant jusqu'à en voir au moins un.
+
+## [2026-11-04] ingest | Table : Fizz, Trickster en images et cibles sur le plateau
+Bug signalé par l'utilisateur (capture : « Quel sort lancer ? » = liste de textes de toutes les paires de cibles de Switcheroo, deux fois). La question envoie maintenant `pc` (carte et cibles de chaque option) ; la bulle montre les sorts en images, puis le ciblage habituel sur le plateau répond à la question. Test `test_fizz_table.py`, robot `verif_fizz.mjs` (dans la porte, partie 2).
