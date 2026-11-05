@@ -356,3 +356,6 @@ Retour utilisateur : la table ne proposait pas de répéter le sort (Repeat acco
 
 ## [2026-11-05] decision | CI : runners fixés sur ubuntu-24.04
 `ubuntu-latest` est passé à Ubuntu 26.04, où Playwright 1.56.1 refuse Chromium : tous les jobs table échouaient (main compris, PR #78). `ci.yml` fixe `runs-on: ubuntu-24.04`.
+
+## [2026-11-05] decision | CI : retour à ubuntu-latest, Playwright 1.63.0
+Playwright 1.63.0 est la première version qui connaît `ubuntu26.04-x64` (Chromium Chrome for Testing) ; c'est aussi celle du conteneur des agents, donc celle que la porte locale exerce déjà. `ci.yml` : `playwright@1.63.0`, clé de cache mise à jour, `install --with-deps chromium` (nouvelle image, bibliothèques système plus supposées), `runs-on: ubuntu-latest` partout.
