@@ -1503,6 +1503,23 @@ def temporal_portal_grants_repeat_equal_to_cost():
 
 
 @T.test
+def printed_and_granted_repeat_paid_together():
+    # 820.1.c.2 / 820.3 : chaque [Repeat] se paie ou non séparément. Downstage Dramatics ([Repeat] 2 énergie, « Draw 1 »)
+    # avec le Repeat donné par Temporal Portal : les deux payés, le sort pioche 3 fois. Avant le 2026-11-04, le moteur ne
+    # proposait que l'un ou l'autre.
+    g, _ = new()
+    runes(g, 0, ["Mind"] * 9)
+    put(g, 0, "Temporal Portal")
+    act(g, 0, "Temporal Portal")
+    dd = hand(g, 0, "Downstage Dramatics")
+    both = [ch for ch in card_choices(g, 0, dd, "hand", False, False) if ch.get("rep") and ch.get("reps")]
+    assert both and total_cost(g, 0, dd, both[0], "hand")[0] == 6
+    n = len(g.p[0].hand)
+    play(g, 0, "Downstage Dramatics", lambda ch: ch.get("rep") and ch.get("reps"))
+    assert len(g.p[0].hand) == n - 1 + 3
+
+
+@T.test
 def jhin_meticulous_for_one_mind_rune():
     g, _ = new()
     runes(g, 0, ["Mind"])

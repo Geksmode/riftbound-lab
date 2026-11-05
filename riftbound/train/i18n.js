@@ -557,6 +557,10 @@
   // Motifs écrits à la main : textes assemblés en plusieurs morceaux dans src.html.
   const ORD = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
   const P = [
+    // [Repeat] : « Avec Repeat ×2 (coût total 4 énergie) → Scuttle Crab #2 adverse » ; coût et cibles viennent du moteur,
+    // déjà en anglais
+    [/^(.+) · Avec Repeat( ×\d+)?(?: \(coût total (.*?)\))?(.*)$/, (m, t) => t(m[1]) + " · With Repeat" + (m[2] || "") + (m[3] ? ` (total cost ${m[3]})` : "") + m[4]],
+    [/^Avec Repeat( ×\d+)?(?: \(coût total (.*?)\))?(.*)$/, (m) => "With Repeat" + (m[1] || "") + (m[2] ? ` (total cost ${m[2]})` : "") + m[3]],
     [/^(.*) · coût (.*)$/, "$1 · cost $2"],   // en-tête de l'agrandi d'une carte
     [/^(.*) Touche une carte ou une zone en surbrillance\.$/, (m, t) => t(m[1]) + " Tap a highlighted card or zone."],
     [/^(.*)\((\d+)e\)(.*)$/, (m, t) => t(m[1]) + "(" + ORD(+m[2]) + ")" + t(m[3])],

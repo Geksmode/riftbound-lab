@@ -8,6 +8,7 @@ Actions are tuples that only reference objects by uid, so the same action can be
   ('move', (uids...), dest)
 """
 from game import Item, ANY, SPEC, EQUIP_BONUS, is_bf, BARON_PIT
+import itertools
 from itertools import count
 
 _ids = count(1)
@@ -539,16 +540,40 @@ def spell_variants(g, pid, card, im, base, ctx, every=False):
         # coded in the choices, e.g. Temptation rep2/tg2, Square Up sq/tg2) would repeat again without its cost
         # paid (rule 820.1.c.2).
         second = [c for c in second if not any(c.get(k) for k in REPEAT_KEYS)] or [{}]
+    lim_p, lim_g = (None, None) if every else (3, 2)
     for ch in base:
         out.append(ch)
         if im.repeat:                              # Repeat can be paid with a Flow play too
-            for ch2 in second[:(None if every else 3)]:
+            for ch2 in second[:lim_p]:
                 out.append(dict(ch, rep=True, tg2=ch2.get("tg", ())))
         for k, re_, rr in grep:
             # a granted Repeat (rule 820): pay it to repeat the effect, with its own choices
-            for ch2 in second[:(None if every else 2)]:
+            for ch2 in second[:lim_g]:
                 rc = dict(ch2, _key=k, _e=re_, _reqs=tuple(rr))
                 out.append(dict(ch, reps=(rc,)))
+        if grep and len(grep) + bool(im.repeat) >= 2:
+            out += _repeat_combos(ch, im, grep, second, lim_p, lim_g)
+    return out
+
+
+def _repeat_combos(ch, im, grep, second, lim_p, lim_g):
+    """Several Repeat instances paid together (rules 820.1.c.2, 820.3: each instance is paid or not individually, and
+    each one paid executes the effect once more, with its own choices, 820.2.a): the printed [Repeat] with granted
+    ones (The Academy, Temporal Portal), or several granted ones. Single instances are offered by spell_variants."""
+    out = []
+    n = len(grep)
+    for mask in range(1, 1 << n):
+        idx = [i for i in range(n) if mask >> i & 1]
+        for printed in ([False, True] if im.repeat else [False]):
+            if len(idx) + printed < 2:
+                continue
+            per = [second[:lim_g]] * len(idx)
+            heads = [dict(rep=True, tg2=c.get("tg", ())) for c in second[:lim_p]] if printed else [{}]
+            for head in heads:
+                for picks in itertools.product(*per):
+                    reps = tuple(dict(c2, _key=grep[i][0], _e=grep[i][1], _reqs=tuple(grep[i][2]))
+                                 for i, c2 in zip(idx, picks))
+                    out.append(dict(ch, **head, reps=reps))
     return out
 
 

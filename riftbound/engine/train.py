@@ -1044,9 +1044,24 @@ def _info(a, g=None):
     out = {}
     if k == "play":
         ch = dict(a[3])
-        out = dict(t1=list(ch.get("tg", ()) or ()), t2=list(ch.get("tg2", ()) or ()),
+        # [Repeat] (820) : nombre de répétitions payées et leurs cibles, quelle que soit la façon dont la carte les code
+        # (rep imprimé, sq de Square Up, rep2 de Temptation, rc de Curtain Call, reps = Repeat accordé par The Academy
+        # ou Temporal Portal). Avant le 2026-11-04 seul « rep » comptait : la table fusionnait les autres variantes
+        # répétées avec le sort normal (inter.js uniq) et ne proposait donc pas de répéter le sort.
+        reps = ch.get("reps") or ()
+        nrep = (1 if (ch.get("rep") or ch.get("rep2") or ch.get("sq")) else 0) + len(reps) + len(ch.get("rc") or ())
+        t2 = list(ch.get("tg2", ()) or ()) + [u for r in reps for u in (r.get("tg", ()) or ())]
+        out = dict(t1=list(ch.get("tg", ()) or ()), t2=t2,
                    loc=ch.get("loc", ch.get("dest")), mover=ch.get("mover"), acc=bool(ch.get("acc")),
-                   rep=bool(ch.get("rep")), from_=a[2])
+                   rep=nrep, from_=a[2])
+        if g is not None and nrep and t2:
+            out["t2n"] = tr(" et ", " and ").join(_tname(g, u, ME) for u in t2 if isinstance(u, int))
+        if g is not None and nrep:
+            c = _find(g, ME, a[1])
+            if c is not None and len(_act.repeat_instances(g, ME, c)) + bool(getattr(g.impl(c), "repeat", None)) >= 2:
+                # plusieurs [Repeat] possibles (imprimé, The Academy, Temporal Portal) : leurs coûts diffèrent, la table
+                # montre le coût total de chaque façon de répéter pour ne pas confondre les lignes
+                out["repc"] = _cost_txt(*_act.total_cost(g, ME, c, ch, a[2]))
         if g is not None:
             from cards import play_cost_parts
             out["xc"] = ", ".join(play_cost_parts(g, ch))
