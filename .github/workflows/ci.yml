@@ -15,11 +15,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Runners fixés sur ubuntu-24.04 (2026-11-05) : ubuntu-latest est passé à Ubuntu 26.04, où Playwright 1.56.1 refuse
-# d'installer Chromium (« Playwright does not support chromium on ubuntu26.04-x64 ») ; tous les jobs table échouaient.
+# ubuntu-latest = Ubuntu 26.04 depuis novembre 2026. Playwright 1.56.1 n'y installait pas Chromium (« does not support
+# chromium on ubuntu26.04-x64 ») : runners fixés sur ubuntu-24.04 le 2026-11-05, puis Playwright passé en 1.63.0
+# (première version qui connaît ubuntu26.04, celle du conteneur des agents) pour revenir à ubuntu-latest.
 jobs:
   tests:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,7 +30,7 @@ jobs:
         run: bash scripts/verifier.sh moteur
 
   robots:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -46,16 +47,16 @@ jobs:
       - name: Pyodide 0.26.4 (paquet npm)
         run: bash riftbound/train/fetch_pyodide.sh
       # Chromium de Playwright gardé d'une CI à l'autre (son téléchargement prenait parfois plusieurs minutes) ; ses
-      # bibliothèques système sont déjà sur l'image ubuntu-latest (Chrome y est installé).
+      # bibliothèques système sont installées par --with-deps (nouvelle image Ubuntu 26.04 : on ne suppose plus rien).
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-1.56.1-chromium-${{ runner.os }}
+          key: playwright-1.63.0-chromium-${{ runner.os }}
       - name: Playwright, Chromium et serveur PeerJS local (robots navigateur)
         run: |
           cd riftbound/train
-          npm install --no-save --no-package-lock playwright@1.56.1 peer@1.0.2
-          npx playwright install chromium
+          npm install --no-save --no-package-lock playwright@1.63.0 peer@1.0.2
+          npx playwright install --with-deps chromium
       - name: Porte d'intégration, partie table (construction + robots de la partie ${{ matrix.part }}/4)
         run: RB_PART=${{ matrix.part }}/4 bash scripts/verifier.sh table
       - name: Page d'accueil du site
@@ -72,14 +73,14 @@ jobs:
   build-table:
     if: always()
     needs: [robots]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - run: test "${{ needs.robots.result }}" = success
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: [tests, build-table]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
