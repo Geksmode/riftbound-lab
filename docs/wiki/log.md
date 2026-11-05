@@ -353,3 +353,6 @@ Bug signalé par l'utilisateur (capture : « Quel sort lancer ? » = liste de te
 
 ## [2026-11-04] decision | [Repeat] : table et moteur
 Retour utilisateur : la table ne proposait pas de répéter le sort (Repeat accordé et Repeat codé autrement fusionnés, cible de la répétition invisible) ; le moteur ne proposait pas plusieurs Repeat ensemble (820.3). Corrigé, robot `train/verif_repeat.mjs` ajouté à la porte. Voir `pages/etat.md`.
+
+## [2026-11-05] decision | CI : runners fixés sur ubuntu-24.04
+`ubuntu-latest` est passé à Ubuntu 26.04, où Playwright 1.56.1 refuse Chromium : tous les jobs table échouaient (main compris, PR #78). `ci.yml` fixe `runs-on: ubuntu-24.04`.
