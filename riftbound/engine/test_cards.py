@@ -1623,6 +1623,9 @@ def table_shows_cards_looked_at_or_revealed():
 
     def settle(v):
         for _ in range(40):
+            if v.get("ask") and v["ask"]["kind"] in ("pay_rune", "pay_gold"):
+                v = json.loads(train.answer(json.dumps(0)))     # quelle rune recycler : celle proposée d'abord
+                continue
             if v.get("ask") or (v.get("dec") and v["dec"]["kind"] == "main" and not train.W["g"].chain):
                 return v
             if v.get("busy") or not v.get("dec"):
