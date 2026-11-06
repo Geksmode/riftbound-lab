@@ -1,7 +1,7 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-11-04
+maj: 2026-11-06
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
