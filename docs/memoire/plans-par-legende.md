@@ -22,4 +22,6 @@ Tests : `cardsets/test_plans_legendes.py`. Les fiches `gameplans/legendes.md` so
 **À ne pas oublier :** aucune partie de ce plan n'est mesurée. Le choix de battlefield (`Plan.battlefield`) n'est pas codé : en
 mode defaut, le battlefield est tiré au hasard. 18 decks par défaut sur 49 ont encore une carte ou un battlefield banni depuis (Stacked Deck, Ekko, Recurrent, The Arena's Greatest,
 Aspirant's Climb), signalés par `train._banned`. Les plans suivent ces listes telles quelles.
+**Radiance (2026-11-06)** : les 9 légendes de Radiance ont maintenant un deck par défaut mais **pas de plan** (`SANS_PLAN`,
+plan générique). Avec `@plan=leg` en mode defaut, ces decks jouent donc sans plan des deux côtés. Plans à chercher.
 Related: [[riftbound-gameplans]], [[ia-tests-decks-varies]], [[riftbound-search-ai]].

@@ -1,4 +1,6 @@
-"""Plans de jeu par légende (2026-10-11) : un plan pour chacune des 49 légendes des decks par défaut (train.default_decks).
+"""Plans de jeu par légende (2026-10-11) : un plan pour chacune des 49 légendes des decks par défaut d'avant Radiance
+(train.default_decks). Les 9 légendes de Radiance (decks par défaut ajoutés le 2026-11-06) n'ont pas encore de plan
+(SANS_PLAN) : plan_for leur rend le plan générique Plan().
 
 Hypothèses tirées de guides, PAS des vérités : rien n'est mesuré. Activation seulement à la demande :
     exp_search.py <paires> <graine0> "sh@plan=leg" sh defaut      (A = plans par légende, B = IA sans plan)
@@ -304,6 +306,10 @@ LEG = {
         "unités de la défausse ; Fury / Chaos."),
 }
 
+# Légendes de Radiance avec un deck par défaut (2026-11-06) mais sans plan sourcé : plan générique, à chercher.
+SANS_PLAN = ("Ekko, Boy Who Shattered Time", "Evelynn, Agony's Embrace", "Jarvan IV, Exemplar of Demacia",
+             "K'Sante, Pride of Nazumah", "Mordekaiser, Iron Revenant", "Orianna, Lady of Clockwork", "Riven, The Exile",
+             "Seraphine, Starry-Eyed Songstress", "Ziggs, Hexplosives Expert")
 EXISTING = {"Akali, Rogue Assassin": "Gorica", "LeBlanc, Deceiver": "Hook tempo"}
 
 

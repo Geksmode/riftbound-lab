@@ -22,7 +22,8 @@ Ajouter un deck : créer un `raw/<legende>_<joueur>_<event>.txt` au même format
 
 Collecte du 2026-10-09 par recherche web (transcriptions des résultats, pages des decks non lues directement), chaque liste
 contrôlée par `check_raw.py`. Règle (`train.default_decks`) : parmi les listes jouables par le moteur, sans carte bannie d'abord,
-puis avec sideboard, puis le meilleur classement ; le même deck en BO1 et en BO3. **Les 49 légendes ont un deck.**
+puis avec sideboard, puis le meilleur classement ; le même deck en BO1 et en BO3. **Les 58 légendes ont un deck** (49 jusqu'au
+2026-11-06, puis les 9 de Radiance, section suivante).
 Contrôle : 106 parties (chaque deck des deux côtés), 0 erreur, 0 partie sans fin.
 
 - **28 listes récentes** (Vendetta, sans carte bannie) : RQ Los Angeles, Singapore, Barcelona, Wuhan Open…
@@ -42,3 +43,30 @@ Contrôle : 106 parties (chaque deck des deux côtés), 0 erreur, 0 partie sans 
   Darius (2 Seal of Unity), Rumble (Rumble, Hotheaded, Deadly Flourish), Renekton (2 Sabotage, donnés par une source).
 - Runes d'une seule source : Jax, Sivir, Garen, Zed, Renekton. Sideboard d'une seule source : Ambessa, Annie (en partie), Vex, Rengar.
 - Places faibles faute de mieux : Shen 450e, Renekton 384e, Renata 311e, Garen 288e, Ivern 277e, Rumble 250e, Ambessa 201e.
+
+## Decks par défaut des 9 légendes de Radiance (2026-11-06)
+
+Demande de l'utilisateur : « trouve des decks par défaut pour les légendes qui n'en ont pas ». Radiance est sorti le 2026-10-23 :
+les listes viennent des premiers grands tournois du format, Showdown 25k LDXP Sacramento (2026-10-24, 755 joueurs) et Showdown
+CoolStuffCon Orlando (2026-11-01, 556 joueurs). Même méthode qu'en octobre : sites de decks bloqués (proxy), listes reconstituées
+à partir des résumés WebSearch (pages riftdecks, riftmana, riftatlas, runesandrift jamais lues directement), validées par les totaux
+par catégorie affichés par la page (unités / équipements / sorts), puis par `check_raw.py`. Chaque doute est dans `# note:`.
+Contrôle : 54 parties (chaque deck 6 fois, des deux côtés, contre un deck par défaut tiré au hasard), 0 erreur, 0 partie sans fin.
+
+| Légende | Liste | Place | Fiabilité |
+|---|---|---|---|
+| Riven, The Exile | Bo Su, Sacramento | 3e / 755 | noms recoupés, quantités d'un seul résumé ; le 1er (Nam Dang) avait un sort manquant ; sans sideboard |
+| Evelynn, Agony's Embrace | John Riftbound, Sacramento | 21e / 755 | main recoupé par deux résumés ; sideboard 5 / 10 |
+| Orianna, Lady of Clockwork | Burrsir, Orlando | 59e / 556 | la plus sûre : deux sources concordantes, sideboard complet |
+| Ekko, Boy Who Shattered Time | Tristan Baltazar, Sacramento | 60e / 755 | sorts, runes, battlefields d'un seul résumé ; sans sideboard |
+| Jarvan IV, Exemplar of Demacia | Braden Van't Hof, Sacramento | 77e / 755 | quantités d'unités et battlefields d'un seul résumé ; Sett, Kingpin ×2 = seule quantité qui donne 40 ; sans sideboard |
+| Ziggs, Hexplosives Expert | Kevin Kim, Sacramento | 85e / 755 | une seule source ; Hard Bargain et Star-Crossed ×1 = seules quantités qui donnent 40 ; sideboard 1 / 10 |
+| Mordekaiser, Iron Revenant | Christian Mukai, Sacramento | 89e / 755 | sorts, équipement, runes d'un seul résumé ; la page dit 33 unités dans un encart (29 dans la liste) |
+| Seraphine, Starry-Eyed Songstress | cheeserdude, Orlando | 190e / 556 | Raucous Anthem ×1 = seule quantité qui donne 40 ; sideboard 8 / 10 |
+| K'Sante, Pride of Nazumah | Sigils, Nexus Night Sacramento | 52e / 64 | **place faible, petit tournoi** : seule liste complète trouvée ; sans sideboard |
+
+Les listes mieux classées non retenues faute d'être complètes : Riven Nam Dang (1er Sacramento), Seraphine Cameron, Orianna
+Kevin Yin, Mordekaiser Calvin / AA Cartaneko / TSS KnightinGale, Ekko Moses Addai / AV Aadion, Ziggs Kevin A (Best-Of Orlando),
+K'Sante des Showdowns. À remplacer dès qu'une page de deck est lisible (réseau) ou que l'utilisateur colle une liste.
+Sans sideboard complet, l'IA joue le BO3 avec le sideboard partiel (elle ne sideboarde pas encore de toute façon).
+Ces 9 légendes n'ont pas de plan par légende (`plans_legendes.SANS_PLAN`, plan générique).

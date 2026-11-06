@@ -158,7 +158,7 @@ def default_deck_per_legend_for_the_vs_screen():
             best = min(train._place(x) for x in pool if load(x)["sideboard"])
             assert train._place(k) == best, (lg, k, best)
     cat = json.loads(train.catalog())
-    # 49 légendes + 9 de Radiance (2026-10-19, sans deck par défaut : grisées dans l'écran de choix)
+    # 49 légendes + 9 de Radiance (2026-10-19 ; leurs decks par défaut depuis le 2026-11-06)
     assert len(cat["legends"]) == 58 and len({l["n"] for l in cat["legends"]}) == 58
     assert {l["n"]: l["key"] for l in cat["legends"] if l["key"]} == dd
     keys = {p["key"] for p in cat["presets"]}

@@ -10,7 +10,7 @@ Le 2026-10-10, l'utilisateur a dit : « pour les prochains tests, tu peux retire
 
 **Application :**
 - un réglage de l'IA (`ai.py`, poids `ai.EV`, recherche) se mesure avec `engine/exp_search.py <paires> <graine0> <A> <B> defaut`
-  (deux decks par défaut tirés au hasard parmi les 49 légendes, places échangées) ;
+  (deux decks par défaut tirés au hasard parmi les 58 légendes (49 avant le 2026-11-06), places échangées) ;
 - **depuis le 2026-10-20, garder un réglage = test séquentiel** (`engine/mesure/sprt.py`, règle 9 de `CLAUDE.md`,
   [[ia-sprt]]) ; 80 paires d'`exp_search.py` ne servent plus qu'à un coup d'œil (elles ne voient qu'un écart d'environ 6 points) ;
 - ne lancer Akali contre LeBlanc (mode `akali`) que si l'utilisateur le demande, ou pour un plan propre à ces decks (`plans.py`).

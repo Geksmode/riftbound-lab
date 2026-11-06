@@ -365,3 +365,11 @@ Retour utilisateur : Baited Hook ne montrait pas les 5 cartes. Correctif génér
 
 ## [2026-11-06] ingest | Duel : « Rejoindre » ne fait rien
 Journal de l'hôte : connexions entrantes sans canal ouvert (liaison WebRTC directe impossible). État ICE journalisé, message clair côté invité après 20 s ; relais TURN à décider (`pages/duel.md`).
+
+## [2026-11-06] ingest | Decks par défaut des 9 légendes de Radiance
+Demande de l'utilisateur : des decks par défaut pour les légendes qui n'en avaient pas (Ekko, Evelynn, Jarvan IV, K'Sante,
+Mordekaiser, Orianna, Riven, Seraphine, Ziggs). 9 listes `decks/raw/` des Showdowns Sacramento (2026-10-24) et Orlando
+(2026-11-01), reconstituées par WebSearch (sites bloqués), `check_raw.py` OK, 54 parties de contrôle sans erreur. Sideboards
+souvent incomplets ou absents ; K'Sante vient d'un petit tournoi (52e / 64). `plans_legendes.SANS_PLAN` : pas de plan pour elles.
+Le pool du mode `defaut` passe de 49 à 58 decks.
+
