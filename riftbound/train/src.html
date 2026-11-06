@@ -3010,6 +3010,7 @@ function hostPeer(tries) {
     diag("hôte : connexion entrante (encodage " + c.serialization + ")");
     if (!d.st) duelStat("Ton ami se connecte…", "ok");
     c.on("open", () => diag("hôte : canal ouvert avec l'invité"));
+    c.on("iceStateChanged", st => diag("hôte : réseau direct (ICE) : " + st));
     c.on("error", e => diag("hôte : erreur du canal : " + errTxt(e)));
     c.on("data", m => duelRecv(m, c));
     c.on("close", () => { diag("hôte : canal fermé"); if (DU === d && d.conn === c) { d.conn = null; duelLost(); } });
@@ -3065,6 +3066,15 @@ function duelJoin(code, name, deck, token) {
     // encodage JSON : l'encodage binaire par défaut de PeerJS pose des problèmes entre navigateurs (Safari / iOS)
     const c = p.connect("rbl-" + code, { reliable: true, serialization: "json" });
     c.on("error", e => diag("invité : erreur du canal : " + errTxt(e)));
+    c.on("iceStateChanged", st => diag("invité : réseau direct (ICE) : " + st));
+    // L'hôte a reçu l'appel mais le canal direct ne s'ouvre pas : réseaux qui bloquent WebRTC (NAT des réseaux mobiles,
+    // Wi-Fi d'entreprise) et relais TURN public de PeerJS indisponible. On le dit au lieu de rester sur « Connexion… ».
+    setTimeout(() => {
+      if (DU !== d || d.conn === c || d.st) return;
+      diag("invité : canal direct toujours fermé après 20 s");
+      duelStat("La room est trouvée mais vos deux appareils n'arrivent pas à se relier directement (réseau qui bloque la connexion directe). "
+        + "Essayez tous les deux sur le même Wi-Fi, ou l'un en partage de connexion de l'autre, puis « Rejoindre » à nouveau.", "err");
+    }, 20000);
     c.on("open", () => {
       if (DU !== d) return; d.conn = c; netChip(); diag("invité : canal ouvert, envoi du hello");
       const hello = { t: "hello", name, deck, token, commit: BUILD.commit, engine: BUILD.engine };

@@ -1,7 +1,7 @@
 ---
 titre: Duel entre amis (room avec code, PeerJS)
 resume: état du duel à deux humains (moteur fait et testé, interface à faire) et spécification complète de l'interface
-maj: 2026-10-08
+maj: 2026-11-06
 sources: riftbound/engine/train.py (duel_new, match_duel_next), riftbound/engine/cardsets/test_duel.py, riftbound/train/fetch_pyodide.sh, build.sh
 ---
 **Décidé avec l'utilisateur (2026-10-08)** : connexion WebRTC via PeerJS (serveur public de mise en relation 0.peerjs.com, sans compte),
@@ -39,3 +39,12 @@ toutes les 6 s (3 fois), l'hôte affiche « Ton ami se connecte… », journal d
 l'utilisateur si le blocage revient). Vérifié en local : robot du duel vert, hello perdu volontairement puis renvoyé, match démarré.
 
 **2026-10-09** : l'utilisateur confirme que le duel fonctionne en réseau réel (après les correctifs JSON et renvoi du hello).
+
+**2026-11-06 (bug réel signalé par l'utilisateur, deux téléphones Android)** : l'ami touche « Rejoindre », rien ne s'ouvre. Journal de l'hôte :
+trois « connexion entrante » (une par appui), jamais « canal ouvert avec l'invité » ni erreur. Donc le serveur de mise en relation marche
+(la room est trouvée) mais la liaison directe WebRTC (ICE) ne s'établit pas : cas typique de deux réseaux qui bloquent le pair-à-pair
+(NAT des réseaux mobiles) quand le relais TURN public de PeerJS (`eu-0/us-0.turn.peerjs.com:3478`, UDP seulement, inclus par défaut
+dans PeerJS 1.5.5) ne répond pas. **Non confirmé** : le journal de l'invité manque et l'état ICE n'était pas journalisé.
+Changements : les deux côtés journalisent l'état ICE (`iceStateChanged`) ; l'invité affiche au bout de 20 s sans canal un message clair
+(même Wi-Fi ou partage de connexion) au lieu de rester sur « Connexion… ». Pas de nouveau relais TURN : les relais gratuits sans compte
+ne sont pas fiables ; un relais sûr demande un compte (Cloudflare, Metered…), à décider avec l'utilisateur.

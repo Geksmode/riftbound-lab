@@ -235,6 +235,8 @@
     ["Versions différentes de la table (toi ${}, hôte ${}) : rechargez tous les deux la page.", "Different versions of the table (you ${}, host ${}): both of you reload the page."],
     ["Deck refusé : ${}", "Deck refused: ${}"], ["Invité", "Guest"], ["Hôte", "Host"], ["hôte", "host"], ["invité", "guest"],
     ["Connexion à la room ${}…", "Connecting to room ${}…"], ["Connecté : l'hôte prépare le match…", "Connected: the host is preparing the match…"],
+    ["La room est trouvée mais vos deux appareils n'arrivent pas à se relier directement (réseau qui bloque la connexion directe). Essayez tous les deux sur le même Wi-Fi, ou l'un en partage de connexion de l'autre, puis « Rejoindre » à nouveau.",
+      "The room was found but your two devices can't link up directly (a network is blocking the direct connection). Try both on the same Wi-Fi, or one on the other's hotspot, then \"Join\" again."],
     ["L'hôte ne répond pas. Ouvre « Journal de connexion », touche « Copier le diagnostic » et envoie-le à Claude.",
      "The host isn't answering. Open \"Connection log\", tap \"Copy the diagnostics\" and send them to Claude."],
     ["Room ${} introuvable : vérifie le code ; l'hôte doit garder sa page ouverte.", "Room ${} not found: check the code; the host must keep their page open."],
@@ -594,7 +596,8 @@
     ["erreur PeerJS ${}", "PeerJS error ${}"], ["refus : ${}", "refusal: ${}"], ["match envoyé à ${}", "match sent to ${}"],
     ["connecté au serveur, appel de la room ${}", "connected to the server, calling room ${}"], ["canal ouvert, envoi du hello", "channel open, sending hello"],
     ["l'hôte ne répond pas", "the host isn't answering"], ["pas de réponse de l'hôte, nouvel envoi du hello (${})", "no answer from the host, sending hello again (${})"],
-    ["envoi impossible : ${}", "can't send: ${}"], ["reçu « ${} »", "received \"${}\""], ["erreur : ${}", "error: ${}"]);
+    ["envoi impossible : ${}", "can't send: ${}"], ["reçu « ${} »", "received \"${}\""], ["erreur : ${}", "error: ${}"],
+    ["réseau direct (ICE) : ${}", "direct network (ICE): ${}"], ["canal direct toujours fermé après 20 s", "direct channel still closed after 20 s"]);
 
   // ---------------------------------------------------------------- moteur de traduction
   const EX = new Map(), PATS = [];
