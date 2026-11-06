@@ -57,6 +57,10 @@ def fizz_pick_describes_spells_and_targets():
     # on répond par l'option (les deux Scouts) : le sort est rejoué sur ces cibles
     k = next(j for j, p in enumerate(pc) if p and sorted(p["tg"]) == sorted([a.uid, e.uid]))
     v = json.loads(train.answer(json.dumps(k)))
+    for _ in range(5):                              # payer la puissance du sort : la rune proposée d'abord
+        if not (v.get("ask") and v["ask"]["kind"] in ("pay_rune", "pay_gold")):
+            break
+        v = json.loads(train.answer(json.dumps(0)))
     g = train.W["g"]
     assert any(it.name == "Switcheroo" and sorted(it.data.get("tg", ())) == sorted([a.uid, e.uid]) for it in g.chain) \
         or any(y.cname == "Switcheroo" for y in g.p[me].deck), [it.name for it in g.chain]

@@ -120,6 +120,9 @@ def table_shows_the_hand_during_the_choice_and_until_the_next_action():
     i = next(o["i"] for o in v["dec"]["options"] if o["k"] == "play" and str(o["src"]) == str(s.uid))
     v = V(train.act(i))
     for _ in range(10):                            # l'IA peut répondre ; on va jusqu'à la question de Sabotage
+        if v.get("ask") and v["ask"]["kind"] in ("pay_rune", "pay_gold"):
+            v = V(train.answer(json.dumps(0)))     # quelle rune recycler (paiement) : celle proposée d'abord
+            continue
         if v.get("ask"):
             break
         v = V(train.act(next(o["i"] for o in v["dec"]["options"] if o["k"] == "pass")))

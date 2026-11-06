@@ -22,6 +22,9 @@ for (const [w, h, mob, sc] of [[1400, 900, false, 1], [1400, 900, false, 2], [39
   const settle = async () => {   // passe la priorité jusqu'à une question ou le retour en phase principale chaîne vide
     for (let i = 0; i < 40; i++) {
       await waitFor("!!(V && !working)"); await pg.waitForTimeout(150);
+      if (await ev("!!(V.ask && /^pay_/.test(V.ask.kind))")) {   // quelle rune recycler (2026-11-06) : la 1re proposée
+        await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue;
+      }
       if (await ev("!!V.ask")) return;
       if (await ev("!!(V.dec && V.dec.kind === 'main' && !(V.st.chain || []).length)")) return;
       await ev("(async()=>{ const o = V.dec && V.dec.options.find(x => x.k === 'pass'); await pump(J(o ? T.act(o.i) : T.step())) })()");

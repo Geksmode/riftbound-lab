@@ -37,9 +37,9 @@ def _play_flip(gold_ready, want):
             v = json.loads(train.step())
         elif v.get("ask"):
             a = v["ask"]
-            if a["kind"] == "pay_gold":
+            if a["kind"] in ("pay_gold", "pay_rune"):
                 asks.append(a)
-            v = json.loads(train.answer(json.dumps(want(a) if a["kind"] == "pay_gold" else 0)))
+            v = json.loads(train.answer(json.dumps(want(a) if a["kind"] in ("pay_gold", "pay_rune") else 0)))
         else:
             break
     g = train.W["g"]
@@ -50,10 +50,35 @@ def _play_flip(gold_ready, want):
 def gold_chosen_keeps_both_runes():
     asks, gold, n = _play_flip(True, lambda a: next(i for i, t in enumerate(a["options"]) if t.startswith("utiliser")))
     assert len(asks) == 1, asks
-    assert asks[0]["options"] == ["recycler 1 rune(s) (Calm)", "utiliser 1 Gold"] or \
-        asks[0]["options"] == ["recycler 1 rune(s) (Fury)", "utiliser 1 Gold"], asks[0]["options"]
+    assert sorted(asks[0]["options"]) == ["recycler la rune Calm prête", "recycler la rune Fury prête",
+                                          "utiliser 1 Gold"], asks[0]["options"]
     assert "Gold" in asks[0]["title"], asks[0]["title"]
     assert not gold and n == 2
+
+
+@T.test
+def answer_by_touching_the_gold_or_the_rune():
+    """Bug 2026-11-06 : les options 0 et 1 (nombre de Gold) rendaient cliquables les battlefields de gauche et de
+    droite. On répond en touchant le Gold ou n'importe quelle rune qui peut payer, jamais un battlefield ; la rune
+    touchée est celle qui est recyclée."""
+    for want in ("Fury", "Calm"):
+        seen = {}
+
+        def want_rune(a, want=want):
+            g, me = train.W["g"], train.ME
+            seen["zs"], seen["uids"] = a["zs"], a["uids"]
+            seen["gold"] = [o.uid for o in g.golds(me)]
+            seen["runes"] = {r.uid: r.domain for r in g.p[me].runes}
+            i = next(i for i, u in enumerate(a["uids"]) if seen["runes"].get(u) == want)
+            seen["pick"] = a["uids"][i]
+            return i
+        asks, gold, n = _play_flip(True, want_rune)
+        assert len(asks) == 1
+        assert seen["zs"] == [None, None, None], seen["zs"]
+        assert sorted(u for u in seen["uids"] if u in seen["runes"]) == sorted(seen["runes"]), seen
+        assert [u for u in seen["uids"] if u in seen["gold"]] == seen["gold"], seen
+        g = train.W["g"]
+        assert gold and n == 1 and seen["pick"] not in {r.uid for r in g.p[train.ME].runes}, seen
 
 
 @T.test
@@ -63,9 +88,24 @@ def rune_chosen_keeps_the_gold():
 
 
 @T.test
-def exhausted_gold_asks_nothing():
-    asks, gold, n = _play_flip(False, lambda a: 0)
-    assert not asks and gold and n == 1
+def exhausted_gold_asks_which_rune():
+    """Gold épuisé : pas de choix de Gold, mais le joueur choisit quand même la rune qu'il recycle (demande de
+    l'utilisateur 2026-11-06) ; la rune touchée est recyclée."""
+    for want in ("Fury", "Calm"):
+        seen = {}
+
+        def pick(a, want=want):
+            g, me = train.W["g"], train.ME
+            dom = {r.uid: r.domain for r in g.p[me].runes}
+            i = next(i for i, u in enumerate(a["uids"]) if dom.get(u) == want)
+            seen["uid"], seen["zs"], seen["n"] = a["uids"][i], a["zs"], len(a["uids"])
+            return i
+        asks, gold, n = _play_flip(False, pick)
+        assert len(asks) == 1 and asks[0]["kind"] == "pay_rune", asks
+        assert "quelle rune" in asks[0]["title"], asks[0]["title"]
+        assert seen["n"] == 2 and seen["zs"] == [None, None], seen
+        g = train.W["g"]
+        assert gold and n == 1 and seen["uid"] not in {r.uid for r in g.p[train.ME].runes}
 
 
 if __name__ == "__main__":
