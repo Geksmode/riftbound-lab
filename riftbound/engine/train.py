@@ -1135,6 +1135,33 @@ def _ask_uid(g, o):
     return None
 
 
+# Questions dont les options entières ne sont pas des battlefields (nombre de Gold, X, joueur, numéro de jeu) : sans
+# ce filtre, 0 et 1 rendaient cliquables les battlefields de gauche et de droite (bug 2026-11-06, Gold ou rune).
+NOT_LOC = frozenset(("pay_gold", "bullet_time_x", "burn_player", "choose_player", "ava_play"))
+
+
+def _pay_gold_uids(g, ask):
+    """Payer la puissance avec un Gold ou une rune (pay_gold) : l'option qui garde le moins de Gold se répond en
+    touchant une rune qu'elle recycle (et que les autres gardent), chaque option suivante en touchant un Gold prêt
+    (game.pay dépense golds[:k]). None quand l'objet manque : l'option reste un bouton."""
+    try:
+        plans = ask.ctx["plans"]
+        ks = sorted(ask.options)
+        golds = g.golds(ask.pid)
+        out = {}
+        lo = ks[0]
+        others = {r.uid for k in ks[1:] for r in plans[k]["recycle"]}
+        own = [r.uid for r in plans[lo]["recycle"]]
+        mine = {r.uid for r in g.p[ask.pid].runes}
+        pick = next((u for u in own if u not in others and u in mine), None)
+        out[lo] = pick
+        for k in ks[1:]:
+            out[k] = golds[k - 1].uid if 0 < k <= len(golds) else None
+        return [out.get(o) if ask.pid == ME else None for o in ask.options]
+    except Exception:
+        return [None for _ in ask.options]
+
+
 def _ask_play(g, ask, o):
     """Option « jouer telle carte avec tel choix » (Fizz, Trickster : sort de la défausse ; Ava Achiever…) : la table
     montre l'image de la carte, puis fait toucher ses cibles sur le plateau. {n, u, tg} ou None."""
@@ -1241,8 +1268,8 @@ def _view(ask=None):
     elif ask is not None:
         out["ask"] = dict(kind=ask.kind, title=_ask_title(g, ask),
                           options=[_alabel(g, ask, o) for o in ask.options],
-                          uids=[_ask_uid(g, o) for o in ask.options],
-                          zs=[("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs)) else None
+                          uids=_pay_gold_uids(g, ask) if ask.kind == "pay_gold" else [_ask_uid(g, o) for o in ask.options],
+                          zs=[None if ask.kind in NOT_LOC else ("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs)) else None
                               for o in ask.options],
                           src=_ask_src(g, ask),
                           item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None,

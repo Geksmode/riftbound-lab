@@ -57,6 +57,27 @@ def gold_chosen_keeps_both_runes():
 
 
 @T.test
+def answer_by_touching_the_gold_or_the_rune():
+    """Bug 2026-11-06 : les options 0 et 1 (nombre de Gold) rendaient cliquables les battlefields de gauche et de
+    droite. On répond maintenant en touchant le Gold ou la rune à recycler, jamais un battlefield."""
+    seen = {}
+
+    def want(a):
+        g, me = train.W["g"], train.ME
+        seen["zs"], seen["uids"] = a["zs"], a["uids"]
+        seen["gold"] = [o.uid for o in g.golds(me)]
+        seen["runes"] = [r.uid for r in g.p[me].runes]
+        return next(i for i, t in enumerate(a["options"]) if t.startswith("utiliser"))
+    asks, gold, n = _play_flip(True, want)
+    assert len(asks) == 1
+    assert seen["zs"] == [None, None], seen["zs"]
+    rec, use = seen["uids"]
+    assert use in seen["gold"], seen
+    assert rec in seen["runes"], seen
+    assert not gold and n == 2
+
+
+@T.test
 def rune_chosen_keeps_the_gold():
     asks, gold, n = _play_flip(True, lambda a: next(i for i, t in enumerate(a["options"]) if t.startswith("recycler")))
     assert len(asks) == 1 and gold and n == 1
