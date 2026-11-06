@@ -3,8 +3,8 @@ import { existsSync } from "node:fs";
 // le choix se faisait en cliquant le battlefield de gauche ou de droite (les options 0 et 1, nombre de Gold, étaient
 // prises pour des battlefields). On répond maintenant en cliquant le Gold de la base ou la rune à recycler.
 // 1. Staunch Survivor (2 énergie + 1 puissance Body) avec un Gold prêt : aucun battlefield en surbrillance, le Gold et
-//    une rune Body le sont ; clic sur le Gold, Valider : le Gold est dépensé, aucune rune recyclée.
-// 2. Même chose en cliquant la rune : la rune est recyclée, le Gold reste.
+//    les 3 runes Body le sont ; clic sur le Gold, Valider : le Gold est dépensé, aucune rune recyclée.
+// 2. Clic sur la 3e rune (pas celle que le moteur aurait prise) : c'est elle qui est recyclée, le Gold reste.
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_gold.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -49,26 +49,32 @@ await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');
 for (const useGold of [true, false]) {
   await fresh();
   const go = String(await ev("pyGet('GO')"));
+  await py(`RU = [r.uid for r in W["g"].p[ME].runes]`);
+  const ru = JSON.parse(await ev("pyGet('RU').then(JSON.stringify)")).map(String);
   await ev("(async()=>{ const i = V.dec.options.findIndex(o => o.k === 'play' && /Staunch Survivor/.test(o.label)); await pump(J(T.act(i))) })()");
   await waitFor("!!(V && !working && V.ask)");
-  const a = await ev("({ kind: V.ask.kind, options: V.ask.options, uids: V.ask.uids, zs: V.ask.zs })");
-  ok(`question « Gold ou rune » posée (${JSON.stringify(a)})`, a.kind === "pay_gold" && a.options.length === 2);
+  const a = await ev("({ kind: V.ask.kind, options: V.ask.options, uids: V.ask.uids.map(u => u === null ? null : String(u)), zs: V.ask.zs })");
+  ok(`question « Gold ou rune » posée : le Gold et chacune des 3 runes (${JSON.stringify(a)})`, a.kind === "pay_gold" && a.options.length === 4 &&
+    [...a.uids].sort().join() === [...ru, go].sort().join());
   await pg.waitForTimeout(300);
   const lit = await ev("[...document.querySelectorAll('#board [data-drop]')].filter(z => z.classList.contains('drop-ok') || z.classList.contains('drop-hover')).map(z => z.dataset.drop)");
   ok(`aucun battlefield (ni la base) en surbrillance (${JSON.stringify(lit)})`, lit.length === 0);
-  const gi = a.uids.findIndex(u => String(u) === go), ri = 1 - gi;
+  const gi = a.uids.indexOf(go);
   ok(`le Gold de la base répond « ${a.options[gi]} » et est en surbrillance`, gi >= 0 && /Gold/.test(a.options[gi]) &&
     await ev(`!!document.querySelector('#board [data-uid="${go}"].drop-ok')`));
-  ok(`une rune répond « ${a.options[ri]} » et est en surbrillance (halo doré visible)`, /recycler/.test(a.options[ri]) &&
-    await ev(`(() => { const x = document.querySelector('#board .rune[data-uid="${a.uids[ri]}"].drop-ok'); return !!x && /214, 178, 94/.test(getComputedStyle(x).boxShadow); })()`));
+  const halo = await ev(`${JSON.stringify(ru)}.map(u => { const x = document.querySelector('#board .rune[data-uid="' + u + '"].drop-ok'); return !!x && /214, 178, 94/.test(getComputedStyle(x).boxShadow); })`);
+  ok(`les 3 runes sont en surbrillance (halo doré visible) : ${JSON.stringify(halo)}`, halo.every(Boolean));
   if (useGold) await pg.screenshot({ path: OUT + "/gold-choix.png" });
-  await pg.click(`#board [data-uid="${useGold ? go : a.uids[ri]}"]`); await pg.waitForTimeout(250);
+  const pick = useGold ? go : ru[2], pi = a.uids.indexOf(pick);   // la 3e rune : pas celle que le moteur aurait prise
+  await pg.click(`#board [data-uid="${pick}"]`); await pg.waitForTimeout(250);
   const ft = await ev("document.querySelector('#fbar .ft') ? document.querySelector('#fbar .ft').innerText : ''");
-  ok(`clic sur ${useGold ? "le Gold" : "la rune"} : le choix est affiché (${JSON.stringify(ft)})`, ft.includes(a.options[useGold ? gi : ri]));
+  ok(`clic sur ${useGold ? "le Gold" : "la 3e rune"} : le choix est affiché (${JSON.stringify(ft)})`, ft.includes(a.options[pi]));
   await pg.click("#fOk"); await pg.waitForTimeout(400); await waitFor("!!(V && !working)");
   const r = await state();
-  ok(`${useGold ? "Gold dépensé, 3 runes gardées" : "rune recyclée, Gold gardé"} et Staunch Survivor en jeu (${JSON.stringify(r)})`,
-    useGold ? (!r[0] && r[1] === 3 && r[2]) : (r[0] && r[1] === 2 && r[2]));
+  await py(`RU2 = [r.uid for r in W["g"].p[ME].runes]`);
+  const ru2 = JSON.parse(await ev("pyGet('RU2').then(JSON.stringify)")).map(String);
+  ok(`${useGold ? "Gold dépensé, 3 runes gardées" : "la rune cliquée est recyclée, les deux autres et le Gold restent"} et Staunch Survivor en jeu (${JSON.stringify([r, ru2])})`,
+    useGold ? (!r[0] && r[1] === 3 && r[2]) : (r[0] && r[1] === 2 && r[2] && !ru2.includes(ru[2]) && ru2.includes(ru[0]) && ru2.includes(ru[1])));
 }
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);
 await b.close();

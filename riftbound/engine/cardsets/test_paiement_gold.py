@@ -50,8 +50,8 @@ def _play_flip(gold_ready, want):
 def gold_chosen_keeps_both_runes():
     asks, gold, n = _play_flip(True, lambda a: next(i for i, t in enumerate(a["options"]) if t.startswith("utiliser")))
     assert len(asks) == 1, asks
-    assert asks[0]["options"] == ["recycler 1 rune(s) (Calm)", "utiliser 1 Gold"] or \
-        asks[0]["options"] == ["recycler 1 rune(s) (Fury)", "utiliser 1 Gold"], asks[0]["options"]
+    assert sorted(asks[0]["options"]) == ["recycler 1 rune(s) (Calm prête)", "recycler 1 rune(s) (Fury prête)",
+                                          "utiliser 1 Gold"], asks[0]["options"]
     assert "Gold" in asks[0]["title"], asks[0]["title"]
     assert not gold and n == 2
 
@@ -59,22 +59,26 @@ def gold_chosen_keeps_both_runes():
 @T.test
 def answer_by_touching_the_gold_or_the_rune():
     """Bug 2026-11-06 : les options 0 et 1 (nombre de Gold) rendaient cliquables les battlefields de gauche et de
-    droite. On répond maintenant en touchant le Gold ou la rune à recycler, jamais un battlefield."""
-    seen = {}
+    droite. On répond en touchant le Gold ou n'importe quelle rune qui peut payer, jamais un battlefield ; la rune
+    touchée est celle qui est recyclée."""
+    for want in ("Fury", "Calm"):
+        seen = {}
 
-    def want(a):
-        g, me = train.W["g"], train.ME
-        seen["zs"], seen["uids"] = a["zs"], a["uids"]
-        seen["gold"] = [o.uid for o in g.golds(me)]
-        seen["runes"] = [r.uid for r in g.p[me].runes]
-        return next(i for i, t in enumerate(a["options"]) if t.startswith("utiliser"))
-    asks, gold, n = _play_flip(True, want)
-    assert len(asks) == 1
-    assert seen["zs"] == [None, None], seen["zs"]
-    rec, use = seen["uids"]
-    assert use in seen["gold"], seen
-    assert rec in seen["runes"], seen
-    assert not gold and n == 2
+        def want_rune(a, want=want):
+            g, me = train.W["g"], train.ME
+            seen["zs"], seen["uids"] = a["zs"], a["uids"]
+            seen["gold"] = [o.uid for o in g.golds(me)]
+            seen["runes"] = {r.uid: r.domain for r in g.p[me].runes}
+            i = next(i for i, u in enumerate(a["uids"]) if seen["runes"].get(u) == want)
+            seen["pick"] = a["uids"][i]
+            return i
+        asks, gold, n = _play_flip(True, want_rune)
+        assert len(asks) == 1
+        assert seen["zs"] == [None, None, None], seen["zs"]
+        assert sorted(u for u in seen["uids"] if u in seen["runes"]) == sorted(seen["runes"]), seen
+        assert [u for u in seen["uids"] if u in seen["gold"]] == seen["gold"], seen
+        g = train.W["g"]
+        assert gold and n == 1 and seen["pick"] not in {r.uid for r in g.p[train.ME].runes}, seen
 
 
 @T.test

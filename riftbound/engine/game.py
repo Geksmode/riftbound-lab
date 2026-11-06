@@ -1281,8 +1281,9 @@ class Game:
                     return sub
         return None
 
-    def _plan_payment(s, pid, e, reqs, ctx=None, _skip=(), gold_first=0):
-        """gold_first: number of ready Gold spent for power before any rune is recycled (the player's choice, pay)."""
+    def _plan_payment(s, pid, e, reqs, ctx=None, _skip=(), gold_first=0, prefer=()):
+        """gold_first: number of ready Gold spent for power before any rune is recycled (the player's choice, pay).
+        prefer: uids of runes to recycle first when their domain fits (the rune the player touched, pay)."""
         pl = s.p[pid]
         pool_e = pl.pool_e
         if pl.pool_r:
@@ -1349,7 +1350,9 @@ class Game:
             if use_gold < min(gold_first, len(golds)):
                 use_gold += 1
                 continue
-            cands = [r for r in exh if r.domain in req and r not in recycle]
+            cands = [r for r in pl.runes if r.uid in prefer and r.domain in req and r not in recycle]
+            if not cands:
+                cands = [r for r in exh if r.domain in req and r not in recycle]
             if not cands:
                 cands = [r for r in ready if r.domain in req and r not in recycle]
             if cands:
@@ -1439,7 +1442,20 @@ class Game:
             alt = s._plan_payment(pid, e, reqs, ctx, gold_first=k)
             if alt is not None and len(alt["recycle"]) < len(alts[max(alts)]["recycle"]):
                 alts[k] = alt
-        return alts
+        if len(alts) == 1:
+            return alts
+        # Paying with runes: every rune that can be recycled for this power is its own option (lo, rune uid), the
+        # planner's rune first (rule 429.3: the player chooses which [Add] abilities pay; user request 2026-11-06).
+        lo, first = plan["gold"], plan["recycle"][0]
+        out = {(lo, first.uid): plan}
+        for r in s.p[pid].runes:
+            if r is first:
+                continue
+            alt = s._plan_payment(pid, e, reqs, ctx, gold_first=lo, prefer=(r.uid,))
+            if alt is not None and r in alt["recycle"] and len(alt["recycle"]) == len(plan["recycle"]):
+                out[(lo, r.uid)] = alt
+        out.update((k, v) for k, v in alts.items() if k != lo)
+        return out
 
     def pay(s, pid, e, reqs, ctx=None):
         plan = s.plan_payment(pid, e, reqs, ctx)

@@ -977,9 +977,12 @@ def _alabel(g, ask, o):
             return tr("la recycler (sous le deck)", "recycle it (bottom of the deck)") if o else tr("la garder sur le dessus", "keep it on top")
         if k == "pay_gold":
             pl = ask.ctx["plans"][o]
-            rs = ", ".join(sorted(r.domain for r in pl["recycle"]))
-            gold = tr(f"utiliser {o} Gold", f"use {o} Gold") if o else ""
-            rec = tr(f"recycler {len(pl['recycle'])} rune(s) ({rs})", f"recycle {len(pl['recycle'])} rune(s) ({rs})") if rs else ""
+            k, ru = o if isinstance(o, tuple) else (o, None)
+            rr = sorted(pl["recycle"], key=lambda r: (r.uid != ru, r.domain))      # la rune touchée d'abord
+            rs = ", ".join(r.domain + (tr(" épuisée", " exhausted") if r.exhausted else tr(" prête", " ready")) if r.uid == ru else r.domain
+                           for r in rr)
+            gold = tr(f"utiliser {k} Gold", f"use {k} Gold") if k else ""
+            rec = tr(f"recycler {len(rr)} rune(s) ({rs})", f"recycle {len(rr)} rune(s) ({rs})") if rr else ""
             return " + ".join(x for x in (gold, rec) if x)
         if k == "damage_pick":
             need = ask.ctx.get('need', {}).get(o.uid, '?')
@@ -1141,23 +1144,19 @@ NOT_LOC = frozenset(("pay_gold", "bullet_time_x", "burn_player", "choose_player"
 
 
 def _pay_gold_uids(g, ask):
-    """Payer la puissance avec un Gold ou une rune (pay_gold) : l'option qui garde le moins de Gold se répond en
-    touchant une rune qu'elle recycle (et que les autres gardent), chaque option suivante en touchant un Gold prêt
-    (game.pay dépense golds[:k]). None quand l'objet manque : l'option reste un bouton."""
+    """Payer la puissance avec un Gold ou une rune (pay_gold) : une option (k, uid) par rune qu'on peut recycler (on
+    touche cette rune, game.gold_choices), et chaque option k (nombre de Gold) suivante se répond en touchant un Gold
+    prêt (game.pay dépense golds[:k]). None quand l'objet manque : l'option reste un bouton."""
     try:
-        plans = ask.ctx["plans"]
-        ks = sorted(ask.options)
         golds = g.golds(ask.pid)
-        out = {}
-        lo = ks[0]
-        others = {r.uid for k in ks[1:] for r in plans[k]["recycle"]}
-        own = [r.uid for r in plans[lo]["recycle"]]
         mine = {r.uid for r in g.p[ask.pid].runes}
-        pick = next((u for u in own if u not in others and u in mine), None)
-        out[lo] = pick
-        for k in ks[1:]:
-            out[k] = golds[k - 1].uid if 0 < k <= len(golds) else None
-        return [out.get(o) if ask.pid == ME else None for o in ask.options]
+        out = []
+        for o in ask.options:
+            if isinstance(o, tuple):
+                out.append(o[1] if o[1] in mine else None)
+            else:
+                out.append(golds[o - 1].uid if 0 < o <= len(golds) else None)
+        return out if ask.pid == ME else [None] * len(out)
     except Exception:
         return [None for _ in ask.options]
 

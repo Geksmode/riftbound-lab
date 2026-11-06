@@ -1087,13 +1087,15 @@ def gold_or_rune_is_the_players_choice():
     from cards import make_token
     seen = []
     def pick(n):
-        return lambda opts, ctx: seen.append(list(opts)) or n
+        # n = 1 : le Gold (option entière) ; n = 0 : la première rune proposée (option (0, uid))
+        return lambda opts, ctx: seen.append(list(opts)) or next(o for o in opts if isinstance(o, int) == bool(n))
     for n in (1, 0):
         g, _ = new(answers0=dict(pay_gold=pick(n)))
         runes(g, 0, ["Fury", "Fury"])
         gold = make_token(g, "Gold", 0, "base", ready=True)
         assert g.pay(0, 1, [frozenset({"Fury"})])
-        assert seen[-1] == [0, 1]
+        # chaque rune Fury est une option (rule 429.3 : le joueur choisit quelle rune il recycle), puis le Gold
+        assert len(seen[-1]) == 3 and seen[-1][2] == 1 and all(isinstance(o, tuple) and o[0] == 0 for o in seen[-1][:2])
         if n:
             assert gold not in g.board and len(g.p[0].runes) == 2
         else:
@@ -1104,6 +1106,27 @@ def gold_or_rune_is_the_players_choice():
     k = len(seen)
     assert g.pay(0, 1, [frozenset({"Fury"})])
     assert len(seen) == k and gold in g.board and len(g.p[0].runes) == 1
+
+
+@test
+def gold_or_rune_recycles_the_rune_the_player_picks():
+    # demande de l'utilisateur 2026-11-06 : toutes les runes qui peuvent payer sont proposées, et c'est la rune
+    # choisie qui est recyclée (pas celle du planificateur)
+    from cards import make_token
+    for want in (0, 1, 2):
+        g, _ = new(answers0=dict(pay_gold=lambda opts, ctx: [o for o in opts if isinstance(o, tuple)][want]))
+        runes(g, 0, ["Fury", "Fury", "Fury"])
+        g.p[0].runes[1].exhausted = True
+        make_token(g, "Gold", 0, "base", ready=True)
+        uids = [r.uid for r in g.p[0].runes]
+        opts = g.gold_choices(0, 1, [frozenset({"Fury"})], None, g.plan_payment(0, 1, [frozenset({"Fury"})]))
+        picks = [o[1] for o in opts if isinstance(o, tuple)]
+        assert sorted(picks) == sorted(uids), (picks, uids)
+        assert picks[0] == uids[1]                       # le choix du planificateur d'abord : la rune déjà épuisée
+        assert g.pay(0, 1, [frozenset({"Fury"})])
+        left = [r.uid for r in g.p[0].runes]
+        assert picks[want] not in left and len(left) == 2, (picks[want], left)
+        assert g.p[0].pool_p == {} or sum(g.p[0].pool_p.values()) == 0
 
 
 @test
