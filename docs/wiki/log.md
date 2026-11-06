@@ -360,6 +360,12 @@ Retour utilisateur : la table ne proposait pas de répéter le sort (Repeat acco
 ## [2026-11-05] decision | CI : retour à ubuntu-latest, Playwright 1.63.0
 Playwright 1.63.0 est la première version qui connaît `ubuntu26.04-x64` (Chromium Chrome for Testing) ; c'est aussi celle du conteneur des agents, donc celle que la porte locale exerce déjà. `ci.yml` : `playwright@1.63.0`, clé de cache mise à jour, `install --with-deps chromium` (nouvelle image, bibliothèques système plus supposées), `runs-on: ubuntu-latest` partout.
 
+## [2026-11-06] correctif | Table : cartes regardées ou révélées depuis un deck montrées
+Retour utilisateur : Baited Hook ne montrait pas les 5 cartes. Correctif général (`train.py`, `TGame.emit`) : chaque `look` du joueur et chaque `reveal` (toi ou l'IA, 424) est noté ; la question qui suit montre toutes les cartes en images (prenables à toucher, autres grisées), et sans question (aucune cible, choix unique) elles restent affichées avec « OK » jusqu'au prochain coup. Ce que l'IA regarde en secret reste caché. Les 53 cartes modélisées qui regardent/révèlent le dessus d'un deck passent toutes par `look`, `reveal` ou `predict` (audit du 2026-11-06). Test `table_shows_cards_looked_at_or_revealed`, robot `verif_regard.mjs`.
+
+## [2026-11-06] ingest | Duel : « Rejoindre » ne fait rien
+Journal de l'hôte : connexions entrantes sans canal ouvert (liaison WebRTC directe impossible). État ICE journalisé, message clair côté invité après 20 s ; relais TURN à décider (`pages/duel.md`).
+
 ## [2026-11-06] fix | Table : payer la puissance en cliquant le Gold ou la rune
 Les options de `pay_gold` (0 ou 1 Gold) passaient pour les battlefields 0 et 1 dans `zs` : on cliquait un battlefield pour choisir. Retours de l'utilisateur : toutes les runes doivent pouvoir être choisies, pas une seule, et la question se pose aussi sans Gold. Pour le joueur humain seulement (`every_choice`), `game.pay_choices` pose une question par rune recyclée (`pay_gold` si un Gold peut payer, sinon `pay_rune`), options `("r", uid)` et nombre de Gold (`_plan_payment(prefer=)`) ; l'IA garde `gold_choices` (inchangé). `train._pay_gold_uids` relie chaque option à sa rune ou au Gold, `NOT_LOC` retire `zs` pour les questions à options entières (pay_gold, bullet_time_x, burn_player, choose_player, ava_play). Halo `.rune.img.drop-ok` corrigé. Robot `verif_gold.mjs` dans la porte (partie 4).
 

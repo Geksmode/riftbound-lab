@@ -172,6 +172,12 @@ body.replay #boardHelp { display: none; }
 .prompt .mull.seen .card { --cw: 120px; --chh: 168px; width: 120px; height: 168px; }
 .prompt .mull.seen .seenc.cur .card { outline: 3px solid var(--brass); outline-offset: 2px; }
 .prompt .mull.seen .seenc.other { opacity: .5; }
+.prompt .mull.seen.pk { flex-wrap: wrap; }
+.prompt .mull.seen.pk .card { --cw: 96px; --chh: 134px; width: 96px; height: 134px; }
+.prompt .mull.seen.pk button.seenc { padding: 0; border: 0; background: none; }
+.prompt .mull.seen.pk button.seenc .card { box-shadow: 0 0 0 3px var(--akali); }
+.prompt .ft.sub { font-size: 12px; opacity: .85; }
+@media (max-width: 820px) { .prompt .mull.seen.pk .card { --cw: 64px; --chh: 90px; width: 64px; height: 90px; } }
 .tgrid .card { --cw: 86px; --chh: 120px; width: 86px; height: 120px; }
 .zoom { z-index: 70; pointer-events: none; }
 .hpop { min-width: 260px; max-width: 340px; border-color: var(--brass); }
@@ -2000,13 +2006,24 @@ function askHTML() {
     return `<span class="ft">Mulligan : touche jusqu'à 2 cartes à remettre.</span><div class="mull mm">${a.options.map((c, i) => `<div class="mc"><button data-m="${i}" aria-pressed="${mode.mull.has(i)}" title="${esc(c)}">${card(c, { raw: true, p: 0, cost: true })}</button><button class="rd" data-rd="${i}" title="Lire la carte">Lire</button></div>`).join("")}</div>
       <div class="prow"><button class="go" id="bKeep">${n ? `Remettre ${n} carte${n > 1 ? "s" : ""}` : "Garder ma main"}</button></div>`;
   }
+  if (a.show && a.show.length && a.pick && !playPicks(a).length) {
+    // Cartes regardées ou révélées par l'effet (Baited Hook, Called Shot, Rift Herald… 2026-11-06) : toutes en grand ;
+    // celles qu'on peut prendre se touchent, les autres sont grisées ; les choix sans carte (« aucun ») en boutons.
+    const loose = a.options.map((o, i) => i).filter(i => !a.pick.includes(i));
+    const none = o => o === "None" || o === "aucun" || o === "none";
+    return `<span class="ft">${who}${esc(a.title)}</span><span class="ft sub">${esc(a.seenT || "")}${a.pick.some(i => i >= 0) ? " · touche la carte à prendre" : ""}</span>
+      <div class="mull seen pk">${a.show.map((n, i) => a.pick[i] >= 0 ? `<button class="seenc ok" data-a="${a.pick[i]}" title="${esc(n)}">${card(n, { raw: true, cost: true })}</button>` : `<div class="seenc other">${card(n, { raw: true, cost: true })}</div>`).join("")}</div>
+      <div class="prow">${loose.map(i => `<button data-a="${i}">${esc(none(a.options[i]) ? "Ne rien prendre" : cap(a.options[i]))}</button>`).join("")}</div>`;
+  }
   if (a.show && a.show.length) return `<span class="ft">${who}${esc(a.title)}</span><div class="mull seen">${a.show.map((n, i) => `<div class="seenc${a.show.length > 1 ? (i === (a.cur || 0) ? " cur" : " other") : ""}">${card(n, { raw: true, cost: true })}</div>`).join("")}</div><div class="prow">${a.options.map((o, i) => `<button class="${i ? "" : "go"}" data-a="${i}">${esc(cap(o))}</button>`).join("")}</div>`;
   if (playPicks(a).length) {
     // Jouer une carte pendant un effet (Fizz, Trickster : un sort de ta défausse) : l'image de chaque carte possible,
     // puis ses cibles se touchent sur le plateau (askPlay). Deux exemplaires identiques ne s'affichent qu'une fois.
     const ps = playPicks(a), loose = a.options.map((o, i) => i).filter(i => !(a.pc || [])[i]);
     return `<span class="ft">${who}${esc(a.title)} Touche la carte à jouer.</span>
-      <div class="mull pick">${ps.map(p => `<button data-pp="${esc(p.n)}" title="${esc(p.n)}">${card(p.n, { raw: true, cost: true })}</button>`).join("")}</div>
+      ${a.show && a.pick ? `<span class="ft sub">${esc(a.seenT || "")}</span>
+      <div class="mull seen pk">${a.show.map(n => ps.some(p => p.n === n) ? `<button class="seenc" data-pp="${esc(n)}" title="${esc(n)}">${card(n, { raw: true, cost: true })}</button>` : `<div class="seenc other">${card(n, { raw: true, cost: true })}</div>`).join("")}</div>`
+      : `<div class="mull pick">${ps.map(p => `<button data-pp="${esc(p.n)}" title="${esc(p.n)}">${card(p.n, { raw: true, cost: true })}</button>`).join("")}</div>`}
       <div class="prow">${loose.map(i => `<button data-a="${i}">${esc(a.options[i] === "None" || a.options[i] === "aucun" ? "Ne rien jouer" : cap(a.options[i]))}</button>`).join("")}</div>`;
   }
   if (a.kind === "may") return `<span class="ft">${who}Utiliser cet effet ?</span><div class="prow"><button class="go" data-a="0">Oui</button><button data-a="1">Non</button></div>`;
@@ -2074,6 +2091,13 @@ function accTxt(o) {
   const n = (srcEl(S(ALIAS[o.src] ?? o.src)) || {}).dataset; const c = CARDS[n ? n.card : ""] || {};
   return `Accelerate (+1 énergie +1 ${(c.d || ["rune"])[0]}, arrive prête)`;
 }
+// Cartes vues ou révélées sans choix à faire (Baited Hook sans unité prenable, Apprentice Smith, révélation de
+// l'adversaire…) : montrées jusqu'à « OK » ou jusqu'au prochain coup (2026-11-06).
+let SEENX = null;
+function seenHTML() {
+  return V.seen.map(s => `<span class="ft">${esc(s.t)}</span><div class="mull seen${s.cards.length > 2 ? " pk" : ""}">${s.cards.map(n => `<div class="seenc">${card(n, { raw: true, cost: true })}</div>`).join("")}</div>`).join("")
+    + `<div class="prow"><button class="go" id="bSeenOk">OK</button></div>`;
+}
 function fbarHTML() {
   if (V && V.winner !== null && V.winner !== undefined && !working) {
     if (DU) return duelEndHTML();
@@ -2088,6 +2112,7 @@ function fbarHTML() {
     }
     return head + `<div class="prow"><button class="go" id="bAgain">Nouvelle partie</button><button id="bSame">Rejouer la même donne</button></div>`;
   }
+  if (!mode && !working && V && V.seen && V.seen.length && SEENX !== JSON.stringify(V.seen)) return seenHTML();
   if (!mode || working) return "";
   if (mode.type === "ask") return askHTML();
   if (mode.type === "target" && mvMode()) {
@@ -2157,6 +2182,7 @@ $("fbar").addEventListener("click", e => {
   if (b.id === "bNextGame") return DU ? duelNextGame() : matchPrep();
   if (b.id === "bDuelMenu") { duelLeave(); return showMenu(); }
   if (b.id === "bSame") { setupForm().then(() => { if ($("sSeed")) $("sSeed").value = MATCH ? MATCH.st.seed : META.seed; }); return; }
+  if (b.id === "bSeenOk") { SEENX = JSON.stringify(V.seen); return decorate(); }
   if (b.id === "bKeep") return answer([...mode.mull]);
   if (b.dataset.a) return answer(+b.dataset.a);
   if (b.dataset.pp !== undefined && mode && mode.type === "ask") return askPlay(b.dataset.pp);
@@ -2984,6 +3010,7 @@ function hostPeer(tries) {
     diag("hôte : connexion entrante (encodage " + c.serialization + ")");
     if (!d.st) duelStat("Ton ami se connecte…", "ok");
     c.on("open", () => diag("hôte : canal ouvert avec l'invité"));
+    c.on("iceStateChanged", st => diag("hôte : réseau direct (ICE) : " + st));
     c.on("error", e => diag("hôte : erreur du canal : " + errTxt(e)));
     c.on("data", m => duelRecv(m, c));
     c.on("close", () => { diag("hôte : canal fermé"); if (DU === d && d.conn === c) { d.conn = null; duelLost(); } });
@@ -3039,6 +3066,15 @@ function duelJoin(code, name, deck, token) {
     // encodage JSON : l'encodage binaire par défaut de PeerJS pose des problèmes entre navigateurs (Safari / iOS)
     const c = p.connect("rbl-" + code, { reliable: true, serialization: "json" });
     c.on("error", e => diag("invité : erreur du canal : " + errTxt(e)));
+    c.on("iceStateChanged", st => diag("invité : réseau direct (ICE) : " + st));
+    // L'hôte a reçu l'appel mais le canal direct ne s'ouvre pas : réseaux qui bloquent WebRTC (NAT des réseaux mobiles,
+    // Wi-Fi d'entreprise) et relais TURN public de PeerJS indisponible. On le dit au lieu de rester sur « Connexion… ».
+    setTimeout(() => {
+      if (DU !== d || d.conn === c || d.st) return;
+      diag("invité : canal direct toujours fermé après 20 s");
+      duelStat("La room est trouvée mais vos deux appareils n'arrivent pas à se relier directement (réseau qui bloque la connexion directe). "
+        + "Essayez tous les deux sur le même Wi-Fi, ou l'un en partage de connexion de l'autre, puis « Rejoindre » à nouveau.", "err");
+    }, 20000);
     c.on("open", () => {
       if (DU !== d) return; d.conn = c; netChip(); diag("invité : canal ouvert, envoi du hello");
       const hello = { t: "hello", name, deck, token, commit: BUILD.commit, engine: BUILD.engine };
