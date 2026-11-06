@@ -52,6 +52,10 @@ const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
 await ev("(()=>{ const b = [...document.querySelectorAll('#pop button[data-i]')].find(b => /Jouer/.test(b.textContent)); if (b) b.click(); })()");
 for (let i = 0; i < 20; i++) {                    // l'IA peut répondre : on passe jusqu'à la question de Sabotage
   await idle();
+  if (await ev("!!(V.ask && /^pay_/.test(V.ask.kind))")) {   // quelle rune recycler (2026-11-06) : on touche une rune, Valider
+    await pg.click(`#board [data-uid="${await ev("String(V.ask.uids.find(u => u !== null))")}"]`); await pg.waitForTimeout(200);
+    await pg.click("#fOk"); await pg.waitForTimeout(300); continue;
+  }
   if (await ev("!!V.ask")) break;
   if (await ev("!!(V.dec && V.dec.options.some(o => o.k === 'pass'))")) await pg.click("#bMain");
   else await pg.waitForTimeout(200);
