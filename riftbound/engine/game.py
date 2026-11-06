@@ -1442,28 +1442,54 @@ class Game:
             alt = s._plan_payment(pid, e, reqs, ctx, gold_first=k)
             if alt is not None and len(alt["recycle"]) < len(alts[max(alts)]["recycle"]):
                 alts[k] = alt
-        if len(alts) == 1:
-            return alts
-        # Paying with runes: every rune that can be recycled for this power is its own option (lo, rune uid), the
-        # planner's rune first (rule 429.3: the player chooses which [Add] abilities pay; user request 2026-11-06).
-        lo, first = plan["gold"], plan["recycle"][0]
-        out = {(lo, first.uid): plan}
-        for r in s.p[pid].runes:
-            if r is first:
-                continue
-            alt = s._plan_payment(pid, e, reqs, ctx, gold_first=lo, prefer=(r.uid,))
-            if alt is not None and r in alt["recycle"] and len(alt["recycle"]) == len(plan["recycle"]):
-                out[(lo, r.uid)] = alt
-        out.update((k, v) for k, v in alts.items() if k != lo)
+        return alts
+
+    def pay_choices(s, pid, e, reqs, ctx, plan, kf, chosen):
+        """What a human player chooses when paying power (rule 429.3: the player chooses which [Add] abilities pay a
+        cost; user request 2026-11-06): {("r", rune uid): plan} for each rune that can be the next one recycled (the
+        plan's own rune first), and {number of Gold: plan} for each way to pay more with ready Gold. plan: the plan
+        so far, built with gold_first=kf and the runes already chosen (uids, recycled whatever else happens)."""
+        out = {}
+        rec = [r.uid for r in plan["recycle"]]
+        nxt = next((u for u in rec if u not in chosen), None)
+        if nxt is not None:
+            out[("r", nxt)] = plan
+            for r in s.p[pid].runes:
+                if r.uid in chosen or r.uid == nxt:
+                    continue
+                alt = s._plan_payment(pid, e, reqs, ctx, gold_first=kf, prefer=tuple(chosen) + (r.uid,))
+                if alt is not None and alt["gold"] == plan["gold"] and len(alt["recycle"]) == len(rec) and \
+                        set(chosen) | {r.uid} <= {x.uid for x in alt["recycle"]}:
+                    out[("r", r.uid)] = alt
+            for k in range(plan["gold"] + 1, min(len(s.golds(pid)), len(reqs)) + 1):
+                alt = s._plan_payment(pid, e, reqs, ctx, gold_first=k, prefer=tuple(chosen))
+                if alt is not None and len(alt["recycle"]) < len(rec) and set(chosen) <= {x.uid for x in alt["recycle"]}:
+                    out[k] = alt
         return out
 
     def pay(s, pid, e, reqs, ctx=None):
         plan = s.plan_payment(pid, e, reqs, ctx)
         if plan is None:
             return False
-        alts = s.gold_choices(pid, e, reqs, ctx, plan)
-        if len(alts) > 1:
-            plan = alts[s.ask(pid, "pay_gold", list(alts), plans=alts)]
+        if getattr(s.agents[pid], "every_choice", False) if getattr(s, "agents", None) else False:
+            # human player (train.Human): chooses each rune recycled, or a Gold instead, one question at a time
+            if not plan.get("conv"):
+                kf, chosen = 0, ()
+                while True:
+                    alts = s.pay_choices(pid, e, reqs, ctx, plan, kf, chosen)
+                    if len(alts) <= 1:
+                        break
+                    kind = "pay_gold" if any(isinstance(k, int) for k in alts) else "pay_rune"
+                    o = s.ask(pid, kind, list(alts), plans=alts, chosen=chosen)
+                    plan = alts[o]
+                    if isinstance(o, tuple):
+                        chosen = tuple(chosen) + (o[1],)
+                    else:
+                        kf = o
+        else:
+            alts = s.gold_choices(pid, e, reqs, ctx, plan)
+            if len(alts) > 1:
+                plan = alts[s.ask(pid, "pay_gold", list(alts), plans=alts)]
         pl = s.p[pid]
         # restricted energy is spent first when it may pay this cost (the plan counted it in its pool)
         took = plan.get("took", 0)

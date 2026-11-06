@@ -975,12 +975,15 @@ def _alabel(g, ask, o):
     try:
         if k == "predict_recycle":
             return tr("la recycler (sous le deck)", "recycle it (bottom of the deck)") if o else tr("la garder sur le dessus", "keep it on top")
-        if k == "pay_gold":
+        if k in ("pay_gold", "pay_rune"):
             pl = ask.ctx["plans"][o]
-            k, ru = o if isinstance(o, tuple) else (o, None)
+            k, ru = pl["gold"], (o[1] if isinstance(o, tuple) else None)
             rr = sorted(pl["recycle"], key=lambda r: (r.uid != ru, r.domain))      # la rune touchée d'abord
-            rs = ", ".join(r.domain + (tr(" épuisée", " exhausted") if r.exhausted else tr(" prête", " ready")) if r.uid == ru else r.domain
-                           for r in rr)
+            if ru is not None:                                                   # une rune touchée : on la nomme
+                r = next(x for x in rr if x.uid == ru)
+                st = tr(" épuisée", " exhausted") if r.exhausted else tr(" prête", " ready")
+                return tr(f"recycler la rune {r.domain}{st}", f"recycle the {r.domain} rune{st}")
+            rs = ", ".join(r.domain for r in rr)
             gold = tr(f"utiliser {k} Gold", f"use {k} Gold") if k else ""
             rec = tr(f"recycler {len(rr)} rune(s) ({rs})", f"recycle {len(rr)} rune(s) ({rs})") if rr else ""
             return " + ".join(x for x in (gold, rec) if x)
@@ -1021,6 +1024,7 @@ ASKS = dict(mulligan="Mulligan : choisis jusqu'à 2 cartes à remettre", may="Ut
             play_location="Où poser l'unité ?", equip_target="Équiper quelle unité ?", discard="Défausser quelle carte ?",
             copy_target="Copier quelle unité ?", sacrifice="Sacrifier quelle unité ?", recycle_rune="Recycler quelle rune ?",
             pay_gold="Payer la puissance : avec un Gold ou en recyclant une rune ?",
+            pay_rune="Payer la puissance : quelle rune recycler ?",
             hook_pick="Baited Hook : quelle unité prendre ?", zhonya_save="Zhonya : sauver quelle unité ?",
             star_spring="Star Spring : quelle unité ?", dusk_kill="Détruire quelle unité ?",
             herald_pick="Quelle unité ?", herald_dk_pick="Quelle carte ?",
@@ -1140,13 +1144,13 @@ def _ask_uid(g, o):
 
 # Questions dont les options entières ne sont pas des battlefields (nombre de Gold, X, joueur, numéro de jeu) : sans
 # ce filtre, 0 et 1 rendaient cliquables les battlefields de gauche et de droite (bug 2026-11-06, Gold ou rune).
-NOT_LOC = frozenset(("pay_gold", "bullet_time_x", "burn_player", "choose_player", "ava_play"))
+NOT_LOC = frozenset(("pay_gold", "pay_rune", "bullet_time_x", "burn_player", "choose_player", "ava_play"))
 
 
 def _pay_gold_uids(g, ask):
-    """Payer la puissance avec un Gold ou une rune (pay_gold) : une option (k, uid) par rune qu'on peut recycler (on
-    touche cette rune, game.gold_choices), et chaque option k (nombre de Gold) suivante se répond en touchant un Gold
-    prêt (game.pay dépense golds[:k]). None quand l'objet manque : l'option reste un bouton."""
+    """Payer la puissance (pay_gold, pay_rune) : l'option ("r", uid) se répond en touchant cette rune, l'option k
+    (nombre de Gold) en touchant le k-ième Gold prêt (game.pay dépense golds[:k]). None quand l'objet manque : l'option
+    reste un bouton."""
     try:
         golds = g.golds(ask.pid)
         mine = {r.uid for r in g.p[ask.pid].runes}
@@ -1267,7 +1271,7 @@ def _view(ask=None):
     elif ask is not None:
         out["ask"] = dict(kind=ask.kind, title=_ask_title(g, ask),
                           options=[_alabel(g, ask, o) for o in ask.options],
-                          uids=_pay_gold_uids(g, ask) if ask.kind == "pay_gold" else [_ask_uid(g, o) for o in ask.options],
+                          uids=_pay_gold_uids(g, ask) if ask.kind in ("pay_gold", "pay_rune") else [_ask_uid(g, o) for o in ask.options],
                           zs=[None if ask.kind in NOT_LOC else ("base" if o == "base" else str(o)) if (o == "base" or (isinstance(o, int) and not isinstance(o, bool) and o in g.bf_locs)) else None
                               for o in ask.options],
                           src=_ask_src(g, ask),

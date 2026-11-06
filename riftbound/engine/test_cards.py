@@ -1087,15 +1087,13 @@ def gold_or_rune_is_the_players_choice():
     from cards import make_token
     seen = []
     def pick(n):
-        # n = 1 : le Gold (option entière) ; n = 0 : la première rune proposée (option (0, uid))
-        return lambda opts, ctx: seen.append(list(opts)) or next(o for o in opts if isinstance(o, int) == bool(n))
+        return lambda opts, ctx: seen.append(list(opts)) or n
     for n in (1, 0):
         g, _ = new(answers0=dict(pay_gold=pick(n)))
         runes(g, 0, ["Fury", "Fury"])
         gold = make_token(g, "Gold", 0, "base", ready=True)
         assert g.pay(0, 1, [frozenset({"Fury"})])
-        # chaque rune Fury est une option (rule 429.3 : le joueur choisit quelle rune il recycle), puis le Gold
-        assert len(seen[-1]) == 3 and seen[-1][2] == 1 and all(isinstance(o, tuple) and o[0] == 0 for o in seen[-1][:2])
+        assert seen[-1] == [0, 1]
         if n:
             assert gold not in g.board and len(g.p[0].runes) == 2
         else:
@@ -1109,24 +1107,48 @@ def gold_or_rune_is_the_players_choice():
 
 
 @test
-def gold_or_rune_recycles_the_rune_the_player_picks():
-    # demande de l'utilisateur 2026-11-06 : toutes les runes qui peuvent payer sont proposées, et c'est la rune
-    # choisie qui est recyclée (pas celle du planificateur)
+def human_picks_each_rune_recycled():
+    # demande de l'utilisateur 2026-11-06 : le joueur humain (every_choice) choisit la rune qu'il recycle, avec ou
+    # sans Gold, une question par rune ; l'IA garde le choix du planificateur sans question
     from cards import make_token
     for want in (0, 1, 2):
-        g, _ = new(answers0=dict(pay_gold=lambda opts, ctx: [o for o in opts if isinstance(o, tuple)][want]))
+        asked = []
+
+        def ans(opts, ctx, want=want):
+            asked.append(list(opts))
+            return [o for o in opts if isinstance(o, tuple)][want]
+        g, _ = new(answers0=dict(pay_rune=ans))
+        g.agents[0].every_choice = True
         runes(g, 0, ["Fury", "Fury", "Fury"])
         g.p[0].runes[1].exhausted = True
-        make_token(g, "Gold", 0, "base", ready=True)
         uids = [r.uid for r in g.p[0].runes]
-        opts = g.gold_choices(0, 1, [frozenset({"Fury"})], None, g.plan_payment(0, 1, [frozenset({"Fury"})]))
-        picks = [o[1] for o in opts if isinstance(o, tuple)]
-        assert sorted(picks) == sorted(uids), (picks, uids)
-        assert picks[0] == uids[1]                       # le choix du planificateur d'abord : la rune déjà épuisée
         assert g.pay(0, 1, [frozenset({"Fury"})])
+        picks = [o[1] for o in asked[0]]
+        assert len(asked) == 1 and sorted(picks) == sorted(uids), (asked, uids)
+        assert picks[0] == uids[1]                       # le choix du planificateur d'abord : la rune déjà épuisée
         left = [r.uid for r in g.p[0].runes]
         assert picks[want] not in left and len(left) == 2, (picks[want], left)
-        assert g.p[0].pool_p == {} or sum(g.p[0].pool_p.values()) == 0
+    # deux puissances : deux questions, la seconde sans la rune déjà choisie
+    asked = []
+    g, _ = new(answers0=dict(pay_rune=lambda opts, ctx: asked.append(list(opts)) or opts[-1]))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Calm", "Fury"])
+    uids = [r.uid for r in g.p[0].runes]
+    assert g.pay(0, 0, [frozenset({"Fury"}), frozenset({"Fury", "Calm"})])
+    assert len(asked) == 2 and asked[0][-1][1] not in [o[1] for o in asked[1]], asked
+    assert len(g.p[0].runes) == 1
+    # avec un Gold : la même question propose aussi le Gold (pay_gold)
+    g, _ = new(answers0=dict(pay_gold=lambda opts, ctx: asked.append(list(opts)) or 1))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Fury"])
+    gold = make_token(g, "Gold", 0, "base", ready=True)
+    assert g.pay(0, 1, [frozenset({"Fury"})])
+    assert len(asked[-1]) == 3 and asked[-1][-1] == 1 and gold not in g.board and len(g.p[0].runes) == 2
+    # une seule rune possible : pas de question
+    g, _ = new(answers0=dict(pay_rune=lambda opts, ctx: 1 / 0))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Calm"])
+    assert g.pay(0, 0, [frozenset({"Calm"})]) and [r.domain for r in g.p[0].runes] == ["Fury"]
 
 
 @test

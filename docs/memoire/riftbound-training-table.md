@@ -120,5 +120,5 @@ revient à la bulle (`unpick`). Robot `train/verif_fizz.mjs`.
 
 Questions à options entières (2026-11-06) : `train.py` mettait dans `zs` tout entier égal à un battlefield ; pour `pay_gold`
 (0/1 Gold), `bullet_time_x`, `burn_player`, `choose_player`, `ava_play`, ces entiers ne sont pas des lieux (`NOT_LOC`).
-`pay_gold` se répond en touchant le Gold ou n'importe quelle rune qui peut payer : options `(k, uid)` de `game.gold_choices`, la rune touchée est recyclée (`_pay_gold_uids`). Robot `train/verif_gold.mjs`.
+Payer la puissance (humain) : `pay_gold` (si un Gold peut payer) ou `pay_rune`, une question par rune recyclée, posée dès que plusieurs runes peuvent payer ; on touche le Gold ou la rune, la rune touchée est recyclée (`game.pay_choices`, `_pay_gold_uids`). Les tests qui pilotent la table doivent y répondre (0 = la rune du planificateur). Robot `train/verif_gold.mjs`.
 
