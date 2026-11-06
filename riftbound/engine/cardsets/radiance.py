@@ -1715,9 +1715,10 @@ card("Bushwhack Trap", kw={"Deploy": 1}, extra_hide_slots=lambda g, src, b: 1 if
 # Evelynn, In Control — "[Disarm] When I hold, if you control a facedown card here, score 1 point."
 card("Evelynn, In Control", kw={"Disarm": 1}, on_event=lambda g, o, ev, info: (
     ev == "hold" and info["pid"] == o.ctrl and o in info["units"] and _q(
-        g, o, "Evelynn, In Control", lambda g_, it: _me(g_, it) is not None and any(
-            c.owner == it.ctrl for c in g_.bfs[_me(g_, it).loc].facedowns if is_bf(_me(g_, it).loc))
+        g, o, "Evelynn, In Control", lambda g_, it: _me(g_, it) is not None and is_bf(_me(g_, it).loc) and any(
+            c.owner == it.ctrl for c in g_.bfs[_me(g_, it).loc].facedowns)
         and g_.gain_point(it.ctrl, "Evelynn, In Control"))))
+# « here » se lit à la résolution : rentrée en base entre-temps, pas de point (la base n'a pas de carte face cachée).
 
 
 # Lulu, Whimsical — "When I move, you may have another unit's base Might become 4 this turn."

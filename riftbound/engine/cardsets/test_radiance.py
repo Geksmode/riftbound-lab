@@ -1513,6 +1513,20 @@ def evelynn_in_control_scores_with_facedown_here():
 
 
 @T.test
+def evelynn_in_control_back_in_base_before_resolution_scores_nothing():
+    # Fuzz 2026-11-06 : Evelynn rentrée en base avant la résolution de son déclencheur → le moteur lisait g.bfs["base"].
+    # « here » = là où elle est à la résolution ; la base n'a pas de carte face cachée : pas de point (rien ne plante).
+    g, _ = N()
+    e = put(g, 0, "Evelynn, In Control", 1)
+    facedown(g, 0, "Demon Shade", 1)
+    g.hold(0, g.bfs[1])
+    pts = g.p[0].points
+    e.loc = "base"
+    settle(g)
+    assert g.p[0].points == pts
+
+
+@T.test
 def lulu_whimsical_base_might_4():
     g, _ = N()
     l = put(g, 0, "Lulu, Whimsical")
