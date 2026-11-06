@@ -1,0 +1,45 @@
+# legend: Orianna, Lady of Clockwork
+# player: Burrsir
+# event: Riftbound Showdown Series $25k - CoolStuffCon Orlando 2026 (556 joueurs)
+# date: 2026-11-01
+# placement: 59
+# url: https://riftdecks.com/riftbound-metagame/deck-orianna-lady-of-clockwork-341263
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: recoupé riftdecks (341263, 7-4-0) + riftmana (« Orlando Showdown Best of Legend Winner Decklists », entrée « 59th Orianna – Burrsir ») ; quantités du main issues d'un résumé, cohérentes avec les totaux d'en-tête riftdecks (unités 10, gear 12, sorts 17, champion 1) ; runes 7 Calm / 5 Mind et battlefields données par deux résumés ; sideboard de 10 identique selon les deux sources. Meilleure Orianna trouvée dans un gros tournoi Radiance (Sacramento : meilleure Orianna 134e, liste incomplète dans les résumés).
+[legend]
+1 Orianna, Lady of Clockwork
+[champion]
+1 Orianna, Exquisite
+[main]
+3 Ravenbloom Student
+2 Blitzcrank, Impassive
+2 Thousand-Tailed Watcher
+3 Astral Heron
+3 Zhonya's Hourglass
+3 The Ball
+3 Mask of Foresight
+2 Cloth Armor
+1 Sterak's Gage
+3 Defy
+3 Stupefy
+3 Discipline
+1 Not So Fast
+1 Back Off
+2 Temporal Breach
+2 Bellows Breath
+2 Eclipse
+[runes]
+7 Calm Rune
+5 Mind Rune
+[battlefields]
+1 Ornn's Forge
+1 Rockfall Path
+1 Veiled Temple
+[sideboard]
+2 Tomb-Raider Barbara
+2 Decree of Focus
+2 Decree of Insight
+1 Charm
+1 Singularity
+1 Unchecked Power
+1 Not So Fast

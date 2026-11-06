@@ -1,0 +1,42 @@
+# legend: Ziggs, Hexplosives Expert
+# player: Kevin Kim
+# event: Riftbound Showdown 25k - LDXP Sacramento (755 joueurs)
+# date: 2026-10-24
+# placement: 85
+# url: https://riftdecks.com/riftbound-metagame/deck-ziggs-hexplosives-expert-337364
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: riftdecks seul (337364, 7-4-0), plusieurs résumés recoupés ; totaux d'en-tête unités 13 / gear 16 / sorts 10 respectés ; gear (16) détaillé par un seul résumé mais somme exacte ; Hard Bargain 1 et Star-Crossed 1 vus dans un résumé et seules quantités qui complètent les 10 sorts ; runes 7 Fury / 5 Chaos (deux résumés) ; battlefields Rakelstake / Sigil of the Storm / Void Gate d'après deux résumés (les autres Ziggs du même tournoi en diffèrent d'une carte). Sideboard (10 annoncés) non récupéré de façon sûre : seule la ligne Ziggs, Short-Fused est gardée (vue dans deux résumés) ; Switcheroo, Star-Crossed et 3 Ravenbloom Prefect cités par certains résumés et démentis par un autre, donc retirés. Pas de liste Ziggs mieux classée récupérable (Kevin A, « Best of Ziggs » à Orlando : liste introuvable).
+[legend]
+1 Ziggs, Hexplosives Expert
+[champion]
+1 Ziggs, Explosive
+[main]
+3 Amateur Demolitionist
+3 Bilgewater Tracker
+3 Shimmering Swimmer
+2 Ferrous Forerunner
+1 Fizz, Trickster
+1 Vex, Apathetic
+3 Seal of Rage
+2 The List
+3 Pack of Wonders
+3 Treasure Trove
+1 Boots of Swiftness
+2 The Good Stuff
+2 Detonation Amplifier
+1 Acceptable Losses
+2 Detonate
+1 Existential Dread
+1 An Offer You Can't Refuse
+3 Falling Star
+1 Hard Bargain
+1 Star-Crossed
+[runes]
+7 Fury Rune
+5 Chaos Rune
+[battlefields]
+1 Rakelstake
+1 Sigil of the Storm
+1 Void Gate
+[sideboard]
+1 Ziggs, Short-Fused

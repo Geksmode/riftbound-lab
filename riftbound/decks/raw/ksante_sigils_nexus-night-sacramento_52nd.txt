@@ -1,0 +1,34 @@
+# legend: K'Sante, Pride of Nazumah
+# player: Sigils
+# event: Nexus Night Constructed - LDXP Sacramento (64 joueurs)
+# date: 2026-10-24
+# placement: 52
+# url: https://riftdecks.com/riftbound-metagame/deck-ksante-pride-of-nazumah-336873
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: classement faible (52e/64) faute de mieux : les listes K'Sante des Showdowns (Orlando 201e Zanzixibax, 305e Truckz ; Sacramento 483e Saeed Gatson, 146e Makai Benjamin Bush sur riftwatch) ne sont pas lisibles dans les résultats WebSearch ; la liste de Michael Emeofa (LDXP Challenge 29e/38) avait des quantités mal alignées. Liste vue dans deux résumés concordants (unités 12, gear 3, sorts 24 + champion = 40) ; Defy 2/Hush 1/Punch First 3/Discipline 3 confirmés par un troisième résumé. Page annoncée à 66 cartes : sideboard de 10 cartes NON visible, donc omis.
+[legend]
+1 K'Sante, Pride of Nazumah
+[champion]
+1 K'Sante, Courageous
+[main]
+3 Rengar, Trophy Hunter
+3 Seraphic Wyvern
+3 Vilemaw
+3 Elder Dragon
+3 Dazzling Aurora
+2 Defy
+1 Hush
+3 Punch First
+3 Discipline
+3 Mobilize
+3 Not So Fast
+3 Find Your Center
+3 Rampage
+3 Cataclysm
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Dragon Roost
+1 The Papertree
+1 Vilemaw's Lair
