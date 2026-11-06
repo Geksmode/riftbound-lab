@@ -1561,6 +1561,77 @@ def tutorial_game_is_fixed_and_playable():
 
 
 @test
+def table_shows_cards_looked_at_or_revealed():
+    """Table (2026-11-06, Baited Hook ne montrait pas les 5 cartes) : les cartes regardées par le joueur ou révélées
+    s'affichent dans la question qui suit (show, et pick : le choix qui prend chaque carte), ou sans question jusqu'à
+    son prochain coup (seen) ; les cartes que l'IA regarde restent cachées."""
+    import json
+    import train
+    from testkit import deck_top
+
+    def main():
+        v = json.loads(train.new(seed=4, first=0, mine="leblanc-iq5"))
+        while not (v.get("dec") and v["dec"]["kind"] == "main"):
+            v = json.loads(train.answer(json.dumps([] if v["ask"]["kind"] == "mulligan" else 0)) if v.get("ask")
+                           else (train.act(0) if v.get("dec") else train.step()))
+        return train.W["g"]
+
+    def settle(v):
+        for _ in range(40):
+            if v.get("ask") or (v.get("dec") and v["dec"]["kind"] == "main" and not train.W["g"].chain):
+                return v
+            if v.get("busy") or not v.get("dec"):
+                v = json.loads(train.step())
+                continue
+            o = next((o for o in v["dec"]["options"] if o["k"] == "pass"), None)
+            v = json.loads(train.act(o["i"]) if o else train.step())
+        return v
+
+    def hook(top):
+        g = main()
+        for u in list(g.units(0)):
+            g.kill([u], 0)
+        put(g, 0, "Shipyard Skulker")                  # 3 might : unités jusqu'à 4 might
+        hk = put(g, 0, "Baited Hook")
+        runes(g, 0, ["Order"] * 2)
+        deck_top(g, 0, top)
+        train.W["d"] = None
+        v = json.loads(train.step())
+        i = next(o["i"] for o in v["dec"]["options"] if o["k"] == "act" and o["src"] == hk.uid)
+        return settle(json.loads(train.act(i)))
+
+    top = ["Mountain Drake", "Vanguard Sergeant", "Pouty Poro", "Sabotage", "Pouty Poro"]
+    a = hook(top)["ask"]
+    assert a["kind"] == "hook_pick" and a["show"] == top, a
+    assert [a["options"][i] if i >= 0 else None for i in a["pick"]] == [None, "Vanguard Sergeant", "Pouty Poro", None, "Pouty Poro"]
+    assert "5 cartes" in a["seenT"] and a["seenT"].startswith("Baited Hook :")
+    v = json.loads(train.answer(json.dumps(a["pick"][1])))
+    assert not v.get("seen"), v.get("seen")               # déjà montrées dans la question
+    top = ["Mountain Drake", "Sabotage", "Sabotage", "Sabotage", "Sabotage"]
+    v = hook(top)                                         # aucune unité prenable : pas de question, les 5 cartes quand même
+    assert not v.get("ask") and v["seen"] and v["seen"][0]["cards"] == top, v.get("seen")
+    o = next(o for o in v["dec"]["options"] if o["k"] in ("end", "pass"))
+    assert not json.loads(train.act(o["i"])).get("seen")  # plus montrées après le coup suivant du joueur
+
+    g = main()                                            # carte révélée du deck adverse (Blind Fury) : vue
+    deck_top(g, 1, ["Vanguard Sergeant"])
+    from cards import IMPL
+    g.queue_trigger(0, "Blind Fury", IMPL["Blind Fury"].resolve)
+    g.flush_triggers()
+    train.W["d"] = None
+    v = settle(json.loads(train.step()))
+    assert any(s["cards"] == ["Vanguard Sergeant"] for s in v.get("seen", [])), v.get("seen")
+
+    g = main()                                            # l'IA regarde son deck : rien n'est montré
+    deck_top(g, 1, ["Sabotage", "Sabotage"])
+    g.queue_trigger(1, "Called Shot", IMPL["Called Shot"].resolve)
+    g.flush_triggers()
+    train.W["d"] = None
+    v = settle(json.loads(train.step()))
+    assert not v.get("seen") and not (v.get("ask") or {}).get("show"), v.get("seen")
+
+
+@test
 def human_option_labels_are_readable():
     import train
     from game import Opt

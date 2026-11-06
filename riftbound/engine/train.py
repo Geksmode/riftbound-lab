@@ -154,6 +154,10 @@ class TGame(Game):
         super().__init__(*a, **k)
 
     def ask(s, pid, kind, options, **ctx):
+        if pid == ME and options:
+            # cartes vues par l'effet qui pose la question (même élément de chaîne) : montrées dans la question
+            it = id(s.resolving) if s.resolving is not None else None
+            s.ask_seen = next((e for e in reversed(getattr(s, "seen_log", [])) if e["it"] == it), None)
         r = super().ask(pid, kind, options, **ctx)
         if pid == AI and not DUEL and s is W.get("g") and options and                 not (len(options) == 1 and kind not in ("may", "may_target", "order")):
             W.setdefault("ailog", []).append(["a", _enc(r, options), kind, len(options)])
@@ -179,6 +183,15 @@ class TGame(Game):
     def emit(s, ev, **info):
         if ev == "combat_won":                          # combats gagnés depuis le dernier rendu (défis du tutoriel)
             s.cw = getattr(s, "cw", []) + [info["pid"]]
+        if ev in ("look", "reveal") and info.get("cards") and (ev == "reveal" or info["pid"] == ME):
+            # Cartes vues depuis un deck (2026-11-06, Baited Hook ne montrait pas les 5 cartes) : « look at the top N »
+            # n'est vu que par le joueur qui regarde, une carte révélée est vue de tous (424). La table les montre dans
+            # la question qui suit (_view : ask.show) ou, sans question, jusqu'au prochain coup du joueur (seen).
+            it = s.resolving
+            s.seen_log = getattr(s, "seen_log", []) + [dict(
+                ev=ev, pid=info["pid"], owner=info.get("owner", info["pid"]), it=id(it) if it is not None else None,
+                src=_src_name(getattr(it, "name", "") or ""),
+                uids=[c.uid for c in info["cards"]], names=[c.cname for c in info["cards"]])]
         return super().emit(ev, **info)
 
     def clone(s):
@@ -270,7 +283,7 @@ def new(seed=None, bf=None, first=None, level=1, mine=None, opp=None, obf=None):
     coach = P.PlanAgent(seed + 900000, plan=_plan_for(MD), opp_plan=_plan_for(OD))
     g = TGame([A, B], [hu, ai], seed=seed, first=f)
     W.clear()
-    W.update(g=g, ag=[hu, ai], coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=names)
+    W.update(g=g, ag=[hu, ai], coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=names, seen_shown=set())
     return json.dumps(dict(seed=seed, first=f, bf=[abf, lbf], battlefields=MD["battlefields"], names=names,
                            decks=[dict(legend=x["legend"], champion=x.get("champion"), main=sorted(set(x["main"])))
                                   for x in (A, B)]))
@@ -349,7 +362,7 @@ def duel_new(seed, bf0, bf1, first, deck0, deck1, me, names=None):
     coach = P.PlanAgent(seed + 900000, plan=_plan_for([A, B][ME]), opp_plan=_plan_for([A, B][AI]))
     g = TGame([A, B], ag, seed=seed, first=int(first))
     W.clear()
-    W.update(g=g, ag=ag, coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=nm)
+    W.update(g=g, ag=ag, coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=nm, seen_shown=set())
     from version import engine_md5
     return json.dumps(dict(seed=seed, first=int(first), bf=[A["battlefield"], B["battlefield"]], names=nm, me=ME,
                            engine=engine_md5(), decks=[dict(legend=x["legend"], champion=x.get("champion"),
@@ -589,6 +602,9 @@ def _run(op):
         op()
     except NeedChoice as e:
         W["ask_shown"] = _shown_now(W["g"])           # main révélée pendant la résolution interrompue (Sabotage…)
+        e.seen = getattr(W["g"], "ask_seen", None) if e.pid in (None, ME) else None
+        if e.seen is not None:                        # déjà montrées dans la question : pas une seconde fois après
+            W.setdefault("seen_shown", set()).add(tuple(e.seen["uids"]))
         _restore(sv)
         for i, a in hus.items():                       # les réponses déjà données restent pour la reprise de op
             W["ag"][i].answers = a.answers
@@ -766,6 +782,10 @@ def act(i):
     h = W.setdefault("hist", [])
     h.append(_save())                                   # en duel aussi, chez les deux joueurs : la page n'autorise
     del h[:-40]                                         # « Reprendre » que tant que le joueur garde la main (undo_duel)
+
+    if not DUEL or d.player == ME:                     # coup du joueur : les cartes vues avant ne sont plus montrées
+        W["g"].seen_log = []
+        W["seen_shown"] = set()
 
     def op():
         W["g"].apply(a)
@@ -1158,6 +1178,34 @@ def _ask_src(g, ask):
     return getattr(c, "uid", None)
 
 
+def _src_name(n):
+    """Nom de carte de l'effet en cours : « Baited Hook: Hook » (capacité) → « Baited Hook » ; « Command: Attack » reste."""
+    if n and n not in _game.SPEC and ": " in n and n.rsplit(": ", 1)[0] in _game.SPEC:
+        n = n.rsplit(": ", 1)[0]
+    return short(n) or None
+
+
+def _opt_card_uid(o):
+    """Carte désignée par un choix qui ne fait que la prendre (Baited Hook, Called Shot…). Un choix « jouer la carte de
+    telle façon » (Reinforce, Wild Claw, Void Rush : (carte, choix)) passe par playPicks côté page (cibles touchées)."""
+    return getattr(o, "uid", None) if hasattr(o, "cname") and not isinstance(o, bool) else None
+
+
+def _seen_title(se):
+    """Légende des cartes vues : qui les voit, d'où, par quel effet."""
+    src = f"{se['src']} : " if se.get("src") else ""
+    n = len(se["names"])
+    if se["ev"] == "look":
+        whose = tr("ton deck", "your deck") if se["owner"] == ME else tr("le deck adverse", "the opponent's deck")
+        return src + tr(f"tu regardes {'la carte' if n == 1 else f'les {n} cartes'} du dessus de {whose}",
+                        f"you look at the top {'card' if n == 1 else f'{n} cards'} of {whose}")
+    who = tr("Tu révèles", "You reveal") if se["pid"] == ME else tr(f"{_rp.NAMES[AI]} révèle", f"{_rp.NAMES[AI]} reveals")
+    whose = tr("ton deck", "your deck") if se["owner"] == ME else tr("son deck", "their deck") if se["pid"] == se["owner"] \
+        else tr("le deck adverse", "the opponent's deck")
+    return src + tr(f"{who} {'la carte' if n == 1 else f'{n} cartes'} du dessus de {whose}",
+                    f"{who} the top {'card' if n == 1 else f'{n} cards'} of {whose}")
+
+
 def _ask_title(g, ask):
     """Titre de la question : connu (ASKS, puis cards.ASK_TEXT que chaque module remplit), précédé du nom de la carte
     qui demande quand il n'y figure pas déjà."""
@@ -1235,6 +1283,12 @@ def _view(ask=None):
             b["fdu"] = gb.facedown.uid
         b["fdus"] = [c.uid if c.owner == ME else None for c in gb.facedowns]   # même ordre que fds
     out["undo"] = len(W.get("hist", []))
+    if ask is None:
+        # cartes vues ou révélées sans question à poser (Baited Hook sans unité prenable, Called Shot avec une seule
+        # carte, Apprentice Smith…) : montrées jusqu'au prochain coup du joueur (act)
+        done = W.get("seen_shown") or set()
+        out["seen"] = [dict(t=_seen_title(e), cards=e["names"]) for e in getattr(g, "seen_log", [])
+                       if tuple(e["uids"]) not in done]
     d = W["d"]
     if ask is not None and DUEL and ask.pid is not None and ask.pid != ME:
         out["wait"] = "adversaire"                      # question posée à l'adversaire : on attend sa réponse
@@ -1251,6 +1305,14 @@ def _view(ask=None):
             top = ask.ctx.get("top") or [ask.ctx["card"]]          # les cartes vues (Predict N), en grand dans la question
             out["ask"]["show"] = [c.cname for c in top]
             out["ask"]["cur"] = ask.ctx.get("i", 0)
+        elif getattr(ask, "seen", None) is not None:
+            # cartes regardées ou révélées par cet effet (Baited Hook, Called Shot, Rift Herald…) : toutes en grand,
+            # et pour chacune l'indice du choix qui la prend (-1 : pas prenable), pour la toucher directement
+            se = ask.seen
+            out["ask"]["show"] = list(se["names"])
+            idx = [[i for i, o in enumerate(ask.options) if _opt_card_uid(o) == u] for u in se["uids"]]
+            out["ask"]["pick"] = [ix[0] if len(ix) == 1 else -1 for ix in idx]
+            out["ask"]["seenT"] = _seen_title(se)
     elif g.winner is not None:
         pass
     elif d is not None and d.player == ME:

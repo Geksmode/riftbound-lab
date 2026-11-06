@@ -359,3 +359,6 @@ Retour utilisateur : la table ne proposait pas de répéter le sort (Repeat acco
 
 ## [2026-11-05] decision | CI : retour à ubuntu-latest, Playwright 1.63.0
 Playwright 1.63.0 est la première version qui connaît `ubuntu26.04-x64` (Chromium Chrome for Testing) ; c'est aussi celle du conteneur des agents, donc celle que la porte locale exerce déjà. `ci.yml` : `playwright@1.63.0`, clé de cache mise à jour, `install --with-deps chromium` (nouvelle image, bibliothèques système plus supposées), `runs-on: ubuntu-latest` partout.
+
+## [2026-11-06] correctif | Table : cartes regardées ou révélées depuis un deck montrées
+Retour utilisateur : Baited Hook ne montrait pas les 5 cartes. Correctif général (`train.py`, `TGame.emit`) : chaque `look` du joueur et chaque `reveal` (toi ou l'IA, 424) est noté ; la question qui suit montre toutes les cartes en images (prenables à toucher, autres grisées), et sans question (aucune cible, choix unique) elles restent affichées avec « OK » jusqu'au prochain coup. Ce que l'IA regarde en secret reste caché. Les 53 cartes modélisées qui regardent/révèlent le dessus d'un deck passent toutes par `look`, `reveal` ou `predict` (audit du 2026-11-06). Test `table_shows_cards_looked_at_or_revealed`, robot `verif_regard.mjs`.
