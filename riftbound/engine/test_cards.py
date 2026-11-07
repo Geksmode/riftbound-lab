@@ -1107,6 +1107,51 @@ def gold_or_rune_is_the_players_choice():
 
 
 @test
+def human_picks_each_rune_recycled():
+    # demande de l'utilisateur 2026-11-06 : le joueur humain (every_choice) choisit la rune qu'il recycle, avec ou
+    # sans Gold, une question par rune ; l'IA garde le choix du planificateur sans question
+    from cards import make_token
+    for want in (0, 1, 2):
+        asked = []
+
+        def ans(opts, ctx, want=want):
+            asked.append(list(opts))
+            return [o for o in opts if isinstance(o, tuple)][want]
+        g, _ = new(answers0=dict(pay_rune=ans))
+        g.agents[0].every_choice = True
+        runes(g, 0, ["Fury", "Fury", "Fury"])
+        g.p[0].runes[1].exhausted = True
+        uids = [r.uid for r in g.p[0].runes]
+        assert g.pay(0, 1, [frozenset({"Fury"})])
+        picks = [o[1] for o in asked[0]]
+        assert len(asked) == 1 and sorted(picks) == sorted(uids), (asked, uids)
+        assert picks[0] == uids[1]                       # le choix du planificateur d'abord : la rune déjà épuisée
+        left = [r.uid for r in g.p[0].runes]
+        assert picks[want] not in left and len(left) == 2, (picks[want], left)
+    # deux puissances : deux questions, la seconde sans la rune déjà choisie
+    asked = []
+    g, _ = new(answers0=dict(pay_rune=lambda opts, ctx: asked.append(list(opts)) or opts[-1]))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Calm", "Fury"])
+    uids = [r.uid for r in g.p[0].runes]
+    assert g.pay(0, 0, [frozenset({"Fury"}), frozenset({"Fury", "Calm"})])
+    assert len(asked) == 2 and asked[0][-1][1] not in [o[1] for o in asked[1]], asked
+    assert len(g.p[0].runes) == 1
+    # avec un Gold : la même question propose aussi le Gold (pay_gold)
+    g, _ = new(answers0=dict(pay_gold=lambda opts, ctx: asked.append(list(opts)) or 1))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Fury"])
+    gold = make_token(g, "Gold", 0, "base", ready=True)
+    assert g.pay(0, 1, [frozenset({"Fury"})])
+    assert len(asked[-1]) == 3 and asked[-1][-1] == 1 and gold not in g.board and len(g.p[0].runes) == 2
+    # une seule rune possible : pas de question
+    g, _ = new(answers0=dict(pay_rune=lambda opts, ctx: 1 / 0))
+    g.agents[0].every_choice = True
+    runes(g, 0, ["Fury", "Calm"])
+    assert g.pay(0, 0, [frozenset({"Calm"})]) and [r.domain for r in g.p[0].runes] == ["Fury"]
+
+
+@test
 def rift_herald_dk_plays_from_hand():
     g, _ = new()
     h = put(g, 1, "Rift Herald")
@@ -1578,6 +1623,9 @@ def table_shows_cards_looked_at_or_revealed():
 
     def settle(v):
         for _ in range(40):
+            if v.get("ask") and v["ask"]["kind"] in ("pay_rune", "pay_gold"):
+                v = json.loads(train.answer(json.dumps(0)))     # quelle rune recycler : celle proposée d'abord
+                continue
             if v.get("ask") or (v.get("dec") and v["dec"]["kind"] == "main" and not train.W["g"].chain):
                 return v
             if v.get("busy") or not v.get("dec"):

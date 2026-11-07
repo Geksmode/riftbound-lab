@@ -40,7 +40,7 @@ TURN_FULL = os.environ.get("RB_TURN_FULL", "1") != "0"
 # decks variés, 648 paires, graines 5100000-5100647 : 49,3 % ± 1,1). Désactivé par défaut ; RB_ASK_SIM=1 ou cfg ask_sim=1.
 ASK_SIM = os.environ.get("RB_ASK_SIM", "0") != "0"
 ASK_SIM_MAX = 12
-ASK_SIM_SKIP = frozenset(("pay_gold", "recycle_rune"))      # paiements : pas des cibles (rune contre Gold : ia-texel)
+ASK_SIM_SKIP = frozenset(("pay_gold", "pay_rune", "recycle_rune"))      # paiements : pas des cibles (rune contre Gold : ia-texel)
 
 # Cibles et timing des sorts (2026-10-28, banc d'erreurs : 31 erreurs de cible sur 518, la bonne cible était dans la
 # liste 30 fois ; rejouée, l'IA change de coup 42 % du temps : bruit de la recherche à 1 tirage). Avec spell_pre, avant
@@ -335,7 +335,7 @@ class Heuristics:
             return max(options, key=lambda u: unit_value(g, u))
         if kind == "play_location":
             return "base" if "base" in options else options[0]
-        if kind == "pay_gold":
+        if kind in ("pay_gold", "pay_rune"):
             return options[0]                  # the planner's payment (Gold kept when a rune can pay)
         if kind == "recycle_rune":
             from collections import Counter

@@ -366,6 +366,9 @@ Retour utilisateur : Baited Hook ne montrait pas les 5 cartes. Correctif génér
 ## [2026-11-06] ingest | Duel : « Rejoindre » ne fait rien
 Journal de l'hôte : connexions entrantes sans canal ouvert (liaison WebRTC directe impossible). État ICE journalisé, message clair côté invité après 20 s ; relais TURN à décider (`pages/duel.md`).
 
+## [2026-11-06] fix | Table : payer la puissance en cliquant le Gold ou la rune
+Les options de `pay_gold` (0 ou 1 Gold) passaient pour les battlefields 0 et 1 dans `zs` : on cliquait un battlefield pour choisir. Retours de l'utilisateur : toutes les runes doivent pouvoir être choisies, pas une seule, et la question se pose aussi sans Gold. Pour le joueur humain seulement (`every_choice`), `game.pay_choices` pose une question par rune recyclée (`pay_gold` si un Gold peut payer, sinon `pay_rune`), options `("r", uid)` et nombre de Gold (`_plan_payment(prefer=)`) ; l'IA garde `gold_choices` (inchangé). `train._pay_gold_uids` relie chaque option à sa rune ou au Gold, `NOT_LOC` retire `zs` pour les questions à options entières (pay_gold, bullet_time_x, burn_player, choose_player, ava_play). Halo `.rune.img.drop-ok` corrigé. Robot `verif_gold.mjs` dans la porte (partie 4).
+
 ## [2026-11-06] ingest | Decks par défaut des 9 légendes de Radiance
 Demande de l'utilisateur : des decks par défaut pour les légendes qui n'en avaient pas (Ekko, Evelynn, Jarvan IV, K'Sante,
 Mordekaiser, Orianna, Riven, Seraphine, Ziggs). 9 listes `decks/raw/` des Showdowns Sacramento (2026-10-24) et Orlando

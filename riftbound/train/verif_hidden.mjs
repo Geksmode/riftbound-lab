@@ -65,6 +65,14 @@ console.log("  pendant le glisser : zones en surbrillance", await ev("[...docume
   "· sous le doigt", await ev(`(()=>{const e=document.elementFromPoint(${z.x + z.width / 2},${z.y + 12}); const t=e&&e.closest('#board [data-uid], #board [data-drop]'); return t? (t.dataset.drop??('u'+t.dataset.uid)) : String(e&&e.className)})()`));
 await pg.mouse.up();
 await pg.waitForTimeout(500); await idle();
+// cacher coûte une rune au choix : la table demande quelle rune recycler (2026-11-06) ; on touche une rune, Valider
+if (await ev("!!(V.ask && V.ask.kind === 'pay_rune')")) {
+  const ru = await ev("String(V.ask.uids.find(u => u !== null))");
+  await pg.click(`#board [data-uid="${ru}"]`); await pg.waitForTimeout(250);
+  await pg.click("#fOk"); await pg.waitForTimeout(500); await idle();
+  ok(`cacher : la table demande quelle rune recycler, la rune touchée (${ru}) est recyclée`,
+    await ev(`!V.st.p[MEP].runeu.map(String).includes("${ru}")`));
+}
 const after = await ev(`({inHand: !!document.querySelector('#board .hand [data-uid="${ouid}"]'), mode: mode ? mode.type : null,
   fb: $('fbar').hidden ? '' : $('fbar').innerText})`);
 await pg.screenshot({ path: OUT + "/hidden-apres-glisser.png" });

@@ -31,6 +31,7 @@ ASK_EN = dict(
     play_location="Where do you play the unit?", equip_target="Equip which unit?", discard="Discard which card?",
     copy_target="Copy which unit?", sacrifice="Sacrifice which unit?", recycle_rune="Recycle which rune?",
     pay_gold="Pay the power: with a Gold or by recycling a rune?",
+    pay_rune="Pay the power: which rune do you recycle?",
     hook_pick="Baited Hook: which unit do you take?", zhonya_save="Zhonya: save which unit?",
     star_spring="Star Spring: which unit?", dusk_kill="Kill which unit?",
     herald_pick="Which unit?", herald_dk_pick="Which card?",

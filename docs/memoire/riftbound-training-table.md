@@ -117,3 +117,8 @@ Pour une question dont les options sont « (carte, choix) » (Fizz, Trickster, A
 toucher une carte ouvre le mode `target` habituel avec `mode.ans` (nom de la carte) : les cibles se touchent sur le plateau
 ou dans la liste de la bulle, « Valider la cible » répond à la question (`pickI` → `answer`), « Retour » / Échap
 revient à la bulle (`unpick`). Robot `train/verif_fizz.mjs`.
+
+Questions à options entières (2026-11-06) : `train.py` mettait dans `zs` tout entier égal à un battlefield ; pour `pay_gold`
+(0/1 Gold), `bullet_time_x`, `burn_player`, `choose_player`, `ava_play`, ces entiers ne sont pas des lieux (`NOT_LOC`).
+Payer la puissance (humain) : `pay_gold` (si un Gold peut payer) ou `pay_rune`, une question par rune recyclée, posée dès que plusieurs runes peuvent payer ; on touche le Gold ou la rune, la rune touchée est recyclée (`game.pay_choices`, `_pay_gold_uids`). Les tests qui pilotent la table doivent y répondre (0 = la rune du planificateur). Robot `train/verif_gold.mjs`.
+
