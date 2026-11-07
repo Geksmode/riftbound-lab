@@ -1,0 +1,45 @@
+# legend: Evelynn, Agony's Embrace
+# player: John Riftbound
+# event: Riftbound Showdown 25k - LDXP Sacramento (755 joueurs)
+# date: 2026-10-24
+# placement: 21
+# url: https://riftdecks.com/riftbound-metagame/deck-evelynn-agony-s-embrace-337279
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: 8-2-1 ; place recoupée riftdecks + riftatlas. Main recoupé sur deux résumés concordants (unités 27, gear 4, sorts 8 = 39 + champion = 40) ; un troisième résumé niait Star-Crossed/Onslaught mais le résumé suivant, ciblé, les confirme (2 et 1), et ce sont les seules quantités qui complètent 8 sorts. Runes 4 Body / 8 Chaos vues dans deux résumés. Sideboard INCOMPLET : la page annonce 10 cartes mais seules 5 lignes (1 chacune) sont visibles ; seules ces 5 sont transcrites.
+[legend]
+1 Evelynn, Agony's Embrace
+[champion]
+1 Evelynn, Entrancing
+[main]
+2 Ezreal, Prodigy
+2 Fizz, Trickster
+3 Gutter Guardian
+3 Kinkou Initiate
+3 Pyke, Returned
+3 Tornado Warrior
+3 Tail-Cloaked Matriarch
+2 Vex, Apathetic
+2 K'Sante, Courageous
+2 Rengar, Trophy Hunter
+1 Kharox
+1 Baron Nashor
+2 Boots of Swiftness
+2 Edge of Night
+1 Switcheroo
+2 Hold 'Em
+2 Rampage
+2 Star-Crossed
+1 Onslaught
+[runes]
+4 Body Rune
+8 Chaos Rune
+[battlefields]
+1 Bandle Scouts' Academy
+1 Rakelstake
+1 Startipped Peak
+[sideboard]
+1 Gust
+1 Abandon
+1 Bedeviling Stranger
+1 Switcheroo
+1 Rampage

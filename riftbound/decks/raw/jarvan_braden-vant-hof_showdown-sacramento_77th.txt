@@ -1,0 +1,36 @@
+# legend: Jarvan IV, Exemplar of Demacia
+# player: Braden Van't Hof
+# event: Riftbound Showdown 25k - LDXP Sacramento (755 joueurs)
+# date: 2026-10-24
+# placement: 77
+# url: https://riftdecks.com/riftbound-metagame/deck-jarvaniv-exemplar-of-demacia-337337
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: liste reconstituée section par section sur plusieurs résumés de la même page riftdecks (aucune autre source). Unités 24 (sommes cohérentes), gear 7 (Concert Poster 1 / Pillaged Armory 3 / Demacian Standard 3), sorts 8 (Punch First 2 / Repulse 1 / Call to Glory 3 / Rampage 2) : 39 + champion = 40. Sett = « Sett, Kingpin » (confirmé par un second résumé, un premier parlait de Sett, Brawler) ; la page aurait un désaccord texte/visuel sur le nombre de Sett : 2 retenu (visuel) et c'est la seule quantité qui donne 24 unités. Runes 8 Body / 4 Order vues dans deux résumés. Sideboard (10 annoncées) omis : seules 7 visibles dans un seul résumé (Repulse, Sabotage, Decree of Unity x2, Salvage x2, Dockside Lock-Up), non recoupées. Fragilités : les quantités des unités et les 3 battlefields ne viennent chacun que d’un seul résumé (présence de First Mate, Skystrike Squadron, Sett, Kingpin confirmée par un second). Les ids riftdecks 337676, 341363, 341983, 337903, 341885 ne sont pas indexés par la recherche.
+[legend]
+1 Jarvan IV, Exemplar of Demacia
+[champion]
+1 Jarvan IV, Martial Paragon
+[main]
+3 Irresistible Faefolk
+3 Pit Rookie
+3 Trifarian Captain
+2 First Mate
+3 Lucian, Merciless
+3 Nidalee, Cat Form
+2 Sett, Kingpin
+3 Rengar, Trophy Hunter
+2 Skystrike Squadron
+1 Concert Poster
+3 Pillaged Armory
+3 Demacian Standard
+2 Punch First
+1 Repulse
+3 Call to Glory
+2 Rampage
+[runes]
+8 Body Rune
+4 Order Rune
+[battlefields]
+1 Monastery of Hirana
+1 Packed Amphitheater
+1 Seat of Power

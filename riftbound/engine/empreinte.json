@@ -1,72 +1,72 @@
 {
- "engine_md5": "e0b0770d77",
- "python": "3.13.17",
- "seconds": 60.6,
+ "engine_md5": "29ad6490a9",
+ "python": "3.13.18",
+ "seconds": 10.6,
  "games": [
   {
    "seed": 910001,
    "search": "old",
    "legends": [
     "Draven, Glorious Executioner",
-    "Pyke, Bloodharbor Ripper"
+    "Miss Fortune, Bounty Hunter"
    ],
-   "decisions": 152,
-   "winner": 0,
-   "turns": 18,
-   "md5": "d0963de1917ba533d938f89bdae380c1",
-   "s": 23.6
+   "decisions": 172,
+   "winner": 1,
+   "turns": 19,
+   "md5": "980bcabdcb2757546840c0760a527dea",
+   "s": 4.8
   },
   {
    "seed": 910002,
    "search": "old",
    "legends": [
-    "Azir, Emperor of the Sands",
-    "Master Yi, Wuju Bladesman"
+    "Vi, Piltover Enforcer",
+    "Azir, Emperor of the Sands"
    ],
-   "decisions": 110,
-   "winner": 1,
-   "turns": 13,
-   "md5": "b6ed68d21c050c5c8a1a5ff038dc37a0",
-   "s": 7.5
+   "decisions": 141,
+   "winner": 0,
+   "turns": 16,
+   "md5": "cd2e80fad89bf4efd90f079b429e8234",
+   "s": 10.4
   },
   {
    "seed": 910003,
    "search": "old",
    "legends": [
-    "Jhin, Virtuoso",
-    "Jayce, Defender of Tomorrow"
+    "Jarvan IV, Exemplar of Demacia",
+    "Vi, Piltover Enforcer"
    ],
-   "decisions": 204,
-   "winner": 1,
-   "turns": 18,
-   "md5": "41249d11acd9c3c45247c33328d780b8",
-   "s": 19.4
+   "decisions": 61,
+   "winner": 0,
+   "turns": 11,
+   "md5": "bea223a086066b97a80e5660af283cef",
+   "s": 2.9
   },
   {
    "seed": 910004,
    "search": "old",
    "legends": [
-    "Lillia, Bashful Bloom",
-    "Nasus, Curator of the Sands"
+    "K'Sante, Pride of Nazumah",
+    "Lucian, Purifier"
    ],
-   "decisions": 178,
-   "winner": 0,
-   "turns": 18,
-   "md5": "dec1c68986407300288cb35fa7522b3b",
-   "s": 15.0
+   "decisions": 66,
+   "winner": 1,
+   "turns": 11,
+   "md5": "7be173469be8c324e85c5322deddcbba",
+   "s": 1.2
   },
   {
    "seed": 910005,
    "search": "turn",
    "legends": [
-    "Rumble, Mechanized Menace",
-    "Kennen, Heart of the Tempest"
+    "Poppy, Keeper of the Hammer",
+    "Master Yi, Wuju Master"
    ],
-   "decisions": 126,
-   "winner": 1,
-   "turns": 11,
-   "md5": "61e28f08648ea919a229da5930b53877",
-   "s": 52.6
+   "decisions": 130,
+   "winner": 0,
+   "turns": 18,
+   "md5": "08ab02b6163243043b0f5686e29a52b9",
+   "s": 6.0
   }
  ]
 }

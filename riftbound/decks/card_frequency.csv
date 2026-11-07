@@ -192,6 +192,51 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Draven, Glorious Executioner",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,0,,100
 "Draven, Glorious Executioner",Star-Crossed,unl-128,Spell,Chaos,3,1,0,,100
 "Draven, Glorious Executioner",Thermo Beam,ogn-022,Spell,Fury,5,1,0,,100
+"Ekko, Boy Who Shattered Time",Bilgewater Tracker,rad-003,Unit,Fury,3,1,100,3.0,0
+"Ekko, Boy Who Shattered Time",Blast Corps Cadet,sfd-013,Unit,Fury,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time",Blastcone Fae,ogn-097,Unit,Mind,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time",Blood Rush,sfd-003,Spell,Fury,1,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Brittle Steel,ven-003,Spell,Fury,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Chronobreak,rad-140,Spell,Fury|Mind,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time","Ekko, Ingenious",rad-061,Unit,Mind,3,1,100,1.0,0
+"Ekko, Boy Who Shattered Time","Ekko, Revolutionary",rad-021,Unit,Fury,5,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Falling Star,ogn-029,Spell,Fury,2,1,100,3.0,0
+"Ekko, Boy Who Shattered Time",Frigid Touch,sfd-066,Spell,Mind,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,3.0,0
+"Ekko, Boy Who Shattered Time",Legion Rearguard,ogn-010,Unit,Fury,2,1,100,1.0,0
+"Ekko, Boy Who Shattered Time",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Ekko, Boy Who Shattered Time",Plundering Poro,sfd-069,Unit,Mind,2,1,100,3.0,0
+"Ekko, Boy Who Shattered Time","Pyke, Dockside Butcher",unl-028,Unit,Fury,3,1,100,1.0,0
+"Ekko, Boy Who Shattered Time",Shock Blast,ven-059,Spell,Mind,3,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Ekko, Boy Who Shattered Time",Temporal Breach,ven-066,Spell,Mind,2,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,2.0,0
+"Ekko, Boy Who Shattered Time",Time Warp,ogn-122,Spell,Mind,10,1,100,1.0,0
+"Ekko, Boy Who Shattered Time","Vayne, Hunter",ogn-035,Unit,Fury,4,1,100,1.0,0
+"Evelynn, Agony's Embrace",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
+"Evelynn, Agony's Embrace",Switcheroo,sfd-145,Spell,Chaos,2,1,100,1.0,100
+"Evelynn, Agony's Embrace",Baron Nashor,unl-147,Unit,Chaos,10,1,100,1.0,0
+"Evelynn, Agony's Embrace",Boots of Swiftness,sfd-133,Gear,Chaos,3,1,100,2.0,0
+"Evelynn, Agony's Embrace",Edge of Night,sfd-139,Gear,Chaos,3,1,100,2.0,0
+"Evelynn, Agony's Embrace","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,1.0,0
+"Evelynn, Agony's Embrace","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,1,100,2.0,0
+"Evelynn, Agony's Embrace","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,2.0,0
+"Evelynn, Agony's Embrace",Gutter Guardian,rad-103,Unit,Chaos,3,1,100,3.0,0
+"Evelynn, Agony's Embrace",Hold 'Em,rad-070,Spell,Body,3,1,100,2.0,0
+"Evelynn, Agony's Embrace","K'Sante, Courageous",rad-086,Unit,Body,5,1,100,2.0,0
+"Evelynn, Agony's Embrace",Kharox,ven-114,Unit,Chaos,6,1,100,1.0,0
+"Evelynn, Agony's Embrace",Kinkou Initiate,unl-097,Unit,Body,3,1,100,3.0,0
+"Evelynn, Agony's Embrace",Onslaught,ven-081,Spell,Body,4,1,100,1.0,0
+"Evelynn, Agony's Embrace","Pyke, Returned",unl-145,Unit,Chaos,3,1,100,3.0,0
+"Evelynn, Agony's Embrace","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,2.0,0
+"Evelynn, Agony's Embrace",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,0
+"Evelynn, Agony's Embrace",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,3.0,0
+"Evelynn, Agony's Embrace",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,3.0,0
+"Evelynn, Agony's Embrace","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,2.0,0
+"Evelynn, Agony's Embrace",Abandon,unl-131,Spell,Chaos,2,1,0,,100
+"Evelynn, Agony's Embrace",Bedeviling Stranger,rad-107,Unit,Chaos,2,1,0,,100
+"Evelynn, Agony's Embrace",Gust,ogn-169,Spell,Chaos,1,1,0,,100
 "Ezreal, Prodigal Explorer",Sprite Fountain,unl-078,Gear,Mind,2,1,100,1.0,100
 "Ezreal, Prodigal Explorer",Turn to Dust,unl-070,Spell,Mind,2,1,100,1.0,100
 "Ezreal, Prodigal Explorer",Bellows Breath,sfd-080,Spell,Mind,1,1,100,3.0,0
@@ -302,6 +347,23 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Ivern, Green Father",Flurry of Feathers,unl-044,Spell,Calm,4,1,0,,100
 "Ivern, Green Father","Janna, Savior",sfd-053,Unit,Calm,3,1,0,,100
 "Ivern, Green Father",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Jarvan IV, Exemplar of Demacia",Call to Glory,ogn-207,Spell,Order,3,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",Concert Poster,rad-116,Gear,Order,1,1,100,1.0,0
+"Jarvan IV, Exemplar of Demacia",Demacian Standard,rad-156,Gear,Body|Order,2,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",First Mate,ogn-132,Unit,Body,3,1,100,2.0,0
+"Jarvan IV, Exemplar of Demacia",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia","Jarvan IV, Martial Paragon",rad-091,Unit,Body,4,1,100,1.0,0
+"Jarvan IV, Exemplar of Demacia","Lucian, Merciless",sfd-113,Unit,Body,3,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia","Nidalee, Cat Form",unl-114,Unit,Body,3,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",Pillaged Armory,rad-073,Gear,Body,1,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",Pit Rookie,ogn-136,Unit,Body,2,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",Punch First,sfd-097,Spell,Body,1,1,100,2.0,0
+"Jarvan IV, Exemplar of Demacia",Rampage,ven-083,Spell,Body,3,1,100,2.0,0
+"Jarvan IV, Exemplar of Demacia","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"Jarvan IV, Exemplar of Demacia",Repulse,unl-106,Spell,Body,1,1,100,1.0,0
+"Jarvan IV, Exemplar of Demacia","Sett, Kingpin",ogn-240,Unit,Order,4,1,100,2.0,0
+"Jarvan IV, Exemplar of Demacia",Skystrike Squadron,rad-075,Unit,Body,5,1,100,2.0,0
+"Jarvan IV, Exemplar of Demacia",Trifarian Captain,rad-129,Unit,Order,2,1,100,3.0,0
 "Jax, Grandmaster At Arms",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
 "Jax, Grandmaster At Arms",Counter Strike,sfd-194,Spell,Calm|Body,2,1,100,3.0,0
 "Jax, Grandmaster At Arms",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
@@ -381,6 +443,21 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Jinx, Loose Cannon",Acceptable Losses,ogn-179,Spell,Chaos,1,1,0,,100
 "Jinx, Loose Cannon",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,0,,100
 "Jinx, Loose Cannon",Star-Crossed,unl-128,Spell,Chaos,3,1,0,,100
+"K'Sante, Pride of Nazumah",Cataclysm,rad-084,Spell,Body,4,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Dazzling Aurora,ogn-160,Gear,Body,9,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Defy,ogn-045,Spell,Calm,1,1,100,2.0,0
+"K'Sante, Pride of Nazumah",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Elder Dragon,unl-118,Unit,Body,12,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Find Your Center,ogn-047,Spell,Calm,3,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Hush,rad-041,Spell,Calm,1,1,100,1.0,0
+"K'Sante, Pride of Nazumah","K'Sante, Courageous",rad-086,Unit,Body,5,1,100,1.0,0
+"K'Sante, Pride of Nazumah",Mobilize,ogn-134,Spell,Body,2,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Not So Fast,sfd-045,Spell,Calm,2,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
+"K'Sante, Pride of Nazumah","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Seraphic Wyvern,rad-092,Unit,Body,7,1,100,3.0,0
+"K'Sante, Pride of Nazumah",Vilemaw,unl-060,Unit,Calm,8,1,100,3.0,0
 "Kai'Sa, Daughter of the Void",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,1.0,100
 "Kai'Sa, Daughter of the Void",Bellows Breath,sfd-080,Spell,Mind,1,1,100,2.0,0
 "Kai'Sa, Daughter of the Void",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,100,3.0,0
@@ -684,6 +761,22 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Miss Fortune, Bounty Hunter",Downwell,sfd-147,Spell,Chaos,8,1,0,,100
 "Miss Fortune, Bounty Hunter",Sabotage,ogn-156,Spell,Body,1,1,0,,100
 "Miss Fortune, Bounty Hunter",Unyielding Spirit,ogn-145,Spell,Body,1,1,0,,100
+"Mordekaiser, Iron Revenant",Bilgewater Tracker,rad-003,Unit,Fury,3,1,100,2.0,0
+"Mordekaiser, Iron Revenant",Carrion Dredger,unl-153,Unit,Order,2,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Hidden Blade,ogn-213,Spell,Order,2,1,100,2.0,0
+"Mordekaiser, Iron Revenant",Honest Broker,sfd-155,Unit,Order,2,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Imperial Decree,ogn-221,Spell,Order,5,1,100,2.0,0
+"Mordekaiser, Iron Revenant","Kai'Sa, Survivor",ogn-039,Unit,Fury,4,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Long Sword,sfd-022,Gear,Fury,2,1,100,3.0,0
+"Mordekaiser, Iron Revenant","Mordekaiser, Dominating",rad-137,Unit,Order,9,1,100,1.0,0
+"Mordekaiser, Iron Revenant",Noxus Hopeful,ogn-012,Unit,Fury,4,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Realm of Death,rad-144,Spell,Fury|Order,2,1,100,3.0,0
+"Mordekaiser, Iron Revenant","Shen, Kinkou",ogn-241,Unit,Order,3,1,100,2.0,0
+"Mordekaiser, Iron Revenant",Spectral Matron,ogn-226,Unit,Order,4,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Trifarian Captain,rad-129,Unit,Order,2,1,100,3.0,0
+"Mordekaiser, Iron Revenant",Vanguard Captain,ogn-218,Unit,Order,3,1,100,3.0,0
+"Mordekaiser, Iron Revenant","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,2.0,0
+"Mordekaiser, Iron Revenant","Xin Zhao, Vigilant",sfd-176,Unit,Order,3,1,100,2.0,0
 "Nasus, Curator of the Sands",Bellows Breath,sfd-080,Spell,Mind,1,1,100,3.0,0
 "Nasus, Curator of the Sands",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
 "Nasus, Curator of the Sands",Clockwork Keeper,ogn-044,Unit,Calm,2,1,100,3.0,0
@@ -700,6 +793,30 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Nasus, Curator of the Sands",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
 "Nasus, Curator of the Sands",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,1.0,0
 "Nasus, Curator of the Sands",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
+"Orianna, Lady of Clockwork",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,100
+"Orianna, Lady of Clockwork",Astral Heron,ven-044,Unit,Calm,7,1,100,3.0,0
+"Orianna, Lady of Clockwork",Back Off,unl-042,Spell,Calm,3,1,100,1.0,0
+"Orianna, Lady of Clockwork",Bellows Breath,sfd-080,Spell,Mind,1,1,100,2.0,0
+"Orianna, Lady of Clockwork","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,100,2.0,0
+"Orianna, Lady of Clockwork",Cloth Armor,sfd-064,Gear,Mind,1,1,100,2.0,0
+"Orianna, Lady of Clockwork",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Orianna, Lady of Clockwork",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Orianna, Lady of Clockwork",Eclipse,unl-063,Spell,Mind,3,1,100,2.0,0
+"Orianna, Lady of Clockwork",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,3.0,0
+"Orianna, Lady of Clockwork","Orianna, Exquisite",rad-042,Unit,Calm,3,1,100,1.0,0
+"Orianna, Lady of Clockwork",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
+"Orianna, Lady of Clockwork",Sterak's Gage,sfd-056,Gear,Calm,3,1,100,1.0,0
+"Orianna, Lady of Clockwork",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
+"Orianna, Lady of Clockwork",Temporal Breach,ven-066,Spell,Mind,2,1,100,2.0,0
+"Orianna, Lady of Clockwork",The Ball,rad-146,Gear,Calm|Mind,5,1,100,3.0,0
+"Orianna, Lady of Clockwork",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,2.0,0
+"Orianna, Lady of Clockwork",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
+"Orianna, Lady of Clockwork",Charm,ogn-043,Spell,Calm,1,1,0,,100
+"Orianna, Lady of Clockwork",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
+"Orianna, Lady of Clockwork",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Orianna, Lady of Clockwork",Singularity,ogn-105,Spell,Mind,6,1,0,,100
+"Orianna, Lady of Clockwork",Tomb-Raider Barbara,ven-037,Unit,Calm,4,1,0,,100
+"Orianna, Lady of Clockwork",Unchecked Power,ogn-123,Spell,Mind,7,1,0,,100
 "Ornn, Fire Below the Mountain",Guardian Angel,sfd-051,Gear,Calm,2,1,100,1.0,100
 "Ornn, Fire Below the Mountain",Aspiring Engineer,sfd-061,Unit,Mind,3,1,100,2.0,0
 "Ornn, Fire Below the Mountain",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
@@ -857,6 +974,23 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Rengar, Pridestalker",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,0,,100
 "Rengar, Pridestalker",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
 "Rengar, Pridestalker",Noxian Demolitionist,ven-080,Unit,Body,2,1,0,,100
+"Riven, The Exile",Astral Heron,ven-044,Unit,Calm,7,1,100,3.0,0
+"Riven, The Exile",Baron Nashor,unl-147,Unit,Chaos,10,1,100,1.0,0
+"Riven, The Exile",Bedeviling Stranger,rad-107,Unit,Chaos,2,1,100,3.0,0
+"Riven, The Exile",Blade of the Exile,rad-150,Gear,Calm|Chaos,3,1,100,3.0,0
+"Riven, The Exile","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,100,2.0,0
+"Riven, The Exile",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
+"Riven, The Exile",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
+"Riven, The Exile","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,2.0,0
+"Riven, The Exile",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
+"Riven, The Exile",Ki Burst,rad-028,Spell,Calm,1,1,100,1.0,0
+"Riven, The Exile",Rebuke,ogn-172,Spell,Chaos,2,1,100,2.0,0
+"Riven, The Exile",Reckless Innovator,rad-105,Unit,Chaos,3,1,100,3.0,0
+"Riven, The Exile","Riven, Broken Blade",rad-043,Unit,Calm,4,1,100,1.0,0
+"Riven, The Exile",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,0
+"Riven, The Exile",Stellacorn Herder,sfd-048,Unit,Calm,4,1,100,3.0,0
+"Riven, The Exile",Tideturner,ogn-199,Unit,Chaos,2,1,100,3.0,0
+"Riven, The Exile",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
 "Rumble, Mechanized Menace","Rumble, Hotheaded",sfd-026,Unit,Fury,4,1,200,1.5,0
 "Rumble, Mechanized Menace",Singularity,ogn-105,Spell,Mind,6,1,100,1.0,100
 "Rumble, Mechanized Menace",Time Warp,ogn-122,Spell,Mind,10,1,100,1.0,100
@@ -878,6 +1012,25 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Rumble, Mechanized Menace",Thermo Beam,ogn-022,Spell,Fury,5,1,0,,100
 "Rumble, Mechanized Menace",Turn to Dust,unl-070,Spell,Mind,2,1,0,,100
 "Rumble, Mechanized Menace",Unchecked Power,ogn-123,Spell,Mind,7,1,0,,100
+"Seraphine, Starry-Eyed Songstress",Bellows Breath,sfd-080,Spell,Mind,1,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Carrion Dredger,unl-153,Unit,Order,2,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Concert Poster,rad-116,Gear,Order,1,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Encore,rad-152,Spell,Mind|Order,3,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Escaped Grayback,ven-124,Unit,Order,3,1,100,2.0,0
+"Seraphine, Starry-Eyed Songstress",Faithful Manufactor,ogn-211,Unit,Order,3,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Hidden Blade,ogn-213,Spell,Order,2,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Imperial Decree,ogn-221,Spell,Order,5,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Raucous Anthem,rad-134,Spell,Order,7,1,100,1.0,0
+"Seraphine, Starry-Eyed Songstress","Seraphine, Not Alone",rad-138,Unit,Order,5,1,100,1.0,0
+"Seraphine, Starry-Eyed Songstress",Shadow's Call,unl-165,Spell,Order,2,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Sprite Burst,unl-069,Spell,Mind,5,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Trifarian Captain,rad-129,Unit,Order,2,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Vanguard Captain,ogn-218,Unit,Order,3,1,100,3.0,0
+"Seraphine, Starry-Eyed Songstress",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
+"Seraphine, Starry-Eyed Songstress",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
+"Seraphine, Starry-Eyed Songstress",Forge of the Future,ogn-212,Gear,Order,2,1,0,,100
+"Seraphine, Starry-Eyed Songstress",Singularity,ogn-105,Spell,Mind,6,1,0,,100
 "Sett, The Boss",Repulse,unl-106,Spell,Body,1,1,100,1.0,100
 "Sett, The Boss","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,1.0,100
 "Sett, The Boss",Arena Bar,ogn-124,Gear,Body,3,1,100,3.0,0
@@ -1099,3 +1252,25 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Zed, Master of Shadows",Rhasa the Sunderer,ogn-195,Unit,Chaos,10,1,0,,100
 "Zed, Master of Shadows",Star-Crossed,unl-128,Spell,Chaos,3,1,0,,100
 "Zed, Master of Shadows","Vex, Apathetic",unl-150,Unit,Chaos,4,1,0,,100
+"Ziggs, Hexplosives Expert",Acceptable Losses,ogn-179,Spell,Chaos,1,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Amateur Demolitionist,rad-001,Unit,Fury,2,1,100,3.0,0
+"Ziggs, Hexplosives Expert",An Offer You Can't Refuse,rad-101,Spell,Chaos,2,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Bilgewater Tracker,rad-003,Unit,Fury,3,1,100,3.0,0
+"Ziggs, Hexplosives Expert",Boots of Swiftness,sfd-133,Gear,Chaos,3,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Detonate,sfd-005,Spell,Fury,1,1,100,2.0,0
+"Ziggs, Hexplosives Expert",Detonation Amplifier,rad-017,Gear,Fury,4,1,100,2.0,0
+"Ziggs, Hexplosives Expert",Existential Dread,unl-134,Spell,Chaos,1,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Falling Star,ogn-029,Spell,Fury,2,1,100,3.0,0
+"Ziggs, Hexplosives Expert",Ferrous Forerunner,sfd-021,Unit,Fury,6,1,100,2.0,0
+"Ziggs, Hexplosives Expert","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Hard Bargain,sfd-136,Spell,Chaos,2,1,100,1.0,0
+"Ziggs, Hexplosives Expert",Pack of Wonders,ogn-181,Gear,Chaos,2,1,100,3.0,0
+"Ziggs, Hexplosives Expert",Seal of Rage,ogn-040,Gear,Fury,0,1,100,3.0,0
+"Ziggs, Hexplosives Expert",Shimmering Swimmer,rad-014,Unit,Fury,3,1,100,3.0,0
+"Ziggs, Hexplosives Expert",Star-Crossed,unl-128,Spell,Chaos,3,1,100,1.0,0
+"Ziggs, Hexplosives Expert",The Good Stuff,rad-106,Gear,Chaos,3,1,100,2.0,0
+"Ziggs, Hexplosives Expert",The List,unl-138,Gear,Chaos,1,1,100,2.0,0
+"Ziggs, Hexplosives Expert",Treasure Trove,ogn-186,Gear,Chaos,2,1,100,3.0,0
+"Ziggs, Hexplosives Expert","Vex, Apathetic",unl-150,Unit,Chaos,4,1,100,1.0,0
+"Ziggs, Hexplosives Expert","Ziggs, Explosive",rad-112,Unit,Chaos,4,1,100,1.0,0
+"Ziggs, Hexplosives Expert","Ziggs, Short-Fused",rad-023,Unit,Fury,5,1,0,,100

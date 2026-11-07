@@ -10,7 +10,7 @@ Graines des agents liées au siège (g et g+500000, comme exp_plans.one et repla
 exactement 0,5 par paire, et une partie se rejoue avec add_replays (clé « search »).
   akali  : Akali G2 (plan Gorica) contre LeBlanc IQ#5 (plan Hook tempo), tirage du premier joueur et des
            battlefields exactement comme exp_plans.one ;
-  defaut : deux decks par défaut (train.default_decks, 49 légendes) tirés au hasard, IA générique des deux côtés ;
+  defaut : deux decks par défaut (train.default_decks, 58 légendes) tirés au hasard, IA générique des deux côtés ;
   miroir : un deck légal au hasard (exp_general.rdeck) des deux côtés, IA générique (plans.Plan()).
 Versions : VERSIONS (nom -> (mode de recherche, samples, sh_extra)), réglages après @ (version()) ;
 « @plan=leg » : cette version joue avec les plans par légende (plans_legendes.plan_for) au lieu de ceux du mode.

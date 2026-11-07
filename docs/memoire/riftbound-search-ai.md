@@ -14,7 +14,7 @@ metadata:
 
 **Mesures** (`engine/exp_search.py`, résultats `engine/results_search.json`, paires appariées : même donne jouée deux fois, places
 échangées ; score = moyenne de la paire ; ± écart-type sur les paires). Mode `defaut` : deux decks par défaut (`train.default_decks`,
-49 légendes) tirés au hasard, IA générique des deux côtés. Chaque ligne = graines neuves.
+58 légendes depuis le 2026-11-06, 49 avant) tirés au hasard, IA générique des deux côtés. Chaque ligne = graines neuves.
 
 | Comparaison | Paires | Graines | Moteur | Score de A |
 |---|---|---|---|---|

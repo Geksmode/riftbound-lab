@@ -1,0 +1,41 @@
+# legend: Ekko, Boy Who Shattered Time
+# player: Tristan Baltazar
+# event: Riftbound Showdown 25k - LDXP Sacramento
+# date: 2026-10-24
+# placement: 60
+# url: https://riftdecks.com/riftbound-metagame/deck-ekko-boy-who-shattered-time-337318
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: liste reconstituée section par section à partir de plusieurs résumés de la page riftdecks 337318 (en-têtes : 23 unités, 16 sorts, pas d'équipement ; 23 + 16 + champion = 40). Unités : Plundering Poro, Bilgewater Tracker, Pyke, Kai'Sa, Ekko Revolutionary, Legion Rearguard vus dans plusieurs requêtes ; Blast Corps Cadet 1, Blastcone Fae 1 et Vayne 1 recoupés par une 2e requête ; Noxus Hopeful 3, Brynhir 2, Thousand-Tailed Watcher 2 vus dans une seule requête, le total de 23 annoncé par la page tombe juste. Sorts : un seul résumé (texte + liste visuelle), total 16 juste. Runes 7 Fury / 5 Mind et battlefields d'un seul résumé. 60e (7-2-2) recoupé par riftbound.zone/riftwatch. Sideboard (10) non récupéré (seuls Decree of Insight x2 et Decree of Rage x2 lisibles) : omis. Pas de liste Ekko complète trouvée pour Riftbros (Moses Addai, 13 joueurs) ni Orlando (AV Aadion 74e).
+[legend]
+1 Ekko, Boy Who Shattered Time
+[champion]
+1 Ekko, Ingenious
+[main]
+1 Blast Corps Cadet
+1 Blastcone Fae
+1 Legion Rearguard
+3 Plundering Poro
+3 Bilgewater Tracker
+1 Pyke, Dockside Butcher
+3 Kai'Sa, Survivor
+2 Ekko, Revolutionary
+3 Noxus Hopeful
+2 Brynhir Thundersong
+2 Thousand-Tailed Watcher
+1 Vayne, Hunter
+2 Blood Rush
+3 Stupefy
+1 Brittle Steel
+1 Chronobreak
+3 Falling Star
+1 Frigid Touch
+2 Temporal Breach
+2 Shock Blast
+1 Time Warp
+[runes]
+7 Fury Rune
+5 Mind Rune
+[battlefields]
+1 Firelights' Hideout
+1 Ripper's Bay
+1 Rockfall Path

@@ -12,7 +12,11 @@ T = Suite("plans_legendes")
 @T.test
 def every_default_legend_has_a_plan_with_cards_of_its_deck():
     dd = TR.default_decks()
-    assert sorted(dd) == sorted(PL.LEG), set(dd) ^ set(PL.LEG)
+    # chaque légende par défaut a un plan, sauf celles de Radiance déclarées sans plan (plan générique)
+    assert sorted(dd) == sorted(set(PL.LEG) | set(PL.SANS_PLAN)), set(dd) ^ (set(PL.LEG) | set(PL.SANS_PLAN))
+    assert not set(PL.LEG) & set(PL.SANS_PLAN)
+    for lg in PL.SANS_PLAN:
+        assert type(PL.plan_for({"legend": lg})) is P.Plan, lg
     for lg, d in PL.LEG.items():
         assert d["axe"] in ("C", "T") and d["style"] in PL.SEUIL and d["conf"] in ("lu", "recherche", "deck"), lg
         assert d["src"].startswith("https://") and d["note"], lg

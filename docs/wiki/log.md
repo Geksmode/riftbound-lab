@@ -369,3 +369,10 @@ Journal de l'hôte : connexions entrantes sans canal ouvert (liaison WebRTC dire
 ## [2026-11-06] fix | Table : payer la puissance en cliquant le Gold ou la rune
 Les options de `pay_gold` (0 ou 1 Gold) passaient pour les battlefields 0 et 1 dans `zs` : on cliquait un battlefield pour choisir. Retours de l'utilisateur : toutes les runes doivent pouvoir être choisies, pas une seule, et la question se pose aussi sans Gold. Pour le joueur humain seulement (`every_choice`), `game.pay_choices` pose une question par rune recyclée (`pay_gold` si un Gold peut payer, sinon `pay_rune`), options `("r", uid)` et nombre de Gold (`_plan_payment(prefer=)`) ; l'IA garde `gold_choices` (inchangé). `train._pay_gold_uids` relie chaque option à sa rune ou au Gold, `NOT_LOC` retire `zs` pour les questions à options entières (pay_gold, bullet_time_x, burn_player, choose_player, ava_play). Halo `.rune.img.drop-ok` corrigé. Robot `verif_gold.mjs` dans la porte (partie 4).
 
+## [2026-11-06] ingest | Decks par défaut des 9 légendes de Radiance
+Demande de l'utilisateur : des decks par défaut pour les légendes qui n'en avaient pas (Ekko, Evelynn, Jarvan IV, K'Sante,
+Mordekaiser, Orianna, Riven, Seraphine, Ziggs). 9 listes `decks/raw/` des Showdowns Sacramento (2026-10-24) et Orlando
+(2026-11-01), reconstituées par WebSearch (sites bloqués), `check_raw.py` OK, 54 parties de contrôle sans erreur. Sideboards
+souvent incomplets ou absents ; K'Sante vient d'un petit tournoi (52e / 64). `plans_legendes.SANS_PLAN` : pas de plan pour elles.
+Le pool du mode `defaut` passe de 49 à 58 decks.
+

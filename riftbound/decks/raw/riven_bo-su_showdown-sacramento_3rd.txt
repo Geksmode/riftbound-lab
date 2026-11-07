@@ -1,0 +1,36 @@
+# legend: Riven, The Exile
+# player: Bo Su
+# event: Riftbound Showdown 25k - LDXP Sacramento
+# date: 2026-10-24
+# placement: 3
+# url: https://riftdecks.com/riftbound-metagame/deck-riven-the-exile-337264
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: quantités issues d'un seul résumé de la page riftdecks 337264 (unités 20, équipement 6, sorts 13 + champion = 40 exactement) ; présence de Blade of the Exile, Zhonya's Hourglass, Astral Heron, Baron Nashor, Blitzcrank, Defy, Gust, Ki Burst, Discipline, Emperor's Dais, Hunters' Circle, runes Calm/Chaos recoupée par d'autres requêtes, mais pas les quantités. Place : 3e selon riftdecks et riftwatch (10-2-1), 4e selon runesandrift. Sideboard (10 cartes) non récupéré : seul Decree of Focus x2 apparaissait, donc sideboard omis. Liste du vainqueur Nam Dang (338917) non retenue : un sort manquant et 3e battlefield contradictoire (Hunters' Circle vs Rakelstake).
+[legend]
+1 Riven, The Exile
+[champion]
+1 Riven, Broken Blade
+[main]
+3 Tideturner
+3 Bedeviling Stranger
+3 Reckless Innovator
+3 Stellacorn Herder
+3 Astral Heron
+2 Evelynn, Entrancing
+2 Blitzcrank, Impassive
+1 Baron Nashor
+3 Blade of the Exile
+3 Zhonya's Hourglass
+3 Defy
+3 Discipline
+2 Gust
+2 Rebuke
+2 Star-Crossed
+1 Ki Burst
+[runes]
+5 Calm Rune
+7 Chaos Rune
+[battlefields]
+1 Emperor's Dais
+1 Hunters' Circle
+1 Star Spring

@@ -1,0 +1,35 @@
+# legend: Mordekaiser, Iron Revenant
+# player: Christian Mukai
+# event: Riftbound Showdown 25k - LDXP Sacramento
+# date: 2026-10-24
+# placement: 89
+# url: https://riftdecks.com/riftbound-metagame/deck-mordekaiser-iron-revenant-337385
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: liste reconstituée section par section à partir de plusieurs résumés de la page riftdecks 337385 (en-têtes : 29 unités, 7 sorts, 3 équipements ; 29 + 7 + 3 + champion = 40). Unités : Carrion Dredger, Honest Broker, Trifarian Captain, Vanguard Captain, Shen, Xin Zhao, Kai'Sa, Noxus Hopeful, Bilgewater Tracker vus dans 2 à 3 requêtes ; Spectral Matron 3 et Vi 2 dans 2 requêtes ; le total 29 tombe juste (une ligne « Deck Stats » de la page indiquerait 33 unités, non expliqué). Sorts/équipement : un seul résumé (texte et liste visuelle concordants). Battlefields : Minefield et Ruined Monastery dans le texte, Zaun Warrens dans la liste visuelle puis confirmé par une 2e requête. Runes 6 Fury / 6 Order (un résumé). Sideboard (10) non récupéré (Decree of Rage, Falling Star, Salvage, Ferrous Forerunner sans quantités) : omis. Meilleures places non retenues faute de liste complète : Calvin 7e/63 (Radiance-Win-A-Case), AA Cartaneko top 8/24 (Fast Cup #4), TSS KnightinGale 67e/556 (Orlando).
+[legend]
+1 Mordekaiser, Iron Revenant
+[champion]
+1 Mordekaiser, Dominating
+[main]
+3 Carrion Dredger
+3 Honest Broker
+3 Trifarian Captain
+2 Bilgewater Tracker
+2 Shen, Kinkou
+3 Vanguard Captain
+2 Xin Zhao, Vigilant
+3 Kai'Sa, Survivor
+3 Noxus Hopeful
+3 Spectral Matron
+2 Vi, Peacekeeper
+2 Hidden Blade
+3 Realm of Death
+2 Imperial Decree
+3 Long Sword
+[runes]
+6 Fury Rune
+6 Order Rune
+[battlefields]
+1 Minefield
+1 Ruined Monastery
+1 Zaun Warrens
