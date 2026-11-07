@@ -1199,6 +1199,23 @@ def _ask_play(g, ask, o):
     return None
 
 
+def _ask_multi(g, ask):
+    """Question « jusqu'à N unités » (Bilgewater Tracker… : radiance._choose_up_to) : chaque option est un groupe
+    d'unités en jeu (Opt de valeur tuple d'uid, () pour « aucune »). Rend, pour chaque option, la liste de ses uid, pour
+    que la table fasse toucher les cartes au lieu de lister les combinaisons en texte ; None si la question n'a pas
+    cette forme (une seule option qui n'est pas un groupe d'unités en jeu suffit)."""
+    if ask.kind in NOT_LOC or ask.pid != ME:
+        return None
+    out = []
+    for o in ask.options:
+        v = getattr(o, "value", None) if isinstance(o, _game.Opt) else None
+        if not isinstance(v, tuple) or not all(isinstance(u, int) and not isinstance(u, bool) and g.obj(u) is not None
+                                               for u in v):
+            return None
+        out.append(list(v))
+    return out if any(out) else None
+
+
 def _ask_src(g, ask):
     it = ask.ctx.get("item")
     src = getattr(it, "src", None)
@@ -1330,7 +1347,8 @@ def _view(ask=None):
                               for o in ask.options],
                           src=_ask_src(g, ask),
                           item=short(getattr(ask.ctx.get("item"), "name", "") or "") or None,
-                          pc=[_ask_play(g, ask, o) for o in ask.options])
+                          pc=[_ask_play(g, ask, o) for o in ask.options],
+                          tg=_ask_multi(g, ask))
         if ask.kind == "predict_recycle" and ask.ctx.get("card") is not None:
             top = ask.ctx.get("top") or [ask.ctx["card"]]          # les cartes vues (Predict N), en grand dans la question
             out["ask"]["show"] = [c.cname for c in top]
