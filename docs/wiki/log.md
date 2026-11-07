@@ -376,3 +376,6 @@ Mordekaiser, Orianna, Riven, Seraphine, Ziggs). 9 listes `decks/raw/` des Showdo
 souvent incomplets ou absents ; K'Sante vient d'un petit tournoi (52e / 64). `plans_legendes.SANS_PLAN` : pas de plan pour elles.
 Le pool du mode `defaut` passe de 49 à 58 decks.
 
+## [2026-11-07] fix | Table : cibles « jusqu'à 2 unités » touchées, battlefields des planches à l'endroit
+Captures de l'utilisateur : Bilgewater Tracker proposait toutes les paires d'unités en texte ; dans le choix de la manche 2, Minefield et Ruined Monastery étaient de côté. `train._ask_multi` (`ask.tg`) + `multiMode` côté page (ciblage habituel). Les cases de planche des battlefields demandent +90°, pas -90° (le plateau les montrait la tête en bas) ; vignettes du choix tournées aussi (`bfThumb`). Test `test_cibles_multiples.py`, robot `verif_multi.mjs` (partie 2 de la porte).
+

@@ -122,3 +122,10 @@ Questions à options entières (2026-11-06) : `train.py` mettait dans `zs` tout 
 (0/1 Gold), `bullet_time_x`, `burn_player`, `choose_player`, `ava_play`, ces entiers ne sont pas des lieux (`NOT_LOC`).
 Payer la puissance (humain) : `pay_gold` (si un Gold peut payer) ou `pay_rune`, une question par rune recyclée, posée dès que plusieurs runes peuvent payer ; on touche le Gold ou la rune, la rune touchée est recyclée (`game.pay_choices`, `_pay_gold_uids`). Les tests qui pilotent la table doivent y répondre (0 = la rune du planificateur). Robot `train/verif_gold.mjs`.
 
+Cibles multiples (2026-11-07) : une question « jusqu'à N unités » (`radiance._choose_up_to` : Opt de valeur tuple d'uid,
+`()` = aucune) envoie `ask.tg` (uid de chaque option, `train._ask_multi`) ; `show()` crée directement un mode `target`
+(`multiMode`, `mode.multi`, `ans` = nom de la carte) : « Valider la cible » répond avec l'option du groupe touché,
+« Aucune cible » pour `()`, « Effacer » / Échap vide la sélection (pas de retour possible : la question doit être répondue).
+Battlefields des planches (`atlas/`) : carte imprimée de côté, haut à gauche → `.bfrot` tourne de **+90°** (avant -90° :
+tête en bas sur le plateau). `bfThumb(n)` pour les vignettes du choix de battlefield (match BO3 et duel). Robot `train/verif_multi.mjs`.
+

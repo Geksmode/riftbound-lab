@@ -319,7 +319,9 @@ body.dkopen { overflow: hidden; }
 .dktxt { width: 100%; min-height: 260px; background: var(--chrome); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: 12.5px/1.4 var(--f-mono); }
 .linkb { background: none; border: 0; padding: 0; color: var(--akali); text-decoration: underline; cursor: pointer; font: inherit; }
 .bfcard { container-type: size; position: relative; overflow: hidden; }
-.bfrot { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(-90deg); background-size: cover; }
+/* Battlefield d'une planche : la carte y est imprimée de côté, haut à gauche ; +90° la remet à l'endroit (planche
+   vérifiée sur les 69 battlefields des planches le 2026-11-07 ; -90° les mettait la tête en bas). */
+.bfrot { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(90deg); background-size: cover; }
 .zspr { width: 100%; aspect-ratio: 200 / 279; border-radius: 10px; background-color: #151a26; }
 @media (max-width: 760px) {
   .dkbody { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 38vh); }
@@ -531,7 +533,7 @@ body.dkopen { overflow: hidden; }
 .choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .choices button { flex: 1 1 140px; min-height: 48px; padding: 8px 12px; font-weight: 600; border-radius: 10px; }
 .bfch button { display: flex; flex-direction: column; align-items: stretch; gap: 6px; text-align: center; font-weight: 500; font-size: 13px; }
-.bfth { display: block; height: 54px; border-radius: 6px; background: #151a26 center / cover no-repeat; }
+.bfth { display: block; height: 54px; border-radius: 6px; background: #151a26 center / cover no-repeat; container-type: size; position: relative; overflow: hidden; }
 .sbstat { font-size: 13.5px; } .sbstat.ok { color: var(--akali); } .sbstat.ko { color: #f0a35b; }
 .sbbar { position: sticky; bottom: -16px; margin: 0 -16px -16px; padding: 10px 16px 16px; background: var(--chrome-2); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -8px 18px rgba(0,0,0,.35); }
 .sbch { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
@@ -1200,7 +1202,7 @@ function prepRender() {
       <button data-pf="0" aria-pressed="${P.first === 0}">Jouer en premier</button><button data-pf="1" aria-pressed="${P.first === 1}">Jouer en second</button></div>`;
   else who += `<div class="prepdec" id="pDecision">${nx.chooser === 1 ? (nx.first === 1 ? "L'IA choisit de jouer en premier." : "L'IA choisit de jouer en second : tu commences.") : (nx.first === 0 ? "Tu commences." : "L'IA commence.")}</div>`;
   const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
-  const bfs = `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}"><span class="bfth" style="${art(b)}"></span><span>${esc(b)}</span></button>`).join("")}</div>
+  const bfs = `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
     ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
     <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5).</div>`;
   const ready = P.first !== null && P.first !== undefined && P.bf;
@@ -1409,8 +1411,8 @@ function toast(msg, cls = "") {
 function show(v) {
   if (v !== V) { sfxView(V, v); addLog(v.log || []); if (v.ai) { toast(PN[OPP()] + " " + v.ai, "opp"); lastAIlab = v.ai; } if (v.aii) lastAI = v.aii; }
   if (!v.dec && !v.ask) { mode = null; sel = null; }
-  if (v.ask && !(mode && mode.type === "ask" && V && V.ask === v.ask)) {
-    mode = { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
+  if (v.ask && !(mode && (mode.type === "ask" || mode.multi) && V && V.ask === v.ask)) {
+    mode = v.ask.tg ? multiMode(v.ask) : { type: "ask", a: v.ask, pick: null, mull: new Set() }; sel = null;
   }
   ALIAS = v.alias || {};
   V = v;
@@ -2075,6 +2077,14 @@ function askPlay(name) {
   mode = { type: "target", src: null, cands: withT, P: [], skip: false, M: null, D: null, X: null, ans: name, back, loose: cands.filter(o => !hasT(o)) };
   decorate();
 }
+// Question « jusqu'à N unités » (Bilgewater Tracker…, a.tg : les uid de chaque option) : on touche les unités sur le
+// plateau ou dans la liste en images, comme les cibles d'un sort, puis « Valider la cible » répond avec l'option dont le
+// groupe est exactement celui touché ; le groupe vide (« aucune ») se valide sans rien toucher (bouton à part).
+function multiMode(a) {
+  const cands = a.options.map((label, i) => ({ i, k: "ask", label, t1: a.tg[i].map(String) }));
+  return { type: "target", src: a.src === null || a.src === undefined ? null : String(a.src), cands: cands.filter(hasT), P: [],
+    skip: false, M: null, D: null, X: null, ans: a.item || "Choix", multi: true, a, loose: cands.filter(o => !hasT(o)) };
+}
 const pickI = i => mode && mode.ans ? answer(i) : choose(i);
 function unpick() { if (mode && mode.back) mode = mode.back; else reset(); decorate(); }
 // Bulle du [Show Off] : une image par carte montrable (touchée = jouée en la montrant), puis « Sans Show Off ». Les
@@ -2135,9 +2145,9 @@ function fbarHTML() {
   }
   if (mode.type === "target") {
     const max = Math.max(...mode.cands.map(o => o.t1.length)), ok = exactT().length > 0;
-    return `<span class="ft">${mode.ans ? `<b>${esc(mode.ans)}</b> · ` : ""}Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
+    return `<span class="ft">${mode.multi ? esc(mode.a.title) + " " : mode.ans ? `<b>${esc(mode.ans)}</b> · ` : ""}Cibles ${mode.P.length}/${max} : ${mode.P.length < max ? "touche une carte en surbrillance" : "valide"}${mode.P.length ? " (retouche une cible pour l'enlever)" : ""}</span>
       ${pickStrip(targetItems(), !!mode.ans)}
-      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider la cible</button>${(mode.loose || []).map(o => `<button data-i="${o.i}">${esc(cap(o.label))}</button>`).join("")}<button id="fNo">${mode.ans ? "Retour" : "Annuler"}</button></div>`;
+      <div class="prow"><button class="go" id="fOk" ${ok ? "" : "disabled"}>Valider la cible</button>${(mode.loose || []).map(o => `<button data-i="${o.i}">${esc(mode.multi ? "Aucune cible" : cap(o.label))}</button>`).join("")}${mode.multi ? (mode.P.length ? `<button id="fNo">Effacer</button>` : "") : `<button id="fNo">${mode.ans ? "Retour" : "Annuler"}</button>`}</div>`;
   }
   if (mode.type === "move") {
     const o = moveOpt(), d = mode.dest;
@@ -2187,7 +2197,7 @@ $("fbar").addEventListener("click", e => {
   if (b.dataset.a) return answer(+b.dataset.a);
   if (b.dataset.pp !== undefined && mode && mode.type === "ask") return askPlay(b.dataset.pp);
   if (b.id === "fOk" && mode.type === "ask") return answer(mode.pick);
-  if (b.id === "fNo") { if (mode && mode.ans) return unpick(); reset(); return decorate(); }
+  if (b.id === "fNo") { if (mode && mode.multi) { mode.P = []; return decorate(); } if (mode && mode.ans) return unpick(); reset(); return decorate(); }
   if (b.id === "fSkip" && mode && mode.type === "target") { mode.skip = true; return decorate(); }
   if (b.dataset.i) return pickI(+b.dataset.i);
   if (b.id === "fOk" && mode.type === "target") return run(exactT());
@@ -2499,7 +2509,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-ban]")) return openBanish(+e.target.dataset.ban);
   if (e.key === "Enter" && e.target.closest && e.target.closest("[data-deck]")) return openKnownTop();
   if (e.key === "Escape" && !$("modal").hidden && $("modal").dataset.closable) return closeModal(true);
-  if (e.key === "Escape") { $("hpop").hidden = true; $("fpop").hidden = true; Z.hidden = true; if (mode && mode.ans) return unpick(); if ((sel !== null || mode) && V) { reset(); decorate(); } }
+  if (e.key === "Escape") { $("hpop").hidden = true; $("fpop").hidden = true; Z.hidden = true; if (mode && mode.multi) { mode.P = []; return decorate(); } if (mode && mode.ans) return unpick(); if ((sel !== null || mode) && V) { reset(); decorate(); } }
   // Retour arrière = « ↶ Reprendre » (sauf dans un champ de saisie, une fenêtre, le menu ou le journal)
   if (e.key === "Backspace" && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
     const t = e.target;
@@ -2547,6 +2557,9 @@ if (store.get("rbt-journal")) journal(true); else badge();
 document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
 boot().catch(err => { ENGERR = err.message || String(err); menuRender(MENUV); $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
 // ------------------------------------------------------------ images : fichier propre (cartes du pool) ou planche de 60 cartes
+// Vignette d'un battlefield (choix de la manche suivante) : une image propre est déjà en paysage ; une case de planche
+// montre la carte imprimée de côté, on la tourne comme sur le plateau (.bfrot).
+const bfThumb = b => `<span class="bfth" style="${IMG[b] ? art(b) : ""}">${!IMG[b] && ATL[b] ? `<span class="bfrot" style="${art(b)}"></span>` : ""}</span>`;
 function art(n) {
   if (IMG[n]) return `background-image:url('${IMG[n]}');`;
   const a = ATL[n]; if (!a) return "";
@@ -3209,7 +3222,7 @@ function duelPrepUI(force) {
   else {
     const both = P.bf[0] && P.bf[1], gone = DU.st.bfs[me].filter(b => !nx.allowed[me].includes(b));
     bfs = P.bf[me] ? `<div class="prepq">Ton battlefield : <b id="pMyBf">${esc(P.bf[me])}</b></div>`
-      : `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed[me].map(b => `<button data-dbf="${esc(b)}" aria-pressed="${P.pick === b}"><span class="bfth" style="${art(b)}"></span><span>${esc(b)}</span></button>`).join("")}</div>
+      : `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed[me].map(b => `<button data-dbf="${esc(b)}" aria-pressed="${P.pick === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
         <div class="big"><button class="main" id="bDuelBf"${P.pick ? "" : " disabled"}>Valider mon battlefield</button></div>`;
     bfs += `<div class="small" id="pOppBf">${both ? `${esc(on)} : <b>${esc(P.bf[op])}</b>` : P.bf[op] ? `${esc(on)} a choisi son battlefield : il sera révélé quand vous aurez choisi tous les deux (règle 486.5).` : `<span class="think"><i></i>${esc(on)} choisit son battlefield…</span>`}</div>`;
     if (gone.length) bfs += `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5) : ${gone.map(esc).join(", ")}.</div>`;
