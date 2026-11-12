@@ -27,4 +27,5 @@ metadata:
   - First, worker "mecaniques" adds generic keywords and the engine/cardsets/ package (one module per batch with its tests, explicit list in cardsets/__init__.py, GUIDE.md, NEEDS.md, test_all.py).
   - Then batches run in parallel workers.
   - build.sh copies the cardsets modules listed in __init__.py into the page.
+- 2026-11-12: deck panel has a « Liste / Images » toggle (dkVisual: one image per copy, champion first then by cost; dkPop menu per image reusing data-sub/data-add/data-tside…; « Masquer le catalogue » = full width). Stored in localStorage rbt-dkview / rbt-dkcat; list stays the default (robots use it). Robot train/verif_deckimg.mjs.
 Related: [[riftbound-training-table]], [[riftbound-engine]], [[riftbound-train-games]].
