@@ -27,7 +27,7 @@ Collecte du 2026-10-02. Base cartes reconstruite le 2026-10-02 depuis https://ap
 - Core Rules : https://playriftbound.com/en-us/news/rules-and-releases/gameplay-guide-core-rules/
 - Tournament Rules : https://playriftbound.com/en-us/news/organizedplay/riftbound-tournament-rules/
 - Règles navigables : https://app.riftjudge.com/rules/core et /rules/tournament
-- Ban list : https://riftbound.zone/en/riftbound-ban-list/ (dernière vague : 2026-09-18)
+- Ban list : https://riftbound.zone/en/riftbound-ban-list/ (dernière vague : 2026-11-23, annoncée le 2026-11-13)
 - Cartes (source actuelle) : https://api.rifthunt.com/bulk/cards (bulk JSON, 1432 impressions, 9 sets). Recherche : https://api.rifthunt.com/cards/search?q=set:ven
 
 ## Lacunes connues

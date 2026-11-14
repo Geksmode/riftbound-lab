@@ -56,30 +56,37 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Akali, Rogue Assassin",Brittle Steel,ven-003,Spell,Fury,2,6,0,,17
 "Akali, Rogue Assassin",Decree of Rage,ven-015,Spell,Fury,1,6,0,,17
 "Akali, Rogue Assassin",Pendulum Blade,ven-011,Gear,Fury,3,6,0,,17
-"Ambessa, Matriarch of War","Ambessa, The Wolf",ven-084,Unit,Body,4,1,200,1.0,0
-"Ambessa, Matriarch of War","Kayle, Justified",ven-134,Unit,Order,3,1,100,2.0,100
-"Ambessa, Matriarch of War",Public Execution,ven-154,Spell,Body|Order,2,1,100,1.0,100
-"Ambessa, Matriarch of War",Sabotage,ogn-156,Spell,Body,1,1,100,1.0,100
-"Ambessa, Matriarch of War",Challenge,ogn-128,Spell,Body,2,1,100,1.0,0
-"Ambessa, Matriarch of War",First Mate,ogn-132,Unit,Body,3,1,100,2.0,0
-"Ambessa, Matriarch of War",Guttural Roar,ven-072,Spell,Body,2,1,100,2.0,0
-"Ambessa, Matriarch of War",Irresistible Faefolk,unl-112,Unit,Body,2,1,100,3.0,0
-"Ambessa, Matriarch of War","Kennen, Keeper of Balance",ven-135,Unit,Order,3,1,100,2.0,0
-"Ambessa, Matriarch of War",Legion Marauder,ven-074,Unit,Body,2,1,100,3.0,0
-"Ambessa, Matriarch of War","Lucian, Merciless",sfd-113,Unit,Body,3,1,100,2.0,0
-"Ambessa, Matriarch of War",Noxian Emissary,ven-128,Unit,Order,2,1,100,2.0,0
-"Ambessa, Matriarch of War",Onslaught,ven-081,Spell,Body,4,1,100,2.0,0
-"Ambessa, Matriarch of War",Pit Rookie,ogn-136,Unit,Body,2,1,100,1.0,0
-"Ambessa, Matriarch of War",Primal Strength,ogn-154,Spell,Body,4,1,100,1.0,0
-"Ambessa, Matriarch of War",Punch First,sfd-097,Spell,Body,1,1,100,3.0,0
-"Ambessa, Matriarch of War",Rampage,ven-083,Spell,Body,3,1,100,3.0,0
-"Ambessa, Matriarch of War","Rengar, Trophy Hunter",unl-120,Unit,Body,5,1,100,2.0,0
-"Ambessa, Matriarch of War",Tactical Retreat,unl-175,Spell,Order,2,1,100,2.0,0
-"Ambessa, Matriarch of War","Vi, Peacekeeper",unl-176,Unit,Order,5,1,100,3.0,0
-"Ambessa, Matriarch of War","Ambessa, Respected and Feared",ven-136,Unit,Order,5,1,0,,100
-"Ambessa, Matriarch of War",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
-"Ambessa, Matriarch of War",Repulse,unl-106,Spell,Body,1,1,0,,100
-"Ambessa, Matriarch of War",Salvage,ogn-224,Spell,Order,2,1,0,,100
+"Ambessa, Matriarch of War","Ambessa, The Wolf",ven-084,Unit,Body,4,2,200,1.0,0
+"Ambessa, Matriarch of War",Sabotage,ogn-156,Spell,Body,1,2,100,1.0,100
+"Ambessa, Matriarch of War",Public Execution,ven-154,Spell,Body|Order,2,2,100,1.5,50
+"Ambessa, Matriarch of War",Challenge,ogn-128,Spell,Body,2,2,100,2.0,0
+"Ambessa, Matriarch of War",First Mate,ogn-132,Unit,Body,3,2,100,2.0,0
+"Ambessa, Matriarch of War",Guttural Roar,ven-072,Spell,Body,2,2,100,2.0,0
+"Ambessa, Matriarch of War",Irresistible Faefolk,unl-112,Unit,Body,2,2,100,3.0,0
+"Ambessa, Matriarch of War","Kennen, Keeper of Balance",ven-135,Unit,Order,3,2,100,2.0,0
+"Ambessa, Matriarch of War",Legion Marauder,ven-074,Unit,Body,2,2,100,3.0,0
+"Ambessa, Matriarch of War",Noxian Emissary,ven-128,Unit,Order,2,2,100,1.5,0
+"Ambessa, Matriarch of War",Onslaught,ven-081,Spell,Body,4,2,100,1.5,0
+"Ambessa, Matriarch of War",Punch First,sfd-097,Spell,Body,1,2,100,3.0,0
+"Ambessa, Matriarch of War",Rampage,ven-083,Spell,Body,3,2,100,2.5,0
+"Ambessa, Matriarch of War","Rengar, Trophy Hunter",unl-120,Unit,Body,5,2,100,2.0,0
+"Ambessa, Matriarch of War","Vi, Peacekeeper",unl-176,Unit,Order,5,2,100,2.5,0
+"Ambessa, Matriarch of War","Kayle, Justified",ven-134,Unit,Order,3,2,50,2.0,100
+"Ambessa, Matriarch of War",Repulse,unl-106,Spell,Body,1,2,50,1.0,50
+"Ambessa, Matriarch of War",Forge of the Future,ogn-212,Gear,Order,2,2,50,1.0,0
+"Ambessa, Matriarch of War",Hidden Blade,ogn-213,Spell,Order,2,2,50,1.0,0
+"Ambessa, Matriarch of War",Ki Barrier,ven-126,Spell,Order,2,2,50,1.0,0
+"Ambessa, Matriarch of War",Kinkou Initiate,unl-097,Unit,Body,3,2,50,3.0,0
+"Ambessa, Matriarch of War","Lucian, Merciless",sfd-113,Unit,Body,3,2,50,2.0,0
+"Ambessa, Matriarch of War",Pit Rookie,ogn-136,Unit,Body,2,2,50,1.0,0
+"Ambessa, Matriarch of War",Primal Strength,ogn-154,Spell,Body,4,2,50,1.0,0
+"Ambessa, Matriarch of War",Solari Sunhawk,ven-122,Unit,Order,3,2,50,2.0,0
+"Ambessa, Matriarch of War",Tactical Retreat,unl-175,Spell,Order,2,2,50,2.0,0
+"Ambessa, Matriarch of War",Decree of Strength,ven-085,Spell,Body,1,2,0,,100
+"Ambessa, Matriarch of War",Salvage,ogn-224,Spell,Order,2,2,0,,100
+"Ambessa, Matriarch of War","Ambessa, Respected and Feared",ven-136,Unit,Order,5,2,0,,50
+"Ambessa, Matriarch of War",Disposal Order,unl-103,Spell,Body,2,2,0,,50
+"Ambessa, Matriarch of War",Ruin Runner,sfd-105,Unit,Body,6,2,0,,50
 "Annie, Dark Child",Abandon,unl-131,Spell,Chaos,2,1,100,1.0,100
 "Annie, Dark Child",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,100
 "Annie, Dark Child","Annie, Stubborn",ogs-010,Unit,Chaos,4,1,100,1.0,0
@@ -402,26 +409,42 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Jayce, Defender of Tomorrow",Repulse,unl-106,Spell,Body,1,1,0,,100
 "Jayce, Defender of Tomorrow",Turn to Dust,unl-070,Spell,Mind,2,1,0,,100
 "Jayce, Defender of Tomorrow",Unyielding Spirit,ogn-145,Spell,Body,1,1,0,,100
-"Jhin, Virtuoso",Falling Comet,ogn-085,Spell,Mind,5,1,100,1.0,100
-"Jhin, Virtuoso",Sprite Burst,unl-069,Spell,Mind,5,1,100,1.0,100
-"Jhin, Virtuoso",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,100,3.0,0
-"Jhin, Virtuoso",Consult the Past,ogn-083,Spell,Mind,4,1,100,3.0,0
-"Jhin, Virtuoso",Curtain Call,unl-182,Spell,Fury|Mind,4,1,100,3.0,0
-"Jhin, Virtuoso",Deadly Flourish,unl-073,Spell,Mind,4,1,100,3.0,0
-"Jhin, Virtuoso",Downstage Dramatics,unl-061,Spell,Mind,2,1,100,3.0,0
-"Jhin, Virtuoso","Ekko, Recurrent",ogn-110,Unit,Mind,5,1,100,3.0,0
-"Jhin, Virtuoso",Energy Conduit,ogn-098,Gear,Mind,3,1,100,2.0,0
-"Jhin, Virtuoso",Gutter Palace,unl-088,Gear,Mind,4,1,100,2.0,0
-"Jhin, Virtuoso",Hextech Anomaly,sfd-083,Gear,Mind,3,1,100,2.0,0
-"Jhin, Virtuoso","Jhin, Meticulous Killer",unl-089,Unit,Mind,4,1,100,1.0,0
-"Jhin, Virtuoso",Keeper of Masks,unl-081,Unit,Mind,2,1,100,1.0,0
-"Jhin, Virtuoso",Progress Day,ogn-114,Spell,Mind,6,1,100,3.0,0
-"Jhin, Virtuoso",Promising Future,ogn-115,Spell,Mind,5,1,100,3.0,0
-"Jhin, Virtuoso",Seal of Insight,ogn-120,Gear,Mind,0,1,100,3.0,0
-"Jhin, Virtuoso",Time Warp,ogn-122,Spell,Mind,10,1,100,3.0,0
-"Jhin, Virtuoso",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,0,,100
-"Jhin, Virtuoso",Unchecked Power,ogn-123,Spell,Mind,7,1,0,,100
-"Jhin, Virtuoso","Vi, Destructive",ogn-036,Unit,Fury,2,1,0,,100
+"Jhin, Virtuoso",Sprite Burst,unl-069,Spell,Mind,5,2,100,1.5,50
+"Jhin, Virtuoso",Consult the Past,ogn-083,Spell,Mind,4,2,100,3.0,0
+"Jhin, Virtuoso",Curtain Call,unl-182,Spell,Fury|Mind,4,2,100,3.0,0
+"Jhin, Virtuoso",Deadly Flourish,unl-073,Spell,Mind,4,2,100,3.0,0
+"Jhin, Virtuoso",Downstage Dramatics,unl-061,Spell,Mind,2,2,100,2.0,0
+"Jhin, Virtuoso","Jhin, Meticulous Killer",unl-089,Unit,Mind,4,2,100,1.0,0
+"Jhin, Virtuoso",Progress Day,ogn-114,Spell,Mind,6,2,100,2.0,0
+"Jhin, Virtuoso",Time Warp,ogn-122,Spell,Mind,10,2,100,2.5,0
+"Jhin, Virtuoso",Falling Comet,ogn-085,Spell,Mind,5,2,50,1.0,50
+"Jhin, Virtuoso",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,2,50,2.0,50
+"Jhin, Virtuoso",Unchecked Power,ogn-123,Spell,Mind,7,2,50,1.0,50
+"Jhin, Virtuoso",Brynhir Thundersong,ogn-026,Unit,Fury,6,2,50,3.0,0
+"Jhin, Virtuoso","Ekko, Recurrent",ogn-110,Unit,Mind,5,2,50,3.0,0
+"Jhin, Virtuoso",Energy Conduit,ogn-098,Gear,Mind,3,2,50,2.0,0
+"Jhin, Virtuoso",Falling Star,ogn-029,Spell,Fury,2,2,50,1.0,0
+"Jhin, Virtuoso",Ferrous Forerunner,sfd-021,Unit,Fury,6,2,50,2.0,0
+"Jhin, Virtuoso",Forecaster,sfd-065,Unit,Mind,2,2,50,3.0,0
+"Jhin, Virtuoso",Frigid Touch,sfd-066,Spell,Mind,2,2,50,1.0,0
+"Jhin, Virtuoso",Gutter Palace,unl-088,Gear,Mind,4,2,50,2.0,0
+"Jhin, Virtuoso",Hextech Anomaly,sfd-083,Gear,Mind,3,2,50,2.0,0
+"Jhin, Virtuoso",Keeper of Masks,unl-081,Unit,Mind,2,2,50,1.0,0
+"Jhin, Virtuoso",Noxus Hopeful,ogn-012,Unit,Fury,4,2,50,3.0,0
+"Jhin, Virtuoso",Orb of Regret,ogn-090,Gear,Mind,1,2,50,1.0,0
+"Jhin, Virtuoso",Plundering Poro,sfd-069,Unit,Mind,2,2,50,3.0,0
+"Jhin, Virtuoso",Promising Future,ogn-115,Spell,Mind,5,2,50,3.0,0
+"Jhin, Virtuoso",Rocket Barrage,sfd-077,Spell,Mind,4,2,50,2.0,0
+"Jhin, Virtuoso",Seal of Insight,ogn-120,Gear,Mind,0,2,50,3.0,0
+"Jhin, Virtuoso",Singularity,ogn-105,Spell,Mind,6,2,50,2.0,0
+"Jhin, Virtuoso",Stupefy,ogn-095,Spell,Mind,1,2,50,3.0,0
+"Jhin, Virtuoso",Bilgewater Tracker,rad-003,Unit,Fury,3,2,0,,50
+"Jhin, Virtuoso",Decree of Insight,ven-061,Spell,Mind,1,2,0,,50
+"Jhin, Virtuoso",Decree of Rage,ven-015,Spell,Fury,1,2,0,,50
+"Jhin, Virtuoso",Lost to the Sands,rad-013,Spell,Fury,3,2,0,,50
+"Jhin, Virtuoso",Temporal Breach,ven-066,Spell,Mind,2,2,0,,50
+"Jhin, Virtuoso",Thermo Beam,ogn-022,Spell,Fury,5,2,0,,50
+"Jhin, Virtuoso","Vi, Destructive",ogn-036,Unit,Fury,2,2,0,,50
 "Jinx, Loose Cannon",Falling Star,ogn-029,Spell,Fury,2,1,100,2.0,100
 "Jinx, Loose Cannon",Gust,ogn-169,Spell,Chaos,1,1,100,1.0,100
 "Jinx, Loose Cannon",Switcheroo,sfd-145,Spell,Chaos,2,1,100,2.0,100

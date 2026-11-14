@@ -70,3 +70,19 @@ Kevin Yin, Mordekaiser Calvin / AA Cartaneko / TSS KnightinGale, Ekko Moses Adda
 K'Sante des Showdowns. À remplacer dès qu'une page de deck est lisible (réseau) ou que l'utilisateur colle une liste.
 Sans sideboard complet, l'IA joue le BO3 avec le sideboard partiel (elle ne sideboarde pas encore de toute façon).
 Ces 9 légendes n'ont pas de plan par légende (`plans_legendes.SANS_PLAN`, plan générique).
+
+## Ban list du 2026-11-23 (annoncée le 2026-11-13)
+
+Bannis en Standard : Riven, Broken Blade ; Zhonya's Hourglass ; Stellacorn Herder ; Nocturne, Horrifying ; Rhasa the Sunderer ;
+Brynhir Thundersong ; Dazzling Aurora ; Baited Hook ; battlefields Emperor's Dais et Star Spring (`cards_unique.csv`, table de
+`../rules/tournament-rules-resume.md`). Effet : **39 des 58 decks par défaut** contenaient une carte bannie.
+
+Recherche du 2026-11-14 (4 agents, WebSearch seulement ; pages de decks, playriftbound.com, riftbound.zone, riftboundfrance.fr
+bloqués) d'une vraie liste de tournoi sans aucune carte bannie, sans retoucher de liste :
+- trouvées (2) : **Jhin** (Benji302080, Showdown Sacramento 27e, sideboard 8 / 10), **Ambessa** (Kyouya, RQ Barcelona 345e,
+  Vendetta, place faible) ;
+- **37 légendes sans liste propre** : le ban n'est pas encore en vigueur, toutes les listes Radiance jouent ces cartes au cœur
+  (Zhonya's chez les Calm, Dazzling Aurora, Star Spring, Emperor's Dais…). Elles gardent leur liste actuelle, signalée ⚠.
+- Pistes : listes officielles « Best Ofs for the European Championship » (playriftbound.com, une par légende) ; Viktor Calvin Jin
+  (Sacramento 5e, a priori propre, liste incomplète dans les résumés) ; Rumble Evan M Nouchi ; listes « Radiance Banned » des
+  tournois d'après le 2026-11-23. Riven : champions non bannis possibles Riven, Shattered et Riven, Deserter.

@@ -373,8 +373,10 @@
   "date": "2026-08-23",
   "placement": "10",
   "url": "https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-247097",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -726,7 +728,8 @@
   "note": "résumé incomplet (39 cartes listées, il en manque 1) ; quantités du sideboard partielles",
   "valid": false,
   "flags": [
-   "main_deck(champion+main)=39 (attendu 40)"
+   "main_deck(champion+main)=39 (attendu 40)",
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -1088,8 +1091,10 @@
   "date": "2026-08",
   "placement": "5",
   "url": "https://riftdecks.com/riftbound-metagame/deck-zhong-ji-a-ka-li-267810",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -1487,8 +1492,10 @@
   "placement": "",
   "url": "https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-281253",
   "note": "sideboard non récupéré",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -1802,8 +1809,10 @@
   "placement": "7",
   "url": "https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-314752",
   "note": "deux résumés de recherche divergent sur quelques quantités (Scuttle Crab, Mournful Witness, Long Sword, Sterak's Gage) ; version retenue = celle qui fait 40 cartes",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -2213,8 +2222,10 @@
   "placement": "41",
   "url": "https://riftdecks.com/riftbound-metagame/deck-akali-rogue-assassin-298938",
   "note": "sideboard partiel",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\", 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -2568,6 +2579,430 @@
   ]
  },
  {
+  "file": "ambessa_kyouya_rq-barcelona_345th.txt",
+  "legend": "Ambessa, Matriarch of War",
+  "player": "Kyouya",
+  "event": "Riftbound Regional Qualifier - Barcelona (Vendetta), Best-Of Ambessa (1re des 34 Ambessa)",
+  "date": "2026-08-23",
+  "placement": "345",
+  "url": "https://riftdecks.com/riftbound-metagame/deck-ambessa-matriarch-of-war-248853",
+  "source": "recherche web (transcription des résultats WebSearch, pages riftdecks / mobalytics / magicalmeta / riftmana / playriftbound non lues directement)",
+  "note": "place faible (345e) faute de mieux : aucune Ambessa sans carte bannie trouvée en Radiance ; la liste LA 201e du dépôt joue Star Spring.",
+  "valid": true,
+  "flags": [],
+  "missing_cards": [],
+  "cards": [
+   {
+    "section": "legend",
+    "qty": 1,
+    "name": "Ambessa, Matriarch of War",
+    "card_id": "ven-153",
+    "name_db": "Ambessa, Matriarch of War",
+    "type": "Legend",
+    "domain": "Body|Order",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "champion",
+    "qty": 1,
+    "name": "Ambessa, The Wolf",
+    "card_id": "ven-084",
+    "name_db": "Ambessa, The Wolf",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": "4"
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Ambessa, The Wolf",
+    "card_id": "ven-084",
+    "name_db": "Ambessa, The Wolf",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": "4"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Irresistible Faefolk",
+    "card_id": "unl-112",
+    "name_db": "Irresistible Faefolk",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": "1"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Legion Marauder",
+    "card_id": "ven-074",
+    "name_db": "Legion Marauder",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": "2"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Kinkou Initiate",
+    "card_id": "unl-097",
+    "name_db": "Kinkou Initiate",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "3"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "First Mate",
+    "card_id": "ogn-132",
+    "name_db": "First Mate",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "3"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Kennen, Keeper of Balance",
+    "card_id": "ven-135",
+    "name_db": "Kennen, Keeper of Balance",
+    "type": "Unit",
+    "domain": "Order",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "2"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Solari Sunhawk",
+    "card_id": "ven-122",
+    "name_db": "Solari Sunhawk",
+    "type": "Unit",
+    "domain": "Order",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "3"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Rengar, Trophy Hunter",
+    "card_id": "unl-120",
+    "name_db": "Rengar, Trophy Hunter",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "5",
+    "power_cost": "1",
+    "might": "6"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Vi, Peacekeeper",
+    "card_id": "unl-176",
+    "name_db": "Vi, Peacekeeper",
+    "type": "Unit",
+    "domain": "Order",
+    "energy_cost": "5",
+    "power_cost": "1",
+    "might": "5"
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Noxian Emissary",
+    "card_id": "ven-128",
+    "name_db": "Noxian Emissary",
+    "type": "Unit",
+    "domain": "Order",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": "2"
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Forge of the Future",
+    "card_id": "ogn-212",
+    "name_db": "Forge of the Future",
+    "type": "Gear",
+    "domain": "Order",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Punch First",
+    "card_id": "sfd-097",
+    "name_db": "Punch First",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "1",
+    "power_cost": "2",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Challenge",
+    "card_id": "ogn-128",
+    "name_db": "Challenge",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Guttural Roar",
+    "card_id": "ven-072",
+    "name_db": "Guttural Roar",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Public Execution",
+    "card_id": "ven-154",
+    "name_db": "Public Execution",
+    "type": "Spell",
+    "domain": "Body|Order",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Rampage",
+    "card_id": "ven-083",
+    "name_db": "Rampage",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Repulse",
+    "card_id": "unl-106",
+    "name_db": "Repulse",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "1",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Sabotage",
+    "card_id": "ogn-156",
+    "name_db": "Sabotage",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "1",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Hidden Blade",
+    "card_id": "ogn-213",
+    "name_db": "Hidden Blade",
+    "type": "Spell",
+    "domain": "Order",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Ki Barrier",
+    "card_id": "ven-126",
+    "name_db": "Ki Barrier",
+    "type": "Spell",
+    "domain": "Order",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Onslaught",
+    "card_id": "ven-081",
+    "name_db": "Onslaught",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "runes",
+    "qty": 7,
+    "name": "Body Rune",
+    "card_id": "ogn-126",
+    "name_db": "Body Rune",
+    "type": "Rune",
+    "domain": "Body",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "runes",
+    "qty": 5,
+    "name": "Order Rune",
+    "card_id": "ogn-214",
+    "name_db": "Order Rune",
+    "type": "Rune",
+    "domain": "Order",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Risen Altar",
+    "card_id": "ven-163",
+    "name_db": "Risen Altar",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Seat of Power",
+    "card_id": "sfd-217",
+    "name_db": "Seat of Power",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Sunken Temple",
+    "card_id": "sfd-218",
+    "name_db": "Sunken Temple",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Decree of Strength",
+    "card_id": "ven-085",
+    "name_db": "Decree of Strength",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "1",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Sabotage",
+    "card_id": "ogn-156",
+    "name_db": "Sabotage",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "1",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Disposal Order",
+    "card_id": "unl-103",
+    "name_db": "Disposal Order",
+    "type": "Spell",
+    "domain": "Body",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Salvage",
+    "card_id": "ogn-224",
+    "name_db": "Salvage",
+    "type": "Spell",
+    "domain": "Order",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Kayle, Justified",
+    "card_id": "ven-134",
+    "name_db": "Kayle, Justified",
+    "type": "Unit",
+    "domain": "Order",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "3"
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Ruin Runner",
+    "card_id": "sfd-105",
+    "name_db": "Ruin Runner",
+    "type": "Unit",
+    "domain": "Body",
+    "energy_cost": "6",
+    "power_cost": "0",
+    "might": "5"
+   }
+  ]
+ },
+ {
   "file": "ambessa_tss-riftboundtee_rq-la_201st.txt",
   "legend": "Ambessa, Matriarch of War",
   "player": "TSS RiftboundTee (TJ T.)",
@@ -2577,8 +3012,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-ambessa-matriarch-of-war-315778",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "transcription douteuse : 22 unités visibles sur 23 annoncées ; la 23e est un 2e Ambessa, The Wolf listé dans les unités (mentionné par un résumé, quantité 1 déduite du total 23) ; sideboard d'une seule transcription",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -3732,7 +4169,7 @@
   "note": "carte bannie depuis : The Arena's Greatest (battlefield). Seal of Unity : 2 (Mobalytics, Rift Mana) ; un résultat attribuait 3 à riftdecks, 2 retenu (total 39 cohérent).",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"The Arena's Greatest\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Baited Hook', \"Emperor's Dais\", \"The Arena's Greatest\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -4521,7 +4958,7 @@
   "note": "Best-Of mieux classés écartés car ils jouent Baron Nashor (non modélisé) : Sydney 10e (Micah Catelan, main), Vancouver 44e (POG CHUNGUS, main) ; Sydney 30e (Nathan, non Best-Of) l'a en sideboard. Mobalytics et RiftDecks concordants. Bannie depuis : Stacked Deck.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Stacked Deck', 'Brynhir Thundersong'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -4909,8 +5346,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-ekko-boy-who-shattered-time-337318",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "liste reconstituée section par section à partir de plusieurs résumés de la page riftdecks 337318 (en-têtes : 23 unités, 16 sorts, pas d'équipement ; 23 + 16 + champion = 40). Unités : Plundering Poro, Bilgewater Tracker, Pyke, Kai'Sa, Ekko Revolutionary, Legion Rearguard vus dans plusieurs requêtes ; Blast Corps Cadet 1, Blastcone Fae 1 et Vayne 1 recoupés par une 2e requête ; Noxus Hopeful 3, Brynhir 2, Thousand-Tailed Watcher 2 vus dans une seule requête, le total de 23 annoncé par la page tombe juste. Sorts : un seul résumé (texte + liste visuelle), total 16 juste. Runes 7 Fury / 5 Mind et battlefields d'un seul résumé. 60e (7-2-2) recoupé par riftbound.zone/riftwatch. Sideboard (10) non récupéré (seuls Decree of Insight x2 et Decree of Rage x2 lisibles) : omis. Pas de liste Ekko complète trouvée pour Riftbros (Moses Addai, 13 joueurs) ni Orlando (AV Aadion 74e).",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Brynhir Thundersong'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -6026,8 +6465,10 @@
   "placement": "8",
   "url": "https://mobalytics.gg/riftbound/decks/fiora-grand-duelist-singapore-regional-qualifier-top-8-fr0zen",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Dazzling Aurora'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -6392,7 +6833,7 @@
   "note": "main identique d'après playriftbound (Sydney's Top Decks) et riftmana ; runes (6/6) et battlefields d'après riftmana (playriftbound illisible pour les runes). Sideboard RETIRÉ : riftmana et playriftbound donnent des sideboards différents (non tranché). Placement 288 confirmé par mobalytics et riftwatch. Carte bannie depuis : Aspirant's Climb.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Dazzling Aurora', \"Aspirant's Climb\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -6683,8 +7124,10 @@
   "placement": "5",
   "url": "https://riftdecks.com/riftbound-metagame/deck-irelia-blade-dancer-315176",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -8066,8 +8509,10 @@
   "placement": "35",
   "url": "https://mobalytics.gg/riftbound/decks/jayce-defender-of-tomorrow-singapore-regional-qualifier-best-of-justmilkey",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Dazzling Aurora'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -8457,6 +8902,406 @@
   ]
  },
  {
+  "file": "jhin_benji302080_showdown-sacramento_27th.txt",
+  "legend": "Jhin, Virtuoso",
+  "player": "Benji302080",
+  "event": "Riftbound Showdown 25k - LDXP Sacramento (755 joueurs)",
+  "date": "2026-10-24",
+  "placement": "27",
+  "url": "https://riftdecks.com/riftbound-metagame/deck-jhin-virtuoso-337319",
+  "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
+  "note": "écartée : la Jhin « Best of Legend » d'Orlando (riftmana) a Brynhir Thundersong au sideboard (bannie).",
+  "valid": true,
+  "flags": [],
+  "missing_cards": [],
+  "cards": [
+   {
+    "section": "legend",
+    "qty": 1,
+    "name": "Jhin, Virtuoso",
+    "card_id": "unl-181",
+    "name_db": "Jhin, Virtuoso",
+    "type": "Legend",
+    "domain": "Fury|Mind",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "champion",
+    "qty": 1,
+    "name": "Jhin, Meticulous Killer",
+    "card_id": "unl-089",
+    "name_db": "Jhin, Meticulous Killer",
+    "type": "Unit",
+    "domain": "Mind",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": "4"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Noxus Hopeful",
+    "card_id": "ogn-012",
+    "name_db": "Noxus Hopeful",
+    "type": "Unit",
+    "domain": "Fury",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": "4"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Forecaster",
+    "card_id": "sfd-065",
+    "name_db": "Forecaster",
+    "type": "Unit",
+    "domain": "Mind",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": "2"
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Plundering Poro",
+    "card_id": "sfd-069",
+    "name_db": "Plundering Poro",
+    "type": "Unit",
+    "domain": "Mind",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": "2"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Ferrous Forerunner",
+    "card_id": "sfd-021",
+    "name_db": "Ferrous Forerunner",
+    "type": "Unit",
+    "domain": "Fury",
+    "energy_cost": "6",
+    "power_cost": "1",
+    "might": "6"
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Thousand-Tailed Watcher",
+    "card_id": "ogn-116",
+    "name_db": "Thousand-Tailed Watcher",
+    "type": "Unit",
+    "domain": "Mind",
+    "energy_cost": "7",
+    "power_cost": "1",
+    "might": "7"
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Orb of Regret",
+    "card_id": "ogn-090",
+    "name_db": "Orb of Regret",
+    "type": "Gear",
+    "domain": "Mind",
+    "energy_cost": "1",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Stupefy",
+    "card_id": "ogn-095",
+    "name_db": "Stupefy",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "1",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Downstage Dramatics",
+    "card_id": "unl-061",
+    "name_db": "Downstage Dramatics",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Frigid Touch",
+    "card_id": "sfd-066",
+    "name_db": "Frigid Touch",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "2",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Consult the Past",
+    "card_id": "ogn-083",
+    "name_db": "Consult the Past",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Curtain Call",
+    "card_id": "unl-182",
+    "name_db": "Curtain Call",
+    "type": "Spell",
+    "domain": "Fury|Mind",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 3,
+    "name": "Deadly Flourish",
+    "card_id": "unl-073",
+    "name_db": "Deadly Flourish",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "4",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Rocket Barrage",
+    "card_id": "sfd-077",
+    "name_db": "Rocket Barrage",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "4",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Sprite Burst",
+    "card_id": "unl-069",
+    "name_db": "Sprite Burst",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "5",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Progress Day",
+    "card_id": "ogn-114",
+    "name_db": "Progress Day",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "6",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Singularity",
+    "card_id": "ogn-105",
+    "name_db": "Singularity",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "6",
+    "power_cost": "2",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Unchecked Power",
+    "card_id": "ogn-123",
+    "name_db": "Unchecked Power",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "7",
+    "power_cost": "2",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 2,
+    "name": "Time Warp",
+    "card_id": "ogn-122",
+    "name_db": "Time Warp",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "10",
+    "power_cost": "4",
+    "might": ""
+   },
+   {
+    "section": "main",
+    "qty": 1,
+    "name": "Falling Star",
+    "card_id": "ogn-029",
+    "name_db": "Falling Star",
+    "type": "Spell",
+    "domain": "Fury",
+    "energy_cost": "2",
+    "power_cost": "2",
+    "might": ""
+   },
+   {
+    "section": "runes",
+    "qty": 5,
+    "name": "Fury Rune",
+    "card_id": "ogn-007",
+    "name_db": "Fury Rune",
+    "type": "Rune",
+    "domain": "Fury",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "runes",
+    "qty": 7,
+    "name": "Mind Rune",
+    "card_id": "ogn-089",
+    "name_db": "Mind Rune",
+    "type": "Rune",
+    "domain": "Mind",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Frozen Fortress",
+    "card_id": "unl-212",
+    "name_db": "Frozen Fortress",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Rockfall Path",
+    "card_id": "sfd-216",
+    "name_db": "Rockfall Path",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "battlefields",
+    "qty": 1,
+    "name": "Sigil of the Storm",
+    "card_id": "ogn-287",
+    "name_db": "Sigil of the Storm",
+    "type": "Battlefield",
+    "domain": "Colorless",
+    "energy_cost": "",
+    "power_cost": "",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Decree of Rage",
+    "card_id": "ven-015",
+    "name_db": "Decree of Rage",
+    "type": "Spell",
+    "domain": "Fury",
+    "energy_cost": "1",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Temporal Breach",
+    "card_id": "ven-066",
+    "name_db": "Temporal Breach",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "2",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Decree of Insight",
+    "card_id": "ven-061",
+    "name_db": "Decree of Insight",
+    "type": "Spell",
+    "domain": "Mind",
+    "energy_cost": "1",
+    "power_cost": "0",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 2,
+    "name": "Bilgewater Tracker",
+    "card_id": "rad-003",
+    "name_db": "Bilgewater Tracker",
+    "type": "Unit",
+    "domain": "Fury",
+    "energy_cost": "3",
+    "power_cost": "0",
+    "might": "3"
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Lost to the Sands",
+    "card_id": "rad-013",
+    "name_db": "Lost to the Sands",
+    "type": "Spell",
+    "domain": "Fury",
+    "energy_cost": "3",
+    "power_cost": "1",
+    "might": ""
+   },
+   {
+    "section": "sideboard",
+    "qty": 1,
+    "name": "Thermo Beam",
+    "card_id": "ogn-022",
+    "name_db": "Thermo Beam",
+    "type": "Spell",
+    "domain": "Fury",
+    "energy_cost": "5",
+    "power_cost": "2",
+    "might": ""
+   }
+  ]
+ },
+ {
   "file": "jhin_ksdden_rq-hartford_29th.txt",
   "legend": "Jhin, Virtuoso",
   "player": "Ksdden",
@@ -8468,7 +9313,7 @@
   "note": "Mobalytics/RiftDecks/Riftmana concordants. Bannies depuis : Ekko, Recurrent, Aspirant's Climb.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Ekko, Recurrent', \"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Ekko, Recurrent', 'Brynhir Thundersong', \"Aspirant's Climb\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -8822,7 +9667,7 @@
   "note": "cartes bannies depuis : Stacked Deck, The Arena's Greatest. Piltover Archive donne les mêmes cartes avec des quantités doublées (6 Seal of Rage, 4 Cleave...) : artefact d'affichage, Mobalytics retenu.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Stacked Deck', \"The Arena's Greatest\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Stacked Deck', \"The Arena's Greatest\", 'Brynhir Thundersong'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -9197,8 +10042,10 @@
   "placement": "9",
   "url": "https://riftdecks.com/riftbound-metagame/deck-kai-sa-daughter-of-the-void-315270",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Brynhir Thundersong'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -9572,8 +10419,10 @@
   "placement": "13",
   "url": "https://riftwatch.gg/decks/los-angeles-best-13/",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Rhasa the Sunderer'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -10019,8 +10868,10 @@
   "placement": "20",
   "url": "https://riftdecks.com/riftbound-metagame/deck-khazix-voidreaver-314814",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement ; liste principale riftdecks + runes/battlefields/sideboard de riftcore.app « Cuoemrei - Top32 »)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -10443,8 +11294,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-ksante-pride-of-nazumah-336873",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "classement faible (52e/64) faute de mieux : les listes K'Sante des Showdowns (Orlando 201e Zanzixibax, 305e Truckz ; Sacramento 483e Saeed Gatson, 146e Makai Benjamin Bush sur riftwatch) ne sont pas lisibles dans les résultats WebSearch ; la liste de Michael Emeofa (LDXP Challenge 29e/38) avait des quantités mal alignées. Liste vue dans deux résumés concordants (unités 12, gear 3, sorts 24 + champion = 40) ; Defy 2/Hush 1/Punch First 3/Discipline 3 confirmés par un troisième résumé. Page annoncée à 66 cartes : sideboard de 10 cartes NON visible, donc omis.",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Dazzling Aurora'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -10710,8 +11563,10 @@
   "placement": "9",
   "url": "https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-318673",
   "note": "runes mal extraites par le résumé (8 Mind / 1 Order) ; 4 Mind / 8 Order supposé comme les autres listes",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Baited Hook', 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -11075,7 +11930,8 @@
   "note": "liste « contrôle » atypique (Cull the Weak, sorts) ; résumé partiel (~33 cartes)",
   "valid": false,
   "flags": [
-   "main_deck(champion+main)=32 (attendu 40)"
+   "main_deck(champion+main)=32 (attendu 40)",
+   "cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -11425,8 +12281,10 @@
   "date": "2026-09-19",
   "placement": "1",
   "url": "https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-307612",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Baited Hook', 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -11800,8 +12658,10 @@
   "placement": "12",
   "url": "https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-315386",
   "note": "sideboard non récupéré",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Baited Hook', 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -12092,7 +12952,7 @@
   "url": "https://mobalytics.gg/riftbound/decks/leblanc-deceiver-vancouver-regional-qualifier-best-of-riuzake",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Baited Hook', \"Aspirant's Climb\", 'Star Spring'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -12431,8 +13291,10 @@
   "placement": "7",
   "url": "https://riftdecks.com/riftbound-metagame/deck-leblanc-deceiver-308360",
   "note": "sideboard partiel",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Baited Hook', 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -12758,8 +13620,10 @@
   "placement": "153",
   "url": "https://riftdecks.com/riftbound-metagame/deck-lee-sin-blind-monk-170894",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\", 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -13136,7 +14000,7 @@
   "note": "carte bannie depuis : The Arena's Greatest (battlefield). Piltover Archive diverge (Fiora, Worthy x4...), écarté.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"The Arena's Greatest\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Stellacorn Herder', \"Zhonya's Hourglass\", \"The Arena's Greatest\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -14948,7 +15812,7 @@
   "note": "les listes mieux classées (Hartford 13e, Vancouver 36e) jouent Baron Nashor (non modélisé). Sideboard : Unyielding Spirit 2 (Mobalytics) ou 3 (RiftDecks/RiftMana) ; on garde 2 (sideboard 7/8). Bannies depuis : Stacked Deck, Aspirant's Climb.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Stacked Deck', \"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Dazzling Aurora', 'Stacked Deck', \"Aspirant's Climb\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -15836,8 +16700,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-orianna-lady-of-clockwork-341263",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "recoupé riftdecks (341263, 7-4-0) + riftmana (« Orlando Showdown Best of Legend Winner Decklists », entrée « 59th Orianna – Burrsir ») ; quantités du main issues d'un résumé, cohérentes avec les totaux d'en-tête riftdecks (unités 10, gear 12, sorts 17, champion 1) ; runes 7 Calm / 5 Mind et battlefields données par deux résumés ; sideboard de 10 identique selon les deux sources. Meilleure Orianna trouvée dans un gros tournoi Radiance (Sacramento : meilleure Orianna 134e, liste incomplète dans les résumés).",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -16601,7 +17467,7 @@
   "note": "main identique d'après riftdecks et mobalytics (Best-Of Rowanno1, 21e, 10-3-0) ; sideboard d'après mobalytics (8 cartes). Carte bannie depuis : Aspirant's Climb.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Dazzling Aurora', \"Aspirant's Climb\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -18128,8 +18994,10 @@
   "url": "https://riftmana.com/singapore-best-of-metal-cards-legend-winner-decklists-vendetta-regional-qualifier/",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement ; riftmana + extrait de playriftbound.com/en-us/news/organizedplay/singapores-top-decks pour le sideboard)",
   "note": "sideboard : Decree of Rage, Decree of Strength et Ferrous Forerunner retirés (quantités ambiguës dans la source, « 2 » seulement déduit du total de 10)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Star Spring', 'Brynhir Thundersong'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -18467,8 +19335,10 @@
   "placement": "1",
   "url": "https://mobalytics.gg/riftbound/decks/rengar-pridestalker-los-angeles-regional-qualifier-1st-dsg-prismaticism",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Emperor's Dais\", 'Star Spring', 'Brynhir Thundersong'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -18855,8 +19725,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-riven-the-exile-337264",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "quantités issues d'un seul résumé de la page riftdecks 337264 (unités 20, équipement 6, sorts 13 + champion = 40 exactement) ; présence de Blade of the Exile, Zhonya's Hourglass, Astral Heron, Baron Nashor, Blitzcrank, Defy, Gust, Ki Burst, Discipline, Emperor's Dais, Hunters' Circle, runes Calm/Chaos recoupée par d'autres requêtes, mais pas les quantités. Place : 3e selon riftdecks et riftwatch (10-2-1), 4e selon runesandrift. Sideboard (10 cartes) non récupéré : seul Decree of Focus x2 apparaissait, donc sideboard omis. Liste du vainqueur Nam Dang (338917) non retenue : un sort manquant et 3e battlefield contradictoire (Hunters' Circle vs Rakelstake).",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Riven, Broken Blade', 'Stellacorn Herder', \"Zhonya's Hourglass\", \"Emperor's Dais\", 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -19147,8 +20019,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-rumble-mechanized-menace-148111",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "2 Rumble, Hotheaded en plus du champion et 2 Deadly Flourish (RiftDecks tronqué à 1) : seules valeurs donnant 40 cartes ; Riftwatch le classe 270e. Aucune carte bannie depuis.",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -20884,7 +21758,7 @@
   "note": "cartes bannies depuis : Stacked Deck, The Arena's Greatest. Meilleur Teemo de Sydney (6e, AshenOCE) écarté : Baron Nashor non modélisé. Teemo, Strategist : 3 au total (1 champion + 2) d'après Mobalytics, mise en forme brouillée ; Piltover Archive (quantités doublées, 63 cartes) diverge. Total 40 + 8 cohérent.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Stacked Deck', \"The Arena's Greatest\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Nocturne, Horrifying', 'Stacked Deck', \"The Arena's Greatest\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -21223,8 +22097,10 @@
   "placement": "4",
   "url": "https://mobalytics.gg/riftbound/decks/vex-gloomist-sydney-regional-qualifier-top-4-eep-bonk-repeat",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -21625,7 +22501,7 @@
   "note": "main d'après RiftDecks, sideboard d'après Mobalytics ; Riftwatch le classe 96e. Bannie depuis : The Arena's Greatest.",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"The Arena's Greatest\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: [\"The Arena's Greatest\", 'Brynhir Thundersong'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -22369,7 +23245,7 @@
   "note": "carte bannie depuis : Aspirant's Climb (battlefield). Sideboard d'après Mobalytics (riftdecks tronqué dans les résultats).",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: [\"Aspirant's Climb\"] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Dazzling Aurora', \"Aspirant's Climb\"] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [
@@ -22721,8 +23597,10 @@
   "url": "https://mobalytics.gg/riftbound/decks/yasuo-unforgiven-vancouver-regional-qualifier-best-of-kiiro",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement) ; quantités d'après Riftmana, runes d'après Piltover Archive",
   "note": "Best-Of Yasuo mieux classé (Utrecht 112e, Bezz) écarté : contient Baron Nashor, non modélisé. Riftwatch indique 153e. Sideboard : Riftmana coupé après 5 lignes mais total = 8.",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\", 'Stellacorn Herder', 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -23084,8 +23962,10 @@
   "placement": "3rd",
   "url": "https://riftdecks.com/riftbound-metagame/deck-master-yi-wuju-bladesman-281302",
   "note": "récupérée via résumé WebSearch (site bloqué), quantités à vérifier",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\", \"Emperor's Dais\", 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -23448,8 +24328,10 @@
   "url": "https://riftdecks.com/riftbound-metagame/deck-master-yi-wuju-bladesman-315144",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
   "note": "dernière carte du sideboard (1 Ruin Runner ?) coupée dans la recherche, non confirmée : retirée (sideboard 9)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\", \"Emperor's Dais\", 'Star Spring'] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -23823,8 +24705,10 @@
   "placement": "",
   "url": "https://magicalmeta.ink/riftbound/decklists/master-yi-wuju-master-best-of-wuhan-regional-open-vendetta",
   "source": "recherche web (transcription des résultats WebSearch, page du deck non lue directement)",
-  "valid": true,
-  "flags": [],
+  "valid": false,
+  "flags": [
+   "cartes bannies aujourd'hui: [\"Zhonya's Hourglass\"] (liste antérieure au ban)"
+  ],
   "missing_cards": [],
   "cards": [
    {
@@ -24189,7 +25073,7 @@
   "note": "runes 7 Chaos / 5 Fury et sideboard vus via riftbound.gg et un résumé de recherche (pas la page riftdecks) ; Stacked Deck banni depuis",
   "valid": false,
   "flags": [
-   "cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)"
+   "cartes bannies aujourd'hui: ['Stacked Deck', 'Brynhir Thundersong', 'Rhasa the Sunderer'] (liste antérieure au ban)"
   ],
   "missing_cards": [],
   "cards": [

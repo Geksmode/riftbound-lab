@@ -381,3 +381,7 @@ Captures de l'utilisateur : Bilgewater Tracker proposait toutes les paires d'uni
 
 ## [2026-11-12] ingest | Éditeur de deck : vue « Images »
 Demande de l'utilisateur (capture d'une decklist en images) : bouton « Liste / Images », un exemplaire = une image, menu par carte, catalogue masquable (`dkVisual`, `dkPop` dans `train/src.html`). Robot `verif_deckimg.mjs` (porte, partie 3).
+
+## [2026-11-14] ingest | Ban list du 2026-11-23
+10 cartes bannies ajoutées (base de cartes, résumé des règles de tournoi). 39 decks par défaut touchés ; seules Jhin et Ambessa ont une
+liste de tournoi propre trouvée, 37 restent signalées ⚠ (`riftbound/decks/README.md`, section « Ban list du 2026-11-23 »).
