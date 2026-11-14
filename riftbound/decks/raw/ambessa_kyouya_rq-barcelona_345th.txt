@@ -1,0 +1,51 @@
+# legend: Ambessa, Matriarch of War
+# player: Kyouya
+# event: Riftbound Regional Qualifier - Barcelona (Vendetta), Best-Of Ambessa (1re des 34 Ambessa)
+# date: 2026-08-23
+# placement: 345
+# url: https://riftdecks.com/riftbound-metagame/deck-ambessa-matriarch-of-war-248853
+# source: recherche web (transcription des résultats WebSearch, pages riftdecks / mobalytics / magicalmeta / riftmana / playriftbound non lues directement)
+# note: main recoupé : totaux par catégorie riftdecks (1 champion, 21 unités, 1 équipement, 17 sorts = 40) + quantités carte par carte d'un résumé riftdecks ; noms et plusieurs quantités recoupés par mobalytics, magicalmeta et l'article officiel « Barcelona's Top Decks ».
+# note: la 2e Ambessa, The Wolf (comptée parmi les 21 unités) est donnée par le résumé riftdecks ; mobalytics affiche aussi Ambessa, The Wolf deux fois.
+# note: runes 7 Body / 5 Order et battlefields recoupés par trois sources ; sideboard de 10 d'après mobalytics, partiellement recoupé par riftmana et l'article officiel (Decree of Strength, Disposal Order, Kayle, Ruin Runner).
+# note: place faible (345e) faute de mieux : aucune Ambessa sans carte bannie trouvée en Radiance ; la liste LA 201e du dépôt joue Star Spring.
+[legend]
+1 Ambessa, Matriarch of War
+[champion]
+1 Ambessa, The Wolf
+[main]
+1 Ambessa, The Wolf
+3 Irresistible Faefolk
+3 Legion Marauder
+3 Kinkou Initiate
+2 First Mate
+2 Kennen, Keeper of Balance
+2 Solari Sunhawk
+2 Rengar, Trophy Hunter
+2 Vi, Peacekeeper
+1 Noxian Emissary
+1 Forge of the Future
+3 Punch First
+3 Challenge
+2 Guttural Roar
+2 Public Execution
+2 Rampage
+1 Repulse
+1 Sabotage
+1 Hidden Blade
+1 Ki Barrier
+1 Onslaught
+[runes]
+7 Body Rune
+5 Order Rune
+[battlefields]
+1 Risen Altar
+1 Seat of Power
+1 Sunken Temple
+[sideboard]
+2 Decree of Strength
+1 Sabotage
+1 Disposal Order
+2 Salvage
+2 Kayle, Justified
+2 Ruin Runner

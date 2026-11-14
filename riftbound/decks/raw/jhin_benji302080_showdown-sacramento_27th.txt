@@ -1,0 +1,49 @@
+# legend: Jhin, Virtuoso
+# player: Benji302080
+# event: Riftbound Showdown 25k - LDXP Sacramento (755 joueurs)
+# date: 2026-10-24
+# placement: 27
+# url: https://riftdecks.com/riftbound-metagame/deck-jhin-virtuoso-337319
+# source: recherche web (transcription des résultats WebSearch, page du deck non lue directement)
+# note: place (27e, 8-3-0) donnée par la page des classements finaux riftdecks de Sacramento ; le lien entre ce classement et la page 337319 repose sur le nom du joueur et la légende (la page du deck ne nomme pas l'événement dans les résumés).
+# note: liste reconstituée à partir de trois résumés WebSearch de la même page : sorts (25) et Noxus Hopeful / Ferrous Forerunner / Thousand-Tailed Watcher d'un résumé, Forecaster ×3 / Plundering Poro ×3 / Consult the Past ×3 / Curtain Call ×3 / runes / battlefields d'un autre ; les quantités d'unités totalisent 13, ce qui correspond à l'en-tête de la page (13 unités, 25 sorts) ; Orb of Regret ×1 seul équipement ; champion ×1 = seule quantité qui donne 40.
+# note: runes 5 Fury / 7 Mind et battlefields donnés par deux résumés concordants. Sideboard incomplet : 8 / 10 cartes lisibles dans les résumés (2 cartes manquantes, non devinées).
+# note: écartée : la Jhin « Best of Legend » d'Orlando (riftmana) a Brynhir Thundersong au sideboard (bannie).
+[legend]
+1 Jhin, Virtuoso
+[champion]
+1 Jhin, Meticulous Killer
+[main]
+3 Noxus Hopeful
+3 Forecaster
+3 Plundering Poro
+2 Ferrous Forerunner
+2 Thousand-Tailed Watcher
+1 Orb of Regret
+3 Stupefy
+1 Downstage Dramatics
+1 Frigid Touch
+3 Consult the Past
+3 Curtain Call
+3 Deadly Flourish
+2 Rocket Barrage
+2 Sprite Burst
+1 Progress Day
+2 Singularity
+1 Unchecked Power
+2 Time Warp
+1 Falling Star
+[runes]
+5 Fury Rune
+7 Mind Rune
+[battlefields]
+1 Frozen Fortress
+1 Rockfall Path
+1 Sigil of the Storm
+[sideboard]
+1 Decree of Rage
+2 Temporal Breach
+1 Decree of Insight
+2 Bilgewater Tracker
+1 Lost to the Sands
+1 Thermo Beam
