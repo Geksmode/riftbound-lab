@@ -1,0 +1,43 @@
+# legend: Orianna, Lady of Clockwork
+# player: CATL LuscoLuna
+# event: Regional Championship Europe, Stuttgart 2026 (315 joueurs), Best-Of
+# date: 2026-11-08
+# placement: 67
+# url: https://riftdecks.com/riftbound-metagame/deck-orianna-lady-of-clockwork-345154
+# source: recherche web (transcription des résultats WebSearch, pages playriftbound/riftdecks non lues directement ; riftdecks bloqué)
+# note: Best-Of officiel Riot (playriftbound « Best Ofs for the European Championship ») recoupé avec riftdecks 345154 (pseudo avec « а » cyrillique, 7-5-0) et riftwatch (#67) ; main : 15 entrées dont un résumé donne 3 Patched Porobot / Charm / Defy / Discipline / Pit Crew / Scuttle Crab, 2 Sprite Burst / Sterak's Gage, 1 Card Sharp / Singularity et totalise 39 ; les 3 de Sprite Fountain, Brutalizer, Blossoming Dreamroot (riftdecks) et de Cloth Armor, Mask of Foresight (playriftbound) viennent d'autres résumés et sont aussi les seules quantités qui donnent 39 + champion = 40 ; runes 8 Calm / 4 Mind (deux sources) ; battlefields (playriftbound) ; sideboard de 10 d'un seul résumé riftdecks, cohérent avec le total de 66 cartes affiché par riftdecks (à confirmer). Aucune carte bannie (check_raw sans --ban-ok : OK).
+[legend]
+1 Orianna, Lady of Clockwork
+[champion]
+1 Orianna, Exquisite
+[main]
+3 Patched Porobot
+3 Pit Crew
+3 Scuttle Crab
+3 Blossoming Dreamroot
+1 Card Sharp
+3 Cloth Armor
+3 Mask of Foresight
+3 Sprite Fountain
+3 Brutalizer
+2 Sterak's Gage
+3 Charm
+3 Defy
+3 Discipline
+2 Sprite Burst
+1 Singularity
+[runes]
+8 Calm Rune
+4 Mind Rune
+[battlefields]
+1 Ornn's Forge
+1 Rockfall Path
+1 Veiled Temple
+[sideboard]
+2 Decree of Focus
+2 Decree of Insight
+1 Hush
+1 Twilight Shroud
+1 Not So Fast
+1 Card Sharp
+2 Disarming Rake

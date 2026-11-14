@@ -1,0 +1,44 @@
+# legend: Ornn, Fire Below the Mountain
+# player: EclipseFactor
+# event: Regional Championship Europe, Stuttgart 2026 (315 joueurs), Best-Of
+# date: 2026-11-08
+# placement: 155
+# url: https://riftdecks.com/riftbound-metagame/deck-ornn-fire-below-the-mountain-345236
+# source: recherche web (transcription des résultats WebSearch, pages non lues directement : riftdecks, playriftbound et riftmana bloqués)
+# note: Best-Of Ornn (3-3-0, joueur Nathan L. selon riftdecks 345236 ; ne pas confondre avec riftdecks 347098 = Ornn de JSTR Dropczak au Nation Clash). Quantités du main issues d'un résumé, cohérentes au chiffre près avec les totaux d'en-tête riftdecks (unités 14, gear 18, sorts 7, champion 1, total 66). Runes 9 Calm / 3 Mind données par deux résumés (Best-Of officiel et riftdecks). Battlefields : résumé du Best-Of officiel (Ornn's Forge confirmé aussi par riftdecks). Sideboard de 10 identique selon riftmana et le Best-Of officiel (d'après le résumé ; mise en page de l'extrait jugée confuse). Riftmana donne 153e au lieu de 155e. Aucune carte bannie au 2026-11-23.
+[legend]
+1 Ornn, Fire Below the Mountain
+[champion]
+1 Ornn, Blacksmith
+[main]
+3 Scuttle Crab
+3 Pit Crew
+3 Patched Porobot
+3 Clockwork Keeper
+2 Orianna, Exquisite
+3 Brutalizer
+3 Sprite Fountain
+3 Sterak's Gage
+3 Seal of Focus
+3 Poro Snax
+1 Guardian Angel
+1 Mask of Foresight
+1 Cloth Armor
+2 Charm
+2 Defy
+2 Twilight Shroud
+1 Not So Fast
+[runes]
+9 Calm Rune
+3 Mind Rune
+[battlefields]
+1 Ornn's Forge
+1 Seat of Power
+1 Veiled Temple
+[sideboard]
+2 Aspiring Engineer
+1 Charm
+3 Decree of Focus
+1 Defy
+2 Disarming Rake
+1 Hush
