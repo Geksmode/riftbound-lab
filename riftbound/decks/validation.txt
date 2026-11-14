@@ -27,6 +27,7 @@ jhin_ksdden_rq-hartford_29th: A VERIFIER cartes bannies aujourd'hui: ['Ekko, Rec
 jinx_htpiper151_rq-sydney_86th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck', "The Arena's Greatest", 'Brynhir Thundersong'] (liste antérieure au ban)
 kaisa_william-n_rq-los-angeles_9th: A VERIFIER cartes bannies aujourd'hui: ['Brynhir Thundersong'] (liste antérieure au ban)
 kennen_dsg-awesumrosum_rq-los-angeles_13th: A VERIFIER cartes bannies aujourd'hui: ['Rhasa the Sunderer'] (liste antérieure au ban)
+kennen_evansrhim_rc-stuttgart_1st: A VERIFIER cartes bannies aujourd'hui: ['Nocturne, Horrifying', 'Rhasa the Sunderer'] (liste antérieure au ban)
 khazix_cuoemrei_rq-los-angeles_20th: A VERIFIER cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)
 ksante_sigils_nexus-night-sacramento_52nd: A VERIFIER cartes bannies aujourd'hui: ['Dazzling Aurora'] (liste antérieure au ban)
 leblanc_aurazera_rebound-la_9th: A VERIFIER cartes bannies aujourd'hui: ['Baited Hook', 'Star Spring'] (liste antérieure au ban)
@@ -38,6 +39,7 @@ leblanc_zidenberg_ccs-sunday5_7th: A VERIFIER cartes bannies aujourd'hui: ['Bait
 leesin_terrythecactus_rq-vancouver_153rd: A VERIFIER cartes bannies aujourd'hui: ["Zhonya's Hourglass", 'Star Spring'] (liste antérieure au ban)
 leona_elle-xv_rq-sydney_140th: A VERIFIER cartes bannies aujourd'hui: ['Stellacorn Herder', "Zhonya's Hourglass", "The Arena's Greatest"] (liste antérieure au ban)
 lillia_duncan_rq-sydney_33rd: OK 
+lillia_lks10_rc-stuttgart_111th: OK 
 lucian_banrate-demon_rq-barcelona_25th: OK 
 lux_ctcg-relivia_rq-hartford_6th: A VERIFIER cartes bannies aujourd'hui: ['Ekko, Recurrent', "Aspirant's Climb"] (liste antérieure au ban)
 mel_ctg-alanzq_rq-barcelona_19th: A VERIFIER cartes bannies aujourd'hui: ['Stacked Deck'] (liste antérieure au ban)
@@ -45,6 +47,8 @@ miss-fortune_battle-cattle_rq-sydney_35th: A VERIFIER cartes bannies aujourd'hui
 mordekaiser_christian-mukai_showdown-sacramento_89th: OK 
 nasus_drinkmaker888_rq-barcelona_80th: OK 
 orianna_burrsir_showdown-orlando_59th: A VERIFIER cartes bannies aujourd'hui: ["Zhonya's Hourglass"] (liste antérieure au ban)
+orianna_catl-luscoluna_rc-stuttgart_67th: OK 
+ornn_eclipsefactor_rc-stuttgart_155th: OK 
 ornn_mice-themanland_rq-barcelona_1st: OK 
 poppy_rowanno1_rq-sydney_21st: A VERIFIER cartes bannies aujourd'hui: ['Dazzling Aurora', "Aspirant's Climb"] (liste antérieure au ban)
 pyke_royy_rebound-la_2nd: OK 
@@ -53,6 +57,7 @@ renata-glasc_purp_rq-singapore_311th: OK
 renekton_maskofmomentum_rq-singapore_384th: A VERIFIER cartes bannies aujourd'hui: ['Star Spring', 'Brynhir Thundersong'] (liste antérieure au ban)
 rengar_dsg-prismaticism_rq-los-angeles_1st: A VERIFIER cartes bannies aujourd'hui: ["Emperor's Dais", 'Star Spring', 'Brynhir Thundersong'] (liste antérieure au ban)
 riven_bo-su_showdown-sacramento_3rd: A VERIFIER cartes bannies aujourd'hui: ['Riven, Broken Blade', 'Stellacorn Herder', "Zhonya's Hourglass", "Emperor's Dais", 'Star Spring'] (liste antérieure au ban)
+riven_sonecon_rc-stuttgart_2nd: A VERIFIER cartes bannies aujourd'hui: ['Riven, Broken Blade', 'Stellacorn Herder', "Zhonya's Hourglass", "Emperor's Dais", 'Star Spring'] (liste antérieure au ban)
 rumble_catmeat_rq-sydney_250th: A VERIFIER cartes bannies aujourd'hui: ['Star Spring'] (liste antérieure au ban)
 seraphine_cheeserdude_showdown-orlando_190th: OK 
 sett_ctcg-collin-k_rq-utrecht_3rd: OK 

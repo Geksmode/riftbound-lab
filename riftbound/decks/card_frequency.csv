@@ -504,31 +504,40 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Kai'Sa, Daughter of the Void",Decree of Rage,ven-015,Spell,Fury,1,1,0,,100
 "Kai'Sa, Daughter of the Void",Icathian Rain,ogn-248,Spell,Fury|Mind,7,1,0,,100
 "Kai'Sa, Daughter of the Void",Pickpocket,sfd-074,Unit,Mind,3,1,0,,100
-"Kennen, Heart of the Tempest","Fizz, Trickster",sfd-140,Unit,Chaos,3,1,100,1.0,100
-"Kennen, Heart of the Tempest",Hard Bargain,sfd-136,Spell,Chaos,2,1,100,1.0,100
-"Kennen, Heart of the Tempest",Salvage,ogn-224,Spell,Order,2,1,100,1.0,100
-"Kennen, Heart of the Tempest",Star-Crossed,unl-128,Spell,Chaos,3,1,100,1.0,100
-"Kennen, Heart of the Tempest",Up from the Deep,ven-100,Spell,Chaos,3,1,100,1.0,100
-"Kennen, Heart of the Tempest",Carrion Dredger,unl-153,Unit,Order,2,1,100,1.0,0
-"Kennen, Heart of the Tempest","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,1,100,2.0,0
-"Kennen, Heart of the Tempest",Flash,ogs-011,Spell,Chaos,2,1,100,2.0,0
-"Kennen, Heart of the Tempest",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
-"Kennen, Heart of the Tempest","Kennen, Storm of Shuriken",ven-113,Unit,Chaos,3,1,100,1.0,0
-"Kennen, Heart of the Tempest",Last Rites,sfd-150,Gear,Chaos,3,1,100,2.0,0
-"Kennen, Heart of the Tempest",Lightning Rush,ven-156,Spell,Order|Chaos,1,1,100,3.0,0
-"Kennen, Heart of the Tempest",Rhasa the Sunderer,ogn-195,Unit,Chaos,10,1,100,3.0,0
-"Kennen, Heart of the Tempest",Ride The Wind,ogn-173,Spell,Chaos,2,1,100,2.0,0
-"Kennen, Heart of the Tempest",Seal of Discord,ogn-204,Gear,Chaos,0,1,100,3.0,0
-"Kennen, Heart of the Tempest",Shadow Order Disciple,ven-095,Unit,Chaos,2,1,100,3.0,0
-"Kennen, Heart of the Tempest",Switcheroo,sfd-145,Spell,Chaos,2,1,100,2.0,0
-"Kennen, Heart of the Tempest",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,1,100,3.0,0
-"Kennen, Heart of the Tempest",Tideturner,ogn-199,Unit,Chaos,2,1,100,1.0,0
-"Kennen, Heart of the Tempest",Tornado Warrior,ven-099,Unit,Chaos,3,1,100,2.0,0
-"Kennen, Heart of the Tempest",Traveling Merchant,ogn-185,Unit,Chaos,2,1,100,3.0,0
-"Kennen, Heart of the Tempest",Decree of Unity,ven-131,Spell,Order,2,1,0,,100
-"Kennen, Heart of the Tempest",Lacerate,ven-127,Spell,Order,2,1,0,,100
-"Kennen, Heart of the Tempest",Ravenbloom Prefect,ven-102,Unit,Chaos,3,1,0,,100
-"Kennen, Heart of the Tempest",Rebuke,ogn-172,Spell,Chaos,2,1,0,,100
+"Kennen, Heart of the Tempest","Fizz, Trickster",sfd-140,Unit,Chaos,3,2,100,1.0,100
+"Kennen, Heart of the Tempest",Hard Bargain,sfd-136,Spell,Chaos,2,2,100,1.0,50
+"Kennen, Heart of the Tempest",Ride The Wind,ogn-173,Spell,Chaos,2,2,100,1.5,50
+"Kennen, Heart of the Tempest",Star-Crossed,unl-128,Spell,Chaos,3,2,100,1.5,50
+"Kennen, Heart of the Tempest",Gust,ogn-169,Spell,Chaos,1,2,100,2.0,0
+"Kennen, Heart of the Tempest","Kennen, Storm of Shuriken",ven-113,Unit,Chaos,3,2,100,1.0,0
+"Kennen, Heart of the Tempest",Last Rites,sfd-150,Gear,Chaos,3,2,100,2.0,0
+"Kennen, Heart of the Tempest",Lightning Rush,ven-156,Spell,Order|Chaos,1,2,100,3.0,0
+"Kennen, Heart of the Tempest",Rhasa the Sunderer,ogn-195,Unit,Chaos,10,2,100,3.0,0
+"Kennen, Heart of the Tempest",Seal of Discord,ogn-204,Gear,Chaos,0,2,100,3.0,0
+"Kennen, Heart of the Tempest",Switcheroo,sfd-145,Spell,Chaos,2,2,100,2.0,0
+"Kennen, Heart of the Tempest",Tideturner,ogn-199,Unit,Chaos,2,2,100,1.0,0
+"Kennen, Heart of the Tempest",Traveling Merchant,ogn-185,Unit,Chaos,2,2,100,3.0,0
+"Kennen, Heart of the Tempest",An Offer You Can't Refuse,rad-101,Spell,Chaos,2,2,50,1.0,50
+"Kennen, Heart of the Tempest",Rebuke,ogn-172,Spell,Chaos,2,2,50,1.0,50
+"Kennen, Heart of the Tempest",Salvage,ogn-224,Spell,Order,2,2,50,1.0,50
+"Kennen, Heart of the Tempest",Up from the Deep,ven-100,Spell,Chaos,3,2,50,1.0,50
+"Kennen, Heart of the Tempest",Bedeviling Stranger,rad-107,Unit,Chaos,2,2,50,2.0,0
+"Kennen, Heart of the Tempest",Carrion Dredger,unl-153,Unit,Order,2,2,50,1.0,0
+"Kennen, Heart of the Tempest",Edge of Night,sfd-139,Gear,Chaos,3,2,50,2.0,0
+"Kennen, Heart of the Tempest","Ezreal, Prodigy",sfd-149,Unit,Chaos,3,2,50,2.0,0
+"Kennen, Heart of the Tempest",Flash,ogs-011,Spell,Chaos,2,2,50,2.0,0
+"Kennen, Heart of the Tempest",Hidden Blade,ogn-213,Spell,Order,2,2,50,1.0,0
+"Kennen, Heart of the Tempest","Nocturne, Horrifying",ogn-194,Unit,Chaos,4,2,50,3.0,0
+"Kennen, Heart of the Tempest",Reckless Innovator,rad-105,Unit,Chaos,3,2,50,2.0,0
+"Kennen, Heart of the Tempest",Shadow Order Disciple,ven-095,Unit,Chaos,2,2,50,3.0,0
+"Kennen, Heart of the Tempest",Tail-Cloaked Matriarch,ven-104,Unit,Chaos,4,2,50,3.0,0
+"Kennen, Heart of the Tempest",Tornado Warrior,ven-099,Unit,Chaos,3,2,50,2.0,0
+"Kennen, Heart of the Tempest",Trifarian Captain,rad-129,Unit,Order,2,2,50,3.0,0
+"Kennen, Heart of the Tempest",Decree of Unity,ven-131,Spell,Order,2,2,0,,100
+"Kennen, Heart of the Tempest",Lacerate,ven-127,Spell,Order,2,2,0,,100
+"Kennen, Heart of the Tempest",Ravenbloom Prefect,ven-102,Unit,Chaos,3,2,0,,100
+"Kennen, Heart of the Tempest",Abandon,unl-131,Spell,Chaos,2,2,0,,50
+"Kennen, Heart of the Tempest",The Good Stuff,rad-106,Gear,Chaos,3,2,0,,50
 "Kha'Zix, Voidreaver",Rampage,ven-083,Spell,Body,3,1,100,2.0,100
 "Kha'Zix, Voidreaver",Sabotage,ogn-156,Spell,Body,1,1,100,2.0,100
 "Kha'Zix, Voidreaver","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,1.0,0
@@ -632,24 +641,37 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Leona, Radiant Dawn","Ashe, Focused",unl-169,Unit,Order,5,1,0,,100
 "Leona, Radiant Dawn",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
 "Leona, Radiant Dawn",Not So Fast,sfd-045,Spell,Calm,2,1,0,,100
-"Lillia, Bashful Bloom",Charm,ogn-043,Spell,Calm,1,1,100,1.0,100
-"Lillia, Bashful Bloom",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
-"Lillia, Bashful Bloom",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Heart of Dark Ice,sfd-052,Gear,Calm,3,1,100,3.0,0
-"Lillia, Bashful Bloom","Lillia, Fae Fawn",unl-082,Unit,Mind,3,1,100,1.0,0
-"Lillia, Bashful Bloom",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Plundering Poro,sfd-069,Unit,Mind,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Smoke and Mirrors,unl-083,Spell,Mind,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Sprite Burst,unl-069,Spell,Mind,5,1,100,3.0,0
-"Lillia, Bashful Bloom",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
-"Lillia, Bashful Bloom",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
-"Lillia, Bashful Bloom",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,2.0,0
-"Lillia, Bashful Bloom",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
-"Lillia, Bashful Bloom",Unchecked Power,ogn-123,Spell,Mind,7,1,100,3.0,0
-"Lillia, Bashful Bloom",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
-"Lillia, Bashful Bloom",Falling Comet,ogn-085,Spell,Mind,5,1,0,,100
-"Lillia, Bashful Bloom",Lilting Lullaby,unl-190,Spell,Calm|Mind,2,1,0,,100
+"Lillia, Bashful Bloom",Charm,ogn-043,Spell,Calm,1,2,100,2.0,50
+"Lillia, Bashful Bloom",Defy,ogn-045,Spell,Calm,1,2,100,3.0,0
+"Lillia, Bashful Bloom",Discipline,ogn-058,Spell,Calm,2,2,100,3.0,0
+"Lillia, Bashful Bloom","Lillia, Fae Fawn",unl-082,Unit,Mind,3,2,100,1.0,0
+"Lillia, Bashful Bloom",Mask of Foresight,ogn-060,Gear,Calm,2,2,100,3.0,0
+"Lillia, Bashful Bloom",Ravenbloom Student,ogn-103,Unit,Mind,2,2,100,3.0,0
+"Lillia, Bashful Bloom",Smoke and Mirrors,unl-083,Spell,Mind,2,2,100,3.0,0
+"Lillia, Bashful Bloom",Sprite Burst,unl-069,Spell,Mind,5,2,100,3.0,0
+"Lillia, Bashful Bloom",Sprite Fountain,unl-078,Gear,Mind,2,2,100,3.0,0
+"Lillia, Bashful Bloom",Stupefy,ogn-095,Spell,Mind,1,2,100,3.0,0
+"Lillia, Bashful Bloom",Disarming Rake,sfd-032,Unit,Calm,3,2,50,1.0,100
+"Lillia, Bashful Bloom",Unchecked Power,ogn-123,Spell,Mind,7,2,50,3.0,50
+"Lillia, Bashful Bloom",Back Off,unl-042,Spell,Calm,3,2,50,1.0,0
+"Lillia, Bashful Bloom",Battle Preparations,rad-032,Spell,Calm,2,2,50,3.0,0
+"Lillia, Bashful Bloom",Blastcone Fae,ogn-097,Unit,Mind,2,2,50,1.0,0
+"Lillia, Bashful Bloom",Brutalizer,sfd-042,Gear,Calm,2,2,50,2.0,0
+"Lillia, Bashful Bloom",En Garde,ogn-046,Spell,Calm,1,2,50,2.0,0
+"Lillia, Bashful Bloom",Heart of Dark Ice,sfd-052,Gear,Calm,3,2,50,3.0,0
+"Lillia, Bashful Bloom",Lonely Poro,sfd-036,Unit,Calm,2,2,50,1.0,0
+"Lillia, Bashful Bloom",Plundering Poro,sfd-069,Unit,Mind,2,2,50,3.0,0
+"Lillia, Bashful Bloom",Smoke Screen,ogn-093,Spell,Mind,2,2,50,1.0,0
+"Lillia, Bashful Bloom",Tasty Faefolk,ogn-075,Unit,Calm,7,2,50,2.0,0
+"Lillia, Bashful Bloom",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,2,50,3.0,0
+"Lillia, Bashful Bloom","Akali, Silent",ven-038,Unit,Calm,4,2,0,,50
+"Lillia, Bashful Bloom",Decree of Insight,ven-061,Spell,Mind,1,2,0,,50
+"Lillia, Bashful Bloom",Falling Comet,ogn-085,Spell,Mind,5,2,0,,50
+"Lillia, Bashful Bloom",Lilting Lullaby,unl-190,Spell,Calm|Mind,2,2,0,,50
+"Lillia, Bashful Bloom",Not So Fast,sfd-045,Spell,Calm,2,2,0,,50
+"Lillia, Bashful Bloom",Pickpocket,sfd-074,Unit,Mind,3,2,0,,50
+"Lillia, Bashful Bloom",Stalwart Poro,ogn-052,Unit,Calm,2,2,0,,50
+"Lillia, Bashful Bloom",Twilight Shroud,ven-031,Spell,Calm,1,2,0,,50
 "Lucian, Purifier","Lucian, Merciless",sfd-113,Unit,Body,3,1,200,1.0,0
 "Lucian, Purifier",Falling Star,ogn-029,Spell,Fury,2,1,100,2.0,100
 "Lucian, Purifier",Blighted Battleaxe,unl-019,Gear,Fury,4,1,100,2.0,0
@@ -816,53 +838,67 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Nasus, Curator of the Sands",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
 "Nasus, Curator of the Sands",Tasty Faefolk,ogn-075,Unit,Calm,7,1,100,1.0,0
 "Nasus, Curator of the Sands",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,3.0,0
-"Orianna, Lady of Clockwork",Not So Fast,sfd-045,Spell,Calm,2,1,100,1.0,100
-"Orianna, Lady of Clockwork",Astral Heron,ven-044,Unit,Calm,7,1,100,3.0,0
-"Orianna, Lady of Clockwork",Back Off,unl-042,Spell,Calm,3,1,100,1.0,0
-"Orianna, Lady of Clockwork",Bellows Breath,sfd-080,Spell,Mind,1,1,100,2.0,0
-"Orianna, Lady of Clockwork","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,100,2.0,0
-"Orianna, Lady of Clockwork",Cloth Armor,sfd-064,Gear,Mind,1,1,100,2.0,0
-"Orianna, Lady of Clockwork",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
-"Orianna, Lady of Clockwork",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
-"Orianna, Lady of Clockwork",Eclipse,unl-063,Spell,Mind,3,1,100,2.0,0
-"Orianna, Lady of Clockwork",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,3.0,0
-"Orianna, Lady of Clockwork","Orianna, Exquisite",rad-042,Unit,Calm,3,1,100,1.0,0
-"Orianna, Lady of Clockwork",Ravenbloom Student,ogn-103,Unit,Mind,2,1,100,3.0,0
-"Orianna, Lady of Clockwork",Sterak's Gage,sfd-056,Gear,Calm,3,1,100,1.0,0
-"Orianna, Lady of Clockwork",Stupefy,ogn-095,Spell,Mind,1,1,100,3.0,0
-"Orianna, Lady of Clockwork",Temporal Breach,ven-066,Spell,Mind,2,1,100,2.0,0
-"Orianna, Lady of Clockwork",The Ball,rad-146,Gear,Calm|Mind,5,1,100,3.0,0
-"Orianna, Lady of Clockwork",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,1,100,2.0,0
-"Orianna, Lady of Clockwork",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
-"Orianna, Lady of Clockwork",Charm,ogn-043,Spell,Calm,1,1,0,,100
-"Orianna, Lady of Clockwork",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
-"Orianna, Lady of Clockwork",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
-"Orianna, Lady of Clockwork",Singularity,ogn-105,Spell,Mind,6,1,0,,100
-"Orianna, Lady of Clockwork",Tomb-Raider Barbara,ven-037,Unit,Calm,4,1,0,,100
-"Orianna, Lady of Clockwork",Unchecked Power,ogn-123,Spell,Mind,7,1,0,,100
-"Ornn, Fire Below the Mountain",Guardian Angel,sfd-051,Gear,Calm,2,1,100,1.0,100
-"Ornn, Fire Below the Mountain",Aspiring Engineer,sfd-061,Unit,Mind,3,1,100,2.0,0
-"Ornn, Fire Below the Mountain",Brutalizer,sfd-042,Gear,Calm,2,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Charm,ogn-043,Spell,Calm,1,1,100,2.0,0
-"Ornn, Fire Below the Mountain",Clockwork Keeper,ogn-044,Unit,Calm,2,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Cloth Armor,sfd-064,Gear,Mind,1,1,100,1.0,0
-"Ornn, Fire Below the Mountain",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Helm of Suppression,ven-045,Gear,Calm,4,1,100,1.0,0
-"Ornn, Fire Below the Mountain",Lecturing Yordle,ogn-087,Unit,Mind,3,1,100,1.0,0
-"Ornn, Fire Below the Mountain",Mask of Foresight,ogn-060,Gear,Calm,2,1,100,1.0,0
-"Ornn, Fire Below the Mountain","Ornn, Blacksmith",sfd-058,Unit,Calm,5,1,100,1.0,0
-"Ornn, Fire Below the Mountain",Patched Porobot,ven-058,Unit,Mind,2,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Pit Crew,ogn-091,Unit,Mind,3,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Poro Snax,sfd-046,Gear,Calm,1,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Scuttle Crab,unl-053,Unit,Calm,2,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Seal of Focus,ogn-081,Gear,Calm,0,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Sprite Fountain,unl-078,Gear,Mind,2,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Sterak's Gage,sfd-056,Gear,Calm,3,1,100,3.0,0
-"Ornn, Fire Below the Mountain",Decree of Focus,ven-040,Spell,Calm,1,1,0,,100
-"Ornn, Fire Below the Mountain",Decree of Insight,ven-061,Spell,Mind,1,1,0,,100
-"Ornn, Fire Below the Mountain",Disarming Rake,sfd-032,Unit,Calm,3,1,0,,100
-"Ornn, Fire Below the Mountain",Not So Fast,sfd-045,Spell,Calm,2,1,0,,100
-"Ornn, Fire Below the Mountain",Pickpocket,sfd-074,Unit,Mind,3,1,0,,100
+"Orianna, Lady of Clockwork",Cloth Armor,sfd-064,Gear,Mind,1,2,100,2.5,0
+"Orianna, Lady of Clockwork",Defy,ogn-045,Spell,Calm,1,2,100,3.0,0
+"Orianna, Lady of Clockwork",Discipline,ogn-058,Spell,Calm,2,2,100,3.0,0
+"Orianna, Lady of Clockwork",Mask of Foresight,ogn-060,Gear,Calm,2,2,100,3.0,0
+"Orianna, Lady of Clockwork","Orianna, Exquisite",rad-042,Unit,Calm,3,2,100,1.0,0
+"Orianna, Lady of Clockwork",Sterak's Gage,sfd-056,Gear,Calm,3,2,100,1.5,0
+"Orianna, Lady of Clockwork",Not So Fast,sfd-045,Spell,Calm,2,2,50,1.0,100
+"Orianna, Lady of Clockwork",Card Sharp,sfd-081,Unit,Mind,3,2,50,1.0,50
+"Orianna, Lady of Clockwork",Charm,ogn-043,Spell,Calm,1,2,50,3.0,50
+"Orianna, Lady of Clockwork",Singularity,ogn-105,Spell,Mind,6,2,50,1.0,50
+"Orianna, Lady of Clockwork",Astral Heron,ven-044,Unit,Calm,7,2,50,3.0,0
+"Orianna, Lady of Clockwork",Back Off,unl-042,Spell,Calm,3,2,50,1.0,0
+"Orianna, Lady of Clockwork",Bellows Breath,sfd-080,Spell,Mind,1,2,50,2.0,0
+"Orianna, Lady of Clockwork","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,2,50,2.0,0
+"Orianna, Lady of Clockwork",Blossoming Dreamroot,rad-024,Gear,Calm,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Brutalizer,sfd-042,Gear,Calm,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Eclipse,unl-063,Spell,Mind,3,2,50,2.0,0
+"Orianna, Lady of Clockwork",Patched Porobot,ven-058,Unit,Mind,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Pit Crew,ogn-091,Unit,Mind,3,2,50,3.0,0
+"Orianna, Lady of Clockwork",Ravenbloom Student,ogn-103,Unit,Mind,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Scuttle Crab,unl-053,Unit,Calm,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Sprite Burst,unl-069,Spell,Mind,5,2,50,2.0,0
+"Orianna, Lady of Clockwork",Sprite Fountain,unl-078,Gear,Mind,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Stupefy,ogn-095,Spell,Mind,1,2,50,3.0,0
+"Orianna, Lady of Clockwork",Temporal Breach,ven-066,Spell,Mind,2,2,50,2.0,0
+"Orianna, Lady of Clockwork",The Ball,rad-146,Gear,Calm|Mind,5,2,50,3.0,0
+"Orianna, Lady of Clockwork",Thousand-Tailed Watcher,ogn-116,Unit,Mind,7,2,50,2.0,0
+"Orianna, Lady of Clockwork",Zhonya's Hourglass,ogn-077,Gear,Calm,2,2,50,3.0,0
+"Orianna, Lady of Clockwork",Decree of Focus,ven-040,Spell,Calm,1,2,0,,100
+"Orianna, Lady of Clockwork",Decree of Insight,ven-061,Spell,Mind,1,2,0,,100
+"Orianna, Lady of Clockwork",Disarming Rake,sfd-032,Unit,Calm,3,2,0,,50
+"Orianna, Lady of Clockwork",Hush,rad-041,Spell,Calm,1,2,0,,50
+"Orianna, Lady of Clockwork",Tomb-Raider Barbara,ven-037,Unit,Calm,4,2,0,,50
+"Orianna, Lady of Clockwork",Twilight Shroud,ven-031,Spell,Calm,1,2,0,,50
+"Orianna, Lady of Clockwork",Unchecked Power,ogn-123,Spell,Mind,7,2,0,,50
+"Ornn, Fire Below the Mountain",Charm,ogn-043,Spell,Calm,1,2,100,2.0,50
+"Ornn, Fire Below the Mountain",Defy,ogn-045,Spell,Calm,1,2,100,2.5,50
+"Ornn, Fire Below the Mountain",Guardian Angel,sfd-051,Gear,Calm,2,2,100,1.0,50
+"Ornn, Fire Below the Mountain",Brutalizer,sfd-042,Gear,Calm,2,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Clockwork Keeper,ogn-044,Unit,Calm,2,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Cloth Armor,sfd-064,Gear,Mind,1,2,100,1.0,0
+"Ornn, Fire Below the Mountain",Mask of Foresight,ogn-060,Gear,Calm,2,2,100,1.0,0
+"Ornn, Fire Below the Mountain","Ornn, Blacksmith",sfd-058,Unit,Calm,5,2,100,1.0,0
+"Ornn, Fire Below the Mountain",Patched Porobot,ven-058,Unit,Mind,2,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Pit Crew,ogn-091,Unit,Mind,3,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Poro Snax,sfd-046,Gear,Calm,1,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Scuttle Crab,unl-053,Unit,Calm,2,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Seal of Focus,ogn-081,Gear,Calm,0,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Sprite Fountain,unl-078,Gear,Mind,2,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Sterak's Gage,sfd-056,Gear,Calm,3,2,100,3.0,0
+"Ornn, Fire Below the Mountain",Aspiring Engineer,sfd-061,Unit,Mind,3,2,50,2.0,50
+"Ornn, Fire Below the Mountain",Not So Fast,sfd-045,Spell,Calm,2,2,50,1.0,50
+"Ornn, Fire Below the Mountain",Helm of Suppression,ven-045,Gear,Calm,4,2,50,1.0,0
+"Ornn, Fire Below the Mountain",Lecturing Yordle,ogn-087,Unit,Mind,3,2,50,1.0,0
+"Ornn, Fire Below the Mountain","Orianna, Exquisite",rad-042,Unit,Calm,3,2,50,2.0,0
+"Ornn, Fire Below the Mountain",Twilight Shroud,ven-031,Spell,Calm,1,2,50,2.0,0
+"Ornn, Fire Below the Mountain",Decree of Focus,ven-040,Spell,Calm,1,2,0,,100
+"Ornn, Fire Below the Mountain",Disarming Rake,sfd-032,Unit,Calm,3,2,0,,100
+"Ornn, Fire Below the Mountain",Decree of Insight,ven-061,Spell,Mind,1,2,0,,50
+"Ornn, Fire Below the Mountain",Hush,rad-041,Spell,Calm,1,2,0,,50
+"Ornn, Fire Below the Mountain",Pickpocket,sfd-074,Unit,Mind,3,2,0,,50
 "Poppy, Keeper of the Hammer",Blood Money,sfd-162,Spell,Order,2,1,100,2.0,100
 "Poppy, Keeper of the Hammer",Sabotage,ogn-156,Spell,Body,1,1,100,2.0,100
 "Poppy, Keeper of the Hammer",Catalyst of Aeons,ogn-138,Spell,Body,4,1,100,3.0,0
@@ -997,23 +1033,35 @@ legend,card,card_id,type,domain,energy_cost,decks,main_pct,avg_copies_when_playe
 "Rengar, Pridestalker",Brynhir Thundersong,ogn-026,Unit,Fury,6,1,0,,100
 "Rengar, Pridestalker",Decree of Strength,ven-085,Spell,Body,1,1,0,,100
 "Rengar, Pridestalker",Noxian Demolitionist,ven-080,Unit,Body,2,1,0,,100
-"Riven, The Exile",Astral Heron,ven-044,Unit,Calm,7,1,100,3.0,0
-"Riven, The Exile",Baron Nashor,unl-147,Unit,Chaos,10,1,100,1.0,0
-"Riven, The Exile",Bedeviling Stranger,rad-107,Unit,Chaos,2,1,100,3.0,0
-"Riven, The Exile",Blade of the Exile,rad-150,Gear,Calm|Chaos,3,1,100,3.0,0
-"Riven, The Exile","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,1,100,2.0,0
-"Riven, The Exile",Defy,ogn-045,Spell,Calm,1,1,100,3.0,0
-"Riven, The Exile",Discipline,ogn-058,Spell,Calm,2,1,100,3.0,0
-"Riven, The Exile","Evelynn, Entrancing",unl-141,Unit,Chaos,2,1,100,2.0,0
-"Riven, The Exile",Gust,ogn-169,Spell,Chaos,1,1,100,2.0,0
-"Riven, The Exile",Ki Burst,rad-028,Spell,Calm,1,1,100,1.0,0
-"Riven, The Exile",Rebuke,ogn-172,Spell,Chaos,2,1,100,2.0,0
-"Riven, The Exile",Reckless Innovator,rad-105,Unit,Chaos,3,1,100,3.0,0
-"Riven, The Exile","Riven, Broken Blade",rad-043,Unit,Calm,4,1,100,1.0,0
-"Riven, The Exile",Star-Crossed,unl-128,Spell,Chaos,3,1,100,2.0,0
-"Riven, The Exile",Stellacorn Herder,sfd-048,Unit,Calm,4,1,100,3.0,0
-"Riven, The Exile",Tideturner,ogn-199,Unit,Chaos,2,1,100,3.0,0
-"Riven, The Exile",Zhonya's Hourglass,ogn-077,Gear,Calm,2,1,100,3.0,0
+"Riven, The Exile",Rebuke,ogn-172,Spell,Chaos,2,2,100,1.5,50
+"Riven, The Exile",Reckless Innovator,rad-105,Unit,Chaos,3,2,100,2.5,50
+"Riven, The Exile",Astral Heron,ven-044,Unit,Calm,7,2,100,3.0,0
+"Riven, The Exile",Baron Nashor,unl-147,Unit,Chaos,10,2,100,1.0,0
+"Riven, The Exile",Bedeviling Stranger,rad-107,Unit,Chaos,2,2,100,2.5,0
+"Riven, The Exile",Blade of the Exile,rad-150,Gear,Calm|Chaos,3,2,100,3.0,0
+"Riven, The Exile","Blitzcrank, Impassive",ogn-067,Unit,Calm,5,2,100,2.0,0
+"Riven, The Exile",Defy,ogn-045,Spell,Calm,1,2,100,2.5,0
+"Riven, The Exile",Discipline,ogn-058,Spell,Calm,2,2,100,3.0,0
+"Riven, The Exile",Gust,ogn-169,Spell,Chaos,1,2,100,2.0,0
+"Riven, The Exile","Riven, Broken Blade",rad-043,Unit,Calm,4,2,100,1.0,0
+"Riven, The Exile",Star-Crossed,unl-128,Spell,Chaos,3,2,100,1.5,0
+"Riven, The Exile",Stellacorn Herder,sfd-048,Unit,Calm,4,2,100,3.0,0
+"Riven, The Exile",Tideturner,ogn-199,Unit,Chaos,2,2,100,2.5,0
+"Riven, The Exile",Zhonya's Hourglass,ogn-077,Gear,Calm,2,2,100,3.0,0
+"Riven, The Exile",Battle Preparations,rad-032,Spell,Calm,2,2,50,1.0,0
+"Riven, The Exile",En Garde,ogn-046,Spell,Calm,1,2,50,1.0,0
+"Riven, The Exile","Evelynn, Entrancing",unl-141,Unit,Chaos,2,2,50,2.0,0
+"Riven, The Exile",Ki Burst,rad-028,Spell,Calm,1,2,50,1.0,0
+"Riven, The Exile",Not So Fast,sfd-045,Spell,Calm,2,2,50,1.0,0
+"Riven, The Exile",Scuttle Crab,unl-053,Unit,Calm,2,2,50,2.0,0
+"Riven, The Exile",Switcheroo,sfd-145,Spell,Chaos,2,2,50,2.0,0
+"Riven, The Exile",Traveling Merchant,ogn-185,Unit,Chaos,2,2,50,2.0,0
+"Riven, The Exile",Abandon,unl-131,Spell,Chaos,2,2,0,,50
+"Riven, The Exile",An Offer You Can't Refuse,rad-101,Spell,Chaos,2,2,0,,50
+"Riven, The Exile",Decree of Focus,ven-040,Spell,Calm,1,2,0,,50
+"Riven, The Exile",Hush,rad-041,Spell,Calm,1,2,0,,50
+"Riven, The Exile",Ravenbloom Prefect,ven-102,Unit,Chaos,3,2,0,,50
+"Riven, The Exile","Vex, Apathetic",unl-150,Unit,Chaos,4,2,0,,50
 "Rumble, Mechanized Menace","Rumble, Hotheaded",sfd-026,Unit,Fury,4,1,200,1.5,0
 "Rumble, Mechanized Menace",Singularity,ogn-105,Spell,Mind,6,1,100,1.0,100
 "Rumble, Mechanized Menace",Time Warp,ogn-122,Spell,Mind,10,1,100,1.0,100

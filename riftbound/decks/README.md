@@ -86,3 +86,22 @@ bloqués) d'une vraie liste de tournoi sans aucune carte bannie, sans retoucher 
 - Pistes : listes officielles « Best Ofs for the European Championship » (playriftbound.com, une par légende) ; Viktor Calvin Jin
   (Sacramento 5e, a priori propre, liste incomplète dans les résumés) ; Rumble Evan M Nouchi ; listes « Radiance Banned » des
   tournois d'après le 2026-11-23. Riven : champions non bannis possibles Riven, Shattered et Riven, Deserter.
+
+### Best-Of du Regional Championship Europe, Stuttgart (2026-11-06 à 08, 315 joueurs), demandées le 2026-11-14
+
+Riot a publié 16 Best-Of (une par légende, choisies par Riot) et le Top 8. Pages (playriftbound.com, riftbound.zone, riftdecks,
+riftwatch, runesandrift) bloquées : listes reconstituées par résumés WebSearch, doutes dans `# note:`. Elles datent d'avant le ban
+du 2026-11-23 : les cartes bannies sont acceptées et signalées ⚠.
+
+| Légende | Liste | Bannies | Deck par défaut |
+|---|---|---|---|
+| Kennen | Evansrhim, 1er | Nocturne, Horrifying ; Rhasa the Sunderer | oui (remplace RQ LA 13e) |
+| Riven | Sonecon, 2e | Riven, Broken Blade (champion), Stellacorn Herder, Zhonya's, Emperor's Dais, Star Spring | oui (remplace Sacramento 3e) |
+| Orianna | CATL LuscoLuna, 67e | aucune | oui (remplace Orlando 59e, qui avait Zhonya's) |
+| Ornn | EclipseFactor, 155e | aucune | non (liste propre mieux classée déjà là) |
+| Lillia | Lks10, 111e | aucune | non (idem) |
+
+Non reconstituées (main incomplet ou contradictoire dans les résumés) : Jayce (Pjax91), LeBlanc (keyistyq), Nasus (drinkmaker888),
+Akali (Employee 427), Rengar (KZG Rowan), Kha'Zix (ASC JUN, 2 cartes manquantes), Mordekaiser (QCK Sanan), Vex (JustSR),
+Diana (CatL Xemnon), Poppy (Rowanno1), Evelynn (Neizzer). Débloquer : autoriser playriftbound.com dans le réseau de la session, ou
+coller les listes. Plans (`plans_legendes.py`) : Jhin et Kennen réduits aux cartes du nouveau deck.

@@ -132,7 +132,9 @@ LEG = {
         "Ramp / pioche : mettre une grande menace en jeu tôt pour tenir un battlefield (Dazzling Aurora, Promising Future) ; "
         "pas de combos d'équipement (le retrait d'équipement est partout)."),
     "Jhin, Virtuoso": L(
-        "T", "combo", ["Seal of Insight", "Energy Conduit", "Promising Future", "Time Warp"], ["Energy Conduit"], "lu",
+        # 2026-11-14 : deck par défaut changé (Benji302080, sans carte bannie) ; seules les cartes du guide présentes
+        # dans ce deck sont gardées (règle du module) : Seal of Insight, Energy Conduit, Promising Future n'y sont plus.
+        "T", "combo", ["Time Warp"], [], "lu",
         GG + "jhin-virtuoso-guide/", "2026-07-17",
         "Combo : tours 1 à 4, tenir, gagner des runes (les sorts de 4 et plus en donnent avec la légende), piocher, "
         "retirer des unités, sans surengager ; concentrer le removal sur un battlefield ; Time Warp au bon tour. Ignorer "
@@ -148,7 +150,8 @@ LEG = {
         "Midrange proactif : coller des unités au plateau, puis sorts et pioche pour prendre les battlefields ; la "
         "légende ignore un coût de puissance par tour, surtout utile une fois une unité posée (removal = conquête)."),
     "Kennen, Heart of the Tempest": L(
-        "T", "controle", ["Traveling Merchant", "Shadow Order Disciple", "Lightning Rush"],
+        # 2026-11-14 : deck par défaut = Best-Of de Stuttgart (Evansrhim, 1er) ; Shadow Order Disciple n'y est plus.
+        "T", "controle", ["Traveling Merchant", "Lightning Rush"],
         ["Rhasa the Sunderer", "Kennen, Storm of Shuriken"], "lu",
         GG + "playing-building-kennen-in-the-post-ban-metagame/", "2026-10-07",
         "Midrange / contrôle : respecter le début adverse, contrôler la vitesse du score, remplir la défausse pour un "

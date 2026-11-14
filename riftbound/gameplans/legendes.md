@@ -31,7 +31,7 @@ Ce que l'IA en fait : `axe` C (conquérant : valorise la might sur les battlefie
 
 ## Ambessa, Matriarch of War
 - Source : [riftbound.gg](https://riftbound.gg/ambessa-matriarch-of-war-guide/) (maj 2026-08-14) ; confiance : guide lu en entier.
-- Deck par défaut : `ambessa_tss-riftboundtee_rq-la_201st` ; champion Ambessa, The Wolf ; courbe 1:4, 2:15, 3:11, 4:4, 5:5.
+- Deck par défaut : `ambessa_kyouya_rq-barcelona_345th` ; champion Ambessa, The Wolf ; courbe 1:5, 2:17, 3:11, 4:2, 5:4.
 - Plan codé : axe C, style midrange ; garde : Legion Marauder, Irresistible Faefolk ; clés : Legion Marauder, Ambessa, The Wolf.
 - Résumé : Plateau : prendre le plateau tôt et forcer l'adversaire à défendre ; la légende prépare une unité (Empower) pour marquer ; removal en base. Légende faible en partie longue : recycler les runes sans hésiter en fin de partie.
 
@@ -109,8 +109,8 @@ Ce que l'IA en fait : `axe` C (conquérant : valorise la might sur les battlefie
 
 ## Jhin, Virtuoso
 - Source : [riftbound.gg](https://riftbound.gg/jhin-virtuoso-guide/) (maj 2026-07-17) ; confiance : guide lu en entier.
-- Deck par défaut : `jhin_ksdden_rq-hartford_29th` ; champion Jhin, Meticulous Killer ; courbe 0:3, 2:4, 3:4, 4:11, 5:8, 6:6, 7+:3.
-- Plan codé : axe T, style combo ; garde : Seal of Insight, Energy Conduit, Promising Future, Time Warp ; clés : Energy Conduit.
+- Deck par défaut : `jhin_benji302080_showdown-sacramento_27th` ; champion Jhin, Meticulous Killer ; courbe 1:4, 2:9, 4:14, 5:2, 6:5, 7+:5.
+- Plan codé : axe T, style combo ; garde : Time Warp ; clés : .
 - Résumé : Combo : tours 1 à 4, tenir, gagner des runes (les sorts de 4 et plus en donnent avec la légende), piocher, retirer des unités, sans surengager ; concentrer le removal sur un battlefield ; Time Warp au bon tour. Ignorer le score adverse tant qu'il n'approche pas 8.
 
 ## Jinx, Loose Cannon
@@ -127,8 +127,8 @@ Ce que l'IA en fait : `axe` C (conquérant : valorise la might sur les battlefie
 
 ## Kennen, Heart of the Tempest
 - Source : [riftbound.gg](https://riftbound.gg/playing-building-kennen-in-the-post-ban-metagame/) (maj 2026-10-07) ; confiance : guide lu en entier.
-- Deck par défaut : `kennen_dsg-awesumrosum_rq-los-angeles_13th` ; champion Kennen, Storm of Shuriken ; courbe 0:3, 1:5, 2:16, 3:9, 4:3, 7+:3.
-- Plan codé : axe T, style controle ; garde : Traveling Merchant, Shadow Order Disciple, Lightning Rush ; clés : Rhasa the Sunderer, Kennen, Storm of Shuriken.
+- Deck par défaut : `kennen_evansrhim_rc-stuttgart_1st` ; champion Kennen, Storm of Shuriken ; courbe 0:3, 1:5, 2:16, 3:9, 4:3, 7+:3.
+- Plan codé : axe T, style controle ; garde : Traveling Merchant, Lightning Rush ; clés : Rhasa the Sunderer, Kennen, Storm of Shuriken.
 - Résumé : Midrange / contrôle : respecter le début adverse, contrôler la vitesse du score, remplir la défausse pour un gros tour (Rhasa the Sunderer) ; ne pas faire la course. Mauvais contre Rengar et Master Yi.
 
 ## Kha'Zix, Voidreaver

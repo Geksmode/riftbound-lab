@@ -385,3 +385,7 @@ Demande de l'utilisateur (capture d'une decklist en images) : bouton « Liste / 
 ## [2026-11-14] ingest | Ban list du 2026-11-23
 10 cartes bannies ajoutées (base de cartes, résumé des règles de tournoi). 39 decks par défaut touchés ; seules Jhin et Ambessa ont une
 liste de tournoi propre trouvée, 37 restent signalées ⚠ (`riftbound/decks/README.md`, section « Ban list du 2026-11-23 »).
+
+## [2026-11-14] ingest | Best-Of de Stuttgart
+5 Best-Of sur 16 reconstituées (Kennen, Riven, Orianna, Ornn, Lillia) ; nouveaux decks par défaut Kennen, Riven, Orianna, Jhin,
+Ambessa. 36 decks par défaut sur 58 ont encore une carte bannie (`riftbound/decks/README.md`).
