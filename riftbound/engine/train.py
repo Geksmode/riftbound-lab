@@ -8,7 +8,7 @@ réponse (le moteur est déterministe : mêmes compteurs, mêmes générateurs a
 
 API (renvoie du JSON) : new(seed, bf, first, level) ; step() ; act(i) ; answer(x) ; hint().
   python3 train.py  -> partie de test où l'humain est remplacé par des choix au hasard."""
-import copy, json, random, itertools, re
+import copy, json, random, itertools
 import actions as _act
 import game as _game
 from game import Game, Obj, Item, is_bf
@@ -468,12 +468,6 @@ def _place(k):
     return int(p) if p else 999
 
 
-def _date(k):
-    """Date de la liste en AAAAMMJJ (jour ou mois manquant = 00), 0 si illisible."""
-    m = re.match(r"(\d{4})(?:-(\d\d))?(?:-(\d\d))?", str(DECKS[k].get("date") or ""))
-    return int(m.group(1) + (m.group(2) or "00") + (m.group(3) or "00")) if m else 0
-
-
 def _banned(d):
     """Cartes du deck bannies en Standard depuis la liste (ex. listes Best-Of d'Unleashed) : jouables, signalées."""
     return sorted({n for n in [d["legend"], d.get("champion")] + d["main"] + d.get("sideboard", []) + d["battlefields"]
@@ -484,16 +478,14 @@ def default_decks():
     """Deck par défaut de l'IA pour chaque légende (menu de sélection) : parmi les listes de tournoi de decks.json
     jouables par le moteur (validate sans erreur : construction 103, sideboard 601.1.c, cartes modélisées), celles sans
     carte bannie d'abord, puis avec sideboard (le même deck sert en BO1 et en BO3), puis le meilleur classement. Une
-    légende dont toutes les listes ont une carte bannie depuis garde la plus récente (2026-11-14 : Best-Of de Stuttgart,
-    avant le ban du 2026-11-23, plutôt qu'une liste Unleashed mieux classée), signalée. {légende: clé de decks.json}."""
+    légende dont toutes les listes ont une carte bannie depuis (Best-Of d'Unleashed) garde la meilleure, signalée.
+    {légende: clé de decks.json}."""
     best = {}
     for k in sorted(DECKS):
         d = load(k)
         if [e for e in validate(d) if not e.startswith("⚠")]:
             continue
-        ban = 1 if _banned(d) else 0
-        recent = -_date(k) if ban else 0
-        rank = (ban, recent, 0 if d["sideboard"] else 1, _place(k), k)
+        rank = (1 if _banned(d) else 0, 0 if d["sideboard"] else 1, _place(k), k)
         if d["legend"] not in best or rank < best[d["legend"]][0]:
             best[d["legend"]] = (rank, k)
     return {lg: v[1] for lg, v in sorted(best.items())}
