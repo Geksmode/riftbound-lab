@@ -19,3 +19,10 @@ OLD engine version (s004-s015, tempo AI + LeBlanc "réel"), opponent leblanc_gya
 NEW engine (s016+, engine 014259caa8, rune rules of 2026-10-06: recycled rune exhausts first + floating energy):
 - s016-s018 pooled (s018 on the refactored engine of 2026-10-07, outcomes verified identical): plan vs none +13.0 ± 2.4, aggro −7.3 ± 2.2, Void Gate −9.3 ± 2.2, Forgotten Monument −9.0 ± 3.2 (one block), Windswept +3.4 ± 1.3 — all old advice holds. Going first +4.1 ± 2.9 unsure. REF 47.6%.
 - s019 planned: LeBlanc plan Hook tempo − Deathknell, G2 − stock.
+
+2026-11-15 — ban du 2026-11-23 (Stellacorn Herder, Zhonya's Hourglass) : candidats par lecture des cartes, NON mesurés.
+Rôles perdus : Stellacorn = pioche à chaque déplacement (légende Akali, Shuriken Flip) ; Zhonya = sauver une unité de la mort
+(recall), caché pour 0 énergie. Pistes : à 4-5 → Akali, Silent (5/6 sideboards Akali), Pakaa Protector (pioche au déplacement
+si unité, ~47 % ; sinon +2 might), Scuttle Crab (pioche en jouant, 5/6 mains Akali) ; protection → Unlicensed Armory (seul
+« recall au lieu de mourir » non banni, coûte une défausse + 1 fury), Twilight Shroud, +1 Not So Fast, +1 Block, Spirit's Refuge.
+Expérience prête : `riftbound/engine/exp_akali_ban.py` (arrêtée à la demande de l'utilisateur avant résultat).
