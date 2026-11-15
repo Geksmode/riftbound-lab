@@ -4,6 +4,7 @@
 Demande de l'utilisateur (2026-11-15) : 10 candidats par carte, puis le meilleur en jouant les parties.
   python3 exp_akali_ban.py s1 <parties>   étape 1 : 10 candidats S, Z remplacée par le bouche-trou FILL_Z (graines 710000+)
   python3 exp_akali_ban.py s2 <parties>   étape 2 : meilleur S de l'étape 1 + 10 candidats Z (graines 720000+)
+  python3 exp_akali_ban.py temoin <parties>  témoin de s3 (2 meilleurs S, Zhonya -> +2 Not So Fast +1 Block)
   python3 exp_akali_ban.py s3 <parties>   étape 3 : 2 meilleurs S x 2 meilleurs Z, graines NEUVES (730000+)
   python3 exp_akali_ban.py rapport        tableau : taux de victoire et écart apparié au meilleur de chaque étape
 Résultats : results_akali_ban.json. Adversaire : LeBlanc IQ#5 tel quel (garde Baited Hook et Star Spring, bannis aussi :
@@ -97,3 +98,6 @@ if __name__ == "__main__":
         zs = [r["z"] for r in ranked("s2")[:2]]
         run("s3", [(f"S={s} | Z={z}", s, z) for s in ss for z in zs if not (s == z == "Scuttle Crab")],
             int(ARGS[1]))
+    elif st == "temoin":   # témoin sur les graines de s3 : sans 3e carte ajoutée pour Zhonya (+2 Not So Fast +1 Block)
+        ss = [r["s"] for r in ranked("s1")[:2]]
+        run("s3", [(f"S={s} | Z={FILL_Z}", s, FILL_Z) for s in ss], int(ARGS[1]))

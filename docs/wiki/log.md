@@ -389,3 +389,7 @@ liste de tournoi propre trouvée, 37 restent signalées ⚠ (`riftbound/decks/RE
 ## [2026-11-14] ingest | Best-Of de Stuttgart
 5 Best-Of sur 16 reconstituées (Kennen, Riven, Orianna, Ornn, Lillia) ; nouveaux decks par défaut Kennen, Riven, Orianna, Jhin,
 Ambessa. 36 decks par défaut sur 58 ont encore une carte bannie (`riftbound/decks/README.md`).
+
+## [2026-11-15] ingest | Akali Gorica : remplaçants de Stellacorn et Zhonya mesurés
+`exp_akali_ban.py` (10 candidats par carte, 3 étapes + témoin sur graines neuves) : Poro ou Forerunner, Crab ou Stoic Ferryman, vers 41 % ± 2,2 contre LeBlanc IQ#5 ; finalistes indiscernables. Détail : `docs/memoire/akali-gorica-heron.md`.
+

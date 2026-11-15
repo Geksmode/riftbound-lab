@@ -25,9 +25,28 @@ Rôles perdus : Stellacorn = pioche à chaque déplacement (légende Akali, Shur
 (recall), caché pour 0 énergie. Pistes : à 4-5 → Akali, Silent (5/6 sideboards Akali), Pakaa Protector (pioche au déplacement
 si unité, ~47 % ; sinon +2 might), Scuttle Crab (pioche en jouant, 5/6 mains Akali) ; protection → Unlicensed Armory (seul
 « recall au lieu de mourir » non banni, coûte une défausse + 1 fury), Twilight Shroud, +1 Not So Fast, +1 Block, Spirit's Refuge.
-Expérience prête : `riftbound/engine/exp_akali_ban.py` (arrêtée à la demande de l'utilisateur avant résultat).
+Mesuré ensuite (2026-11-15), voir le bloc « Résultats » plus bas.
 Radiance (lecture des cartes, non mesuré) : Akali, Brash (5e+1 Fury, 5 ; 1er déplacement du tour = +1 énergie +1 rune, 2e = carte
 du dessus jouable : seul vrai « avantage au déplacement » ; 1 copie dans une Akali de Sacramento, 482e) ; Stoic Ferryman (4e Calm,
 2/Shield 3 ; joué sur un battlefield, renvoie une autre de tes unités à la base = sauvetage + déplacement) ; Consult the Heavens,
 Hunker Down, Life from Stone (cantrips Calm à 1). Rien en Radiance ne sauve de la mort comme Zhonya. riftbound.gg : seule Hush
 (RAD-041) entre dans le sideboard Akali.
+
+2026-11-15 — Résultats `exp_akali_ban.py` (`results_akali_ban.json`), Gorica contre LeBlanc IQ#5, IA sans plan des deux côtés.
+Limites : un seul adversaire, qui garde Baited Hook / Star Spring (bannies) ; le plan Gorica tourne autour de Stellacorn.
+- s1 (10 remplaçants de Stellacorn x3, Zhonya → +2 Not So Fast +1 Block, 300 parties, graines 710000+) : Lonely Poro 33,3 %
+  ± 2,7, Ferrous Forerunner 33,0, Scuttle Crab 31,3, Jhin 30,7, Irelia 30,0, Ahri 28,3, Pakaa 28,0, Akali Silent 27,7,
+  Akali Brash 27,3 : tous sous 2 écarts-types du 1er (apparié) ; seul Adaptatron est nettement pire (−10,7 ± 3,0).
+- s2 (Poro + 10 remplaçants de Zhonya x3, 300 parties, graines 720000+) : Scuttle Crab 42,0 % ± 2,9, Stoic Ferryman 37,0
+  (−5,0 ± 3,0, on ne sait pas), Hush 36,0 (on ne sait pas) ; nettement pires que Crab : En Garde, Twilight Shroud, Spirit's
+  Refuge, +2 NSF +1 Block, Unlicensed Armory, Charm, Consult the Heavens (28,0).
+- s3 (graines NEUVES 730000+, 500 parties) : Forerunner+Ferryman 41,0 % ± 2,2, Poro+Ferryman 40,8, Forerunner+Crab 40,8,
+  Poro+Crab 40,6 : indiscernables (écarts ≤ 0,4 ± 2,6). Témoins sur les mêmes graines (Zhonya → +2 NSF +1 Block) :
+  Forerunner 37,4 %, Poro 33,8 %. Apparié : avec Poro, Crab +6,8 ± 2,3 et Ferryman +7,0 ± 2,4 (confirmé) ; avec Forerunner,
+  Crab +3,4 ± 2,6 et Ferryman +3,6 ± 2,5 (on ne sait pas).
+- Conclusion : 3 Lonely Poro ou 3 Ferrous Forerunner pour Stellacorn (on ne sait pas lequel), 3 Scuttle Crab ou 3 Stoic
+  Ferryman pour Zhonya (on ne sait pas lequel) ; ne pas remplacer Zhonya par des contres (Not So Fast, Block), ni par
+  Armory, Charm ou Consult. Le deck reste vers 41 % contre cette LeBlanc avec l'IA sans plan.
+- Les 2 témoins portent engine_md5 f274c70e7b au lieu de 93e9f7586d : seule différence, l'ajout de l'option `temoin` dans
+  `exp_akali_ban.py` (vérifié : le hachage recalculé avec l'ancien script redonne 93e9f7586d) ; le moteur de jeu est identique.
+
