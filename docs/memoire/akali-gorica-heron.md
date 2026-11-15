@@ -26,3 +26,8 @@ Rôles perdus : Stellacorn = pioche à chaque déplacement (légende Akali, Shur
 si unité, ~47 % ; sinon +2 might), Scuttle Crab (pioche en jouant, 5/6 mains Akali) ; protection → Unlicensed Armory (seul
 « recall au lieu de mourir » non banni, coûte une défausse + 1 fury), Twilight Shroud, +1 Not So Fast, +1 Block, Spirit's Refuge.
 Expérience prête : `riftbound/engine/exp_akali_ban.py` (arrêtée à la demande de l'utilisateur avant résultat).
+Radiance (lecture des cartes, non mesuré) : Akali, Brash (5e+1 Fury, 5 ; 1er déplacement du tour = +1 énergie +1 rune, 2e = carte
+du dessus jouable : seul vrai « avantage au déplacement » ; 1 copie dans une Akali de Sacramento, 482e) ; Stoic Ferryman (4e Calm,
+2/Shield 3 ; joué sur un battlefield, renvoie une autre de tes unités à la base = sauvetage + déplacement) ; Consult the Heavens,
+Hunker Down, Life from Stone (cantrips Calm à 1). Rien en Radiance ne sauve de la mort comme Zhonya. riftbound.gg : seule Hush
+(RAD-041) entre dans le sideboard Akali.
