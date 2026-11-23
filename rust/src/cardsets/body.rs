@@ -11,9 +11,9 @@
 //! - Les coûts dans les instructions des capacités déclenchées se paient à la finalisation, ceux des sorts à la
 //!   résolution (740.4.a).
 //!
-//! Cartes non enregistrées (il manque un stockage d'attributs par objet, `setattr(o, "_body_...")` en Python) :
-//! Lucian, Merciless ; Miss Fortune, Captain ; Sivir, Ambitious ; Udyr, Wildman. Leur traduction est prête dans le
-//! module `en_attente` en bas de ce fichier (non compilé).
+//! Les cartes qui posent des attributs sur l'objet (`setattr(o, "_body_...")` en Python : Lucian, Merciless ;
+//! Miss Fortune, Captain ; Sivir, Ambitious ; Udyr, Wildman) sont dans le module `avec_attrs` en bas de ce fichier
+//! (`Obj.attrs`, clé au nom de l'attribut Python).
 use std::cmp::Ordering;
 
 use crate::actions::{attach, deflect_reqs, full_choices, play_card, total_cost};
@@ -1260,7 +1260,7 @@ fn legion_marauder() -> Impl {
     }
 }
 
-// Lucian, Merciless — non enregistrée : voir `en_attente`.
+// Lucian, Merciless — voir `avec_attrs::lucian`.
 
 // Master Yi, Honed — "[Ganking] I enter ready."
 fn yi_honed() -> Impl {
@@ -1276,7 +1276,7 @@ fn yi_tempered() -> Impl {
     }
 }
 
-// Miss Fortune, Captain — non enregistrée : voir `en_attente`.
+// Miss Fortune, Captain — voir `avec_attrs::miss_fortune`.
 
 // Nidalee, Cat Form — "[Ambush] When I win a combat, draw 1." (I win if I remain after combat)
 fn nidalee() -> Impl {
@@ -1601,7 +1601,7 @@ fn sett() -> Impl {
     }
 }
 
-// Sivir, Ambitious — non enregistrée : voir `en_attente`.
+// Sivir, Ambitious — voir `avec_attrs::sivir`.
 
 // Stormclaw Ursine — "[Tank] When you play me, channel 1 rune exhausted."
 fn stormclaw() -> Impl {
@@ -1623,7 +1623,7 @@ fn targonian() -> Impl {
     Impl { levels: vec![(11, map! { might = 4 })], ..new("Targonian Visionary") }
 }
 
-// Udyr, Wildman — non enregistrée : voir `en_attente`.
+// Udyr, Wildman — voir `avec_attrs::udyr`.
 
 // Volibear, Imposing — "[Shield 3] [Tank] When an opponent moves to a battlefield other than mine, draw 1."
 // Rules decision: one trigger per move performed by an opponent (units moved together count once).
@@ -3786,10 +3786,10 @@ pub fn register(r: &mut Registry) {
     r.card(laurent());
     r.card(lee_sin());
     r.card(legion_marauder());
-    // Lucian, Merciless : non enregistrée (attributs d'objet, voir `en_attente`)
+    r.card(avec_attrs::lucian());
     r.card(yi_honed());
     r.card(yi_tempered());
-    // Miss Fortune, Captain : non enregistrée (attributs d'objet, voir `en_attente`)
+    r.card(avec_attrs::miss_fortune());
     r.card(nidalee());
     r.card(nilah());
     r.card(demolitionist());
@@ -3801,10 +3801,10 @@ pub fn register(r: &mut Registry) {
     r.card(ruin_runner());
     r.card(sea_monkey());
     r.card(sett());
-    // Sivir, Ambitious : non enregistrée (attributs d'objet, voir `en_attente`)
+    r.card(avec_attrs::sivir());
     r.card(stormclaw());
     r.card(targonian());
-    // Udyr, Wildman : non enregistrée (attributs d'objet, voir `en_attente`)
+    r.card(avec_attrs::udyr());
     r.card(volibear());
     r.card(warwick());
     r.card(wildclaw_shaman());
@@ -3903,13 +3903,10 @@ mod tests {
     }
 }
 
-// ====================================================================== en attente d'API (non compilé)
-/// Traduction prête des quatre cartes bloquées. Il leur manque `Obj.attrs: Map` (attributs posés par les modules de
-/// cartes avec `setattr(o, "_body_...")` en Python : jamais remis à zéro, copiés avec la partie). Quand ce champ
-/// existe : retirer le `cfg`, vérifier la compilation et ajouter les quatre `r.card(...)` à leur place dans
-/// `register` (après Legion Marauder, Master Yi, Tempered, Sett, Targonian Visionary).
-#[cfg(any())]
-mod en_attente {
+// ====================================================================== cartes avec attributs d'objet
+/// Cartes qui posent des attributs sur l'objet (`setattr(o, "_body_...")` en Python) : `Obj.attrs`, jamais remis à
+/// zéro, copiés avec la partie.
+mod avec_attrs {
     use super::*;
     use crate::cards_helpers::p_unit_bf_v;
 
