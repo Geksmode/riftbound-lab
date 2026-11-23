@@ -715,8 +715,9 @@ impl Game {
     pub fn has_effect(&self, eid: u64) -> bool {
         self.effects.iter().any(|e| e.eid == eid)
     }
+    /// L'effet `eid`, encore dans `effects` ou retiré le temps d'appeler sa `fn` (`effects_gone`).
     pub fn eff(&self, eid: u64) -> Option<&Map> {
-        self.effects.iter().find(|e| e.eid == eid).map(|e| &e.d)
+        self.effects.iter().chain(self.effects_gone.iter()).find(|e| e.eid == eid).map(|e| &e.d)
     }
     pub fn eff_mut(&mut self, eid: u64) -> Option<&mut Map> {
         self.effects.iter_mut().find(|e| e.eid == eid).map(|e| &mut e.d)
