@@ -387,6 +387,12 @@ pub trait Agent: Send + Sync {
     fn mulligan(&mut self, _g: &mut Game, _pid: usize) -> Res<Vec<O>> {
         Ok(vec![])
     }
+    /// début de partie (`start(g)`)
+    fn start(&mut self, _g: &mut Game) {}
+    /// décision de haut niveau (`decide(g, d)`) : renvoie l'action choisie, une des `d.options`.
+    fn decide(&mut self, _g: &mut Game, _d: &Decision) -> Res<Value> {
+        panic!("cet agent ne prend pas de décision de haut niveau")
+    }
     /// `every_choice` : joueur humain (voit tous les choix légaux)
     fn every_choice(&self) -> bool {
         false
