@@ -477,6 +477,8 @@ pub struct Hist {
     pub tokens: [i64; 2],
     pub to_bf: [i64; 2],
     pub moved: Vec<(u32, i64)>,
+    /// Hungry Wolf : (uid, oid) des loups déjà utilisés ce tour (`hist["wolf_used"]`)
+    pub wolf_used: Vec<(u32, i64)>,
 }
 
 /// `game.Game`

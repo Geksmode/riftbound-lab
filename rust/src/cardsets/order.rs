@@ -2,7 +2,6 @@
 //! `riftbound/engine/cardsets/order.py` (référence tant que le portage n'est pas fini ; voir
 //! `docs/memoire/portage-rust.md`).
 //!
-//! Carte non enregistrée ici (bloquée) : Hungry Wolf (il manque `Hist.wolf_used`, voir le compte rendu du portage).
 use std::collections::BTreeSet;
 
 use crate::actions::{attach, card_choices, full_choices, pay_ctx, play_card, total_cost};
@@ -2574,9 +2573,37 @@ pub fn register(r: &mut Registry) {
     });
 
     // Hungry Wolf — "[Order]: Ready me and give me +1 might this turn. Use only if you've chosen an enemy unit this turn
-    // and only once each turn." NON ENREGISTRÉE : le Python note l'usage dans `g.hist["wolf_used"]` (remis à zéro à
-    // chaque tour avec `reset_hist`) ; le `Hist` de Rust n'a pas ce champ (API manquante : `Hist.wolf_used:
-    // Vec<(u32, i64)>`). La carte reste bloquée.
+    // and only once each turn." (Game.hist['chose_enemy'] ; l'usage est noté pour cet objet dans Game.hist.wolf_used)
+    r.card(Impl {
+        abilities: vec![ability(
+            "Ready",
+            AbilityArgs {
+                cost: Cost::Text("1 order rune".into()),
+                timing: "main",
+                resolve: Value::func("_wolf_res", |g, a| {
+                    let it = a[0].item();
+                    if let Some(o) = g.it(it).src.and_then(|u| g.obj(u)) {
+                        g.ready_obj(o, None, None)?;
+                        g.mod_(o, 1, "turn".into(), None)?;
+                    }
+                    Ok(Value::None)
+                }),
+                can: Value::func("Hungry Wolf.can", |g, a| {
+                    let (pid, o) = (a[0].int() as usize, a[1].obj());
+                    let key = (g.o(o).uid, g.o(o).oid);
+                    Ok((g.hist.chose_enemy[pid] && !g.hist.wolf_used.contains(&key)).into())
+                }),
+                extra_cost: Value::func("Hungry Wolf.extra_cost", |g, a| {
+                    let o = a[1].obj();
+                    let key = (g.o(o).uid, g.o(o).oid);
+                    g.hist.wolf_used.push(key);
+                    Ok(Value::None)
+                }),
+                ..Default::default()
+            },
+        )],
+        ..imp("Hungry Wolf")
+    });
 
     // Ivern, Friend to All — "As you play me, choose Bird, Cat, Dog, or Poro. I gain that tag. When I conquer or hold,
     // score 1 point if your units have all of the following tags among them — Bird, Cat, Dog, and Poro."
