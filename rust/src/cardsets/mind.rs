@@ -69,9 +69,6 @@ fn objs(v: &[O]) -> Value {
     Value::List(v.iter().map(|&o| Value::Obj(o)).collect())
 }
 
-fn obj_vec(v: &Value) -> Vec<O> {
-    v.list().iter().map(|x| x.obj()).collect()
-}
 
 fn maps(v: Vec<Map>) -> Value {
     Value::List(v.into_iter().map(Value::Map).collect())
@@ -2490,4 +2487,951 @@ fn malz_victims(g: &mut Game, a: &[Value]) -> Res<Value> {
     Ok(objs(&sort_keyed(xs, keys)))
 }
 
-// @@SUITE@@
+// ====================================================================== registre
+fn fv(name: &'static str, fun: fn(&mut Game, &[Value]) -> Res<Value>) -> Value {
+    Value::func(name, fun)
+}
+
+fn preds(v: Vec<Value>) -> Value {
+    Value::List(v)
+}
+
+/// `card(name, on_event=fn)`
+fn ev_card(name: &str, fun: Value) -> Impl {
+    Impl { on_event: fun, ..imp(name) }
+}
+
+/// `card(name, on_play=fn)`
+fn play_card_impl(name: &str, fun: Value) -> Impl {
+    Impl { on_play: fun, ..imp(name) }
+}
+
+/// aura_kw des Mechs alliés (Breakneck Mech, Forecaster)
+fn mech_aura(kw: Map) -> Value {
+    f("mech_aura", move |g, a| {
+        let (src, o) = (a[0].obj(), a[1].obj());
+        if g.o(o).ctrl == g.o(src).ctrl && ty(g, o) == "Unit" && is_mech(g, o)? {
+            return Ok(Value::Map(kw.clone()));
+        }
+        Ok(Value::None)
+    })
+}
+
+fn with_hook(mut im: Impl, field: &str, v: Value) -> Impl {
+    im.hooks.set(field, v);
+    im
+}
+
+fn ab(name: &str, cost: Cost, exhaust: bool, timing: &'static str) -> AbilityArgs {
+    let _ = name;
+    AbilityArgs { cost, exhaust, timing, ..Default::default() }
+}
+
+pub fn register(r: &mut Registry) {
+    // ---------------------------------------------------------------- units
+    r.card(ev_card("Ahri, Inquisitive", fv("_ahri", ahri)));
+
+    let mut im = Impl { might_if: vec![(when_empowered(), 1)], on_event: fv("_mage", mage), ..imp("Apprentice Mage") };
+    impl_empower(&mut im, Cost::Text("2 energy".into()));
+    r.card(im);
+
+    r.card(play_card_impl("Aspiring Engineer", fv("_engineer", engineer)));
+
+    // Ava n'a pas le mot-clé Hidden (image OGN 107 vérifiée) : elle ne se cache pas (811.1) et n'est pas une « card
+    // with [Hidden] » pour elle-même.
+    r.card(ev_card("Ava Achiever", fv("_ava", ava)));
+
+    r.card(Impl {
+        as_played: f("_bard.as_played", |g, a| {
+            let pid = a[0].int() as usize;
+            let mut v = vec![Value::Map(Map::new())];
+            if !g.exhausted(g.p[pid].legend) {
+                v.push(map! { bard = true }.into());
+            }
+            Ok(Value::List(v))
+        }),
+        pay_extra: f("_bard.pay_extra", |g, a| {
+            let (pid, ch) = (a[0].int() as usize, a[2].map());
+            if ch.g("bard").truthy() {
+                let leg = g.p[pid].legend;
+                g.set_exhausted(leg, true);
+            }
+            Ok(Value::None)
+        }),
+        on_play: f("_bard.on_play", |g, a| {
+            if a[1].map().g("bard").truthy() {
+                trig0(g, a[0].obj(), "Bard, Mercurial", fv("_bard_res", bard_res));
+            }
+            Ok(Value::None)
+        }),
+        ..imp("Bard, Mercurial")
+    });
+
+    r.card(Impl { hidden: true, on_play: fv("_blastcone", blastcone), ..imp("Blastcone Fae") });
+
+    // Breakneck Mech — "Your Mechs have [Deflect] and [Ganking]. I enter ready if you control another Mech."
+    r.card(Impl {
+        aura_kw: mech_aura(map! { Deflect = 1, Ganking = 1 }),
+        enter_ready: f("_breakneck.enter_ready", |g, a| {
+            let pid = a[0].int() as usize;
+            for u in g.units(Some(pid), None) {
+                if is_mech(g, u)? {
+                    return Ok(true.into());
+                }
+            }
+            Ok(false.into())
+        }),
+        ..imp("Breakneck Mech")
+    });
+
+    r.card(play_card_impl("Bubble Bot", fv("_bubble", bubble)));
+    r.card(play_card_impl("Card Sharp", on_play_trig("Card Sharp", fv("_sharp", sharp))));
+
+    // Cloud Drake — "When you play me, draw 1." ; Lecturing Yordle — "[Tank] When you play me, draw 1."
+    r.card(play_card_impl("Cloud Drake", on_play_trig("Cloud Drake", draw_fn(1))));
+    r.card(Impl { kw: kw1("Tank", 1), ..play_card_impl("Lecturing Yordle", on_play_trig("Lecturing Yordle", draw_fn(1))) });
+
+    let mut im = ev_card("Covert Informant", fv("_informant", informant));
+    impl_empower(&mut im, Cost::Text("3 energy".into()));
+    r.card(im);
+
+    r.card(ev_card("Diana, Lunari", fv("_diana", diana)));
+
+    r.card(Impl {
+        might_mod: f("_mundo.might", |g, a| {
+            let o = a[0].obj();
+            Ok((g.p[g.o(o).ctrl].trash.len() as i64).into())
+        }),
+        ..ev_card("Dr. Mundo, Expert", fv("_mundo", mundo))
+    });
+
+    // Dramatic Visionary — "[Deathknell] [Predict 2]."
+    r.card(Impl {
+        deathknell: f("_visionary.dk", |g, a| {
+            let c = itc(g, a[0].item());
+            g.predict(c, 2)?;
+            Ok(Value::None)
+        }),
+        ..imp("Dramatic Visionary")
+    });
+
+    r.card(play_card_impl("Dropboarder", fv("_dropboarder", dropboarder)));
+
+    r.card(Impl {
+        accelerate: true,
+        deathknell: fv("_ekko_dk", ekko_dk),
+        dk_choose: fv("_ekko_cost", ekko_cost),
+        ..imp("Ekko, Recurrent")
+    });
+
+    r.card(play_card_impl("Fate Weaver", on_play_trig("Fate Weaver", fv("_weaver_res", weaver_res))));
+
+    // Forecaster — "Your Mechs have [Vision]."
+    r.card(Impl { aura_kw: mech_aura(map! { Vision = 1 }), ..imp("Forecaster") });
+
+    r.card(Impl {
+        as_played: f("_cub.as_played", |_g, _a| Ok(Value::List(vec![Map::new().into(), map! { cub = true }.into()]))),
+        extra_cost_fn: f("_cub.extra", |_g, a| {
+            if a[2].map().g("cub").truthy() {
+                Ok(cost_v(0, &[mind()]))
+            } else {
+                Ok(cost_v(0, &[]))
+            }
+        }),
+        on_play: fv("_cub", cub),
+        ..imp("Frostcoat Cub")
+    });
+
+    // Gearhead — "[Accelerate] Each Equipment attached to me gives double its base Might bonus."
+    r.card(Impl {
+        accelerate: true,
+        might_mod: f("_gearhead.might", |g, a| {
+            let o = a[0].obj();
+            let mut s = 0;
+            for x in g.o(o).attached.clone() {
+                if let Some(xo) = g.obj(x) {
+                    s += g.equip_bonus_of(g.cname(xo));
+                }
+            }
+            Ok(s.into())
+        }),
+        ..imp("Gearhead")
+    });
+
+    // Gemcraft Seer — "[Vision] Other friendly units have [Vision]."
+    r.card(Impl {
+        kw: kw1("Vision", 1),
+        aura_kw: f("_seer.aura", |g, a| {
+            let (src, o) = (a[0].obj(), a[1].obj());
+            if o != src && g.o(o).ctrl == g.o(src).ctrl && ty(g, o) == "Unit" {
+                return Ok(map! { Vision = 1 }.into());
+            }
+            Ok(Value::None)
+        }),
+        ..imp("Gemcraft Seer")
+    });
+
+    // Grumpy Rockbear — "[Empower] 12 energy. This ability costs 1 energy less for each rune you control.
+    // [Empowered] I have [Deflect] and [Shield 3]."
+    let mut im = Impl { kw_if: vec![(when_empowered(), map! { Deflect = 1, Shield = 3 })], ..imp("Grumpy Rockbear") };
+    impl_empower(
+        &mut im,
+        Cost::Fn(f("_rockbear.cost", |g, a| {
+            let pid = a[0].int() as usize;
+            Ok(cost_v(0.max(12 - g.p[pid].runes.len() as i64), &[]))
+        })),
+    );
+    r.card(im);
+
+    // Gustwalker — "[Hunt 2] [Level 3] I have +1 might and [Ganking]."
+    r.card(Impl { kw: kw1("Hunt", 2), levels: vec![(3, map! { might = 1, kw = kw1("Ganking", 1) })], ..imp("Gustwalker") });
+
+    r.card(ev_card("Hwei, Brooding Painter", fv("_hwei", hwei)));
+    r.card(ev_card("Icevale Archer", fv("_archer", archer)));
+    r.card(Impl {
+        on_play: f("_jayce.on_play", |g, a| {
+            trig(g, a[0].obj(), "Jayce, Brilliant Inventor", fv("_jayce_res", jayce_res), Map::new(), true, fv("_jayce_choose", jayce_choose), Value::None);
+            Ok(Value::None)
+        }),
+        ..ev_card("Jayce, Brilliant Inventor", fv("_jayce_event", jayce_event))
+    });
+    r.card(Impl {
+        hidden: true,
+        kw: kw1("Temporary", 1),
+        ..play_card_impl("Keeper of Masks", on_play_trig("Keeper of Masks", fv("_keeper_res", keeper_res)))
+    });
+    r.card(Impl { accelerate: true, ..ev_card("Lillia, Fae Fawn", fv("_lillia", lillia)) });
+    r.card(ev_card("Lux, Illuminated", fv("_lux", lux)));
+    r.card(ev_card("Nasus, Guardian of Knowledge", fv("_nasus", nasus)));
+
+    // Ornn, Forge God — "[Deflect 2] [Weaponmaster] I have +1 might for each friendly gear."
+    r.card(Impl {
+        kw: map! { Deflect = 2, Weaponmaster = 1 },
+        might_mod: f("_ornn.might", |g, a| {
+            let o = a[0].obj();
+            Ok((g.gear(Some(g.o(o).ctrl)).len() as i64).into())
+        }),
+        ..imp("Ornn, Forge God")
+    });
+
+    r.card(play_card_impl("Patched Porobot", fv("_porobot", porobot)));
+
+    // Petal Pixie — "I have +1 might for each of your units with [Temporary] at my battlefield."
+    r.card(Impl {
+        might_mod: f("_pixie.might", |g, a| {
+            let o = a[0].obj();
+            if !g.at_bf(o) {
+                return Ok(0.into());
+            }
+            let mut n = 0i64;
+            for u in g.units(Some(g.o(o).ctrl), g.o(o).loc) {
+                if g.has_kw(u, "Temporary")? {
+                    n += 1;
+                }
+            }
+            Ok(n.into())
+        }),
+        ..imp("Petal Pixie")
+    });
+
+    r.card(play_card_impl("Pickpocket", fv("_pickpocket", pickpocket)));
+    r.card(ev_card("Pit Crew", fv("_pit_crew", pit_crew)));
+
+    // Plaza Guardian — "I cost 1 energy less for each gear you control. [Deflect]"
+    r.card(Impl {
+        kw: kw1("Deflect", 1),
+        cost_mod: f("_plaza.cost_mod", |g, a| {
+            let pid = a[0].int() as usize;
+            Ok(Value::Tuple(vec![(g.gear(Some(pid)).len() as i64).into(), 0.into()]))
+        }),
+        ..imp("Plaza Guardian")
+    });
+
+    r.card(ev_card("Plundering Poro", fv("_plunder", plunder)));
+    r.card(ev_card("Ravenbloom Student", fv("_ravenbloom", ravenbloom)));
+
+    // Renata Glasc, Mastermind — "1 energy and 1 mind rune: Draw 1. 4 energy and 4 mind runes, exhaust: Score 1 point.
+    // Use my abilities only while I'm at a battlefield."  (a point scored by an effect, not a Conquer: no Final
+    // Point restriction, rule 471.1.b)
+    r.card(Impl {
+        abilities: vec![
+            ability(
+                "Draw",
+                AbilityArgs { can: can_at_bf(), resolve: draw_fn(1), ..ab("Draw", Cost::Text("1 energy and 1 mind rune".into()), false, "main") },
+            ),
+            ability(
+                "Score",
+                AbilityArgs {
+                    can: can_at_bf(),
+                    resolve: f("_renata.score", |g, a| {
+                        let c = itc(g, a[0].item());
+                        g.gain_point(c, "Renata Glasc, Mastermind")?;
+                        Ok(Value::None)
+                    }),
+                    ..ab("Score", Cost::Text("4 energy and 4 mind runes".into()), true, "main")
+                },
+            ),
+        ],
+        ..imp("Renata Glasc, Mastermind")
+    });
+
+    r.card(play_card_impl("Riptide Rex", fv("_rex", rex)));
+
+    r.card(Impl {
+        aura_might: f("_rumble.aura", |g, a| {
+            let (src, o) = (a[0].obj(), a[1].obj());
+            Ok((if g.o(o).ctrl == g.o(src).ctrl && ty(g, o) == "Unit" && is_mech(g, o)? { 1 } else { 0 }).into())
+        }),
+        ..ev_card("Rumble, Scrapper", fv("_rumble", rumble))
+    });
+
+    r.card(Impl {
+        abilities: vec![ability(
+            "Strike",
+            AbilityArgs {
+                choices: fv("_cruiser_choices", cruiser_choices),
+                preds: preds(vec![p_unit_bf_v()]),
+                can: f("_cruiser.can", |g, a| {
+                    let pid = a[0].int() as usize;
+                    Ok(g.p[pid].hand.iter().any(|&c| ty(g, c) == "Gear").into())
+                }),
+                extra_cost: fv("_cruiser_discard", cruiser_discard),
+                resolve: f("_cruiser.res", |g, a| {
+                    let it = a[0].item();
+                    let u = g.legal(it, 0)?;
+                    let c = itc(g, it);
+                    g.deal(u, 4, "ability", Some(c), None)?;
+                    Ok(Value::None)
+                }),
+                ..ab("Strike", Cost::Text("1 energy".into()), true, "main")
+            },
+        )],
+        ..imp("Sky Cruiser")
+    });
+
+    // Soul Shepherd — "Your token units have +1 might."
+    r.card(Impl {
+        aura_might: f("_shepherd.aura", |g, a| {
+            let (src, o) = (a[0].obj(), a[1].obj());
+            Ok((if g.o(o).ctrl == g.o(src).ctrl && g.o(o).token && ty(g, o) == "Unit" { 1 } else { 0 }).into())
+        }),
+        ..imp("Soul Shepherd")
+    });
+
+    r.card(ev_card("Spectral Centaur", fv("_centaur", centaur)));
+    r.card(play_card_impl("Sprite Mother", on_play_trig("Sprite Mother", fv("_mother_res", mother_res))));
+    r.card(Impl {
+        on_event: f("_queen.event", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
+            if ev == "beginning_start" && pid_is_ctrl(g, info, o) {
+                trig0(g, o, "Sprite Queen", fv("_queen_res", queen_res));
+            }
+            Ok(Value::None)
+        }),
+        ..play_card_impl("Sprite Queen", on_play_trig("Sprite Queen", fv("_queen_res", queen_res)))
+    });
+    r.card(Impl { kw: kw1("Vision", 1), ..ev_card("Swain, Visionary", fv("_swain", swain)) });
+    r.card(Impl {
+        hidden: true,
+        on_play: f("_teemo.on_play", |g, a| {
+            if a[1].map().g("src").opt_str() == Some("facedown") {
+                teemo_trigger(g, a[0].obj());
+            }
+            Ok(Value::None)
+        }),
+        on_event: f("_teemo.event", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
+            if ev == "defend" && is_obj(&info.g("obj"), o) {
+                teemo_trigger(g, o);
+            }
+            Ok(Value::None)
+        }),
+        ..imp("Teemo, Strategist")
+    });
+    r.card(ev_card("Viktor, Innovator", fv("_viktor", viktor)));
+
+    // ---------------------------------------------------------------- gear
+    r.card(ev_card("Bottled Constellation", fv("_constellation", constellation)));
+    r.card(ev_card("Chemtech Cask", fv("_cask", cask)));
+
+    // Cloth Armor — "[Quick-Draw] [Equip] 1 mind rune"; Might Bonus +0 and Effect Text "[Shield 2]" (card image).
+    let mut im = Impl { timing: Some("reaction"), quickdraw: true, bonus: Some(0), equip_kw: Some(kw1("Shield", 2)), ..imp("Cloth Armor") };
+    impl_equip(&mut im, Cost::Text("1 mind rune".into()));
+    r.card(im);
+
+    // Energy Conduit — "exhaust: [Reaction] — [Add] 1 energy."
+    r.card(Impl { add: vec![add_ability("1 energy", true, false, Value::None)], ..imp("Energy Conduit") });
+
+    // Garbage Grabber — "Recycle 3 from your trash, 1 energy, exhaust: Draw 1."
+    r.card(Impl {
+        abilities: vec![ability(
+            "Draw",
+            AbilityArgs {
+                can: f("_grabber.can", |g, a| Ok((g.p[a[0].int() as usize].trash.len() >= 3).into())),
+                extra_cost: f("_grabber.extra", |g, a| {
+                    recycle_from_trash(g, a[0].int() as usize, 3, "recycle_pick")?;
+                    Ok(Value::None)
+                }),
+                resolve: draw_fn(1),
+                ..ab("Draw", Cost::Text("1 energy".into()), true, "main")
+            },
+        )],
+        ..imp("Garbage Grabber")
+    });
+
+    r.card(Impl {
+        abilities: vec![ability(
+            "Bird",
+            AbilityArgs {
+                can: f("_palace.can", |g, a| Ok((!g.p[a[0].int() as usize].hand.is_empty()).into())),
+                extra_cost: fv("_palace_discard", palace_discard),
+                resolve: f("_palace.bird", |g, a| {
+                    let c = itc(g, a[0].item());
+                    play_unit_token(g, "Bird", c, false, None, None)?;
+                    Ok(Value::None)
+                }),
+                ..ab("Bird", Cost::None, true, "main")
+            },
+        )],
+        ..ev_card("Gutter Palace", fv("_palace", palace))
+    });
+
+    // Hextech Formula — "This enters exhausted. exhaust: Empower another gear."
+    r.card(Impl {
+        enter_exhausted: true,
+        abilities: vec![ability(
+            "Empower",
+            AbilityArgs {
+                choices: f("_formula.choices", |g, a| {
+                    let (pid, o) = (a[0].int() as usize, a[1].obj());
+                    let gs = g.gear(Some(pid));
+                    let keys: Vec<(bool, i64)> = gs.iter().map(|&x| (g.o(x).empowered, -se(g, x))).collect();
+                    let v: Vec<Map> = sort_keyed(gs, keys).into_iter().filter(|&x| x != o).map(|x| map! { tg = tg_of(g, &[x]) }).collect();
+                    Ok(maps(v))
+                }),
+                preds: preds(vec![f("_formula.pred", |g, a| {
+                    let (it, x) = (a[0].item(), a[1].obj());
+                    Ok((ty(g, x) == "Gear" && Some(g.o(x).uid) != g.it(it).src).into())
+                })]),
+                resolve: f("_formula.res", |g, a| {
+                    let u = g.legal(a[0].item(), 0)?;
+                    g.empower(u, None)?;
+                    Ok(Value::None)
+                }),
+                ..ab("Empower", Cost::None, true, "main")
+            },
+        )],
+        ..imp("Hextech Formula")
+    });
+
+    r.card(ev_card("Mushroom Pouch", fv("_pouch", pouch)));
+
+    // Orb of Regret — "exhaust: Give a unit -1 might this turn, to a minimum of 1 might."
+    r.card(Impl {
+        abilities: vec![ability(
+            "Regret",
+            AbilityArgs {
+                choices: f("_orb.choices", |g, a| {
+                    let us = all_units(g, a[0].int() as usize, false, None)?;
+                    Ok(maps(tg_choices(g, &us)))
+                }),
+                preds: preds(vec![p_unit_v()]),
+                resolve: minus_spell(1, Some(1)),
+                ..ab("Regret", Cost::None, true, "main")
+            },
+        )],
+        ..imp("Orb of Regret")
+    });
+
+    // Questionable Tome — "[Empower] — exhaust. Disempower this, 1 energy, exhaust: Draw 1."
+    r.card(Impl {
+        abilities: vec![
+            empower_ability(Cost::Parts(0, vec![]), "main", true),
+            ability(
+                "Draw",
+                AbilityArgs {
+                    can: f("_tome.can", |g, a| Ok(g.o(a[1].obj()).empowered.into())),
+                    extra_cost: f("_tome.extra", |g, a| Ok(g.disempower(Some(a[1].obj())).into())),
+                    resolve: draw_fn(1),
+                    ..ab("Draw", Cost::Text("1 energy".into()), true, "main")
+                },
+            ),
+        ],
+        ..imp("Questionable Tome")
+    });
+
+    // Seal of Insight — "exhaust: [Reaction] — [Add] 1 mind rune."
+    r.card(Impl { add: vec![add_ability("1 mind rune", true, false, Value::None)], ..imp("Seal of Insight") });
+
+    r.card(Impl {
+        kw: kw1("Temporary", 1),
+        deathknell: fv("_fountain_res", fountain_res),
+        ..play_card_impl("Sprite Fountain", on_play_trig("Sprite Fountain", fv("_fountain_res", fountain_res)))
+    });
+
+    r.card(Impl { timing: Some("reaction"), kw: kw1("Temporary", 1), ..ev_card("Sumpworks Map", fv("_map", sump_map)) });
+
+    // The Zero Drive : non enregistrée (voir plus haut).
+
+    let mut im = Impl { bonus: Some(2), effect_event: fv("_atlas", atlas), ..imp("World Atlas") };
+    impl_equip(&mut im, Cost::Text("1 mind rune".into()));
+    r.card(im);
+
+    // ---------------------------------------------------------------- spells
+    r.card(Impl {
+        choices: fv("_gate_choices", gate_choices),
+        preds: preds(vec![fv("_P_perm", p_perm)]),
+        resolve: fv("_gate", gate),
+        ..imp("Acceleration Gate")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        banish_after: true,
+        preds: preds(vec![p_friend_v(), p_enemy_bf_v()]),
+        resolve: fv("_shift", shift),
+        choices: fv("_shift_choices", shift_choices),
+        ..imp("Arcane Shift")
+    });
+    // Clairvoyance — "[Reaction] [Predict 5]. Draw 2."
+    r.card(Impl {
+        timing: Some("reaction"),
+        resolve: f("_clairvoyance", |g, a| {
+            let c = itc(g, a[0].item());
+            g.predict(c, 5)?;
+            g.draw(c, 2)?;
+            Ok(Value::None)
+        }),
+        ..imp("Clairvoyance")
+    });
+    // Consult the Past — "[Hidden] [Reaction] Draw 2."
+    r.card(Impl { hidden: true, timing: Some("reaction"), resolve: draw_fn(2), ..imp("Consult the Past") });
+    r.card(Impl {
+        timing: Some("reaction"),
+        preds: preds(vec![
+            p_friend_v(),
+            f("_mutation.pred2", |g, a| Ok(p_friend(g, a[0].item(), a[1].obj()).into())),
+        ]),
+        resolve: fv("_mutation", mutation),
+        choices: fv("_mutation_choices", mutation_choices),
+        ..imp("Convergent Mutation")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        resolve: fv("_crescent", crescent),
+        choices: fv("_crescent_choices", crescent_choices),
+        preds: preds(vec![f("_crescent.pred", |g, a| {
+            let (it, o) = (a[0].item(), a[1].obj());
+            let bf = g.it(it).data.g("bf").int() as usize;
+            Ok((p_enemy(g, it, o) && g.o(o).loc == Some(Loc::Bf(bf))).into())
+        })]),
+        ..imp("Crescent Strike")
+    });
+    r.card(Impl {
+        preds: preds(vec![p_enemy_v()]),
+        resolve: fv("_flourish", flourish),
+        choices: enemy_choices(false),
+        ..imp("Deadly Flourish")
+    });
+    // Downstage Dramatics — "[Reaction] [Repeat] 2 energy. Draw 1."
+    r.card(Impl {
+        timing: Some("reaction"),
+        repeat: repeat_cost("2 energy"),
+        resolve: repeatable(draw_fn(1)),
+        ..imp("Downstage Dramatics")
+    });
+    // Dredge Up — "Draw 1. [Flow] 2 energy"
+    r.card(Impl { flow: flow_cost("2 energy"), resolve: draw_fn(1), ..imp("Dredge Up") });
+    r.card(Impl {
+        timing: Some("reaction"),
+        preds: preds(vec![p_unit_v()]),
+        resolve: fv("_eclipse", eclipse),
+        choices: fv("_units_choices", units_choices),
+        ..imp("Eclipse")
+    });
+    // Falling Comet — "[Action] Deal 6 to a unit at a battlefield." ; Final Spark — "[Action] Deal 8 to a unit."
+    r.card(Impl {
+        timing: Some("action"),
+        preds: preds(vec![p_unit_bf_v()]),
+        resolve: dmg_spell(6),
+        choices: enemy_choices(true),
+        ..imp("Falling Comet")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        preds: preds(vec![p_unit_v()]),
+        resolve: dmg_spell(8),
+        choices: enemy_choices(false),
+        ..imp("Final Spark")
+    });
+    // Frigid Touch — "[Reaction] [Repeat] 2 energy. Give a unit -2 might this turn."
+    r.card(Impl {
+        timing: Some("reaction"),
+        repeat: repeat_cost("2 energy"),
+        preds: preds(vec![p_unit_v()]),
+        resolve: repeatable(minus_spell(2, None)),
+        choices: fv("_units_choices", units_choices),
+        ..imp("Frigid Touch")
+    });
+    r.card(Impl {
+        hidden: true,
+        preds: preds(vec![p_enemy_bf_v()]),
+        resolve: fv("_takeover", takeover),
+        choices: enemy_choices(true),
+        ..imp("Hostile Takeover")
+    });
+    // Iterative Design — "Play a 3 might Mech unit token. [Flow] 2 energy and 1 mind rune"
+    r.card(Impl {
+        flow: flow_cost("2 energy and 1 mind rune"),
+        resolve: f("_iterative", |g, a| {
+            let it = a[0].item();
+            let (c, hb) = (itc(g, it), g.it(it).data.g("hidden_bf").opt_loc());
+            play_unit_token(g, "Mech", c, false, hb, None)?;
+            Ok(Value::None)
+        }),
+        ..imp("Iterative Design")
+    });
+    r.card(Impl {
+        timing: Some("reaction"),
+        resolve: fv("_mesmerize", mesmerize),
+        choices: fv("_mesmerize_choices", mesmerize_choices),
+        preds: preds(vec![f("_mesmerize.pred", |g, a| {
+            let (it, o) = (a[0].item(), a[1].obj());
+            let ret = g.it(it).data.g("mode").opt_str() == Some("return");
+            Ok((if ret { p_friend(g, it, o) } else { p_enemy(g, it, o) }).into())
+        })]),
+        ..imp("Mesmerize")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        preds: preds(vec![p_enemy_v()]),
+        resolve: fv("_moonfall", moonfall),
+        choices: fv("_moonfall_choices", moonfall_choices),
+        ..imp("Moonfall")
+    });
+    // Moonlight Affliction — "[Reaction] Give a unit -10 might this turn."
+    r.card(Impl {
+        timing: Some("reaction"),
+        preds: preds(vec![p_unit_v()]),
+        resolve: minus_spell(10, None),
+        choices: fv("_units_choices", units_choices),
+        ..imp("Moonlight Affliction")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        preds: preds(vec![p_friend_v()]),
+        resolve: fv("_portal", portal),
+        choices: f("_portal.choices", |g, a| {
+            let (pid, hb) = (a[0].int() as usize, ctx_hb(&a[1]));
+            let us = friends_damaged_first(g, pid, hb)?;
+            Ok(maps(tg_choices(g, &us)))
+        }),
+        ..imp("Portal Rescue")
+    });
+    // Premonition — "[Reaction] Draw 3." ; Progress Day — "Draw 4."
+    r.card(Impl { timing: Some("reaction"), resolve: draw_fn(3), ..imp("Premonition") });
+    r.card(Impl { resolve: draw_fn(4), ..imp("Progress Day") });
+    // Production Surge — "This costs 2 energy less if you control a Mech. Play a 3 might Mech unit token to your base.
+    // Draw 1."
+    r.card(Impl {
+        cost_mod: f("_surge.cost_mod", |g, a| {
+            let pid = a[0].int() as usize;
+            for u in g.units(Some(pid), None) {
+                if is_mech(g, u)? {
+                    return Ok(Value::Tuple(vec![2.into(), 0.into()]));
+                }
+            }
+            Ok(Value::Tuple(vec![0.into(), 0.into()]))
+        }),
+        resolve: f("_surge", |g, a| {
+            let c = itc(g, a[0].item());
+            play_token(g, "Mech", c, Loc::Base, false)?;
+            g.draw(c, 1)?;
+            Ok(Value::None)
+        }),
+        ..imp("Production Surge")
+    });
+    r.card(Impl { resolve: fv("_promising", promising), ..imp("Promising Future") });
+    r.card(Impl {
+        timing: Some("reaction"),
+        preds: preds(vec![p_friend_v()]),
+        resolve: fv("_retreat", retreat),
+        choices: f("_retreat.choices", |g, a| {
+            let (pid, hb) = (a[0].int() as usize, ctx_hb(&a[1]));
+            let fr = friends(g, pid, false, hb)?;
+            let mut keys = vec![];
+            for &u in &fr {
+                keys.push((-g.o(u).damage as f64, !g.in_combat(u), -value(g, u)?));
+            }
+            let us = sort_keyed(fr, keys);
+            Ok(maps(tg_choices(g, &us)))
+        }),
+        ..imp("Retreat")
+    });
+    r.card(Impl {
+        repeat: repeat_cost("4 energy and 1 mind rune"),
+        preds: preds(vec![fv("_barrage_pred", barrage_pred)]),
+        resolve: repeatable(fv("_barrage_one", barrage_one)),
+        choices: fv("_barrage_choices", barrage_choices),
+        ..imp("Rocket Barrage")
+    });
+    r.card(Impl {
+        timing: Some("action"),
+        preds: preds(vec![p_unit_bf_v()]),
+        resolve: dmg_spell(4),
+        cost_mod: f("_shock.cost_mod", |g, a| {
+            let pid = a[0].int() as usize;
+            let d = if empowered_any(g, pid) { 2 } else { 0 };
+            Ok(Value::Tuple(vec![d.into(), 0.into()]))
+        }),
+        choices: enemy_choices(true),
+        ..imp("Shock Blast")
+    });
+    r.card(Impl {
+        preds: preds(vec![p_unit_v()]),
+        resolve: fv("_singularity", singularity),
+        choices: fv("_singularity_choices", singularity_choices),
+        max_choices: 10,
+        ..imp("Singularity")
+    });
+    r.card(Impl {
+        timing: Some("reaction"),
+        resolve: fv("_siphon", siphon),
+        choices: fv("_siphon_choices", siphon_choices),
+        ..imp("Siphon Power")
+    });
+    // Smoke Screen — "[Reaction] Give a unit -4 might this turn, to a minimum of 1 might."
+    r.card(Impl {
+        timing: Some("reaction"),
+        preds: preds(vec![p_unit_v()]),
+        resolve: minus_spell(4, Some(1)),
+        choices: fv("_units_choices", units_choices),
+        ..imp("Smoke Screen")
+    });
+    r.card(Impl {
+        hidden: true,
+        timing: Some("action"),
+        resolve: fv("_smoke_mirrors", smoke_mirrors),
+        choices: fv("_smoke_mirrors_choices", smoke_mirrors_choices),
+        preds: preds(vec![
+            p_friend_v(),
+            f("_smoke_mirrors.pred2", |g, a| {
+                let (it, o) = (a[0].item(), a[1].obj());
+                Ok((ty(g, o) == "Unit" && g.o(o).ctrl == itc(g, it)).into())
+            }),
+        ]),
+        ..imp("Smoke and Mirrors")
+    });
+    // Sprite Burst — "Play two ready 3 might Sprite unit tokens with [Temporary]."
+    r.card(Impl {
+        resolve: f("_sprite_burst", |g, a| {
+            let it = a[0].item();
+            for _ in 0..2 {
+                let (c, hb) = (itc(g, it), g.it(it).data.g("hidden_bf").opt_loc());
+                play_unit_token(g, "Sprite", c, true, hb, None)?;
+            }
+            Ok(Value::None)
+        }),
+        ..imp("Sprite Burst")
+    });
+    // Sprite Call — "[Hidden] [Action] Play a ready 3 might Sprite unit token with [Temporary]."
+    r.card(Impl {
+        hidden: true,
+        timing: Some("action"),
+        resolve: f("_sprite_call", |g, a| {
+            let it = a[0].item();
+            let (c, hb) = (itc(g, it), g.it(it).data.g("hidden_bf").opt_loc());
+            play_unit_token(g, "Sprite", c, true, hb, None)?;
+            Ok(Value::None)
+        }),
+        ..imp("Sprite Call")
+    });
+    r.card(Impl {
+        hidden: true,
+        preds: preds(vec![p_unit_v()]),
+        resolve: fv("_breach", breach),
+        choices: f("_breach.choices", |g, a| {
+            let (pid, hb) = (a[0].int() as usize, ctx_hb(&a[1]));
+            let mut us = friends_damaged_first(g, pid, hb)?;
+            us.extend(enemies(g, pid, false, hb, true)?);
+            Ok(maps(tg_choices(g, &us)))
+        }),
+        ..imp("Temporal Breach")
+    });
+    r.card(Impl { resolve: fv("_unchecked", unchecked), ..imp("Unchecked Power") });
+    // Wages of Pain — "[Hidden] [Action] Deal 3 to a unit at a battlefield. Play a Gold gear token exhausted."
+    r.card(Impl {
+        hidden: true,
+        timing: Some("action"),
+        preds: preds(vec![p_unit_bf_v()]),
+        resolve: f("_wages", |g, a| {
+            let it = a[0].item();
+            let u = g.legal(it, 0)?;
+            let c = itc(g, it);
+            g.deal(u, 3, "spell", Some(c), None)?;
+            gold(g, c)?;
+            Ok(Value::None)
+        }),
+        choices: enemy_choices(true),
+        ..imp("Wages of Pain")
+    });
+
+    // ---------------------------------------------------------------- cards using the engine hooks (integration)
+    r.ask_text(&[
+        ("jayce_kill_gear", "Jayce : quelle gear alliée tuer ?"),
+        ("guerilla_return", "Guerilla Warfare : quelle carte [Hidden] reprendre ?"),
+        ("zilean_copy", "Zilean : jouer une copie supplémentaire du jeton ?"),
+        ("kaisa_spell", "Kai'Sa : quel sort jouer depuis ta défausse ?"),
+        ("rebuttal_pay", "Rebuttal : payer 1 rune pour prendre le contrôle du sort (sinon il est contré) ?"),
+    ]);
+
+    // Applied Researchers — "[Empower] 3 energy. [Empowered][>] Your spells cost 1 energy and 1 rune of any type less,
+    // to a minimum of 1 energy." (rule 356.4.e: the minimum applies to this discount)
+    r.card(with_hook(
+        Impl { abilities: vec![empower_ability(Cost::Text("3 energy".into()), "main", false)], ..imp("Applied Researchers") },
+        "cost_aura",
+        f("_researchers.cost_aura", |g, a| {
+            let (src, pid, what) = (a[0].obj(), a[1].int() as usize, a[2].map());
+            if g.o(src).empowered && pid == g.o(src).ctrl && what.g("kind").opt_str() == Some("spell") && !what.g("card").is_none() {
+                return Ok(Value::List(vec![map! { e = -1, rm = 1, min_e = 1 }.into()]));
+            }
+            Ok(Value::List(vec![]))
+        }),
+    ));
+
+    // Eager Apprentice — "While I'm at a battlefield, the Energy costs for spells you play is reduced by 1 energy, to a
+    // minimum of 1 energy."
+    r.card(with_hook(
+        imp("Eager Apprentice"),
+        "cost_aura",
+        f("_eager.cost_aura", |g, a| {
+            let (src, pid, what) = (a[0].obj(), a[1].int() as usize, a[2].map());
+            if g.at_bf(src) && pid == g.o(src).ctrl && what.g("kind").opt_str() == Some("spell") && !what.g("card").is_none() {
+                return Ok(Value::List(vec![map! { e = -1, min_e = 1 }.into()]));
+            }
+            Ok(Value::List(vec![]))
+        }),
+    ));
+
+    r.card(play_card_impl(
+        "Jayce, Man of Progress",
+        f("_mop.on_play", |g, a| {
+            let o = a[0].obj();
+            if !g.gear(Some(g.o(o).ctrl)).is_empty() {
+                trig(g, o, "Jayce, Man of Progress", fv("_mop_res", mop_res), Map::new(), true, Value::None, Value::None);
+            }
+            Ok(Value::None)
+        }),
+    ));
+
+    r.card(Impl {
+        abilities: vec![ability(
+            "Repeat",
+            AbilityArgs { resolve: fv("_portal_res", portal_res), ..ab("Repeat", Cost::Text("1 rune of any type".into()), true, "main") },
+        )],
+        ..imp("Temporal Portal")
+    });
+
+    r.card(Impl { kw: kw1("Vision", 1), alt_costs: fv("_mk_alt", mk_alt), ..imp("Jhin, Meticulous Killer") });
+    r.card(Impl { resolve: fv("_guerilla", guerilla), ..imp("Guerilla Warfare") });
+    r.card(ev_card("Frigid Jewel", fv("_jewel", jewel)));
+    r.card(ev_card("Wraith of Echoes", fv("_wraith", wraith)));
+
+    r.card(with_hook(
+        Impl {
+            on_event: f("_dashing.event", |g, a| {
+                let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
+                if matches!(ev, "attack" | "defend") && is_obj(&info.g("obj"), o) {
+                    trig(g, o, "Ezreal, Dashing", fv("_dashing_res", dashing_res), Map::new(), false, target_here(false), Value::None);
+                }
+                Ok(Value::None)
+            }),
+            abilities: vec![ability(
+                "Move to base",
+                AbilityArgs {
+                    resolve: fv("_dashing_back", dashing_back),
+                    can: f("_dashing.can", |g, a| Ok((g.o(a[1].obj()).loc != Some(Loc::Base)).into())),
+                    ..ab("Move to base", Cost::Text("1 mind rune".into()), false, "action")
+                },
+            )],
+            ..imp("Ezreal, Dashing")
+        },
+        "no_combat_damage",
+        f("_dashing.no_combat", |_g, _a| Ok(true.into())),
+    ));
+
+    r.card(with_hook(imp("Otterpus"), "point_rep", fv("_otterpus", otterpus)));
+
+    r.card(with_hook(
+        Impl { kw: kw1("Shield", 2), on_event: fv("_sentinel_event", sentinel_event), ..imp("Blue Sentinel") },
+        "scoring_extra",
+        f("_sentinel.extra", |g, a| {
+            let (src, pid, bf, ev) = (a[0].obj(), a[1].int() as usize, a[2].int() as usize, a[3].str());
+            Ok((if ev == "hold" && pid == g.o(src).ctrl && g.o(src).loc == Some(Loc::Bf(bf)) { 1 } else { 0 }).into())
+        }),
+    ));
+
+    r.card(with_hook(imp("Zilean, Time Mage"), "token_rep", fv("_zilean", zilean)));
+    r.card(ev_card("Prize of Progress", fv("_prize", prize)));
+    r.card(Impl {
+        timing: Some("reaction"),
+        resolve: fv("_rebuttal", rebuttal),
+        choices: fv("_rebuttal_choices", rebuttal_choices),
+        ..imp("Rebuttal")
+    });
+    r.card(Impl {
+        kw: kw1("Ganking", 1),
+        on_event: f("_kaisa.event", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
+            if ev == "conquer" && in_list(&info.g("units"), o) {
+                trig0(g, o, "Kai'Sa, Evolutionary", fv("_kaisa_res", kaisa_res));
+            }
+            Ok(Value::None)
+        }),
+        ..imp("Kai'Sa, Evolutionary")
+    });
+
+    // Mel, Newly Awakened — "When you play me, draw 1. [Empower] 3 energy. [Empowered][>] Your spells and abilities
+    // can't be countered. If a spell or ability you control would give -might to a unit it chooses, it gives an
+    // additional -1 might."
+    let im = Impl {
+        abilities: vec![empower_ability(Cost::Text("3 energy".into()), "main", false)],
+        on_play: on_play_trig("Mel, Newly Awakened", draw_fn(1)),
+        ..imp("Mel, Newly Awakened")
+    };
+    let im = with_hook(
+        im,
+        "no_counter",
+        f("_mel.no_counter", |g, a| {
+            let (src, item) = (a[0].obj(), a[1].item());
+            Ok((g.o(src).empowered && g.it(item).ctrl == g.o(src).ctrl).into())
+        }),
+    );
+    r.card(with_hook(
+        im,
+        "minus_extra",
+        f("_mel.minus_extra", |g, a| {
+            let src = a[0].obj();
+            let ok = g.o(src).empowered && matches!(a[1], Value::Item(_)) && Some(a[1].item()).is_some_and(|i| g.it(i).ctrl == g.o(src).ctrl);
+            Ok((if ok { 1 } else { 0 }).into())
+        }),
+    ));
+
+    let im = with_hook(imp("Heimerdinger, Inventor"), "grant_abilities", fv("_heimer_abilities", heimer_abilities));
+    r.card(with_hook(im, "grant_add", fv("_heimer_adds", heimer_adds)));
+
+    // Hextech Anomaly — "[E]: [Reaction] — Pay any amount of 1 rune of any type to [Add] that much Energy."
+    r.card(Impl { add: vec![map! { conv = "p2e", var = true, exhaust = true }], ..imp("Hextech Anomaly") });
+
+    r.card(Impl {
+        add: vec![map! {
+            conv = "kill", p = Value::List(vec!["A".into(), "A".into()]), victims = fv("_malz_victims", malz_victims),
+            exhaust = true, timing = "action",
+        }],
+        ..imp("Malzahar, Fanatic")
+    });
+
+    // Experimental Hexplate — "[Equip] 1 mind rune". Might Bonus +1, Effect Text (card image): "I am a Mech."
+    let mut im = Impl { bonus: Some(1), equip_tags: Some(vec!["Mech".to_string()]), ..imp("Experimental Hexplate") };
+    impl_equip(&mut im, Cost::Text("1 mind rune".into()));
+    r.card(im);
+}
