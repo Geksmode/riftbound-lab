@@ -6,8 +6,12 @@ pub mod order;
 pub mod pool;
 
 pub fn register_all(r: &mut Registry) {
-    // cards.py enregistre ses cartes du pool avant de charger cardsets
+    // cards.py : titres des questions, runes et Gold // Buff, cartes du pool, puis cardsets
+    crate::cards_helpers::register_core_ask_text(r);
+    crate::cards_helpers::register_core_cards(r);
     pool::register(r);
     // MODULES : battlefields, body, calm, chaos, fury, legends, mind, order, radiance
     order::register(r);
+    // cartes « mots-clés seulement » non modélisées par un module (register_keyword_only_cards)
+    crate::cards_helpers::register_auto(r);
 }
