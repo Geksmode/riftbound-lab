@@ -6,7 +6,10 @@ use std::fmt::Write;
 pub enum Json {
     Null,
     Bool(bool),
-    Num(f64),
+    /// entier (`int` Python)
+    Int(i64),
+    /// flottant (`float` Python) : toujours écrit comme `repr(float)` (« 3.0 », « 1e-05 »)
+    Float(f64),
     Str(String),
     Arr(Vec<Json>),
     /// objet, ordre des clés conservé
@@ -28,8 +31,63 @@ impl Json {
     }
     pub fn num(&self) -> Option<f64> {
         match self {
-            Json::Num(n) => Some(*n),
+            Json::Int(n) => Some(*n as f64),
+            Json::Float(n) => Some(*n),
             _ => None,
+        }
+    }
+    /// entier (un flottant compte aussi, tronqué comme `int(x)`)
+    pub fn int(&self) -> Option<i64> {
+        match self {
+            Json::Int(n) => Some(*n),
+            Json::Float(n) => Some(*n as i64),
+            Json::Bool(b) => Some(*b as i64),
+            _ => None,
+        }
+    }
+    pub fn obj(&self) -> &[(String, Json)] {
+        match self {
+            Json::Obj(v) => v,
+            _ => &[],
+        }
+    }
+    pub fn is_null(&self) -> bool {
+        matches!(self, Json::Null)
+    }
+
+    /// `json.dumps(x)` (séparateurs par défaut « , » et « : ») ; ascii : `ensure_ascii=True` (défaut de Python).
+    pub fn dumps(&self, ascii: bool) -> String {
+        let mut s = String::new();
+        self.write_py(&mut s, ascii);
+        s
+    }
+
+    fn write_py(&self, out: &mut String, ascii: bool) {
+        match self {
+            Json::Str(s) => write_str_py(s, out, ascii),
+            Json::Arr(v) => {
+                out.push('[');
+                for (i, x) in v.iter().enumerate() {
+                    if i > 0 {
+                        out.push_str(", ");
+                    }
+                    x.write_py(out, ascii);
+                }
+                out.push(']');
+            }
+            Json::Obj(v) => {
+                out.push('{');
+                for (i, (k, x)) in v.iter().enumerate() {
+                    if i > 0 {
+                        out.push_str(", ");
+                    }
+                    write_str_py(k, out, ascii);
+                    out.push_str(": ");
+                    x.write_py(out, ascii);
+                }
+                out.push('}');
+            }
+            x => x.write(out),
         }
     }
     pub fn arr(&self) -> &[Json] {
@@ -50,13 +108,10 @@ impl Json {
         match self {
             Json::Null => out.push_str("null"),
             Json::Bool(b) => out.push_str(if *b { "true" } else { "false" }),
-            Json::Num(n) => {
-                if n.fract() == 0.0 && n.abs() < 1e15 {
-                    let _ = write!(out, "{}", *n as i64);
-                } else {
-                    let _ = write!(out, "{n:?}");
-                }
+            Json::Int(n) => {
+                let _ = write!(out, "{n}");
             }
+            Json::Float(n) => out.push_str(&py_float(*n)),
             Json::Str(s) => write_str(s, out),
             Json::Arr(v) => {
                 out.push('[');
@@ -93,8 +148,90 @@ fn write_str(s: &str, out: &mut String) {
             '\n' => out.push_str("\\n"),
             '\r' => out.push_str("\\r"),
             '\t' => out.push_str("\\t"),
+            '\u{8}' => out.push_str("\\b"),
+            '\u{c}' => out.push_str("\\f"),
             c if (c as u32) < 0x20 => {
                 let _ = write!(out, "\\u{:04x}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+}
+
+/// `repr(float)` de Python : chiffres les plus courts, exposant au-delà de 1e16 ou en deçà de 1e-4 ; NaN et infinis
+/// comme `json.dumps` (NaN, Infinity).
+pub fn py_float(f: f64) -> String {
+    if f.is_nan() {
+        return "NaN".into();
+    }
+    if f.is_infinite() {
+        return if f > 0.0 { "Infinity".into() } else { "-Infinity".into() };
+    }
+    if f == 0.0 {
+        return if f.is_sign_negative() { "-0.0".into() } else { "0.0".into() };
+    }
+    let e = format!("{f:e}"); // « -1.2345e-5 » : les chiffres les plus courts qui relisent la même valeur
+    let (mant, exp) = e.split_once('e').unwrap();
+    let exp: i32 = exp.parse().unwrap();
+    let neg = mant.starts_with('-');
+    let digits: String = mant.chars().filter(|c| c.is_ascii_digit()).collect();
+    let n = digits.len() as i32;
+    let mut out = String::new();
+    if neg {
+        out.push('-');
+    }
+    if (-4..16).contains(&exp) {
+        if exp >= 0 {
+            if n <= exp + 1 {
+                out.push_str(&digits);
+                for _ in 0..(exp + 1 - n) {
+                    out.push('0');
+                }
+                out.push_str(".0");
+            } else {
+                out.push_str(&digits[..(exp + 1) as usize]);
+                out.push('.');
+                out.push_str(&digits[(exp + 1) as usize..]);
+            }
+        } else {
+            out.push_str("0.");
+            for _ in 0..(-exp - 1) {
+                out.push('0');
+            }
+            out.push_str(&digits);
+        }
+    } else {
+        out.push_str(&digits[..1]);
+        if n > 1 {
+            out.push('.');
+            out.push_str(&digits[1..]);
+        }
+        let _ = write!(out, "e{}{:02}", if exp < 0 { '-' } else { '+' }, exp.abs());
+    }
+    out
+}
+
+/// Texte JSON à la manière de Python ; ascii : `ensure_ascii=True` (\uXXXX, paires de substitution).
+fn write_str_py(s: &str, out: &mut String, ascii: bool) {
+    if !ascii {
+        return write_str(s, out);
+    }
+    out.push('"');
+    for c in s.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            '\u{8}' => out.push_str("\\b"),
+            '\u{c}' => out.push_str("\\f"),
+            c if (c as u32) < 0x20 || (c as u32) > 0x7e => {
+                let mut b = [0u16; 2];
+                for u in c.encode_utf16(&mut b) {
+                    let _ = write!(out, "\\u{:04x}", u);
+                }
             }
             c => out.push(c),
         }
@@ -201,7 +338,12 @@ impl Parser<'_> {
                     self.i += 1;
                 }
                 let t = std::str::from_utf8(&self.s[st..self.i]).unwrap();
-                t.parse::<f64>().map(Json::Num).map_err(|_| format!("JSON : nombre invalide {t:?} à {st}"))
+                if !t.contains(['.', 'e', 'E']) {
+                    if let Ok(n) = t.parse::<i64>() {
+                        return Ok(Json::Int(n));
+                    }
+                }
+                t.parse::<f64>().map(Json::Float).map_err(|_| format!("JSON : nombre invalide {t:?} à {st}"))
             }
             None => Err("JSON : fin inattendue".into()),
         }
@@ -250,4 +392,123 @@ impl Parser<'_> {
         self.i += 4;
         u32::from_str_radix(t, 16).map_err(|e| e.to_string())
     }
+}
+
+impl From<bool> for Json {
+    fn from(b: bool) -> Self {
+        Json::Bool(b)
+    }
+}
+impl From<i64> for Json {
+    fn from(n: i64) -> Self {
+        Json::Int(n)
+    }
+}
+impl From<i32> for Json {
+    fn from(n: i32) -> Self {
+        Json::Int(n as i64)
+    }
+}
+impl From<u32> for Json {
+    fn from(n: u32) -> Self {
+        Json::Int(n as i64)
+    }
+}
+impl From<usize> for Json {
+    fn from(n: usize) -> Self {
+        Json::Int(n as i64)
+    }
+}
+impl From<f64> for Json {
+    fn from(n: f64) -> Self {
+        Json::Float(n)
+    }
+}
+impl From<&str> for Json {
+    fn from(s: &str) -> Self {
+        Json::Str(s.to_string())
+    }
+}
+impl From<String> for Json {
+    fn from(s: String) -> Self {
+        Json::Str(s)
+    }
+}
+impl From<&String> for Json {
+    fn from(s: &String) -> Self {
+        Json::Str(s.clone())
+    }
+}
+impl<T: Into<Json>> From<Option<T>> for Json {
+    fn from(o: Option<T>) -> Self {
+        match o {
+            Some(x) => x.into(),
+            None => Json::Null,
+        }
+    }
+}
+impl<T: Into<Json>> From<Vec<T>> for Json {
+    fn from(v: Vec<T>) -> Self {
+        Json::Arr(v.into_iter().map(Into::into).collect())
+    }
+}
+
+impl Json {
+    /// Objet : ajoute (ou remplace, à sa place) une clé, comme `d[k] = v` en Python.
+    pub fn set(&mut self, k: &str, v: impl Into<Json>) {
+        if let Json::Obj(o) = self {
+            let v = v.into();
+            if let Some(e) = o.iter_mut().find(|(x, _)| x == k) {
+                e.1 = v;
+            } else {
+                o.push((k.to_string(), v));
+            }
+        }
+    }
+    /// `d.pop(k, None)`
+    pub fn remove(&mut self, k: &str) -> Option<Json> {
+        if let Json::Obj(o) = self {
+            let i = o.iter().position(|(x, _)| x == k)?;
+            return Some(o.remove(i).1);
+        }
+        None
+    }
+    pub fn get_mut(&mut self, k: &str) -> Option<&mut Json> {
+        match self {
+            Json::Obj(v) => v.iter_mut().find(|(x, _)| x == k).map(|(_, j)| j),
+            _ => None,
+        }
+    }
+    pub fn arr_mut(&mut self) -> &mut Vec<Json> {
+        match self {
+            Json::Arr(v) => v,
+            _ => panic!("liste JSON attendue"),
+        }
+    }
+    /// `d.get(k)` : Null si absente.
+    pub fn g(&self, k: &str) -> &Json {
+        static NULL: Json = Json::Null;
+        self.get(k).unwrap_or(&NULL)
+    }
+    /// Vérité Python
+    pub fn truthy(&self) -> bool {
+        match self {
+            Json::Null => false,
+            Json::Bool(b) => *b,
+            Json::Int(n) => *n != 0,
+            Json::Float(f) => *f != 0.0,
+            Json::Str(s) => !s.is_empty(),
+            Json::Arr(v) => !v.is_empty(),
+            Json::Obj(v) => !v.is_empty(),
+        }
+    }
+}
+
+/// Objet JSON, clés dans l'ordre donné : `jo! { "a" => 1, "b" => "x" }`.
+#[macro_export]
+macro_rules! jo {
+    () => { $crate::json::Json::Obj(vec![]) };
+    ($($k:expr => $v:expr),+ $(,)?) => {
+        $crate::json::Json::Obj(vec![$(($k.to_string(), $crate::json::Json::from($v))),+])
+    };
 }
