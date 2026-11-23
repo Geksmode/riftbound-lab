@@ -80,7 +80,17 @@ les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table
 - `Game._memo` (mémoire de génération des coups) : pas portée (optimisation sans effet sur le jeu, `empreinte.py`).
 - Contexte `plans=` de `pay_gold` / `pay_rune` non passé aux agents (à faire avec `train.py`).
 
+- Python dont l'ordre dépend d'un `set` (à corriger côté Python avec `sorted()` avant le différentiel) :
+  Bellows Breath (`max(set(u.loc ...))`, mélange de `'base'` et d'entiers, ordre dépendant de PYTHONHASHSEED).
+- Écarts de fidélité du Python lui-même (portés tels quels, à décider avec l'utilisateur) : Decree of Insight
+  n'ignore pas [Deflect] (texte : « Ignore [Deflect] while paying this spell's cost ») ; code mort dans Shuriken Flip
+  (`or True`) et Kennen (`[:0]`).
+- Formats fixés par les cartes : coût de capacité en dict brut = `Tuple([e, reqs])`, `Impl.flow` =
+  `Tuple([e, p, Tuple(domaines)])`, `Impl.repeat` = `Tuple([e, Tuple(domaines), p])`, `cost_mod` -> `Tuple([de, dp])`,
+  `as_played` -> liste de dict.
+
 ## Avancement
+- 2026-11-23 : cartes du pool de cards.py portées (84/84, `cardsets/pool.rs`, compile ; pas encore jouées).
 - 2026-11-23 : contrat, crate créée ; hasard identique à CPython (442 tirages) ; base de cartes identique (1111
   entrées) ; `game.py` entier porté (`rust/src/game*.rs`, compile sans avertissement, pas encore jouable :
   `actions.py`, aides de `cards.py`, modules de cartes, IA restent à porter).
