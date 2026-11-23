@@ -10,10 +10,8 @@
 //!
 //! Un battlefield passé à un crochet (`bf_event`, `aura_*`, `cost_aura`...) est `Value::Int(idx)`.
 //!
-//! Cartes non enregistrées (il manque un champ d'état dans `game.rs`, voir le compte rendu du portage) : Fortified
-//! Position, Ravenbloom Conservatory, Reaver's Row (`Showdown._bf_defend_seen`), Trapping Grounds
-//! (`Showdown._bf_excess`), Hallowed Tomb (`Player.bf_chosen_champion`). Leur traduction est gardée plus bas, hors
-//! compilation (`#[cfg(any())]`), écrite contre les champs naturels qui manquent.
+//! Les attributs posés à la volée par le Python (`sd._bf_defend_seen`, `sd._bf_excess`, `pl.bf_chosen_champion`)
+//! sont rangés dans `attrs`, sous le même nom.
 use std::cell::RefCell;
 use std::cmp::Ordering;
 use std::collections::BTreeSet;
@@ -1171,11 +1169,11 @@ pub fn register(r: &mut Registry) {
     card(r, Impl { bf_event: recital(), ..Impl::new("Amateur Recital") });
     card(r, Impl { aura_kw: bfa_aura(), ..Impl::new("Black Flame Altar") });
     card(r, Impl { bf_event: dais(), ..Impl::new("Emperor's Dais") });
-    // Fortified Position : non enregistrée (Showdown._bf_defend_seen, identité des grants : voir plus bas)
+    card(r, Impl { bf_event: fortified(), ..Impl::new("Fortified Position") });
     card(r, Impl { bf_event: frozen(), ..Impl::new("Frozen Fortress") });
     card(r, Impl { bf_event: grove(), ..Impl::new("Grove of the God-Willow") });
     card(r, Impl { bf_event: hall(), ..Impl::new("Hall of Legends") });
-    // Hallowed Tomb : non enregistrée (Player.bf_chosen_champion)
+    card(r, Impl { bf_event: hallowed(), ..Impl::new("Hallowed Tomb") });
     card(r, Impl { aura_might: kinkou(), ..Impl::new("Kinkou Temple") });
     card(r, Impl { bf_event: minefield(), ..Impl::new("Minefield") });
     card(r, Impl { bf_event: monastery(), ..Impl::new("Monastery of Hirana") });
@@ -1183,7 +1181,8 @@ pub fn register(r: &mut Registry) {
     card(r, Impl { bf_event: obelisk(), ..Impl::new("Obelisk of Power") });
     card(r, Impl { bf_event: nexus(), ..Impl::new("Power Nexus") });
     card(r, Impl { bf_event: sands(), ..Impl::new("Protective Sands") });
-    // Ravenbloom Conservatory, Reaver's Row : non enregistrées (Showdown._bf_defend_seen)
+    card(r, Impl { bf_event: ravenbloom(), ..Impl::new("Ravenbloom Conservatory") });
+    card(r, Impl { bf_event: reaver(), ..Impl::new("Reaver's Row") });
     card(r, Impl { bf_event: reckoner(), ..Impl::new("Reckoner's Arena") });
     card(r, Impl { bf_event: seat(), ..Impl::new("Seat of Power") });
     card(r, Impl { bf_event: shadow(), ..Impl::new("Shadow Temple") });
@@ -1194,7 +1193,7 @@ pub fn register(r: &mut Registry) {
     card(r, Impl { bf_event: dreaming(), ..Impl::new("The Dreaming Tree") });
     card(r, Impl { bf_event: plaza(), ..Impl::new("The Grand Plaza") });
     card(r, Impl { bf_event: papertree(), ..Impl::new("The Papertree") });
-    // Trapping Grounds : non enregistrée (Showdown._bf_excess)
+    card(r, Impl { bf_event: trapping(), ..Impl::new("Trapping Grounds") });
     card(r, Impl { bf_event: hoard(), ..Impl::new("Treasure Hoard") });
     card(r, Impl { aura_might: trifarian(), ..Impl::new("Trifarian War Camp") });
     card(r, Impl { bf_event: valley(), ..Impl::new("Valley of Idols") });
@@ -1256,86 +1255,253 @@ pub fn register(r: &mut Registry) {
     card(r, Impl::new("Baron Pit"));
 }
 
-// ====================================================================== cartes non enregistrées (état manquant)
-// Traductions écrites contre les champs naturels qui manquent dans `game.rs` ; jamais compilées tant que ces champs
-// n'existent pas. Champs attendus :
-// - `Showdown.bf_defend_seen: BTreeSet<(usize, usize)>`  (Python : `sd._bf_defend_seen`, créé à la volée)
-// - `Showdown.bf_excess: Vec<(Option<usize>, i64)>`      (Python : `sd._bf_excess`, dict joueur -> excès)
-// - `Player.bf_chosen_champion: Option<Option<u32>>`     (Python : `pl.bf_chosen_champion`, posé au premier évènement)
-// - Fortified Position retire *ce* grant par identité (`k is eff["grant"]`) : il faut une identité aux entrées de
-//   `Obj.grants` (par exemple un identifiant dans la durée).
-#[cfg(any())]
-mod missing_state {
-    use super::*;
-
-    /// `_first_defend(g, b, info)` (383.4.f.2.a)
-    fn first_defend(g: &mut Game, b: usize, info: &Map) -> bool {
-        let o = info.g("obj").obj();
-        if info.g("bf").int() as usize != b || g.sd.is_none() {
-            return false;
-        }
-        let key = (b, g.o(o).ctrl);
-        let sd = g.sd.as_mut().unwrap();
-        if sd.bf_defend_seen.contains(&key) {
-            return false;
-        }
-        sd.bf_defend_seen.insert(key);
-        true
+// ====================================================================== cartes à état (attributs libres `attrs`)
+/// `_first_defend(g, b, info)` : vrai la première fois qu'une unité d'un joueur défend à b dans le combat en cours
+/// (règle 383.4.f.2.a). `sd._bf_defend_seen` : liste de (b, joueur) dans `sd.attrs`.
+fn first_defend(g: &mut Game, b: usize, info: &Map) -> bool {
+    let o = info.g("obj").obj();
+    if info.g("bf").int() as usize != b || g.sd.is_none() {
+        return false;
     }
+    let key = Value::Tuple(vec![Value::from(b), Value::from(g.o(o).ctrl)]);
+    let sd = g.sd.as_mut().unwrap();
+    if !sd.attrs.contains("_bf_defend_seen") {
+        sd.attrs.set("_bf_defend_seen", Value::List(vec![]));
+    }
+    let seen = sd.attrs.get_mut("_bf_defend_seen").unwrap().list_mut();
+    if seen.contains(&key) {
+        return false;
+    }
+    seen.push(key);
+    true
+}
 
-    // Ravenbloom Conservatory — "When you defend here, reveal the top card of your Main Deck. If it's a spell, put it
-    // in your hand. Otherwise, recycle it."  (empty deck: nothing is revealed, no burn out, rule 431.1.c)
-    fn ravenbloom() -> Value {
-        Value::func("_ravenbloom", |g, a| {
-            let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
-            if ev == "defend" && first_defend(g, b, info) {
-                let res = Value::func("res", |g_, a_| {
-                    let c = g_.it(a_[0].item()).ctrl;
-                    let top = g_.reveal(c, 1, None, true, None)?;
-                    if top.is_empty() {
-                        return nil();
+// ---------------------------------------------------------------------------------------------- Fortified Position
+// "When you defend here, choose a unit. It gains [Shield 2] this combat."
+// Écart de forme (sans effet sur le jeu) : Python retire *ce* grant par identité (`k is eff["grant"]`) ; ici la durée
+// du grant est un dict {dur: "turn", id: eid de l'effet de fin}, retiré par égalité. Ce dict n'étant pas "turn", la
+// fin de tour ne l'enlève pas : la fin du combat (toujours dans le tour) l'enlève, et un changement de zone vide les
+// grants.
+fn fortified() -> Value {
+    Value::func("_fortified", |g, a| {
+        let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        if ev == "defend" && first_defend(g, b, info) {
+            let pid = g.o(info.g("obj").obj()).ctrl;
+            let opts = Value::func("opts", move |g_, a_| {
+                let c = g_.it(a_[0].item()).ctrl;
+                let mine: Vec<O> =
+                    friends(g_, c, false, None)?.into_iter().filter(|&u| g_.o(u).loc == here_loc(b)).collect();
+                let rest: Vec<O> = all_units(g_, c, false, None)?.into_iter().filter(|u| !mine.contains(u)).collect();
+                let rest = sorted_by(g_, rest, |g2, u| Ok(g2.o(u).ctrl != c))?;
+                let mut out = mine;
+                out.extend(rest);
+                Ok(objs(&out))
+            });
+            let res = Value::func("res", |g_, a_| {
+                let Some(u) = g_.legal(a_[0].item(), 0)? else { return nil() };
+                let id = g_.next_eid + 1; // eid que recevra l'effet de fin ajouté juste après
+                let mark: Value = map! { dur = "turn", id = id as i64 }.into();
+                g_.o_mut(u).grants.push(("Shield".to_string(), 2, mark.clone()));
+                let end = Value::func("end", |g2, a2| {
+                    // "this combat": the grant ends with the combat
+                    let eid = a2[0].int() as u64;
+                    let eff = g2.eff(eid).cloned().unwrap_or_default();
+                    if g2.has_effect(eid) {
+                        g2.remove_effect(eid);
                     }
-                    let x = top[0];
-                    if is_type(g_, x, "Spell") {
-                        g_.to_zone(x, "hand", false, None)?;
+                    if let Some(x) = g2.obj(eff.g("uid").int() as u32) {
+                        let gr = eff.g("grant");
+                        if let Some(i) = g2.o(x).grants.iter().position(|k| k.2 == gr) {
+                            g2.o_mut(x).grants.remove(i);
+                        }
+                    }
+                    nil()
+                });
+                let uid = g_.o(u).uid;
+                let eid = g_.add_effect(map! { on = "combat_end", fn = end, dur = "turn", uid = uid, grant = mark });
+                debug_assert_eq!(eid, id);
+                nil()
+            });
+            g.queue_trigger(
+                pid,
+                "Fortified Position",
+                res,
+                Map::new(),
+                None,
+                false,
+                trig_target(opts, Value::None, "fortified_shield", false, true),
+                Value::None,
+            );
+        }
+        nil()
+    })
+}
+
+// ---------------------------------------------------------------------------------------------- Hallowed Tomb
+// "When you hold here, you may return your Chosen Champion from your trash to your Champion Zone if it is empty."
+/// `_champ_uid(g, pid)` : uid de la carte Chosen Champion de pid. Notée au premier évènement vu par ce battlefield :
+/// le premier évènement d'une partie (Beginning Phase du tour 1) précède tout jeu, le champion est encore dans sa zone.
+fn champ_uid(g: &Game, pid: usize) -> Option<u32> {
+    g.p[pid].attrs.g("bf_chosen_champion").opt_int().map(|x| x as u32)
+}
+
+fn hallowed_find(g: &Game, p: usize) -> Option<O> {
+    let uid = champ_uid(g, p)?;
+    g.p[p].trash.iter().copied().find(|&c| g.o(c).uid == uid)
+}
+
+fn hallowed() -> Value {
+    Value::func("_hallowed", |g, a| {
+        let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        for p in 0..g.p.len() {
+            if !g.p[p].attrs.contains("bf_chosen_champion") {
+                let v: Value = g.p[p].champ.first().map(|&c| g.o(c).uid).into();
+                g.p[p].attrs.set("bf_chosen_champion", v);
+            }
+        }
+        if ev == "hold" && info.g("bf").int() as usize == b {
+            let pid = info.g("pid").int() as usize;
+            let res = Value::func("res", |g_, a_| {
+                let c0 = g_.it(a_[0].item()).ctrl;
+                let Some(c) = hallowed_find(g_, c0) else { return nil() };
+                if !g_.p[c0].champ.is_empty() {
+                    return nil();
+                }
+                if let Some(i) = g_.p[c0].trash.iter().position(|&x| x == c) {
+                    g_.p[c0].trash.remove(i);
+                }
+                g_.reset_obj(c);
+                g_.o_mut(c).oid += 1;
+                g_.o_mut(c).zone = Some(Zone::Champ);
+                g_.p[c0].champ.push(c);
+                let r = g_.repr(c);
+                g_.log(|| format!("  Hallowed Tomb returns {r} to the Champion Zone"));
+                nil()
+            });
+            if hallowed_find(g, pid).is_some() && g.p[pid].champ.is_empty() {
+                g.queue_trigger(pid, "Hallowed Tomb", res, Map::new(), None, true, Value::None, Value::None);
+            }
+        }
+        nil()
+    })
+}
+
+// ---------------------------------------------------------------------------------------------- Ravenbloom Conservatory
+// "When you defend here, reveal the top card of your Main Deck. If it's a spell, put it in your hand. Otherwise,
+// recycle it."  (empty deck: nothing is revealed, no burn out, rule 431.1.c)
+fn ravenbloom() -> Value {
+    Value::func("_ravenbloom", |g, a| {
+        let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        if ev == "defend" && first_defend(g, b, info) {
+            let res = Value::func("res", |g_, a_| {
+                let c = g_.it(a_[0].item()).ctrl;
+                let top = g_.reveal(c, 1, None, true, None)?;
+                if top.is_empty() {
+                    return nil();
+                }
+                let x = top[0];
+                if is_type(g_, x, "Spell") {
+                    g_.to_zone(x, "hand", false, None)?;
+                } else {
+                    g_.recycle_cards(c, &[x])?;
+                }
+                nil()
+            });
+            let p = g.o(info.g("obj").obj()).ctrl;
+            g.queue_trigger(p, "Ravenbloom Conservatory", res, Map::new(), None, false, Value::None, Value::None);
+        }
+        nil()
+    })
+}
+
+// ---------------------------------------------------------------------------------------------- Reaver's Row
+// "When you defend here, you may move a friendly unit here to base."
+fn reaver() -> Value {
+    Value::func("_reaver", |g, a| {
+        let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        if ev == "defend" && first_defend(g, b, info) {
+            let res = Value::func("res", |g_, a_| {
+                let it = a_[0].item();
+                if let Some(u) = g_.legal(it, 0)? {
+                    let c = g_.it(it).ctrl;
+                    g_.move_(&[u], Loc::Base, Some(c), false)?;
+                }
+                nil()
+            });
+            let opts = Value::func("opts", move |g_, a_| {
+                let c = g_.it(a_[0].item()).ctrl;
+                let f = friends(g_, c, false, here_loc(b))?;
+                Ok(objs(&sorted_by(g_, f, value)?))
+            });
+            let pred = Value::func("pred", move |g_, a_| {
+                let (it, o) = (a_[0].item(), a_[1].obj());
+                Ok((g_.o(o).ctrl == g_.it(it).ctrl && g_.o(o).loc == here_loc(b)).into())
+            });
+            let p = g.o(info.g("obj").obj()).ctrl;
+            g.queue_trigger(p, "Reaver's Row", res, Map::new(), None, true, trig_target(opts, pred, "reaver_move", false, true), Value::None);
+        }
+        nil()
+    })
+}
+
+// ---------------------------------------------------------------------------------------------- Trapping Grounds
+// "When you conquer here, if you assigned 3 or more excess damage, play a 1 might Bird unit token with [Deflect]."
+// Excess damage = combat damage assigned to a unit beyond its lethal damage (Game.lethal_need). It is measured on
+// the 'damaged' events of the combat here: assigned - lethal = dealt - max(1, might - previous damage).
+// The token names no location: it is played to a location it can be played to (rule 187 / play rules): base or a
+// battlefield its controller controls.
+// `sd._bf_excess` : dict joueur -> excès dans `sd.attrs` (clé : texte du joueur, "None" sans joueur).
+fn trapping() -> Value {
+    Value::func("_trapping", |g, a| {
+        let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        let sd_here = g.sd.as_ref().map(|sd| sd.bf == b);
+        if ev == "damaged" && info.g("kind").opt_str() == Some("combat") && sd_here == Some(true) {
+            let (o, n) = (info.g("obj").obj(), info.g("amount").int());
+            let prior = g.o(o).damage - n;
+            let ex = n - 1.max(g.might(o)? - prior);
+            if ex > 0 {
+                let by = match info.g("by") {
+                    Value::None => "None".to_string(),
+                    v => v.int().to_string(),
+                };
+                let sd = g.sd.as_mut().unwrap();
+                if !sd.attrs.contains("_bf_excess") {
+                    sd.attrs.set("_bf_excess", Map::new());
+                }
+                let d = sd.attrs.get_mut("_bf_excess").unwrap().map_mut();
+                let cur = d.g(&by).opt_int().unwrap_or(0);
+                d.set(&by, cur + ex);
+            }
+        } else if ev == "conquer" && info.g("bf").int() as usize == b {
+            let pid = info.g("pid").int() as usize;
+            let got = match g.sd.as_ref() {
+                Some(sd) if sd.bf == b => {
+                    let d = sd.attrs.g("_bf_excess");
+                    if d.is_none() {
+                        0
                     } else {
-                        g_.recycle_cards(c, &[x])?;
+                        d.map().g(&pid.to_string()).opt_int().unwrap_or(0)
                     }
-                    nil()
-                });
-                let p = g.o(info.g("obj").obj()).ctrl;
-                g.queue_trigger(p, "Ravenbloom Conservatory", res, Map::new(), None, false, Value::None, Value::None);
+                }
+                _ => return nil(),
+            };
+            if got < 3 {
+                return nil();
             }
-            nil()
-        })
-    }
-
-    // Reaver's Row — "When you defend here, you may move a friendly unit here to base."
-    fn reaver() -> Value {
-        Value::func("_reaver", |g, a| {
-            let (b, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
-            if ev == "defend" && first_defend(g, b, info) {
-                let res = Value::func("res", |g_, a_| {
-                    let it = a_[0].item();
-                    if let Some(u) = g_.legal(it, 0)? {
-                        let c = g_.it(it).ctrl;
-                        g_.move_(&[u], Loc::Base, Some(c), false)?;
+            let res = Value::func("res", |g_, a_| {
+                let c = g_.it(a_[0].item()).ctrl;
+                let mut locs = vec![Value::Loc(Loc::Base)];
+                for x in &g_.bfs {
+                    if x.ctrl == Some(c) {
+                        locs.push(Value::Loc(Loc::Bf(x.idx)));
                     }
-                    nil()
-                });
-                let opts = Value::func("opts", move |g_, a_| {
-                    let c = g_.it(a_[0].item()).ctrl;
-                    let f = friends(g_, c, false, here_loc(b))?;
-                    Ok(objs(&sorted_by(g_, f, value)?))
-                });
-                let pred = Value::func("pred", move |g_, a_| {
-                    let (it, o) = (a_[0].item(), a_[1].obj());
-                    Ok((g_.o(o).ctrl == g_.it(it).ctrl && g_.o(o).loc == here_loc(b)).into())
-                });
-                let p = g.o(info.g("obj").obj()).ctrl;
-                g.queue_trigger(p, "Reaver's Row", res, Map::new(), None, true, trig_target(opts, pred, "reaver_move", false, true), Value::None);
-            }
-            nil()
-        })
-    }
+                }
+                let loc = g_.ask(c, "play_location", locs, Map::new())?.loc();
+                make_token(g_, "Bird", c, loc, false)?;
+                nil()
+            });
+            g.queue_trigger(pid, "Trapping Grounds", res, Map::new(), None, false, Value::None, Value::None);
+        }
+        nil()
+    })
 }

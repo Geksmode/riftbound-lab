@@ -6,9 +6,8 @@
 //! peut être incliné / empowered), leurs capacités passives sur les unités sont `aura_kw` / `aura_might` (src =
 //! l'objet légende, src.owner = son joueur) et leurs capacités [Add] sont `add` (utilisées en payant, règle 429.3).
 //!
-//! Cartes non enregistrées (il manque un champ d'état dans `game.rs`, voir le compte rendu du portage) : Vi, Piltover
-//! Enforcer (`Showdown.legends_excess`) et Jhin, Virtuoso (`Obj.jhin`). Leur traduction est gardée plus bas, hors
-//! compilation (`#[cfg(any())]`), écrite contre les champs naturels qui manquent.
+//! Les attributs posés à la volée par le Python (`sd.legends_excess`, `leg.jhin`) sont rangés dans `attrs`, sous le
+//! même nom.
 use std::cmp::Ordering;
 
 use crate::actions::{attach, card_choices, play_card};
@@ -1689,7 +1688,7 @@ pub fn register(r: &mut Registry) {
         },
     );
     card(r, Impl { legend_event: vex(), ..Impl::new("Vex, Gloomist") });
-    // Vi, Piltover Enforcer : non enregistrée (Showdown.legends_excess : voir plus bas)
+    card(r, Impl { legend_event: vi(), ..Impl::new("Vi, Piltover Enforcer") });
     card(
         r,
         Impl {
@@ -1767,7 +1766,7 @@ pub fn register(r: &mut Registry) {
         },
     );
     card(r, Impl { legend_event: ivern(), ..Impl::new("Ivern, Green Father") });
-    // Jhin, Virtuoso : non enregistrée (Obj.jhin : voir plus bas)
+    card(r, Impl { legend_event: jhin(), ..Impl::new("Jhin, Virtuoso") });
     card(
         r,
         Impl {
@@ -1830,128 +1829,129 @@ pub fn register(r: &mut Registry) {
     );
 }
 
-// ====================================================================== cartes non enregistrées (état manquant)
-// Traductions écrites contre les champs naturels qui manquent dans `game.rs` ; jamais compilées tant que ces champs
-// n'existent pas. Champs attendus :
-// - `Showdown.legends_excess: Option<[i64; 2]>`  (Python : `sd.legends_excess`, créé à la volée) ; `sd.assigned`
-//   est lu comme deux listes de (objet, dégâts) : `mine[u]` = les dégâts assignés à u.
-// - `Obj.jhin: Option<Vec<(O, i64)>>`            (Python : `leg.jhin`, les sorts bannis avec Jhin et leur oid)
-#[cfg(any())]
-mod missing_state {
-    use super::*;
-
-    // Vi, Piltover Enforcer — "When you conquer, if you assigned 3 or more excess damage, you may exhaust me to ready a
-    // unit." Excess damage = combat damage assigned to a unit beyond the lethal damage it needed (rules 142.4,
-    // 437.5.a, 465.2.c.3). It is measured when the combat damage is dealt (the 'damaged' events of the combat, before
-    // the units die) from the assignment kept in g.sd.assigned, and stored on the showdown. The "if" is part of the
-    // trigger condition (rule 383.2.a.1).
-    fn vi_record(g: &mut Game, pid: usize, info: &Map) -> Res<()> {
-        let Some(sd) = g.sd.as_ref() else { return Ok(()) };
-        if !sd.combat || sd.assigned.is_none() {
-            return Ok(());
+// ====================================================================== cartes à état (attributs libres `attrs`)
+// ---------------------------------------------------------------------- Vi, Piltover Enforcer
+// "When you conquer, if you assigned 3 or more excess damage, you may exhaust me to ready a unit."
+// Excess damage = combat damage assigned to a unit beyond the lethal damage it needed (rules 142.4, 437.5.a,
+// 465.2.c.3). It is measured when the combat damage is dealt (the 'damaged' events of the combat, before the
+// units die) from the assignment kept in g.sd.assigned, and stored on the showdown. The "if" is part of the
+// trigger condition (rule 383.2.a.1).
+// `sd.legends_excess` : [n0, n1] dans `sd.attrs` ; `sd.assigned` : deux listes de (unité, dégâts assignés).
+fn vi_record(g: &mut Game, pid: usize, info: &Map) -> Res<()> {
+    let Some(sd) = g.sd.as_ref() else { return Ok(()) };
+    if !sd.combat || sd.assigned.is_none() {
+        return Ok(());
+    }
+    let mine = sd.assigned.list()[if pid == sd.attacker { 0 } else { 1 }].clone();
+    let u = info.g("obj").obj();
+    let Some(n) = mine.list().iter().find(|p| p.list()[0].obj() == u).map(|p| p.list()[1].int()) else {
+        return Ok(());
+    };
+    let dealt = info.g("amount").int();
+    let prevent_before = g.o(u).prevent + (n - dealt); // the rest of the assignment was prevented
+    let need = 1.max(g.might(u)? - (g.o(u).damage - dealt)) + prevent_before;
+    if n > need {
+        let sd = g.sd.as_mut().unwrap();
+        if sd.attrs.g("legends_excess").is_none() {
+            sd.attrs.set("legends_excess", Value::List(vec![Value::Int(0), Value::Int(0)]));
         }
-        let mine = sd.assigned.list()[if pid == sd.attacker { 0 } else { 1 }].clone();
-        let u = info.g("obj").obj();
-        let Some(n) = mine.list().iter().find(|p| p.list()[0].obj() == u).map(|p| p.list()[1].int()) else {
-            return Ok(());
-        };
-        let dealt = info.g("amount").int();
-        let prevent_before = g.o(u).prevent + (n - dealt); // the rest of the assignment was prevented
-        let need = 1.max(g.might(u)? - (g.o(u).damage - dealt)) + prevent_before;
-        if n > need {
-            let sd = g.sd.as_mut().unwrap();
-            let ex = sd.legends_excess.get_or_insert([0, 0]);
-            ex[pid] += n - need;
+        let ex = sd.attrs.get_mut("legends_excess").unwrap().list_mut();
+        let cur = ex[pid].int();
+        ex[pid] = Value::Int(cur + n - need);
+    }
+    Ok(())
+}
+
+fn vi() -> Value {
+    Value::func("_vi", |g, a| {
+        let (pid, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        if ev == "damaged" && info.g("kind").opt_str() == Some("combat") {
+            vi_record(g, pid, info)?;
+        } else if ev == "conquer" && info.g("pid").int() as usize == pid {
+            let Some(sd) = g.sd.as_ref() else { return nil() };
+            if !sd.combat || sd.bf as i64 != info.g("bf").int() {
+                return nil();
+            }
+            let ex = sd.attrs.g("legends_excess");
+            let n = if ex.truthy() { ex.list()[pid].int() } else { 0 };
+            if n < 3 {
+                return nil();
+            }
+            let opts = Value::func("opts", |g_, a_| {
+                let c = ctrl_of(g_, a_);
+                let us = units_targetable(g_, c)?;
+                Ok(objs(&friends_first(g_, c, &us, |g2, u| Ok((!g2.exhausted(u), -value(g2, u)?)))?))
+            });
+            let src = leg_uid(g, pid);
+            g.queue_trigger(
+                pid,
+                "Vi, Piltover Enforcer",
+                ready_target_res(),
+                Map::new(),
+                src,
+                true,
+                trig_target(opts, p_unit_v(), "ready_target", false, true),
+                exhaust_me(),
+            );
         }
-        Ok(())
-    }
+        nil()
+    })
+}
 
-    fn vi() -> Value {
-        Value::func("_vi", |g, a| {
-            let (pid, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
-            if ev == "damaged" && info.g("kind").opt_str() == Some("combat") {
-                vi_record(g, pid, info)?;
-            } else if ev == "conquer" && info.g("pid").int() as usize == pid {
-                let Some(sd) = g.sd.as_ref() else { return nil() };
-                if !sd.combat || sd.bf != info.g("bf").int() as usize {
-                    return nil();
-                }
-                if sd.legends_excess.unwrap_or([0, 0])[pid] < 3 {
-                    return nil();
-                }
-                let opts = Value::func("opts", |g_, a_| {
-                    let c = ctrl_of(g_, a_);
-                    let us = units_targetable(g_, c)?;
-                    Ok(objs(&friends_first(g_, c, &us, |g2, u| Ok((!g2.exhausted(u), -value(g2, u)?)))?))
-                });
-                let src = leg_uid(g, pid);
-                g.queue_trigger(
-                    pid,
-                    "Vi, Piltover Enforcer",
-                    ready_target_res(),
-                    Map::new(),
-                    src,
-                    true,
-                    trig_target(opts, p_unit_v(), "ready_target", false, true),
-                    exhaust_me(),
-                );
-            }
-            nil()
-        })
-    }
+// ---------------------------------------------------------------------- Jhin, Virtuoso
+// "When you play a spell, if you spent 4 energy or more, you may banish it. Then, if there are four spells banished
+// with me, put each in its trash, channel 4 runes, and draw 1." (the spells banished with Jhin: legend.jhin, rangé
+// dans `attrs["jhin"]` : liste de (carte, oid))
+fn jhin_list(g: &Game, l: O) -> Vec<(O, i64)> {
+    g.o(l).attrs.g("jhin").list().iter().map(|p| (p.list()[0].obj(), p.list()[1].int())).collect()
+}
 
-    // Jhin, Virtuoso — "When you play a spell, if you spent 4 energy or more, you may banish it. Then, if there are
-    // four spells banished with me, put each in its trash, channel 4 runes, and draw 1." (the spells banished with
-    // Jhin: legend.jhin)
-    fn jhin_res() -> Value {
-        Value::func("_jhin_res", |g, a| {
-            let it = a[0].item();
-            let c0 = g.it(it).ctrl;
-            let l = leg(g, c0);
-            let c = g.it(it).data.g("card").obj();
-            if g.o(c).zone == Some(Zone::Trash) && g.o(c).oid == g.it(it).data.g("oid").int() {
-                g.to_zone(c, "banish", false, Some(c0))?;
-                let oid = g.o(c).oid;
-                let mut j = g.o(l).jhin.clone().unwrap_or_default();
-                j.push((c, oid));
-                g.o_mut(l).jhin = Some(j);
-            }
-            let with_me: Vec<(O, i64)> = g
-                .o(l)
-                .jhin
-                .clone()
-                .unwrap_or_default()
-                .into_iter()
-                .filter(|&(x, oid)| g.o(x).zone == Some(Zone::Banish) && g.o(x).oid == oid)
-                .collect();
-            g.o_mut(l).jhin = Some(with_me.clone());
-            if with_me.len() >= 4 {
-                g.o_mut(l).jhin = Some(vec![]);
-                for (x, _) in with_me {
-                    g.to_zone(x, "trash", false, Some(c0))?;
-                }
-                g.channel(c0, 4, false)?;
-                g.draw(c0, 1)?;
-            }
-            nil()
-        })
-    }
+fn jhin_set(g: &mut Game, l: O, v: &[(O, i64)]) {
+    let lv = Value::List(v.iter().map(|&(c, oid)| Value::Tuple(vec![Value::Obj(c), Value::Int(oid)])).collect());
+    g.o_mut(l).attrs.set("jhin", lv);
+}
 
-    fn jhin() -> Value {
-        Value::func("_jhin", |g, a| {
-            let (pid, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
-            let Value::Item(it) = info.g("item") else { return nil() };
-            if ev == "played"
-                && info.g("pid").int() as usize == pid
-                && is_type(g, info.g("card").obj(), "Spell")
-                && g.it(it).data.g("paid_e").opt_int().unwrap_or(0) >= 4
-            {
-                let c = info.g("card").obj();
-                let oid = g.o(c).oid;
-                let src = leg_uid(g, pid);
-                g.queue_trigger(pid, "Jhin, Virtuoso", jhin_res(), map! { card = c, oid = oid }, src, true, Value::None, Value::None);
+fn jhin_res() -> Value {
+    Value::func("_jhin_res", |g, a| {
+        let it = a[0].item();
+        let c0 = g.it(it).ctrl;
+        let l = leg(g, c0);
+        let c = g.it(it).data.g("card").obj();
+        if g.o(c).zone == Some(Zone::Trash) && g.o(c).oid == g.it(it).data.g("oid").int() {
+            g.to_zone(c, "banish", false, Some(c0))?;
+            let mut j = jhin_list(g, l);
+            j.push((c, g.o(c).oid));
+            jhin_set(g, l, &j);
+        }
+        let with_me: Vec<(O, i64)> =
+            jhin_list(g, l).into_iter().filter(|&(x, oid)| g.o(x).zone == Some(Zone::Banish) && g.o(x).oid == oid).collect();
+        jhin_set(g, l, &with_me);
+        if with_me.len() >= 4 {
+            jhin_set(g, l, &[]);
+            for (x, _) in with_me {
+                g.to_zone(x, "trash", false, Some(c0))?;
             }
-            nil()
-        })
-    }
+            g.channel(c0, 4, false)?;
+            g.draw(c0, 1)?;
+        }
+        nil()
+    })
+}
+
+fn jhin() -> Value {
+    Value::func("_jhin", |g, a| {
+        let (pid, ev, info) = (a[0].int() as usize, a[1].str(), a[2].map());
+        let it = info.g("item");
+        if ev == "played" && info.g("pid").int() as usize == pid && is_type(g, info.g("card").obj(), "Spell") {
+            if let Value::Item(it) = it {
+                if g.it(it).data.g("paid_e").opt_int().unwrap_or(0) >= 4 {
+                    let c = info.g("card").obj();
+                    let oid = g.o(c).oid;
+                    let src = leg_uid(g, pid);
+                    g.queue_trigger(pid, "Jhin, Virtuoso", jhin_res(), map! { card = c, oid = oid }, src, true, Value::None, Value::None);
+                }
+            }
+        }
+        nil()
+    })
 }
