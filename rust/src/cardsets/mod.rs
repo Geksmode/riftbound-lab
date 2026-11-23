@@ -1,4 +1,8 @@
 //! Modules de cartes (`cardsets/`), enregistrés dans l'ordre de `cardsets/__init__.py : MODULES`.
 use crate::cards::Registry;
 
-pub fn register_all(_r: &mut Registry) {}
+pub mod radiance;
+
+pub fn register_all(r: &mut Registry) {
+    radiance::register(r);
+}
