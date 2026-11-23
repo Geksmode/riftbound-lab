@@ -5,6 +5,7 @@
 pub mod cards;
 pub mod cardsets;
 pub mod game;
+pub mod game_costs;
 mod pending;
 pub mod pyrandom;
 pub mod spec;

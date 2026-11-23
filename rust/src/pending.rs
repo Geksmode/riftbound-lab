@@ -9,7 +9,7 @@ impl Game {
     pub fn replace_choice_effect(&mut self, _o: O, _what: &str, _duration: Value) -> Res<bool> {
         todo!("portage : Game.replace_choice_effect")
     }
-    pub fn burn_out(&mut self, _pid: usize) -> Res<()> {
-        todo!("portage : Game.burn_out")
+    pub fn kill(&mut self, _objs: &[O], _by_pid: Option<usize>, _cost: bool) -> Res<Vec<O>> {
+        todo!("portage : Game.kill")
     }
 }
