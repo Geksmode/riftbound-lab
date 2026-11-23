@@ -1,4 +1,9 @@
 //! Modules de cartes (`cardsets/`), enregistrés dans l'ordre de `cardsets/__init__.py : MODULES`.
 use crate::cards::Registry;
 
-pub fn register_all(_r: &mut Registry) {}
+pub mod pool;
+
+pub fn register_all(r: &mut Registry) {
+    // cards.py enregistre ses cartes du pool avant de charger cardsets
+    pool::register(r);
+}
