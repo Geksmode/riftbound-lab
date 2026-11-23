@@ -11,6 +11,7 @@ pub mod legends;
 pub mod mind;
 pub mod order;
 pub mod pool;
+pub mod radiance;
 
 pub fn register_all(r: &mut Registry) {
     // cards.py : titres des questions, runes et Gold // Buff, cartes du pool, puis cardsets
@@ -26,6 +27,7 @@ pub fn register_all(r: &mut Registry) {
     legends::register(r);
     mind::register(r);
     order::register(r);
+    radiance::register(r);
     // cartes « mots-clés seulement » non modélisées par un module (register_keyword_only_cards)
     crate::cards_helpers::register_auto(r);
 }
