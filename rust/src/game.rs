@@ -540,6 +540,24 @@ pub struct Game {
     pub effects_gone: Vec<Effect>,
     /// partie jouée par l'humain (train.Human) : `getattr(s, "every_choice", False)`
     pub every_choice: bool,
+    /// point de reprise de la partie réelle (`checkpoint`, `_ckpt`, `_asklog`, ai.ask_sim) : jamais copié
+    pub ck: Checkpoint,
+}
+
+/// Point de reprise (2026-10-28, ai.ask_sim) : quand `on` est vrai (posé par l'IA sur la partie réelle), `apply` garde
+/// une copie de l'état d'avant le coup (`ckpt` : partie, `Obj._n`, `Item._n`, action) et `ask` note chaque réponse
+/// donnée depuis (`asklog`). Jamais copié (`_game_copy`) : la copie d'une partie en a un vide.
+#[derive(Default)]
+pub struct Checkpoint {
+    pub on: bool,
+    pub ckpt: Option<Box<(Game, u32, u32, Value)>>,
+    pub asklog: Vec<crate::ai::AskLog>,
+}
+
+impl Clone for Checkpoint {
+    fn clone(&self) -> Self {
+        Checkpoint::default()
+    }
 }
 
 /// Paquet d'un joueur : `dict(legend, champion, main, runes, battlefield)`.
@@ -613,6 +631,7 @@ impl Game {
             hist: Hist::default(),
             effects_gone: vec![],
             every_choice: false,
+            ck: Checkpoint::default(),
         };
         for (i, d) in decks.iter().enumerate() {
             let pl = g.new_player(i, d);

@@ -4,6 +4,7 @@
 
 pub mod actions;
 pub mod agents;
+pub mod ai;
 pub mod cards;
 pub mod cards_helpers;
 pub mod cardsets;
@@ -15,6 +16,9 @@ pub mod game_events;
 pub mod game_turn;
 pub mod json;
 pub mod lang;
+pub mod plans;
+pub mod plans_general;
+pub mod plans_legendes;
 pub mod pyrandom;
 pub mod spec;
 pub mod trace;
