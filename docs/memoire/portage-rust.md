@@ -90,6 +90,13 @@ les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table
   `as_played` -> liste de dict.
 
 ## Avancement
+- 2026-11-23 (fin) : **règles et cartes portées** : 1037 cartes des 10 lots enregistrées (pool 84, battlefields 55,
+  body 128, calm 114, chaos 122, fury 121, legends 47, mind 120, order 101, radiance 165), plus runes et cartes
+  « mots-clés seulement ». Test différentiel (`rust/diff/serie.sh`, deux RandomAgent, paires de paquets de
+  `decks.json` tirées par la graine) : **2000/2000 parties identiques au Python** (graines 101 à 2100), 0 erreur.
+  Non couvert : cartes absentes de tous les paquets (Sivir, Ambitious ; Udyr, Wildman ; Reaver's Row ; Trapping
+  Grounds ; Hallowed Tomb ; The Zero Drive ; The List et Cursed Sarcophagus peu ou pas jouées) ; IA (simulations sur
+  copies) pas encore portée. Reste : IA (`ai.py`, plans), `train.py`/`match.py`, WebAssembly, bascule.
 - 2026-11-23 : cartes du pool de cards.py portées (84/84, `cardsets/pool.rs`, compile ; pas encore jouées).
 - 2026-11-23 : contrat, crate créée ; hasard identique à CPython (442 tirages) ; base de cartes identique (1111
   entrées) ; `game.py` entier porté (`rust/src/game*.rs`, compile sans avertissement, pas encore jouable :
