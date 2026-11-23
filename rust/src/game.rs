@@ -173,6 +173,8 @@ pub struct Obj {
     pub paid_e: i64,
     /// `limited_play` : jouée par un effet (play_card limited=True)
     pub limited_play: bool,
+    /// attributs libres posés par les cartes (`setattr(o, ...)` en Python) : jamais remis à zéro, copiés avec la partie
+    pub attrs: Map,
 }
 
 impl Obj {
@@ -218,6 +220,7 @@ impl Obj {
             play_choice: None,
             paid_e: 0,
             limited_play: false,
+            attrs: Map::new(),
         };
         o.reset_fields();
         o
@@ -293,6 +296,8 @@ pub struct Player {
     /// uids des cartes de son propre deck que le joueur a vues (436, 817)
     pub seen: BTreeSet<u32>,
     pub gold_spent: i64,
+    /// attributs libres posés par les cartes (`setattr(pl, ...)`)
+    pub attrs: Map,
 }
 
 /// `game.Item` : un item de chaîne (sort, capacité activée ou déclenchée, règles 328-340).
@@ -334,6 +339,8 @@ pub struct Showdown {
     pub assigned: Value,
     pub excess: [i64; 2],
     pub result: Option<usize>,
+    /// attributs libres posés par les cartes (`sd._bf_defend_seen`, `sd._bf_excess`...)
+    pub attrs: Map,
 }
 
 /// `game.Battlefield`
@@ -704,6 +711,7 @@ impl Game {
             revealed_turn: -1,
             seen: BTreeSet::new(),
             gold_spent: 0,
+            attrs: Map::new(),
         }
     }
 

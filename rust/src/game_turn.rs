@@ -224,6 +224,7 @@ impl Game {
             assigned: Value::None,
             excess: [0, 0],
             result: None,
+            attrs: Map::new(),
         });
         let n = self.bfs[b].name.clone();
         self.log(|| format!("{} at {n}, attacker P{attacker}", if combat { "COMBAT" } else { "showdown" }));
