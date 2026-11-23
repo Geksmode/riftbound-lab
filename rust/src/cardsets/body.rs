@@ -3902,3 +3902,311 @@ mod tests {
         assert!(combinations(1, 2).is_empty());
     }
 }
+
+// ====================================================================== en attente d'API (non compilé)
+/// Traduction prête des quatre cartes bloquées. Il leur manque `Obj.attrs: Map` (attributs posés par les modules de
+/// cartes avec `setattr(o, "_body_...")` en Python : jamais remis à zéro, copiés avec la partie). Quand ce champ
+/// existe : retirer le `cfg`, vérifier la compilation et ajouter les quatre `r.card(...)` à leur place dans
+/// `register` (après Legion Marauder, Master Yi, Tempered, Sett, Targonian Visionary).
+#[cfg(any())]
+mod en_attente {
+    use super::*;
+    use crate::cards_helpers::p_unit_bf_v;
+
+    /// `_first_each_turn(o, key, g)` : vrai la première fois pour (incarnation, clé) dans un tour.
+    fn first_each_turn(g: &mut Game, o: O, key: &str) -> bool {
+        let attr = format!("_body_{key}");
+        let mark = Value::Tuple(vec![g.turn_no.into(), g.o(o).oid.into()]);
+        if g.o(o).attrs.g(&attr) == mark {
+            return false;
+        }
+        g.o_mut(o).attrs.set(&attr, mark);
+        true
+    }
+
+    // Lucian, Merciless — "[Weaponmaster] The first time I conquer each turn, ready me."
+    pub fn lucian() -> Impl {
+        let on_event = fv("_lucian", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map().clone());
+            if ev == "conquer" && in_units(&info, o) && first_each_turn(g, o, "lucian") {
+                let res = fv("res", |g_, a| {
+                    let it = a[0].item();
+                    if src(g_, it).is_some() {
+                        let s = src(g_, it).unwrap();
+                        g_.ready_obj(s, None, None)?;
+                    }
+                    Ok(Value::None)
+                });
+                trig(g, o, "Lucian, Merciless", res);
+            }
+            Ok(Value::None)
+        });
+        Impl { kw: map! { Weaponmaster = 1 }, on_event, ..new("Lucian, Merciless") }
+    }
+
+    // Miss Fortune, Captain — "[Accelerate] [Ganking] The first time I move each turn, you may ready something else
+    // that's exhausted." (anything on the board: units, gear, runes, legends; rules 107, 415.1)
+    pub fn miss_fortune() -> Impl {
+        let on_event = fv("_mf", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map().clone());
+            if !(ev == "move" && is_o(&info.g("obj"), o) && first_each_turn(g, o, "mf")) {
+                return Ok(Value::None);
+            }
+            let choose = fv("choose", |g_, a| {
+                let it = a[0].item();
+                let pid = ctrl(g_, it);
+                let s = g_.it(it).src;
+                let mine: Vec<O> = g_
+                    .units(Some(pid), None)
+                    .into_iter()
+                    .filter(|&u| g_.exhausted(u) && Some(g_.o(u).uid) != s)
+                    .collect();
+                let mut keys = vec![];
+                for &u in &mine {
+                    keys.push(vec![-value(g_, u)?]);
+                }
+                let mine = sort_keyed(mine, keys);
+                let rs0: Vec<_> = g_.p[pid].runes.iter().copied().filter(|&r| g_.r(r).exhausted).collect();
+                let rs = cap(g_, rs0, 1, Some(pid));
+                let mut other = vec![];
+                for x in g_.board.clone() {
+                    if g_.exhausted(x)
+                        && Some(g_.o(x).uid) != s
+                        && !mine.contains(&x)
+                        && (g_.o(x).ctrl == pid || (g_.targetable(x, Some(pid))? && payable(g_, it, x)?))
+                    {
+                        other.push(x);
+                    }
+                }
+                let okeys = other
+                    .iter()
+                    .map(|&x| vec![bk(g_.o(x).ctrl != pid), bk(g_.spec(x).type_ != "Gear"), g_.o(x).uid as f64])
+                    .collect();
+                let other = sort_keyed(other, okeys);
+                let legs: Vec<O> = g_.p.iter().map(|pl| pl.legend).filter(|&x| g_.exhausted(x)).collect();
+                let lkeys = legs.iter().map(|&x| vec![bk(g_.o(x).owner != pid)]).collect();
+                let legs = sort_keyed(legs, lkeys);
+                let er0: Vec<_> = g_.p[1 - pid].runes.iter().copied().filter(|&r| g_.r(r).exhausted).collect();
+                let erune = cap(g_, er0, 1, Some(pid));
+                let t = |k: &str, v: Value| Value::Tuple(vec![k.into(), v]);
+                let mut opts: Vec<Value> = mine.iter().map(|&x| t("obj", x.into())).collect();
+                opts.extend(rs.iter().map(|&r| t("rune", r.into())));
+                opts.extend(legs.iter().map(|&x| t("legend", x.into())));
+                opts.extend(other.iter().map(|&x| t("obj", x.into())));
+                opts.extend(erune.iter().map(|&r| t("rune", r.into())));
+                if opts.is_empty() {
+                    return Ok(Value::Bool(false));
+                }
+                let p = g_.ask(pid, "mf_ready", opts, map! { item = it })?;
+                let (k, x) = (p.list()[0].str().to_string(), p.list()[1].clone());
+                if k == "obj" {
+                    if !pay_deflect(g_, it, x.obj())? {
+                        return Ok(Value::Bool(false));
+                    }
+                    g_.add_target(it, x.obj(), Value::None);
+                } else {
+                    g_.it_mut(it).data.set("thing", Value::Tuple(vec![k.as_str().into(), x]));
+                }
+                Ok(Value::Bool(true))
+            });
+            let res = fv("res", |g_, a| {
+                let it = a[0].item();
+                if !g_.it(it).targets.is_empty() {
+                    if let Some(x) = g_.legal(it, 0)? {
+                        g_.ready_obj(x, None, None)?;
+                    }
+                } else if g_.it(it).data.g("thing").truthy() {
+                    match g_.it(it).data.g("thing").list()[1].clone() {
+                        Value::Rune(r) => g_.r_mut(r).exhausted = false,
+                        Value::Obj(x) => g_.set_exhausted(x, false),
+                        _ => {}
+                    }
+                }
+                Ok(Value::None)
+            });
+            trig_full(g, o, "Miss Fortune, Captain", res, Map::new(), true, choose, Value::None);
+            Ok(Value::None)
+        });
+        Impl { accelerate: true, kw: map! { Ganking = 1 }, on_event, ..new("Miss Fortune, Captain") }
+    }
+
+    // Sivir, Ambitious — "[Deflect 2] When I conquer after an attack, if you assigned 5 or more excess damage to enemy
+    // units, you may deal that much to an enemy unit." Excess damage on a unit = damage assigned to it beyond the
+    // lethal damage it needed when damage was assigned (rule 142.4.b), from the attacker's assignment
+    // (Showdown.assigned). `_body_sivir` = (turn_no, bf, {uid: excès}) ; le dict à clés entières devient une Map à
+    // clés texte, sommée dans l'ordre des entiers.
+    pub fn sivir() -> Impl {
+        let on_event = fv("_sivir", |g, a| {
+            let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map().clone());
+            if ev == "combat_start" {
+                let rec =
+                    Value::Tuple(vec![g.turn_no.into(), Value::Int(bfi(&info.g("bf")) as i64), Map::new().into()]);
+                g.o_mut(o).attrs.set("_body_sivir", rec);
+            } else if ev == "damaged" && info.g("kind").opt_str() == Some("combat") {
+                let u = info.g("obj").obj();
+                let rec = g.o(o).attrs.g("_body_sivir");
+                let Some(sd) = g.sd.clone() else { return Ok(Value::None) };
+                if sd.assigned.is_none()
+                    || g.o(u).ctrl == g.o(o).ctrl
+                    || sd.attacker != g.o(o).ctrl
+                    || rec.is_none()
+                    || rec.list()[0] != Value::Int(g.turn_no)
+                    || rec.list()[1] != Value::Int(sd.bf as i64)
+                {
+                    return Ok(Value::None);
+                }
+                let a_ = sd.assigned.list()[0]
+                    .list()
+                    .iter()
+                    .find(|p| p.list()[0].opt_obj() == Some(u))
+                    .map(|p| p.list()[1].int())
+                    .unwrap_or(0);
+                let n = info.g("amount").int();
+                let d0 = g.o(u).damage - n; // dégâts marqués avant ces dégâts de combat
+                let p0 = (a_ - n) + g.o(u).prevent; // prévention qu'elle avait quand les dégâts ont été assignés
+                let need = 1.max(g.might(u)? - d0) + p0;
+                let key = g.o(u).uid.to_string();
+                let mut rec = rec;
+                rec.list_mut()[2].map_mut().set(&key, 0.max(a_ - need));
+                g.o_mut(o).attrs.set("_body_sivir", rec);
+            } else if ev == "conquer" && in_units(&info, o) {
+                let rec = g.o(o).attrs.g("_body_sivir");
+                let Some(sd) = g.sd.clone() else { return Ok(Value::None) };
+                if !sd.combat
+                    || sd.attacker != g.o(o).ctrl
+                    || sd.bf != bfi(&info.g("bf"))
+                    || rec.is_none()
+                    || rec.list()[0] != Value::Int(g.turn_no)
+                    || rec.list()[1] != Value::Int(sd.bf as i64)
+                {
+                    return Ok(Value::None);
+                }
+                let m = rec.list()[2].map();
+                let mut ks: Vec<i64> = m.keys().map(|k| k.parse().unwrap()).collect();
+                ks.sort();
+                let ex: i64 = ks.iter().map(|k| m.g(&k.to_string()).int()).sum();
+                if ex < 5 {
+                    return Ok(Value::None);
+                }
+                let res = fv("res", |g_, a| {
+                    let it = a[0].item();
+                    let t = g_.legal(it, 0)?;
+                    let (d, c) = (g_.it(it).data.g("dmg").int(), ctrl(g_, it));
+                    g_.deal(t, d, "ability", Some(c), None)?;
+                    Ok(Value::None)
+                });
+                let choose = pick(
+                    |g_, it| {
+                        let c = ctrl(g_, it);
+                        enemies(g_, c, false, None, true)
+                    },
+                    p_enemy_v(),
+                    1,
+                    "target",
+                    true,
+                );
+                trig_full(g, o, "Sivir, Ambitious", res, map! { dmg = ex }, true, choose, Value::None);
+            }
+            Ok(Value::None)
+        });
+        Impl { kw: map! { Deflect = 2 }, on_event, ..new("Sivir, Ambitious") }
+    }
+
+    // Udyr, Wildman — "Spend my buff: Choose one you've not chosen this turn — Deal 2 to a unit at a battlefield.
+    // Stun a unit at a battlefield. Ready me. Give me [Ganking] this turn."
+    fn udyr_used(g: &Game, o: O) -> Vec<String> {
+        let rec = g.o(o).attrs.g("_body_udyr");
+        if rec.is_none() || rec.list()[0] != Value::Int(g.turn_no) || rec.list()[1] != Value::Int(g.o(o).oid) {
+            return vec![];
+        }
+        rec.list()[2].list().iter().map(|v| v.str().to_string()).collect()
+    }
+
+    pub fn udyr() -> Impl {
+        let choices = fv("_udyr_choices", |g, a| {
+            let (pid, o) = (a[0].int() as usize, a[1].obj());
+            let used = udyr_used(g, o);
+            let has = |k: &str| used.iter().any(|x| x == k);
+            let mut out = vec![];
+            if !has("ready") && g.exhausted(o) {
+                out.push(map! { mode = "ready" });
+            }
+            if !has("dmg") {
+                let mut es = vec![];
+                for u in enemies(g, pid, true, None, true)? {
+                    if g.might(u)? - g.o(u).damage <= 2 {
+                        es.push(u);
+                    }
+                }
+                for u in enemies(g, pid, true, None, true)? {
+                    if g.might(u)? - g.o(u).damage > 2 {
+                        es.push(u);
+                    }
+                }
+                for u in cap(g, es, 3, Some(pid)) {
+                    out.push(map! { mode = "dmg", tg = tup(&[g.o(u).uid]) });
+                }
+            }
+            if !has("stun") {
+                let st: Vec<Map> = enemies(g, pid, true, None, true)?
+                    .into_iter()
+                    .filter(|&u| !g.o(u).stunned)
+                    .map(|u| map! { mode = "stun", tg = tup(&[g.o(u).uid]) })
+                    .collect();
+                out.extend(cap(g, st, 2, Some(pid)));
+            }
+            if !has("gank") && !g.has_kw(o, "Ganking")? {
+                out.push(map! { mode = "gank" });
+            }
+            if !has("ready") && !g.exhausted(o) {
+                out.push(map! { mode = "ready" });
+            }
+            Ok(maps(out))
+        });
+        let pay = fv("_udyr_pay", |g, a| {
+            let (o, ch) = (a[1].obj(), a[2].map().clone());
+            spend_buff(g, Some(o))?;
+            let mut used: Vec<Value> = udyr_used(g, o).into_iter().map(Value::from).collect();
+            used.push(ch.g("mode"));
+            let rec = Value::Tuple(vec![g.turn_no.into(), g.o(o).oid.into(), Value::Tuple(used)]);
+            g.o_mut(o).attrs.set("_body_udyr", rec);
+            Ok(Value::None)
+        });
+        let res = fv("_udyr_res", |g, a| {
+            let it = a[0].item();
+            let m = g.it(it).data.g("mode").str().to_string();
+            let me = src_board(g, it);
+            let c = ctrl(g, it);
+            if m == "dmg" || m == "stun" {
+                if let Some(u) = g.legal(it, 0)? {
+                    if m == "dmg" {
+                        g.deal(Some(u), 2, "ability", Some(c), None)?;
+                    } else {
+                        g.stun(Some(u), Some(c))?;
+                    }
+                }
+            } else if let Some(me) = me {
+                if m == "ready" {
+                    g.ready_obj(me, None, None)?;
+                } else {
+                    g.grant(me, "Ganking", 1, turn());
+                }
+            }
+            Ok(Value::None)
+        });
+        Impl {
+            abilities: vec![ability(
+                "Spend buff",
+                AbilityArgs {
+                    can: fv("can", |g, a| Ok(Value::Bool(g.o(a[1].obj()).buff > 0))),
+                    choices,
+                    preds: Value::List(vec![p_unit_bf_v()]),
+                    extra_cost: pay,
+                    resolve: res,
+                    ..Default::default()
+                },
+            )],
+            ..new("Udyr, Wildman")
+        }
+    }
+}
