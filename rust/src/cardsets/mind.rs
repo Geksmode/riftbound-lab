@@ -3,8 +3,6 @@
 //!
 //! Les fermetures ne capturent jamais d'objet de jeu modifiable : les objets passent par `item.data`, les entrées de
 //! `g.effects` ou des uids (comme en Python, où les copies de l'IA copient la partie mais pas les fermetures).
-//!
-//! Carte du module Python non enregistrée ici (elle reste bloquée) : The Zero Drive (voir son commentaire plus bas).
 use std::cmp::Ordering;
 
 use crate::actions::{full_choices, pay_ctx, play_card, play_forbidden, spell_variants, total_cost};
@@ -1359,12 +1357,95 @@ fn sump_map(g: &mut Game, a: &[Value]) -> Res<Value> {
 
 // The Zero Drive — "[Equip] 1 energy and 1 mind rune. 3 energy and 1 mind rune, Banish this: Play all units
 // banished with this, ignoring their costs. (Use only if unattached.)"; Might Bonus +2 and Effect Text
-// "[Deathknell] — Banish me." (card image).
-// NON PORTÉE (carte bloquée) : le Python range la liste des cartes bannies sur l'objet lui-même
-// (`x.__dict__.setdefault("zero_banished", [])`), un attribut libre qui survit aux changements de zone et aux
-// copies de l'IA. `game::Obj` n'a pas de champ équivalent (les `xtags` sont remis à zéro à chaque changement de
-// zone) : il faut un champ `zero_banished: Vec<(i64, O)>` (ou des attributs libres) dans `Obj` pour la traduire
-// fidèlement.
+// "[Deathknell] — Banish me." (card image). The granted Deathknell is watched by an effect created when the Drive
+// is attached (the unit's look-back info lists its attached gear, so it works even if the Drive left the board).
+// L'attribut Python `x.zero_banished` est rangé dans `Obj.attrs["zero_banished"]` (liste de tuples (oid, carte)).
+fn zero_dk_watch(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let (eid, info) = (a[0].int() as u64, a[1].map());
+    let inf = info.g("info");
+    let inf = inf.map();
+    let gear = g.eff(eid).map(|e| e.g("gear")).unwrap_or_default();
+    if !inf.g("attached").list().contains(&gear) {
+        return Ok(Value::None);
+    }
+    let ctrl = inf.g("ctrl").int() as usize;
+    g.queue_trigger(
+        ctrl,
+        "Deathknell (The Zero Drive)",
+        f("_zero_dk_res", zero_dk_res),
+        map! { card = inf.g("obj"), gear = gear },
+        None,
+        false,
+        Value::None,
+        Value::None,
+    );
+    Ok(Value::None)
+}
+
+fn zero_dk_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c = g.it(it).data.g("card").obj();
+    let owner = g.o(c).owner;
+    if g.o(c).token || !g.p[owner].trash.contains(&c) {
+        return Ok(Value::None);
+    }
+    g.to_zone(c, "banish", false, None)?;
+    let r = g.repr(c);
+    g.log(|| format!("  {r} is banished with The Zero Drive"));
+    let gu = g.it(it).data.g("gear").int() as u32;
+    if let Some(x) = g.obj(gu) {
+        let oid = g.o(x).oid;
+        let ob = g.o_mut(x);
+        if !ob.attrs.contains("zero_banished") {
+            ob.attrs.set("zero_banished", Value::List(vec![]));
+        }
+        ob.attrs.get_mut("zero_banished").unwrap().list_mut().push(Value::Tuple(vec![oid.into(), Value::Obj(c)]));
+    }
+    Ok(Value::None)
+}
+
+fn zero_event(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
+    if ev == "attached" && is_obj(&info.g("gear"), o) {
+        let uid = g.o(o).uid;
+        let key = format!("('zero_watch', {uid})");
+        if !stats_has(g, &key) {
+            g.stats.add(&key, 1);
+            g.add_effect(mk(vec![("on", "die".into()), ("fn", f("_zero_dk_watch", zero_dk_watch)), ("gear", uid.into())]));
+        }
+    }
+    Ok(Value::None)
+}
+
+fn zero_pay(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let (o, mut ch) = (a[1].obj(), a[2].map().clone());
+    let oid = g.o(o).oid;
+    let cards: Vec<Value> = g
+        .o(o)
+        .attrs
+        .g("zero_banished")
+        .list()
+        .iter()
+        .filter(|t| t.list()[0].int() == oid)
+        .map(|t| t.list()[1].clone())
+        .collect();
+    ch.set("cards", Value::List(cards));
+    g.to_zone(o, "banish", false, None)?;
+    Ok(Value::Map(ch))
+}
+
+fn zero_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c0 = itc(g, it);
+    for c in g.it(it).data.g("cards").list().to_vec() {
+        let c = c.obj();
+        let owner = g.o(c).owner;
+        if g.p[owner].banish.contains(&c) {
+            play_unit_free(g, c0, c, "banish", None, false, None)?;
+        }
+    }
+    Ok(Value::None)
+}
 
 // World Atlas — "[Equip] 1 mind rune"; Might Bonus +2 and Effect Text "When I hold, play two Gold gear tokens
 // exhausted." (card image)
@@ -2971,7 +3052,23 @@ pub fn register(r: &mut Registry) {
 
     r.card(Impl { timing: Some("reaction"), kw: kw1("Temporary", 1), ..ev_card("Sumpworks Map", fv("_map", sump_map)) });
 
-    // The Zero Drive : non enregistrée (voir plus haut).
+    let mut im = Impl {
+        bonus: Some(2),
+        equip_kw: Some(kw1("Deathknell", 1)),
+        on_event: fv("_zero_event", zero_event),
+        abilities: vec![ability(
+            "Release",
+            AbilityArgs {
+                can: f("_zero.can", |g, a| Ok(g.o(a[1].obj()).attached_to.is_none().into())),
+                extra_cost: fv("_zero_pay", zero_pay),
+                resolve: fv("_zero_res", zero_res),
+                ..ab("Release", Cost::Text("3 energy and 1 mind rune".into()), false, "main")
+            },
+        )],
+        ..imp("The Zero Drive")
+    };
+    impl_equip(&mut im, Cost::Text("1 energy and 1 mind rune".into()));
+    r.card(im);
 
     let mut im = Impl { bonus: Some(2), effect_event: fv("_atlas", atlas), ..imp("World Atlas") };
     impl_equip(&mut im, Cost::Text("1 mind rune".into()));
