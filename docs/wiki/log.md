@@ -381,3 +381,6 @@ Captures de l'utilisateur : Bilgewater Tracker proposait toutes les paires d'uni
 
 ## [2026-11-12] ingest | Éditeur de deck : vue « Images »
 Demande de l'utilisateur (capture d'une decklist en images) : bouton « Liste / Images », un exemplaire = une image, menu par carte, catalogue masquable (`dkVisual`, `dkPop` dans `train/src.html`). Robot `verif_deckimg.mjs` (porte, partie 3).
+
+## [2026-11-23] ingest | Table : menu « Puzzles »
+Demande de l'utilisateur (« fais les puzzles »). Les 6 puzzles Akali contre Yi de `riftbound/puzzles/` (mini-moteur JS simplifié) sont repris dans la table sur le vrai moteur : `engine/puzzles.py` (positions, objectifs), `train.puzzle_new`, objectif jugé dans `TGame.next_turn`. Solutions et pièges joués contre l'IA de la table (`cardsets/test_puzzles.py`), robot `verif_puzzle.mjs` (porte, partie 3). Le hachage du moteur change (nouveau fichier `.py`) : chiffres d'avant non regroupables par `compare.py`. Voir [puzzles](pages/puzzles.md).

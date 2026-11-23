@@ -1,5 +1,9 @@
 # Puzzles sur plateau
 
+**Ancienne version.** Depuis le 2026-11-23, les puzzles se jouent dans la table d'entraînement (menu « Puzzles ») sur le
+vrai moteur : `../engine/puzzles.py`, wiki `docs/wiki/pages/puzzles.md`. Ce dossier (mini-moteur JS simplifié) est gardé
+pour l'historique.
+
 Plateau interactif publié : https://claude.ai/artifact/Ds4TSVoR6tcNRbQKBKYpcP
 
 - `engine.js` : mini-moteur JS (chaîne, showdown, combat, contrôle, runes), règles reprises de `../engine/game.py`.

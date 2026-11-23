@@ -13,7 +13,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats, garder un réglage de l'IA | [pages/resultats.md](pages/resultats.md), [test séquentiel](../memoire/ia-sprt.md), [réalisme](../memoire/ia-realisme.md) |
 | lancer une simulation ou un retex | [méthode retex](../memoire/retex-method.md), [manager](../memoire/riftbound-manager.md) |
-| toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md), [version anglaise](pages/anglais.md) |
+| toucher la table, le menu, l'éditeur de deck | [table](../memoire/riftbound-training-table.md), [éditeur](../memoire/riftbound-deckbuilder.md), [publication](pages/publication.md), [tutoriel](pages/tutoriel.md), [puzzles](pages/puzzles.md), [version anglaise](pages/anglais.md) |
 | coordonner des agents | [pages/equipe.md](pages/equipe.md), `docs/MISSIONS.md`, `.claude/chef.md` |
 | comprendre un hook qui bloque, contrat de tâche, worktrees | [pages/harness.md](pages/harness.md) |
 | connaître le jeu, les règles, la méta | `docs/vault/Riftbound - Accueil.md` (index du vault), `riftbound/rules/` |
@@ -30,6 +30,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 - [Match BO1 / BO3 et sideboard](pages/match.md) : règles du match, code, choix de l'IA
 - [Tutoriel « Apprendre à jouer »](pages/tutoriel.md) : partie guidée pas à pas pour débutants complets (12 leçons, 6 défis, zones surlignées, focus et priorité), lexique et mots-clés expliqués, Yi contre Darius
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
+- [Puzzles de la table](pages/puzzles.md) : menu « Puzzles », 6 positions Akali contre Yi dans le vrai moteur, objectif jugé par le moteur, solution testée contre l'IA
 - [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.py` (moteur), robot `verif_anglais.mjs`
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI
 - [Extension Radiance](pages/radiance.md) : 166/167 cartes modélisées, Deploy (gear affiché sur son battlefield) / Disarm / Show Off, corrections de la source, Neeko bloquée

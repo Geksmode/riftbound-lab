@@ -493,6 +493,8 @@ body.dkopen { overflow: hidden; }
 /* ---------- tutoriel : puce de la barre du haut, carte du coach, écrans d'intro */
 .tchip { border: 1px solid var(--akali); color: var(--akali); background: rgba(114,226,188,.08); cursor: pointer; white-space: nowrap; flex: none; min-height: 0; }
 .tchip.tbump { animation: tpop .6s ease-out; }
+.pzsol { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.pzsol p, .tintro p.pzgoal { text-align: left; }
 .tchip .tg::before { content: " · "; }
 @keyframes tpop { 0% { transform: scale(1); } 35% { transform: scale(1.25); box-shadow: 0 0 18px var(--akali); } 100% { transform: scale(1); } }
 .coach { position: fixed; z-index: 49; top: 52px; left: 0; right: 0; margin: 0 auto; width: min(440px, calc(100vw - 24px)); box-sizing: border-box; display: flex; flex-direction: column; gap: 8px;
@@ -785,6 +787,7 @@ body.dkopen { overflow: hidden; }
       <span class="small" id="gmeta">Choisis ton deck et celui de l'IA, puis joue.</span>
       <span class="res mchip" id="gmatch" hidden></span>
       <button class="res tchip" id="gtuto" hidden aria-label="Afficher le défi du tutoriel"></button>
+      <button class="res tchip" id="gpuz" hidden aria-label="Revoir l'énoncé du puzzle">Objectif</button>
       <span class="savechip" id="saveChip" hidden></span>
       <button class="savechip netchip" id="netChip" hidden></button>
       <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bSon" class="son" aria-haspopup="true" aria-expanded="false" title="Sons de la table">♪</button></div>
@@ -829,7 +832,7 @@ const DOMC = { Fury: "fury", Calm: "calm", Mind: "mind", Body: "body", Chaos: "c
 const RUNE = { Fu: "Fury", Ca: "Calm", Mi: "Mind", Bo: "Body", Ch: "Chaos", Or: "Order" };
 const GLYPH = { Fury: "F", Calm: "Ca", Mind: "Mi", Body: "B", Chaos: "Ch", Order: "O" };
 let PN = ["Akali", "LeBlanc"];
-const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "match.py", "version.py", "lang.py", "pool.txt"/*CARDSETS*/];
+const PY = ["game.py", "actions.py", "cards.py", "ai.py", "plans.py", "decks.py", "replay.py", "train.py", "match.py", "version.py", "lang.py", "puzzles.py", "pool.txt"/*CARDSETS*/];
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -1453,6 +1456,7 @@ function show(v) {
   renderCtrl(v);
   decorate();
   tutoCheck(v);
+  puzCheck(v);
 }
 
 // ------------------------------------------------------------ enregistrement des parties
@@ -1552,11 +1556,12 @@ function renderCtrl(v) {
   if (RP) return rpCtrl(v);
   $("bUndo").disabled = working || !(DU ? duelUndoIdx() >= 0 : v.undo);
   $("bHint").disabled = working || !v.dec;
-  $("bHint").hidden = !!DU;   // en duel : pas de conseil ; « Reprendre » seulement tant que tu as la main (duelUndoIdx)
+  $("bHint").hidden = !!DU || !!(PUZ && PUZ.meta === META);   // puzzle : la solution se montre à la fin   // en duel : pas de conseil ; « Reprendre » seulement tant que tu as la main (duelUndoIdx)
   $("bUndo").hidden = false;
   M.className = "endbtn"; M.onclick = null;
   if (v.winner !== null && v.winner !== undefined) {
     if (DU) return duelCtrlEnd(v);
+    if (PUZ && PUZ.meta === META && v.puz) return puzCtrlEnd(v);
     const w = v.winner === 0;
     matchFinish(v);
     recFinish(v);
@@ -3879,6 +3884,78 @@ function tutoEnd(v) {
   $("tAgain").onclick = () => tutoStart();
   $("tReal").onclick = () => { closeModal(); setupForm(); };
 }
+// ------------------------------------------------------------ puzzles (menu « Puzzles », engine/puzzles.py)
+// Une position montée dans le vrai moteur (toutes les règles), l'IA de la table (Normal) en face ; le moteur juge
+// l'objectif à la fin du tour fixé par le puzzle (V.puz.ok) et la partie s'arrête là. Pas de Conseil ; « Reprendre »
+// marche comme d'habitude. Pas enregistré dans « Mes parties » ; puzzles réussis gardés dans ce navigateur (rbt-puz).
+let PUZ = null, PZLIST = null;
+const pzDone = () => { try { return JSON.parse(store.get("rbt-puz") || "{}") || {}; } catch (e) { return {}; } };
+async function pzList() {
+  if (!PZLIST && T) { try { PZLIST = await J(T.puzzles()); } catch (e) { PZLIST = null; } }
+  return PZLIST;
+}
+function puzzlesHTML(back) {
+  const done = pzDone();
+  const head = `<div class="menuin msub">${back}<h2>Puzzles</h2><div class="mcard small">Akali contre Master Yi : une position, un objectif, la vraie IA de la table en face. Toutes les règles s'appliquent ; « Reprendre » annule ton dernier coup.</div>`;
+  if (!PZLIST) return head + `<div class="mcard">Chargement…</div></div>`;
+  return head + PZLIST.map((p, i) => `<div class="mcard row"><div class="grow"><div class="t">${i + 1}. ${esc(p.title)}${done[p.id] ? " ✓" : ""}</div><div class="small">${esc(p.tag)} · ${esc(p.brief)}</div></div><div class="acts"><button class="go" data-pz="${esc(p.id)}"${READY ? "" : " disabled"}>${done[p.id] ? "Rejouer" : "Jouer"}</button></div></div>`).join("") + `</div>`;
+}
+async function puzzleStart(id) {
+  if (!T || working) return;
+  if (DU) duelLeave();
+  if (RP) await exitReplay();
+  closeModal(); hideMenu();
+  if (REC && recT) recSave(true);
+  GEN++; working = true;
+  REC = null; MATCH = null; MEP = 0; TUTO = null;
+  let v0;
+  try { META = await J(T.puzzle_new(id, 1)); CARDS = await J(T.cards()); v0 = await J(T.step()); }
+  catch (err) { working = false; toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
+  PN = META.names;
+  LOG = []; LOGSTACK = []; V = null; lastAI = null; toast("");
+  PUZ = { meta: META, p: META.puzzle, end: false };
+  $("gmeta").textContent = `Puzzle · ${META.puzzle.title}`;
+  $("gres").hidden = true; matchChip();
+  working = false;
+  show(v0);
+  puzBrief(() => { if (V && V.busy) pump(J(T.step())); });
+}
+// Énoncé : au départ (« Commencer » lance la partie), puis à la demande (puce « Objectif »).
+function puzBrief(go) {
+  const p = PUZ.p;
+  openModal(`<div class="tintro" id="pzBrief"><div class="tig" aria-hidden="true">✦</div><h3>${esc(p.title)}</h3><div class="small">${esc(p.tag)}</div>
+    <p class="pzgoal">${esc(p.brief)}</p><p class="pzgoal"><b>Objectif :</b> ${esc(p.goal)}</p>
+    <div class="big"><button class="main" id="pzGo">${go ? "Commencer" : "Fermer"}</button></div></div>`, !go);
+  $("pzGo").onclick = () => { closeModal(); if (go) go(); };
+}
+function puzCheck(v) {
+  const c = $("gpuz");
+  if (!PUZ || PUZ.meta !== META || DU || RP || !v.puz) { if (PUZ && PUZ.meta !== META) PUZ = null; c.hidden = true; return; }
+  c.hidden = false;
+  const over = v.winner !== null && v.winner !== undefined;
+  if (over && !PUZ.end && !working) { PUZ.end = true; puzEnd(v); }
+}
+$("gpuz").onclick = () => { if (!PUZ) return; if (PUZ.end && V && V.puz) puzEnd(V); else puzBrief(null); };
+function puzNext() { const L = PZLIST || [], i = L.findIndex(x => x.id === PUZ.p.id); return i >= 0 && i + 1 < L.length ? L[i + 1] : null; }
+function puzEnd(v) {
+  const p = PUZ.p, ok = v.puz.ok === true;
+  if (ok) { const d = pzDone(); d[p.id] = 1; store.set("rbt-puz", JSON.stringify(d)); }
+  const nx = puzNext();
+  openModal(`<div class="tintro" id="pzEnd"><div class="tig" aria-hidden="true">✦</div><h3>${ok ? "Puzzle réussi !" : "Puzzle raté"}</h3>
+    <p class="pzgoal"><b>Objectif :</b> ${esc(p.goal)}</p>${ok ? "" : `<p class="pzgoal">L'objectif n'est pas atteint.</p>`}
+    <div class="pzsol" id="pzSol"${ok ? "" : " hidden"}><p><b>Solution :</b> ${esc(p.solution)}</p><p><b>Pourquoi :</b> ${esc(p.lesson)}</p></div>
+    <div class="big"><button id="pzAgain">Réessayer</button>${ok ? "" : `<button id="pzShow">Voir la solution</button>`}${nx ? `<button class="main" id="pzNext">Puzzle suivant</button>` : ""}<button id="pzList">Tous les puzzles</button></div></div>`, true);
+  $("pzAgain").onclick = () => puzzleStart(p.id);
+  if ($("pzShow")) $("pzShow").onclick = () => { $("pzSol").hidden = false; $("pzShow").remove(); };
+  if ($("pzNext")) $("pzNext").onclick = () => puzzleStart(nx.id);
+  $("pzList").onclick = () => { closeModal(); showMenu("puzzles"); };
+}
+function puzCtrlEnd(v) {
+  const M = $("bMain"), I = $("turnInfo"), ok = v.puz.ok === true;
+  I.innerHTML = `<b class="${ok ? "me" : "opp"}">${ok ? "Puzzle réussi !" : "Puzzle raté"}</b>`;
+  $("gres").hidden = false; $("gres").className = "res " + (ok ? "w" : "l"); $("gres").textContent = ok ? "Puzzle réussi" : "Puzzle raté";
+  M.disabled = false; M.textContent = "Réessayer"; M.onclick = () => puzzleStart(PUZ.p.id);
+}
 $("gtuto").onclick = () => { if (!TUTO) return; TUTO.open = !TUTO.open; if (!TUTO.open) { TUTO.fresh = -1; TUTO.tip = null; } tutoDraw(); };
 
 // ------------------------------------------------------------ menu d'accueil
@@ -3985,6 +4062,7 @@ function menuRender(view) {
       ${item("new", "⚔", "Nouvelle partie", "Contre l'IA : choisis les deux decks et le niveau.")}
       ${DU && DU.st ? item("duel", "⇄", "Retour au duel", "Room " + DU.code + " contre " + (DU.names[OPP()] || "ton ami") + ".", "hot") : item("friend", "⇄", "Jouer avec un ami", "Duel en ligne avec un code de room.")}
       ${item("learn", "★", "Apprendre à jouer", "Tutoriel : une partie guidée en 6 défis.")}
+      ${item("puzzles", "✦", "Puzzles", "Akali contre Yi : une position, un objectif.")}
       ${item("deck", "✎", "Éditeur de deck", "Cartes, runes, battlefields, import et export.")}
       ${item("mydecks", "▤", "Mes decks", "Modifier ou jouer directement.")}
       ${item("games", "◷", "Mes parties", "Revois-les coup par coup.")}
@@ -4012,6 +4090,8 @@ function menuRender(view) {
       + `<div class="mcard row"><div class="grow small">Les decks sont gardés sur cet appareil, et dans la base claude.ai quand elle existe.</div><div class="acts"><button data-m="deck">Créer un deck</button></div></div></div>`;
   } else if (MENUV === "friend") {
     h = friendHTML(back);
+  } else if (MENUV === "puzzles") {
+    h = puzzlesHTML(back);
   } else if (MENUV === "games") {
     h = `<div class="menuin msub">${back}<h2>Mes parties</h2><div class="mcard" id="gamesBox">Chargement…</div></div>`;
   }
@@ -4021,6 +4101,7 @@ function menuRender(view) {
   if (MENUV === "main" && READY) dashGames();
   if (MENUV === "games") loadGames();
   if (MENUV === "friend") friendWire();
+  if (MENUV === "puzzles" && READY && !PZLIST) pzList().then(L => { if (L && MENUV === "puzzles" && !$("menu").hidden) menuRender("puzzles"); });
 }
 // Parties enregistrées (base claude.ai si elle existe, sinon ce navigateur) ; null si la lecture échoue.
 async function fetchGames() {
@@ -4051,7 +4132,8 @@ async function loadGames() {
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
-  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick]"); if (!t || t.disabled) return;
+  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick],[data-pz]"); if (!t || t.disabled) return;
+  if (t.dataset.pz) { puzzleStart(t.dataset.pz); return; }
   if (t.dataset.dl) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.dl);
     if (g) downloadGames([g], `partie-riftbound-${String(g.updated || g.started || "").slice(0, 16).replace(/[:T]/g, "-")}-donne-${g.seed}`.replace(/[^\w.-]+/g, "_")); return; }
   if (t.dataset.pleg) { if (t.classList.contains("off")) return; PICKLG = t.dataset.pleg; menuRender("pick"); const l = $("menu").querySelector(".pick h3"); if (l) l.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }

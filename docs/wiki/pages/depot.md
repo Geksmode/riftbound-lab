@@ -14,7 +14,7 @@ sources: CLAUDE.md (ancienne version), riftbound/engine/README.md
 | `riftbound/manager/` | agent manager : sessions de simulation toutes les 6 h (`PROTOCOLE.md`, `learnings.md`, `sessions/`) |
 | `riftbound/replays/` | lecteur de replays (`viewer.html`) et parties enregistrées |
 | `riftbound/train/` | table d'entraînement (navigateur, Pyodide), éditeur de deck, parties de l'utilisateur, analyses |
-| `riftbound/puzzles/` | puzzles Akali vs Yi |
+| `riftbound/puzzles/` | anciens puzzles Akali vs Yi (mini-moteur JS) ; ceux de la table sont dans `engine/puzzles.py` ([puzzles](puzzles.md)) |
 | `riftbound/retex/` | retex écrits |
 | `riftbound/sim/` | ancien simulateur simplifié, **périmé**, gardé pour l'historique |
 | `docs/` | `wiki/` (ce wiki), `memoire/`, `vault/`, `REPRISE.md`, `MISSIONS.md` |

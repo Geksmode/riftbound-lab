@@ -194,6 +194,18 @@ class TGame(Game):
                 uids=[c.uid for c in info["cards"]], names=[c.cname for c in info["cards"]])]
         return super().emit(ev, **info)
 
+    def next_turn(s):
+        # Puzzle (menu « Puzzles ») : l'objectif est jugé à la fin du tour fixé par le puzzle, avant le tour suivant ;
+        # la partie s'arrête là (gagnée si l'objectif est atteint). Les copies de l'IA s'arrêtent au même endroit : sa
+        # recherche joue donc contre l'objectif du puzzle.
+        pz = getattr(s, "puz", None)
+        if pz is not None and s.turn_no >= pz["end"]:
+            import puzzles as _pz
+            s.puz_ok = _pz.judge(s, pz["start"])
+            s.winner = ME if s.puz_ok else AI
+            raise _game.GameOver()
+        return super().next_turn()
+
     def clone(s):
         b, s.buf = s.buf, []
         try:
@@ -340,6 +352,60 @@ def tuto_seeds(n=3, start=1):
 def tuto():
     """Partie du tutoriel : donne fixe, tu commences, IA débutante (level 0)."""
     return new(TUTO_SEED, None, 0, 0, TUTO_DECKS[0], TUTO_DECKS[1])
+
+
+# ------------------------------------------------------------------ puzzles (menu « Puzzles »)
+class PuzzleAgent(P.PlanAgent):
+    """IA de la table pour un puzzle : ses premiers déplacements peuvent être imposés par l'énoncé (forced : « il attaque
+    Sigil avec Master Yi ») ; ensuite elle joue comme à la table."""
+
+    def __init__(s, seed=0, forced=(), **kw):
+        super().__init__(seed, **kw)
+        s.forced = [(sorted(n), d) for n, d in forced]
+
+    def decide(s, g, d):
+        if s.forced and d.kind == "main":
+            names, dest = s.forced[0]
+            for a in d.options:
+                if a[0] == "move" and a[2] == dest and sorted(g.obj(u).name for u in a[1]) == names:
+                    s.forced.pop(0)
+                    return a
+        return super().decide(g, d)
+
+
+def puzzles():
+    """Liste des puzzles pour le menu."""
+    import puzzles as _pz
+    return json.dumps(_pz.listing(), ensure_ascii=False)
+
+
+def puzzle_new(pid, level=1):
+    """Partie du puzzle pid : position montée dans le vrai moteur (puzzles.setup), IA de la table (niveau level)."""
+    import puzzles as _pz
+    duel_off()
+    p = _pz.BY_ID[pid]
+    seed = int(p["seed"])
+    Obj._n = 0
+    Item._n = 0
+    MD, OD = _deck(_pz.DECKS[0], G2), _deck(_pz.DECKS[1], L)
+    A, B = with_bf(MD, p["bfs"][0][0]), with_bf(OD, p["bfs"][1][0])
+    names = [_short(A), _short(B)]
+    _rp.NAMES = tuple(names)
+    pa, pl = _plan_for(A), _plan_for(B)
+    hu = Human()
+    ai = PuzzleAgent(seed + 500000, forced=p.get("forced", ()), plan=pl, opp_plan=pa, samples=max(1, int(level)),
+                     search="turn", cfg=table_cfg(max(1, int(level))))
+    coach = P.PlanAgent(seed + 900000, plan=pa, opp_plan=pl)
+    g = TGame([A, B], [hu, ai], seed=seed, first=p["start"])
+    start = _pz.setup(g, p)
+    g.puz["start"] = start
+    W.clear()
+    W.update(g=g, ag=[hu, ai], coach=coach, d=None, retry=None, seed=seed, decks=[A, B], last_ai=None, names=names,
+             seen_shown=set(), puzzle=pid, extra_cards=sorted(_pz.card_names(p)))
+    return json.dumps(dict(seed=seed, first=p["start"], bf=[A["battlefield"], B["battlefield"]], names=names,
+                           puzzle=_pz.texts(p),
+                           decks=[dict(legend=x["legend"], champion=None, main=sorted(set(x["main"]))) for x in (A, B)]),
+                      ensure_ascii=False)
 
 
 # ------------------------------------------------------------------ duel entre deux joueurs
@@ -817,6 +883,7 @@ def cards():
     for d in W["decks"]:
         names |= set(d["main"]) | {d["legend"], d.get("champion"), d["battlefield"]} | set(d.get("battlefields", []))
     names |= {n for n, sp in _game.SPEC.items() if sp.get("super") == "Token"} | {"Mech", "Reflection", "Gold"}
+    names |= set(W.get("extra_cards", ()))              # cartes d'un puzzle qui ne sont pas dans les decks
     return json.dumps(card_db(n for n in names if n), ensure_ascii=False)
 
 
@@ -1381,6 +1448,10 @@ def _view(ask=None):
         out["wait"] = "adversaire"                      # décision de l'adversaire : on attend son coup
     else:
         out["busy"] = True
+    pz = getattr(g, "puz", None)
+    if pz is not None:                                  # puzzle : tour jugé, et objectif atteint ou non une fois jugé
+        out["puz"] = dict(id=pz["id"], end=pz["end"], turn=g.turn_no,
+                          ok=getattr(g, "puz_ok", None) if g.winner is not None else None)
     out["me"] = ME
     return json.dumps(out, ensure_ascii=False)
 
