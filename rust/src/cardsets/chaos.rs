@@ -12,8 +12,7 @@
 //! `enter_loc(pid, card, loc)` -> emplacement. Les reqs rangés dans une valeur suivent `game_costs::reqs_to_value`.
 //! La clé de choix `bf` (Bone Skewer, Maduli) est l'indice du battlefield (`Value::Int`), `dest` un `Value::Loc`.
 //!
-//! Cartes du module Python non enregistrées ici (restent bloquées) : Cursed Sarcophagus et The List (attributs
-//! posés sur l'objet, `o.sarc` et `o.named_tag`, absents de `game::Obj`).
+//! Les attributs que le Python pose sur un objet (`o.sarc`, `o.named_tag`) sont rangés dans `Obj.attrs`.
 use std::collections::BTreeSet;
 
 use crate::actions::{affordable, attach, deflect_reqs, flow_of, full_choices, open_bf, play_card, total_cost};
@@ -985,8 +984,71 @@ fn c_cull() -> Impl {
 }
 
 // Cursed Sarcophagus — "When you play this, banish all units from your trash. [E]: Play a unit banished with this.
-// (You must pay its costs.)" : NON PORTÉE. Le Python range les uids des cartes bannies sur l'objet (`me.sarc`), un
-// attribut que `game::Obj` n'a pas.
+// (You must pay its costs.)"  (rule 427.3: cards banished by the same object)
+// L'attribut Python `me.sarc = (oid, [uids])` est rangé dans `attrs["sarc"]`.
+fn sarc_play(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let res = f("_sarc_play_res", |g_, a_| {
+        let it = a_[0].item();
+        let c0 = ctrl(g_, it);
+        let us: Vec<O> = g_.p[c0].trash.iter().copied().filter(|&c| stype(g_, c) == "Unit").collect();
+        for &c in &us {
+            g_.to_zone(c, "banish", false, None)?;
+        }
+        if let Some(m) = me(g_, it) {
+            let uids = Value::List(us.iter().map(|&c| Value::from(g_.o(c).uid)).collect());
+            let v = Value::Tuple(vec![g_.o(m).oid.into(), uids]);
+            g_.o_mut(m).attrs.set("sarc", v);
+        }
+        Ok(Value::None)
+    });
+    q0(g, a[0].obj(), "Cursed Sarcophagus", res);
+    Ok(Value::None)
+}
+
+/// `_sarc_cards(g, o)`
+fn sarc_cards(g: &Game, o: O) -> Vec<O> {
+    let s = g.o(o).attrs.g("sarc");
+    if !s.truthy() || s.list()[0] != Value::from(g.o(o).oid) {
+        return vec![];
+    }
+    let ids = s.list()[1].list().to_vec();
+    g.p.iter().flat_map(|pl| pl.banish.iter().copied()).filter(|&c| ids.contains(&Value::from(g.o(c).uid))).collect()
+}
+
+fn c_cursed_sarcophagus() -> Impl {
+    let ab = ability(
+        "Unearth",
+        AbilityArgs {
+            exhaust: true,
+            choices: f("_sarc_choices", |g, a| {
+                let (pid, o) = (pid_of(&a[0]), a[1].obj());
+                let cs = by_cval_desc(g, sarc_cards(g, o));
+                let mut out = vec![];
+                for c in cs {
+                    if !pay_options(g, pid, c, "banish")?.is_empty() {
+                        out.push(map! { c = g.o(c).uid });
+                    }
+                }
+                Ok(chv(out))
+            }),
+            resolve: f("_sarc_res", |g, a| {
+                let it = a[0].item();
+                let o = g.it(it).src.and_then(|u| g.obj(u));
+                let want = dget(g, it, "c");
+                let c = g.p.iter().flat_map(|pl| pl.banish.iter().copied()).find(|&x| Value::from(g.o(x).uid) == want);
+                if let Some(c) = c {
+                    if o.is_none() || sarc_cards(g, o.unwrap()).contains(&c) {
+                        let c0 = ctrl(g, it);
+                        play_paying(g, c0, c, "banish")?;
+                    }
+                }
+                Ok(Value::None)
+            }),
+            ..Default::default()
+        },
+    );
+    Impl { on_play: f("_sarc_play", sarc_play), abilities: vec![ab], ..new_impl("Cursed Sarcophagus") }
+}
 
 // ====================================================================== D
 // Decree of Discord — "Return any number of enemy Order units with total Might 5 or less to their owners' hands."
@@ -3160,9 +3222,91 @@ fn c_the_harrowing() -> Impl {
     }
 }
 
-// The List — "As you play this, name a tag. [E]: Give a unit with the named tag -2 might this turn." : NON PORTÉE.
-// Le Python range le tag nommé sur l'objet (`o.named_tag = (oid, tag)`), un attribut que `game::Obj` n'a pas
-// (`chosen_tag` est un tag gagné par l'objet, lu par `Game::tags`).
+// The List — "As you play this, name a tag. [E]: Give a unit with the named tag -2 might this turn."
+// L'attribut Python `o.named_tag = (oid, tag)` est rangé dans `attrs["named_tag"]`.
+/// `_all_tags()` : tous les tags de la base, triés
+fn all_tags() -> &'static Vec<String> {
+    static T: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
+    T.get_or_init(|| {
+        let s: BTreeSet<String> = crate::spec::specs().values().flat_map(|s| s.tags.iter().cloned()).collect();
+        s.into_iter().collect()
+    })
+}
+
+fn list_play(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let o = a[0].obj();
+    let c = g.o(o).ctrl;
+    let mut seen: Vec<String> = vec![];
+    for u in enemies(g, c, false, None, false)? {
+        for t in g.tags(u)? {
+            if !seen.contains(&t) {
+                seen.push(t);
+            }
+        }
+    }
+    let mut tags: Vec<Value> = seen.iter().map(|t| Value::from(t.as_str())).collect();
+    tags.extend(all_tags().iter().filter(|t| !seen.contains(t)).map(|t| Value::from(t.as_str())));
+    let t = g.ask(c, "name_tag", tags, Map::new())?; // « As you play this » (règle 355.1)
+    let v = Value::Tuple(vec![g.o(o).oid.into(), t]);
+    g.o_mut(o).attrs.set("named_tag", v);
+    Ok(Value::None)
+}
+
+/// `_list_tag(o)`
+fn list_tag(g: &Game, o: O) -> Option<String> {
+    let t = g.o(o).attrs.g("named_tag");
+    if t.truthy() && t.list()[0] == Value::from(g.o(o).oid) {
+        return t.list()[1].opt_str().map(|s| s.to_string());
+    }
+    None
+}
+
+/// `_list_tag(o) in g.tags(u)`
+fn has_list_tag(g: &mut Game, o: O, u: O) -> Res<bool> {
+    match list_tag(g, o) {
+        Some(t) => Ok(g.tags(u)?.contains(&t)),
+        None => Ok(false),
+    }
+}
+
+fn c_the_list() -> Impl {
+    let ab = ability(
+        "Mark",
+        AbilityArgs {
+            exhaust: true,
+            choices: f("_list_choices", |g, a| {
+                let (pid, o) = (pid_of(&a[0]), a[1].obj());
+                let mut us = en(g, pid)?;
+                us.extend(fr(g, pid)?);
+                let mut out = vec![];
+                for u in us {
+                    if has_list_tag(g, o, u)? {
+                        out.push(u);
+                    }
+                }
+                Ok(tgv(g, &out))
+            }),
+            preds: Value::List(vec![f("_list_pred", |g, a| {
+                let (it, u) = (a[0].item(), a[1].obj());
+                match g.it(it).src.and_then(|s| g.obj(s)) {
+                    Some(o) => Ok(has_list_tag(g, o, u)?.into()),
+                    None => Ok(false.into()),
+                }
+            })]),
+            resolve: f("_list_mark", |g, a| {
+                let it = a[0].item();
+                if g.legal(it, 0)?.is_some() {
+                    if let Some(u) = g.legal(it, 0)? {
+                        g.mod_(u, -2, "turn".into(), None)?;
+                    }
+                }
+                Ok(Value::None)
+            }),
+            ..Default::default()
+        },
+    );
+    Impl { on_play: f("_list_play", list_play), abilities: vec![ab], ..new_impl("The List") }
+}
 
 // The Syren — "[1], [E]: Move a friendly unit at a battlefield to your base."
 fn c_the_syren() -> Impl {
@@ -4251,7 +4395,7 @@ pub fn register(r: &mut Registry) {
     r.card(c_corrupt_enforcer());
     r.card(c_crescent_guardian());
     r.card(c_cull());
-    // Cursed Sarcophagus : non enregistrée (voir plus haut)
+    r.card(c_cursed_sarcophagus());
     r.card(c_decree_of_discord());
     r.card(c_diana_no_longer_human());
     r.card(c_dorans_ring());
@@ -4320,7 +4464,7 @@ pub fn register(r: &mut Registry) {
     r.card(c_teemo_scout());
     r.card(c_temptation());
     r.card(c_the_harrowing());
-    // The List : non enregistrée (voir plus haut)
+    r.card(c_the_list());
     r.card(c_the_syren());
     r.card(c_tideturner());
     r.card(c_tornado_warrior());
