@@ -3,3 +3,4 @@
 //! portage n'est pas fini : même graine = même partie dans les deux moteurs.
 
 pub mod pyrandom;
+pub mod spec;
