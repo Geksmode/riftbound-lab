@@ -383,6 +383,10 @@ pub struct Decision {
 /// Un joueur (IA, humain, hasard). `choose` renvoie l'indice de l'option choisie (en Python : l'option elle-même).
 pub trait Agent: Send + Sync {
     fn choose(&mut self, g: &mut Game, pid: usize, kind: &str, options: &[Value], ctx: &Map) -> Res<usize>;
+    /// cartes de la main initiale à remettre (au plus 2)
+    fn mulligan(&mut self, _g: &mut Game, _pid: usize) -> Res<Vec<O>> {
+        Ok(vec![])
+    }
     /// `every_choice` : joueur humain (voit tous les choix légaux)
     fn every_choice(&self) -> bool {
         false
@@ -393,6 +397,36 @@ pub trait Agent: Send + Sync {
 impl Clone for Box<dyn Agent> {
     fn clone(&self) -> Self {
         self.clone_box()
+    }
+}
+
+/// Les agents de la partie. Une copie de la partie (`Game.clone`, recherche de l'IA) n'a pas d'agents : l'appelant
+/// pose les siens, comme en Python.
+#[derive(Default)]
+pub struct Agents(pub Vec<Box<dyn Agent>>);
+
+impl Clone for Agents {
+    fn clone(&self) -> Self {
+        Agents(vec![])
+    }
+}
+
+impl std::ops::Index<usize> for Agents {
+    type Output = Box<dyn Agent>;
+    fn index(&self, i: usize) -> &Self::Output {
+        &self.0[i]
+    }
+}
+
+impl std::ops::IndexMut<usize> for Agents {
+    fn index_mut(&mut self, i: usize) -> &mut Self::Output {
+        &mut self.0[i]
+    }
+}
+
+impl Agents {
+    pub fn get(&self, i: usize) -> Option<&Box<dyn Agent>> {
+        self.0.get(i)
     }
 }
 
@@ -432,7 +466,7 @@ pub struct Game {
     pub items: Vec<Item>,
     pub next_eid: u64,
     pub rng: PyRandom,
-    pub agents: Vec<Box<dyn Agent>>,
+    pub agents: Agents,
     pub logging: bool,
     pub lines: Vec<String>,
     pub victory: i64,
@@ -450,7 +484,8 @@ pub struct Game {
     /// capacités déclenchées en attente d'être mises sur la chaîne (règle 383.3)
     pub trigq: Vec<ItemId>,
     pub need_cleanup: bool,
-    pub winner: Option<usize>,
+    /// gagnant ; -1 pour une partie nulle (tour 80 dépassé)
+    pub winner: Option<i64>,
     pub turn_no: i64,
     pub first: usize,
     pub tp: usize,
@@ -508,7 +543,7 @@ impl Game {
             items: vec![],
             next_eid: 0,
             rng,
-            agents,
+            agents: Agents(agents),
             logging: log,
             lines: vec![],
             victory,

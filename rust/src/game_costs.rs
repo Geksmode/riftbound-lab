@@ -312,7 +312,7 @@ impl Game {
     /// `win(pid)` : lève GameOver.
     pub fn win(&mut self, pid: usize) -> Res<()> {
         if self.winner.is_none() {
-            self.winner = Some(pid);
+            self.winner = Some(pid as i64);
             self.log(|| format!("WINNER {pid}"));
         }
         Err(crate::game::GameOver)
