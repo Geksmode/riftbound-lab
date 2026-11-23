@@ -162,6 +162,17 @@ pub struct Obj {
     pub copy_src: Option<O>,
     pub copy_name: Option<String>,
     pub chosen_tag: Option<String>,
+    // attributs posés par `actions.play_card` / `cards.make_token` (jamais remis à zéro, comme en Python)
+    /// `played_to` : où la carte est jouée (Riven, The Exile)
+    pub played_to: Option<Loc>,
+    /// `played_from` : zone d'où elle a été jouée ('hand', 'facedown'...)
+    pub played_from: Option<String>,
+    /// `play_choice` : le choix avec lequel elle a été jouée
+    pub play_choice: Option<Map>,
+    /// `paid_e` : énergie payée pour la jouer
+    pub paid_e: i64,
+    /// `limited_play` : jouée par un effet (play_card limited=True)
+    pub limited_play: bool,
 }
 
 impl Obj {
@@ -202,6 +213,11 @@ impl Obj {
             copy_src: None,
             copy_name: None,
             chosen_tag: None,
+            played_to: None,
+            played_from: None,
+            play_choice: None,
+            paid_e: 0,
+            limited_play: false,
         };
         o.reset_fields();
         o
@@ -504,6 +520,9 @@ pub struct Game {
     pub zone_listen: bool,
     pub exh_pending: Vec<O>,
     pub hist: Hist,
+    /// effets retirés de `effects` le temps d'appeler leur `fn` (`next_spell` : Python retire l'effet puis appelle
+    /// `ef["fn"](g, ef, it)`) : `eff(eid)` les lit encore.
+    pub effects_gone: Vec<Effect>,
     /// partie jouée par l'humain (train.Human) : `getattr(s, "every_choice", False)`
     pub every_choice: bool,
 }
@@ -577,6 +596,7 @@ impl Game {
             zone_listen: true,
             exh_pending: vec![],
             hist: Hist::default(),
+            effects_gone: vec![],
             every_choice: false,
         };
         for (i, d) in decks.iter().enumerate() {
@@ -609,6 +629,20 @@ impl Game {
         let uid = self.counters.next_obj();
         self.objs.push(Obj::new(uid, name, owner, token));
         O(self.objs.len() as u32 - 1)
+    }
+
+    /// `Obj.__new__(Obj)` sans uid (`cards.token_locations` : un jeton témoin qui ne prend pas de numéro au compteur).
+    /// À retirer avec `drop_probe` dès qu'il a servi.
+    pub fn new_probe(&mut self, name: &str, owner: usize) -> O {
+        self.objs.push(Obj::new(0, name, owner, true));
+        O(self.objs.len() as u32 - 1)
+    }
+
+    /// Retire le témoin de `new_probe` (le dernier objet de l'arène).
+    pub fn drop_probe(&mut self, o: O) {
+        if o.0 as usize + 1 == self.objs.len() {
+            self.objs.pop();
+        }
     }
 
     fn new_rune(&mut self, domain: &str, owner: usize) -> R {

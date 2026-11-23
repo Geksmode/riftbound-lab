@@ -59,7 +59,7 @@ pub struct OptV {
     pub obj: Value,
 }
 
-#[derive(Clone, Debug, PartialEq, Default)]
+#[derive(Clone, Debug, Default)]
 pub enum Value {
     #[default]
     None,
@@ -81,8 +81,40 @@ pub enum Value {
 }
 
 /// Dict Python à clés texte, ordre d'insertion conservé.
-#[derive(Clone, Debug, PartialEq, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Map(pub Vec<(Arc<str>, Value)>);
+
+/// Égalité de dict Python : mêmes clés et mêmes valeurs, quel que soit l'ordre d'insertion.
+impl PartialEq for Map {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.len() == other.0.len() && self.0.iter().all(|(k, v)| other.get(k).is_some_and(|w| v == w))
+    }
+}
+
+/// Égalité Python (`==`) : les nombres se comparent entre eux (`1 == True == 1.0`), une liste n'est jamais égale à un
+/// tuple, les dict sans tenir compte de l'ordre, les fonctions par identité.
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        use Value::*;
+        match (self, other) {
+            (None, None) => true,
+            (Bool(_) | Int(_) | Float(_), Bool(_) | Int(_) | Float(_)) => match (self, other) {
+                (Float(_), _) | (_, Float(_)) => self.float() == other.float(),
+                _ => self.int() == other.int(),
+            },
+            (Str(a), Str(b)) => a == b,
+            (Obj(a), Obj(b)) => a == b,
+            (Rune(a), Rune(b)) => a == b,
+            (Item(a), Item(b)) => a == b,
+            (Loc(a), Loc(b)) => a == b,
+            (List(a), List(b)) | (Tuple(a), Tuple(b)) => a == b,
+            (Map(a), Map(b)) => a == b,
+            (Opt(a), Opt(b)) => a == b,
+            (Fn(a), Fn(b)) => a == b,
+            _ => false,
+        }
+    }
+}
 
 impl Map {
     pub fn new() -> Self {
