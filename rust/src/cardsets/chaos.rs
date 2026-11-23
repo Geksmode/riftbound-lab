@@ -28,7 +28,7 @@ use crate::game::{Desig, Game, ItemId, Res, Zone, O};
 use crate::game_costs::{any_req, reqs_to_value, Req};
 use crate::lang::tr;
 use crate::map;
-use crate::spec::{spec, specs, BARON_PIT};
+use crate::spec::{spec, BARON_PIT};
 use crate::value::{is_bf, Loc, Map, Value};
 
 // ====================================================================== aides privées
@@ -58,9 +58,6 @@ fn dget(g: &Game, it: ItemId, k: &str) -> Value {
     g.it(it).data.g(k)
 }
 
-fn uid(g: &Game, o: O) -> u32 {
-    g.o(o).uid
-}
 
 /// `(u.uid,)` / `tuple(u.uid for u in us)`
 fn uids_t(g: &Game, us: &[O]) -> Value {
@@ -3708,7 +3705,532 @@ fn c_zed_without_a_sound() -> Impl {
     }
 }
 
-// @@SUITE@@
+// ====================================================================== cartes qui utilisent les crochets du moteur
+/// `_open_bfs(g, closed)` : battlefields ouverts (`Value::Loc`)
+fn open_bfs(g: &Game, closed: bool) -> Value {
+    if closed {
+        return Value::List(vec![]);
+    }
+    Value::List((0..g.bfs.len()).filter(|&i| open_bf(g, i)).map(|i| Value::Loc(Loc::Bf(i))).collect())
+}
+
+fn extra_locs_open() -> Value {
+    f("_open_bfs", |g, a| Ok(open_bfs(g, a[2].truthy())))
+}
+
+fn with_hook(mut im: Impl, field: &str, v: Value) -> Impl {
+    im.hooks.set(field, v);
+    im
+}
+
+// Miss Fortune, Buccaneer — "You may play me to an open battlefield. Friendly units may be played to open
+// battlefields."
+fn c_miss_fortune_buccaneer() -> Impl {
+    let im = with_hook(new_impl("Miss Fortune, Buccaneer"), "extra_locs", extra_locs_open());
+    with_hook(
+        im,
+        "aura_locs",
+        f("_mf_aura_locs", |g, a| {
+            let (src, pid, c, closed) = (a[0].obj(), pid_of(&a[1]), a[2].obj(), a[3].truthy());
+            if pid == g.o(src).ctrl && stype(g, c) == "Unit" {
+                Ok(open_bfs(g, closed))
+            } else {
+                Ok(Value::List(vec![]))
+            }
+        }),
+    )
+}
+
+// Ocean Drake — "You may play me to an open battlefield. When you play me, you may return a non-Dragon unit to its
+// owner's hand."
+fn drake_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c = ctrl(g, it);
+    let mut us = vec![];
+    for u in g.units(None, None) {
+        if !g.tags(u)?.contains("Dragon") {
+            us.push(u);
+        }
+    }
+    let mut ks = vec![];
+    for &u in &us {
+        ks.push((g.o(u).ctrl == c, -value(g, u)?, g.o(u).uid));
+    }
+    let us = sort_keys(us, ks);
+    if !us.is_empty() {
+        let mut ov = objv(&us);
+        ov.push(Value::None);
+        let u = g.ask(c, "ocean_drake", ov, map! { item = it })?;
+        if let Some(u) = u.opt_obj() {
+            to_hand(g, Some(u))?;
+        }
+    }
+    Ok(Value::None)
+}
+
+fn c_ocean_drake() -> Impl {
+    let im = Impl {
+        on_play: f("_drake_play", |g, a| {
+            q(g, a[0].obj(), "Ocean Drake", f("_drake_res", drake_res), Map::new(), true, Value::None, Value::None);
+            Ok(Value::None)
+        }),
+        ..new_impl("Ocean Drake")
+    };
+    with_hook(im, "extra_locs", extra_locs_open())
+}
+
+// Sai Scout — "[Vision] You may play me to an open battlefield."
+fn c_sai_scout() -> Impl {
+    with_hook(Impl { kw: kw1("Vision"), ..new_impl("Sai Scout") }, "extra_locs", extra_locs_open())
+}
+
+// Sneaky Deckhand — "You may play me to an open battlefield."
+fn c_sneaky_deckhand() -> Impl {
+    with_hook(new_impl("Sneaky Deckhand"), "extra_locs", extra_locs_open())
+}
+
+// Irelia, Graceful — "Your spells that choose me cost 1 energy or 1 rune of any type less."
+fn c_irelia_graceful() -> Impl {
+    with_hook(
+        new_impl("Irelia, Graceful"),
+        "cost_aura",
+        f("_irelia_aura", |g, a| {
+            let (src, pid, what) = (a[0].obj(), pid_of(&a[1]), a[2].map());
+            let chv0 = what.g("choice");
+            let ch = if chv0.truthy() { chv0.map().clone() } else { Map::new() };
+            let mut chosen: Vec<Value> = ch.g("tg").list().to_vec();
+            chosen.extend(ch.g("tg2").list().iter().cloned());
+            for rc in ch.g("reps").list() {
+                chosen.extend(rc.map().g("tg").list().iter().cloned());
+            }
+            if pid == g.o(src).ctrl
+                && what.g("kind").opt_str() == Some("spell")
+                && chosen.contains(&Value::from(g.o(src).uid))
+            {
+                return Ok(chv(vec![map! { flex = 1 }]));
+            }
+            Ok(Value::List(vec![]))
+        }),
+    )
+}
+
+// Stargazer — "Spells with [Flow] you play from your trash cost 2 energy less, to a minimum of 1 energy."
+fn c_stargazer() -> Impl {
+    with_hook(
+        new_impl("Stargazer"),
+        "cost_aura",
+        f("_stargazer_aura", |g, a| {
+            let (src, pid, what) = (a[0].obj(), pid_of(&a[1]), a[2].map());
+            if pid == g.o(src).ctrl
+                && what.g("kind").opt_str() == Some("spell")
+                && what.g("src").opt_str() == Some("trash")
+                && flow_of(g, pid, what.g("card").obj()).truthy()
+            {
+                return Ok(chv(vec![map! { e = -2, min_e = 1 }]));
+            }
+            Ok(Value::List(vec![]))
+        }),
+    )
+}
+
+// Vex, Cheerless — "While I'm in combat, friendly spells cost 1 energy and 1 rune of any type less to a minimum of 1
+// energy, and enemy spells cost 1 energy and 1 rune of any type more."
+fn c_vex_cheerless() -> Impl {
+    with_hook(
+        new_impl("Vex, Cheerless"),
+        "cost_aura",
+        f("_vex_aura", |g, a| {
+            let (src, pid, what) = (a[0].obj(), pid_of(&a[1]), a[2].map());
+            if what.g("kind").opt_str() != Some("spell") || !g.in_combat(src) {
+                return Ok(Value::List(vec![]));
+            }
+            if pid == g.o(src).ctrl {
+                return Ok(chv(vec![map! { e = -1, rm = 1, min_e = 1 }]));
+            }
+            Ok(chv(vec![map! { e = 1, p = reqs_to_value(&[any_req()]) }]))
+        }),
+    )
+}
+
+// Ezreal, Prodigy — "When you play me, discard 1, then draw 2. Optional additional costs you pay cost 1 energy or 1
+// rune of any type less." (each optional additional cost: Accelerate, each Repeat cost, "you may pay ... as an
+// additional cost")
+fn c_ezreal_prodigy() -> Impl {
+    let im = Impl {
+        on_play: f("_ezreal_play", |g, a| {
+            let res = f("_ezreal_res", |g_, a_| {
+                let c = ctrl(g_, a_[0].item());
+                discard_n(g_, c, 1)?;
+                g_.draw(c, 2)?;
+                Ok(Value::None)
+            });
+            q0(g, a[0].obj(), "Ezreal, Prodigy", res);
+            Ok(Value::None)
+        }),
+        ..new_impl("Ezreal, Prodigy")
+    };
+    with_hook(
+        im,
+        "cost_aura",
+        f("_ezreal_aura", |g, a| {
+            if pid_of(&a[1]) == g.o(a[0].obj()).ctrl {
+                Ok(chv(vec![map! { flex = 1, on = "opt" }]))
+            } else {
+                Ok(Value::List(vec![]))
+            }
+        }),
+    )
+}
+
+// Syndra, Transcendent — "While I'm in a showdown, your spells have [Repeat] 2 energy and 1 chaos rune." (a granted
+// Repeat instance, rule 820.1.c.2: actions.repeat_instances; its repetition makes its own choices)
+fn c_syndra_transcendent() -> Impl {
+    with_hook(
+        new_impl("Syndra, Transcendent"),
+        "card_kw",
+        f("_syndra_kw", |g, a| {
+            let (src, pid, c, kw) = (a[0].obj(), pid_of(&a[1]), a[2].obj(), a[3].str());
+            if kw == "Repeat"
+                && pid == g.o(src).ctrl
+                && stype(g, c) == "Spell"
+                && g.sd.as_ref().is_some_and(|sd| g.o(src).loc == Some(Loc::Bf(sd.bf)))
+            {
+                return Ok(Value::Tuple(vec![2.into(), reqs_to_value(&[req1("Chaos")])]));
+            }
+            Ok(false.into())
+        }),
+    )
+}
+
+// Kennen, Storm of Shuriken — "When you play me, [Burn 2]. When I conquer, give a spell in your trash [Flow] equal to
+// its cost this turn." (a 'grant_flow' effect on that card: its Energy and Power costs, of its domains)
+fn kennen_conquer(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c0 = ctrl(g, it);
+    let sp: Vec<O> =
+        g.p[c0].trash.iter().copied().filter(|&c| stype(g, c) == "Spell" && g.impl_o(c).is_some()).collect();
+    let ks: Vec<(f64, u32)> = sp.iter().map(|&c| (-cval(g, c), g.o(c).uid)).collect();
+    let sp = sort_keys(sp, ks);
+    if sp.is_empty() {
+        return Ok(Value::None);
+    }
+    let c = g.ask(c0, "kennen_flow", objv(&sp), map! { item = it })?.obj();
+    let s = g.spec(c);
+    let doms = Value::Tuple(s.domains.iter().map(|d| Value::from(d.as_str())).collect());
+    let flow = Value::Tuple(vec![s.e.into(), s.p.into(), doms]);
+    g.add_effect(map! { kind = "grant_flow", uid = g.o(c).uid, oid = g.o(c).oid, dur = "turn", flow = flow });
+    let r = g.repr(c);
+    g.log(|| format!("  {r} has [Flow] this turn"));
+    Ok(Value::None)
+}
+
+fn c_kennen_storm_of_shuriken() -> Impl {
+    Impl {
+        on_event: f("_kennen_event", |g, a| {
+            let (o, ev, info) = ev_args(a);
+            if ev == "conquer" && in_units(info, o) {
+                q0(g, o, "Kennen, Storm of Shuriken", f("_kennen_conquer", kennen_conquer));
+            }
+            Ok(Value::None)
+        }),
+        on_play: f("_kennen_play", |g, a| {
+            let res = f("_kennen_burn", |g_, a_| {
+                let c = ctrl(g_, a_[0].item());
+                g_.burn(c, 2)?;
+                Ok(Value::None)
+            });
+            q0(g, a[0].obj(), "Kennen, Storm of Shuriken", res);
+            Ok(Value::None)
+        }),
+        ..new_impl("Kennen, Storm of Shuriken")
+    }
+}
+
+// Mask Mother — "When you discard me, you may pay 1 energy to give a friendly unit +2 might this turn."
+fn mask_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c = ctrl(g, it);
+    let us = g.units(Some(c), None);
+    let mut ks = vec![];
+    for &u in &us {
+        ks.push((-value(g, u)?, g.o(u).uid));
+    }
+    let us = sort_keys(us, ks);
+    if !us.is_empty() {
+        let u = if us.len() > 1 { g.ask(c, "mask_mother", objv(&us), map! { item = it })?.obj() } else { us[0] };
+        g.mod_(u, 2, "turn".into(), None)?;
+    }
+    Ok(Value::None)
+}
+
+fn c_mask_mother() -> Impl {
+    Impl {
+        on_discard: f("_mask_discard", |g, a| {
+            let pid = pid_of(&a[1]);
+            g.queue_trigger(pid, "Mask Mother", f("_mask_res", mask_res), Map::new(), None, true, Value::None, may_pay(1, Value::None));
+            Ok(Value::None)
+        }),
+        ..new_impl("Mask Mother")
+    }
+}
+
+// Scrapheap — "When this is played, discarded, or killed, draw 1." (killed: its own 'leave' event from a kill; this is
+// not a Deathknell)
+fn c_scrapheap() -> Impl {
+    Impl {
+        on_play: f("_scrapheap_play", |g, a| {
+            q0(g, a[0].obj(), "Scrapheap", draw1_res());
+            Ok(Value::None)
+        }),
+        on_discard: f("_scrapheap_discard", |g, a| {
+            let pid = pid_of(&a[1]);
+            g.queue_trigger(pid, "Scrapheap", draw1_res(), Map::new(), None, false, Value::None, Value::None);
+            Ok(Value::None)
+        }),
+        on_leave: f("_scrapheap_leave", |g, a| {
+            let info = a[1].map();
+            if info.g("killed").truthy() {
+                let p = pid_of(&info.g("info").map().g("ctrl"));
+                g.queue_trigger(p, "Scrapheap", draw1_res(), Map::new(), None, false, Value::None, Value::None);
+            }
+            Ok(Value::None)
+        }),
+        ..new_impl("Scrapheap")
+    }
+}
+
+// Treasure Trove — "When this leaves the board, draw 1 and channel 1 rune exhausted. [Chaos], [E]: Kill this."
+fn c_treasure_trove() -> Impl {
+    let ab = ability(
+        "Kill this",
+        AbilityArgs {
+            cost: Cost::Text("1 chaos rune".into()),
+            exhaust: true,
+            resolve: f("_trove_kill", |g, a| {
+                let it = a[0].item();
+                if let Some(m) = me(g, it) {
+                    let c = ctrl(g, it);
+                    g.kill(&[m], Some(c), false)?;
+                }
+                Ok(Value::None)
+            }),
+            ..Default::default()
+        },
+    );
+    Impl {
+        on_leave: f("_trove_leave", |g, a| {
+            let p = pid_of(&a[1].map().g("info").map().g("ctrl"));
+            let res = f("_trove_res", |g_, a_| {
+                let c = ctrl(g_, a_[0].item());
+                g_.draw(c, 1)?;
+                g_.channel(c, 1, true)?;
+                Ok(Value::None)
+            });
+            g.queue_trigger(p, "Treasure Trove", res, Map::new(), None, false, Value::None, Value::None);
+            Ok(Value::None)
+        }),
+        abilities: vec![ab],
+        ..new_impl("Treasure Trove")
+    }
+}
+
+// Maduli the Gatekeeper — "I can't be readied. [Chaos]: Move me to an occupied enemy battlefield if my Might is greater
+// than the total Might of enemy units there."
+fn maduli_ok(g: &mut Game, o: O, b: usize) -> Res<bool> {
+    let es = g.units(Some(1 - g.o(o).ctrl), Some(Loc::Bf(b)));
+    if es.is_empty() || g.bfs[b].ctrl != Some(1 - g.o(o).ctrl) {
+        return Ok(false);
+    }
+    let m = g.might(o)?;
+    Ok(m > sum_might(g, &es)?)
+}
+
+fn c_maduli_the_gatekeeper() -> Impl {
+    let ab = ability(
+        "Move",
+        AbilityArgs {
+            cost: Cost::Text("1 chaos rune".into()),
+            resolve: f("_maduli_res", |g, a| {
+                let it = a[0].item();
+                let o = g.it(it).src.and_then(|u| g.obj(u));
+                let b = dget(g, it, "bf");
+                if let (Some(o), Some(b)) = (o, b.opt_int()) {
+                    let b = b as usize;
+                    if g.o(o).loc != Some(Loc::Bf(b)) && maduli_ok(g, o, b)? {
+                        let c = ctrl(g, it);
+                        mv(g, o, Loc::Bf(b), c)?;
+                    }
+                }
+                Ok(Value::None)
+            }),
+            choices: f("_maduli_choices", |g, a| {
+                let o = a[1].obj();
+                let mut out = vec![];
+                for i in 0..g.bfs.len() {
+                    if Some(Loc::Bf(i)) != g.o(o).loc && maduli_ok(g, o, i)? {
+                        out.push(map! { bf = i });
+                    }
+                }
+                Ok(chv(out))
+            }),
+            ..Default::default()
+        },
+    );
+    let im = Impl { abilities: vec![ab], ..new_impl("Maduli the Gatekeeper") };
+    with_hook(im, "no_ready", f("_maduli_no_ready", |_g, _a| Ok(true.into())))
+}
+
+// Vex, Apathetic — "[Deflect] When an opponent plays a unit while I'm at a battlefield, [Stun] it. They can't move it
+// this turn."
+fn vex_ap_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let Some(u) = same(g, &dget(g, it, "u"), &dget(g, it, "uoid")) else { return Ok(Value::None) };
+    let c = ctrl(g, it);
+    g.stun(Some(u), Some(c))?;
+    let no_move = f("_vex_no_move", |g_, a_| {
+        let (eid, o, by) = (a_[0].int() as u64, a_[1].obj(), &a_[3]);
+        let Some(e) = g_.eff(eid) else { return Ok(false.into()) };
+        Ok((Value::from(g_.o(o).uid) == e.g("uid") && Value::from(g_.o(o).oid) == e.g("oid") && *by == e.g("pid")).into())
+    });
+    let mut d = Map::new();
+    d.set("kind", "cant_move");
+    d.set("fn", no_move);
+    d.set("uid", g.o(u).uid);
+    d.set("oid", g.o(u).oid);
+    d.set("pid", g.o(u).ctrl);
+    d.set("dur", "turn");
+    g.add_effect(d);
+    Ok(Value::None)
+}
+
+fn c_vex_apathetic() -> Impl {
+    Impl {
+        kw: kw1("Deflect"),
+        on_event: f("_vex_ap_event", |g, a| {
+            let (o, ev, info) = ev_args(a);
+            let c = if ev == "played" { info.g("card").opt_obj() } else { None };
+            if let Some(c) = c {
+                if pid_of(&info.g("pid")) != g.o(o).ctrl
+                    && stype(g, c) == "Unit"
+                    && is_bf(g.o(o).loc)
+                    && g.board.contains(&c)
+                {
+                    let data = map! { u = g.o(c).uid, uoid = g.o(c).oid };
+                    q(g, o, "Vex, Apathetic", f("_vex_ap_res", vex_ap_res), data, false, Value::None, Value::None);
+                }
+            }
+            Ok(Value::None)
+        }),
+        ..new_impl("Vex, Apathetic")
+    }
+}
+
+// Sivir, Mercenary — "[Accelerate] If you've spent at least 2 runes of any type this turn, I have +2 might and
+// [Ganking]." (Game.hist['power_spent'])
+fn sivir_merc() -> Value {
+    f("_sivir_merc", |g, a| Ok((g.hist.power_spent[g.o(a[0].obj()).ctrl] >= 2).into()))
+}
+
+fn c_sivir_mercenary() -> Impl {
+    Impl {
+        accelerate: true,
+        might_if: vec![(sivir_merc(), 2)],
+        kw_if: vec![(sivir_merc(), kw1("Ganking"))],
+        ..new_impl("Sivir, Mercenary")
+    }
+}
+
+// Nocturne, Horrifying — "[Ganking] When you look at cards from the top of your deck (and don't draw them) and see me,
+// you may play me for 1 rune of any type." (Impl.on_seen, called by Game.look; when the trigger resolves he must
+// still be in the Main Deck, not drawn since)
+fn nocturne_alt(ch: &Map) -> Map {
+    let mut m = ch.clone();
+    m.set("alt", "nocturne");
+    m.set("alt_e", 0);
+    m.set("alt_reqs", Value::Tuple(reqs_to_value(&[any_req()]).list().to_vec()));
+    m
+}
+
+fn nocturne_res(g: &mut Game, a: &[Value]) -> Res<Value> {
+    let it = a[0].item();
+    let c0 = ctrl(g, it);
+    let want = dget(g, it, "c");
+    let mut c = None;
+    for &x in &g.p[c0].deck {
+        if Value::from(g.o(x).uid) == want {
+            c = Some(x);
+        }
+    }
+    let Some(c) = c else { return Ok(Value::None) };
+    if Value::from(g.o(c).oid) != dget(g, it, "oid") || Value::from(g.o(c).drawn_at) != dget(g, it, "drawn") {
+        return Ok(Value::None);
+    }
+    let ctx: Value = map! { kind = "unit", card = c }.into();
+    let mut chs = vec![];
+    for ch in unit_play_choices(g, c0, c, "deck", None)? {
+        let (e, reqs) = total_cost(g, c0, c, &nocturne_alt(&ch), "deck")?;
+        if g.can_pay(c0, e, &reqs, &ctx)? {
+            chs.push(ch);
+        }
+    }
+    if chs.is_empty() {
+        return Ok(Value::None);
+    }
+    let ch = if chs.len() > 1 {
+        g.ask(c0, "play_choice", chs.into_iter().map(Value::Map).collect(), map! { card = c })?.map().clone()
+    } else {
+        chs.remove(0)
+    };
+    let ch = nocturne_alt(&ch);
+    let (e, reqs) = total_cost(g, c0, c, &ch, "deck")?;
+    if g.pay(c0, e, &reqs, &ctx)? {
+        play_card(g, c0, c, "deck", ch, true)?;
+    }
+    Ok(Value::None)
+}
+
+fn c_nocturne_horrifying() -> Impl {
+    with_hook(
+        Impl { kw: kw1("Ganking"), ..new_impl("Nocturne, Horrifying") },
+        "on_seen",
+        f("_nocturne_seen", |g, a| {
+            let (c, pid) = (a[0].obj(), pid_of(&a[1]));
+            if pid == g.o(c).owner {
+                let data = map! { c = g.o(c).uid, oid = g.o(c).oid, drawn = g.o(c).drawn_at };
+                g.queue_trigger(pid, "Nocturne, Horrifying", f("_nocturne_res", nocturne_res), data, None, true, Value::None, Value::None);
+            }
+            Ok(Value::None)
+        }),
+    )
+}
+
+// Baron Nashor — "As you play me, add the Baron Pit battlefield token to the board if it's not there already. If you
+// do, I enter there. (It has "Units can move here from anywhere.") I can't be chosen by enemy spells and abilities.
+// Other friendly units have +2 might." The last sentence of the first ability replaces where he enters (rule 369.3,
+// whose example is this card): only when the token was added by this play. Entering there applies Contested (rule
+// 190.3.a.1), so he usually conquers the Baron Pit. With three battlefields on the board, the Final Point by conquer
+// needs all three scored that turn (rule 471.1.b.1).
+fn c_baron_nashor() -> Impl {
+    Impl {
+        enter_loc: f("_nashor_enter", |g, a| {
+            if g.bfs.iter().any(|b| b.name == BARON_PIT) {
+                return Ok(a[2].clone());
+            }
+            Ok(Value::Loc(Loc::Bf(g.add_battlefield(BARON_PIT)?)))
+        }),
+        untargetable: f("_nashor_untargetable", |g, a| {
+            Ok((a[1].opt_int() != Some(g.o(a[0].obj()).ctrl as i64)).into())
+        }),
+        aura_might: f("_nashor_aura", |g, a| {
+            let (src, o) = (a[0].obj(), a[1].obj());
+            let ok = stype(g, src) == "Unit" && o != src && g.o(o).ctrl == g.o(src).ctrl && stype(g, o) == "Unit";
+            Ok(if ok { 2 } else { 0 }.into())
+        }),
+        ..new_impl("Baron Nashor")
+    }
+}
+
+
 
 // ====================================================================== enregistrement (ordre du Python)
 pub fn register(r: &mut Registry) {
@@ -3816,5 +4338,29 @@ pub fn register(r: &mut Registry) {
     r.card(c_yasuo_windrider());
     r.card(c_zaunite_bouncer());
     r.card(c_zed_without_a_sound());
-    // @@REG@@
+    r.ask_text(&[
+        ("ocean_drake", "Ocean Drake : quelle unité non-Dragon renvoyer dans la main de son propriétaire ?"),
+        ("kennen_flow", "Kennen, Storm of Shuriken : à quel sort de ta défausse donner [Flow] ?"),
+        ("mask_mother", "Mask Mother : quelle unité alliée gagne +2 ?"),
+        ("maduli_dest", "Maduli the Gatekeeper : vers quel champ de bataille ?"),
+        ("nocturne_play", "Nocturne, Horrifying : le jouer pour 1 rune ?"),
+    ]);
+    r.card(c_miss_fortune_buccaneer());
+    r.card(c_ocean_drake());
+    r.card(c_sai_scout());
+    r.card(c_sneaky_deckhand());
+    r.card(c_irelia_graceful());
+    r.card(c_stargazer());
+    r.card(c_vex_cheerless());
+    r.card(c_ezreal_prodigy());
+    r.card(c_syndra_transcendent());
+    r.card(c_kennen_storm_of_shuriken());
+    r.card(c_mask_mother());
+    r.card(c_scrapheap());
+    r.card(c_treasure_trove());
+    r.card(c_maduli_the_gatekeeper());
+    r.card(c_vex_apathetic());
+    r.card(c_sivir_mercenary());
+    r.card(c_nocturne_horrifying());
+    r.card(c_baron_nashor());
 }
