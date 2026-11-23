@@ -33,6 +33,11 @@ sources: demande de l'utilisateur (2026-11-23, « pas de mesure, tout en Rust »
 4. IA (`ai.py`, `plans*.py`), puis `train.py` / `match.py` (interface de la table) et la liaison WebAssembly.
 5. Bascule de la table, nouvelle version du moteur, remesure des chiffres.
 
+## Suppression du moteur Python (décision de l'utilisateur, 2026-11-23)
+L'utilisateur ne veut plus de moteur Python. Il reste **gelé** (aucune évolution) tant qu'il sert de référence au test
+différentiel, puis **tout le Python du moteur est supprimé dans le même commit que la bascule** (moteur Rust qui joue
+les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table et les simulations casseraient.
+
 ## Architecture (fixée le 2026-11-23, à suivre pour que le différentiel tienne)
 - **Traduction au plus près** de la structure Python : mêmes fonctions, même ordre d'opérations, mêmes tris (le tri
   Rust `sort_by` est stable comme `sorted`), mêmes listes ordonnées (jamais de `HashMap` dont l'ordre compte :
