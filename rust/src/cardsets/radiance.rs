@@ -8,7 +8,6 @@
 //! (Obj.exhausted, Game._advance).
 //! Les cartes qui ne peuvent pas être modélisées fidèlement restent hors de IMPL : voir NEEDS_radiance.md.
 //!
-//! Non enregistrée ici (API manquante) : Orianna, Lady of Clockwork (attribut `Obj.ugear_by` absent de `game.rs`).
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 
@@ -23,7 +22,7 @@ use crate::cards_helpers::{
     tg_choices, token_locations, trig_target, unit_play_choices, value, AbilityArgs, Cost,
 };
 use crate::game::{Desig, Game, ItemId, Res, Zone, O};
-use crate::game_costs::{any_req, Req};
+use crate::game_costs::{any_req, reqs_to_value, Req};
 use crate::lang::tr;
 use crate::spec::spec;
 use crate::value::{is_bf, Loc, Map, OptV, Value};
@@ -42,10 +41,6 @@ fn req(ds: &[&str]) -> Req {
     ds.iter().map(|d| d.to_string()).collect()
 }
 
-/// Liste de `Req` rangée dans une valeur (liste de listes de domaines, comme `game_costs::reqs_of` la lit).
-fn reqs_v(reqs: &[Req]) -> Value {
-    Value::List(reqs.iter().map(|r| Value::List(r.iter().map(|d| Value::from(d.as_str())).collect())).collect())
-}
 
 fn objs_v(xs: &[O]) -> Value {
     Value::List(xs.iter().map(|&o| Value::Obj(o)).collect())
@@ -2620,7 +2615,7 @@ fn mind(r: &mut Registry) {
                 let pid = a[1].int() as usize;
                 let dest = a[3].opt_loc();
                 Ok(if zone_is(g, s, Zone::Board) && is_bf(g.o(s).loc) && dest == g.o(s).loc && pid != g.o(s).ctrl {
-                    Value::Tuple(vec![1.into(), reqs_v(&[any_req()])])
+                    Value::Tuple(vec![1.into(), reqs_to_value(&[any_req()])])
                 } else {
                     Value::None
                 })
@@ -2843,7 +2838,7 @@ fn armory_trig(g: &mut Game, o: O) {
 
 /// `may_pay(e, reqs_fn)` avec des reqs fixes
 fn reqs_fn(reqs: Vec<Req>) -> Value {
-    Value::func("reqs_fn", move |_g, _a| Ok(reqs_v(&reqs)))
+    Value::func("reqs_fn", move |_g, _a| Ok(reqs_to_value(&reqs)))
 }
 
 fn hold_me(g: &Game, o: O, info: &Map) -> bool {
@@ -4817,7 +4812,7 @@ fn legends(r: &mut Registry) {
         extra_cost_fn: Value::func("Chronobreak.extra_cost_fn", |_g, a| {
             let ch = ctx_of(&a[2]);
             let x = ch.g("x").opt_int().unwrap_or(0).max(0) as usize;
-            Ok(Value::Tuple(vec![0.into(), reqs_v(&vec![any_req(); x])]))
+            Ok(Value::Tuple(vec![0.into(), reqs_to_value(&vec![any_req(); x])]))
         }),
         ..imp("Chronobreak")
     });
@@ -4935,8 +4930,56 @@ fn legends(r: &mut Registry) {
         ..imp("Realm of Death")
     });
 
-    // Orianna, Lady of Clockwork : non enregistrée (son effet retient `ugear_by` sur l'objet, attribut absent de
-    // `game::Obj` ; voir l'en-tête du module).
+    // Orianna, Lady of Clockwork — "At the start of your Main Phase, you may pay [1] to choose a friendly gear. It
+    // becomes a unit gear with Might equal to its Energy cost until you choose another gear with me." (Obj.ugear : une
+    // unité dont la Might est son coût en énergie imprimé ; un Equipment attaché se détache en devenant une unité,
+    // 143.5.b)
+    r.card(Impl {
+        legend_event: idx_event_fn("_ori_legend", |g, pid, ev, info| {
+            if ev != "main_start" || info.g("pid").int() as usize != pid || g.gear(Some(pid)).is_empty() {
+                return Ok(());
+            }
+            let choose = bool_fn("_ori_legend.choose", |g, it| {
+                let c = ctrl(g, it);
+                let gs: Vec<O> = g.gear(Some(c)).into_iter().filter(|&x| !g.o(x).ugear).collect();
+                if gs.is_empty() {
+                    return Ok(false);
+                }
+                let s = sort_by(g, gs, |g, x| Ok((-e_of(g, x), g.o(x).uid)))?;
+                let x = g.ask_obj(c, "orianna_gear", &s, crate::map! { item = it })?.unwrap();
+                let pred = pred_fn("_ori_legend.pred", |g, it2, o| Ok(g.o(o).ctrl == ctrl(g, it2) && g.is_gear(o)));
+                g.add_target(it, x, pred);
+                Ok(true)
+            });
+            let res = res_fn("_ori_legend.res", |g, it| {
+                let Some(x) = g.legal(it, 0)? else { return Ok(()) };
+                let c = ctrl(g, it);
+                for y in g.board.clone() {
+                    if g.o(y).ugear && g.o(y).ctrl == c && g.o(y).attrs.g("ugear_by") == Value::from(c) {
+                        g.o_mut(y).ugear = false;
+                    }
+                }
+                if let Some(au) = g.o(x).attached_to {
+                    let xu = g.o(x).uid;
+                    if let Some(u) = g.obj(au) {
+                        if let Some(i) = g.o(u).attached.iter().position(|&a| a == xu) {
+                            g.o_mut(u).attached.remove(i);
+                        }
+                    }
+                    g.o_mut(x).attached_to = None;
+                }
+                g.o_mut(x).ugear = true;
+                g.o_mut(x).attrs.set("ugear_by", c);
+                g.need_cleanup = true;
+                let cn = g.cname(x).to_string();
+                g.log(|| format!("  {cn} becomes a unit gear"));
+                Ok(())
+            });
+            g.queue_trigger(pid, "Orianna, Lady of Clockwork", res, Map::new(), None, true, choose, may_pay(1, Value::None));
+            Ok(())
+        }),
+        ..imp("Orianna, Lady of Clockwork")
+    });
 
     // The Ball — "[Deploy] [Ganking] When you play or move this, choose one — Draw 1. Deal 2 to enemy units here."
     r.card(Impl {
@@ -5056,7 +5099,7 @@ fn legends(r: &mut Registry) {
                     Ok(if !ch.g("exh").is_none() {
                         Value::Tuple(vec![0.into(), Value::List(vec![])])
                     } else {
-                        Value::Tuple(vec![0.into(), reqs_v(&[any_req()])])
+                        Value::Tuple(vec![0.into(), reqs_to_value(&[any_req()])])
                     })
                 }),
             ),
