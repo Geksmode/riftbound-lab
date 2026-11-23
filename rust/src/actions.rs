@@ -71,6 +71,16 @@ pub fn cost_of(v: &Value) -> (i64, Vec<Req>) {
     (l[0].int(), reqs_of(&l[1]))
 }
 
+/// Un emplacement rangé dans une valeur : `Value::Loc`, un indice de battlefield (`Int`) ou 'base' ; None sinon.
+pub fn loc_of(v: &Value) -> Option<Loc> {
+    match v {
+        Value::Loc(l) => Some(*l),
+        Value::Int(i) => Some(Loc::Bf(*i as usize)),
+        Value::Str(s) if &**s == "base" => Some(Loc::Base),
+        _ => None,
+    }
+}
+
 fn loc_v(l: Loc) -> Value {
     Value::Loc(l)
 }
@@ -619,7 +629,7 @@ pub fn unit_timing_ok(timing: Option<&str>, closed: bool) -> bool {
 pub fn loc_allowed(g: &mut Game, pid: usize, card: O, loc: Loc) -> Res<bool> {
     if let Some(im) = g.impl_o(card) {
         let ol = im.hook("only_locs");
-        if !ol.is_none() && !ol.call(g, &[pid.into(), card.into()])?.list().contains(&loc_v(loc)) {
+        if !ol.is_none() && !ol.call(g, &[pid.into(), card.into()])?.list().iter().any(|x| loc_of(x) == Some(loc)) {
             return Ok(false);
         }
     }
@@ -664,7 +674,7 @@ pub fn unit_locations_extra(g: &mut Game, pid: usize, card: O, src: &str, closed
         let el = im.hook("extra_locs");
         if !el.is_none() {
             for l in el.call(g, &[pid.into(), card.into(), closed_or_focus.into()])?.list() {
-                let e = (l.loc(), Map::new());
+                let e = (loc_of(l).expect("emplacement attendu"), Map::new());
                 if !locs.contains(&e) {
                     locs.push(e);
                 }
@@ -674,8 +684,8 @@ pub fn unit_locations_extra(g: &mut Game, pid: usize, card: O, src: &str, closed
             let r = ia.hook("aura_locs").call(g, &[so, pid.into(), card.into(), closed_or_focus.into()])?;
             for l in r.list() {
                 let e = match l {
-                    Value::Tuple(t) => (t[0].loc(), t[1].map().clone()),
-                    v => (v.loc(), Map::new()),
+                    Value::Tuple(t) => (loc_of(&t[0]).expect("emplacement attendu"), t[1].map().clone()),
+                    v => (loc_of(v).expect("emplacement attendu"), Map::new()),
                 };
                 if !locs.contains(&e) {
                     locs.push(e);
@@ -687,7 +697,7 @@ pub fn unit_locations_extra(g: &mut Game, pid: usize, card: O, src: &str, closed
             if ef.d.g("kind").opt_str() == Some("aura_locs") && ef.d.g("pid") == Value::from(pid) {
                 let r = ef.d.g("fn").call(g, &[Value::Int(ef.eid as i64), card.into(), closed_or_focus.into()])?;
                 for l in r.list() {
-                    let e = (l.loc(), Map::new());
+                    let e = (loc_of(l).expect("emplacement attendu"), Map::new());
                     if !locs.contains(&e) {
                         locs.push(e);
                     }
@@ -1623,7 +1633,7 @@ pub fn play_card(g: &mut Game, pid: usize, card: O, src: &str, ch: Map, limited:
         g.chain_origin = Some("play");
     }
     if typ == "Unit" || typ == "Gear" {
-        let mut loc = ch.g("loc").opt_loc().unwrap_or(Loc::Base);
+        let mut loc = loc_of(&ch.g("loc")).unwrap_or(Loc::Base);
         if typ == "Gear" && !from_facedown {
             if has_deploy(g, card)? {
                 // « Play this only to a battlefield » (830.1.b)
@@ -1646,7 +1656,7 @@ pub fn play_card(g: &mut Game, pid: usize, card: O, src: &str, ch: Map, limited:
         }
         if !im.enter_loc.is_none() {
             // « As you play me ... I enter there » (Baron Nashor, 369.3)
-            loc = im.enter_loc.call(g, &[pid.into(), card.into(), loc_v(loc)])?.loc();
+            loc = loc_of(&im.enter_loc.call(g, &[pid.into(), card.into(), loc_v(loc)])?).expect("emplacement attendu");
         }
         g.enter_board(card, pid, loc, ready);
         if ch.g("tag").truthy() {
