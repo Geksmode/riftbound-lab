@@ -512,3 +512,19 @@ macro_rules! jo {
         $crate::json::Json::Obj(vec![$(($k.to_string(), $crate::json::Json::from($v))),+])
     };
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn comme_json_dumps() {
+        for (f, s) in [(3.0, "3.0"), (-0.5, "-0.5"), (1e-5, "1e-05"), (1e16, "1e+16"), (123456.7, "123456.7"), (0.0001, "0.0001")] {
+            assert_eq!(py_float(f), s);
+        }
+        let j = parse(r#"{"a": [1, 2.5, "é"], "b": null}"#).unwrap();
+        let bs = char::from(92u8); // barre oblique inverse
+        assert_eq!(j.dumps(true), format!("{{\"a\": [1, 2.5, \"{bs}u00e9\"], \"b\": null}}"));
+        assert_eq!(j.dumps(false), r#"{"a": [1, 2.5, "é"], "b": null}"#);
+    }
+}

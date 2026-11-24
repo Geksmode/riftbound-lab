@@ -2,7 +2,7 @@
 titre: Duel entre amis (room avec code, PeerJS)
 resume: état du duel à deux humains (moteur fait et testé, interface à faire) et spécification complète de l'interface
 maj: 2026-11-06
-sources: riftbound/engine/train.py (duel_new, match_duel_next), riftbound/engine/cardsets/test_duel.py, riftbound/train/fetch_pyodide.sh, build.sh
+sources: riftbound/engine/train.py (duel_new, match_duel_next), riftbound/engine/cardsets/test_duel.py, riftbound/train/fetch_vendor.sh, build.sh
 ---
 **Décidé avec l'utilisateur (2026-10-08)** : connexion WebRTC via PeerJS (serveur public de mise en relation 0.peerjs.com, sans compte),
 room créée par l'hôte avec un code, modes BO1 et BO3 avec les règles de match habituelles ([match.md](match.md)), pas de spectateurs.
@@ -16,7 +16,7 @@ Limite acceptée : chaque navigateur fait tourner toute la partie (la main adver
 - Correctif nécessaire au duel : `_expand` construit les options pour le joueur qui décide (avant : toujours `ME`), sinon désynchronisation.
 - `train.match_duel_next(state)` : préparation d'une manche sans choix d'IA (chooser, first imposé, battlefields permis par place, `bo1_bfs`,
   sideboard, graine). Tests : `cardsets/test_duel.py` (deux processus synchronisés jusqu'à la fin, main adverse cachée), `test_match.py`.
-- PeerJS 1.5.5 servi avec la page : `build/vendor/peerjs.min.js` (téléchargé par `fetch_pyodide.sh`).
+- PeerJS 1.5.5 servi avec la page : `build/vendor/peerjs.min.js` (téléchargé par `fetch_vendor.sh`).
 - Serveur PeerJS local pour les robots : `npm install peer@1.0.2` puis `peerjs --port 9123 --path /myapp` (arrêter par PID).
 
 **Interface faite (2026-10-08, agent design, commit `43ddbc7`)** : menu « Jouer avec un ami » (pseudo, deck, « Créer une room » BO1 / BO3 avec

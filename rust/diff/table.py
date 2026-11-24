@@ -98,6 +98,8 @@ def play(rng, v, moves, limit):
             if r < 0.08:
                 call("flag")
                 call("ai_script")
+            if not STUB and r < 0.12:
+                call("hint", 4)   # conseil de l IA (coach) : même tirage, mêmes scores
             ops = v["dec"]["options"]
             i = rng.randrange(len(ops))
             moves.append(["act", i])
@@ -118,14 +120,18 @@ def scenario(seed):
     call("check", json.dumps(train._export(train._deck(mine, train.G2))))
     level = rng.choice([1, 3, 6])
     first = rng.choice([None, 0, 1])
-    meta = json.loads(call("new", seed, None, first, level, mine, opp, None))
+    if not STUB and seed % 5 == 0:   # tutoriel : IA débutante (Gentle, level 0), decks et donne fixes
+        mine, opp, level, first = train.TUTO_DECKS[0], train.TUTO_DECKS[1], 0, 0
+        meta = json.loads(call("tuto"))
+    else:
+        meta = json.loads(call("new", seed, None, first, level, mine, opp, None))
     call("cards", loose=True)
     moves = []
     v = json.loads(call("step"))
     v = play(rng, v, moves, MAXC)
     script = json.loads(call("ai_script"))
     # mode replay de la partie jouée
-    game = dict(seed=seed, first=meta["first"], bf=meta["bf"][0], obf=meta["bf"][1], level=level, mine=mine, opp=opp,
+    game = dict(seed=meta["seed"], first=meta["first"], bf=meta["bf"][0], obf=meta["bf"][1], level=level, mine=mine, opp=opp,
                 moves=moves, ai=script["ai"], result=dict(winner=v.get("winner"), pts=v["st"]["pts"]))
     rl = call("replay_load", json.dumps(game))
     if rl is not None:

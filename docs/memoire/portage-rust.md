@@ -90,6 +90,14 @@ les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table
   `as_played` -> liste de dict.
 
 ## Avancement
+- 2026-11-24 : **table en WebAssembly** : `lang.rs`, `match_.rs`, `replay.rs` (textes et `snap` ; l'enregistreur
+  RecGame/RecAgent/record n'est pas porté : outils Python seulement), `train.rs` (toutes les fonctions appelées par la
+  page), `wasm.rs` (`rb_alloc`, `rb_call`, sans dépendance), `engine.worker.js` (même protocole `{id, fn, args}`),
+  `build.sh` sans Pyodide (`fetch_vendor.sh` : PeerJS seul). Crochets de `TGame` dans `Game` (`tg`), contexte `plans=`
+  de `pay_gold`/`pay_rune` passé. Robots : `exec(code Python)` remplacé par des opérations JSON (`train_dbg.rs`).
+  Différentiel `rust/diff/table.py` (mêmes appels, JSON comparé octet pour octet) : voir `docs/wiki/pages/etat.md`.
+  Écart connu : l'ordre des domaines d'un frozenset de plusieurs domaines dans le journal (`pay_cost=`, `alt_reqs=`)
+  dépend de PYTHONHASHSEED en Python ; Rust écrit l'ordre alphabétique.
 - 2026-11-23 (fin) : **règles et cartes portées** : 1037 cartes des 10 lots enregistrées (pool 84, battlefields 55,
   body 128, calm 114, chaos 122, fury 121, legends 47, mind 120, order 101, radiance 165), plus runes et cartes
   « mots-clés seulement ». Test différentiel (`rust/diff/serie.sh`, deux RandomAgent, paires de paquets de
