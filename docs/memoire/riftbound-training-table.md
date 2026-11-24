@@ -132,3 +132,6 @@ Cibles multiples (2026-11-07) : une question « jusqu'à N unités » (`radiance
 Battlefields des planches (`atlas/`) : carte imprimée de côté, haut à gauche → `.bfrot` tourne de **+90°** (avant -90° :
 tête en bas sur le plateau). `bfThumb(n)` pour les vignettes du choix de battlefield (match BO3 et duel). Robot `train/verif_multi.mjs`.
 
+## Cartes agrandies sur ordinateur (2026-11-24)
+Demande : « les cartes sont trop petites ». Dans `@media (min-width: 1000px)` : `--cw/--chh` 74×104 → 96×134 (taille de maquette, mise à l'échelle par `fitBoard`), main 104×145, légende 116×162 (adverse 92×128), rangées `.half.p0` 150/100/60, `.half.p1` 52/150, `.bf` 144/auto/144. Côtés de battlefield et main en `container-type: inline-size` avec marge négative calculée sur `--n`/`--nx` (chevauchement, jamais de défilement). Éventail plafonné (lift ≤ 12 px, rotation ≤ 9°). Mesure à 1893×909 : unité 86×120 (avant 68×95). Robot `verif_charge.mjs` (taille minimale et main à l'écran).
+Runes (même jour) : `.half` en colonnes `1fr 1fr 262px`, aires p0 "runes base leg / hand hand leg / hand hand pile", p1 "ohand ohand pile / base runes leg" ; zone runes `--rw 88px --rh 123px`, chevauchement sur `--n/--nx`, `.res-line` et `.floatpool` en absolu en haut de la zone.

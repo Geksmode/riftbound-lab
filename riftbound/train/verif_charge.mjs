@@ -48,8 +48,12 @@ for (const [w, h] of [[393, 851], [360, 740], [412, 915], [1875, 902], [1400, 90
     return JSON.stringify({ hors: out.slice(0, 60), nHors: out.length, page: document.documentElement.scrollHeight > innerHeight + 1 || document.documentElement.scrollWidth > innerWidth + 1,
       unite: unit ? Math.round(unit.getBoundingClientRect().width) + 'x' + Math.round(unit.getBoundingClientRect().height) : null,
       main: hc ? Math.round(hc.getBoundingClientRect().width) + 'x' + Math.round(hc.getBoundingClientRect().height) : null, defile: sc }) })()`));
-  if (!mob) {   // ordinateur : seulement le battlefield (17 cartes en main y débordent : sujet à part, hors de ce robot)
-    m.hors = m.hors.filter(x => x.startsWith('.bf')); m.nHors = m.hors.length; m.page = false; m.defile = m.defile.filter(x => x.startsWith('side'));
+  if (!mob) {   // ordinateur : battlefields et main (17 cartes : elles se chevauchent depuis le 2026-11-24, cartes agrandies)
+    m.hors = m.hors.filter(x => x.startsWith('.bf') || x.startsWith('.half.p0 .hand')); m.nHors = m.hors.length; m.page = false; m.defile = m.defile.filter(x => x.startsWith('side'));
+    const d = await ev("(()=>{const u=document.querySelector('.bf .side > .slot:not(.x) .card').getBoundingClientRect();const ru=[...document.querySelectorAll('.half.p0 .runeslot:not(.x) .rune')].map(x=>x.getBoundingClientRect()),rz=document.querySelector('.half.p0 .zrunes').getBoundingClientRect();return {rh:Math.round(Math.min(...ru.map(r=>r.height))),rout:[...document.querySelectorAll('.half.p0 .runeslot')].filter(x=>{const r=x.getBoundingClientRect();return r.left<rz.left-2||r.right>rz.right+2||r.top<rz.top-2||r.bottom>rz.bottom+2}).length,uh:Math.round(u.height),bot:Math.round(Math.max(...[...document.querySelectorAll('.half.p0 .hand > .card')].map(c=>c.getBoundingClientRect().bottom))),vh:innerHeight}})()");
+    // demande du 2026-11-24 (« les cartes sont trop petites ») : unités ≥ 110 px de haut à 1875×902 (95 avant), ≥ 100 à 1400×900
+    m.taille = d; // runes en rangée de cartes (comme RiftAtlas, 2026-11-24) : ≥ 95 px de haut, 12 runes toutes dans leur zone
+    if (d.uh < (w > 1800 ? 110 : 100) || d.bot > d.vh || d.rh < 95 || d.rout) { m.nHors++; m.hors.push(`taille : unité ${d.uh} px de haut, rune ${d.rh} px, ${d.rout} rune(s) hors zone, bas de la main ${d.bot} / ${d.vh}`); }
   }
   const bad = m.nHors > 0 || m.page || m.defile.length > 0 || errs.length;
   if (bad) fails++;

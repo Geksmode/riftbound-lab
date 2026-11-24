@@ -34,3 +34,11 @@ Chaque panneau a un menu qui ne montre que les variantes de sa légende (tes dec
 et légendes manquantes : `riftbound/decks/README.md`). L'IA **ne sideboarde pas encore** : son sideboard est chargé mais pas utilisé. Robot `train/verif_vs.mjs`
 (18 contrôles, 1400×900 et 393×851, vrais clics / toucher simulé) dans la porte ; test `default_deck_per_legend_for_the_vs_screen`.
 **Changement** : en BO1 la graine d'une manche vaut donne × 10 + 1 : une « Donne N » ne redonne plus la partie d'avant ce changement.
+
+## Préparation d'une manche de BO3 en deux étapes (2026-11-24)
+Demande de l'utilisateur (comme RiftAtlas) : d'abord le battlefield, puis le tirage au sort / qui commence, au lieu des deux
+dans la même fenêtre. Conforme aux Core Rules : battlefields mis de côté et choisis selon le mode (113, 486.5) avant l'ordre des
+tours (115). Étape 1 : les battlefields permis en grandes cartes, « Au hasard », « Continuer » (`#pNext`). Étape 2 : rappel du
+battlefield (« Changer » ramène à l'étape 1), tirage ou perdant de la manche précédente (407), « Lancer la manche ». Une seule
+étape si un seul battlefield reste permis. `prepRender` / `MATCH.pick.step` dans `src.html` ; robots `verif_match.mjs`,
+`verif_anglais.mjs`. Le BO1 tire les battlefields au hasard (485.5) et n'a pas cet écran ; le duel entre amis garde sa préparation.

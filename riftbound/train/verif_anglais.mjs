@@ -18,7 +18,7 @@ const OK = ["Mulligan", "Sideboard", "Battlefield", "Battlefields", "Combat", "S
   "Accelerate", "Hidden", "Tank", "Backline", "Ganking", "Deflect", "Assault", "Shield", "Temporary", "Empower", "Flow", "Repeat",
   "Riftbound Observatory", "Riftbound", "Predict", "Vision", "Reaction", "Action", "BO1", "BO3", "ST", "TEMP", "EMP", "Lvl", "VS",
   "Français", "Decks.", "Coach", "Champions", "sideboard", "best", "hidden", "Pause", "⏸ Pause", "might", "Might", "Menu", "☰ Menu", "← Menu", "Destination", "Ready", "Points", "Claude", "PeerJS", "WebRTC", "Darius", "Master Yi", "LeBlanc", "Akali",
-  "Ambush", "Legion", "Deathknell", "Equip", "Quick-Draw", "Weaponmaster", "Hunt", "Level", "Unique", "Empowered", "Stun", "Burn", "Mighty", "Buff", "Add", "XP", "Focus"];
+  "Ambush", "Legion", "Deathknell", "Equip", "Quick-Draw", "Weaponmaster", "Hunt", "Level", "Unique", "Empowered", "Stun", "Burn", "Mighty", "Buff", "Add", "XP", "Focus", "Stats"];
 const FR = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|du|une|et|ou|ton|ta|tes|ses|pour|avec|sans|sur|sous|dans|vers|cible|carte|cartes|unité|unités|joue|déplace|pioche|tour|défausse|aucun|aucune|quelle|quel|toi|adverse|passe|termine|gratuit|oui|partie|parties|manche|donne|choisis|touche|suivant|compris|revoir|coup|coups|forte|normale|nouvelle|nouveau|jouer|retour|fin|début|aide|garder|valider|annuler|cibler|cible|cibles|jouable|principale|enregistrement|stockage|plein|choisi|vide|cacher|leçon|défi|lexique|mot|mots)\b/i;
 const b = await chromium.launch(process.env.CHROME_PATH || existsSync(LOCAL_CHROME) ? { executablePath: process.env.CHROME_PATH || LOCAL_CHROME } : {});
 let fails = 0;
@@ -100,11 +100,13 @@ async function run1(W, H, mobile, found) {
   await tap('.vtile[data-leg="LeBlanc, Deceiver"], .vtile[data-leg^="LeBlanc"]'); await pg.waitForTimeout(200);
   await tap("#sBo3"); await pg.waitForTimeout(200); await step("nouvelle partie BO3", "new-bo3");
   await pg.fill("#sSeed", "12");
-  await tap("#bStart"); await waitFor("!!document.getElementById('bLaunch')");
-  await step("préparation manche 1", "prep1");
-  if (await ev("!!document.querySelector('[data-pf]')")) await tap('[data-pf="0"]');
+  await tap("#bStart"); await waitFor("!!document.getElementById('pNext')");
+  await step("préparation manche 1 : battlefield", "prep1");
   const bfs = await ev("[...document.querySelectorAll('[data-pbf]')].map(x=>x.dataset.pbf)");
-  await tap(`[data-pbf="${bfs[0]}"]`); await step("préparation choisie");
+  await tap(`[data-pbf="${bfs[0]}"]`); await tap("#pNext"); await waitFor("!!document.getElementById('bLaunch')");
+  await step("préparation manche 1 : qui commence");
+  if (await ev("!!document.querySelector('[data-pf]')")) await tap('[data-pf="0"]');
+  await step("préparation choisie");
   await tap("#bLaunch"); await waitFor("!!(V && META)");
   // partie jouée au hasard jusqu'au bout, avec relevés réguliers
   let seed = 4242; const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
@@ -139,7 +141,8 @@ async function run1(W, H, mobile, found) {
   if (await ev("!!document.getElementById('bNextGame')")) {
     await tap("#bNextGame"); await pg.waitForTimeout(800);
     if (await ev("!!document.getElementById('sbKeep')")) { await step("sideboard", "sideboard"); await tap("#sbKeep"); await pg.waitForTimeout(500); }
-    await waitFor("!!document.getElementById('bLaunch')"); await step("préparation manche 2", "prep2");
+    await waitFor("!!document.getElementById('pNext')"); await step("préparation manche 2 : battlefield", "prep2");
+    await tap("[data-pbf]"); await tap("#pNext"); await waitFor("!!document.getElementById('bLaunch')"); await step("préparation manche 2 : qui commence");
     await ev("closeModal()");
   }
   // replay de la partie jouée

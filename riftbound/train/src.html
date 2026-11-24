@@ -298,6 +298,10 @@ body.dkopen { overflow: hidden; }
 .dkg { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
 .dkr { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 3px 4px; border-radius: 6px; }
 .dkr:hover { background: rgba(255,255,255,.05); }
+.th { flex: none; position: relative; width: 46px; height: 26px; border-radius: 5px; overflow: hidden; background: #151a26; box-shadow: 0 0 0 1px rgba(255,255,255,.08); }
+.th > span { position: absolute; left: -7px; top: -17px; width: 60px; height: 84px; background-size: cover; background-repeat: no-repeat; }
+.th.bf > span { left: 0; top: 0; width: 100%; height: 100%; background-position: center !important; background-size: cover !important; }
+.dkr.todo .th { filter: grayscale(1) brightness(.6); }
 .dkr .q { width: 18px; text-align: right; font-family: var(--f-mono); color: var(--ink-2); }
 .dkr .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dkr .nm i { font-size: 10.5px; color: #f0a35b; font-style: normal; }
@@ -335,6 +339,37 @@ body.dkopen { overflow: hidden; }
 .dkpop .t { font-size: 12.5px; color: var(--brass); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dkpop button { min-height: 38px; text-align: left; padding: 6px 10px; border-radius: 8px; }
 @media (max-width: 820px), (pointer: coarse) { .dkvw button, .dkpop button { min-height: 44px; } }
+/* vue « Stats » du deck */
+.deckview.dkstatmode .dkbody { grid-template-columns: minmax(300px, 1fr) minmax(0, 1.3fr); }
+.stgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr)); gap: 6px 18px; align-items: start; }
+.stgrid > section { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sttiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.sttile { display: flex; flex-direction: column; gap: 2px; padding: 8px; border-radius: 10px; background: var(--chrome); border: 1px solid var(--line); min-width: 0; }
+.sttile b { font: 600 22px/1 var(--f-mono); color: var(--ink); }
+.sttile span { font-size: 11px; color: var(--ink-3); line-height: 1.2; }
+.stleg { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: 11.5px; color: var(--ink-2); }
+.stleg i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: -6px; }
+.stcurve { display: flex; align-items: stretch; gap: 4px; height: 150px; padding-top: 4px; }
+.stcurve.mi { height: 110px; }
+.stcol { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 3px; }
+.stn { text-align: center; font: 600 11.5px var(--f-mono); color: var(--ink); min-height: 14px; }
+.stbar { display: flex; flex-direction: column; border-radius: 3px 3px 0 0; overflow: hidden; min-height: 0; }
+.stbar i, .stleg i { display: block; }
+.stbar i { min-height: 2px; }
+.stcurve i.u, .stleg i.u { background: #5bc8f0; } .stcurve i.s, .stleg i.s { background: #a98bf0; }
+.stcurve i.g, .stleg i.g { background: #e0b860; } .stcurve i.o { background: #8a93a8; }
+.stcurve i.ch, .stleg i.ch { background: transparent; border: 1.5px dashed #cfd6e6; }
+.ste { text-align: center; font: 600 11px var(--f-mono); color: var(--ink-2); background: var(--chrome); border-radius: 4px; padding: 1px 0; }
+.stpow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 8px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.stpbar { display: flex; gap: 3px; height: 22px; }
+.stpbar span { min-width: 0; border-radius: 5px; display: grid; place-items: center; font: 600 10.5px var(--f-mono); color: #10131e; overflow: hidden; white-space: nowrap; }
+.stpbar span.mix { background: repeating-linear-gradient(135deg, var(--a) 0 6px, var(--b) 6px 12px); }
+.stpbar span.none { flex: 1; background: var(--chrome); color: var(--ink-3); }
+.sttab { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.sttab th { font-weight: 400; color: var(--ink-3); font-size: 11px; text-align: right; padding: 2px 4px; }
+.sttab td { padding: 3px 4px; text-align: right; font-family: var(--f-mono); border-top: 1px solid var(--line); }
+.sttab td:first-child { text-align: left; font-family: var(--f-body); white-space: nowrap; }
+.sttab .rune, .sbp .rune { width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 8px/1 var(--f-mono); color: #111; font-style: normal; vertical-align: -3px; }
 .dktxt { width: 100%; min-height: 260px; background: var(--chrome); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: 12.5px/1.4 var(--f-mono); }
 .linkb { background: none; border: 0; padding: 0; color: var(--akali); text-decoration: underline; cursor: pointer; font: inherit; }
 .bfcard { container-type: size; position: relative; overflow: hidden; }
@@ -349,6 +384,8 @@ body.dkopen { overflow: hidden; }
   .dkgrid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
   .dkbar { padding: 8px 48px 8px 12px; } .dkcat { padding: 10px 12px 20px; }
   .deckview.dkimgmode .dkbody { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .deckview.dkstatmode .dkbody { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .sttiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .deckview.dknocat .dkbody { grid-template-rows: minmax(0, 1fr); }
   .dkvg { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; }
 }
@@ -560,19 +597,57 @@ body.dkopen { overflow: hidden; }
 .choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .choices button { flex: 1 1 140px; min-height: 48px; padding: 8px 12px; font-weight: 600; border-radius: 10px; }
 .bfch button { display: flex; flex-direction: column; align-items: stretch; gap: 6px; text-align: center; font-weight: 500; font-size: 13px; }
+.psteps { display: flex; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: ps; font-size: 12.5px; color: var(--ink-3); }
+.psteps li { counter-increment: ps; display: flex; align-items: center; gap: 6px; }
+.psteps li::before { content: counter(ps); width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font: 600 11px var(--f-mono); }
+.psteps li + li::after { content: none; }
+.psteps li.on { color: var(--ink); } .psteps li.on::before { border-color: var(--brass); background: rgba(214,178,94,.2); color: var(--ink); }
+.psteps li.done { color: var(--akali); } .psteps li.done::before { content: "✓"; border-color: var(--akali); }
+.bfbig { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; }
+.bfbig button { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-radius: 14px; text-align: center; font-size: 14px; min-height: 44px; }
+.bfbig button .bfth { height: auto; aspect-ratio: 279 / 200; border-radius: 10px; }
+.bfbig button[aria-pressed="true"] { border-color: var(--brass); box-shadow: 0 0 0 2px var(--brass), 0 0 20px rgba(214,178,94,.4); }
+.pbfdone { flex-direction: row; align-items: center; gap: 12px; }
+.pbfdone .pbfth { width: 112px; flex: none; } .pbfdone .bfth { height: auto; aspect-ratio: 279 / 200; }
+.pbfdone .grow { flex: 1; min-width: 0; } #pBf { font-family: var(--f-display); font-size: 16px; }
+.pbfdone button { min-height: 44px; flex: none; }
 .bfth { display: block; height: 54px; border-radius: 6px; background: #151a26 center / cover no-repeat; container-type: size; position: relative; overflow: hidden; }
 .sbstat { font-size: 13.5px; } .sbstat.ok { color: var(--akali); } .sbstat.ko { color: #f0a35b; }
 .sbbar { position: sticky; bottom: -16px; margin: 0 -16px -16px; padding: 10px 16px 16px; background: var(--chrome-2); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -8px 18px rgba(0,0,0,.35); }
 .sbch { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
 .sbch select { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 8px; color: var(--ink); font: inherit; min-height: 44px; }
-.sbcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 10px; }
-.sbcols > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.sbr { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 2px 4px; border-radius: 8px; }
-.sbr.on { background: rgba(214,178,94,.1); }
+.sbhead { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding-right: 40px; }
+.sbhead h3 { margin: 0; letter-spacing: .14em; text-transform: uppercase; font-size: 18px; }
+.sbch1 { font-size: 13px; color: var(--ink-2); } .sbch1 b { color: var(--ink); font-weight: 600; }
+.sbcols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 230px; gap: 12px; align-items: start; }
+.sbcol { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 8px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid var(--line); }
+.sbcol .grp { display: flex; justify-content: space-between; align-items: center; letter-spacing: .12em; text-transform: uppercase; font-size: 11.5px; padding: 2px 4px 6px; }
+.sbcol .grp b { font: 600 11.5px var(--f-mono); color: var(--akali); border: 1px solid rgba(114,226,188,.45); border-radius: 6px; padding: 2px 6px; letter-spacing: 0; }
+.sbr { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 3px 4px; border-radius: 8px; border: 1px solid transparent; cursor: default; }
+.sbr:hover, .sbr.pv { background: rgba(255,255,255,.05); }
+.sbr.pv { border-color: rgba(214,178,94,.45); }
+.sbr.on { background: rgba(214,178,94,.12); }
+.sbr .qb { flex: none; min-width: 30px; text-align: center; font: 600 11.5px/1 var(--f-mono); color: var(--ink-2); border: 1px solid var(--line); border-radius: 5px; padding: 4px 3px; }
 .sbr .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sbr .q { font-family: var(--f-mono); color: var(--ink-2); min-width: 22px; text-align: right; }
-.sbr .q i { font-style: normal; color: var(--brass); margin-left: 3px; }
+.sbr .dl { font-style: normal; font: 600 11.5px var(--f-mono); color: var(--brass); }
+.sbr .e { font: 11.5px var(--f-mono); color: var(--ink-3); min-width: 12px; text-align: right; }
 .sbr button { width: 44px; height: 44px; padding: 0; font-size: 18px; flex: none; }
+.sbr button.go { color: var(--akali); border-color: rgba(114,226,188,.45); }
+.sbp { position: sticky; top: 0; display: flex; flex-direction: column; gap: 6px; }
+.sbpimg { width: 100%; aspect-ratio: 200 / 279; border-radius: 12px; background-color: #151a26; background-size: cover; box-shadow: 0 10px 28px rgba(0,0,0,.55); }
+.sbpi { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.sbp .t { font-family: var(--f-display); font-size: 15px; color: var(--ink); }
+.mbox.sbbox { width: min(1120px, 100%); padding: 16px; }
+@media (max-width: 900px) {
+  .sbcols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .sbp { display: none; }
+}
+@media (max-width: 640px) {
+  .mbox.sbbox { padding: 12px; }
+  .mbox.sbbox .sbbar { bottom: -12px; margin: 0 -12px -12px; padding: 10px 12px 12px; }
+  .sbcols { grid-template-columns: minmax(0, 1fr); }
+  .sbr .e { display: none; }
+}
 .mbox .big button { min-height: 44px; }
 /* ---------- duel entre amis */
 .fl { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
@@ -597,32 +672,47 @@ body.dkopen { overflow: hidden; }
 @media (min-width: 1000px) {
   #boardHelp { display: none; }
   .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 232px; }
-  .board, .zone, .bf { --cw: 74px; --chh: 104px; }
+  .board, .zone, .bf { --cw: 96px; --chh: 134px; }   /* cartes agrandies le 2026-11-24 (demande : « les cartes sont trop petites ») */
   .hand.top { height: auto; min-height: 0; padding: 0; overflow: hidden; align-items: center; }
   .hand.top .card { --cw: 34px; --chh: 48px; width: 34px; height: 48px; margin-inline: -5px; }
   /* moitié d'un joueur en grille : runes à gauche sur toute la hauteur, base au centre (main dessous pour toi, dessus
      pour l'adversaire), légende + champion choisi à droite en grand, nom / score / deck / défausse sous la légende. */
-  .half { display: grid; gap: 6px; grid-template-columns: 216px minmax(0, 1fr) 244px; }
+  .half { display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 262px; }
   .half .zrow { display: contents; }
-  .half.p0 { grid-template-rows: 176px 82px 62px; grid-template-areas: "runes base leg" "runes hand leg" "runes hand pile"; }
-  .half.p1 { grid-template-rows: 62px 176px; grid-template-areas: "runes ohand pile" "runes base leg"; }
+  .half.p0 { grid-template-rows: 150px 100px 60px; grid-template-areas: "runes base leg" "hand hand leg" "hand hand pile"; }
+  .half.p1 { grid-template-rows: 52px 150px; grid-template-areas: "ohand ohand pile" "base runes leg"; }
   .half.p0 .hand { grid-area: hand; } .half.p1 .hand { grid-area: ohand; }
   .zrow > .zone { min-height: 0; }
-  .zrow > .zone:nth-child(2) { grid-area: runes; align-content: flex-start; gap: 4px; --rw: 44px; --rh: 62px; }
+  /* runes en rangée de vraies cartes, à côté de la base (comme RiftAtlas, demande du 2026-11-24) ; épuisées = couchées ;
+     beaucoup de runes : elles se chevauchent */
+  .zrow > .zone:nth-child(2) { grid-area: runes; flex-wrap: nowrap; align-items: center; align-content: center; justify-content: safe center; gap: 0;
+    padding: 18px 8px 4px; overflow: hidden; container-type: inline-size; --rw: 88px; --rh: 123px; }
+  .zrow > .zone:nth-child(2) > .runeslot ~ .runeslot { margin-left: min(6px, calc((100cqw - (var(--n) - var(--nx, 0)) * var(--rw) - var(--nx, 0) * var(--rh)) / max(1, var(--n) - 1))); }
+  .zrow > .zone:nth-child(2) > .res-line { position: absolute; left: 10px; top: 2px; width: auto; font-size: 11px; white-space: nowrap; }
+  .zrow > .zone:nth-child(2) > .floatpool { position: absolute; right: 8px; top: 1px; z-index: 2; width: auto; margin: 0; }
+  .zrow > .zone:nth-child(2) > .label { display: none; }
   .zrow > .zone:nth-child(3) { grid-area: base; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
-  .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 10px; padding-bottom: 18px; --cw: 104px; --chh: 146px; }
+  .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 10px; padding-bottom: 18px; --cw: 116px; --chh: 162px; }
+  .half.p1 .zone.legend { --cw: 92px; --chh: 128px; }   /* légende adverse : une seule rangée (150 px) */
   .zone.pile { grid-area: pile; flex-direction: row; align-items: center; gap: 10px; padding: 6px 10px; }
   .zone.pile .who { flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .zone.pile .score { order: 2; font-size: 22px; padding: 2px 10px; flex: none; }
   .zone.pile .piles { order: 3; padding: 0; gap: 12px; }
   .zone.pile .counts { order: 4; }
   .zone.pile .pl { width: 34px; height: 48px; }
-  .bf { grid-template-rows: 110px auto 110px; }
+  .bf { grid-template-rows: 144px auto 144px; }
   .bf .side { padding: 3px 6px; }
   .bf .side { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; justify-content: safe center; scrollbar-width: thin; }
   .bf .side.top { align-items: flex-end; }
+  /* beaucoup d'unités : elles se chevauchent au lieu de faire défiler le battlefield (comme sur téléphone) */
+  .bf .side { container-type: inline-size; gap: 0; }
+  .bf .side > .slot ~ .slot { margin-left: min(5px, calc((100cqw - 12px - (var(--n) - var(--nx, 0)) * var(--cw) - var(--nx, 0) * var(--chh)) / max(1, var(--n) - 1))); }
   .p0 .hand { height: auto; min-height: 0; padding: 8px 0 6px; }
-  .p0 .hand .card { --cw: 84px; --chh: 118px; width: 84px; height: 118px; margin-inline: -3px; }
+  .p0 .hand .card { --cw: 104px; --chh: 145px; width: 104px; height: 145px; margin-inline: -3px; }
+  .p0 .hand { align-items: flex-start; padding-top: 6px; }
+  .half.p0 .hand { container-type: inline-size; overflow: visible; }
+  .half.p0 .hand > .card ~ .card { margin-left: min(-6px, calc((100cqw - 110px - var(--n) * var(--cw)) / max(1, var(--n) - 1))); }   /* main pleine : les cartes se chevauchent, rien ne sort de la rangée */
+  .p0 .hand .card { transform: translateY(min(calc(var(--lift) * .45), 12px)) rotate(clamp(-9deg, calc(var(--rot) * .6), 9deg)); }   /* éventail plus plat : la main ne sort pas du bas de l'écran */
   .p0 .hand .card:hover, .p0 .hand .card:focus-visible, .p0 .hand .card.can:hover { transform: translateY(-16px) scale(1.2); }
   .ctrlcol, .track { contain: size; }
   .ctrlcol .stackcol { min-height: 0; overflow-y: auto; justify-content: flex-start; scrollbar-width: thin; }
@@ -1003,7 +1093,7 @@ async function boot() {
 
 // ------------------------------------------------------------ fenêtres : nouvelle partie, défausse
 function openModal(html, closable = true) {
-  $("mbox").classList.remove("wide");
+  $("mbox").classList.remove("wide", "sbbox");
   $("mbox").innerHTML = (closable ? `<button class="mclose" id="mClose" aria-label="Fermer">✕</button>` : "") + html;
   $("modal").hidden = false; $("modal").dataset.closable = closable ? "1" : "";
   const c = $("mClose"); if (c) c.onclick = () => closeModal(true);
@@ -1206,7 +1296,9 @@ async function start() {
   matchPrep();
 }
 
-// Préparation d'une manche de BO3 : sideboard (si permis), qui commence, battlefield, puis lancement.
+// Préparation d'une manche de BO3, en étapes comme RiftAtlas (demande du 2026-11-24) : sideboard (si permis), puis le
+// battlefield (règles 113 et 486.5 : les battlefields sont mis de côté et choisis selon le mode), puis le tirage au sort ou
+// le perdant de la manche précédente et qui commence (règle 115 : l'ordre des tours vient après ; 407 des règles de tournoi).
 async function matchPrep() {
   if (!MATCH) return setupForm();
   if (MATCH.cur && MATCH.cur.rec) return;   // fin de manche pas encore enregistrée (matchFinish)
@@ -1215,11 +1307,27 @@ async function matchPrep() {
   catch (err) { toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
   MATCH.nx = nx; if (!MATCH.sb[nx.game]) MATCH.sbDone = "";
   MATCH.pick = { first: nx.chooser === 0 ? null : nx.first, bf: nx.allowed.length === 1 ? nx.allowed[0] : null };
+  MATCH.pick.step = MATCH.pick.bf ? "first" : "bf";   // battlefield d'abord (113, 486.5), puis l'ordre des tours (115)
   if (nx.sideboard && !MATCH.sb[nx.game]) return sbOpen();
   prepRender();
 }
 function prepRender() {
   const nx = MATCH.nx, P = MATCH.pick, st = MATCH.st;
+  const head = `<h3>Manche ${nx.game} · BO3</h3><div class="mscore" id="pScore">Match : ${scoreTxt(st.wins)}${MATCH.sbDone ? ` · <span class="small">${esc(MATCH.sbDone)}</span>` : ""}</div>
+    <ol class="psteps"><li class="${P.step === "bf" ? "on" : "done"}">Battlefield</li><li class="${P.step === "first" ? "on" : ""}">Qui commence</li></ol>`;
+  if (P.step === "bf") {
+    const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
+    openModal(`${head}<section class="prep"><div class="prepq">Choisis ton battlefield</div>
+      <div class="bfbig">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
+      ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
+      <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5). Le premier joueur se décide ensuite (règle 115).</div></section>
+      <div class="big"><button id="pRand">Au hasard</button><button class="main" id="pNext"${P.bf ? "" : " disabled"}>Continuer</button></div>`, true);
+    $("mbox").classList.add("wide");
+    $("mbox").querySelectorAll("[data-pbf]").forEach(b => b.onclick = () => { P.bf = b.dataset.pbf; prepRender(); });
+    $("pRand").onclick = () => { P.bf = nx.allowed[Math.floor(Math.random() * nx.allowed.length)]; prepRender(); };
+    $("pNext").onclick = () => { if (P.bf) { P.step = "first"; prepRender(); } };
+    return;
+  }
   let who;
   if (nx.game === 1) {
     who = `<div class="mres ${nx.roll === 0 ? "me" : "opp"}" id="pRoll">${nx.roll === 0 ? "Tu gagnes le tirage au sort." : "L'IA gagne le tirage au sort."}</div>
@@ -1230,17 +1338,12 @@ function prepRender() {
   if (nx.chooser === 0) who += `<div class="prepq">Jouer en premier ou en second ?</div><div class="choices">
       <button data-pf="0" aria-pressed="${P.first === 0}">Jouer en premier</button><button data-pf="1" aria-pressed="${P.first === 1}">Jouer en second</button></div>`;
   else who += `<div class="prepdec" id="pDecision">${nx.chooser === 1 ? (nx.first === 1 ? "L'IA choisit de jouer en premier." : "L'IA choisit de jouer en second : tu commences.") : (nx.first === 0 ? "Tu commences." : "L'IA commence.")}</div>`;
-  const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
-  const bfs = `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
-    ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
-    <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5).</div>`;
   const ready = P.first !== null && P.first !== undefined && P.bf;
-  openModal(`<h3>Manche ${nx.game} · BO3</h3><div class="mscore" id="pScore">Match : ${scoreTxt(st.wins)}${MATCH.sbDone ? ` · <span class="small">${esc(MATCH.sbDone)}</span>` : ""}</div>
+  openModal(`${head}<section class="prep pbfdone"><span class="pbfth">${bfThumb(P.bf)}</span><div class="grow"><div class="grp">Ton battlefield</div><div id="pBf">${esc(P.bf)}</div></div>${nx.allowed.length > 1 ? `<button id="pBack">Changer</button>` : ""}</section>
     <section class="prep"><div class="grp">Qui commence</div>${who}</section>
-    <section class="prep"><div class="grp">Battlefield</div>${bfs}</section>
     <div class="big"><button class="main" id="bLaunch"${ready ? "" : " disabled"}>Lancer la manche ${nx.game}</button></div>`, true);
   $("mbox").querySelectorAll("[data-pf]").forEach(b => b.onclick = () => { P.first = +b.dataset.pf; prepRender(); });
-  $("mbox").querySelectorAll("[data-pbf]").forEach(b => b.onclick = () => { P.bf = b.dataset.pbf; prepRender(); });
+  if ($("pBack")) $("pBack").onclick = () => { P.step = "bf"; prepRender(); };
   $("bLaunch").onclick = () => { if (!$("bLaunch").disabled) { closeModal(); launchGame(nx, P.bf, P.first); } };
 }
 
@@ -1253,28 +1356,49 @@ function sbOpen(ctx) {
     MATCH.sb[MATCH.nx.game] = true; MATCH.sbDone = txt; prepRender(); } };
   SB = { ctx, out: {}, inn: {}, champ: ctx.deck.champion, err: "" }; sbRender();
 }
+// aperçu du sideboard (grande carte) ; le survol ne change que lui, pas la fenêtre : un bouton sous la souris garde son clic
+function sbPrevHTML(pv) {
+  const pc = CAT.by[pv] || {};
+  return `<div class="sbpimg" style="${art(pv)}"></div><div class="t">${esc(pv)}</div>
+      <div class="small sbpi"><span>${[pc.s, pc.t].filter(Boolean).join(" ")}</span>${(pc.d || []).map(x => `<i class="rune" style="background:var(--${DOMC[x]})">${GLYPH[x]}</i>`).join("")}${pc.e !== "" && pc.e !== undefined ? `<span>coût ${pc.e}${+pc.p ? " + " + pc.p : ""}</span>` : ""}${pc.mi ? `<span>Might ${pc.mi}</span>` : ""}</div>`;
+}
 function sbRender() {
   const d = SB.ctx.deck, tally = xs => { const m = {}; for (const n of xs) m[n] = (m[n] || 0) + 1; return m; };
   const main = tally(d.main), side = tally(d.sideboard || []);
   const no = cnt(SB.out), ni = cnt(SB.inn);
   const lt = (CAT.by[d.legend] || {}).tg || [];
   const champs = [d.champion, ...[...new Set([...d.main, ...(d.sideboard || [])])].filter(n => n !== d.champion && (c => c && c.t === "Unit" && c.s === "Champion" && c.tg.some(t => lt.includes(t)))(CAT.by[n]))];
-  const row = (n, q, k) => { const v = SB[k][n] || 0;
-    return `<div class="sbr ${v ? "on" : ""}"><span class="nm">${esc(n)}</span><span class="q">${q - v}${v ? `<i>${k === "out" ? "−" : "+"}${v}</i>` : ""}</span><button data-sbm="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Garder" : "Ne pas faire entrer"} ${esc(n)}"${v ? "" : " disabled"}>−</button><button data-sbp="${k}" data-n="${esc(n)}" aria-label="${k === "out" ? "Sortir" : "Faire entrer"} ${esc(n)}"${v < q ? "" : " disabled"}>+</button></div>`; };
-  const sortN = o => Object.entries(o).sort((a, b) => a[0].localeCompare(b[0]));
+  const C = n => CAT.by[n] || {};
+  // une ligne : quantité restante, miniature, nom, coût ; − annule, la flèche fait sortir (→) ou entrer (←)
+  const row = (n, q, k) => { const v = SB[k][n] || 0, c = C(n), a = esc(n);
+    const undo = `<button class="u" data-sbm="${k}" data-n="${a}" aria-label="${k === "out" ? "Garder" : "Ne pas faire entrer"} ${a}"${v ? "" : " disabled"}>−</button>`;
+    const go = `<button class="go" data-sbp="${k}" data-n="${a}" aria-label="${k === "out" ? "Sortir" : "Faire entrer"} ${a}" title="${k === "out" ? "Sortir vers le sideboard" : "Faire entrer dans le deck"}"${v < q ? "" : " disabled"}>${k === "out" ? "→" : "←"}</button>`;
+    return `<div class="sbr ${v ? "on" : ""} ${SB.pv === n ? "pv" : ""}" data-pv="${a}">${k === "inn" ? go : ""}<span class="qb">×${q - v}</span>${thumb(n)}<span class="nm">${a}</span>${v ? `<i class="dl">${k === "out" ? "−" : "+"}${v}</i>` : ""}<span class="e">${c.e || ""}</span>${undo}${k === "out" ? go : ""}</div>`; };
+  const sortN = o => Object.entries(o).sort((a, b) => ((+C(a[0]).e || 0) - (+C(b[0]).e || 0)) || a[0].localeCompare(b[0]));
   const changed = no || SB.champ !== d.champion;
-  openModal(`<h3>Sideboard avant la manche ${SB.ctx.game}</h3><div class="mscore">Match : ${SB.ctx.score}</div>
-    <div class="small rule">Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) ; runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).</div>
-    ${champs.length > 1 ? `<label class="sbch" for="sbChamp">Chosen Champion (règle 601.1.c.4)<select id="sbChamp">${champs.map(n => `<option${n === SB.champ ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>` : ""}
+  const pv = SB.pv && (main[SB.pv] || side[SB.pv] || SB.pv === SB.champ) ? SB.pv : (sortN(side)[0] || sortN(main)[0] || [null])[0];
+  const prev = pv ? `<aside class="sbp" id="sbPrev">${sbPrevHTML(pv)}</aside>` : "";
+  openModal(`<div class="sbhead"><h3>Sideboard</h3><span class="mscore">Manche ${SB.ctx.game} · Match : ${SB.ctx.score}</span></div>
+    ${champs.length > 1 ? `<label class="sbch" for="sbChamp">Chosen Champion (règle 601.1.c.4)<select id="sbChamp">${champs.map(n => `<option${n === SB.champ ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>` : `<div class="sbch1">Champion : <b>${esc(SB.champ)}</b></div>`}
     ${SB.err ? `<div class="small flash">${esc(SB.err)}</div>` : ""}
-    <div class="sbcols"><div><div class="grp">Main Deck : touche + pour sortir</div>${sortN(main).map(([n, q]) => row(n, q, "out")).join("")}</div>
-    <div><div class="grp">Sideboard : touche + pour faire entrer</div>${sortN(side).map(([n, q]) => row(n, q, "inn")).join("") || `<div class="small">Sideboard vide.</div>`}</div></div>
+    <div class="sbcols"><div class="sbcol"><div class="grp">Main Deck<b>${d.main.length - no + ni}/${d.main.length}</b></div>${sortN(main).map(([n, q]) => row(n, q, "out")).join("")}</div>
+    <div class="sbcol"><div class="grp">Sideboard<b>${(d.sideboard || []).length - ni + no}/${(d.sideboard || []).length}</b></div>${sortN(side).map(([n, q]) => row(n, q, "inn")).join("") || `<div class="small">Sideboard vide.</div>`}</div>${prev}</div>
+    <div class="small rule">Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) : → fait sortir une carte, ← en fait entrer une. Runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).</div>
     <div class="sbbar"><div class="sbstat ${no === ni ? "ok" : "ko"}" id="sbStat">Sortent <b>${no}</b> · entrent <b>${ni}</b>${no === ni ? "" : " : il en faut autant de chaque côté (403.4)"}</div>
     <div class="big"><button id="sbKeep">Garder le deck</button><button class="main" id="sbOk"${changed && no === ni ? "" : " disabled"}>Valider les échanges</button></div></div>`, true);
+  $("mbox").classList.add("wide", "sbbox");
+  // aperçu : survol à la souris, toucher la ligne (hors boutons) sur téléphone
+  $("mbox").querySelectorAll("[data-pv]").forEach(r => {
+    const set = () => { if (SB.pv === r.dataset.pv) return; SB.pv = r.dataset.pv;
+      $("mbox").querySelectorAll(".sbr.pv").forEach(x => x.classList.remove("pv")); r.classList.add("pv");
+      const P = $("sbPrev"); if (P) P.innerHTML = sbPrevHTML(SB.pv); };
+    if (HOVER) r.addEventListener("mouseenter", set);
+    r.addEventListener("click", e => { if (!e.target.closest("button")) set(); });
+  });
   $("mbox").querySelectorAll("[data-sbp],[data-sbm]").forEach(b => b.onclick = () => {
     const k = b.dataset.sbp || b.dataset.sbm, n = b.dataset.n, o = SB[k];
     o[n] = (o[n] || 0) + (b.dataset.sbp ? 1 : -1); if (o[n] <= 0) delete o[n];
-    SB.err = ""; sbRender();
+    SB.err = ""; SB.pv = n; const y = $("mbox").scrollTop; sbRender(); $("mbox").scrollTop = y;
   });
   if ($("sbChamp")) $("sbChamp").onchange = e => { SB.champ = e.target.value; sbRender(); };
   $("sbKeep").onclick = () => SB.ctx.done(null, "deck gardé");
@@ -2599,11 +2723,14 @@ function art(n) {
   return `background-image:url('atlas/a${a[0]}.jpg');background-size:1000% 600%;background-position:${(k % 10) / 9 * 100}% ${Math.floor(k / 10) / 5 * 100}%;`;
 }
 
+// Miniature d'une carte dans une liste (éditeur, sideboard) : la bande de l'illustration, comme les listes de RiftAtlas.
+const thumb = n => `<span class="th${(CAT.by[n] || {}).t === "Battlefield" ? " bf" : ""}" aria-hidden="true"><span style="${art(n)}"></span></span>`;
+
 // ------------------------------------------------------------ éditeur de deck
 // Un deck : { id, name, legend, champion, main: {nom: qté}, sideboard: {nom: qté}, runes: {domaine: qté}, battlefields: [3] }.
 // Le sideboard (règles de tournoi 601.1.c) : 10 cartes au plus, valides pour le Main Deck, 3 exemplaires deck + sideboard.
 // Stocké dans la table (collection « decks ») et en copie locale ; seules les cartes modélisées sont jouables.
-let DKV = store.get("rbt-dkview") === "img" ? "img" : "list", DKCAT = store.get("rbt-dkcat") !== "0", DKPOP = null;   // vue du deck, catalogue visible, menu ouvert
+let DKV = ["img", "stats"].includes(store.get("rbt-dkview")) ? store.get("rbt-dkview") : "list", DKCAT = store.get("rbt-dkcat") !== "0", DKPOP = null;   // vue du deck, catalogue visible, menu ouvert
 let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", only: false, mine: true, lim: 120, to: "main" }, DKERR = [];
 const RUNES = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"];
 // Une seule fois (les appels simultanés attendent le même chargement) : catalogue, decks, puis vérification de tous les
@@ -2772,7 +2899,7 @@ function dkCard(c) {
     <span class="dkimg" style="${art(c.n)}"></span>${n ? `<b class="dkn">${n}</b>` : ""}${c.m ? "" : `<i class="dktodo">à modéliser</i>`}${c.ban ? `<i class="dkban">bannie</i>` : ""}</button>`;
 }
 function dkList() {
-  const row = (n, q, extra = "") => { const c = CAT.by[n] || {}; return `<div class="dkr ${c.m ? "" : "todo"}" data-card="${esc(n)}"><span class="q">${q}</span><span class="nm">${esc(n)}${c.m ? "" : " <i>à modéliser</i>"}</span><span class="e">${c.e || ""}${+c.p ? "+" + c.p : ""}</span>${extra}</div>`; };
+  const row = (n, q, extra = "") => { const c = CAT.by[n] || {}; return `<div class="dkr ${c.m ? "" : "todo"}" data-card="${esc(n)}">${thumb(n)}<span class="q">${q}</span><span class="nm">${esc(n)}${c.m ? "" : " <i>à modéliser</i>"}</span><span class="e">${c.e || ""}${+c.p ? "+" + c.p : ""}</span>${extra}</div>`; };
   const pm = n => `<button data-tside="${esc(n)}" aria-label="Passer ${esc(n)} au sideboard" title="Passer un exemplaire au sideboard">⇄</button><button data-sub="${esc(n)}" aria-label="Retirer ${esc(n)}">−</button><button data-add="${esc(n)}" aria-label="Ajouter ${esc(n)}">+</button>`;
   const sb = DK.sideboard || {}, nsb = cnt(sb);
   const groups = { Unit: [], Spell: [], Gear: [] };
@@ -2812,6 +2939,50 @@ function dkVisual() {
     : `<div class="small">Vide. Choisis « Ajouter au : Sideboard » au-dessus de la liste, ou touche ⇄ sur une carte du deck.</div>`);
   h += `<div class="dkh">Battlefields <b>${DK.battlefields.length}</b>/3</div>` + (DK.battlefields.length ? `<div class="dkvg">${DK.battlefields.map(n => tile(n, "bf")).join("")}</div>` : `<div class="small">Touche 3 battlefields dans la liste.</div>`);
   return h + dkRunes();
+}
+// Vue « Stats » (inspirée de l'onglet Stats de RiftAtlas) : énergie et Might moyennes, courbe d'énergie par type, puissance
+// demandée par domaine face aux runes, Might des unités. Deck principal = 40 cartes, Chosen Champion compris (103.2).
+function dkStats() {
+  const L = []; for (const [n, q] of Object.entries(DK.main)) for (let i = 0; i < q; i++) L.push([n, false]);
+  if (DK.champion) L.push([DK.champion, true]);
+  if (!L.length) return `<div class="small">Ajoute des cartes au deck principal pour voir ses statistiques.</div>`;
+  const C = n => CAT.by[n] || {}, num = v => (v === "" || v === undefined || v === null) ? null : +v;
+  const kind = c => c.t === "Unit" ? "u" : c.t === "Spell" ? "s" : c.t === "Gear" ? "g" : "o";
+  const en = L.map(([n]) => num(C(n).e)).filter(v => v !== null), units = L.filter(([n]) => C(n).t === "Unit");
+  const mi = units.map(([n]) => num(C(n).mi)).filter(v => v !== null);
+  const avg = a => a.length ? (a.reduce((x, y) => x + y, 0) / a.length).toFixed(1) : "–";
+  const pw = L.filter(([n]) => +C(n).p > 0);
+  const tile = (v, t, id) => `<div class="sttile"${id ? ` id="${id}"` : ""}><b>${v}</b><span>${t}</span></div>`;
+  let h = `<div class="sttiles">${tile(L.length, "cartes")}${tile(avg(en), "énergie moyenne", "stAvgE")}${tile(avg(mi), "Might moyenne", "stAvgM")}${tile(pw.length, "cartes à puissance")}</div>`;
+  // courbe d'énergie : une colonne par coût, empilée par type, le champion en pointillé
+  const maxE = Math.max(7, ...en), cols = [];
+  for (let e = 0; e <= maxE; e++) {
+    const at = L.filter(([n]) => (num(C(n).e) ?? 0) === e), seg = { u: 0, s: 0, g: 0, o: 0 }; let ch = 0;
+    for (const [n, isC] of at) { if (isC) ch++; else seg[kind(C(n))]++; }
+    cols.push({ e, n: at.length, seg, ch });
+  }
+  const top = Math.max(1, ...cols.map(c => c.n));
+  h += `<div class="stgrid"><section><div class="dkh">Courbe d'énergie</div><div class="stleg"><i class="u"></i>Unités ${L.filter(([n, c]) => !c && kind(C(n)) === "u").length}<i class="s"></i>Sorts ${L.filter(([n]) => kind(C(n)) === "s").length}<i class="g"></i>Équipements ${L.filter(([n]) => kind(C(n)) === "g").length}<i class="ch"></i>Champion</div>
+    <div class="stcurve" id="stCurve">${cols.map(c => `<div class="stcol" data-e="${c.e}" data-n="${c.n}" title="${c.n} carte${c.n > 1 ? "s" : ""} à ${c.e} énergie"><span class="stn">${c.n || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${c.n / top})">${c.ch ? `<i class="ch" style="flex:${c.ch}"></i>` : ""}${["g", "s", "u", "o"].filter(k => c.seg[k]).map(k => `<i class="${k}" style="flex:${c.seg[k]}"></i>`).join("")}</div><span class="ste">${c.e}</span></div>`).join("")}</div></section>`;
+  // puissance demandée par domaine (symboles de coût en puissance) face aux runes du deck
+  const doms = ident().length ? ident() : [...new Set(L.flatMap(([n]) => C(n).d || []))].filter(d => RUNES.includes(d));
+  const byD = {}, row = k => byD[k] || (byD[k] = { cards: 0, pow: 0 });
+  for (const [n] of L) { const c = C(n), ds = (c.d || []).filter(d => RUNES.includes(d)); if (!ds.length) continue;
+    const k = ds.length > 1 ? ds.join("/") : ds[0], r = row(k); r.cards++; r.pow += +c.p || 0; }
+  const totP = Object.values(byD).reduce((a, r) => a + r.pow, 0), totR = cnt(DK.runes);
+  const bar = parts => `<div class="stpbar">${parts.filter(x => x[1] > 0).map(([d, v, t]) => `<span class="${d.includes("/") ? "mix" : ""}" style="flex:${v};${d.includes("/") ? `--a:var(--${DOMC[d.split("/")[0]]});--b:var(--${DOMC[d.split("/")[1]]})` : `background:var(--${DOMC[d]})`}" title="${esc(d)} : ${v}">${Math.round(v / t * 100)} %</span>`).join("") || `<span class="none">aucune</span>`}</div>`;
+  const keys = [...doms.filter(d => byD[d] || DK.runes[d]), ...Object.keys(byD).filter(k => k.includes("/"))];
+  h += `<section><div class="dkh">Puissance et runes</div><div class="stpow" id="stPow"><span class="lb">Puissance</span>${bar(keys.map(k => [k, (byD[k] || {}).pow || 0, totP]))}
+    <span class="lb">Runes</span>${bar(doms.map(d => [d, DK.runes[d] || 0, totR]))}</div>
+    <table class="sttab"><thead><tr><th></th><th>Cartes</th><th>Puissance</th><th>Runes</th></tr></thead><tbody>${keys.map(k => `<tr><td>${k.split("/").map(d => `<i class="rune" style="background:var(--${DOMC[d]})">${GLYPH[d]}</i>`).join("")} ${esc(k)}</td><td>${(byD[k] || {}).cards || 0}</td><td>${(byD[k] || {}).pow || 0}</td><td>${k.includes("/") ? "–" : DK.runes[k] || 0}</td></tr>`).join("")}</tbody></table>
+    <div class="small">Coût en puissance : ${[1, 2, 3, 4].map(p => [p, pw.filter(([n]) => +C(n).p === p).length]).filter(x => x[1]).map(([p, k]) => `${k} carte${k > 1 ? "s" : ""} à ${p}`).join(" · ") || "aucune carte"}.</div></section>`;
+  // Might des unités
+  if (mi.length) {
+    const lo = Math.min(...mi), hi = Math.max(...mi), mc = []; for (let m = lo; m <= hi; m++) mc.push([m, mi.filter(v => v === m).length]);
+    const t2 = Math.max(...mc.map(x => x[1]));
+    h += `<section><div class="dkh">Might des unités</div><div class="stcurve mi" id="stMight">${mc.map(([m, k]) => `<div class="stcol" data-m="${m}" data-n="${k}"><span class="stn">${k || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${k / t2})"><i class="u" style="flex:1"></i></div><span class="ste">${m}</span></div>`).join("")}</div></section>`;
+  }
+  return h + `</div>`;
 }
 function dkTiles(p) { return [...$("deckView").querySelectorAll(".dkv")].filter(x => x.dataset.vz === p.z && x.dataset.vn === p.n); }
 function closeDkPop() { DKPOP = null; const P = $("dkPop"); if (P) P.hidden = true; document.querySelectorAll("#deckView .dkv.on").forEach(x => x.classList.remove("on")); }
@@ -2880,11 +3051,11 @@ function dkRender() {
         <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
         <ul class="dkerr"${DKERR.length ? "" : " hidden"}>${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
         <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}</div>
-        <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV !== "img"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}</div>
-        <div class="dklist">${DKV === "img" ? dkVisual() : dkList()}</div>
+        <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV === "list"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button><button id="dkVStat" aria-pressed="${DKV === "stats"}">Stats</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}</div>
+        <div class="dklist">${DKV === "img" ? dkVisual() : DKV === "stats" ? dkStats() : dkList()}</div>
       </aside>
     </div><div class="dkpop" id="dkPop" hidden role="menu"></div>`;
-  V_.classList.toggle("dkimgmode", DKV === "img"); V_.classList.toggle("dknocat", DKV === "img" && !DKCAT);
+  V_.classList.toggle("dkimgmode", DKV === "img"); V_.classList.toggle("dkstatmode", DKV === "stats"); V_.classList.toggle("dknocat", DKV === "img" && !DKCAT);
   V_.querySelector(".dkcat").scrollTop = st0; V_.querySelector(".dkdeck").scrollTop = st1;
   V_.querySelector(".dkcat").addEventListener("scroll", () => { Z.hidden = true; }, { passive: true });
   // le menu d'une image se ferme quand l'utilisateur fait défiler (molette, doigt), pas quand le redessin replace le défilement
@@ -2892,6 +3063,7 @@ function dkRender() {
   if (DKPOP) dkPop();
   $("dkVList").onclick = () => { DKV = "list"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
   $("dkVImg").onclick = () => { DKV = "img"; store.set("rbt-dkview", DKV); dkRender(); };
+  $("dkVStat").onclick = () => { DKV = "stats"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
   if ($("dkCatT")) $("dkCatT").onclick = () => { DKCAT = !DKCAT; store.set("rbt-dkcat", DKCAT ? "1" : "0"); dkRender(); };
   const q = $("dkQ"); q.oninput = () => { DKF.q = q.value; DKF.lim = 120; const pos = q.selectionStart; dkRender(); const q2 = $("dkQ"); q2.focus(); q2.setSelectionRange(pos, pos); };
   $("dkType").onchange = e => { DKF.type = e.target.value; DKF.lim = 120; dkRender(); };

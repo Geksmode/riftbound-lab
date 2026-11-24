@@ -393,3 +393,15 @@ Signalé par l'utilisateur. La base ne donne que « Unit » ; le texte de la car
 
 ## [2026-11-24] decision | Table : 10 niveaux de l'IA
 Demande de l'utilisateur (« 10 niveaux comme sur Smash, 1 le plus faible, 10 vraiment très dur »). `ai::LEVEL_TABLE` / `level_opts` : niveaux 1 à 5 = niveau 6 avec 70 / 50 / 35 / 20 / 8 % de coups au hasard ; 6, 7, 8 = anciens Normal, Fort, Très fort ; 9 = 12 mondes, faisceau 8 ; 10 = 24 mondes, faisceau 12. Marches (80 paires, decks variés, 11001000+) : 61,3 ± 3,2 ; 61,3 ± 3,7 ; 64,4 ± 2,7 ; 56,9 ± 3,2 ; 57,5 ± 3,0 ; 58,1 ± 3,1 ; 8 contre 7 : 51,9 ± 2,7 (on ne sait pas) ; 10 contre 9 : 52,5 ± 2,9 (on ne sait pas). 9 contre 8 : test séquentiel gardé, 55,6 % ± 1,8 sur 224 paires (10000000+) ; confirmation (12000000+) en cours à la fusion. Table : dix boutons, « − » / « + » sur téléphone ; anciennes parties (1 / 3 / 6) lues comme 6 / 7 / 8. Porte verte. Détail : `docs/memoire/ia-niveaux.md`.
+
+## [2026-11-24] ingest | Interface inspirée de RiftAtlas
+Éditeur de deck : miniatures dans la liste et vue « Stats » (courbe d'énergie par type, puissance et runes, Might) ; sideboard en deux colonnes avec aperçu. Robot `train/verif_stats.mjs` dans la porte. Détail : `pages/etat.md`.
+
+## [2026-11-24] decision | Cartes plus grandes sur la table (ordinateur)
+Unités +27 % à l'écran (86×120 à 1893×909), main entière visible, chevauchement quand une rangée est pleine ; `verif_charge.mjs` contrôle la taille. Détail : `pages/etat.md`.
+
+## [2026-11-24] decision | Runes en rangée de cartes (ordinateur)
+Runes à côté de la base, taille de carte, épuisées couchées (comme RiftAtlas) ; survol du sideboard sans redessin. `verif_charge.mjs` contrôle leur taille.
+
+## [2026-11-24] decision | BO3 : battlefield puis qui commence, en deux étapes
+Comme RiftAtlas et les Core Rules (113, 486.5 avant 115). Détail : `pages/match.md`.
