@@ -65,8 +65,12 @@ def call(f, *a, loose=False):
             return None
         raise Diff(f"{f}{list(a)!r:.200} : Python {p!r:.600}\n   Rust {r!r:.600}")
     if p["r"] != r["r"]:
-        if loose and json.loads(p["r"]) == json.loads(r["r"]):
-            return p["r"]
+        if loose:
+            jp, jr = json.loads(p["r"]), json.loads(r["r"])
+            if jp == jr:
+                return p["r"]
+            ks = sorted(set(jp) ^ set(jr)) or [k for k in jp if jp[k] != jr.get(k)][:3]
+            raise Diff(f"{f} : clés différentes {ks} : Python {[jp.get(k) for k in ks]!r:.800} Rust {[jr.get(k) for k in ks]!r:.800}")
         a_, b_ = p["r"], r["r"]
         i = next((k for k in range(min(len(a_), len(b_))) if a_[k] != b_[k]), min(len(a_), len(b_)))
         raise Diff(f"{f}{list(a)!r:.200} : première différence au caractère {i}\n   Python …{a_[max(0, i - 300):i + 200]}\n"

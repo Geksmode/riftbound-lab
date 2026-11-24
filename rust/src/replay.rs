@@ -579,9 +579,14 @@ pub fn card_db<'a>(names: impl IntoIterator<Item = &'a str>) -> Json {
             "e" => sp.e as i64, "p" => sp.p as i64, "m" => sp.might.map(|x| x as i64), "tx" => sp.text.clone(),
             "tg" => Json::Arr(tags.into_iter().map(Json::from).collect()),
         };
-        let eb = equip_bonus(n);
-        if eb != 0 {
-            d.set("eb", eb as i64);
+        // EQUIP_BONUS : les trois bonus de game.py, plus chaque `bonus=` des cartes (même 0)
+        let eb = match crate::cards::impl_of(n).and_then(|im| im.bonus) {
+            Some(b) => Some(b),
+            None if equip_bonus(n) != 0 => Some(equip_bonus(n) as i64),
+            None => None,
+        };
+        if let Some(eb) = eb {
+            d.set("eb", eb);
         }
         db.set(n, d);
     }

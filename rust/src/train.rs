@@ -2836,7 +2836,9 @@ fn expand(g: &mut Game, d: &mut Decision) -> Res<()> {
             let t: BTreeSet<i64> = a.list()[3].map().g("tg").list().iter().map(|x| x.int()).collect();
             t.len() < n
         });
-        let same = pr.iter().all(|p| *p == pr[0]);
+        // `p is pr[0]` : les prédicats nommés du moteur (P_unit...) sont une seule fonction en Python ; en Rust chaque
+        // `p_*_v()` crée sa fermeture : même nom = même fonction
+        let same = pr.iter().all(|p| *p == pr[0] || matches!((p, &pr[0]), (Value::Fn(a), Value::Fn(b)) if a.1 == b.1));
         let mut cs: Vec<Vec<O>> = vec![];
         let r = (|| -> Res<()> {
             if same {
