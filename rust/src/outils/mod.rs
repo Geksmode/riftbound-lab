@@ -16,4 +16,5 @@ pub mod run_session;
 pub mod py;
 pub mod sprt;
 pub mod t_rand;
+pub mod train_games;
 pub mod version;
