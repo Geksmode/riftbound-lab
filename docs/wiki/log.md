@@ -393,3 +393,6 @@ Tout tourne en Rust (`rust/` : moteur, 1037 cartes, IA, outils, table en WebAsse
 
 ## [2026-11-24] decision | Cartes plus grandes sur la table (ordinateur)
 Unités +27 % à l'écran (86×120 à 1893×909), main entière visible, chevauchement quand une rangée est pleine ; `verif_charge.mjs` contrôle la taille. Détail : `pages/etat.md`.
+
+## [2026-11-24] decision | Runes en rangée de cartes (ordinateur)
+Runes à côté de la base, taille de carte, épuisées couchées (comme RiftAtlas) ; survol du sideboard sans redessin. `verif_charge.mjs` contrôle leur taille.

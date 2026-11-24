@@ -658,13 +658,20 @@ body.dkopen { overflow: hidden; }
   .hand.top .card { --cw: 34px; --chh: 48px; width: 34px; height: 48px; margin-inline: -5px; }
   /* moitié d'un joueur en grille : runes à gauche sur toute la hauteur, base au centre (main dessous pour toi, dessus
      pour l'adversaire), légende + champion choisi à droite en grand, nom / score / deck / défausse sous la légende. */
-  .half { display: grid; gap: 6px; grid-template-columns: 216px minmax(0, 1fr) 262px; }
+  .half { display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 262px; }
   .half .zrow { display: contents; }
-  .half.p0 { grid-template-rows: 150px 100px 60px; grid-template-areas: "runes base leg" "runes hand leg" "runes hand pile"; }
-  .half.p1 { grid-template-rows: 52px 150px; grid-template-areas: "runes ohand pile" "runes base leg"; }
+  .half.p0 { grid-template-rows: 150px 100px 60px; grid-template-areas: "runes base leg" "hand hand leg" "hand hand pile"; }
+  .half.p1 { grid-template-rows: 52px 150px; grid-template-areas: "ohand ohand pile" "base runes leg"; }
   .half.p0 .hand { grid-area: hand; } .half.p1 .hand { grid-area: ohand; }
   .zrow > .zone { min-height: 0; }
-  .zrow > .zone:nth-child(2) { grid-area: runes; align-content: flex-start; gap: 4px; --rw: 44px; --rh: 62px; }
+  /* runes en rangée de vraies cartes, à côté de la base (comme RiftAtlas, demande du 2026-11-24) ; épuisées = couchées ;
+     beaucoup de runes : elles se chevauchent */
+  .zrow > .zone:nth-child(2) { grid-area: runes; flex-wrap: nowrap; align-items: center; align-content: center; justify-content: safe center; gap: 0;
+    padding: 18px 8px 4px; overflow: hidden; container-type: inline-size; --rw: 88px; --rh: 123px; }
+  .zrow > .zone:nth-child(2) > .runeslot ~ .runeslot { margin-left: min(6px, calc((100cqw - (var(--n) - var(--nx, 0)) * var(--rw) - var(--nx, 0) * var(--rh)) / max(1, var(--n) - 1))); }
+  .zrow > .zone:nth-child(2) > .res-line { position: absolute; left: 10px; top: 2px; width: auto; font-size: 11px; white-space: nowrap; }
+  .zrow > .zone:nth-child(2) > .floatpool { position: absolute; right: 8px; top: 1px; z-index: 2; width: auto; margin: 0; }
+  .zrow > .zone:nth-child(2) > .label { display: none; }
   .zrow > .zone:nth-child(3) { grid-area: base; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
   .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 10px; padding-bottom: 18px; --cw: 116px; --chh: 162px; }
   .half.p1 .zone.legend { --cw: 92px; --chh: 128px; }   /* légende adverse : une seule rangée (150 px) */
@@ -1315,6 +1322,12 @@ function sbOpen(ctx) {
     MATCH.sb[MATCH.nx.game] = true; MATCH.sbDone = txt; prepRender(); } };
   SB = { ctx, out: {}, inn: {}, champ: ctx.deck.champion, err: "" }; sbRender();
 }
+// aperçu du sideboard (grande carte) ; le survol ne change que lui, pas la fenêtre : un bouton sous la souris garde son clic
+function sbPrevHTML(pv) {
+  const pc = CAT.by[pv] || {};
+  return `<div class="sbpimg" style="${art(pv)}"></div><div class="t">${esc(pv)}</div>
+      <div class="small sbpi"><span>${[pc.s, pc.t].filter(Boolean).join(" ")}</span>${(pc.d || []).map(x => `<i class="rune" style="background:var(--${DOMC[x]})">${GLYPH[x]}</i>`).join("")}${pc.e !== "" && pc.e !== undefined ? `<span>coût ${pc.e}${+pc.p ? " + " + pc.p : ""}</span>` : ""}${pc.mi ? `<span>Might ${pc.mi}</span>` : ""}</div>`;
+}
 function sbRender() {
   const d = SB.ctx.deck, tally = xs => { const m = {}; for (const n of xs) m[n] = (m[n] || 0) + 1; return m; };
   const main = tally(d.main), side = tally(d.sideboard || []);
@@ -1330,9 +1343,7 @@ function sbRender() {
   const sortN = o => Object.entries(o).sort((a, b) => ((+C(a[0]).e || 0) - (+C(b[0]).e || 0)) || a[0].localeCompare(b[0]));
   const changed = no || SB.champ !== d.champion;
   const pv = SB.pv && (main[SB.pv] || side[SB.pv] || SB.pv === SB.champ) ? SB.pv : (sortN(side)[0] || sortN(main)[0] || [null])[0];
-  const pc = C(pv);
-  const prev = pv ? `<aside class="sbp" id="sbPrev"><div class="sbpimg" style="${art(pv)}"></div><div class="t">${esc(pv)}</div>
-      <div class="small sbpi"><span>${[pc.s, pc.t].filter(Boolean).join(" ")}</span>${(pc.d || []).map(x => `<i class="rune" style="background:var(--${DOMC[x]})">${GLYPH[x]}</i>`).join("")}${pc.e !== "" && pc.e !== undefined ? `<span>coût ${pc.e}${+pc.p ? " + " + pc.p : ""}</span>` : ""}${pc.mi ? `<span>Might ${pc.mi}</span>` : ""}</div></aside>` : "";
+  const prev = pv ? `<aside class="sbp" id="sbPrev">${sbPrevHTML(pv)}</aside>` : "";
   openModal(`<div class="sbhead"><h3>Sideboard</h3><span class="mscore">Manche ${SB.ctx.game} · Match : ${SB.ctx.score}</span></div>
     ${champs.length > 1 ? `<label class="sbch" for="sbChamp">Chosen Champion (règle 601.1.c.4)<select id="sbChamp">${champs.map(n => `<option${n === SB.champ ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>` : `<div class="sbch1">Champion : <b>${esc(SB.champ)}</b></div>`}
     ${SB.err ? `<div class="small flash">${esc(SB.err)}</div>` : ""}
@@ -1344,7 +1355,9 @@ function sbRender() {
   $("mbox").classList.add("wide", "sbbox");
   // aperçu : survol à la souris, toucher la ligne (hors boutons) sur téléphone
   $("mbox").querySelectorAll("[data-pv]").forEach(r => {
-    const set = () => { if (SB.pv === r.dataset.pv) return; SB.pv = r.dataset.pv; const y = $("mbox").scrollTop; sbRender(); $("mbox").scrollTop = y; };
+    const set = () => { if (SB.pv === r.dataset.pv) return; SB.pv = r.dataset.pv;
+      $("mbox").querySelectorAll(".sbr.pv").forEach(x => x.classList.remove("pv")); r.classList.add("pv");
+      const P = $("sbPrev"); if (P) P.innerHTML = sbPrevHTML(SB.pv); };
     if (HOVER) r.addEventListener("mouseenter", set);
     r.addEventListener("click", e => { if (!e.target.closest("button")) set(); });
   });
