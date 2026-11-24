@@ -40,7 +40,7 @@ correctif, attendre l'utilisateur (ou le chef). Pas de troisième essai à l'ave
 - Équipe tmux : `scripts/equipe.sh` crée `../rb-<agent>` sur `agent/<nom>` (inchangé).
 - Session isolée ponctuelle : `claude -w <nom>` → `.claude/worktrees/<nom>/`, branche `worktree-<nom>`, nettoyée en sortie
   si rien n'a changé ; `claude -w <nom> --resume` pour reprendre. Préférer ça aux copies faites à la main.
-- `.worktreeinclude` recopie `riftbound/train/pyodide-cache/` dans chaque nouveau worktree (pas de re-téléchargement).
+- `.worktreeinclude` recopie `riftbound/train/vendor-cache/` dans chaque nouveau worktree (pas de re-téléchargement).
 - `.claude/worktrees/` est ignoré par git. Lister / ranger : `git worktree list`, `git worktree remove <dossier>`, `git worktree prune`.
 - Sous-agent isolé : `isolation: worktree` dans l'en-tête d'un rôle de `.claude/agents/` (pas mis par défaut : les rôles
   servent aussi à `claude --agent` dans les fenêtres tmux, déjà isolées).

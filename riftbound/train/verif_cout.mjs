@@ -20,18 +20,11 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
   for (let i = 0; i < 200; i++) { await waitFor("!!(V && !working)"); if (await ev("!!document.getElementById('bKeep')")) { await pg.click("#bKeep"); continue; } if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue; } if (await ev("!!(V.dec && V.dec.kind === 'main')")) break; await ev("(async()=>{ await pump(J(T.act(0))) })()"); }
-  await py(`
-from game import Obj, Rune
-g = W["g"]; me = ME; op = 1 - ME
-g.p[me].runes = [Rune("Fury", me) for _ in range(5)]
-for o in [o for o in g.board if o.loc == "base"]:
-    g.board.remove(o)
-f = Obj("Shipyard Skulker", me); g.enter_board(f, me, "base", ready=True)
-x = Obj("Seal of Discord", me); g.enter_board(x, me, "base", ready=True)
-e = Obj("Mournful Witness", op); g.enter_board(e, op, "base", ready=True)
-s = Obj("Shimmering Swimmer", me); s.zone = "hand"; g.p[me].hand.append(s)
-SW, F, X, E = s.uid, f.uid, x.uid, e.uid
-W["d"] = None`);
+  await py(JSON.stringify([   // opérations de rust/src/train_dbg.rs
+    ["runes", "me", ["Fury", "Fury", "Fury", "Fury", "Fury"]], ["clear_base"],
+    { as: "F", op: ["board", "me", "Shipyard Skulker", "base", true] }, { as: "X", op: ["board", "me", "Seal of Discord", "base", true] },
+    { as: "E", op: ["board", "op", "Mournful Witness", "base", true] }, { as: "SW", op: ["card", "me", "Shimmering Swimmer", "hand"] },
+    ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
   const sw = String(await ev("pyGet('SW')"));
   const el = pg.locator(`#board [data-uid="${sw}"]`);
@@ -58,7 +51,8 @@ W["d"] = None`);
     if (await ev("!!(V.dec && V.dec.kind !== 'main' && V.dec.options.some(o => o.k === 'pass'))")) { await ev("(async()=>{ await pump(J(T.act(V.dec.options.findIndex(o => o.k === 'pass')))) })()"); await waitFor("!!(V && !working)"); continue; }
     break;
   }
-  await py(`gg = W["g"]; Z = [gg.obj(SW) is not None, gg.obj(X) is None, gg.obj(F) is not None, (lambda o: "trash" if o is None else o.damage)(gg.obj(E)), sum(1 for r in gg.p[ME].runes if not r.exhausted)]`);
+  await py(JSON.stringify([{ as: "Z", op: ["list", ["on_board", { v: "SW" }], ["on_board", { v: "X" }], ["on_board", { v: "F" }], ["damage", { v: "E" }], ["ready_runes", "me"]] }]));
+  { const zz = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)")); zz[1] = !zz[1]; if (zz[3] === null) zz[3] = "trash"; await py(JSON.stringify([["set", "Z", zz]])); }
   const z = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)"));
   ok(`${w} px : Swimmer en jeu, Seal of Discord détruit, Shipyard Skulker gardé, 2 dégâts à Mournful Witness (${JSON.stringify(z)})`,
     z[0] && z[1] && z[2] && (z[3] === "trash" || z[3] === 2) && z[4] === 2);

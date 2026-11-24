@@ -1126,7 +1126,7 @@ fn library() -> Value {
 
 // The Academy — "When you hold here, give your next spell this turn [Repeat] equal to its base cost."
 /// `_academy_cost(g, card)` : (e, reqs)
-fn academy_cost() -> Value {
+pub fn academy_cost() -> Value {
     Value::func("_academy_cost", |g, a| {
         let c = a[0].obj();
         let sp = g.spec(c);

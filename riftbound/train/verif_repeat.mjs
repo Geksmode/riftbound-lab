@@ -23,19 +23,9 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
   for (let i = 0; i < 200; i++) { await waitFor("!!(V && !working)"); if (await ev("!!document.getElementById('bKeep')")) { await pg.click("#bKeep"); continue; } if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue; } if (await ev("!!(V.dec && V.dec.kind === 'main')")) break; await ev("(async()=>{ await pump(J(T.act(0))) })()"); }
-  await py(`
-from game import Obj, Rune
-from cardsets.battlefields import _academy_cost
-g = W["g"]; me = ME
-g.p[me].runes = [Rune("Fury", me) for _ in range(6)]
-for o in [o for o in g.board if o.loc == "base"]:
-    g.board.remove(o)
-p = Obj("Lonely Poro", me); g.enter_board(p, me, "base", ready=True)
-c = Obj("Scuttle Crab", me); g.enter_board(c, me, "base", ready=True)
-br = Obj("Blood Rush", me); br.zone = "hand"; g.p[me].hand.append(br)
-g.effects.append(dict(kind="grant_repeat", pid=me, cost=_academy_cost, next=True, key="academy-robot", dur="turn"))
-BR, PO, CR = br.uid, p.uid, c.uid
-W["d"] = None`);
+  await py(JSON.stringify([["runes", "me", ["Fury", "Fury", "Fury", "Fury", "Fury", "Fury"]], ["clear_base"],
+    { as: "PO", op: ["board", "me", "Lonely Poro", "base", true] }, { as: "CR", op: ["board", "me", "Scuttle Crab", "base", true] },
+    { as: "BR", op: ["card", "me", "Blood Rush", "hand"] }, ["academy", "me"], ["d_none"]]));   // [Repeat] accordé (The Academy)
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
   const [br, po] = [String(await ev("pyGet('BR')")), String(await ev("pyGet('PO')"))];
   if (mob) { const el = pg.locator(`#board [data-uid="${br}"]`), bb = await el.boundingBox(); await pg.touchscreen.tap(bb.x + bb.width - 6, bb.y + bb.height / 2); await pg.waitForTimeout(250);
@@ -57,7 +47,7 @@ W["d"] = None`);
     if (await ev("!!(V.dec && V.dec.kind !== 'main' && V.dec.options.some(o => o.k === 'pass'))")) { await ev("(async()=>{ await pump(J(T.act(V.dec.options.findIndex(o => o.k === 'pass')))) })()"); await waitFor("!!(V && !working)"); continue; }
     break;
   }
-  await py(`gg = W["g"]; Z = [gg.kw_value(gg.obj(PO), "Assault"), gg.kw_value(gg.obj(CR), "Assault"), sum(1 for r in gg.p[ME].runes if not r.exhausted)]`);
+  await py(JSON.stringify([{ as: "Z", op: ["list", ["kw", { v: "PO" }, "Assault"], ["kw", { v: "CR" }, "Assault"], ["ready_runes", "me"]] }]));
   const z = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)"));
   ok(`${w} px : joué deux fois répété : Poro Assault 4, Crab Assault 2, 3 runes restantes (${JSON.stringify(z)})`, z[0] === 4 && z[1] === 2 && z[2] === 3);
   ok(`${w} px : aucune erreur JavaScript` + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);

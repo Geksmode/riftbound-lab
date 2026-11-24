@@ -16,10 +16,17 @@ pub mod game_events;
 pub mod game_turn;
 pub mod json;
 pub mod lang;
+pub mod match_;
 pub mod plans;
 pub mod plans_general;
 pub mod plans_legendes;
 pub mod pyrandom;
+pub mod regex;
+pub mod replay;
 pub mod spec;
 pub mod trace;
+pub mod train;
+pub mod train_dbg;
 pub mod value;
+#[cfg(target_arch = "wasm32")]
+pub mod wasm;

@@ -69,7 +69,7 @@ hasard() {
 }
 table()  {
   cd "$TR" || return 1
-  [ -f pyodide-cache/package/pyodide.js ] || bash fetch_pyodide.sh >/dev/null || return 1
+  [ -f vendor-cache/peerjs/package/dist/peerjs.min.js ] || bash fetch_vendor.sh >/dev/null || return 1
   bash build.sh | tail -1
 }
 navigateur() {

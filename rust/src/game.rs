@@ -421,6 +421,10 @@ pub trait Agent: Send + Sync {
         false
     }
     fn clone_box(&self) -> Box<dyn Agent>;
+    /// accès à l'agent concret (la table lit et règle l'état de son agent humain, `train.Human`)
+    fn as_any(&mut self) -> Option<&mut dyn std::any::Any> {
+        None
+    }
 }
 
 impl Clone for Box<dyn Agent> {
@@ -542,6 +546,9 @@ pub struct Game {
     pub every_choice: bool,
     /// point de reprise de la partie réelle (`checkpoint`, `_ckpt`, `_asklog`, ai.ask_sim) : jamais copié
     pub ck: Checkpoint,
+    /// partie de la table d'entraînement (`train.TGame`) : journal dans la langue de la table, pioches notées, cartes
+    /// vues, combats gagnés. None hors de la table et dans les copies (`clone_game`).
+    pub tg: Option<Box<crate::train::TableExt>>,
 }
 
 /// Point de reprise (2026-10-28, ai.ask_sim) : quand `on` est vrai (posé par l'IA sur la partie réelle), `apply` garde
@@ -632,6 +639,7 @@ impl Game {
             effects_gone: vec![],
             every_choice: false,
             ck: Checkpoint::default(),
+            tg: None,
         };
         for (i, d) in decks.iter().enumerate() {
             let pl = g.new_player(i, d);
@@ -859,6 +867,11 @@ impl Game {
     pub fn log(&mut self, msg: impl FnOnce() -> String) {
         if self.logging {
             let m = msg();
+            if self.tg.is_some() {
+                // TGame.log : la ligne traduite va dans le journal de la table
+                crate::train::tg_log(self, &m);
+                return;
+            }
             self.lines.push(format!("[T{} P{}] {}", self.turn_no, self.tp, m));
         }
     }
@@ -1663,6 +1676,26 @@ impl Game {
 
     /// `draw(pid, n)`
     pub fn draw(&mut self, pid: usize, n: i64) -> Res<()> {
+        if self.tg.is_none() {
+            return self.draw_base(pid, n);
+        }
+        // TGame.draw : une carte à la fois, chaque pioche notée dans le journal de la table
+        for _ in 0..n {
+            let before = self.p[pid].hand.clone();
+            self.draw_base(pid, 1)?;
+            if self.winner.is_some() {
+                return Ok(());
+            }
+            let new: Vec<O> = self.p[pid].hand.iter().copied().filter(|c| !before.contains(c)).collect();
+            if !new.is_empty() && self.logging && self.stage != "setup" {
+                crate::train::tg_draw(self, pid, new[0]);
+            }
+        }
+        Ok(())
+    }
+
+    /// `Game.draw` (sans le journal de la table)
+    fn draw_base(&mut self, pid: usize, n: i64) -> Res<()> {
         for _ in 0..n {
             if self.p[pid].deck.is_empty() {
                 self.burn_out(pid)?;

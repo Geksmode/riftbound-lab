@@ -26,7 +26,7 @@ const settle = async () => {   // répond 0 aux questions et passe jusqu'au reto
     await waitFor("!!(V && !working)");
   }
 };
-const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (Pyodide)
+const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (WebAssembly, rust/src/train_dbg.rs)
   await ev("showMenu('main')").catch(() => {});
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
@@ -37,15 +37,9 @@ const fresh = async code => {   // nouvelle partie (graine 4), situation posée 
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj, Rune, DOMAINS
-g = W["g"]; me = ME; op = 1 - ME
-g.p[me].runes = [Rune(d, me) for d in DOMAINS for _ in range(3)]
-def H(n):
-    c = Obj(n, me); c.zone = "hand"; g.p[me].hand.append(c); return c.uid
-${code}
-W["d"] = None
-`);
+  // opérations de rust/src/train_dbg.rs : 3 runes de chaque domaine, puis la situation (code : liste d'opérations)
+  const D3 = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"].flatMap(d => [d, d, d]);
+  await py(JSON.stringify([["runes", "me", D3], ...code, ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
 };
 await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -53,15 +47,10 @@ await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');
 
 
 const BUBBLE = "({ cards: [...document.querySelectorAll('#fbar .mull.pick button[data-pp] .card')].map(c => c.dataset.card), text: [...document.querySelectorAll('#fbar .prow button')].map(b => b.textContent), long: [...document.querySelectorAll('#fbar button')].filter(b => /cible/.test(b.textContent)).length })";
-const SETUP = `
-FZ = H("Fizz, Trickster")
-for _ in range(2):
-    s = Obj("Switcheroo", me); s.zone = "trash"; g.p[me].trash.append(s)
-a = Obj("Soaring Scout", me); g.enter_board(a, me, 1, ready=True); A = a.uid
-b = Obj("Soaring Scout", me)
-g.enter_board(b, me, 1, ready=True); B = b.uid
-g.mod(b, 2)
-g.bfs[1].ctrl = me`;
+const SETUP = [   // Fizz en main, deux Switcheroo à la défausse, deux Scouts au battlefield 1 (le second +2 ce tour)
+  { as: "FZ", op: ["card", "me", "Fizz, Trickster", "hand"] }, ["card", "me", "Switcheroo", "trash"], ["card", "me", "Switcheroo", "trash"],
+  { as: "A", op: ["board", "me", "Soaring Scout", 1, true] }, { as: "B", op: ["board", "me", "Soaring Scout", 1, true] },
+  ["mod", { v: "B" }, 2], ["bf_ctrl", 1, "me"]];
 for (const phone of [true, false]) {
   if (!phone) await pg.setViewportSize({ width: 1440, height: 900 });
   await fresh(SETUP);
@@ -91,7 +80,7 @@ for (const phone of [true, false]) {
   ok(`${tag} : deux cibles touchées, « Valider la cible » actif`, okEn);
   await tapSel("#fOk");
   await settle();
-  await py(`R = [W["g"].might(W["g"].obj(${A})), W["g"].might(W["g"].obj(${B})), any(c.cname == "Switcheroo" for c in W["g"].p[ME].deck)]`);
+  await py(JSON.stringify([{ as: "R", op: ["list", ["might", +A], ["might", +B], ["deck_has", "me", "Switcheroo"]] }]));
   const r = JSON.parse(await ev("pyGet('R').then(JSON.stringify)"));
   ok(`${tag} : Switcheroo rejoué sur les deux Scouts (Might échangées) et recyclé dans le deck (${JSON.stringify(r)})`, r[0] > r[1] && r[2]);
 }

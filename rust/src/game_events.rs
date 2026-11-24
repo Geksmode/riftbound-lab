@@ -172,6 +172,9 @@ impl Game {
     /// `emit(ev, **info)` : distribue un évènement à chaque permanent, battlefield, légende et effet actif qui
     /// l'écoute. Un permanent qui quitte le plateau reçoit son propre 'leave' (on_leave).
     pub fn emit(&mut self, ev: &str, info: Map) -> Res<()> {
+        if self.tg.is_some() {
+            crate::train::tg_emit(self, ev, &info); // TGame.emit : combats gagnés, cartes vues
+        }
         let infov = Value::Map(info.clone());
         if ev == "leave" {
             let name = info.g("info").map().g("name");

@@ -2041,6 +2041,31 @@ pub fn fmt_choice(g: &Game, ch: &Map) -> String {
             parts.push(format!("{k}={}", names.join(",")));
         } else if k == "killed_info" {
             continue;
+        } else if (k == "pay_cost" && v.list().len() == 2) || (k == "alt_reqs" && v.truthy()) {
+            // (frozenset({...}), ...) : repr Python d'un coût en runes (pay_cost = (e, reqs)). L'ordre des domaines
+            // d'un frozenset de plusieurs domaines dépend du hachage en Python (PYTHONHASHSEED) : ici, alphabétique.
+            let reqs_repr = |r: &Value| -> String {
+                let sets: Vec<String> = r
+                    .list()
+                    .iter()
+                    .map(|r| {
+                        let mut ds: Vec<String> = r.list().iter().map(|d| py_repr(g, d)).collect();
+                        ds.sort();
+                        format!("frozenset({{{}}})", ds.join(", "))
+                    })
+                    .collect();
+                if sets.len() == 1 {
+                    format!("({},)", sets[0])
+                } else {
+                    format!("({})", sets.join(", "))
+                }
+            };
+            if k == "alt_reqs" {
+                parts.push(format!("{k}={}", reqs_repr(v)));
+            } else {
+                let l = v.list();
+                parts.push(format!("{k}=({}, {})", py_repr(g, &l[0]), reqs_repr(&l[1])));
+            }
         } else if !matches!(v, Value::Bool(false) | Value::None)
             && !matches!(v, Value::Map(m) if m.0.is_empty())
             && !matches!(v, Value::Tuple(t) if t.is_empty())

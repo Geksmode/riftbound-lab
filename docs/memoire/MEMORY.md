@@ -23,3 +23,4 @@
 - [riftbound-train-games](riftbound-train-games.md) — v10 records user games (db "games"), train_games.py replay/analysis, plan to tune LeBlanc AI
 - [riftbound-deckbuilder](riftbound-deckbuilder.md) — v11 deck builder (938 cards, non-IMPL greyed), train.new(mine, opp), atlas images, model-all-cards project
 - GitHub repo (2026-10-07): user created Geksmode/riftbound-lab (in project repos) because they will switch Claude accounts; the repo must be self-sufficient for any other agent (code, data, retex, manager protocol + routine prompt, memory conventions as CLAUDE.md/docs; no Riot card images, a script re-downloads them). The thread "Replays graphiques des simulations" owns the cleanup and push, after the last card modelling is finished and tested.
+- [portage-rust](portage-rust.md) — portage du moteur en Rust (règles, cartes, IA, table en WebAssembly), contrat, conventions, avancement

@@ -96,6 +96,14 @@ scripts Python qui ne jouent pas de parties (`scripts/wiki_lint.py`, `riftbound/
   `as_played` -> liste de dict.
 
 ## Avancement
+- 2026-11-24 : **table en WebAssembly** : `lang.rs`, `match_.rs`, `replay.rs` (textes et `snap` ; l'enregistreur
+  RecGame/RecAgent/record n'est pas porté : outils Python seulement), `train.rs` (toutes les fonctions appelées par la
+  page), `wasm.rs` (`rb_alloc`, `rb_call`, sans dépendance), `engine.worker.js` (même protocole `{id, fn, args}`),
+  `build.sh` sans Pyodide (`fetch_vendor.sh` : PeerJS seul). Crochets de `TGame` dans `Game` (`tg`), contexte `plans=`
+  de `pay_gold`/`pay_rune` passé. Robots : `exec(code Python)` remplacé par des opérations JSON (`train_dbg.rs`).
+  Différentiel `rust/diff/table.py` (mêmes appels, JSON comparé octet pour octet) : voir `docs/wiki/pages/etat.md`.
+  Écart connu : l'ordre des domaines d'un frozenset de plusieurs domaines dans le journal (`pay_cost=`, `alt_reqs=`)
+  dépend de PYTHONHASHSEED en Python ; Rust écrit l'ordre alphabétique.
 - 2026-11-24 : **IA portée** (`rust/src/ai.rs`, `plans.rs`, `plans_general.rs`, `plans_legendes.rs` ; variables
   d'environnement `RB_*` mêmes noms et défauts, lues par `ai::env_var`, absentes en WebAssembly). Différentiel IA
   (`rust/diff/serie_ia.sh`, `trace.py --ia` : IA par défaut de la table des deux côtés, PlanAgent, plans de

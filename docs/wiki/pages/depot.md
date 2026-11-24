@@ -28,7 +28,7 @@ python3 empreinte.py                     # décisions de l'IA à graines fixes =
 python3 fuzz_cards.py 200 --module fury  # parties aléatoires avec un paquet (0 exception attendu)
 RB_CARDSETS=fury,body python3 ...        # ne charger que certains paquets
 python3 ../train/t_rand.py 40            # 40 parties avec des decks légaux au hasard
-cd ../train && bash fetch_pyodide.sh && bash build.sh   # table dans train/build/
+cd ../train && bash fetch_vendor.sh && bash build.sh   # table dans train/build/ (moteur Rust en WebAssembly : cargo + cible wasm32-unknown-unknown)
 ```
 Après une modification du moteur : `test_all.py`, `fuzz_cards.py` sur les paquets touchés, 30 parties `t_rand.py`, puis la
 table dans un navigateur (robot Playwright `train/dk2.py`) avant de publier. Jamais d'ordre de `set` qui compte
