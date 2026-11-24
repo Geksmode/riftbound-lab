@@ -92,14 +92,17 @@ fn agent(game: &Json, ver: &str) -> crate::ai::SearchAgent {
     let seed = game.g("seed").int().unwrap() as i128 + 500000;
     let (pl, op) = (train::table_plan_for(b), train::table_plan_for(a));
     if nm == "table" {
-        let lvl = game.get("level").and_then(|l| l.int()).unwrap_or(1);
-        let mut cfg: Cfg = crate::trace::table_cfg(lvl);
+        // niveau de la partie (0, tutoriel : niveau 1) ; les coups au hasard des niveaux 1 à 5 ne sont pas rejoués
+        let lvl = train::saved_level(game).int().unwrap().max(1);
+        let lo = crate::ai::level_opts(lvl);
+        let mut cfg: Cfg = lo.cfg;
+        cfg.set("wild", crate::ai::CfgV::Num(0.0));
         if let Some(o) = opts.filter(|o| !o.is_empty()) {
             for (k, v) in version(&format!("turn@{o}")).4 .0 {
                 cfg.set(&k, v);
             }
         }
-        let o = SearchOpts { samples: lvl as usize, search: Some("turn".into()), cfg, ..Default::default() };
+        let o = SearchOpts { samples: lo.samples, search: Some("turn".into()), cfg, ..Default::default() };
         return plan_agent(seed, Some(pl), Some(op), o);
     }
     let (sm, n, ex, h, cfg) = version(ver);

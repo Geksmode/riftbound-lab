@@ -957,7 +957,7 @@ impl Game {
         item: Option<crate::game::ItemId>,
     ) -> Res<()> {
         if let Some(o) = o {
-            if self.spec(o).type_ == "Gear" {
+            if self.is_gear(o) {
                 self.hist.gear_abs[pid] += 1;
             }
         }

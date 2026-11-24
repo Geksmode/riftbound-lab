@@ -16,7 +16,7 @@ use crate::cards_helpers::{
 use crate::game::{Game, ItemId, Res, Zone, O, R};
 use crate::game_costs::{any_req, reqs_to_value, Req};
 use crate::map;
-use crate::spec::specs;
+use crate::spec::{specs, Spec};
 use crate::value::{is_bf, Loc, Map, Value};
 
 /// `MIND = frozenset({"Mind"})`
@@ -306,7 +306,7 @@ fn engineer(g: &mut Game, a: &[Value]) -> Res<Value> {
     let choose = f("_engineer.choose", |g, a| {
         let it = a[0].item();
         let ctrl = itc(g, it);
-        let gs: Vec<O> = g.p[ctrl].trash.iter().copied().filter(|&c| ty(g, c) == "Gear").collect();
+        let gs: Vec<O> = g.p[ctrl].trash.iter().copied().filter(|&c| g.is_gear(c)).collect();
         let keys: Vec<(i64, String)> = gs.iter().map(|&c| (-se(g, c) - 2 * sp(g, c), cn(g, c))).collect();
         let gs = sort_keyed(gs, keys);
         if gs.is_empty() {
@@ -730,10 +730,12 @@ fn hwei_res(g: &mut Game, a: &[Value]) -> Res<Value> {
     if !g.discard(pid, c)? {
         return Ok(Value::None);
     }
+    // une unit gear a les deux types : les deux lignes s'appliquent (178.3)
     let t = ty(g, c);
     if t == "Spell" {
         g.draw(pid, 1)?;
-    } else if t == "Gear" {
+    }
+    if g.is_gear(c) {
         let ex: Vec<R> = g.p[pid].runes.iter().copied().filter(|&r| g.r(r).exhausted).collect();
         let doms: std::collections::BTreeSet<&str> = ex.iter().map(|&r| g.r(r).domain.as_str()).collect();
         if full_choices(g, Some(pid)) && ex.len() > 2 && doms.len() > 1 {
@@ -749,7 +751,8 @@ fn hwei_res(g: &mut Game, a: &[Value]) -> Res<Value> {
                 g.r_mut(r).exhausted = false;
             }
         }
-    } else if t == "Unit" {
+    }
+    if t == "Unit" {
         if let Some(me) = src_of(g, it) {
             g.mod_(me, 3, turn(), None)?;
         }
@@ -843,9 +846,9 @@ fn jayce_event(g: &mut Game, a: &[Value]) -> Res<Value> {
     let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
     if ev == "played" && info.g("pid").int() as usize == g.o(o).ctrl {
         let card = info.g("card").obj();
-        if ty(g, card) == "Gear" && !g.o(card).token {
+        if g.is_gear(card) && !g.o(card).token {
             let ctrl = g.o(o).ctrl;
-            let n = g.played[ctrl].iter().filter(|n| specs()[n.as_str()].type_ == "Gear").count();
+            let n = g.played[ctrl].iter().filter(|n| specs()[n.as_str()].is_gear()).count();
             if n == 1 {
                 // first non-token gear
                 trig(g, o, "Jayce, Brilliant Inventor", f("_jayce_res", jayce_res), Map::new(), true, f("_jayce_choose", jayce_choose), Value::None);
@@ -958,10 +961,13 @@ fn nasus(g: &mut Game, a: &[Value]) -> Res<Value> {
 // Patched Porobot — "(I enter exhausted.) When you play me, if you control 3 or more other gear, draw 1."
 fn porobot(g: &mut Game, a: &[Value]) -> Res<Value> {
     let o = a[0].obj();
-    if g.gear(Some(g.o(o).ctrl)).len() >= 3 {
+    // Gear Unit (spec::UNIT_GEAR) : « other gear » ne le compte pas lui-même.
+    if g.gear(Some(g.o(o).ctrl)).into_iter().filter(|&x| x != o).count() >= 3 {
         let res = f("_porobot.res", |g, a| {
-            let c = itc(g, a[0].item());
-            if g.gear(Some(c)).len() >= 3 {
+            let it = a[0].item();
+            let c = itc(g, it);
+            let me = g.it(it).src;
+            if g.gear(Some(c)).into_iter().filter(|&x| Some(g.o(x).uid) != me).count() >= 3 {
                 g.draw(c, 1)?;
             }
             Ok(Value::None)
@@ -976,7 +982,7 @@ fn porobot(g: &mut Game, a: &[Value]) -> Res<Value> {
 fn cheap_gear(g: &Game, x: O) -> bool {
     let ob = g.o(x);
     let e = if ob.token && ob.copy.as_deref().is_none_or(|c| c.is_empty()) { 0 } else { se(g, x) };
-    ty(g, x) == "Gear" && e <= 1
+    g.is_gear(x) && e <= 1
 }
 
 fn pickpocket_res(g: &mut Game, a: &[Value]) -> Res<Value> {
@@ -1012,7 +1018,7 @@ fn pid_is_ctrl(g: &Game, info: &Map, o: O) -> bool {
 // Pit Crew — "When you play a gear, ready me."
 fn pit_crew(g: &mut Game, a: &[Value]) -> Res<Value> {
     let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
-    if ev == "played" && pid_is_ctrl(g, info, o) && ty(g, info.g("card").obj()) == "Gear" {
+    if ev == "played" && pid_is_ctrl(g, info, o) && g.is_gear(info.g("card").obj()) {
         trig0(g, o, "Pit Crew", src_ready());
     }
     Ok(Value::None)
@@ -1086,7 +1092,7 @@ fn rumble(g: &mut Game, a: &[Value]) -> Res<Value> {
 // Sky Cruiser — "Discard a gear, 1 energy, exhaust: Deal 4 to a unit at a battlefield."
 fn cruiser_choices(g: &mut Game, a: &[Value]) -> Res<Value> {
     let pid = a[0].int() as usize;
-    let gs: Vec<O> = g.p[pid].hand.iter().copied().filter(|&c| ty(g, c) == "Gear").collect();
+    let gs: Vec<O> = g.p[pid].hand.iter().copied().filter(|&c| g.is_gear(c)).collect();
     let keys: Vec<(i64, String)> = gs.iter().map(|&c| (se(g, c), cn(g, c))).collect();
     let gs = sort_keyed(gs, keys);
     let mut names: Vec<String> = vec![];
@@ -1154,8 +1160,8 @@ fn queen_res(g: &mut Game, a: &[Value]) -> Res<Value> {
 // Swain, Visionary — "[Vision] When I conquer, if you've played a non-token unit, a non-token gear, and a spell this
 // turn, you score 1 point."
 fn swain_ok(g: &Game, pid: usize) -> bool {
-    let ts: Vec<&str> = g.played[pid].iter().filter_map(|n| specs().get(n.as_str())).map(|s| s.type_.as_str()).collect();
-    ["Unit", "Gear", "Spell"].iter().all(|t| ts.contains(t))
+    let ss: Vec<&Spec> = g.played[pid].iter().filter_map(|n| specs().get(n.as_str())).collect();
+    ["Unit", "Spell"].iter().all(|t| ss.iter().any(|s| s.type_ == *t)) && ss.iter().any(|s| s.is_gear())
 }
 
 fn swain(g: &mut Game, a: &[Value]) -> Res<Value> {
@@ -1956,7 +1962,7 @@ fn retreat(g: &mut Game, a: &[Value]) -> Res<Value> {
 // The mode follows from the chosen object (a unit or a gear), so each repetition can choose another mode.
 fn barrage_pred(g: &mut Game, a: &[Value]) -> Res<Value> {
     let o = a[1].obj();
-    Ok(((ty(g, o) == "Unit" && g.o(o).loc == Some(Loc::Base)) || ty(g, o) == "Gear").into())
+    Ok(((ty(g, o) == "Unit" && g.o(o).loc == Some(Loc::Base)) || g.is_gear(o)).into())
 }
 
 fn barrage_one(g: &mut Game, a: &[Value]) -> Res<Value> {
@@ -2181,7 +2187,7 @@ fn play_spell_limited(g: &mut Game, pid: usize, c: O, src: &str, flags: &Map, ex
 // cost no more than 7 energy from hand this turn, ignoring its Energy cost." (a play permission, consumed when used)
 fn jayce_perm(g: &mut Game, a: &[Value]) -> Res<Value> {
     let (card, src) = (a[1].obj(), a[2].str());
-    Ok((src == "hand" && ty(g, card) == "Gear" && se(g, card) <= 7).into())
+    Ok((src == "hand" && g.is_gear(card) && se(g, card) <= 7).into())
 }
 
 fn mop_res(g: &mut Game, a: &[Value]) -> Res<Value> {
@@ -2411,7 +2417,7 @@ fn prize(g: &mut Game, a: &[Value]) -> Res<Value> {
     let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
     if ev == "activated" && pid_is_ctrl(g, info, o) {
         if let Some(x) = info.g("obj").opt_obj() {
-            if ty(g, x) == "Gear" {
+            if g.is_gear(x) {
                 trig0(g, o, "Prize of Progress", src_mod(1));
             }
         }
@@ -2874,7 +2880,7 @@ pub fn register(r: &mut Registry) {
                 preds: preds(vec![p_unit_bf_v()]),
                 can: f("_cruiser.can", |g, a| {
                     let pid = a[0].int() as usize;
-                    Ok(g.p[pid].hand.iter().any(|&c| ty(g, c) == "Gear").into())
+                    Ok(g.p[pid].hand.iter().any(|&c| g.is_gear(c)).into())
                 }),
                 extra_cost: fv("_cruiser_discard", cruiser_discard),
                 resolve: f("_cruiser.res", |g, a| {
@@ -2992,7 +2998,7 @@ pub fn register(r: &mut Registry) {
                 }),
                 preds: preds(vec![f("_formula.pred", |g, a| {
                     let (it, x) = (a[0].item(), a[1].obj());
-                    Ok((ty(g, x) == "Gear" && Some(g.o(x).uid) != g.it(it).src).into())
+                    Ok((g.is_gear(x) && Some(g.o(x).uid) != g.it(it).src).into())
                 })]),
                 resolve: f("_formula.res", |g, a| {
                     let u = g.legal(a[0].item(), 0)?;

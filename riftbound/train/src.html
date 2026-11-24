@@ -490,8 +490,10 @@ body.dkopen { overflow: hidden; }
 .vpad.p1 .vtag { color: var(--akali); } .vpad.cpu .vtag { color: var(--leblanc); }
 .vlg { font: 400 24px/1.05 var(--f-display, serif); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .vpad select { min-height: 36px; font-size: 12.5px; width: 100%; min-width: 0; }
-.vlvl { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 12px; color: var(--ink-2); }
-.vlvl button { flex: 1 1 auto; min-width: 0; min-height: 32px; padding: 2px 6px; font-size: 12px; white-space: nowrap; }
+.vlvl { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.vlvl > span { grid-column: 1 / -1; }
+.vlvl [data-lvs] { display: none; }
+.vlvl button { min-width: 0; min-height: 32px; padding: 2px 0; font-size: 12px; white-space: nowrap; }
 .vlvl button[aria-checked="true"] { border-color: var(--leblanc); color: var(--ink); background: rgba(255,143,126,.14); }
 .vopt summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; padding: 4px 0; }
 .vopt[open] { display: grid; gap: 8px; }
@@ -512,7 +514,10 @@ body.dkopen { overflow: hidden; }
   .vpad .vpart { --aw: calc(100cqw - 12px); width: 100%; height: 64px; }
   .vlg { font-size: 19px; }
   .vpad select { min-height: 34px; font-size: 12px; }
-  .vlvl > span { width: 100%; }
+  .vlvl { display: flex; gap: 6px; }
+  .vlvl > span { flex: 1 1 auto; text-align: center; min-width: 0; }
+  .vlvl [data-lvl] { display: none; }
+  .vlvl [data-lvs] { display: block; flex: 0 0 44px; min-height: 36px; font-size: 18px; line-height: 1; }
 }
 .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
 .seg .segl { width: 100%; font-size: 12px; color: var(--ink-2); }
@@ -1176,12 +1181,12 @@ async function setupForm(msg) {
   const pad = (who, lbl) => `<div class="vpad ${who}" data-side="${who}" role="button" tabindex="0" aria-label="Choisir pour ${who === "p1" ? "toi" : "l'IA"}">
       <div class="vpart"></div><div class="vpinfo"><div class="vtag">${lbl}</div><div class="vlg"></div>
       <select id="${who === "p1" ? "sMine" : "sOpp"}" aria-label="${who === "p1" ? "Ton deck (variantes de la légende)" : "Deck de l'IA (variantes de la légende)"}">${legendOptions(deckLegend(who === "p1" ? mk : ok), who === "p1" ? mk : ok)}</select>
-      ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><span>Niv.</span><button role="radio" data-lvl="1">Normal</button><button role="radio" data-lvl="3">Fort</button><button role="radio" data-lvl="6">Très fort</button></div>` : ""}<div class="small vdk"></div></div></div>`;
+      ${who === "cpu" ? `<div class="vlvl" role="radiogroup" aria-label="Niveau de l'IA"><button data-lvs="-1" aria-label="Niveau plus faible">−</button><span>Niv. <b id="sLvlNo"></b> <b id="sLvlName"></b></span>${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => `<button role="radio" data-lvl="${n}" aria-label="Niveau ${n}">${n}</button>`).join("")}<button data-lvs="1" aria-label="Niveau plus fort">+</button></div>` : ""}<div class="small vdk"></div></div></div>`;
   openModal(`<h3>Contre l'IA</h3>${msg ? `<div class="small flash">${esc(msg)}</div>` : ""}<div class="setup vs">
     <div class="small vhelp">Touche ton panneau ou celui de l'IA, puis une légende. Chaque légende arrive avec son deck par défaut (meilleure liste de tournoi jouable, sideboard compris).</div>
     <div class="roster" role="group" aria-label="Légendes">${tiles}</div>
     <div class="vpads">${pad("p1", "Toi")}<div class="vsx">VS</div>${pad("cpu", "IA")}</div>
-    <input type="hidden" id="sLvl" value="${["3", "6"].includes(last("lvl")) ? last("lvl") : "1"}">
+    <input type="hidden" id="sLvl" value="${LVL_NAMES[+last("niv")] ? last("niv") : ({ 3: "7", 6: "8" })[last("lvl")] || "6"}">
     <div class="seg" role="radiogroup" aria-label="Mode de match"><span class="segl">Mode</span>
       <button role="radio" id="sBo1" data-mode="bo1" aria-checked="${lm === "bo1"}">BO1<small>une manche</small></button>
       <button role="radio" id="sBo3" data-mode="bo3" aria-checked="${lm === "bo3"}">BO3<small>2 manches gagnantes, sideboard</small></button></div>
@@ -1206,8 +1211,10 @@ async function setupForm(msg) {
     $("bStart").textContent = m === "bo3" ? "Commencer le match" : "Commencer";
   };
   for (const b of document.querySelectorAll("[data-mode]")) b.onclick = () => setMode(b.dataset.mode);
-  const setLvl = v => { $("sLvl").value = v; for (const b of document.querySelectorAll("[data-lvl]")) b.setAttribute("aria-checked", b.dataset.lvl === v); };
+  const setLvl = v => { $("sLvl").value = v; if ($("sLvlName")) { $("sLvlNo").textContent = v; $("sLvlName").textContent = LVL_NAMES[+v]; } for (const b of document.querySelectorAll("[data-lvl]")) b.setAttribute("aria-checked", b.dataset.lvl === v); };
   for (const b of document.querySelectorAll("[data-lvl]")) b.onclick = e => { e.stopPropagation(); setLvl(b.dataset.lvl); };
+  // téléphone : « − » et « + » à la place des dix boutons (ils ne tiennent pas sur une rangée)
+  for (const b of document.querySelectorAll("[data-lvs]")) b.onclick = e => { e.stopPropagation(); setLvl(String(Math.min(10, Math.max(1, +$("sLvl").value + +b.dataset.lvs)))); };
   const setSide = s => { SIDE = s; for (const x of document.querySelectorAll(".vpad")) x.classList.toggle("act", x.dataset.side === s); };
   for (const x of document.querySelectorAll(".vpad")) {
     x.onclick = e => { if (!e.target.closest("select, button")) setSide(x.dataset.side); };
@@ -1272,7 +1279,7 @@ async function start() {
   if (DU) duelLeave();
   const bf = $("sBf").value, first = $("sFirst").value, lvl = $("sLvl").value, seed = $("sSeed").value.trim();
   const mk = $("sMine").value, ok = $("sOpp").value, mine = deckArg(mk), opp = deckArg(ok), mode = $("bStart").dataset.mode === "bo3" ? "bo3" : "bo1";
-  store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-lvl", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok); store.set("rbt-mode", mode);
+  store.set("rbt-bf", bf); store.set("rbt-first", first); store.set("rbt-niv", lvl); store.set("rbt-mine", mk); store.set("rbt-opp", ok); store.set("rbt-mode", mode);
   let st;
   GEN++; working = true;   // jusqu'au lancement : l'ancien plateau ne se joue plus pendant que le moteur prépare la partie
   try { st = await J(T.match_new(mode, seed === "" ? null : +seed, mine, opp)); }
@@ -1488,8 +1495,11 @@ async function pump(v) {
 
 // Réflexion longue de l'IA (niveaux Fort et Très fort : jusqu'à plusieurs dizaines de secondes) : après 2 s, les secondes écoulées
 // s'affichent à côté de « … joue », pour qu'on voie que la table n'est pas figée.
-// Nom du niveau de l'IA (train.new : level = nombre de mondes tirés par décision).
-const lvlName = l => ({ 3: "forte", 6: "très forte" })[+l] || "normale";
+// Niveaux de l'IA, 1 (le plus faible) à 10 (le plus fort) : réglages dans le moteur (ai::level_opts). Les parties
+// enregistrées avant le 2026-11-24 (sans lvs) portent 1, 3 ou 6 (Normal, Fort, Très fort) = niveaux 6, 7, 8.
+const LVL_NAMES = [, "Débutant", "Novice", "Facile", "Apprenti", "Moyen", "Normal", "Fort", "Très fort", "Expert", "Maître"];
+const lvlOf = g => g.lvs === 10 ? +g.level : +g.level === 0 ? 0 : ({ 3: 7, 6: 8 })[+g.level] || 6;
+const lvlName = l => +l ? `niveau ${+l}` : "normale";
 async function thinking(p) {
   const t0 = Date.now(), tick = setInterval(() => { const x = $("thinkSec"), n = Math.floor((Date.now() - t0) / 1000); if (x && n >= 2) x.textContent = " · " + n + " s"; }, 500);
   try { return await p; } finally { clearInterval(tick); }
@@ -1595,7 +1605,7 @@ function recStart(meta, bf, first, lvl, mine, opp) {
   lastAIlab = null;
   REC = { id: Date.now().toString(36) + "-" + meta.seed, ver: PAGE_VER, seed: meta.seed, bf: bf || null, first: first === "" ? null : +first,
     mine: mine || null, opp: opp || null, names: meta.names,
-    level: +lvl, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null,
+    level: +lvl, lvs: 10, bfs: meta.bf, whoFirst: meta.first, started: new Date().toISOString(), moves: [], result: null,
     commit: BUILD.commit, engine: BUILD.engine };
   chip("");
 }
@@ -4172,7 +4182,7 @@ function menuRender(view) {
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace, qui répond aussi « Oui » aux questions oui / non (« Utiliser cet effet ? »).</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
-      <li><b>L'IA.</b> Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente ; « Très fort » : 6 simulations par coup, encore plus lente. Flèches corail : ses derniers coups.</li>
+      <li><b>L'IA.</b> Elle ne voit pas ta main. Dix niveaux : de 1 à 5 elle se trompe exprès, de moins en moins ; 6 est son jeu normal ; de 7 à 10 elle calcule de plus en plus, et répond plus lentement. Flèches corail : ses derniers coups.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
       <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de conseil en duel ; « Reprendre » tant que tu gardes la main. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
@@ -4214,7 +4224,7 @@ async function loadGames() {
     const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
     const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
     const canRp = !g.duel && g.kind !== "duel" && Array.isArray(g.moves);
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + lvlName(g.level)}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + lvlName(lvlOf(g))}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
   const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les (toutes, ou une seule avec ⤓) puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>

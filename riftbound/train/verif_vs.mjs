@@ -38,23 +38,24 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const fit = await ev("(()=>{const m=$('mbox'),r=m.getBoundingClientRect();return {sw: document.documentElement.scrollWidth, w: innerWidth, right: r.right, bottom: [...document.querySelectorAll('.vpad')].map(x=>x.getBoundingClientRect().bottom), h: innerHeight}})()");
   ok(`${w} px : pas de défilement horizontal, les deux panneaux visibles sans défiler (${JSON.stringify(fit)})`, fit.sw <= fit.w && fit.right <= fit.w && Math.max(...fit.bottom) <= fit.h);
   // Boutons de niveau dans le panneau de l'IA, aussi avec la police agrandie du téléphone (« Très fort » débordait, 2026-10-27)
-  const lvlIn = () => ev("(()=>{const p=document.querySelector('.vpad.cpu').getBoundingClientRect();return [...document.querySelectorAll('.vpad.cpu .vlvl button')].every(x=>{const q=x.getBoundingClientRect();return q.left>=p.left&&q.right<=p.right&&x.scrollWidth<=x.clientWidth})})()");
+  const lvlIn = () => ev("(()=>{const p=document.querySelector('.vpad.cpu').getBoundingClientRect();return [...document.querySelectorAll('.vpad.cpu .vlvl button')].filter(x=>x.offsetParent).every(x=>{const q=x.getBoundingClientRect();return q.left>=p.left&&q.right<=p.right&&x.scrollWidth<=x.clientWidth})})()");
   const lvlN = await lvlIn(); await ev("(()=>{const s=document.createElement('style');s.id='bigf';s.textContent='.vlvl, .vlvl button { font-size: 17px !important; }';document.head.append(s)})()");
   const lvlG = await lvlIn(); await ev("document.getElementById('bigf').remove()");
-  ok(`${w} px : les trois boutons de niveau tiennent dans le panneau de l'IA (police normale ${lvlN}, agrandie ${lvlG})`, lvlN && lvlG);
+  ok(`${w} px : les boutons de niveau (dix à l'ordinateur, − et + au téléphone) tiennent dans le panneau de l'IA (police normale ${lvlN}, agrandie ${lvlG})`, lvlN && lvlG);
   const art = await ev("getComputedStyle(document.querySelector('.vtile:not(.off) .vart')).backgroundImage");
   ok(`${w} px : les tuiles montrent l'image de la légende`, /atlas|img/.test(art));
   await pg.screenshot({ path: `${OUT}/vs_${w}.png` });
   await tap('.vtile[data-leg="?"]');
   ok(`${w} px : « ? » met l'IA au hasard`, await ev("document.querySelector('.vpad.cpu .vlg').textContent") === "Au hasard");
-  await tap('[data-lvl="6"]');
-  ok(`${w} px : le niveau « Très fort » se choisit (${await ev("$('sLvl').value")})`, await ev("$('sLvl').value") === "6" && await ev("document.querySelector('[data-lvl=\"6\"]').getAttribute('aria-checked')") === "true" && await ev("document.querySelector('[data-lvl=\"6\"]').textContent") === "Très fort");
+  if (mob) { await tap('[data-lvs="1"]'); await tap('[data-lvs="1"]'); await tap('[data-lvs="1"]'); await tap('[data-lvs="-1"]'); } else await tap('[data-lvl="8"]');
+  ok(`${w} px : le bouton « Commencer » est à l'écran sans défiler`, await ev("(()=>{const r=$('bStart').getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight})()"));
+  ok(`${w} px : dix niveaux, le niveau 8 « Très fort » se choisit (${await ev("$('sLvl').value")})`, await ev("document.querySelectorAll('.vpad.cpu [data-lvl]').length") === 10 && await ev("$('sLvl').value") === "8" && await ev("document.querySelector('[data-lvl=\"8\"]').getAttribute('aria-checked')") === "true" && await ev("$('sLvlName').textContent") === "Très fort");
   await ev("$('sSeed').value='7'"); await tap("#bStart");
   await waitFor("!!(V && !working)");
   const lg = await ev("pyExec(JSON.stringify([{ as: 'LG', op: ['legends'] }]), 'LG')");
   ok(`${w} px : la partie démarre, toi LeBlanc, l'IA une légende jouable tirée au hasard (${lg})`, lg[0] === "LeBlanc, Deceiver" && Object.keys(dflt).includes(lg[1]));
   const lv = await ev("pyExec(JSON.stringify([{ as: 'LV', op: ['ai_cfg'] }]), 'LV')");
-  ok(`${w} px : l'IA « Très fort » a 6 mondes, un faisceau de 6, 3 mondes hors préparation du tour (${lv}), bandeau « IA très forte »`, JSON.stringify(lv) === "[6,6,3]" && (await ev("$('gmeta').textContent")).includes("IA très forte"));
+  ok(`${w} px : l'IA de niveau 8 a 6 mondes, un faisceau de 6, 3 mondes hors préparation du tour (${lv}), bandeau « IA niveau 8 »`, JSON.stringify(lv) === "[6,6,3]" && (await ev("$('gmeta').textContent")).includes("IA niveau 8"));
   ok(`${w} px : aucune erreur JS (${errs.join(" | ")})`, !errs.length);
 }
 await b.close();

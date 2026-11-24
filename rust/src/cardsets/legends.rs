@@ -280,12 +280,15 @@ fn ornn_can() -> Value {
         if ctx.is_none() {
             return Ok(false.into());
         }
-        if ctx_get(ctx, "kind").opt_str() == Some("gear") {
+        // jouer une unit gear, c'est jouer un équipement (178.3) : son « kind » de coût est « unit »
+        if ctx_get(ctx, "kind").opt_str() == Some("gear")
+            || (ctx_get(ctx, "kind").opt_str() == Some("unit") && ctx_get(ctx, "card").opt_obj().is_some_and(|c| g.is_gear(c)))
+        {
             return Ok(true.into());
         }
         let ob = ctx_get(ctx, "obj").opt_obj();
         Ok((ctx_get(ctx, "kind").opt_str() == Some("ability")
-            && ob.is_some_and(|ob| g.o(ob).zone == Some(Zone::Board) && is_type(g, ob, "Gear")))
+            && ob.is_some_and(|ob| g.o(ob).zone == Some(Zone::Board) && g.is_gear(ob)))
         .into())
     })
 }

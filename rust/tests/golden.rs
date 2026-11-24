@@ -1,6 +1,9 @@
 //! Non-régression contre le moteur Python de référence (supprimé à la bascule) : chaque ligne de
 //! `data/golden.txt` (produit par `rust/diff/golden.sh` avec le moteur Python) donne une partie et le MD5 de son
 //! journal de trace. Le moteur Rust doit écrire exactement le même journal.
+//! Après une correction de règle, les seules parties dont le journal change sont refigées avec le moteur Rust, après
+//! comparaison ligne à ligne avec le moteur d'avant (`docs/wiki/pages/porte.md`). Refigées le 2026-11-24 : 11 parties
+//! des paquets Ornn et Renata (Patched Porobot est une « Gear Unit », règles 178.2 et 178.3).
 //! Les parties de l'IA (lentes) ne tournent qu'avec `RB_GOLDEN_IA=1` ; les parties aléatoires tournent toujours.
 use riftbound::outils::md5::md5_hex;
 use std::sync::atomic::{AtomicUsize, Ordering};
