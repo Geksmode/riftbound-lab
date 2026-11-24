@@ -25,4 +25,6 @@ pub mod regex;
 pub mod replay;
 pub mod spec;
 pub mod trace;
+pub mod train;
+pub mod train_dbg;
 pub mod value;

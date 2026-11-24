@@ -48,6 +48,18 @@ impl PayKey {
     }
 }
 
+/// `plans=alts` de `pay` : pour chaque option (même ordre), le plan de paiement `{gold, recycle}` (runes recyclées).
+fn plans_value(alts: &[(PayKey, Plan)]) -> Value {
+    Value::List(
+        alts.iter()
+            .map(|(_, p)| {
+                crate::map! { gold = p.gold, recycle = Value::List(p.recycle.iter().map(|&r| Value::Rune(r)).collect()) }
+                    .into()
+            })
+            .collect(),
+    )
+}
+
 fn reqs_value(reqs: &[Req]) -> Value {
     Value::List(reqs.iter().map(|r| Value::List(r.iter().map(|d| Value::from(d.as_str())).collect())).collect())
 }
@@ -61,6 +73,18 @@ impl Game {
     /// `ask(pid, kind, options, **ctx)` : choix synchrone d'un joueur. None sans option ; la seule option sans
     /// question, sauf pour 'may', 'may_target' et 'order'.
     pub fn ask(&mut self, pid: usize, kind: &str, options: Vec<Value>, ctx: Map) -> Res<Value> {
+        if self.tg.is_some() {
+            // TGame.ask : cartes vues par l'effet qui pose la question ; réponses de l'IA notées dans son journal
+            crate::train::tg_ask_pre(self, pid, &options);
+            let r = self.ask_base(pid, kind, options.clone(), ctx)?;
+            crate::train::tg_ask_post(self, pid, kind, &options, &r);
+            return Ok(r);
+        }
+        self.ask_base(pid, kind, options, ctx)
+    }
+
+    /// `Game.ask` (sans les ajouts de la table)
+    fn ask_base(&mut self, pid: usize, kind: &str, options: Vec<Value>, ctx: Map) -> Res<Value> {
         if options.is_empty() {
             return Ok(Value::None);
         }
@@ -800,7 +824,12 @@ impl Game {
                     }
                     let kind = if alts.iter().any(|a| matches!(a.0, PayKey::Gold(_))) { "pay_gold" } else { "pay_rune" };
                     let opts: Vec<Value> = alts.iter().map(|a| a.0.value()).collect();
-                    let ch = crate::map! { chosen = Value::Tuple(chosen.iter().map(|&u| u.into()).collect()) };
+                    // plans=alts (dict option -> plan en Python) : ici une liste parallèle aux options, lue par la
+                    // table pour nommer chaque façon de payer (train._alabel)
+                    let ch = crate::map! {
+                        plans = plans_value(&alts),
+                        chosen = Value::Tuple(chosen.iter().map(|&u| u.into()).collect())
+                    };
                     let o = self.ask(pid, kind, opts.clone(), ch)?;
                     let i = opts.iter().position(|x| *x == o).unwrap();
                     plan = alts[i].1.clone();
@@ -814,7 +843,8 @@ impl Game {
             let alts = self.gold_choices(pid, e, reqs, ctx, &plan)?;
             if alts.len() > 1 {
                 let opts: Vec<Value> = alts.iter().map(|a| a.0.into()).collect();
-                let k = self.ask(pid, "pay_gold", opts, Map::new())?.int();
+                let pv: Vec<(PayKey, Plan)> = alts.iter().map(|a| (PayKey::Gold(a.0), a.1.clone())).collect();
+                let k = self.ask(pid, "pay_gold", opts, crate::map! { plans = plans_value(&pv) })?.int();
                 plan = alts.into_iter().find(|a| a.0 == k).unwrap().1;
             }
         }
