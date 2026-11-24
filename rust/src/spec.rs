@@ -19,9 +19,21 @@ pub struct Spec {
     pub tags: BTreeSet<String>,
     pub text: String,
     pub keywords: Vec<String>,
-    /// unit gear (`Obj.spec` d'une unit gear : `gear=True`)
+    /// unit gear (`Obj.spec` d'une unit gear : `gear=True`), imprimée (`UNIT_GEAR`) ou créée par un effet
     pub gear: bool,
 }
+
+impl Spec {
+    /// Un équipement, unit gear comprise : un objet à plusieurs types est concerné par ce qui vise l'un d'eux (178.3).
+    pub fn is_gear(&self) -> bool {
+        self.type_ == "Gear" || self.gear
+    }
+}
+
+/// Cartes imprimées « Gear Unit » : la base ne donne qu'un type (« Unit »). Elles se jouent comme des unités et
+/// entrent épuisées (359.2.c, 359.2.d ne vise que les « Non-Unit Gear »), gardent les permissions des deux types
+/// (178.2) et comptent comme équipement pour tout effet qui regarde les équipements (178.3).
+pub const UNIT_GEAR: [&str; 1] = ["Patched Porobot"];
 
 /// Le CSV de la base de cartes, embarqué (le moteur WebAssembly n'a pas de système de fichiers).
 const CSV: &str = include_str!("../../riftbound/cards/cards_unique.csv");
@@ -115,7 +127,7 @@ fn build() -> BTreeMap<String, Spec> {
                 tags: split_bar(&r[c_tags]).collect(),
                 text: r[c_text].clone(),
                 keywords: split_bar(&r[c_kw]).collect(),
-                gear: false,
+                gear: UNIT_GEAR.contains(&r[c_name].as_str()),
             },
         );
     }

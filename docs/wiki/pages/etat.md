@@ -5,6 +5,9 @@ maj: 2026-11-24
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **Patched Porobot en « Gear Unit » (2026-11-24)** : unité et équipement à la fois (178.2, 178.3), entre épuisé, Pit Crew se
+  redresse quand on le joue ; `spec::UNIT_GEAR`, test `rust/tests/unit_gear.rs`, 11 parties de référence refigées
+  ([porte](porte.md)). Ligne de type non relue sur l'image de la carte (réseau bloqué). Chiffres Ornn et Renata à remesurer.
 - **Bascule du moteur en Rust (2026-11-24)** : le moteur Python (`riftbound/engine/*.py`) est supprimé ; moteur, 1037 cartes,
   IA, outils et table (WebAssembly) tournent en Rust (`rust/`, binaires `rust/target/release/<nom>`). Dernier état avec Python :
   étiquette git `moteur-python-final`. Test différentiel : 2000/2000 parties aléatoires et 200/200 parties IA identiques au

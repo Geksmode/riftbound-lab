@@ -278,6 +278,8 @@ Other shared tools:
   `cards.disarm_trigger`), `show_off=fn(g, pid, card, x)` (the play choice gets `show` and `shown`, the shown object's
   information as it was shown, rule 832.1.d.1), the Bomb gear token, the `exhausted` event (`objs`: every object
   exhausted by one action, "When I become exhausted"), `might_reduced` (obj, amount, by), unit gear (`o.ugear`,
-  `g.is_gear(o)`), play permissions from Banishment (`g.effects` kind `play_banished`), granted timing
+  `g.is_gear(o)`; printed "Gear Unit" cards are listed in `spec::UNIT_GEAR`, e.g. Patched Porobot: type `Unit`, played
+  as a unit, entering exhausted, and a gear for every effect that looks at gear, rules 178.2-178.3: test "a gear" with
+  `g.is_gear(o)`, never `type_ == "Gear"`, which is only for "non-unit gear" cases such as where it is played), play permissions from Banishment (`g.effects` kind `play_banished`), granted timing
   (`card_kw(..., "Action"/"Reaction")`, `actions.eff_timing`).
 - Keep `cardsets/__init__.py` MODULES sorted, one name per line.

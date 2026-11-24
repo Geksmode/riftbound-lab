@@ -683,7 +683,7 @@ fn gear_ctrl_of_item(g: &Game, item: Option<ItemId>) -> Option<usize> {
         }
     }
     if let Value::Map(info) = g.it(item).data.g("info") {
-        if info.g("spec").opt_str().is_some_and(|n| spec(n).type_ == "Gear") {
+        if info.g("spec").opt_str().is_some_and(|n| spec(n).is_gear()) {
             return Some(info.g("ctrl").int() as usize);
         }
     }
@@ -1871,7 +1871,7 @@ fn calm(r: &mut Registry) {
             Ok(())
         }),
         show_off: show_off_fn("Battle Preparations.show_off", |g, _pid, _c, x| {
-            Ok(if g.board.contains(&x) { g.is_gear(x) } else { ty(g, x) == "Gear" })
+            Ok(g.is_gear(x))
         }),
         choices: choices_fn("Battle Preparations.choices", |g, pid, ctx| {
             let us = buff_targets(g, pid, ctx.g("hidden_bf").opt_loc())?;
@@ -1895,7 +1895,7 @@ fn calm(r: &mut Registry) {
                 }
                 return Ok(());
             }
-            look_pick(g, c, 5, "gear_pick", |g, x| ty(g, x) == "Gear")
+            look_pick(g, c, 5, "gear_pick", |g, x| g.is_gear(x))
         }),
         choices: choices_fn("_ca_choices", |g, pid, _ctx| {
             let mut out = vec![crate::map! { mode = "look" }];
@@ -2664,7 +2664,8 @@ fn mind(r: &mut Registry) {
                         return Ok(());
                     }
                     let x = top[0];
-                    if guess.opt_str() == Some(ty(g, x)) {
+                    // une unit gear a les deux types (178.3)
+                    if guess.opt_str() == Some(ty(g, x)) || (guess.opt_str() == Some("Gear") && g.is_gear(x)) {
                         deck_remove(g, c, x);
                         g.recycle_cards(c, &[x])?;
                     } else {
@@ -2770,8 +2771,7 @@ fn mind(r: &mut Registry) {
                 Ok(if zone_is(g, s, Zone::Board)
                     && is_bf(g.o(s).loc)
                     && pid == g.o(s).ctrl
-                    && what.g("kind").opt_str() == Some("gear")
-                    && !what.g("card").is_none()
+                    && what.g("card").opt_obj().is_some_and(|c| g.is_gear(c))
                     && g.stats.get(&om_key(g, s)) == 0
                 {
                     maps_v(vec![crate::map! { e = -1, rm = 1 }])
@@ -2784,7 +2784,7 @@ fn mind(r: &mut Registry) {
             if ev == "played"
                 && info.g("pid").int() as usize == g.o(o).ctrl
                 && played_card(info)
-                && ty(g, info.g("card").obj()) == "Gear"
+                && g.is_gear(info.g("card").obj())
                 && is_bf(g.o(o).loc)
                 && !g.o(info.g("card").obj()).limited_play
             {
@@ -3290,7 +3290,7 @@ fn body(r: &mut Registry) {
                     a[3].opt_str() == Some("Action")
                         && zone_is(g, s, Zone::Board)
                         && pid == g.o(s).ctrl
-                        && ty(g, c) == "Gear"
+                        && g.is_gear(c)
                         && has_deploy(g, c)?,
                 ))
             }),
@@ -4310,7 +4310,7 @@ fn order(r: &mut Registry) {
             if ev == "die" {
                 let inf = info.g("info").map().clone();
                 if inf.g("ctrl").int() as usize == g.o(o).ctrl
-                    && inf_type(&inf) == "Gear"
+                    && spec(inf.g("spec").str()).is_gear()
                     && is_bf(inf.g("loc").opt_loc())
                     && !inf.g("token").truthy()
                 {
