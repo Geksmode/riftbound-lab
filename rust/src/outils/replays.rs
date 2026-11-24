@@ -330,14 +330,14 @@ pub fn add_main(a: &[String]) -> i32 {
             }
         },
         "digest" => {
-            let ap = (arg(4) != "-").then(|| arg(4));
-            let lp = a.get(5).map(|s| s.as_str()).filter(|s| *s != "-");
-            println!("{}", digest(&rec(arg(2).parse().unwrap(), arg(3), ap, lp, None, None), 150));
+            let ap = Some(arg(3)).filter(|s| *s != "-");
+            let lp = a.get(4).map(|s| s.as_str()).filter(|s| *s != "-");
+            println!("{}", digest(&rec(arg(1).parse().unwrap(), arg(2), ap, lp, None, None), 150));
         }
         "dsearch" => {
             // dsearch <graine> <defaut|miroir> <version j0> <version j1>
-            let v = [arg(4).to_string(), arg(5).to_string()];
-            println!("{}", digest(&rec(arg(2).parse().unwrap(), "G2", None, None, Some(&v), Some(arg(3))), 150));
+            let v = [arg(3).to_string(), arg(4).to_string()];
+            println!("{}", digest(&rec(arg(1).parse().unwrap(), "G2", None, None, Some(&v), Some(arg(2))), 150));
         }
         "add" => {
             let spec = match py::load_file(Path::new(arg(2 - 1))) {
@@ -436,8 +436,8 @@ pub fn curate_main(_a: &[String]) -> i32 {
     // garder les parties ajoutées par add_replays
     let mut all: Vec<PyVal> = old.as_list().iter().filter(|o| !ids.contains(&o.get("id").unwrap().py_str())).cloned().collect();
     all.extend(idx.iter().cloned());
-    py::dump_file(&f, &PyVal::List(all), Dump { indent: Some(1), ensure_ascii: false });
-    for o in &idx {
+    py::dump_file(&f, &PyVal::List(all.clone()), Dump { indent: Some(1), ensure_ascii: false });
+    for o in &all {
         println!("{} {} {} {}", o.get("id").unwrap().py_str(), o.get("seed").unwrap().py_str(), o.get("winner").unwrap().py_str(), o.get("pts").unwrap().py_repr());
     }
     0
