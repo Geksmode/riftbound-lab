@@ -42,6 +42,9 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    gain de victoires, s'il **ne fait pas perdre** : test séquentiel de non-infériorité (`RB_SPRT_H0=0.485 RB_SPRT_H1=0.50
    mesure/sprt.py`, « garde ») puis confirmé sur des graines neuves. Les erreurs jugées par la note automatique du banc
    ne comptent pas (elle se trompe sur ce qui fait gagner). Détails : `docs/memoire/ia-realisme.md`.
+11. **Sous-agents** (2026-11-24) : choisir le modèle selon la tâche pour économiser les tokens : un modèle léger
+   (Sonnet, Haiku) pour le travail mécanique ou de recherche, le plus fort seulement pour ce qui exige un jugement fin
+   (architecture, débogage difficile, fidélité aux règles).
 
 ## Conventions
 - Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
