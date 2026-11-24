@@ -1117,6 +1117,8 @@ pub struct SearchAgent {
     pub plan: Option<Arc<dyn Plan>>,
     /// PlanAgent : plan prêté à l'adversaire dans les simulations
     pub opp_plan: Option<Arc<dyn Plan>>,
+    /// niveaux 1 à 5 de la table (cfg `wild`) : générateur des coups pris au hasard, séparé de celui de la recherche
+    pub wrng: PyRandom,
 }
 
 /// Résultat de `pick` : (meilleur coup, sa valeur, [(valeur, coup)]).
@@ -1173,7 +1175,30 @@ impl SearchAgent {
             tplan: None,
             plan: None,
             opp_plan: None,
+            wrng: PyRandom::new(seed * 31 + 7),
         }
+    }
+
+    /// Niveaux faibles de la table (cfg `wild` = p) : avec la probabilité p, la décision est prise au hasard parmi
+    /// les coups légaux (même procédé que `train::Gentle`, l'IA du tutoriel) : en « main », rarement « end » s'il y a
+    /// autre chose ; hors « main », souvent « pass ». La suite prévue du tour (tplan) est alors abandonnée.
+    fn wild_move(&mut self, d: &Decision) -> Option<Value> {
+        let p = self.cfg.num("wild", 0.0);
+        if p <= 0.0 || self.wrng.random() >= p {
+            return None;
+        }
+        let mut opts: Vec<Value> = d.options.clone()?;
+        if opts.len() < 2 {
+            return None;
+        }
+        self.tplan = None;
+        if d.kind == "main" && self.wrng.random() < 0.85 {
+            opts.retain(|o| o.list()[0].str() != "end");
+        }
+        if d.kind != "main" && self.wrng.random() < 0.6 {
+            return Some(Value::Tuple(vec!["pass".into()]));
+        }
+        Some(self.wrng.choice(&opts).clone())
     }
 
     fn ask_sim_on(&self) -> bool {
@@ -1744,10 +1769,63 @@ impl Agent for SearchAgent {
         Ok(base)
     }
     fn decide(&mut self, g: &mut Game, d: &Decision) -> Res<Value> {
+        if let Some(a) = self.wild_move(d) {
+            return Ok(a);
+        }
         self.decide_search(g, d)
     }
     fn clone_box(&self) -> Box<dyn Agent> {
         Box::new(self.clone())
+    }
+}
+
+/// Nombre de niveaux de l'IA de la table (1 = le plus faible, `LEVELS` = le plus fort).
+pub const LEVELS: i64 = 10;
+
+/// Niveau 1 à 10 de l'IA de la table (2026-11-24, demande de l'utilisateur : « 10 niveaux comme sur Smash ») :
+/// (probabilité d'un coup au hasard, mondes tirés, largeur du faisceau, mondes hors « main »). Niveaux 1 à 5 : l'IA du
+/// niveau 6 qui se trompe de moins en moins ; 6, 7, 8 = anciens Normal, Fort, Très fort ; 9 et 10 : plus de calcul.
+/// Mesures : `docs/memoire/ia-niveaux.md`.
+pub const LEVEL_TABLE: [(f64, usize, usize, usize); 10] = [
+    (0.70, 1, 0, 0),
+    (0.50, 1, 0, 0),
+    (0.35, 1, 0, 0),
+    (0.20, 1, 0, 0),
+    (0.08, 1, 0, 0),
+    (0.0, 1, 0, 0),
+    (0.0, 3, 0, 0),
+    (0.0, 6, 6, 3),
+    (0.0, 12, 8, 6),
+    (0.0, 24, 12, 12),
+];
+
+/// Réglages de l'IA de la table au niveau `level` (borné à 1..=LEVELS) : recherche du tour entier, réglages de
+/// réalisme de la table (`ambush`, `tie_react`, règle 10) et ligne de `LEVEL_TABLE`.
+pub fn level_opts(level: i64) -> SearchOpts {
+    let (wild, n, w, rn) = LEVEL_TABLE[(level.clamp(1, LEVELS) - 1) as usize];
+    let mut c = Cfg::new();
+    c.set("ambush", CfgV::Num(0.5));
+    c.set("tie_react", CfgV::Num(1.0));
+    if w > 0 {
+        c.set("turn_w", CfgV::Num(w as f64));
+        c.set("react_n", CfgV::Num(rn as f64));
+    }
+    if wild > 0.0 {
+        c.set("wild", CfgV::Num(wild));
+    }
+    SearchOpts { samples: n, search: Some("turn".into()), cfg: c, ..SearchOpts::default() }
+}
+
+/// Niveau d'une partie enregistrée, sur l'échelle 1 à 10 : les parties d'avant le 2026-11-24 (sans `lvs`) portent le
+/// nombre de mondes (1 Normal, 3 Fort, 6 Très fort) = niveaux 6, 7, 8 ; 0 reste l'IA du tutoriel.
+pub fn level_from_saved(level: i64, scale10: bool) -> i64 {
+    if scale10 || level == 0 {
+        return level;
+    }
+    match level {
+        3 => 7,
+        6 => 8,
+        _ => 6,
     }
 }
 

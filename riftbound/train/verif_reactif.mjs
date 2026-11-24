@@ -24,7 +24,7 @@ await ev(`(()=>{ window.__M = { call: 0, fn: "", gap: 0, gapAI: 0 };
   setInterval(() => { const n = performance.now(), g = n - last - 50; last = n; if (g > __M.gap) __M.gap = g; if (working && g > __M.gapAI) __M.gapAI = g; }, 50);
 })()`);
 await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
-await ev("document.getElementById('sSeed').value='11'; document.getElementById('sLvl').value='3'");
+await ev("document.getElementById('sSeed').value='11'; document.getElementById('sLvl').value='7'");
 await pg.click("#bStart");
 let seed = 4242; const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
 let moves = 0, probes = 0, slowProbe = 0, journalOK = false;
