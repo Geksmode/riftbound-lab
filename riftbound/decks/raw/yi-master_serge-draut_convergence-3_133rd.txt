@@ -1,0 +1,47 @@
+# legend: Master Yi, Wuju Master
+# player: Serge DRAUT
+# event: Convergence #3
+# date: 2026-09-19
+# placement: 133
+# players: 217
+# record: 2-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVH4AAAAQBQAABNHI6ACAYAMEBAIABIGUAQKAFTAEBQCAAAF4DQIAB3LNPF6ZDRYAAQCBIAKMBQCAAATYBACAYA3EAQGBAAOG7QDVIBAABQEAAAHCOACAIEAB2QCBIAEUBACAYAFUAQKACQAECAA4I&name=Serge+DRAUT+%C2%B7+Convergence+%233&event=convergence-3&rank=133
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Master Yi, Wuju Master
+[champion]
+1 Master Yi, Tempered
+[main]
+3 Defy
+3 Discipline
+3 Mask of Foresight
+3 Punch First
+3 Wuju Apprentice
+3 Scuttle Crab
+3 Rengar, Trophy Hunter
+2 Find Your Center
+2 Master Yi, Unstoppable
+2 Concentrate
+2 Gemhand Hunter
+2 Grim Resolve
+2 Voracious Gromp
+1 Master Yi, Tempered
+2 Alpha Strike
+2 Rampage
+1 Master Yi, Tempered
+[runes]
+6 Calm Rune
+6 Body Rune
+[battlefields]
+1 Reckoner's Arena
+1 Seat of Power
+1 Gardens of Becoming
+[sideboard]
+2 Adaptatron
+2 Sabotage
+2 Arachnoid Horror
+2 Tomb-Raider Barbara
+1 Not So Fast
+1 Noxian Demolitionist

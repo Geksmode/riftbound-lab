@@ -1,0 +1,50 @@
+# legend: Leona, Radiant Dawn
+# player: Aurorum
+# event: Deck communautaire riftatlas « [ESP RAD] Leona la mala (En desarrollo 28/10/2026) » (sans résultat de tournoi)
+# date: 2026-11-24
+# url: https://riftatlas.com/decks/community/01a18250f98a72ec8d010ef42060db33
+# source: riftatlas.com, code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: aucune liste de tournoi de cette légende n'est légale avec la ban list du 2026-11-23 (tournois du 2026-09-19 au 2026-11-22). Deck communautaire modifié après l'annonce des bans, 16 copies, 1 j'aime : jamais classé en tournoi.
+[legend]
+1 Leona, Radiant Dawn
+[champion]
+1 Leona, Zealot
+[main]
+3 Defy
+3 Back Off
+3 Ki Burst
+2 Discipline
+2 Fiora, Victorious
+2 Leona, Determined
+2 Zenith Blade
+2 Thwonk!
+2 Honest Broker
+2 Nami, Headstrong
+2 Scuttle Crab
+2 Vex, Mocking
+2 Vi, Peacekeeper
+2 Affectionate Poro
+2 Mournful Witness
+2 Kennen, Keeper of Balance
+1 Emperor's Divide
+1 Monch
+1 Honeyfruit
+1 Tactical Retreat
+[runes]
+7 Calm Rune
+5 Order Rune
+[battlefields]
+1 Monastery of Hirana
+1 Sunken Temple
+1 Amateur Recital
+[sideboard]
+2 Call to Glory
+1 Eclipse Herald
+1 Spirit's Refuge
+1 Hidden Blade
+1 Salvage
+1 Disarming Rake
+1 Emperor's Divide
+1 Not So Fast
+1 Hush

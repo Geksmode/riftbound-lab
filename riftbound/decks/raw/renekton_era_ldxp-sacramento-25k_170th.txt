@@ -1,0 +1,46 @@
+# legend: Renekton, Butcher of the Sands
+# player: era
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 170
+# players: 745
+# record: 4-2-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADX4AAAAMCAAAAME6CADCABAIBQAFTBAECAA4ADAIAAAHM4AECAIAACCNQXEAQFABJ3GAIEAIBQA2OQAEAQIAA4AMCQAE4NAGRACAIGACPACAIBAYABAAQBAMABKAIFAABQGAIDABUQCBAANIAQKACTAECQAEY&name=era+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=170
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Renekton, Butcher of the Sands
+[champion]
+1 Renekton, Rage Fueled
+[main]
+3 Noxus Hopeful
+3 Kai'Sa, Survivor
+3 First Mate
+3 Pit Rookie
+3 Long Sword
+3 Punch First
+3 Irresistible Faefolk
+2 Falling Star
+2 Sabotage
+2 Inferna
+2 Blighted Battleaxe
+2 Kinkou Initiate
+2 Nidalee, Cat Form
+2 Rampage
+2 Rengar, Trophy Hunter
+1 Ruin Runner
+1 Pyke, Dockside Butcher
+[runes]
+6 Fury Rune
+6 Body Rune
+[battlefields]
+1 Forge of the Fluft
+1 Protective Sands
+1 Black Market
+[sideboard]
+3 Coalesced Energy
+2 Ferrous Forerunner
+2 Brittle Steel
+1 Ruin Runner
+1 Repulse
+1 Rampage

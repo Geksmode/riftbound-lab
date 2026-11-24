@@ -1,0 +1,47 @@
+# legend: Master Yi, Wuju Bladesman
+# player: Scout
+# event: Open the Vault - Riftbound $5k
+# date: 2026-11-21
+# placement: 2
+# players: 42
+# record: 7-1-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAPYAACAIAAAVAABAFAAACWLJ2QQAYQAICAMACIYIBAQADKAIFACZQCAYCAAAC5HABAEBQA2IBAUAFGBICAAAJQAVHAIAQCAATAIBQALOZAEBAIADRYAAQEBIAEVIQAAQCAUACQVIBAYAFGAQCAMAC22ICAQACVQABAECAA4I&name=Scout+%C2%B7+Open+the+Vault+-+Riftbound+%245k&event=open-the-vault-riftbound-5k&rank=2
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Master Yi, Wuju Bladesman
+[champion]
+1 Master Yi, Tempered
+[main]
+3 Charm
+3 Defy
+3 Discipline
+3 First Mate
+3 Pit Rookie
+3 Lonely Poro
+3 Punch First
+3 Scuttle Crab
+3 Rengar, Trophy Hunter
+2 En Garde
+2 Sabotage
+2 Ruin Runner
+2 Rampage
+1 Not So Fast
+1 Alpha Strike
+1 Tomb-Raider Barbara
+1 Onslaught
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Grove of the God-Willow
+1 Vilemaw's Lair
+1 Seat of Power
+[sideboard]
+2 Decree of Focus
+2 Decree of Strength
+2 Stalwart Goatherd
+1 Not So Fast
+1 Ruin Runner
+1 Back Off
+1 Alpha Strike

@@ -1,0 +1,47 @@
+# legend: Fiora, Grand Duelist
+# player: Diego
+# event: Open the Vault - Riftbound $5k
+# date: 2026-11-21
+# placement: 9
+# players: 42
+# record: 4-2-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAD6AAAAAAIBAAANMAIDAIBQAX3BAUCAAYLWTYA22ANTAEBAKAEGAGZQCBABAMAM4AICAQAHJIIBAECQAUYBAYAISAIEAMAABAAB5AA2UAQCAMAM2AO2AEAQIADKAEDABJABAABACAAA4AAQCBIAKUCQCAAASEAQCAYAZYAQEBAANKYACAIFACBQCAIGABLQCAAA5AAQ&name=Diego+%C2%B7+Open+the+Vault+-+Riftbound+%245k&event=open-the-vault-riftbound-5k&rank=9
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Fiora, Grand Duelist
+[champion]
+1 Fiora, Victorious
+[main]
+3 Doran's Blade
+3 Punch First
+3 Kinkou Initiate
+3 Elder Dragon
+3 Shepherd's Heirloom
+3 Sacrifice
+3 Rift Herald
+3 Kayle, Justified
+3 Rengar, Trophy Hunter
+2 Riposte
+2 Poppy, Paragon
+2 Divining Shells
+2 Rampage
+2 Mordekaiser, Dominating
+1 Challenge
+1 Repulse
+[runes]
+8 Body Rune
+4 Order Rune
+[battlefields]
+1 Zaun Warrens
+1 Sunken Temple
+1 Packed Amphitheater
+[sideboard]
+2 Salvage
+2 Decree of Strength
+1 Unyielding Spirit
+1 Riposte
+1 Repulse
+1 Vi, Peacekeeper
+1 Decree of Unity
+1 Portable Portal

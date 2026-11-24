@@ -1,0 +1,46 @@
+# legend: Sivir, Battle Mistress
+# player: DMB0
+# event: Convergence #3
+# date: 2026-09-19
+# placement: 99
+# players: 217
+# record: 3-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAUYAQAAIBAAAH4AADAIAABOIBXIAQGAYAMGGADFIBAQCQAU3DNBYQGAQAACOADLIBAEBQBBQBAECABAABAMBAAAFVAGVAEBIDACHQDEIBZMA5IAO5AEBAKADFOIAQCAAAWMAQEAIAACUQCAQFABKFKAIBAUAGWAIDACHQC&name=DMB0+%C2%B7+Convergence+%233&event=convergence-3&rank=99
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Sivir, Battle Mistress
+[champion]
+1 Sivir, Mercenary
+[main]
+3 Traveling Merchant
+3 Treasure Trove
+3 Punch First
+3 Fizz, Trickster
+3 Ezreal, Prodigy
+3 Rampage
+3 Tornado Warrior
+3 Tail-Cloaked Matriarch
+3 Kennen, Storm of Shuriken
+2 Sabotage
+2 Ride The Wind
+2 Cull
+2 Star-Crossed
+1 Pack of Wonders
+1 Switcheroo
+1 Gust Monk
+1 Kharox
+[runes]
+7 Chaos Rune
+5 Body Rune
+[battlefields]
+1 Zaun Warrens
+1 Minefield
+1 Veiled Temple
+[sideboard]
+3 Acceptable Losses
+2 Gust
+2 Ambessa, The Wolf
+2 Decree of Strength
+1 Decree of Discord

@@ -1,0 +1,44 @@
+# legend: Lucian, Purifier
+# player: Joshua Moises Mares
+# event: CCS $25,000 Showdown Series Event - Riftbound Invitational
+# date: 2026-09-19
+# placement: 143
+# players: 563
+# record: 5-3-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADX4AAAAMCQAAAME6CADCABTQAQIAYACULF6YICAQAGC4ACAEAAAHIBAQABGAYBAAAKSAQFAMAHC4NXAG4ADUABAECABUQBAEBAKAADKMAQCAAABIBACAAADUAQKAALAEBQA4I&name=Joshua+Moises+Mares+%C2%B7+CCS+%2425%2C000+Showdown+Series+Event+-+Riftbound+Invitational&event=25000-houston-invitational-qualifier-5&rank=143
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Lucian, Purifier
+[champion]
+1 Lucian, Merciless
+[main]
+3 Noxus Hopeful
+3 Kai'Sa, Survivor
+3 First Mate
+3 Pit Rookie
+3 Sabotage
+3 Ferrous Forerunner
+3 Long Sword
+3 Doran's Blade
+3 Punch First
+3 Kinkou Initiate
+3 Irresistible Faefolk
+2 Falling Star
+2 Blighted Battleaxe
+1 Lucian, Merciless
+1 Relentless Pursuit
+[runes]
+6 Fury Rune
+6 Body Rune
+[battlefields]
+1 Windswept Hillock
+1 Forge of the Fluft
+1 Forbidding Waste
+[sideboard]
+3 Brittle Steel
+3 Rampage
+2 Legion Rearguard
+1 Falling Star
+1 Pendulum Blade

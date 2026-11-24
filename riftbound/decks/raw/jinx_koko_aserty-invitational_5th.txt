@@ -1,0 +1,48 @@
+# legend: Jinx, Loose Cannon
+# player: Koko
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 5
+# players: 58
+# record: 3-0
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAD2MAIAAACAEAAAFC4QCAQEAAHBOAIFAADQCBQANMCAIAAABQIR3JYBAIBQBCYBSEAQGBAADSAADFQBAEDAAXYDAQAAAHX3AGLAFKACAECABEIBAEDABHIBAABACAAAEQAQGAAVAQBAAAAWU4AQCAYASMAQCBAASMAQCBIAAMAQAAA6&name=Koko+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=5
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Jinx, Loose Cannon
+[champion]
+1 Jinx, Demolitionist
+[main]
+3 Seal of Rage
+3 Traveling Merchant
+3 Monster Harpoon
+3 Katarina, Reckless
+3 Punching Poro
+3 Bedeviling Stranger
+2 Noxus Hopeful
+2 Iron Ballista
+2 Falling Star
+2 Ember Monk
+2 Edge of Night
+2 Switcheroo
+2 Pyke, Dockside Butcher
+2 Star-Crossed
+2 Vex, Apathetic
+2 Momentary Companion
+1 Pyke, Returned
+[runes]
+6 Fury Rune
+6 Chaos Rune
+[battlefields]
+1 Bandle Tree
+1 Void Gate
+1 Bandle Scouts' Academy
+[sideboard]
+2 Vi, Destructive
+2 Ferrous Forerunner
+1 Thermo Beam
+1 Ember Monk
+1 Downwell
+1 Baron Nashor
+1 Brittle Steel

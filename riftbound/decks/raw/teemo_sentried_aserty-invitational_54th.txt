@@ -1,0 +1,39 @@
+# legend: Teemo, Swift Scout
+# player: Sentried
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 54
+# players: 58
+# record: 0-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAABAEAABJQBAAAAAAAAAMDAAACTLFR2SANVAHEQCAQDACGADFQBAMCQAQTIOEBAEAAAMDDACAIDABHAIBAAABYHTBYCVIBAEAYASMAZKAIBAQANCAIBAYAJ4AIAAAAACAAAPE&name=Sentried+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=54
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Teemo, Swift Scout
+[champion]
+1 Teemo, Strategist
+[main]
+3 Consult the Past
+3 Garbage Grabber
+3 Gust
+3 Pack of Wonders
+3 Invert Timelines
+3 Fizz, Trickster
+3 Last Rites
+3 Temporal Breach
+3 Tail-Cloaked Matriarch
+3 Kennen, Storm of Shuriken
+2 Watchful Sentry
+2 The Harrowing
+2 Temporal Portal
+1 Kai'Sa, Evolutionary
+1 Downwell
+1 Ezreal, Prodigy
+[runes]
+9 Chaos Rune
+3 Mind Rune
+[battlefields]
+1 Zaun Warrens
+1 Dusk Rose Lab
+1 Black Market

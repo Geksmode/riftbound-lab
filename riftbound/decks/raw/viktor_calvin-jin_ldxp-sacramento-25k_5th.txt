@@ -1,0 +1,45 @@
+# legend: Viktor, Herald of the Arcane
+# player: Calvin Jin
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 5
+# players: 745
+# record: 8-2-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAA2YAQAAIBAAAFSAAEAQAAAX6RAHKQDXIBAIBQARSQAQCAARKOTEA2KAIBAYAHIAAEAUAAA5G4AHQAD5QBREBAIAYAUEA2EAOXAHMACAIEADJACAIFACDQCAQBAMAEUAIFAA6QCAIAADQACAQBAQAKIAIBAUAIGAIBAAAPMAI&name=Calvin+Jin+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=5
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Viktor, Herald of the Arcane
+[champion]
+1 Viktor, Leader
+[main]
+3 Stupefy
+3 Cull the Weak
+3 Hidden Blade
+3 Imperial Decree
+3 Wages of Pain
+3 Bellows Breath
+3 Sprite Burst
+3 Sprite Fountain
+3 Carrion Dredger
+3 Shadow's Call
+3 Concert Poster
+1 Thousand-Tailed Watcher
+1 Facebreaker
+1 Salvage
+1 B.F. Sword
+1 Blood Money
+1 Kennen, Keeper of Balance
+[runes]
+7 Order Rune
+5 Mind Rune
+[battlefields]
+1 Ravenbloom Conservatory
+1 Rockfall Path
+1 Forbidding Waste
+[sideboard]
+3 Pickpocket
+3 Decree of Insight
+2 Salvage
+1 Safety Inspector
+1 Decree of Unity

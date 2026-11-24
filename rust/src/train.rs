@@ -1211,9 +1211,12 @@ fn banned(d: &TDeck) -> Vec<String> {
     s.into_iter().collect()
 }
 
-/// `default_decks()` : deck par défaut de l'IA pour chaque légende (menu de sélection).
+/// `default_decks()` : deck par défaut de l'IA pour chaque légende (menu de sélection). Parmi les listes jouables :
+/// sans carte bannie d'abord, puis la liste retenue à la dernière collecte (en-tête `# defaut:` du fichier brut,
+/// `riftbound/decks/README.md`), puis avec sideboard, puis le meilleur classement. Une liste retenue qui reçoit un
+/// ban cède donc la place à une liste légale.
 pub fn default_decks() -> BTreeMap<String, String> {
-    let mut best: BTreeMap<String, ((i64, i64, i64, String), String)> = BTreeMap::new();
+    let mut best: BTreeMap<String, ((i64, i64, i64, i64, String), String)> = BTreeMap::new();
     for k in decks().keys() {
         let d = tload(k);
         if validate(&d.json()).iter().any(|e| !e.starts_with('⚠')) {
@@ -1221,6 +1224,7 @@ pub fn default_decks() -> BTreeMap<String, String> {
         }
         let rank = (
             if banned(&d).is_empty() { 0 } else { 1 },
+            if decks()[k].g("defaut").truthy() { 0 } else { 1 },
             if d.sideboard.is_empty() { 1 } else { 0 },
             place(k),
             k.clone(),

@@ -1,0 +1,46 @@
+# legend: Jax, Grandmaster At Arms
+# player: Brandon Ho
+# event: CCS $25,000 Showdown Series Event - Riftbound Invitational Qualifie
+# date: 2026-09-19
+# placement: 270
+# players: 563
+# record: 4-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVH4AAAAMBQAABNHKCACBQDAASCUM3JOF3ACBIAKMBQCAAATQAQEAYAMHBACAIEAA2QEAIAACMAEBIDAA3G3QIB3EA5UAIAAIAQGABAAICQAKCVAIAQAAE4AEBQGABNNXBACAIDAA3A&name=Brandon+Ho+%C2%B7+CCS+%2425%2C000+Showdown+Series+Event+-+Riftbound+Invitational+Qualifie&event=25000-houston-invitational-qualifier-5&rank=270
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Jax, Grandmaster At Arms
+[champion]
+1 Jax, Unmatched
+[main]
+3 Defy
+3 Discipline
+3 First Mate
+3 Lonely Poro
+3 Brutalizer
+3 Guardian Angel
+3 Ruin Runner
+3 Lucian, Merciless
+3 Boneshiver
+3 Rampage
+2 Sabotage
+2 Punch First
+2 Counter Strike
+2 Scuttle Crab
+1 Akshan, Mischievous
+[runes]
+6 Calm Rune
+6 Body Rune
+[battlefields]
+1 Grove of the God-Willow
+1 Seat of Power
+1 Sunken Temple
+[sideboard]
+2 Disarming Rake
+2 Decree of Focus
+2 Decree of Strength
+1 Sabotage
+1 Not So Fast
+1 Akshan, Mischievous
+1 Counter Strike

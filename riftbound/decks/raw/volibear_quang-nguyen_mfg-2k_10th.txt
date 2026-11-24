@@ -1,0 +1,45 @@
+# legend: Volibear, Relentless Storm
+# player: Quang Nguyen
+# event: MFG's Riftbound $2k
+# date: 2026-11-22
+# placement: 10
+# players: 28
+# record: 3-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADX4AAAAQCQAAABBYTIGAMGAEBQIAC5NB3ACBIAWMAQCBQALQBAEAAADWGACAIDABVAIBIAAAUYAAMFAH4QDHYCAEBQBUIBAECQBHIBAEDAAVYBAEDAAAYCAEAAAFQBAYAE6AQCAAAIKAM4AEAQIADKAEAAAKI&name=Quang+Nguyen+%C2%B7+MFG%27s+Riftbound+%242k&event=the-rune-wars-riftbound-2k&rank=10
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Volibear, Relentless Storm
+[champion]
+1 Volibear, Furious
+[main]
+3 Blazing Scorcher
+3 Sky Splitter
+3 Kadregrin the Infernal
+3 Dune Drake
+3 Mobilize
+3 Dragonsoul Sage
+3 Gentle Gemdragon
+3 Elder Dragon
+3 Rengar, Trophy Hunter
+3 Seraphic Wyvern
+2 Falling Star
+2 Herald of Scales
+2 Show of Strength
+1 Challenge
+1 Flurry of Blades
+1 Portable Portal
+[runes]
+6 Fury Rune
+6 Body Rune
+[battlefields]
+1 Sigil of the Storm
+1 Forgotten Monument
+1 Dragon Roost
+[sideboard]
+3 Bilgewater Tracker
+2 Thermo Beam
+2 Avalanche
+1 Flurry of Blades
+1 Sabotage
+1 Repulse

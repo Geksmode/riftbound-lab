@@ -1,0 +1,51 @@
+# legend: Poppy, Keeper of the Hammer
+# player: Roman-Anthony Thomas Reece
+# event: CCS $25,000 Showdown Series Event - Riftbound Invit
+# date: 2026-09-19
+# placement: 280
+# players: 563
+# record: 4-6
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAD6AAAAAAIBAAANMAIDAEAABBABAEBQAYIEAQAFYX3BUIAQGAQAACAADCABAQCAA4M6AGYADTABAICQAU5TAEBQGAAA4AA6QAM6AIDAIADUTMA26AOLAHHQDVIBAECQAVAAAIAQGADJAECQAVIEAIAABEIB4AAQCAYAUMAQEBAATMA3AAIBAUAH4AIEAB2A&name=Roman-Anthony+Thomas+Reece+%C2%B7+CCS+%2425%2C000+Showdown+Series+Event+-+Riftbound+Invit&event=25000-houston-invitational-qualifier-5&rank=280
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Poppy, Keeper of the Hammer
+[champion]
+1 Poppy, Paragon
+[main]
+3 First Mate
+3 Punch First
+3 Demacian Diplomat
+3 Grim Resolve
+3 Kinkou Initiate
+3 Enthralling Protector
+2 Challenge
+2 Pit Rookie
+2 Master Yi, Tempered
+2 Shepherd's Heirloom
+2 Vi, Peacekeeper
+2 Keeper's Verdict
+2 Rampage
+2 Rengar, Trophy Hunter
+1 Salvage
+1 Fiora, Victorious
+1 Heroic Charge
+1 Tactical Retreat
+1 Ambessa, The Wolf
+[runes]
+8 Body Rune
+4 Order Rune
+[battlefields]
+1 Reckoner's Arena
+1 Amateur Recital
+1 Gardens of Becoming
+[sideboard]
+2 Ruin Runner
+2 Decree of Strength
+1 Unyielding Spirit
+1 Salvage
+1 Deathgrip
+1 Heroic Charge
+1 Vi, Peacekeeper
+1 Ki Barrier

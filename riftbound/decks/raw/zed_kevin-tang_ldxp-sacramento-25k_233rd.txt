@@ -1,0 +1,53 @@
+# legend: Zed, Master of Shadows
+# player: Kevin Tang
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 233
+# players: 745
+# record: 4-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAA4AACAIAACTACAADAEAAADABAUAGKAIGAAGAKBAAAAOSPLIBY4AQCAYAQAAQCBAASYAQCBIABQCAMAAOCVUWWBAFAAAAJKIBVQA3GANKAICAGAAVRQAZCAOYAEBAIAEAAHJACAQFABYI6AIAAIAQGAEIAEAQKADGAQAQAAFJAEBAGAAVSEAQEBAAQQAZGAIBAYAGKAIFABYA&name=Kevin+Tang+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=233
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Zed, Master of Shadows
+[champion]
+1 Zed, Without a Sound
+[main]
+3 Noxus Hopeful
+3 Gust Monk
+3 Runeblade Anvil
+2 Falling Star
+2 Kai'Sa, Survivor
+2 Ride The Wind
+2 Tideturner
+2 Overzealous Fan
+2 Vex, Apathetic
+2 Perfect Execution
+2 Shimmering Swimmer
+2 Ekko, Revolutionary
+2 Reckless Innovator
+2 Bedeviling Stranger
+1 Cleave
+1 Gust
+1 Rebuke
+1 Acceptable Losses
+1 Ferrous Forerunner
+1 Fizz, Trickster
+1 Switcheroo
+1 Star-Crossed
+[runes]
+7 Fury Rune
+5 Chaos Rune
+[battlefields]
+1 Zaun Warrens
+1 Rockfall Path
+1 Forbidding Waste
+[sideboard]
+2 Hard Bargain
+2 Ravenbloom Prefect
+1 Gust
+1 Ferrous Forerunner
+1 Switcheroo
+1 Angler Beast
+1 Baron Nashor
+1 An Offer You Can't Refuse

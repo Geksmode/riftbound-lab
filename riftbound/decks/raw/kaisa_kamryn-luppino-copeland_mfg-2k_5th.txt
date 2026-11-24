@@ -1,0 +1,45 @@
+# legend: Kai'Sa, Daughter of the Void
+# player: Kamryn Luppino-Copeland
+# event: MFG's Riftbound $2k
+# date: 2026-11-22
+# placement: 5
+# players: 28
+# record: 4-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAALEAACAIAAADQAAYFAAAASDA5L52ACAYAIEAQMAB4AMDAAAAODBLV2YD2AEBQAFIBAYAAGAYEAAACO2PXAGUAEAQDABINQAIBAQANIAIAAIBAAAASPMBQKAADB46QAAIAAATQ&name=Kamryn+Luppino-Copeland+%C2%B7+MFG%27s+Riftbound+%242k&event=the-rune-wars-riftbound-2k&rank=5
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Kai'Sa, Daughter of the Void
+[champion]
+1 Kai'Sa, Survivor
+[main]
+3 Hextech Ray
+3 Noxus Hopeful
+3 Falling Star
+3 Stupefy
+3 Thousand-Tailed Watcher
+3 Forecaster
+3 The Empyrean
+2 Sky Splitter
+2 Void Seeker
+2 Lecturing Yordle
+2 Smoke Screen
+2 Watchful Sentry
+2 Time Warp
+2 Ferrous Forerunner
+2 Bilgewater Tracker
+1 Singularity
+1 Bellows Breath
+[runes]
+7 Mind Rune
+5 Fury Rune
+[battlefields]
+1 Void Gate
+1 Rockfall Path
+1 Frozen Fortress
+[sideboard]
+2 Noxus Saboteur
+2 Unchecked Power
+2 Brittle Steel
+2 Decree of Rage
+2 Decree of Insight

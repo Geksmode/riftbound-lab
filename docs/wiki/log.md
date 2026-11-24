@@ -417,3 +417,6 @@ Choisis par l'utilisateur (propositions 1 et 2, puis « des puzzles »). Menu «
 
 ## [2026-11-24] fix | Conseil de l'IA moyenné sur 8 calculs
 Demande de l'utilisateur après le constat du bruit : « Conseil » (en partie) et « Analyser ce coup » (replay) donnent la moyenne de 8 simulations ± erreur type (`hintEval`) ; « sous 2 c'est du bruit » retiré des textes.
+
+## [2026-11-24] ingest | Ban list du 2026-11-23, decks par défaut refaits à partir de riftatlas.com
+10 cartes bannies de plus dans la base ; 58 decks par défaut légaux (37 tournois Radiance, 16 Vendetta, 5 communautaires), en-tête `# defaut:` lu par `train::default_decks`. riftatlas.com est lisible directement : scripts dans `riftbound/decks/riftatlas/`. Aucun tournoi d'après le ban publié ; Akali Heron illégal ; plans par légende à refaire. Détail : `riftbound/decks/README.md`.

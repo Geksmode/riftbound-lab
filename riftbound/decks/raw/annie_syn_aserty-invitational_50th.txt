@@ -1,0 +1,44 @@
+# legend: Annie, Dark Child
+# player: Syn
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 50
+# players: 58
+# record: 1-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAA4AACAIAACTACAAFAIAAADFNAEAQCAALAEBQAGICAQAAE7IEAUAAYYLENUBQCAAAWAAQCAYAQAAQEBAACWAACBABAAAKUAQCAEAAUEIBAMANSAICAUAGLJQBAIAQAAFTAEAQKADGAEAQIAALAIAQAAGAAEAQKADFAEAQACQ&name=Syn+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=50
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Annie, Dark Child
+[champion]
+1 Annie, Stubborn
+[main]
+3 Noxus Hopeful
+3 Ride The Wind
+3 Flash
+3 Rengar, Pouncing
+3 Inferna
+3 Lunar Boon
+3 Perfect Execution
+3 Spiderling
+3 Up from the Deep
+3 Illaoi, Prophet of the Great Kraken
+2 Sneaky Deckhand
+2 Overzealous Fan
+2 Grim Apothecary
+2 Star-Crossed
+1 Gust Monk
+[runes]
+7 Fury Rune
+5 Chaos Rune
+[battlefields]
+1 Zaun Warrens
+1 Seat of Power
+1 Threshold of the Gray
+[sideboard]
+3 Acceptable Losses
+3 Ravenbloom Prefect
+2 Fresh Beans
+1 Mindsplitter
+1 Gust Monk

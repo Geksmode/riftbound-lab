@@ -1,0 +1,44 @@
+# legend: Mordekaiser, Iron Revenant
+# player: Christian Mukai
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 89
+# players: 745
+# record: 7-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAD5MAIAAACAIAAABQT5UAPCAEBAGAAWTMAQCBAATEAQEBQAQEAZAAIEAMAABVIB3UA7CAIBAMALAAIBAQALAAIBAYAAGAYBAAAKUAQBAMANIAIDAYAISAMPAGTACAADAEAABYABAECABJABAICQAD4DAEBACAAADUAQGAAVAEDABCIB&name=Christian+Mukai+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=89
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Mordekaiser, Iron Revenant
+[champion]
+1 Mordekaiser, Dominating
+[main]
+3 Noxus Hopeful
+3 Kai'Sa, Survivor
+3 Vanguard Captain
+3 Spectral Matron
+3 Long Sword
+3 Honest Broker
+3 Carrion Dredger
+3 Trifarian Captain
+3 Realm of Death
+2 Hidden Blade
+2 Imperial Decree
+2 Shen, Kinkou
+2 Xin Zhao, Vigilant
+2 Vi, Peacekeeper
+2 Bilgewater Tracker
+[runes]
+6 Fury Rune
+6 Order Rune
+[battlefields]
+1 Zaun Warrens
+1 Minefield
+1 Ruined Monastery
+[sideboard]
+2 Salvage
+2 Safety Inspector
+2 Decree of Rage
+2 Decree of Unity
+1 Falling Star
+1 Ferrous Forerunner

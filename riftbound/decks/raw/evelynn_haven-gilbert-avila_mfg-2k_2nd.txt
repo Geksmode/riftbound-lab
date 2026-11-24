@@ -1,0 +1,51 @@
+# legend: Evelynn, Agony's Embrace
+# player: Haven Gilbert-Avila
+# event: MFG's Riftbound $2k
+# date: 2026-11-22
+# placement: 2
+# players: 28
+# record: 5-2-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAB7KMAIAAABAEBAAMGIQCAYFABRWRMYBAUAQAAFJAEBAGADBRMAQEBAAQAAZMAIBAUAFGBAGABDGO2LLAQAQAAFAAICAGAEFAGGADEIBSUAQCBAARUAQGBQATEAZ2ANDAEAACAIDABUQIAIAACIQCAQDACEADDABAICQAUKTAMDAAVLFNIAQIAENAE&name=Haven+Gilbert-Avila+%C2%B7+MFG%27s+Riftbound+%242k&event=the-rune-wars-riftbound-2k&rank=2
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Evelynn, Agony's Embrace
+[champion]
+1 Evelynn, Entrancing
+[main]
+3 Kinkou Initiate
+3 Pyke, Returned
+3 Tornado Warrior
+3 Tail-Cloaked Matriarch
+3 Rengar, Trophy Hunter
+2 Gust
+2 Punch First
+2 Edge of Night
+2 Star-Crossed
+2 Vex, Apathetic
+2 Rampage
+2 Hold 'Em
+2 Gutter Guardian
+2 Reckless Innovator
+2 Bedeviling Stranger
+1 Boots of Swiftness
+1 Fizz, Trickster
+1 Switcheroo
+1 Ezreal, Prodigy
+[runes]
+6 Body Rune
+6 Chaos Rune
+[battlefields]
+1 Startipped Peak
+1 Bandle Scouts' Academy
+1 Hunters' Circle
+[sideboard]
+2 Ruin Runner
+1 Unyielding Spirit
+1 Hard Bargain
+1 Fizz, Trickster
+1 Onslaught
+1 Rampage
+1 Graves, Blasting Through
+1 An Offer You Can't Refuse
+1 The Good Stuff

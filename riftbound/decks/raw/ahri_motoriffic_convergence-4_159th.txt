@@ -1,0 +1,51 @@
+# legend: Ahri, Nine-Tailed Fox
+# player: Motoriffic
+# event: Convergence IV
+# date: 2026-10-31
+# placement: 159
+# players: 227
+# record: 0-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVFSAAAAMAQAADHAEBQAOYDAQACSNKXAQCQAABLFU5FDAACAEBQALIBAQADYAIGAAUQGBQAABAEE577AGQAFJYCAIBQAPCGAUDAAIRGFQW2CAIAAMAQGABAAECAARQBAUACOAYCAAAHI5YBAMACWAIEAA4QCAAAII&name=Motoriffic+%C2%B7+Convergence+IV&event=convergence-4&rank=159
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Ahri, Nine-Tailed Fox
+[champion]
+1 Ahri, Alluring
+[main]
+3 Ravenbloom Student
+3 Svellsongur
+3 Allay, Eager Admirer
+3 Scuttle Crab
+3 Blue Sentinel
+2 Charm
+2 Defy
+2 Discipline
+2 Seal of Focus
+2 Fox-Fire
+2 Not So Fast
+2 Vilemaw
+2 Hush
+1 Wind Wall
+1 Ahri, Inquisitive
+1 Tianna Crownguard
+1 Wages of Pain
+1 Hunker Down
+1 Ahri, Confident
+1 Hunting Blind
+1 K'Sante, Dauntless
+[runes]
+6 Calm Rune
+6 Mind Rune
+[battlefields]
+1 Startipped Peak
+1 Vilemaw's Lair
+1 Durand Memorial
+[sideboard]
+2 Disarming Rake
+2 Turn to Dust
+2 Crumbling Sands
+1 Thousand-Tailed Watcher
+1 Ahri, Inquisitive
+1 Emperor's Divide
+1 Alpha Wildclaw

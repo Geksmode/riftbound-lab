@@ -1,7 +1,7 @@
 {
- "engine_md5": "29ad6490a9",
- "python": "3.13.18",
- "seconds": 10.6,
+ "engine_md5": "579dcdb4af-rust",
+ "rust": "0.1.0",
+ "seconds": 7.8,
  "games": [
   {
    "seed": 910001,
@@ -10,11 +10,11 @@
     "Draven, Glorious Executioner",
     "Miss Fortune, Bounty Hunter"
    ],
-   "decisions": 172,
-   "winner": 1,
-   "turns": 19,
-   "md5": "980bcabdcb2757546840c0760a527dea",
-   "s": 4.8
+   "decisions": 126,
+   "winner": 0,
+   "turns": 16,
+   "md5": "31b45b53d9936ae5d75c6bbd3efdef9f",
+   "s": 1.7
   },
   {
    "seed": 910002,
@@ -23,11 +23,11 @@
     "Vi, Piltover Enforcer",
     "Azir, Emperor of the Sands"
    ],
-   "decisions": 141,
-   "winner": 0,
-   "turns": 16,
-   "md5": "cd2e80fad89bf4efd90f079b429e8234",
-   "s": 10.4
+   "decisions": 168,
+   "winner": 1,
+   "turns": 17,
+   "md5": "823761f8933aa0f81fdc8b1fec8b3729",
+   "s": 3.8
   },
   {
    "seed": 910003,
@@ -36,11 +36,11 @@
     "Jarvan IV, Exemplar of Demacia",
     "Vi, Piltover Enforcer"
    ],
-   "decisions": 61,
-   "winner": 0,
-   "turns": 11,
-   "md5": "bea223a086066b97a80e5660af283cef",
-   "s": 2.9
+   "decisions": 160,
+   "winner": 1,
+   "turns": 14,
+   "md5": "93683dd3071c32a1ce775c5359cb71a4",
+   "s": 2.7
   },
   {
    "seed": 910004,
@@ -49,11 +49,11 @@
     "K'Sante, Pride of Nazumah",
     "Lucian, Purifier"
    ],
-   "decisions": 66,
+   "decisions": 172,
    "winner": 1,
-   "turns": 11,
-   "md5": "7be173469be8c324e85c5322deddcbba",
-   "s": 1.2
+   "turns": 17,
+   "md5": "75f20ca51a3d508a1e8cd15821f056d9",
+   "s": 4.2
   },
   {
    "seed": 910005,
@@ -62,10 +62,10 @@
     "Poppy, Keeper of the Hammer",
     "Master Yi, Wuju Master"
    ],
-   "decisions": 130,
+   "decisions": 176,
    "winner": 0,
-   "turns": 18,
-   "md5": "08ab02b6163243043b0f5686e29a52b9",
+   "turns": 16,
+   "md5": "3dbcb890b3940279c6c032e84c07fd0d",
    "s": 6.0
   }
  ]

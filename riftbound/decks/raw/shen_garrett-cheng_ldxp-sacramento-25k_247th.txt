@@ -1,0 +1,50 @@
+# legend: Shen, Eye of Twilight
+# player: Garrett Cheng
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 247
+# players: 745
+# record: 4-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAA2YAQAAIBAAACUAAEAMAAALJ25AAQEAYAUEA2OAIBAQAJYAIBAUABYBACAAACXVIBAIBQBGYBWQAQCBAAWAAQEBQAEB5QIBAAABF6AAPRAGTAEAIDAAVQGBIAQ4AZGAM7AEAQMAFEAEAACAIFACBQCBICAAANYAPAAEBAGABAFUBAIABKVEAQCBIAFAAQMABJAEAAB4IB&name=Garrett+Cheng+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=247
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Shen, Eye of Twilight
+[champion]
+1 Shen, Kinkou
+[main]
+3 Defy
+3 Discipline
+3 Fiora, Victorious
+3 B.F. Sword
+3 Unsung Hero
+3 Loyal Poro
+3 Mournful Witness
+2 Charm
+2 Hidden Blade
+2 Honest Broker
+2 Fiora, Worthy
+2 Vi, Peacekeeper
+2 Battle Preparations
+2 Protector's Shield
+1 Tasty Faefolk
+1 Salvage
+1 Emperor's Divide
+1 Kennen, Keeper of Balance
+[runes]
+7 Order Rune
+5 Calm Rune
+[battlefields]
+1 Trifarian War Camp
+1 Kinkou Temple
+1 Packed Amphitheater
+[sideboard]
+2 Decree of Unity
+1 Facebreaker
+1 Salvage
+1 Disarming Rake
+1 Not So Fast
+1 Back Off
+1 Ashe, Focused
+1 Decree of Focus
+1 Hush

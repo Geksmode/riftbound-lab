@@ -1,0 +1,47 @@
+# legend: Ekko, Boy Who Shattered Time
+# player: Eric Zhang
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 430
+# players: 745
+# record: 3-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADVSAAAAMCAAAAME5LV6AIDABCQCBAAAIBQMAAAAQOSGYDUPMAQKAB3AIDAAAYVAQBAAAA3PIAQGAGZAEBQIAA42IA5MAICAYAD3CYBAEAQKAADAIAQGACKAECQAPIBAMAAAHLIPMAQMAB5&name=Eric+Zhang+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=430
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Ekko, Boy Who Shattered Time
+[champion]
+1 Ekko, Ingenious
+[main]
+3 Noxus Hopeful
+3 Kai'Sa, Survivor
+3 Lecturing Yordle
+3 Stupefy
+3 Plundering Poro
+3 Inferna
+2 Cleave
+2 Falling Star
+2 Vayne, Hunter
+2 Watchful Sentry
+2 Thousand-Tailed Watcher
+2 Unchecked Power
+2 Shock Blast
+2 Bilgewater Tracker
+2 Ekko, Revolutionary
+1 Darius, Trifarian
+1 Time Warp
+1 Pyke, Dockside Butcher
+[runes]
+6 Fury Rune
+6 Mind Rune
+[battlefields]
+1 Seat of Power
+1 Forbidding Waste
+1 Ripper's Bay
+[sideboard]
+3 Brittle Steel
+2 Pickpocket
+2 Decree of Insight
+1 Falling Star
+1 Retreat
+1 Unchecked Power

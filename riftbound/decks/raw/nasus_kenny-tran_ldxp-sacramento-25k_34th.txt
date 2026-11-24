@@ -1,0 +1,47 @@
+# legend: Nasus, Curator of the Sands
+# player: Kenny Tran
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 34
+# players: 745
+# record: 8-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAALEAACAIAAAVAABAFAAAC2OS7M52AEAYAERIACBAAGUBAMAA5HQBACAAAF4AQKACCAUBAAAD2PMAQGAGYAEBAIACF2QAQGBIAEU7ZCAICAYACTJQBAABACBAAHQBAKABIHUBAGBIAD4SSOAIGAAUQCBIAH4&name=Kenny+Tran+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=34
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Nasus, Curator of the Sands
+[champion]
+1 Nasus, Guardian of Knowledge
+[main]
+3 Defy
+3 Discipline
+3 Stupefy
+3 Ravenbloom Student
+3 Thousand-Tailed Watcher
+3 Lonely Poro
+3 Bellows Breath
+3 Scuttle Crab
+3 Life from Stone
+3 The Empyrean
+2 Find Your Center
+2 Temporal Breach
+1 Time Warp
+1 Unchecked Power
+1 Sprite Burst
+1 Tomb-Raider Barbara
+1 Hush
+[runes]
+7 Mind Rune
+5 Calm Rune
+[battlefields]
+1 Rockfall Path
+1 Frozen Fortress
+1 Ruined Monastery
+[sideboard]
+2 Vilemaw
+2 Decree of Focus
+2 Decree of Insight
+1 Twilight Shroud
+1 Tomb-Raider Barbara
+1 Crumbling Sands
+1 Hush

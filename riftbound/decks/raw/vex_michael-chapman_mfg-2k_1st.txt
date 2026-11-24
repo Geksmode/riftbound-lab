@@ -1,0 +1,53 @@
+# legend: Vex, Gloomist
+# player: Michael Chapman
+# event: MFG's Riftbound $2k
+# date: 2026-11-22
+# placement: 1
+# players: 28
+# record: 6-0-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVKMAIAAACACAAAFUAQIAERAEBAKABLFQAQMADLAUBAAAB2VQAQEAYAQUAZCAICAQACVDIBAECQAYYBAYAGUAYGAAACWQ5JAGWQDRYBUABAKBAAQAAYGAMPAGLADQIBAIDABHIBUQAQAAIBAUACKBIBAAAKSAIBAMAC2AIEAA6AGBIAD4UGGAQGAAUWKAIEACLAC&name=Michael+Chapman+%C2%B7+MFG%27s+Riftbound+%242k&event=the-rune-wars-riftbound-2k&rank=1
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Vex, Gloomist
+[champion]
+1 Vex, Apathetic
+[main]
+3 Defy
+3 Pyke, Returned
+3 Steel Paws
+3 Astral Heron
+3 Bedeviling Stranger
+2 Discipline
+2 Rebuke
+2 Boots of Swiftness
+2 Switcheroo
+2 Back Off
+2 Evelynn, Entrancing
+2 Tornado Warrior
+2 The Good Stuff
+1 Charm
+1 Blitzcrank, Impassive
+1 Gust
+1 Ride The Wind
+1 Tideturner
+1 Star-Crossed
+1 Abandon
+1 Kha'Zix, Mutating Horror
+[runes]
+6 Calm Rune
+6 Chaos Rune
+[battlefields]
+1 Startipped Peak
+1 Bandle Scouts' Academy
+1 Packed Amphitheater
+[sideboard]
+2 Tomb-Raider Barbara
+1 Gust
+1 Not So Fast
+1 Vilemaw
+1 Twilight Shroud
+1 Decree of Focus
+1 Tornado Warrior
+1 Hush
+1 An Offer You Can't Refuse

@@ -1,0 +1,44 @@
+# legend: Miss Fortune, Bounty Hunter
+# player: Maddie - Judge_Azooka
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 32
+# players: 58
+# record: 1-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAPYAACAIAACTACAADAQAABBIBT4A3SAMMAIAQGAECAEBQMADAMVYAIAQDABYZMAICAQAF7FQBAECQBMYBAIDAAWDCAQBQAAGBAGFQFIICAEBQA4YBAQANIAIBAUAJ4AIBAEBQA3IBAIAABAABVEAQCAIEACAACAIAADAQC&name=Maddie+-+Judge_Azooka+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=32
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Miss Fortune, Bounty Hunter
+[champion]
+1 Miss Fortune, Buccaneer
+[main]
+3 Flurry of Blades
+3 Warwick, Hunter
+3 Traveling Merchant
+3 Bullet Time
+3 Treasure Hunter
+3 Satchel Charge
+3 An Offer You Can't Refuse
+3 Ziggs, Explosive
+2 Lucian, Merciless
+2 Last Rites
+2 Grim Resolve
+2 Vex, Apathetic
+2 Rengar, Trophy Hunter
+2 Staunch Survivor
+2 Siren's Song
+1 Trinity Force
+[runes]
+7 Body Rune
+5 Chaos Rune
+[battlefields]
+1 Targon's Peak
+1 Frozen Fortress
+1 Heisho, Shell of the World
+[sideboard]
+3 Akshan, Mischievous
+2 Challenge
+2 Gust
+1 Star-Crossed

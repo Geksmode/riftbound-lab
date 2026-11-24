@@ -28,6 +28,7 @@ cd ../riftbound/engine
 ../../rust/target/release/empreinte      # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
 ../../rust/target/release/fuzz_cards 200 --module fury  # parties aléatoires avec un paquet (0 exception attendu)
 ../../rust/target/release/t_rand 40      # 40 parties avec des decks légaux au hasard
+python3 ../decks/check_raw.py ../decks/raw/<fichier>.txt   # valide un deck brut avec le moteur (outil check_decks) ; collecte riftatlas : ../decks/riftatlas/README.md
 ../../rust/target/release/sprt <graine0> <A> <B>   # test séquentiel (en-tête de rust/src/bin/*.rs pour les options)
 cd ../train && bash fetch_vendor.sh && bash build.sh   # table dans train/build/ (moteur Rust en WebAssembly : cargo + cible wasm32-unknown-unknown)
 ```

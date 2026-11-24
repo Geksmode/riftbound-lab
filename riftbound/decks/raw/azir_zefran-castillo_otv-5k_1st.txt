@@ -1,0 +1,47 @@
+# legend: Azir, Emperor of the Sands
+# player: Zefran Castillo
+# event: Open the Vault - Riftbound $5k
+# date: 2026-11-21
+# placement: 1
+# players: 42
+# record: 8-1-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAFIAACAIAADLACAADAIAAALJ2AUBQAIJKTEA2CAOGAEAQIABHAQAQAAGVAEBAGAE2AGRQCAIEAAVACBQAEACAEAAAFOTAEBADACYQDRIB2IA5SAIBAUABWAYGAAOCGKQAAIBAAABL4AAQEBIAFCBQCAQBAQALAAIBAYACSAIDACYQC&name=Zefran+Castillo+%C2%B7+Open+the+Vault+-+Riftbound+%245k&event=open-the-vault-riftbound-5k&rank=1
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Azir, Emperor of the Sands
+[champion]
+1 Azir, Sovereign
+[main]
+3 Defy
+3 Discipline
+3 Doran's Shield
+3 Brutalizer
+3 Eye of the Herald
+3 B.F. Sword
+3 Arise!
+3 Soul Sword
+2 Hidden Blade
+2 Guards!
+2 Deathgrip
+2 Back Off
+2 Battle Preparations
+1 Charm
+1 Hand Hammer
+1 Ki Burst
+1 Invigorating Bloom
+1 Orianna, Exquisite
+[runes]
+7 Calm Rune
+5 Order Rune
+[battlefields]
+1 Trifarian War Camp
+1 Hall of Legends
+1 Seat of Power
+[sideboard]
+2 Charm
+2 Salvage
+2 Decree of Focus
+2 Decree of Unity
+1 Vi, Peacekeeper
+1 Hush

@@ -1,0 +1,47 @@
+# legend: Rumble, Mechanized Menace
+# player: Evan M Nouchi
+# event: LDXP Sacramento - Nexus Night Constructed
+# date: 2026-10-24
+# placement: 7
+# players: 58
+# record: 3-0
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAALEAACAIAAADQAAYCAAAF65AEAMAAOFJ6IEAQMAALAQBQAAAMDBUQEAYADJGQCBIAIIAQMABXAQBAAAAIDUCQGAA2LG2QDVAB3AAQCBAAH4AQMAFGAEAAKAIAAALACAYAAEAQIACGAECQADYBAYADWAABAMABU&name=Evan+M+Nouchi+%C2%B7+LDXP+Sacramento+-+Nexus+Night+Constructed&event=ldxp-sacramento-nexus-night-constructed&rank=7
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Rumble, Mechanized Menace
+[champion]
+1 Rumble, Hotheaded
+[main]
+3 Stupefy
+3 Thousand-Tailed Watcher
+3 Gem Jammer
+3 Ferrous Forerunner
+3 Bubble Bot
+3 Forecaster
+3 Incorrigible Construct
+2 Noxus Hopeful
+2 Void Seeker
+2 Singularity
+1 Rumble, Hotheaded
+2 Rocket Barrage
+2 Temporal Breach
+2 Clanging Sentry
+1 Get Excited!
+1 Falling Star
+1 Rumble, Hotheaded
+1 Rumble, Scrapper
+1 Eclipse
+[runes]
+7 Mind Rune
+5 Fury Rune
+[battlefields]
+1 Minefield
+1 Rockfall Path
+1 Ruined Monastery
+[sideboard]
+2 Thermo Beam
+2 Against the Odds
+2 Turn to Dust
+2 Decree of Rage
+2 Supernova

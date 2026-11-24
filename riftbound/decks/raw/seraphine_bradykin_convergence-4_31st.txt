@@ -1,0 +1,46 @@
+# legend: Seraphine, Starry-Eyed Songstress
+# player: Bradykin
+# event: Convergence IV
+# date: 2026-10-31
+# placement: 31
+# players: 227
+# record: 4-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAABM5MAIAAACAIAAAL5QGPXIBAEBQAUACAQAD7GIBAIDAANMYAECACAYAVUAQCBAAIUAQKABRAEDABBQBAQCAAAD22UA6AANBAIAQGAGZAEAQKAD6AMDABCQBS4AZ6AIAAIAQAAHAAEBQKAB5IWBQCAQBAAAGYAIFAB7ACBQARIAQ&name=Bradykin+%C2%B7+Convergence+IV&event=convergence-4&rank=31
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Seraphine, Starry-Eyed Songstress
+[champion]
+1 Seraphine, Not Alone
+[main]
+3 Stupefy
+3 Watchful Sentry
+3 Ravenbloom Student
+3 Imperial Decree
+3 Bellows Breath
+3 Eclipse
+3 Carrion Dredger
+3 Strigian Oracle
+3 Encore
+2 Soraka, Wanderer
+2 Sprite Burst
+2 Dredge Up
+2 Raucous Anthem
+1 Time Warp
+1 Hidden Blade
+1 Salvage
+1 Ki Barrier
+[runes]
+6 Mind Rune
+6 Order Rune
+[battlefields]
+1 Targon's Peak
+1 Seat of Power
+1 Black Rose Sanctum
+[sideboard]
+2 Salvage
+2 Decree of Insight
+2 Mel, Newly Awakened
+2 Decree of Unity
+1 Convergent Mutation
+1 Ki Barrier
