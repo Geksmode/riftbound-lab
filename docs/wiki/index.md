@@ -8,7 +8,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | savoir où en est le projet | [pages/etat.md](pages/etat.md) |
 | trouver un fichier, lancer tests ou build | [pages/depot.md](pages/depot.md) |
 | intégrer une branche, vérifier avant de pousser | [pages/porte.md](pages/porte.md) |
-| modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md`, `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md), [Radiance](pages/radiance.md) |
+| modéliser une carte ou déboguer une interaction | `riftbound/engine/README.md` (moteur en Rust : `rust/src/cardsets/`), `riftbound/engine/cardsets/GUIDE.md`, [moteur](../memoire/riftbound-engine.md), [Radiance](pages/radiance.md) |
 | travailler sur l'IA ou les plans | [recherche de l'IA générale](../memoire/riftbound-search-ai.md), [plans](../memoire/riftbound-gameplans.md), [IA tempo](../memoire/riftbound-tempo-ai.md), [réglage Texel des poids](../memoire/ia-texel.md), [banc d'erreurs de cible et de timing](../memoire/ia-banc-erreurs.md), [plans par légende](../memoire/plans-par-legende.md) (fiches `riftbound/gameplans/legendes.md`), [LeBlanc réel](../memoire/leblanc-real-play.md), [parties](../memoire/riftbound-train-games.md) |
 | analyser les parties de l'utilisateur | [pages/parties.md](pages/parties.md) |
 | comparer ou regrouper des résultats, garder un réglage de l'IA | [pages/resultats.md](pages/resultats.md), [test séquentiel](../memoire/ia-sprt.md), [réalisme](../memoire/ia-realisme.md) |
@@ -20,17 +20,17 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | reprendre le compte, la routine, les artefacts | `docs/REPRISE.md` (§2 artefacts, §3 publication, §4 routine) |
 
 ## Pages du wiki
-- [État du travail](pages/etat.md) : fait, en cours, à faire (2026-10-07)
+- [État du travail](pages/etat.md) : fait, en cours, à faire (2026-11-24)
 - [Carte du dépôt et commandes](pages/depot.md) : dossiers, tests, build
 - [Équipe d'agents](pages/equipe.md) : chef, agents tmux, intégration
 - [Garde-fous automatiques](pages/harness.md) : hooks (push, fin de session, démarrage), contrat de tâche, escalade, worktrees
 - [Publication de la table](pages/publication.md) : Pages, artefact, pièges
-- [Chiffres versionnés](pages/resultats.md) : version du moteur dans chaque résultat, `compare.py`
+- [Chiffres versionnés](pages/resultats.md) : version du moteur dans chaque résultat, `compare`
 - [Duel entre amis](pages/duel.md) : room avec code (PeerJS), BO1 / BO3, ce qui est testé et ce qui ne l'est pas
 - [Match BO1 / BO3 et sideboard](pages/match.md) : règles du match, code, choix de l'IA
 - [Tutoriel « Apprendre à jouer »](pages/tutoriel.md) : partie guidée pas à pas pour débutants complets (12 leçons, 6 défis, zones surlignées, focus et priorité), lexique et mots-clés expliqués, Yi contre Darius
 - [Boucle des parties](pages/parties.md) : garder, déposer, rejouer fidèlement, analyser tes parties
-- [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.py` (moteur), robot `verif_anglais.mjs`
+- [Version anglaise de la table](pages/anglais.md) : bouton English / Français, `i18n.js` (page), `lang.rs` (moteur), robot `verif_anglais.mjs`
 - [Porte d'intégration](pages/porte.md) : `scripts/verifier.sh`, ce qu'il vérifie, CI
 - [Extension Radiance](pages/radiance.md) : 166/167 cartes modélisées, Deploy (gear affiché sur son battlefield) / Disarm / Show Off, corrections de la source, Neeko bloquée
 

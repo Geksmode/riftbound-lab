@@ -4,6 +4,8 @@ description: Training table v11 deck builder (all 938 cards, only IMPL cards pla
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 2026-10-07: the user asked for a menu to build any decklist and play it against the AI, then « modélise toutes les cartes de riftbound ». Decision card: cards not yet modelled are greyed and blocked from play (option « Bloquer »), never played as stats-only.
 
 - Page v11 (artifact HTmfbgtzcPP7jN7UsCfcHC):

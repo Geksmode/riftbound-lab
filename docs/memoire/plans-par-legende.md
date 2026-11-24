@@ -4,6 +4,8 @@ description: 2026-10-11 : un plan de jeu sourcé pour chacune des 49 légendes d
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 Demande de l'utilisateur (2026-10-11) : « chercher chaque gameplan pour chaque légende par défaut ». Il fait les mesures
 lui-même, en local (plus rapide).
 
@@ -15,9 +17,9 @@ donnent surtout les cartes clés (en codes, traduits avec `cards_unique.csv`) et
 
 **Code :** `engine/plans_legendes.py`, table `LEG` (axe conquérant / tenant, style, `garde` pour le mulligan, `cles` valorisées
 en jeu, source, date). `LegendPlan` agit sur le mulligan et `shape`. Les poids sont choisis sans mesure (`RB_LEG_*`). Akali et
-LeBlanc gardent Gorica et Hook tempo. Rien n'est branché dans `train.py` ni dans la table.
-Mesure : `exp_search.py 80 <graines neuves> "sh@plan=leg" sh defaut`, puis une confirmation sur d'autres graines neuves.
-Tests : `cardsets/test_plans_legendes.py`. Les fiches `gameplans/legendes.md` sont générées par `python3 plans_legendes.py`.
+LeBlanc gardent Gorica et Hook tempo. Rien n'est branché dans `train.rs` ni dans la table.
+Mesure : `exp_search 80 <graines neuves> "sh@plan=leg" sh defaut`, puis une confirmation sur d'autres graines neuves.
+Tests : `cargo test`. Les fiches `gameplans/legendes.md` sont générées par le moteur (`rust/src/plans_legendes.rs`).
 
 **À ne pas oublier :** aucune partie de ce plan n'est mesurée. Le choix de battlefield (`Plan.battlefield`) n'est pas codé : en
 mode defaut, le battlefield est tiré au hasard. 18 decks par défaut sur 49 ont encore une carte ou un battlefield banni depuis (Stacked Deck, Ekko, Recurrent, The Arena's Greatest,

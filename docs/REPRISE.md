@@ -4,16 +4,16 @@ Ce document dit où en est le travail, ce qui restait lié à l'ancien compte Cl
 
 ## 1. État du travail
 - **Moteur** : Baron Nashor et le jeton Baron Pit sont modélisés depuis le 2026-10-19 (battlefields en liste de taille
-  variable : `is_bf`, `g.bf_locs`). Encore bloquées : Neeko, Blending In (voir `docs/wiki/pages/radiance.md`). Suite : `python3 test_all.py` = 968/968.
+  variable : `is_bf`, `g.bf_locs`). Encore bloquées : Neeko, Blending In (voir `docs/wiki/pages/radiance.md`). Suite (au 2026-10-07, moteur Python) : `test_all.py` = 968/968 ; depuis le 2026-11-24 : `cd rust && cargo test --release`.
   Détails et décisions de règles par paquet : `riftbound/engine/cardsets/NEEDS_*.md`, guide `cardsets/GUIDE.md`.
 - **Table d'entraînement** : dernière version publiée = v12 (768 cartes jouables à ce moment). Le moteur du dépôt
   (917 cartes) **n'a pas encore été publié** dans la page : refaire `bash build.sh` puis publier (§3).
-- **IA** : plans propres pour Akali (Gorica) et LeBlanc (Hook tempo) dans `engine/plans.py` ; toute autre légende
+- **IA** : plans propres pour Akali (Gorica) et LeBlanc (Hook tempo) dans `rust/src/plans.rs` (avant le 2026-11-24 : `engine/plans.py`) ; toute autre légende
   joue avec l'IA générique (plus faible). Piste : écrire des plans pour les légendes que l'utilisateur joue.
 - **Parties de l'utilisateur** : 17 parties enregistrées par la table (`riftbound/train/games/games/*.json`) et ses
   decks (`riftbound/train/games/decks/`). Demande en attente : « apprends sur ce que je fais contre LeBlanc, et
-  affine l'IA de LeBlanc avec ce que j'ai fait pour gagner ». Outil prêt : `cd riftbound/engine && python3
-  train_games.py ../train/games/games/*.json --coach` (rejoue chaque partie, vérifie la fidélité, écrit
+  affine l'IA de LeBlanc avec ce que j'ai fait pour gagner ». Outil prêt : `cd riftbound/engine &&
+  ../../rust/target/release/train_games ../train/games/games/*.json --coach` (rejoue chaque partie, vérifie la fidélité, écrit
   `train/analyses/<id>.md` et `choices.jsonl`). Une partie enregistrée avant le 7/10 au soir a été jouée avec un
   moteur plus ancien : si la vérification de fidélité échoue, le dire, ne pas forcer.
   Mécanisme proposé : un modèle des choix de l'utilisateur sert d'`opp_plan` à LeBlanc au lieu du plan Gorica, mesuré
@@ -36,17 +36,16 @@ La table enregistrait les parties et les decks dans la base de l'artefact (capac
 ## 3. Republier la table d'entraînement
 ```bash
 cd riftbound/train
-bash fetch_pyodide.sh      # une fois (npm pack pyodide@0.26.4 ; le CDN jsdelivr est souvent bloqué)
-bash build.sh              # -> build/train.html + build/py, build/pyodide, build/atlas, build/img, build/data
+bash fetch_vendor.sh       # une fois (PeerJS)
+bash build.sh              # compile le moteur Rust en WebAssembly -> build/train.html + build/riftbound.wasm, build/atlas, build/img, build/data
 python3 serve_csp.py &     # test local avec la politique de sécurité de claude.ai
 python3 dk2.py 1400 900    # robot Playwright : partie complète avec deux decks au hasard (adapter le port/chemins)
 ```
 Publication (outil Artifact de Claude) : `file_path` = `build/train.html`, `root` = `build`, `files` = tous les
-fichiers de `build/` sauf train.html (les `.py` avec `contentType: text/plain`), `capabilities: {"db": {}}`.
+fichiers de `build/` sauf train.html (`.wasm` en `application/wasm`), `capabilities: {"db": {}}`.
 Pièges connus :
-- la page claude.ai interdit les URL `blob:` et le `fetch` d'un blob : la bibliothèque standard Python est publiée en
-  base64 (`python_stdlib.b64.txt`) et servie par une interception de `fetch` (déjà dans `src.html`) ;
-- `.zip` n'est pas servi par les artefacts, d'où le base64 ;
+- (historique, Pyodide) la page claude.ai interdit les URL `blob:` : la bibliothèque standard Python était publiée en
+  base64 et servie par une interception de `fetch` ; plus utile depuis le wasm du 2026-11-24 ;
 - 255 fichiers au plus par publication ; la version complète en compte environ 110 ;
 - dans un test Playwright, la politique de sécurité bloque `wait_for_function` : sonder avec `evaluate` en boucle.
 `src.html` est la copie maîtresse de la page (CSS dans `base.css`, injecté par build.sh). Les vieux robots

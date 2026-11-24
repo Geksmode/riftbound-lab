@@ -6,21 +6,21 @@
 - [akali-gorica-heron](akali-gorica-heron.md) — user plays Gorica's Akali Heron; best build G2 52.9% vs LeBlanc
 - [retex-method](retex-method.md) — 'retex' = self-critical review; fresh-seed and anti-pooling rules for sims
 - [riftbound-vault](riftbound-vault.md) — "le vault" = Obsidian markdown vault /mnt/project-files/vault/, keep it updated
-- [riftbound-replays](riftbound-replays.md) — graphical replay viewer artifact, recorder engine/replay.py, curated games
+- [riftbound-replays](riftbound-replays.md) — graphical replay viewer artifact, recorder rust/src/replay.rs, curated games
 - [riftbound-manager](riftbound-manager.md) — 6h routine running matchup sim sessions + retex, riftbound/manager/
-- [riftbound-gameplans](riftbound-gameplans.md) — player gameplans in engine/plans.py; Gorica engine plan ~53% vs LeBlanc Hook tempo
+- [riftbound-gameplans](riftbound-gameplans.md) — player gameplans in rust/src/plans.rs; Gorica engine plan ~53% vs LeBlanc Hook tempo
 - [riftbound-search-ai](riftbound-search-ai.md) — IA générale 2026-10-09 : tirages communs + élimination en passes (défaut « sh »), +15 points contre l'ancienne sur 49 decks, essais d'évaluation non retenus, temps par coup ; sorts de combat gardés en main et runes ouvertes (2026-10-10)
 - [ia-texel](ia-texel.md) — 2026-10-20 : réglage Texel des poids ai.EV sur 2 004 parties sh, gardé par deux tests séquentiels (53,5 % ± 0,9 regroupé), par défaut dans ai.EV (RB_EV=old) ; ≈ 20 % plus de réflexion en partie ; outils engine/texel/
-- [ia-sprt](ia-sprt.md) — règle 2026-10-20 : réglage gardé si +2 points démontré par test séquentiel (mesure/sprt.py), confirmé sur graines neuves ; durées réelles ; piège cp1252 sous Windows
+- [ia-sprt](ia-sprt.md) — règle 2026-10-20 : réglage gardé si +2 points démontré par test séquentiel (`sprt`, Rust), confirmé sur graines neuves ; durées réelles ; piège cp1252 sous Windows
 - [ia-banc-erreurs](ia-banc-erreurs.md) — 2026-10-28 : banc d'erreurs de cible et de timing (engine/banc/), juge à deux jeux de poids ; IA Normal 3,4 % ± 0,4 de choix nettement mauvais, 11 % de sorts sans effet visible ; ask_sim rejeté, spell_pre « on ne sait pas » ; coût moyen d'une erreur −0,8 ± 2,4 points de victoire
 - [ia-realisme](ia-realisme.md) — règle 2026-10-29 : réglage qui corrige des erreurs marquées par l'utilisateur gardé s'il ne fait pas perdre (deux tests de non-infériorité 48,5/50 %)
 - [ia-tests-decks-varies](ia-tests-decks-varies.md) — règle 2026-10-10 : tester l'IA sur des decks variés (exp_search defaut, ~80 paires), plus d'Akali contre LeBlanc par défaut
-- [plans-par-legende](plans-par-legende.md) — 2026-10-11 : plan sourcé pour les 49 légendes par défaut (plans_legendes.py, gameplans/legendes.md), non mesuré, « @plan=leg » dans exp_search
+- [plans-par-legende](plans-par-legende.md) — 2026-10-11 : plan sourcé pour les 49 légendes par défaut (plans_legendes.rs, gameplans/legendes.md), non mesuré, « @plan=leg » dans exp_search
 - [riftbound-tempo-ai](riftbound-tempo-ai.md) — "win at all costs" AI flag ai.TEMPO, paired effects, Akali-at-7 passivity left
 - [leblanc-real-play](leblanc-real-play.md) — LeBlanc keeps Reflection on battlefield, hides more, video rules; flags RB_REFL/RB_VIDEO, no measurable effect
 - [akali-vs-yi-coaching](akali-vs-yi-coaching.md) — 0-2 vs Yi Bladesman/Azir, Yi fiche, carnet de parties, puzzles artifact
-- [riftbound-training-table](riftbound-training-table.md) — table d'entraînement (Pyodide, GitHub Pages), état 2026-10-09 et leçons d'interface
-- [riftbound-train-games](riftbound-train-games.md) — v10 records user games (db "games"), train_games.py replay/analysis, plan to tune LeBlanc AI
+- [riftbound-training-table](riftbound-training-table.md) — table d'entraînement (moteur Rust en WebAssembly depuis le 2026-11-24, GitHub Pages), état 2026-10-09 et leçons d'interface
+- [riftbound-train-games](riftbound-train-games.md) — v10 records user games (db "games"), train_games replay/analysis, plan to tune LeBlanc AI
 - [riftbound-deckbuilder](riftbound-deckbuilder.md) — v11 deck builder (938 cards, non-IMPL greyed), train.new(mine, opp), atlas images, model-all-cards project
 - GitHub repo (2026-10-07): user created Geksmode/riftbound-lab (in project repos) because they will switch Claude accounts; the repo must be self-sufficient for any other agent (code, data, retex, manager protocol + routine prompt, memory conventions as CLAUDE.md/docs; no Riot card images, a script re-downloads them). The thread "Replays graphiques des simulations" owns the cleanup and push, after the last card modelling is finished and tested.
 - [portage-rust](portage-rust.md) — portage du moteur en Rust (règles, cartes, IA, table en WebAssembly), contrat, conventions, avancement

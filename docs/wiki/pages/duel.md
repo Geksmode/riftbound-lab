@@ -2,7 +2,7 @@
 titre: Duel entre amis (room avec code, PeerJS)
 resume: état du duel à deux humains (moteur fait et testé, interface à faire) et spécification complète de l'interface
 maj: 2026-11-06
-sources: riftbound/engine/train.py (duel_new, match_duel_next), riftbound/engine/cardsets/test_duel.py, riftbound/train/fetch_vendor.sh, build.sh
+sources: rust/src/train.rs (duel_new, match_duel_next), riftbound/train/fetch_vendor.sh, build.sh
 ---
 **Décidé avec l'utilisateur (2026-10-08)** : connexion WebRTC via PeerJS (serveur public de mise en relation 0.peerjs.com, sans compte),
 room créée par l'hôte avec un code, modes BO1 et BO3 avec les règles de match habituelles ([match.md](match.md)), pas de spectateurs.
@@ -15,7 +15,7 @@ Limite acceptée : chaque navigateur fait tourner toute la partie (la main adver
   « Reprendre » en duel (règle de table demandée par l'utilisateur le 2026-10-10) : permis tant que le joueur n'a pas passé le focus, c'est-à-dire tant que l'adversaire n'a rien joué depuis et que la décision est encore la sienne ; jamais un « Passer » ni un « Terminer le tour ». La page envoie `{t: "undo", g, n}` (`duelUndoIdx`), les deux moteurs font `undo()` (historique gardé aussi en duel) et coupent les entrées à `n`. Test `cardsets/test_duel.py`, robot `verif_duel.mjs`.
 - Correctif nécessaire au duel : `_expand` construit les options pour le joueur qui décide (avant : toujours `ME`), sinon désynchronisation.
 - `train.match_duel_next(state)` : préparation d'une manche sans choix d'IA (chooser, first imposé, battlefields permis par place, `bo1_bfs`,
-  sideboard, graine). Tests : `cardsets/test_duel.py` (deux processus synchronisés jusqu'à la fin, main adverse cachée), `test_match.py`.
+  sideboard, graine). Tests : `cargo test` (deux parties synchronisées jusqu'à la fin, main adverse cachée ; tests de match).
 - PeerJS 1.5.5 servi avec la page : `build/vendor/peerjs.min.js` (téléchargé par `fetch_vendor.sh`).
 - Serveur PeerJS local pour les robots : `npm install peer@1.0.2` puis `peerjs --port 9123 --path /myapp` (arrêter par PID).
 
@@ -31,7 +31,7 @@ et reprise ; 39 contrôles, 2 graines par l'agent et 1 relance par le chef, tous
 **Pas testé** : le vrai serveur 0.peerjs.com (refusé par le proxy du conteneur), deux appareils sur des réseaux différents (NAT, pas de serveur TURN),
 la page comme artefact claude.ai ; BO1 en duel ; manche nulle ; fin d'un BO3 complet ; refus de version ou de deck ; room introuvable ; lien `#room=` ;
 rechargement pendant la préparation ; changement de champion au sideboard. Si l'**hôte** recharge, la room est perdue (documenté dans l'aide).
-Les parties de duel ne sont pas rejouées par `train_games.py` (pas de clé `moves`) : à faire si utile.
+Les parties de duel ne sont pas rejouées par `train_games` (pas de clé `moves`) : à faire si utile.
 **Correctif du 2026-10-08 (bug réel signalé par l'utilisateur)** : l'invité était « Connecté : l'hôte prépare le match… » mais l'hôte restait
 « en attente de ton ami ». Non reproduit en local (5 variantes OK : BO1, deck perso, lien, même deck). Cause la plus probable : encodage
 binaire par défaut de PeerJS entre navigateurs différents. Changements : encodage JSON (`serialization: "json"`), l'invité renvoie le hello

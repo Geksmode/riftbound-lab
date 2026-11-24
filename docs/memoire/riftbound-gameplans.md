@@ -5,6 +5,8 @@ metadata:
   type: project
   modified: 2026-10-03T10:55:36.669Z
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 2026-10-03: the user said the sim's play patterns don't match real players. Gameplans were taken from YouTube transcripts (fetched via Remote Control on the user's PC), Gorica's Metafy guide (the user put it in their PC vault) and written LeBlanc guides (riftbound.gg via its WP API; Hextech, RiftStorm and Cardsrealm only through WebSearch summaries because they are blocked). Summary: riftbound/gameplans/gameplans.md plus notes_*_videos.md.
 
 The code is engine/plans.py (Plan: mulligan, battlefield, prior, shape, choose; PlanAgent = SearchAgent + plan) and engine/exp_plans.py (results in results_plans.json; per-seed results allow paired comparisons; env ONLY=indices).

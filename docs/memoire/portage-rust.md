@@ -5,6 +5,8 @@ sources: demande de l'utilisateur (2026-11-23, « pas de mesure, tout en Rust »
 ---
 # Portage du moteur en Rust
 
+**Terminé le 2026-11-24** : le moteur Python est supprimé (étiquette git `moteur-python-final`), tout tourne en Rust. Test différentiel final : 2000/2000 parties aléatoires et 200/200 parties IA identiques au Python, référence figée dans `rust/tests/golden.rs`. Ce qui suit est le contrat et l'historique du portage.
+
 **Décision de l'utilisateur (2026-11-23)** : réécrire tout le « back » en Rust, sans mesure préalable. Ne pas re-discuter.
 
 ## Contrat

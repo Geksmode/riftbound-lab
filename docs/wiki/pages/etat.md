@@ -5,7 +5,16 @@ maj: 2026-11-24
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
-- **Table sur le moteur Rust en WebAssembly (2026-11-24, branche de portage, pas dans `main`)** : Pyodide retiré de la
+- **Bascule du moteur en Rust (2026-11-24)** : le moteur Python (`riftbound/engine/*.py`) est supprimé ; moteur, 1037 cartes,
+  IA, outils et table (WebAssembly) tournent en Rust (`rust/`, binaires `rust/target/release/<nom>`). Dernier état avec Python :
+  étiquette git `moteur-python-final`. Test différentiel : 2000/2000 parties aléatoires et 200/200 parties IA identiques au
+  Python ; référence figée dans `rust/tests/golden.rs` (300 parties). La version du moteur porte le suffixe `-rust` : `compare`
+  refuse d'agréger ses chiffres avec ceux du Python ([chiffres versionnés](resultats.md)) ; les chiffres d'avant la bascule
+  sont à remesurer avant de les mêler à de nouveaux. Commandes : [depot.md](depot.md), porte : [porte.md](porte.md).
+  Restent en Python : `scripts/wiki_lint.py`, `riftbound/decks/*.py`, `riftbound/cards/*.py`, `riftbound/tools/`, `riftbound/sim/`
+  et les scripts Playwright de `riftbound/train/`. Les entrées plus bas qui citent des fichiers `.py` du moteur sont datées
+  d'avant la bascule (historique).
+- **Table sur le moteur Rust en WebAssembly (2026-11-24)** : Pyodide retiré de la
   table ; `riftbound.wasm` (crate `rust/`, `train.rs`, `wasm.rs`) dans le même Web Worker, même protocole, même JSON.
   Différentiel `rust/diff/table.py` (mêmes appels aux deux moteurs, réponses comparées octet pour octet) : vraie IA,
   30 scénarios (graines 1-15 et 20-34 : parties complètes, conseil, tutoriel, Reprendre, questions, replay, match,

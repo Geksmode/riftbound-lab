@@ -4,6 +4,8 @@ description: Réglage Texel des poids ai.EV (2026-10-20) : 2 004 parties sh ; 50
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 **Demande** (2026-10-20) : « ajuster les poids pour que le bot soit meilleur », « pas NNUE ? » → réglage Texel (régression
 logistique position → gagnant final), « le plus fiable possible même si ça prend 2 h ».
 

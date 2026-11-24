@@ -4,6 +4,8 @@ description: IA générale (SearchAgent) 2026-10-09 (niveau Très fort de la tab
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 **Demande** (2026-10-09) : « améliore l'IA de base pour tous les decks » (SearchAgent / rollout / evaluate de `engine/ai.py`, pas les plans).
 
 **Changement gardé : la recherche** (`ai.SEARCH`, variable `RB_SEARCH`, défaut `"sh"` ; `"old"` = avant le 2026-10-09).

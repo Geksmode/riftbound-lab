@@ -4,6 +4,8 @@ description: Banc d'erreurs de cible et de timing de l'IA (2026-10-28) : juge à
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 **Demande** (2026-10-28) : l'utilisateur voit l'IA « faire encore beaucoup d'erreurs de séquence », jouer des cartes « au
 mauvais timing ou sur la mauvaise cible » ; « oui, le banc » (monter un banc d'erreurs avant de corriger).
 

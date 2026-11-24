@@ -2,7 +2,7 @@
 titre: Version anglaise de la table
 resume: comment la table passe en anglais (page et moteur), où ajouter une traduction, comment c'est vérifié
 maj: 2026-10-17
-sources: riftbound/train/i18n.js, riftbound/engine/lang.py, riftbound/train/verif_anglais.mjs, riftbound/engine/cardsets/test_lang.py, riftbound/train/scan_textes.js
+sources: riftbound/train/i18n.js, rust/src/lang.rs, riftbound/train/verif_anglais.mjs, riftbound/train/scan_textes.js
 ---
 Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app ». Une seule table, deux langues.
 
@@ -17,10 +17,10 @@ Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app »
   `title`, `aria-label`, `placeholder`, `label`, juste après chaque `innerHTML` / `textContent` /
   `insertAdjacentHTML` (avant les mesures de mise en page), plus un `MutationObserver` pour le reste ; `confirm()`
   aussi. Dictionnaire `D` (`${}` = partie variable, elle-même traduite) et motifs `P` pour les textes assemblés.
-- **Moteur** : `engine/lang.py` (`set_lang`, `tr(fr, en)`, `ASK_EN` = titre anglais de chaque question). La page
+- **Moteur** : `rust/src/lang.rs` (`set_lang`, `tr(fr, en)`, `ASK_EN` = titre anglais de chaque question). La page
   appelle `train.set_lang("en")` au chargement. Questions, choix, coups décrits, conseil, journal (`replay.en_line`,
   le journal du moteur est déjà en anglais), erreurs de deck et de sideboard sortent en anglais.
-- **La langue ne change pas la partie** : le moteur ne lit jamais ces textes ; `test_lang.py` joue 3 parties
+- **La langue ne change pas la partie** : le moteur ne lit jamais ces textes ; le test de `lang.rs` (`cargo test`) joue 3 parties
   (decks au hasard) en français puis en anglais avec les mêmes choix et compare chaque état.
 - Les tests de la page qui lisaient du texte français acceptent les deux langues : sons (« Tour/Turn »,
   « Tu pioches/You draw », « meurt/dies »), classes du journal, raccourci espace (oui/yes), replay (« Tu joues/You play »).
@@ -28,7 +28,7 @@ Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app »
 ## Ajouter ou changer un texte
 - Nouveau texte dans `src.html` : ajouter la paire `[français, anglais]` à `D` dans `i18n.js` ; sinon le robot le
   signale (il reste affiché en français, rien ne casse).
-- Nouvelle question `g.ask` dans un module : titre anglais dans `lang.ASK_EN` (sinon `test_lang.py` échoue) ;
+- Nouvelle question `g.ask` dans un module : titre anglais dans `lang::ASK_EN` (sinon le test de `lang.rs` échoue) ;
   libellé ou ligne de journal montré au joueur : `tr("…", "…")`. Voir `engine/cardsets/GUIDE.md`.
 - Vocabulaire : Donne = Deal, Manche = Game (d'un match), Conseil = Hint, Reprendre = Undo, Journal = Log,
   Défausse = trash, Passer = Pass, Terminer le tour = End turn ; termes de jeu en anglais officiel (ready, exhaust,
@@ -43,7 +43,7 @@ Demande de l'utilisateur (2026-10-17) : « fait une version anglaise de l'app »
   traduits. Les morceaux qui restent dans sa liste sont soit des noms de cartes ou du code, soit des bouts assemblés
   dont la phrase entière est traduite (vérifiés un par un). Le robot ne les voyait pas : sa liste de mots français
   n'avait pas « cibler », « jouable », « principale »… (ajoutés).
-- `engine/cardsets/test_lang.py` (dans `test_all.py`) : chaque question a un titre anglais ; 3 parties en anglais sans
+- test de `lang.rs` (dans `cargo test`) : chaque question a un titre anglais ; 3 parties en anglais sans
   aucun texte français ; même partie dans les deux langues ; erreurs de deck en anglais.
 - `train/verif_anglais.mjs` (porte : étape `anglais`, `RB_EN=0` pour la sauter) : la table en `?lang=en` sur
   ordinateur et téléphone, menu, choix du deck, aide, mes decks, mes parties, ami, sons, éditeur (import, export),

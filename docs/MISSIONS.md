@@ -26,7 +26,7 @@ son implémentation ; chercher en priorité les formulations qui changent ce qu'
 - coûts optionnels et additionnels, réactions, remplacement de mort, copies, priorité, showdown, ordre des déclencheurs.
 Pour chaque écart : un test qui échoue d'abord, la règle citée, le correctif, puis la suite entière.
 Fin : tableau `riftbound/engine/cardsets/AUDIT_TEXTE.md` (carte, formulation à risque, test, statut) sans carte
-« à vérifier » restante, `test_all.py` vert, `fuzz_cards.py` sans exception, 30 parties `t_rand.py` sans erreur.
+« à vérifier » restante, `cargo test --release` vert, `fuzz_cards` sans exception, 30 parties `t_rand` sans erreur.
 Prévenir le chef de tout correctif de règle (les chiffres de simulation d'avant ne sont plus comparables).
 
 ## ia : IA globale, avec recherche de ressources
@@ -41,7 +41,7 @@ sous 2 écarts-types, une seule version du moteur).
 Livrables : (1) note de synthèse des ressources et des principes retenus ; (2) un plan **déduit du deck** (rôle, cartes
 clés, courbe) pour toute légende ; (3) un banc d'essai : N decks légaux aléatoires, IA générale contre l'ancienne,
 paires de graines, intervalles ; (4) réglage des paramètres par auto-jeu, confirmé sur graines neuves ;
-(5) temps par coup mesuré dans le navigateur (Pyodide).
+(5) temps par coup mesuré dans le navigateur (à l'époque avec Pyodide ; le moteur est en WebAssembly depuis le 2026-11-24).
 Fin : gain annoncé seulement s'il dépasse 2 écarts-types sur graines neuves, avec le chiffre et l'intervalle.
 
 ## retex (à faire par le chef et l'agent retex)
