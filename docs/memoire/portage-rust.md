@@ -1,6 +1,6 @@
 ---
 resume: portage complet du moteur (règles, cartes, IA, table) de Python vers Rust, décidé par l'utilisateur le 2026-11-23
-maj: 2026-11-23
+maj: 2026-11-24
 sources: demande de l'utilisateur (2026-11-23, « pas de mesure, tout en Rust »), riftbound/engine/, rust/
 ---
 # Portage du moteur en Rust
@@ -96,6 +96,16 @@ scripts Python qui ne jouent pas de parties (`scripts/wiki_lint.py`, `riftbound/
   `as_played` -> liste de dict.
 
 ## Avancement
+- 2026-11-24 : **outils de mesure restants portés** (`rust/src/outils/`, binaires `rust/src/bin/`) : `empreinte` (MD5 des
+  5 parties identiques à `empreinte.json`), `exp_temps`, `t_rand`, `run_session` (manager), `add_replays` / `batch_replays` /
+  `curate_replays` (enregistreur de replays `replay_rec.rs` : fichiers identiques au Python, hors ordre des clés de
+  `cards`), `train_games` / `bilan_parties`, `banc` / `banc_cout` / `banc_humain`, `combats_parties` (sonde `probe.rs`),
+  `texel_gen` / `texel_fit` / `texel_test`. Comparés au Python sur les mêmes graines ou fichiers : sorties identiques.
+  Non portés : `exp_temps.mjs` (Pyodide), `riftbound/sim/*.py` (simulateur à part, n'importe pas le moteur), moteurs
+  Python figés de `train_games --frozen` et de `combats_parties` (copies de Python). Écart de fidélité corrigé dans
+  `ai.rs` : `sum()` de Python 3.12+ compense les erreurs d'arrondi (Neumaier), pas l'addition naïve de Rust (`evaluate`,
+  moyenne de la recherche du tour) : `fsum`. Bug connu, hérité de Python : graine 4200002 du mode `miroir` d'`exp_search`
+  (récursion infinie ; Python lève `RecursionError`, Rust fait déborder la pile du fil et arrête le processus).
 - 2026-11-24 : **table en WebAssembly** : `lang.rs`, `match_.rs`, `replay.rs` (textes et `snap` ; l'enregistreur
   RecGame/RecAgent/record n'est pas porté : outils Python seulement), `train.rs` (toutes les fonctions appelées par la
   page), `wasm.rs` (`rb_alloc`, `rb_call`, sans dépendance), `engine.worker.js` (même protocole `{id, fn, args}`),
