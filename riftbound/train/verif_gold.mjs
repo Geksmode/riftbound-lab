@@ -28,20 +28,13 @@ const fresh = async (withGold = true) => {   // nouvelle partie (graine 4) ; 3 r
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj, Rune
-from cards import make_token
-g = W["g"]; me = ME
-g.p[me].runes = [Rune("Body", me) for _ in range(3)]
-g.p[me].pool_e = 0
-c = Obj("Staunch Survivor", me); c.zone = "hand"; g.p[me].hand.append(c); SS = c.uid
-GO = make_token(g, "Gold", me, "base", ready=True).uid if ${withGold ? "True" : "False"} else -1
-W["d"] = None
-`);
+  await py(JSON.stringify([["runes", "me", ["Body", "Body", "Body"]], ["pool_e", "me", 0],
+    { as: "SS", op: ["card", "me", "Staunch Survivor", "hand"] },
+    withGold ? { as: "GO", op: ["token", "me", "Gold", "base", true] } : ["set", "GO", -1], ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
 };
 const state = async () => {
-  await py(`R = [any(o.uid == GO for o in W["g"].board), len(W["g"].p[ME].runes), any(u.uid == SS for u in W["g"].units(ME))]`);
+  await py(JSON.stringify([{ as: "R", op: ["list", ["on_board", { v: "GO" }], ["nrunes", "me"], ["unit_has", "me", { v: "SS" }]] }]));
   return JSON.parse(await ev("pyGet('R').then(JSON.stringify)"));
 };
 await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -50,7 +43,7 @@ await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');
 for (const useGold of [true, false]) {
   await fresh();
   const go = String(await ev("pyGet('GO')"));
-  await py(`RU = [r.uid for r in W["g"].p[ME].runes]`);
+  await py(JSON.stringify([{ as: "RU", op: ["rune_uids", "me"] }]));
   const ru = JSON.parse(await ev("pyGet('RU').then(JSON.stringify)")).map(String);
   await ev("(async()=>{ const i = V.dec.options.findIndex(o => o.k === 'play' && /Staunch Survivor/.test(o.label)); await pump(J(T.act(i))) })()");
   await waitFor("!!(V && !working && V.ask)");
@@ -72,7 +65,7 @@ for (const useGold of [true, false]) {
   ok(`clic sur ${useGold ? "le Gold" : "la 3e rune"} : le choix est affiché (${JSON.stringify(ft)})`, ft.includes(a.options[pi]));
   await pg.click("#fOk"); await pg.waitForTimeout(400); await waitFor("!!(V && !working)");
   const r = await state();
-  await py(`RU2 = [r.uid for r in W["g"].p[ME].runes]`);
+  await py(JSON.stringify([{ as: "RU2", op: ["rune_uids", "me"] }]));
   const ru2 = JSON.parse(await ev("pyGet('RU2').then(JSON.stringify)")).map(String);
   ok(`${useGold ? "Gold dépensé, 3 runes gardées" : "la rune cliquée est recyclée, les deux autres et le Gold restent"} et Staunch Survivor en jeu (${JSON.stringify([r, ru2])})`,
     useGold ? (!r[0] && r[1] === 3 && r[2]) : (r[0] && r[1] === 2 && r[2] && !ru2.includes(ru[2]) && ru2.includes(ru[0]) && ru2.includes(ru[1])));
@@ -80,7 +73,7 @@ for (const useGold of [true, false]) {
 // ---------- 3. Sans Gold : la table demande quand même quelle rune recycler
 await fresh(false);
 {
-  await py(`RU = [r.uid for r in W["g"].p[ME].runes]`);
+  await py(JSON.stringify([{ as: "RU", op: ["rune_uids", "me"] }]));
   const ru = JSON.parse(await ev("pyGet('RU').then(JSON.stringify)")).map(String);
   await ev("(async()=>{ const i = V.dec.options.findIndex(o => o.k === 'play' && /Staunch Survivor/.test(o.label)); await pump(J(T.act(i))) })()");
   await waitFor("!!(V && !working && V.ask)");
@@ -95,7 +88,7 @@ await fresh(false);
   await pg.click(`#board [data-uid="${ru[1]}"]`); await pg.waitForTimeout(250);
   await pg.click("#fOk"); await pg.waitForTimeout(400); await waitFor("!!(V && !working)");
   const r = await state();
-  await py(`RU2 = [r.uid for r in W["g"].p[ME].runes]`);
+  await py(JSON.stringify([{ as: "RU2", op: ["rune_uids", "me"] }]));
   const ru2 = JSON.parse(await ev("pyGet('RU2').then(JSON.stringify)")).map(String);
   ok(`la 2e rune cliquée est recyclée, les deux autres restent, Staunch Survivor en jeu (${JSON.stringify([r, ru2])})`,
     r[1] === 2 && r[2] && !ru2.includes(ru[1]) && ru2.includes(ru[0]) && ru2.includes(ru[2]));

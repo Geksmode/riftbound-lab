@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 // Robot de Flow (règle 829) dans la vraie table : un sort de ta défausse jouable pour son coût de Flow s'affiche au bout
 // de ta main (marqué FLOW), se joue au toucher ou au clic (« Jouer … (Flow) »), coûte son coût de Flow, puis est banni.
-// Onslaught sans cible ne doit pas apparaître. Ordinateur et téléphone. Situation posée dans le moteur (Pyodide).
+// Onslaught sans cible ne doit pas apparaître. Ordinateur et téléphone. Situation posée dans le moteur (WebAssembly : opérations de rust/src/train_dbg.rs).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_flow.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -19,15 +19,9 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
   for (let i = 0; i < 200; i++) { await waitFor("!!(V && !working)"); if (await ev("!!document.getElementById('bKeep')")) { await pg.click("#bKeep"); continue; } if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue; } if (await ev("!!(V.dec && V.dec.kind === 'main')")) break; await ev("(async()=>{ await pump(J(T.act(0))) })()"); }
-  await py(`
-from game import Obj, Rune
-g = W["g"]; me = ME
-g.p[me].runes = [Rune("Calm", me) for _ in range(5)]
-for n in ("Dredge Up", "Onslaught"):
-    c = Obj(n, me); c.zone = "trash"; g.p[me].trash.append(c)
-DU = [c.uid for c in g.p[me].trash if c.cname == "Dredge Up"][0]
-H0 = len(g.p[me].hand)
-W["d"] = None`);
+  await py(JSON.stringify([["runes", "me", ["Calm", "Calm", "Calm", "Calm", "Calm"]],
+    { as: "DU", op: ["card", "me", "Dredge Up", "trash"] }, ["card", "me", "Onslaught", "trash"],
+    { as: "H0", op: ["hand_len", "me"] }, ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
   const du = String(await ev("pyGet('DU')")), h0 = await ev("pyGet('H0')");
   const names = await ev("[...document.querySelectorAll('#board .half.p0 .hand .card.flow')].map(c => c.dataset.card)");
@@ -42,7 +36,8 @@ W["d"] = None`);
   await ev("(()=>{ const b = [...document.querySelectorAll('#pop button[data-i]')].find(b => /Flow/.test(b.textContent)); if (b) b.click(); })()");
   await pg.waitForTimeout(500); await waitFor("!!(V && !working)");
   for (let i = 0; i < 10; i++) { if (await ev("!!(V.dec && V.dec.kind !== 'main' && V.dec.options.some(o => o.k === 'pass'))")) { await ev("(async()=>{ await pump(J(T.act(V.dec.options.findIndex(o => o.k === 'pass')))) })()"); await waitFor("!!(V && !working)"); } else break; }
-  await py(`Z = [c.zone for c in W["g"].p[ME].banish if c.uid == DU] + [len(W["g"].p[ME].hand), sum(1 for r in W["g"].p[ME].runes if not r.exhausted)]`);
+  await py(JSON.stringify([{ as: "Z", op: ["list", ["in_banish", "me", { v: "DU" }], ["hand_len", "me"], ["ready_runes", "me"]] }]));
+  { const zz = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)")); zz[0] = zz[0] ? "banish" : null; await py(JSON.stringify([["set", "Z", zz]])); }
   const z = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)"));
   ok(`${w} px : coût de Flow payé (2 énergie : ${z[z.length - 1]} runes prêtes sur 5), carte piochée (main ${h0} → ${z[z.length - 2]}), Dredge Up bannie`, z[0] === "banish" && z[z.length - 1] === 3 && z[z.length - 2] === h0 + 1);
   ok(`${w} px : aucune erreur JavaScript` + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);

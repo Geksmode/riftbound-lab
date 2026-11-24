@@ -32,7 +32,7 @@ const settle = async () => {   // répond 0 aux questions et passe jusqu'au reto
     await waitFor("!!(V && !working)");
   }
 };
-const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (Pyodide)
+const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (WebAssembly, rust/src/train_dbg.rs)
   await ev("showMenu('main')").catch(() => {});
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
@@ -43,15 +43,9 @@ const fresh = async code => {   // nouvelle partie (graine 4), situation posée 
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj, Rune, DOMAINS
-g = W["g"]; me = ME; op = 1 - ME
-g.p[me].runes = [Rune(d, me) for d in DOMAINS for _ in range(3)]
-def H(n):
-    c = Obj(n, me); c.zone = "hand"; g.p[me].hand.append(c); return c.uid
-${code}
-W["d"] = None
-`);
+  // opérations de rust/src/train_dbg.rs : 3 runes de chaque domaine, puis la situation (code : liste d'opérations)
+  const D3 = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"].flatMap(d => [d, d, d]);
+  await py(JSON.stringify([["runes", "me", D3], ...code, ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
 };
 await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -59,7 +53,7 @@ await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');
 
 // ---------- 1. Incorrigible Construct, avec puis sans Show Off
 for (const withShow of [true, false]) {
-  await fresh(`CC = H("Incorrigible Construct"); MM = H("Mega-Mech")`);
+  await fresh([{ as: "CC", op: ["card", "me", "Incorrigible Construct", "hand"] }, { as: "MM", op: ["card", "me", "Mega-Mech", "hand"] }]);
   const cc = String(await ev("pyGet('CC')"));
   await tapSel(`#board [data-uid="${cc}"]`);
   const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
@@ -72,17 +66,16 @@ for (const withShow of [true, false]) {
   if (withShow) await tapSel('#fbar .mull.show button[data-i]:has(.card[data-card="Mega-Mech"])');
   else await tapText("#fbar .prow button[data-i]", /Sans Show Off/);
   await settle();
-  await py(`R = [[u.exhausted for u in W["g"].units(ME) if u.uid == ${cc}], [c.uid for c in W["g"].p[ME].hand if c.cname == "Mega-Mech"]]`);
+  await py(JSON.stringify([{ as: "R", op: ["list", ["exhausted", +cc], ["hand_uids", "me", "Mega-Mech"]] }]));
+  { const rr = JSON.parse(await ev("pyGet('R').then(JSON.stringify)")); rr[0] = rr[0] === null ? [] : [rr[0]]; await py(JSON.stringify([["set", "R", rr]])); }
   const r = JSON.parse(await ev("pyGet('R').then(JSON.stringify)"));
   ok(`${withShow ? "avec" : "sans"} Show Off : Incorrigible Construct entre ${withShow ? "prêt" : "épuisé"}, Mega-Mech reste en main (${JSON.stringify(r)})`,
     r[0].length === 1 && r[0][0] === !withShow && r[1].length === 1);
 }
 
 // ---------- 2. Primordial Roar : cible, Valider, puis l'unité à montrer
-await fresh(`
-PR = H("Primordial Roar")
-a = Obj("Playful Phantom", me); g.enter_board(a, me, "base", ready=True); PH = a.uid
-e = Obj("Shipyard Skulker", op); g.enter_board(e, op, "base", ready=True); FOE = e.uid`);
+await fresh([{ as: "PR", op: ["card", "me", "Primordial Roar", "hand"] }, { as: "PH", op: ["board", "me", "Playful Phantom", "base", true] },
+  { as: "FOE", op: ["board", "op", "Shipyard Skulker", "base", true] }]);
 const pr = String(await ev("pyGet('PR')")), ph = String(await ev("pyGet('PH')")), foe = String(await ev("pyGet('FOE')"));
 await tapSel(`#board [data-uid="${pr}"]`);
 await tapSel("#pop button[data-tg]");
@@ -95,7 +88,8 @@ ok(`Primordial Roar, cible choisie : la bulle montre les unités à montrer en i
 await pg.screenshot({ path: OUT + "/showoff-liste.png" });
 await tapSel('#fbar .mull.show button[data-i]:has(.card[data-card="Playful Phantom"])');
 await settle();
-await py(`R = [W["g"].obj(${foe}) is None, W["g"].obj(${ph}) is not None]`);
+await py(JSON.stringify([{ as: "R", op: ["list", ["on_board", +foe], ["on_board", +ph]] }]));
+{ const rr = JSON.parse(await ev("pyGet('R').then(JSON.stringify)")); rr[0] = !rr[0]; await py(JSON.stringify([["set", "R", rr]])); }
 const r = JSON.parse(await ev("pyGet('R').then(JSON.stringify)"));
 ok(`Playful Phantom (5) montré : Primordial Roar tue Shipyard Skulker, Playful Phantom reste en jeu (${JSON.stringify(r)})`, r[0] && r[1]);
 ok("aucune erreur JavaScript" + (errs.length ? " : " + errs.slice(0, 2).join(" / ") : ""), errs.length === 0);

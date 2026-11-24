@@ -1,54 +1,55 @@
-// Moteur de la table dans un Web Worker : Pyodide et le module train tournent ici, hors du fil de la page. Une longue
-// réflexion de l'IA ne gèle plus l'affichage (le navigateur ne dit plus « la page ne répond pas »).
-// Protocole (messages) :
-//   page → worker : { init: { ver, py } }                     charge Pyodide et les fichiers du moteur
+// Moteur de la table dans un Web Worker : le moteur Rust compilé en WebAssembly (riftbound.wasm, crate rust/) tourne
+// ici, hors du fil de la page. Une longue réflexion de l'IA ne gèle pas l'affichage.
+// Protocole (messages) — inchangé depuis la version Pyodide :
+//   page → worker : { init: { ver } }                         charge le module WebAssembly
 //                   { id, fn, args }                          appelle train.<fn>(...args) (chaînes JSON en retour)
-//                   { id, exec, get }                         robots de vérification : exec(code) dans train, renvoie
-//                                                             json.dumps(train.<get>) si get est donné
+//                   { id, exec, get }                         robots de vérification : exec = liste d'opérations JSON
+//                                                             (rust/src/train_dbg.rs) ; renvoie la valeur nommée get
 //   worker → page : { ready: true } | { fatal: message } | { id, r } | { id, err }
-// Les messages sont traités un par un, dans l'ordre d'arrivée : même graine = même partie.
-importScripts("pyodide/pyodide.js");
+// Les messages sont traités un par un, dans l'ordre d'arrivée : même graine = même partie. L'état de la partie et le
+// hasard restent dans le module entre deux appels.
 
-let py = null, T = null;
+let W = null, BUF = null;
+const enc = new TextEncoder(), dec = new TextDecoder();
 
-async function init({ ver, py: files }) {
-  // Tout part en même temps : stdlib, fichiers du moteur et bytecode se téléchargent pendant que Pyodide charge son wasm.
-  // Les fichiers du moteur ont la version de la page en paramètre : sinon le navigateur peut garder l'ancien moteur en
-  // cache (GitHub Pages : 10 min) sous une page neuve.
-  const bytes = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.arrayBuffer(); }).then(b => new Uint8Array(b));
-  const engine = Promise.all([["data/cards_unique.csv", "/rb/cards/cards_unique.csv"], ["data/decks.json", "/rb/decks/decks.json"],
-    ...files.map(f => ["py/" + f, "/rb/engine/" + f])].map(([u, dst]) => bytes(u + "?v=" + ver).then(b => [dst, b])));
-  engine.catch(() => {});
-  // Bytecode du moteur (precompile.mjs) : facultatif, sans lui Python compile les .py comme avant.
-  const pyc = fetch("py/bytecode.json?v=" + ver).then(r => r.ok ? r.json() : {}).catch(() => ({}));
-  // La bibliothèque standard de Python est publiée en base64 (les .zip ne sont pas servis). Les URL blob: sont interdites par
-  // la page claude.ai : on intercepte donc la requête de Pyodide vers stdlib.zip et on lui rend les octets décodés.
-  const zip = fetch("pyodide/python_stdlib.b64.txt").then(r => { if (!r.ok) throw new Error("python_stdlib"); return r.text(); }).then(b64ToBytes);
-  zip.catch(() => {});
-  const stdLibURL = new URL("pyodide/stdlib-virtuel.zip", self.location.href).href;
-  const realFetch = self.fetch.bind(self);
-  self.fetch = (u, o) => String(u && u.url || u) === stdLibURL ? zip.then(z => new Response(z, { headers: { "Content-Type": "application/zip" } })) : realFetch(u, o);
-  try { py = await loadPyodide({ indexURL: new URL("pyodide/", self.location.href).href, stdLibURL }); }
-  finally { self.fetch = realFetch; }
-  for (const d of ["/rb", "/rb/cards", "/rb/decks", "/rb/engine", "/rb/engine/cardsets"]) py.FS.mkdir(d);
-  for (const [dst, b] of await engine) py.FS.writeFile(dst, b);
-  // .pyc « checked-hash » : Python vérifie qu'ils viennent du .py posé à côté, sinon il recompile (jamais de bytecode périmé).
-  for (const [f, b64] of Object.entries(await pyc)) {
-    const dst = "/rb/engine/" + f;
-    py.FS.mkdirTree(dst.slice(0, dst.lastIndexOf("/")));
-    py.FS.writeFile(dst, b64ToBytes(b64));
+async function init({ ver }) {
+  // Le module a la version de la page en paramètre : sinon le navigateur peut garder l'ancien moteur en cache.
+  const env = { rb_random: () => Math.random() };
+  const url = "riftbound.wasm?v=" + ver;
+  let inst;
+  try {
+    ({ instance: inst } = await WebAssembly.instantiateStreaming(fetch(url), { env }));
+  } catch (e) {
+    // serveur qui ne donne pas le type application/wasm : compilation depuis les octets
+    const r = await fetch(url);
+    if (!r.ok) throw new Error("riftbound.wasm : " + r.status);
+    ({ instance: inst } = await WebAssembly.instantiate(await r.arrayBuffer(), { env }));
   }
-  py.runPython("import sys; sys.path.insert(0, '/rb/engine')");
-  T = py.pyimport("train");
+  W = inst.exports;
 }
 
-function b64ToBytes(b64) {
-  const bin = atob(b64.trim()), out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
+function put(s) {
+  const b = enc.encode(s), p = W.rb_alloc(b.length);
+  new Uint8Array(W.memory.buffer, p, b.length).set(b);
+  return [p, b.length];
 }
 
-// Message d'une erreur Python : la dernière ligne non vide (le type et le texte), comme la page l'affichait avant.
+// train.<fn>(...args) : texte de la réponse, ou exception avec le message d'erreur (dernière ligne : type et texte).
+function call(fn, args) {
+  const [fp, fl] = put(fn), [ap, al] = put(JSON.stringify(args.map(a => a === undefined ? null : a)));
+  let p;
+  try { p = W.rb_call(fp, fl, ap, al); }
+  catch (e) {
+    const n = W.rb_panic_len();
+    const msg = n ? dec.decode(new Uint8Array(W.memory.buffer, W.rb_panic(), n).slice()) : String(e && e.message || e);
+    throw new Error("le moteur s'est arrêté : " + msg);
+  }
+  const n = W.rb_len(), bytes = new Uint8Array(W.memory.buffer, p, n + 1).slice();
+  const s = dec.decode(bytes.subarray(1));
+  if (bytes[0] !== 0) throw new Error(s);
+  return s;
+}
+
 const errMsg = e => String(e && e.message || e);
 
 self.onmessage = async e => {
@@ -61,14 +62,10 @@ self.onmessage = async e => {
   try {
     let r;
     if (m.exec !== undefined) {
-      py.globals.set("_rb_code", m.exec);
-      py.runPython("import train as _t; exec(_rb_code, _t.__dict__)");
-      r = m.get ? py.runPython(`import json as _j, train as _t; _j.dumps(_t.__dict__.get(${JSON.stringify(m.get)}), default=str)`) : "true";
+      if (m.exec) call("dbg", [m.exec]);
+      r = m.get ? JSON.stringify(JSON.parse(call("dbg", [JSON.stringify([{ as: "_get", op: ["get", m.get] }])]))._get ?? null) : "true";
     } else {
-      const f = T[m.fn];
-      if (f === undefined || f === null) throw new Error("T." + m.fn + " n'est pas une fonction");
-      r = f(...m.args);
-      if (r && typeof r.toJs === "function") { const x = r.toJs(); r.destroy(); r = x; }
+      r = call(m.fn, m.args || []);
     }
     self.postMessage({ id: m.id, r });
   } catch (err) {

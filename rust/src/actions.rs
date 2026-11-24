@@ -2041,6 +2041,21 @@ pub fn fmt_choice(g: &Game, ch: &Map) -> String {
             parts.push(format!("{k}={}", names.join(",")));
         } else if k == "killed_info" {
             continue;
+        } else if k == "pay_cost" && v.list().len() == 2 {
+            // (e, (frozenset({...}), ...)) : repr Python d'un coût en runes. L'ordre des domaines d'un frozenset de
+            // plusieurs domaines dépend du hachage en Python (PYTHONHASHSEED) : ici, ordre alphabétique.
+            let l = v.list();
+            let sets: Vec<String> = l[1]
+                .list()
+                .iter()
+                .map(|r| {
+                    let mut ds: Vec<String> = r.list().iter().map(|d| py_repr(g, d)).collect();
+                    ds.sort();
+                    format!("frozenset({{{}}})", ds.join(", "))
+                })
+                .collect();
+            let inner = if sets.len() == 1 { format!("({},)", sets[0]) } else { format!("({})", sets.join(", ")) };
+            parts.push(format!("{k}=({}, {inner})", py_repr(g, &l[0])));
         } else if !matches!(v, Value::Bool(false) | Value::None)
             && !matches!(v, Value::Map(m) if m.0.is_empty())
             && !matches!(v, Value::Tuple(t) if t.is_empty())

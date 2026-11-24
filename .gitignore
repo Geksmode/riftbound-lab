@@ -1,7 +1,7 @@
 __pycache__/
 *.pyc
 riftbound/train/build/
-riftbound/train/pyodide-cache/
+riftbound/train/vendor-cache/
 riftbound/train/thumbs/
 riftbound/puzzles/build_table/
 riftbound/train/node_modules/
