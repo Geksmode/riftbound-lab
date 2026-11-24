@@ -411,3 +411,6 @@ Mesure d'abord : la compilation coûtait ≈ 16 min (LTO refait pour chacun des 
 
 ## [2026-11-24] decision | Confort de la table d'après Rift Atlas et TCG Arena
 Choisi par l'utilisateur parmi quatre propositions (les quatre) : raccourcis clavier et « ? », recherche de carte Ctrl+K / ⌕, clic droit = fiche, éditeur (filtre de coût, tris, groupes, deck non enregistré). Robot `verif_qol.mjs`. Environnement cloud « riftbound-lab » créé pour autoriser tcg-arena.fr et riftatlas.com. Détail : `pages/etat.md`.
+
+## [2026-11-24] decision | Table : bilan par matchup, testeur de main, exercices tirés des parties
+Choisis par l'utilisateur (propositions 1 et 2, puis « des puzzles »). Menu « Bilan » (intervalle de Wilson, « on ne sait pas »), éditeur « Tester la main » (règles 116, 117, 485.7 ; chances exactes), menu « Exercices » (décisions à 3 ou plus du conseil, rejouées sur le plateau). Constat : un conseil isolé de l'IA varie de plusieurs points d'un calcul à l'autre ; les exercices moyennent 8 calculs. Robot `verif_entrain.mjs`. Détail : `pages/etat.md`, `docs/memoire/riftbound-training-table.md`.
