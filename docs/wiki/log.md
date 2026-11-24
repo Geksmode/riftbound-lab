@@ -393,3 +393,6 @@ Signalé par l'utilisateur. La base ne donne que « Unit » ; le texte de la car
 
 ## [2026-11-24] decision | Table : 10 niveaux de l'IA
 Demande de l'utilisateur (« 10 niveaux comme sur Smash, 1 le plus faible, 10 vraiment très dur »). `ai::LEVEL_TABLE` / `level_opts` : niveaux 1 à 5 = niveau 6 avec 70 / 50 / 35 / 20 / 8 % de coups au hasard ; 6, 7, 8 = anciens Normal, Fort, Très fort ; 9 = 12 mondes, faisceau 8 ; 10 = 24 mondes, faisceau 12. Marches (80 paires, decks variés, 11001000+) : 61,3 ± 3,2 ; 61,3 ± 3,7 ; 64,4 ± 2,7 ; 56,9 ± 3,2 ; 57,5 ± 3,0 ; 58,1 ± 3,1 ; 8 contre 7 : 51,9 ± 2,7 (on ne sait pas) ; 10 contre 9 : 52,5 ± 2,9 (on ne sait pas). 9 contre 8 : test séquentiel gardé, 55,6 % ± 1,8 sur 224 paires (10000000+) ; confirmation (12000000+) en cours à la fusion. Table : dix boutons, « − » / « + » sur téléphone ; anciennes parties (1 / 3 / 6) lues comme 6 / 7 / 8. Porte verte. Détail : `docs/memoire/ia-niveaux.md`.
+
+## [2026-11-24] ingest | Niveaux de l'IA : marche 9 contre 8 confirmée
+Second test séquentiel sur graines neuves (14000000-14000519, moteur `151f55e0f4-rust`, non regroupé avec `07aa82b4bd-rust`) : GARDE après 520 paires, 53,3 % ± 1,2, LLR +3,00. Avec le premier (55,6 % ± 1,8, 224 paires), la marche est démontrée selon la règle 9. Le test coupé à 120 paires (12000000+) ne compte pas. Détail : `docs/memoire/ia-niveaux.md`.
