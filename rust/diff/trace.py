@@ -1,10 +1,10 @@
 """Test différentiel Python / Rust : journal d'une partie du moteur Python de référence.
 
-Deux RandomAgent (agents.py) jouent ; chaque question (g.ask) et chaque décision de haut niveau est écrite avec ses
+Deux RandomAgent (agents.py) jouent (option --ia : l'IA par défaut de la table des deux côtés, voir agents_ia) ; chaque question (g.ask) et chaque décision de haut niveau est écrite avec ses
 options (écriture canonique, la même que rust/src/trace.rs) et l'indice choisi, plus un résumé de l'état à chaque
 décision. Le moteur Rust doit écrire exactement le même journal (rust/src/bin/trace.rs).
 
-    python3 rust/diff/trace.py <graine> <paquet0> <paquet1> [graine_agent0 graine_agent1]  > journal.txt
+    python3 rust/diff/trace.py <graine> <paquet0> <paquet1> [graine_agent0 graine_agent1] [--ia]  > journal.txt
 """
 import json, os, sys
 
@@ -97,12 +97,23 @@ class Trace:
         return r
 
 
-def run(seed, k0, k1, a0=1, a1=2, max_decisions=5000):
+def agents_ia(decks_, seeds):
+    """IA par défaut de la table (train.new, niveau 1 « Normal ») pour les deux joueurs : PlanAgent, plan de la légende
+    (train._plan_for) pour soi et pour le modèle de l'adversaire, 1 monde par décision, recherche du tour entier,
+    réglages de la table (train.table_cfg(1))."""
+    import plans as P
+    from train import _plan_for, table_cfg
+    return [P.PlanAgent(seeds[i], plan=_plan_for(decks_[i]), opp_plan=_plan_for(decks_[1 - i]), samples=1, search="turn",
+                        cfg=table_cfg(1)) for i in range(2)]
+
+
+def run(seed, k0, k1, a0=1, a1=2, max_decisions=5000, ia=False):
     Obj._n = 0
     Item._n = 0
     out = []
     d0, d1 = decks.load(k0), decks.load(k1)
-    agents = [Trace(RandomAgent(a0), out), Trace(RandomAgent(a1), out)]
+    inner = agents_ia([d0, d1], [a0, a1]) if ia else [RandomAgent(a0), RandomAgent(a1)]
+    agents = [Trace(inner[0], out), Trace(inner[1], out)]
     g = game.play_game([d0, d1], agents, seed=seed, max_decisions=max_decisions)
     out.append(f"fin winner={g.winner} t{g.turn_no} pts={g.p[0].points}-{g.p[1].points}")
     return out
@@ -110,6 +121,8 @@ def run(seed, k0, k1, a0=1, a1=2, max_decisions=5000):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
+    ia = "--ia" in a
+    a = [x for x in a if x != "--ia"]
     seed, k0, k1 = int(a[0]), a[1], a[2]
     a0, a1 = (int(a[3]), int(a[4])) if len(a) >= 5 else (1, 2)
-    print("\n".join(run(seed, k0, k1, a0, a1)))
+    print("\n".join(run(seed, k0, k1, a0, a1, ia=ia)))

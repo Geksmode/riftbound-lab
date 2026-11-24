@@ -71,6 +71,12 @@ impl Game {
         let r = agent.choose(self, pid, kind, &options, &ctx);
         self.agents[pid] = agent;
         let i = r?;
+        if self.ck.on && self.ck.ckpt.is_some() {
+            // (type, nombre d'options, indice de la réponse, (valeur,) si simple : None, booléen, nombre, texte)
+            let v = &options[i];
+            let simple = matches!(v, Value::None | Value::Bool(_) | Value::Int(_) | Value::Float(_) | Value::Str(_) | Value::Loc(_));
+            self.ck.asklog.push((kind.to_string(), options.len(), Some(i), if simple { Some(v.clone()) } else { None }));
+        }
         Ok(options[i].clone())
     }
 
