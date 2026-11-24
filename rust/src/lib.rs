@@ -20,6 +20,7 @@ pub mod outils;
 pub mod plans;
 pub mod plans_general;
 pub mod plans_legendes;
+pub mod probe;
 pub mod pyrandom;
 pub mod regex;
 pub mod replay;

@@ -1480,6 +1480,17 @@ impl SearchAgent {
     /// `pick_turn(g, d, opts)` : suite de coups du tour (jusqu'à « end ») au lieu du seul premier coup ; la suite
     /// complète va dans s.tplan. En danger (ou si tout perd), on refait avec URGENT_SAMPLES mondes.
     pub fn pick_turn(&mut self, g: &mut Game, d: &Decision, opts: &[Value]) -> Res<Picked> {
+        let res = self.pick_turn_inner(g, d, opts)?;
+        if crate::probe::active() {
+            // sonde de combats_parties (hors jeu)
+            let rp = |g: &Game, v: &Value| crate::outils::empreinte::repr_value(g, v);
+            let plan: Vec<String> = self.tplan.as_ref().map(|t| t.1.iter().map(|x| rp(g, x)).collect()).unwrap_or_default();
+            crate::probe::on_pick_turn(g.turn_no, rp(g, &res.0), res.1, plan);
+        }
+        Ok(res)
+    }
+
+    fn pick_turn_inner(&mut self, g: &mut Game, d: &Decision, opts: &[Value]) -> Res<Picked> {
         let me = d.player;
         let nw = self.samples.max(URGENT_SAMPLES);
         let worlds: Vec<i128> = (0..nw).map(|_| self.rng.getrandbits(30) as i128).collect();

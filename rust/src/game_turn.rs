@@ -206,6 +206,9 @@ impl Game {
 
     /// `start_showdown(b, combat)`
     pub fn start_showdown(&mut self, b: usize, combat: bool) -> Res<()> {
+        if crate::probe::active() {
+            crate::probe::on_start_showdown(self, b); // sonde de combats_parties (hors jeu)
+        }
         self.bfs[b].sd_staged = false;
         self.bfs[b].combat_staged = false;
         let attacker = self.bfs[b].contested.unwrap();
@@ -287,6 +290,9 @@ impl Game {
             let sd = self.sd.as_ref().unwrap();
             (sd.stage, sd.bf)
         };
+        if stage == "damage" && crate::probe::active() {
+            crate::probe::on_combat_damage(self);
+        }
         let here = |g: &Game, d: Desig| -> Vec<O> {
             g.units(None, Some(Loc::Bf(b))).into_iter().filter(|&u| g.o(u).desig == Some(d)).collect()
         };
@@ -357,6 +363,9 @@ impl Game {
                     }
                 }
                 self.sd.as_mut().unwrap().stage = "end";
+                if crate::probe::active() {
+                    crate::probe::on_combat_end(self);
+                }
                 self.need_cleanup = true;
             }
             "end" => {
