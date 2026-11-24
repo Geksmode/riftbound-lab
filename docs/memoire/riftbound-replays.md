@@ -5,6 +5,8 @@ metadata:
   type: project
   modified: 2026-10-03T08:52:38.932Z
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 2026-10-03: the user wanted to watch the simulated games graphically to learn. Built:
 - engine/replay.py: additive recorder (RecGame/RecAgent subclass Game/SearchAgent, same RNG draws, resets Obj/Item id counters so a seed replays identically). Frames = French log line + full state + AI option scores + Akali-side evaluation. 91 tests still pass.
 - engine/batch_replays.py (lot + summaries), engine/curate_replays.py (PICKS = curated list with notes).

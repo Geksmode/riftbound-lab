@@ -4,6 +4,8 @@ description: LeBlanc realism rules (2026-10-03) from the user and two pasted vid
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 User remarks, 2026-10-03: real LeBlanc players never pull the Reflection or the copied unit back to base, and they hide a card even when only a Reflection holds the battlefield. The user pasted two YouTube transcripts: a Long Beach Deathknell/Hook player, and Riftlab's « LeBlanc Deceiver guide ». YouTube is blocked from the cloud and from the user's PC (subtitles 429), so pasted transcripts are the only route. Notes are in gameplans/notes_leblanc_videos.md.
 
 Code, in engine/plans.py, LeBlancDeathknell (inherited by Hook plans):

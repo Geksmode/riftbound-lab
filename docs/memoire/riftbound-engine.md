@@ -1,10 +1,12 @@
 ---
 name: riftbound-engine
-description: Faithful Riftbound rules engine in /mnt/project-files/riftbound/engine (all pool cards modelled, 91 tests) and why the old sim/ is superseded
+description: Faithful Riftbound rules engine, now in Rust (rust/, since 2026-11-24; former Python engine in riftbound/engine, tag moteur-python-final; all cards modelled) and why the old sim/ is superseded
 metadata:
   type: project
   modified: 2026-10-02T17:22:55.642Z
 ---
+**2026-11-24 : le moteur est en Rust.** Le moteur Python (`riftbound/engine/*.py`) est supprimé ; dernier état : étiquette git `moteur-python-final`. Tout ce qui suit sur `game.py`, `cards.py`, `ai.py`, `empreinte.py`, `fuzz_cards.py`, `RB_MEMO_CHECK`, `RB_LAZY_CHECK`... décrit le moteur Python, avec les mêmes idées dans `rust/src/` (`game*.rs`, `actions.rs`, `cards*.rs`, `cardsets/*.rs`, `ai.rs`) ; correspondance des fichiers : `riftbound/engine/README.md`. Commandes : `cd rust && cargo test --release`, binaires `rust/target/release/<nom>` (`empreinte`, `fuzz_cards`...). 1037 cartes modélisées. Non-régression : 2000/2000 parties aléatoires et 200/200 parties IA identiques au Python, référence figée dans `rust/tests/golden.rs` ; historique : [portage-rust](portage-rust.md).
+
 2026-10-02: the user rejected the simplified simulator ("je ne veux pas des simplification, il faut savoir modeliser toutes les cartes"), so a faithful engine was written in /mnt/project-files/riftbound/engine/ from the Core Rules dated 2026-07-16 (rules/source/core_rules_2026-07-16.txt).
 
 Structure: game.py (state, cost payment, chain with priority/focus, cleanups, showdowns, combat, scoring, layers), actions.py (legal actions + process of play), cards.py (one Impl per card name — 85 pool cards + Mech/Reflection/Gold tokens; extensible to the other 938 cards by adding entries), ai.py (SearchAgent = 1-ply search on game clones with a 2-turn PolicyAgent rollout, hidden info determinized), decks.py, test_cards.py (91 scenario tests, every pool card covered), run.py + exp_*.py (multiprocess Monte Carlo, ~1.2 s/game on 4 cores). See engine/README.md for modelled rules and limits.
@@ -27,12 +29,12 @@ version are not audited in the engine. Radiance cards: docs/wiki/pages/radiance.
 2026-10-27 (performance) : `Game.clone` = `copy.deepcopy`, accéléré par `game._fastcopy`, posé en `__deepcopy__` sur Obj,
 Rune, Player, Item, Showdown, Opt, Decision, Battlefield et Game (même résultat que la copie générique, sans repasser par
 deepcopy pour chaque entier ou texte). Une nouvelle classe d'état du moteur doit recevoir `__deepcopy__ = _fastcopy`.
-Vérifier une optimisation : `engine/empreinte.py` (étape « empreinte » de la porte) rejoue 5 parties à graines fixes et compare le hachage des décisions à `empreinte.json`.
+Vérifier une optimisation : `engine/empreinte.py` (Rust : `rust/target/release/empreinte` ; étape « empreinte » de la porte) rejoue 5 parties à graines fixes et compare le hachage des décisions à `empreinte.json`.
 2026-10-27 (mémoire de la génération des coups) : pendant `options_main` / `options_focus` / `options_priority`
 (`Game._gen_options`), `Game._memo` garde `providers(champ)`, `aura_sources()` et `can_pay(...)` ; hors de là, `_memo` vaut
 None. Hypothèse : rien ne modifie la partie pendant qu'on liste les coups. Une carte dont un rappel (`can`, `cost_aura`,
 `as_played`…) modifierait l'état la casserait : `RB_MEMO_CHECK=1` recalcule chaque réponse mémorisée et lève une erreur si
-elle diffère (à lancer avec `fuzz_cards.py` sur le paquet touché après une nouvelle carte de ce genre).
+elle diffère (à lancer avec `fuzz_cards` sur le paquet touché après une nouvelle carte de ce genre).
 2026-10-27 (coups à la demande dans les simulations) : `Game.advance(lazy=True)` rend une Decision avec `options=None` ;
 `ai.PolicyAgent` (politique de simulation : `rollout_policy`, `settle` de la recherche « turn », `react_margin`) génère
 alors seulement ce qu'elle regarde : capacités, déplacements, puis cartes une par une (`_play_lazy` : l'unité de plus

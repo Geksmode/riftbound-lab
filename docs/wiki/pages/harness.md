@@ -1,12 +1,12 @@
 ---
 titre: Garde-fous automatiques (harness)
 resume: ce que les hooks de .claude/ font respecter mécaniquement, contrat de tâche, escalade, worktrees
-maj: 2026-10-30
+maj: 2026-11-24
 sources: .claude/settings.json, scripts/hooks/, scripts/porte_etat.mjs, .worktreeinclude, https://github.com/walkinglabs/learn-harness-engineering, https://code.claude.com/docs/en/worktrees
 ---
 Principe (« double encodage ») : une règle importante est écrite dans `CLAUDE.md` **et** tenue par un contrôle
-mécanique, parce qu'un agent chargé oublie une règle écrite. Ce qui existait déjà : `compare.py` (refuse d'agréger deux
-versions du moteur), l'éditeur qui bloque les cartes non modélisées, `empreinte.py`, la porte `scripts/verifier.sh`, la CI.
+mécanique, parce qu'un agent chargé oublie une règle écrite. Ce qui existait déjà : `compare` (Rust ; refuse d'agréger deux
+versions du moteur, dont Rust contre Python), l'éditeur qui bloque les cartes non modélisées, `empreinte`, la porte `scripts/verifier.sh`, la CI.
 
 ## Hooks de `.claude/settings.json` (Node, donc aussi sous Windows)
 | Hook | Fichier | Effet |

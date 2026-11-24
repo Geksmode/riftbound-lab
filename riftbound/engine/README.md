@@ -5,21 +5,25 @@ récupérées sur app.riftjudge.com). Aucune simplification de carte : chaque ca
 d'après son texte, avec les numéros de règle cités en commentaire.
 
 ## Fichiers
-| fichier | contenu |
+Depuis le 2026-11-24 le moteur, les cartes, l'IA et les outils sont en **Rust** (`rust/`, binaires dans
+`rust/target/release/`, `cd rust && cargo build --release`). Le moteur Python est supprimé ; son dernier état est
+l'étiquette git `moteur-python-final`. Dans ce dossier restent les données (`results*.json`, `empreinte.json`,
+`pool.txt`, `exemple_partie.txt`), les guides de modélisation (`cardsets/GUIDE.md`, `NEEDS*.md`) et les mesures
+(`banc/`, `texel/`).
+
+| fichier Rust | contenu |
 |---|---|
-| `game.py` | état de partie, zones, runes et paiement des coûts, chaîne (priorité/focus), cleanups, showdowns, combat, contrôle, score, burn out, couches (layers) de calcul de might |
-| `actions.py` | actions discrétionnaires légales et processus de jeu d'une carte / activation d'une capacité (règles 353-359, 398-406) |
-| `cards.py` | registre `IMPL` (une entrée par carte : 85 cartes du pool + tokens), aides génériques pour les mots-clés (`ability`, `parse_cost`, `add_ability`, `when_level`...), modélisation automatique des cartes « mots-clés seulement » (`auto_keywords`, liste `AUTO`), chargeur des modules `cardsets/`, contrôle de deck (`deck_problems` : non modélisée, [Unique]) |
-| `cardsets/` | modules de cartes par lot (liste explicite `MODULES` dans `__init__.py`, chargés à la fin de `cards.py`), `GUIDE.md` (guide de modélisation), `NEEDS.md` (crochets moteur manquants), `test_keywords.py` (mots-clés génériques) |
-| `testkit.py`, `test_all.py` | aides de test pour les modules (`Suite`, `temp_card`, `deck_top`...) ; lance `test_cards.py` et tous les `cardsets/test_*.py` |
-| `fuzz_cards.py` | parties aléatoires avec des decks contenant des cartes données (ou les cartes d'un module) : aucune exception, même graine = même partie |
-| `ai.py` | agents : `SearchAgent` (recherche à 1 coup sur copies de la partie + déroulement par politique), `PolicyAgent` (politique rapide), évaluation, déterminisation de l'information cachée |
-| `decks.py` | charge les 12 decklists de tournoi depuis `../decks/decks.json` |
-| `test_cards.py` | 91 tests de scénario, au moins un par carte du pool et par règle clé |
-| `run.py`, `exp.py` | runner Monte Carlo multiprocess et suite d'expériences reprenable (`results.json`) |
-| `quick.py`, `agents.py` | partie unique avec journal, agent aléatoire (fuzzing du moteur) |
-| `replay.py`, `batch_replays.py`, `curate_replays.py` | enregistreur de replays (états + scores des options de l'IA) pour le lecteur `../replays/viewer.html` |
-| `plans.py`, `exp_plans.py` | plans de jeu des joueurs (Akali Gorica moteur/agressif, LeBlanc Deathknell/Hook tempo) et leurs simulations (`results_plans.json`) ; sources dans `../gameplans/` |
+| `rust/src/game.rs`, `game_board.rs`, `game_costs.rs`, `game_events.rs`, `game_turn.rs` | état de partie, zones, runes et paiement des coûts, chaîne (priorité/focus), cleanups, showdowns, combat, contrôle, score, burn out, couches (layers) de calcul de might (ancien `game.py`) |
+| `rust/src/actions.rs` | actions discrétionnaires légales et processus de jeu d'une carte / activation d'une capacité (règles 353-359, 398-406) |
+| `rust/src/cards.rs`, `cards_helpers.rs` | registre `IMPL` (une entrée par carte et par token), aides génériques pour les mots-clés (`ability`, `parse_cost`, `add_ability`, `when_level`...), modélisation automatique des cartes « mots-clés seulement » (`auto_keywords`, liste `AUTO`), chargeur des paquets, contrôle de deck (`deck_problems` : non modélisée, [Unique]) |
+| `rust/src/cardsets/*.rs` | cartes par paquet (`battlefields`, `body`, `calm`, `chaos`, `fury`, `legends`, `mind`, `order`, `radiance`, `pool`), enregistrés dans l'ordre de `cardsets/mod.rs` ; guides de modélisation restés ici : `cardsets/GUIDE.md`, `cardsets/NEEDS*.md` |
+| `rust/tests/`, `rust/src/outils/fuzz.rs`, `rust/src/bin/fuzz_cards.rs` | tests (`cargo test --release`), parties aléatoires avec des decks contenant des cartes données (aucune exception, même graine = même partie), référence figée `rust/tests/golden.rs` (300 parties du moteur Python) |
+| `rust/src/ai.rs`, `agents.rs` | agents : `SearchAgent` (recherche à 1 coup sur copies de la partie + déroulement par politique), `PolicyAgent`, agent aléatoire, évaluation, déterminisation de l'information cachée |
+| `rust/src/decks.rs` | charge les 12 decklists de tournoi depuis `../decks/decks.json` |
+| `rust/src/outils/` et `rust/src/bin/` | un binaire par outil : `exp`, `exp_search`, `sprt`, `compare`, `empreinte`, `t_rand`, `run_session`, `banc`, `banc_cout`, `banc_humain`, `texel_gen`, `texel_fit`, `quick` (partie unique avec journal), `train_games`... |
+| `rust/src/replay.rs`, `replay_rec.rs`, `bin/batch_replays.rs`, `bin/curate_replays.rs` | enregistreur de replays (états + scores des options de l'IA) pour le lecteur `../replays/viewer.html` |
+| `rust/src/plans.rs`, `plans_general.rs`, `plans_legendes.rs`, `bin/exp_plans.rs` | plans de jeu des joueurs (Akali Gorica moteur/agressif, LeBlanc Deathknell/Hook tempo) et leurs simulations (`results_plans.json`) ; sources dans `../gameplans/` |
+| `rust/src/train.rs`, `match_.rs`, `lang.rs`, `wasm.rs` | table d'entraînement : API appelée par la page (humain, BO3, textes français et anglais), compilée en WebAssembly (`riftbound.wasm`, `../train/engine.worker.js`) |
 | `exemple_partie.txt` | deux parties complètes tour par tour |
 | `pool.txt` | texte, coût, might et mots-clés des 85 cartes du pool |
 
@@ -53,16 +57,16 @@ d'après son texte, avec les numéros de règle cités en commentaire.
   `becomes_mighty`), Buff, Stun, Add (capacités utilisées pendant le paiement : `add=`), Unique (contrôle de deck),
   mots-clés dépendants (`kw_if`, `might_if`), auras (`aura_kw`, `aura_might`).
 - **Cartes « mots-clés seulement »** (texte = mots-clés + texte de rappel : unités vanilla, tokens Recruit/Sprite/
-  Bird/Sand Soldier/Tentacle, Sunlit Guardian, Shen Kinkou...) : modélisées automatiquement (`cards.AUTO`).
+  Bird/Sand Soldier/Tentacle, Sunlit Guardian, Shen Kinkou...) : modélisées automatiquement (`cards::AUTO`).
 - **Lots de cartes** (`cardsets/`) : 1084 des 1086 cartes jouables (hors runes et tokens) sont modélisées, dont 166
-  des 167 de Radiance (`cardsets/radiance.py`, mots-clés des Core Rules du 2026-10-09 : Deploy, Disarm, Show Off,
+  des 167 de Radiance (`rust/src/cardsets/radiance.rs`, mots-clés des Core Rules du 2026-10-09 : Deploy, Disarm, Show Off,
   jeton Bomb ; bloquées : Neeko, Blending In) ; Baron Nashor et le jeton Baron Pit (troisième battlefield,
   `Game.add_battlefield`, règles 187.9 et 471.1.b) ; crochets
   partagés (remplacements de mort, de point, de révélation, coûts alternatifs, permissions de jouer
   `play_perm`, capacités et [Add] donnés par d'autres objets, battlefield remplacé `replace_battlefield` — règle
   438, Brush d'Ivern...) décrits dans `cardsets/GUIDE.md` §9.
-- **Joueur humain** (`train.py`) : chaque question `g.ask` a un titre français (`cards.ASK_TEXT`, `ask_text()`) et un
-  titre anglais (`lang.ASK_EN`, version anglaise de la table ; textes montrés au joueur : `lang.tr(fr, en)`),
+- **Joueur humain** (`rust/src/train.rs`) : chaque question `g.ask` a un titre français (`cards::ASK_TEXT`, `ask_text()`) et un
+  titre anglais (`lang::ASK_EN`, version anglaise de la table ; textes montrés au joueur : `lang::tr(fr, en)`),
   ses options sont lisibles (cartes, runes, lieux, `Opt`, choix de jeu, répartitions de dégâts) ; l'humain voit
   tous les choix légaux (`Human.every_choice` → `actions.full_choices`, `cards.cap`, `Impl.all_choices` :
   sous-ensembles de Commander Ledros, répartitions de Volibear, toutes les cibles...), l'IA garde ses listes
@@ -77,7 +81,7 @@ d'après son texte, avec les numéros de règle cités en commentaire.
   (+2 might ce tour quand l'unité équipée bouge sur un battlefield) vient de la même source.
 - Zhonya's Hourglass utilise le texte de l'errata (riftwatcher), différent de celui de la base de cartes.
 - Modes 3-4 joueurs non implémentés. Les cartes hors pool sont modélisées par lots dans `cardsets/` (voir
-  `cardsets/GUIDE.md`) ; une carte absente de `cards.IMPL` n'est pas modélisée et le deck builder la refuse.
+  `cardsets/GUIDE.md`) ; une carte absente de `cards::IMPL` n'est pas modélisée et le deck builder la refuse.
   Crochets moteur manquants connus : `cardsets/NEEDS.md`. Les battlefields forment une liste `g.bfs` de taille
   variable (2, ou 3 avec le Baron Pit) : un lieu de battlefield se teste avec `is_bf(loc)`, on les parcourt avec
   `g.bf_locs` (ou `g.locs()` avec la base), jamais avec `(0, 1)`.
@@ -87,9 +91,9 @@ d'après son texte, avec les numéros de règle cités en commentaire.
 
 ## Utilisation
 ```bash
-python3 test_cards.py                 # 91 tests du pool
-python3 test_all.py                   # test_cards.py + tous les cardsets/test_*.py
-python3 fuzz_cards.py 50              # 50 parties aléatoires avec les cartes auto-modélisées
-python3 exp.py 160 480                # suite d'experiences (relancer pour continuer)
-python3 run.py                        # fonctions play() pour vos propres expériences
+cd rust && cargo build --release && cargo test --release   # moteur, cartes, référence figée Python
+cd ../riftbound/engine                                      # les outils lisent et écrivent results*.json, empreinte.json ici
+../../rust/target/release/fuzz_cards 50                     # 50 parties aléatoires avec les cartes auto-modélisées
+../../rust/target/release/exp 160 480                       # suite d'expériences (relancer pour continuer)
+../../rust/target/release/empreinte                         # décisions de l'IA à graines fixes (--maj si le jeu change exprès)
 ```
