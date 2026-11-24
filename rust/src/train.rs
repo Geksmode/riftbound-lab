@@ -502,7 +502,7 @@ pub struct TDeck {
 }
 
 impl TDeck {
-    fn list(&self) -> DeckList {
+    pub fn list(&self) -> DeckList {
         DeckList {
             legend: self.legend.clone(),
             champion: self.champion.clone(),
@@ -511,13 +511,13 @@ impl TDeck {
             battlefield: self.battlefield.clone(),
         }
     }
-    fn with_bf(&self, bf: &str) -> TDeck {
+    pub fn with_bf(&self, bf: &str) -> TDeck {
         let mut d = self.clone();
         d.battlefield = bf.to_string();
         d
     }
     /// le dict Python, pour `validate`
-    fn json(&self) -> Json {
+    pub fn json(&self) -> Json {
         jo! {
             "legend" => self.legend.clone(), "champion" => self.champion.clone(), "main" => self.main.clone(),
             "runes" => self.runes.clone(), "battlefields" => self.battlefields.clone(), "sideboard" => self.sideboard.clone(),
@@ -526,7 +526,7 @@ impl TDeck {
     }
 }
 
-fn tload(key: &str) -> TDeck {
+pub fn tload(key: &str) -> TDeck {
     let l = load(key, None);
     TDeck {
         legend: l.deck.legend,
@@ -541,7 +541,7 @@ fn tload(key: &str) -> TDeck {
 }
 
 /// `decks.edit(deck, out, add)`
-fn edit(d: &TDeck, out: &[(&str, usize)], add: &[(&str, usize)]) -> TDeck {
+pub fn edit(d: &TDeck, out: &[(&str, usize)], add: &[(&str, usize)]) -> TDeck {
     let mut d = d.clone();
     for (n, q) in out {
         for _ in 0..*q {
@@ -558,14 +558,14 @@ fn edit(d: &TDeck, out: &[(&str, usize)], add: &[(&str, usize)]) -> TDeck {
 }
 
 /// `G2` : Akali G2 (Gorica)
-fn g2() -> TDeck {
+pub fn g2() -> TDeck {
     let g = tload("akali_gorica_rq-singapore");
     let gl = edit(&g, &[("Long Sword", 2)], &[("Akali, Silent", 1), ("Ferrous Forerunner", 1)]);
     edit(&gl, &[("Defy", 3)], &[("Ferrous Forerunner", 1), ("Lonely Poro", 1), ("Scuttle Crab", 1)])
 }
 
 /// `L` : LeBlanc IQ#5 (Gyatarina)
-fn leblanc() -> TDeck {
+pub fn leblanc() -> TDeck {
     tload("leblanc_gyatarina_ccs-iq5_1st")
 }
 
@@ -611,7 +611,7 @@ fn strs(j: &Json) -> Vec<String> {
 
 /// `_deck(x, default)` : deck donné par la page : clé de PRESETS, clé de decks.json, ou dict {legend, champion, main,
 /// runes, battlefields}.
-fn deck_arg(x: &Json, default: fn() -> TDeck) -> Result<TDeck, String> {
+pub fn deck_arg(x: &Json, default: fn() -> TDeck) -> Result<TDeck, String> {
     match x {
         Json::Null => return Ok(default()),
         Json::Str(s) if s.is_empty() => return Ok(default()),
@@ -1111,7 +1111,7 @@ fn modeled(n: &str) -> bool {
 }
 
 /// `catalog()` : toutes les cartes du jeu pour l'éditeur : m=1 si la carte est modélisée (jouable).
-fn catalog() -> String {
+pub fn catalog() -> String {
     let mut out = vec![];
     for x in spec_rows() {
         if col(x, "supertype") == "Token" {
@@ -1175,7 +1175,7 @@ fn banned(d: &TDeck) -> Vec<String> {
 }
 
 /// `default_decks()` : deck par défaut de l'IA pour chaque légende (menu de sélection).
-fn default_decks() -> BTreeMap<String, String> {
+pub fn default_decks() -> BTreeMap<String, String> {
     let mut best: BTreeMap<String, ((i64, i64, i64, String), String)> = BTreeMap::new();
     for k in decks().keys() {
         let d = tload(k);

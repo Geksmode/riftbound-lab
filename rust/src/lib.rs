@@ -1,7 +1,6 @@
 //! Moteur Riftbound fidèle (1v1), portage en Rust du moteur Python `riftbound/engine`.
 //! Contrat et avancement : `docs/memoire/portage-rust.md`. Le moteur Python reste la référence tant que le
 //! portage n'est pas fini : même graine = même partie dans les deux moteurs.
-
 pub mod actions;
 pub mod agents;
 pub mod ai;
@@ -17,6 +16,7 @@ pub mod game_turn;
 pub mod json;
 pub mod lang;
 pub mod match_;
+pub mod outils;
 pub mod plans;
 pub mod plans_general;
 pub mod plans_legendes;

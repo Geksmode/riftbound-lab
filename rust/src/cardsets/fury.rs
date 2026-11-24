@@ -4302,8 +4302,10 @@ pub fn register(r: &mut Registry) {
         im.hooks.set(
             "ignore_tank",
             Value::func("surfer_tank", |g, a| {
-                let (src, pid, bf) = (src_obj(&a[0]), a[1].int() as usize, a[2].int() as usize);
-                Ok((pid == g.o(src).ctrl && g.o(src).loc == Some(Loc::Bf(bf))).into())
+                // bf : l'emplacement des unités ciblées (Game.assign_damage passe `self.o(targets[0]).loc`, une
+                // valeur Loc ; Python : `src.loc == bf`)
+                let (src, pid, bf) = (src_obj(&a[0]), a[1].int() as usize, a[2].opt_loc());
+                Ok((pid == g.o(src).ctrl && g.o(src).loc == bf).into())
             }),
         );
         reg(r, im);
