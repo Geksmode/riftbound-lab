@@ -77,12 +77,24 @@ async function run(W, H, mobile, SEED) {
   ok("nouvelle partie : BO3 choisi, battlefield et premier joueur masqués", await ev("document.getElementById('sBo3').getAttribute('aria-checked')==='true' && document.getElementById('sBf').closest('label').hidden"));
   await pg.click(".vopt summary"); await pg.fill("#sSeed", SEED);   // la donne est dans « Plus d'options »
   await pg.screenshot({ path: `${OUT}/nouvelle-partie-bo3-${tag}.png` });
-  await tap("#bStart"); await waitFor("!!document.getElementById('bLaunch')");
+  await tap("#bStart"); await waitFor("!!document.getElementById('pNext')");
+  // étapes comme RiftAtlas (demande du 2026-11-24) : battlefield d'abord (113, 486.5), puis qui commence (115)
+  ok("manche 1 : étape 1 = battlefield seul (ni tirage, ni premier joueur, ni « Lancer »)", await ev("!document.getElementById('pRoll') && !document.querySelector('[data-pf]') && !document.getElementById('bLaunch')"));
+  ok("manche 1 : « Continuer » bloqué tant qu'aucun battlefield n'est choisi", await ev("document.getElementById('pNext').disabled"));
+  const bfs1 = await ev("[...document.querySelectorAll('[data-pbf]')].map(x=>x.dataset.pbf)");
+  ok(`manche 1 : 3 battlefields proposés en grand (${bfs1.join(", ")})`, bfs1.length === 3 && await ev("[...document.querySelectorAll('.bfbig [data-pbf] .bfth')].every(x=>x.getBoundingClientRect().height>=80)"));
+  await tap(`[data-pbf="${bfs1[1]}"]`);
+  ok("prépa (battlefield) : pas de défilement horizontal", await noHScroll());
+  const tg0 = await small("#mbox .bfbig button, #pNext, #pRand");
+  ok(`prépa (battlefield) : boutons ≥ 44 px (plus petit ${Math.min(...tg0)} px)`, Math.min(...tg0) >= 44);
+  await pg.screenshot({ path: `${OUT}/bo3-manche1-battlefield-${tag}.png` });
+  await tap("#pNext"); await waitFor("!!document.getElementById('bLaunch')");
+  ok(`manche 1 : étape 2 rappelle le battlefield choisi (« ${bfs1[1]} »)`, await ev(`document.getElementById('pBf').textContent === ${JSON.stringify(bfs1[1])} && !document.querySelector('[data-pbf]')`));
   const roll = await ev("document.getElementById('pRoll').textContent");
-  ok(`manche 1 : tirage affiché (« ${roll} »)`, /tirage/.test(roll));
-  ok("manche 1 : « Lancer » bloqué tant que rien n'est choisi", await ev("document.getElementById('bLaunch').disabled"));
+  ok(`manche 1 : tirage affiché à l'étape 2 (« ${roll} »)`, /tirage/.test(roll));
   let firstPick;
   if (await ev("!!document.querySelector('[data-pf]')")) {
+    ok("manche 1 : « Lancer » bloqué tant que le premier joueur n'est pas choisi", await ev("document.getElementById('bLaunch').disabled"));
     ok("manche 1 : question « Jouer en premier ou en second ? »", /premier ou en second/.test(await ev("document.getElementById('mbox').textContent")));
     firstPick = mobile ? 0 : 1;
     await tap(`[data-pf="${firstPick}"]`);
@@ -90,11 +102,8 @@ async function run(W, H, mobile, SEED) {
     const dec = await ev("document.getElementById('pDecision').textContent");
     ok(`manche 1 : décision de l'IA affichée (« ${dec} »)`, /L'IA/.test(dec));
   }
-  const bfs1 = await ev("[...document.querySelectorAll('[data-pbf]')].map(x=>x.dataset.pbf)");
-  ok(`manche 1 : 3 battlefields proposés (${bfs1.join(", ")})`, bfs1.length === 3);
-  await tap(`[data-pbf="${bfs1[1]}"]`);
   ok("prépa : pas de défilement horizontal", await noHScroll());
-  const tgt = await small("#mbox .choices button, #bLaunch");
+  const tgt = await small("#mbox .choices button, #bLaunch, #pBack");
   ok(`prépa : boutons ≥ 44 px (plus petit ${Math.min(...tgt)} px)`, Math.min(...tgt) >= 44);
   await pg.screenshot({ path: `${OUT}/bo3-manche1-prepa-${tag}.png` });
   await tap("#bLaunch");
@@ -137,25 +146,26 @@ async function run(W, H, mobile, SEED) {
     ok(`sideboard : boutons ≥ 44 px (plus petit ${Math.min(...tg2)} px)`, Math.min(...tg2) >= 44);
     await pg.screenshot({ path: `${OUT}/bo3-sideboard-${tag}.png` });
     const before = await ev("JSON.stringify(MATCH.deck)");
-    await tap("#sbOk"); await waitFor("!!document.getElementById('bLaunch')", 10000);
+    await tap("#sbOk"); await waitFor("!!document.getElementById('pNext')", 10000);
     const d2 = await ev("MATCH.deck"), d1 = JSON.parse(before);
     const c = (xs, n) => xs.filter(x => x === n).length;
     ok(`sideboard : « ${out} » sort, « ${inn} » entre (deck ${d2.main.length + 1}, sideboard ${d2.sideboard.length})`,
       c(d2.main, out) === c(d1.main, out) - 1 + (out === inn ? 1 : 0) && c(d2.main, inn) === c(d1.main, inn) + 1 - (out === inn ? 1 : 0) && d2.main.length === d1.main.length && d2.sideboard.length === d1.sideboard.length);
     ok("sideboard : le deck enregistré dans « Mes decks » n'a pas changé (403.8)", await ev(SAVED) === sideSaved);
   } else {
-    await waitFor("!!document.getElementById('bLaunch')", 10000);
+    await waitFor("!!document.getElementById('pNext')", 10000);
     ok("manche 1 nulle : pas de sideboard (403.10)", !(await ev("!!document.getElementById('sbOk')")));
   }
-  const prep2 = await ev("({t: document.getElementById('mbox').textContent, bfs: [...document.querySelectorAll('[data-pbf]')].map(x=>x.dataset.pbf), gone: !!document.getElementById('pGone'), pf: !!document.querySelector('[data-pf]')})");
+  const prep2 = await ev("({t: document.getElementById('mbox').textContent, bfs: [...document.querySelectorAll('[data-pbf]')].map(x=>x.dataset.pbf), gone: !!document.getElementById('pGone')})");
+  await tap(`[data-pbf="${prep2.bfs[0]}"]`); await tap("#pNext"); await waitFor("!!document.getElementById('bLaunch')");
+  Object.assign(prep2, await ev("({t2: document.getElementById('mbox').textContent, pf: !!document.querySelector('[data-pf]')})"));
   ok(`manche 2 : score « ${await ev("document.getElementById('pScore').textContent")} »`, prep2.t.includes("Match : " + exp));
   // 486.5 : après une manche gagnée (par l'un ou l'autre), les battlefields joués sont retirés ; après une nulle ils resservent.
   if (w1 === 0 || w1 === 1) ok(`manche 2 : « ${bfs1[1]} » (joué en manche 1, gagnée par ${w1 === 0 ? "toi" : "l'IA"}) n'est plus proposé : ${prep2.bfs.join(", ")} (486.5)`, !prep2.bfs.includes(bfs1[1]) && prep2.bfs.length === 2 && prep2.gone);
   else ok(`manche 2 : tes 3 battlefields restent proposés (manche nulle, 486.5.a) : ${prep2.bfs.join(", ")}`, prep2.bfs.length === 3);
-  if (w1 === 0) ok("manche 2 : l'IA a perdu, elle choisit (407.4)", /L'IA a perdu/.test(prep2.t) && !prep2.pf);
-  if (w1 === 1) ok("manche 2 : tu as perdu, tu choisis (407.4)", /Tu as perdu/.test(prep2.t) && prep2.pf);
+  if (w1 === 0) ok("manche 2 : l'IA a perdu, elle choisit (407.4)", /L'IA a perdu/.test(prep2.t2) && !prep2.pf);
+  if (w1 === 1) ok("manche 2 : tu as perdu, tu choisis (407.4)", /Tu as perdu/.test(prep2.t2) && prep2.pf);
   if (prep2.pf) await tap('[data-pf="0"]');
-  await tap(`[data-pbf="${prep2.bfs[0]}"]`);
   await pg.screenshot({ path: `${OUT}/bo3-manche2-prepa-${tag}.png` });
   await tap("#bLaunch"); await waitFor("!!(V && REC && REC.match && REC.match.game === 2 && !working)");
   const m2 = await ev("({bf: META.bf, chip: document.getElementById('gmatch').textContent, mine: REC.mine, seed: META.seed})");

@@ -592,6 +592,20 @@ body.dkopen { overflow: hidden; }
 .choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .choices button { flex: 1 1 140px; min-height: 48px; padding: 8px 12px; font-weight: 600; border-radius: 10px; }
 .bfch button { display: flex; flex-direction: column; align-items: stretch; gap: 6px; text-align: center; font-weight: 500; font-size: 13px; }
+.psteps { display: flex; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: ps; font-size: 12.5px; color: var(--ink-3); }
+.psteps li { counter-increment: ps; display: flex; align-items: center; gap: 6px; }
+.psteps li::before { content: counter(ps); width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font: 600 11px var(--f-mono); }
+.psteps li + li::after { content: none; }
+.psteps li.on { color: var(--ink); } .psteps li.on::before { border-color: var(--brass); background: rgba(214,178,94,.2); color: var(--ink); }
+.psteps li.done { color: var(--akali); } .psteps li.done::before { content: "✓"; border-color: var(--akali); }
+.bfbig { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; }
+.bfbig button { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-radius: 14px; text-align: center; font-size: 14px; min-height: 44px; }
+.bfbig button .bfth { height: auto; aspect-ratio: 279 / 200; border-radius: 10px; }
+.bfbig button[aria-pressed="true"] { border-color: var(--brass); box-shadow: 0 0 0 2px var(--brass), 0 0 20px rgba(214,178,94,.4); }
+.pbfdone { flex-direction: row; align-items: center; gap: 12px; }
+.pbfdone .pbfth { width: 112px; flex: none; } .pbfdone .bfth { height: auto; aspect-ratio: 279 / 200; }
+.pbfdone .grow { flex: 1; min-width: 0; } #pBf { font-family: var(--f-display); font-size: 16px; }
+.pbfdone button { min-height: 44px; flex: none; }
 .bfth { display: block; height: 54px; border-radius: 6px; background: #151a26 center / cover no-repeat; container-type: size; position: relative; overflow: hidden; }
 .sbstat { font-size: 13.5px; } .sbstat.ok { color: var(--akali); } .sbstat.ko { color: #f0a35b; }
 .sbbar { position: sticky; bottom: -16px; margin: 0 -16px -16px; padding: 10px 16px 16px; background: var(--chrome-2); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 -8px 18px rgba(0,0,0,.35); }
@@ -1275,7 +1289,9 @@ async function start() {
   matchPrep();
 }
 
-// Préparation d'une manche de BO3 : sideboard (si permis), qui commence, battlefield, puis lancement.
+// Préparation d'une manche de BO3, en étapes comme RiftAtlas (demande du 2026-11-24) : sideboard (si permis), puis le
+// battlefield (règles 113 et 486.5 : les battlefields sont mis de côté et choisis selon le mode), puis le tirage au sort ou
+// le perdant de la manche précédente et qui commence (règle 115 : l'ordre des tours vient après ; 407 des règles de tournoi).
 async function matchPrep() {
   if (!MATCH) return setupForm();
   if (MATCH.cur && MATCH.cur.rec) return;   // fin de manche pas encore enregistrée (matchFinish)
@@ -1284,11 +1300,27 @@ async function matchPrep() {
   catch (err) { toast("Erreur du moteur : " + String(err.message || err).split("\n").filter(Boolean).slice(-1)[0], "flash"); return; }
   MATCH.nx = nx; if (!MATCH.sb[nx.game]) MATCH.sbDone = "";
   MATCH.pick = { first: nx.chooser === 0 ? null : nx.first, bf: nx.allowed.length === 1 ? nx.allowed[0] : null };
+  MATCH.pick.step = MATCH.pick.bf ? "first" : "bf";   // battlefield d'abord (113, 486.5), puis l'ordre des tours (115)
   if (nx.sideboard && !MATCH.sb[nx.game]) return sbOpen();
   prepRender();
 }
 function prepRender() {
   const nx = MATCH.nx, P = MATCH.pick, st = MATCH.st;
+  const head = `<h3>Manche ${nx.game} · BO3</h3><div class="mscore" id="pScore">Match : ${scoreTxt(st.wins)}${MATCH.sbDone ? ` · <span class="small">${esc(MATCH.sbDone)}</span>` : ""}</div>
+    <ol class="psteps"><li class="${P.step === "bf" ? "on" : "done"}">Battlefield</li><li class="${P.step === "first" ? "on" : ""}">Qui commence</li></ol>`;
+  if (P.step === "bf") {
+    const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
+    openModal(`${head}<section class="prep"><div class="prepq">Choisis ton battlefield</div>
+      <div class="bfbig">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
+      ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
+      <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5). Le premier joueur se décide ensuite (règle 115).</div></section>
+      <div class="big"><button id="pRand">Au hasard</button><button class="main" id="pNext"${P.bf ? "" : " disabled"}>Continuer</button></div>`, true);
+    $("mbox").classList.add("wide");
+    $("mbox").querySelectorAll("[data-pbf]").forEach(b => b.onclick = () => { P.bf = b.dataset.pbf; prepRender(); });
+    $("pRand").onclick = () => { P.bf = nx.allowed[Math.floor(Math.random() * nx.allowed.length)]; prepRender(); };
+    $("pNext").onclick = () => { if (P.bf) { P.step = "first"; prepRender(); } };
+    return;
+  }
   let who;
   if (nx.game === 1) {
     who = `<div class="mres ${nx.roll === 0 ? "me" : "opp"}" id="pRoll">${nx.roll === 0 ? "Tu gagnes le tirage au sort." : "L'IA gagne le tirage au sort."}</div>
@@ -1299,17 +1331,12 @@ function prepRender() {
   if (nx.chooser === 0) who += `<div class="prepq">Jouer en premier ou en second ?</div><div class="choices">
       <button data-pf="0" aria-pressed="${P.first === 0}">Jouer en premier</button><button data-pf="1" aria-pressed="${P.first === 1}">Jouer en second</button></div>`;
   else who += `<div class="prepdec" id="pDecision">${nx.chooser === 1 ? (nx.first === 1 ? "L'IA choisit de jouer en premier." : "L'IA choisit de jouer en second : tu commences.") : (nx.first === 0 ? "Tu commences." : "L'IA commence.")}</div>`;
-  const gone = st.bfs[0].filter(b => !nx.allowed.includes(b));
-  const bfs = `<div class="prepq">Choisis ton battlefield</div><div class="choices bfch">${nx.allowed.map(b => `<button data-pbf="${esc(b)}" aria-pressed="${P.bf === b}">${bfThumb(b)}<span>${esc(b)}</span></button>`).join("")}</div>
-    ${gone.length ? `<div class="small rule" id="pGone">Déjà joué${gone.length > 1 ? "s" : ""} lors d'une manche gagnée par un joueur, retiré${gone.length > 1 ? "s" : ""} pour le reste du match (règle 486.5 ; après une nulle ils resservent, 486.5.a) : ${gone.map(esc).join(", ")}.</div>` : ""}
-    <div class="small rule">Choix simultanés : l'IA a choisi le sien sans voir le tien ; les deux sont révélés au lancement (règle 486.5).</div>`;
   const ready = P.first !== null && P.first !== undefined && P.bf;
-  openModal(`<h3>Manche ${nx.game} · BO3</h3><div class="mscore" id="pScore">Match : ${scoreTxt(st.wins)}${MATCH.sbDone ? ` · <span class="small">${esc(MATCH.sbDone)}</span>` : ""}</div>
+  openModal(`${head}<section class="prep pbfdone"><span class="pbfth">${bfThumb(P.bf)}</span><div class="grow"><div class="grp">Ton battlefield</div><div id="pBf">${esc(P.bf)}</div></div>${nx.allowed.length > 1 ? `<button id="pBack">Changer</button>` : ""}</section>
     <section class="prep"><div class="grp">Qui commence</div>${who}</section>
-    <section class="prep"><div class="grp">Battlefield</div>${bfs}</section>
     <div class="big"><button class="main" id="bLaunch"${ready ? "" : " disabled"}>Lancer la manche ${nx.game}</button></div>`, true);
   $("mbox").querySelectorAll("[data-pf]").forEach(b => b.onclick = () => { P.first = +b.dataset.pf; prepRender(); });
-  $("mbox").querySelectorAll("[data-pbf]").forEach(b => b.onclick = () => { P.bf = b.dataset.pbf; prepRender(); });
+  if ($("pBack")) $("pBack").onclick = () => { P.step = "bf"; prepRender(); };
   $("bLaunch").onclick = () => { if (!$("bLaunch").disabled) { closeModal(); launchGame(nx, P.bf, P.first); } };
 }
 

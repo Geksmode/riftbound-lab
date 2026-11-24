@@ -396,3 +396,6 @@ Unités +27 % à l'écran (86×120 à 1893×909), main entière visible, chevauc
 
 ## [2026-11-24] decision | Runes en rangée de cartes (ordinateur)
 Runes à côté de la base, taille de carte, épuisées couchées (comme RiftAtlas) ; survol du sideboard sans redessin. `verif_charge.mjs` contrôle leur taille.
+
+## [2026-11-24] decision | BO3 : battlefield puis qui commence, en deux étapes
+Comme RiftAtlas et les Core Rules (113, 486.5 avant 115). Détail : `pages/match.md`.
