@@ -57,7 +57,8 @@ jamais regroupées avec celles du moteur `07aa82b4bd-rust`, règle 2 ; tests sé
 | Marche | Verdict | Paires | Graines | Score du niveau du haut | LLR (bornes ± 2,94) | Moteur |
 |---|---|---|---|---|---|---|
 | 9 contre 8 (confirmation) | **GARDE** | 520 | 14000000-14000519 | **53,3 % ± 1,2** | +3,00 | `151f55e0f4-rust` |
-| 8 contre 7 | en cours | | 15000000+ | | | `151f55e0f4-rust` |
+| 8 contre 7 (test séquentiel 1) | **GARDE** | 568 | 15000000-15000567 | **52,8 % ± 1,1** | +3,04 | `151f55e0f4-rust` |
+| 8 contre 7 (test séquentiel 2, confirmation) | en cours | | 16000000+ | | | `151f55e0f4-rust` |
 
 **Marche 9 contre 8 : démontrée selon la règle 9** (deux tests séquentiels « garde », sur des graines différentes, un par
 version du moteur). Le gain est plus petit que ce que disait le premier test : 53,3 % ± 1,2 ici contre 55,6 % ± 1,8 (un test
