@@ -144,3 +144,27 @@ Demande : « regarde TCG arena, regarde rift atlas les différents outils, et am
 - Éditeur : `DKF.cost`, `DKF.sort` (`DKSORT`), `DKG` (groupes de `dkList`), `DKSNAP` / `dkMark` / `dkDirty` / `dkLose` (`confirm` avant Nouveau, Ouvrir, Importer). Fermer l'éditeur ne demande rien : le deck reste en mémoire jusqu'au rechargement de la page. Un robot qui écrase un deck modifié doit accepter le dialogue (`pg.once("dialog", d => d.accept())`).
 - Pas repris : le déplacement libre des cartes, compteurs, jetons à la main (notre moteur applique les règles), comptes, matchmaking, cosmétiques. Idées restantes vues chez eux : lien de partage d'un deck, cartes favorites, « Suggestions » de Rift Atlas.
 Robot `train/verif_qol.mjs` (porte, partie 3).
+
+## Bilan, testeur de main, exercices (2026-11-24)
+Demande de l'utilisateur après une liste de propositions : « 1 et 2 c'est ok, ensuite faire des puzzles ». Tout est dans
+`train/src.html` (bloc avant le lexique), sans changement du moteur ; traductions dans `i18n.js`.
+- **Bilan** (`bilanLoad`, menu `bilan`) : parties finies contre l'IA (`fetchGames`, pas les duels ; une manche de BO3 =
+  une partie), groupées par `names[1]`, `lvlOf(g)`, `whoFirst`. Intervalle de Wilson à 95 % (`wilson`) ; verdict
+  « favorable / défavorable » seulement si l'intervalle exclut 50 %, sinon « on ne sait pas ».
+- **Tester la main** (`htOpen`, bouton `dkHand` de l'éditeur) : tirage en JavaScript sur `DK.main` (39 cartes, le champion
+  choisi commence dans sa zone), règles 116, 117.1 à 117.3, 416.1, 430.4.a, 485.7, 315.4.b. Chances : `htProb`
+  (hypergéométrique exacte), colonnes 4, 6, 8, 10 cartes vues (`HT_SEEN`).
+- **Exercices** (`pzScan`, `pzStart`, `pzBar`, menu `puz`, clé `rbt-puz`) : `train.replay_load` puis `train.replay_hint`
+  à chaque décision « Tu joues ». L'exercice est un replay ouvert à l'étape de la décision avec `dec` laissé actif
+  (`pzLive`) ; `choose` intercepte le coup (`pzAnswer`) au lieu d'appeler le moteur.
+- **Leçon** : **quand** j'affiche un conseil de l'IA comme une note, **je le calcule plusieurs fois et je donne l'erreur
+  type**. *Pourquoi :* `hint` tire ses mondes au hasard (le hasard du coach n'est pas dans l'état sauvegardé) ; le robot a
+  montré le « meilleur » coup d'un calcul à -4,7 au calcul suivant, et un écart-type d'environ 5 à 12 sur l'écart d'un
+  coup (7 positions, une partie, niveau du conseil de la table). `pzEval` moyenne 8 calculs, écarts appariés ; un coup
+  n'est dit moins bon qu'au-delà de 2 points et de 2 erreurs types. Même jour, demande de l'utilisateur (« oui pour le conseil
+  bruité ») : « Conseil » et « Analyser ce coup » passent par `hintEval` (8 calculs, ± erreur type par ligne) ; le texte
+  « sous 2 c'est du bruit » est remplacé partout (bulle, replay, aide). Contrôlé par `verif_entrain` et `verif_replay`.
+- Robot `train/verif_entrain.mjs` (porte, partie 4) : comptes et intervalles du bilan recalculés à part, chances
+  recalculées par dénombrement, exercice joué par le gros bouton puis par les coups conseillé et joué ; vérifié par
+  robot (toucher simulé), pas sur un vrai téléphone.
+

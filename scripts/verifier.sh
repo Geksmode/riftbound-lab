@@ -30,7 +30,7 @@ declare -A PARTIE=(
   [verif_anglais]=1 [verif_tuto]=1 [verif_charge]=1 [verif_son]=1 [verif_hidden]=1 [verif_vs]=1
   [verif_replay]=2 [verif_nashor]=2 [verif_espace]=2 [verif_dash]=2 [verif_flow]=2 [verif_cibles]=2 [verif_drapeau]=2 [verif_showoff]=2 [verif_fizz]=2 [verif_multi]=2
   [verif_qol]=3 [verif_fleches]=3 [verif_deploy]=3 [verif_reactif]=3 [verif_base]=3 [verif_cout]=3 [verif_revele]=3 [verif_repeat]=3 [verif_deckimg]=3 [verif_stats]=3
-  [verif_duel]=4 [verif_match]=4 [verif_mobile]=4 [verif_banish]=4 [verif_predict]=4 [verif_mulligan]=4 [verif_gold]=4 [verif_regard]=4
+  [verif_duel]=4 [verif_match]=4 [verif_mobile]=4 [verif_banish]=4 [verif_predict]=4 [verif_mulligan]=4 [verif_gold]=4 [verif_regard]=4 [verif_entrain]=4
 )
 PART="${RB_PART:-}"
 if [ -n "$PART" ] && ! [[ "$PART" =~ ^[1-4]/4$ ]]; then echo "RB_PART doit valoir 1/4, 2/4, 3/4 ou 4/4" >&2; exit 2; fi
@@ -93,7 +93,7 @@ ROBOTS="anglais:verif_anglais:2400 cache:verif_replay:1200 cache:verif_fleches:9
   cache:verif_dash:600 cache:verif_hidden:900 cache:verif_cout:900 cache:verif_predict:600 cache:verif_flow:600
   cache:verif_mulligan:600 cache:verif_vs:600 cache:verif_revele:600 cache:verif_cibles:600 cache:verif_drapeau:900
   cache:verif_showoff:600 cache:verif_fizz:600 cache:verif_repeat:900 cache:verif_gold:600 cache:verif_regard:900
-  cache:verif_multi:600 cache:verif_deckimg:600 cache:verif_stats:600 cache:verif_qol:900"
+  cache:verif_multi:600 cache:verif_deckimg:600 cache:verif_stats:600 cache:verif_qol:900 cache:verif_entrain:900"
 NROB="${RB_ROBOTS:-$JOBS}"
 havepw() { [ -f /opt/node22/lib/node_modules/playwright/index.mjs ] || (cd "$TR" && node -e "require.resolve('playwright')" >/dev/null 2>&1); }
 peerjs() { local c; for c in "$TR/node_modules/.bin/peerjs" /tmp/claude-0/peersrv/node_modules/.bin/peerjs; do [ -x "$c" ] && echo "$c" && return 0; done; return 1; }

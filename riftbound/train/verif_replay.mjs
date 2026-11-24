@@ -64,7 +64,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   const lab = await ev("$('rpbar').querySelector('.rpmine') ? $('rpbar').querySelector('.rpq').textContent : ''");
   await tap("#rpAn"); await waitFor("!!(RP && RP.hint[RP.k])", 120000); await pg.waitForTimeout(200);
   const rows = await ev("[...document.querySelectorAll('#rpbar .rpmine .hintrow')].map(r => r.textContent)");
-  ok(`${w} px : « Analyser ce coup » donne le conseil de l'IA (${rows.length} coups ; « ${lab.slice(0, 60)} »)`, kA >= 0 && rows.length >= 2 && /meilleur/.test(rows[0]));
+  ok(`${w} px : « Analyser ce coup » donne le conseil de l'IA (${rows.length} coups ; « ${lab.slice(0, 60)} »)`, kA >= 0 && rows.length >= 2 && /meilleur/.test(rows[0]) && rows.slice(1).every(x => /±|perd la partie|loses the game/.test(x)));
   const inBar = await ev(`(()=>{ const r = $('rpbar').getBoundingClientRect(), c = $('ctrl').getBoundingClientRect(), q = $('rpQuit').getBoundingClientRect();
     const over = ${mob} && r.bottom > c.top + 1;            // téléphone : jamais sur la barre de commande
     return { ok: r.width > 0 && r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 && !over && document.documentElement.scrollWidth <= innerWidth + 1,

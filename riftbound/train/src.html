@@ -157,6 +157,38 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .rpt { color: var(--brass); }
 .rpfold { display: none; }
 body.replay #boardHelp { display: none; }
+/* bilan par matchup, testeur de main, exercices (2026-11-24) */
+.bilrow { display: grid; grid-template-columns: minmax(0, 1.5fr) auto minmax(90px, 1fr) auto; gap: 4px 12px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.bilrow:first-of-type { border-top: 0; }
+.bilrow .bn { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bilrow .bs { font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); white-space: nowrap; min-width: 118px; text-align: right; }
+.bilbar { position: relative; height: 10px; border-radius: 5px; background: rgba(255,255,255,.08); }
+.bilbar i { position: absolute; top: 0; bottom: 0; border-radius: 5px; background: var(--ink-3); opacity: .7; }
+.bilbar b { position: absolute; top: -3px; bottom: -3px; width: 3px; margin-left: -1px; border-radius: 2px; background: var(--brass); }
+.bilbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--ink-2); }
+.bilv { font-size: 11.5px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; min-width: 92px; text-align: center; }
+.pzbar .hintrow .v, .hpop .hintrow .v, .rpmine .hintrow .v { white-space: nowrap; }
+.bilv.fav { color: var(--akali); border-color: var(--akali); } .bilv.def { color: var(--leblanc); border-color: var(--leblanc); }
+.bilsub { grid-column: 1 / -1; font-size: 11.5px; color: var(--ink-3); }
+.htrow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.htrow button[aria-pressed="true"] { border-color: var(--brass); color: var(--ink); box-shadow: inset 0 0 0 1px var(--brass); }
+.hthand { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.htc { position: relative; padding: 0; border: 0; background: none; border-radius: 8px; aspect-ratio: 200 / 279; cursor: pointer; min-width: 0; }
+.htc .dkimg { border-radius: 8px; }
+.htc.out .dkimg { filter: brightness(.4); box-shadow: 0 0 0 3px var(--leblanc); }
+.htc.new .dkimg { box-shadow: 0 0 0 3px var(--akali); }
+.htc em { position: absolute; left: 4px; top: 4px; font: normal 10px/1.2 var(--f-body); padding: 2px 5px; border-radius: 5px; background: rgba(8,10,16,.88); color: var(--ink); }
+.htrunes .rune { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font: 600 9px/1 var(--f-mono); color: #111; font-style: normal; vertical-align: -4px; margin-right: 2px; }
+.httab tr.on td { background: rgba(214,178,94,.14); }
+.httab th { white-space: normal; vertical-align: bottom; } .httab td:first-child { white-space: normal; }
+.httab tbody tr { cursor: pointer; }
+.httab tr.grp td { border-top: 2px solid var(--brass); color: var(--brass); }
+.pzbar .pzv { font-size: 13px; padding: 8px; border-radius: 10px; border: 1px solid var(--line); }
+.pzbar .pzv.ok { border-color: var(--akali); background: rgba(114,226,188,.08); } .pzbar .pzv.ko { border-color: var(--leblanc); background: rgba(240,120,150,.07); }
+.pzrow button { min-height: 36px; padding: 6px 16px; align-self: center; }
+.pzacts { display: flex; flex-wrap: wrap; gap: 6px; } .pzacts button { flex: 1 1 auto; min-height: 36px; }
+.pzprog { height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden; } .pzprog i { display: block; height: 100%; background: var(--brass); }
+@media (max-width: 820px) { .httab { font-size: 11px; table-layout: fixed; } .httab th { font-size: 10px; } .httab th:first-child { width: 32%; } .httab th:nth-child(2) { width: 8%; } .httab td, .httab th { padding: 3px 2px; } .httab td:first-child { overflow-wrap: anywhere; } .httab td:not(:first-child) { white-space: nowrap; } .bilrow { grid-template-columns: minmax(0, 1fr) auto; } .bilrow .bilbar { grid-column: 1 / 2; } .hthand { grid-template-columns: repeat(auto-fill, minmax(66px, 1fr)); gap: 6px; } }
 @media (max-width: 820px), (max-height: 520px) and (max-width: 999px) {
   /* téléphone : la barre de lecture devient un panneau au-dessus de la barre de commande (placé par rpPlace) */
   .rpbar { position: fixed; left: 8px; right: 8px; z-index: 44; max-height: 42vh; overflow-y: auto; padding: 8px; gap: 6px;
@@ -1703,11 +1735,11 @@ function renderCtrl(v) {
   $("hpop").hidden = true; $("fpop").hidden = true;
   $("bFlag").hidden = !!DU || !!RP;   // pas d'IA en duel ; en replay, rien à enregistrer
   $("bFlag").disabled = working || !REC || !lastAIlab;
-  if (RP) return rpCtrl(v);
+  if (RP && !pzLive()) return rpCtrl(v);
   $("bUndo").disabled = working || !(DU ? duelUndoIdx() >= 0 : v.undo);
   $("bHint").disabled = working || !v.dec;
-  $("bHint").hidden = !!DU;   // en duel : pas de conseil ; « Reprendre » seulement tant que tu as la main (duelUndoIdx)
-  $("bUndo").hidden = false;
+  $("bHint").hidden = !!DU || !!RP;   // en duel : pas de conseil ; « Reprendre » seulement tant que tu as la main (duelUndoIdx)
+  $("bUndo").hidden = !!RP;
   M.className = "endbtn"; M.onclick = null;
   if (v.winner !== null && v.winner !== undefined) {
     if (DU) return duelCtrlEnd(v);
@@ -1741,10 +1773,12 @@ function renderCtrl(v) {
   M.textContent = o.k === "end" ? "Terminer le tour" : "Passer";
   M.classList.toggle("pass", o.k === "pass");
   M.disabled = working; M.onclick = () => choose(o.i);
+  if (RP) pzBar(v);
 }
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 async function choose(i) {
+  if (RP) { if (pzLive() && !working && V && V.dec) pzAnswer(i); return; }   // replay : lecture seule ; exercice : le coup est noté, pas joué
   if (working || !V || !V.dec) return;
   sel = null; mode = null; lastAI = null; toast(""); setHandOpen(false); setBaseOpen(null);
   LOGSTACK.push(LOG.length);
@@ -1764,10 +1798,10 @@ $("bHint").onclick = async e => {
   recMove(["hint", 5]);
   const v0 = V;
   let hs;
-  try { hs = await J(T.hint(5)); } catch (err) { console.error(err); P.hidden = true; toast("Conseil impossible : " + errTxt(err), "flash"); return; }
+  try { hs = (await hintEval(() => T.hint(99))).slice(0, 5); } catch (err) { console.error(err); P.hidden = true; toast("Conseil impossible : " + errTxt(err), "flash"); return; }
   if (V !== v0 || P.hidden) { P.hidden = true; return; }   // un coup joué pendant le calcul : le conseil ne vaut plus
-  P.innerHTML = `<div class="pt">Conseil de l'IA</div>` + (hs.length ? hs.map((x, j) => `<button class="hintrow ${j ? "" : "best"}" data-i="${x.i}"><span>${esc(cap(x.label))}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></button>`).join("") : `<div class="small">Rien à conseiller ici.</div>`) +
-    `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit. Touche une ligne pour la jouer.</div>`;
+  P.innerHTML = `<div class="pt">Conseil de l'IA</div>` + (hs.length ? hs.map((x, j) => `<button class="hintrow ${j ? "" : "best"}" data-i="${x.i}"><span>${esc(cap(x.label))}</span><span class="v">${j ? esc(gapTxt(x)) : "meilleur"}</span></button>`).join("") : `<div class="small">Rien à conseiller ici.</div>`) +
+    `<div class="small" style="color:var(--ink-3)">Moyenne de ${PZ_REP} simulations sur 2 tours, ± erreur type : sous 2 erreurs types, deux coups ne sont pas départagés. 7 vaut environ un point. Touche une ligne pour la jouer.</div>`;
   placeHint();
 };
 function placeHint(P = $("hpop"), btn = $("bHint")) {
@@ -3193,7 +3227,7 @@ function dkRender() {
         <input id="dkName" placeholder="Nom du deck" value="${esc(DK.name)}">
         <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
         <ul class="dkerr"${DKERR.length ? "" : " hidden"}>${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
-        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}<span class="dkunsaved" id="dkUns"${dkDirty() ? "" : " hidden"}>● non enregistré</span></div>
+        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button><button id="dkHand">Tester la main</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}<span class="dkunsaved" id="dkUns"${dkDirty() ? "" : " hidden"}>● non enregistré</span></div>
         <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV === "list"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button><button id="dkVStat" aria-pressed="${DKV === "stats"}">Stats</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}${DKV === "list" ? `<select id="dkGrp" aria-label="Grouper le deck">${[["type", "Groupes : type"], ["e", "Groupes : énergie"], ["dom", "Groupes : domaine"]].map(([v, l]) => `<option value="${v}"${DKG === v ? " selected" : ""}>${l}</option>`).join("")}</select>` : ""}</div>
         <div class="dklist">${DKV === "img" ? dkVisual() : DKV === "stats" ? dkStats() : dkList()}</div>
       </aside>
@@ -3204,6 +3238,7 @@ function dkRender() {
   // le menu d'une image se ferme quand l'utilisateur fait défiler (molette, doigt), pas quand le redessin replace le défilement
   for (const ty of ["wheel", "touchmove"]) V_.querySelector(".dkdeck").addEventListener(ty, () => { if (DKPOP) { Z.hidden = true; closeDkPop(); } }, { passive: true });
   if (DKPOP) dkPop();
+  $("dkHand").onclick = () => htOpen();
   $("dkVList").onclick = () => { DKV = "list"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
   $("dkVImg").onclick = () => { DKV = "img"; store.set("rbt-dkview", DKV); dkRender(); };
   $("dkVStat").onclick = () => { DKV = "stats"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
@@ -3813,7 +3848,7 @@ addEventListener("pagehide", () => { if (DU && DU.role === "host") duelSend({ t:
 // étapes, tes décisions (⇤ ⇥), lecture automatique, et « Analyser ce coup » (conseil de l'IA à ta place, écart en points).
 // La partie en cours éventuelle est gardée et rendue en quittant.
 let RP = null;
-async function startReplay(g) {
+async function startReplay(g, pz) {
   if (RP || working) return;
   openModal(`<h3>Revoir la partie</h3><div class="think"><i></i>Le moteur rejoue la partie coup par coup…</div><div class="small">L'IA recalcule ses coups : de quelques secondes à une minute.</div>`, false);
   working = true;   // le rejeu prend du temps (worker) : rien d'autre ne part vers le moteur pendant ce temps
@@ -3828,14 +3863,14 @@ async function startReplay(g) {
   RP = { g, r, k: 0, timer: null, hint: {}, busy: false,
     keep: { V, LOG, LOGSTACK, META, PN, MEP, lastAI, CARDS, seenLog, gmeta: $("gmeta").textContent, gres: $("gres").hidden } };
   MEP = 0; META = r.meta; PN = r.meta.names; CARDS = cards; LOGSTACK = [];
-  RP.warn = [];
+  RP.warn = []; RP.pz = pz ? { ...pz, ans: null } : null; RP.pzmode = !!pz;
   if (g.engine && BUILD.engine && g.engine !== BUILD.engine) RP.warn.push("moteur différent de celui de la partie : le rejeu peut s'écarter");
   if (r.desync !== null && r.desync !== undefined) RP.warn.push(`le rejeu s'arrête à ta décision n° ${r.desync + 1} (moteur changé depuis)`);
   else if (!r.same) RP.warn.push("fin différente de la partie enregistrée (moteur changé depuis)");
   $("gmeta").textContent = `Replay · donne ${g.seed} · ${PN[0]} contre ${PN[1]}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + g.match.game : ""} · ${fmtDate(g.updated || g.started)}`;
   $("gres").hidden = true;
   document.body.classList.add("replay");
-  rpGo(0);
+  rpGo(pz ? pz.k : 0);
 }
 // Les images arrivent du moteur plus tard : seule la dernière étape demandée est affichée (RP.tok).
 async function rpGo(k) {
@@ -3848,7 +3883,8 @@ async function rpGo(k) {
   RP.f = f;
   LOG = RP.r.log.filter(l => l[2] <= k).map(l => [l[0], l[1]]); seenLog = LOG.length;
   lastAI = f.v.aii || null; mode = null; sel = null;
-  const v = { ...f.v, dec: null, ask: null, ai: null, aii: null, alias: {}, undo: 0, busy: false, wait: null };
+  const live = pzLive();   // exercice : ta décision de cette étape est jouable (le coup choisi est noté, pas envoyé au moteur)
+  const v = { ...f.v, dec: live ? f.v.dec : null, ask: null, ai: null, aii: null, alias: live ? f.v.alias || {} : {}, undo: 0, busy: false, wait: null };
   V = v; show(v); addLog([]); RP.shown = k;   // étape affichée (les robots l'attendent)
 }
 function rpStop() { if (RP && RP.timer) { clearInterval(RP.timer); RP.timer = null; } }
@@ -3863,6 +3899,7 @@ const normLab = x => String(x || "").replace(/^Tu joues : /, "").toLowerCase().t
 function rpCtrl(v) {
   const M = $("bMain"), I = $("turnInfo"), f = RP.f || { lab: "", who: "jeu" }, k = RP.k, n = RP.r.n;
   $("bUndo").hidden = $("bHint").hidden = true;
+  if (RP.pz) return pzBar(v);
   I.innerHTML = `<b class="rpt">Replay</b><span class="tn">tour ${v.st.t} · étape ${k + 1}/${n}</span>`;
   M.className = "endbtn"; M.disabled = false; M.onclick = rpPlay;
   M.textContent = RP.timer ? "⏸ Pause" : k >= n - 1 ? "↺ Revoir du début" : "▶ Lecture";
@@ -3872,9 +3909,9 @@ function rpCtrl(v) {
   const nx = RP.r.mine.find(x => x[0] > k), pv = [...RP.r.mine].reverse().find(x => x[0] < k);
   const hs = RP.hint[k];
   const rows = hs ? (hs.length ? hs.map((x, j) => { const me = normLab(x.label) === normLab(mine[1]);
-      return `<div class="hintrow ${j ? "" : "best"} ${me ? "mine" : ""}"><span>${esc(cap(x.label))}${me ? " <b>(ton coup)</b>" : ""}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></div>`; }).join("")
+      return `<div class="hintrow ${j ? "" : "best"} ${me ? "mine" : ""}"><span>${esc(cap(x.label))}${me ? " <b>(ton coup)</b>" : ""}</span><span class="v">${j ? esc(gapTxt(x)) : "meilleur"}</span></div>`; }).join("")
       + (hs.some(x => normLab(x.label) === normLab(mine[1])) ? "" : `<div class="small">Ton coup n'est pas parmi les ${hs.length} meilleurs de l'IA.</div>`)
-      + `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit.</div>`
+      + `<div class="small" style="color:var(--ink-3)">Moyenne de ${PZ_REP} simulations sur 2 tours, ± erreur type : sous 2 erreurs types, deux coups ne sont pas départagés. 7 vaut environ un point.</div>`
     : `<div class="small">Rien à conseiller ici (un seul coup possible).</div>`) : "";
   const end = v.winner !== null && v.winner !== undefined ? `<div class="rpend ${v.winner === 0 ? "w" : "l"}">${v.winner === 0 ? "Victoire" : v.winner === 1 ? "Défaite" : "Partie nulle"} ${v.st.pts[0]}-${v.st.pts[1]}</div>` : "";
   bar.classList.toggle("fold", !!RP.fold);
@@ -3898,13 +3935,14 @@ function rpPlace() {
 addEventListener("resize", () => { if (RP) rpPlace(); });
 document.addEventListener("click", async e => {
   if (!RP) return;
+  if (e.target.closest("#rpbar [data-pz]")) return pzClick(e.target.closest("[data-pz]").dataset.pz);
   const b = e.target.closest("#rpbar [data-rpg]");
   if (b) { rpStop(); rpGo(+b.dataset.rpg); return; }
   if (e.target.closest("#rpQuit")) { await exitReplay(); return; }
   if (e.target.closest("#rpFold")) { RP.fold = !RP.fold; rpCtrl(V); return; }
   if (e.target.closest("#rpAn") && !RP.busy) {
     const k = RP.k, rp = RP; RP.busy = true; rpCtrl(V);
-    try { rp.hint[k] = await J(T.replay_hint(k, 5)); } catch (err) { rp.hint[k] = []; }
+    try { rp.hint[k] = (await hintEval(() => T.replay_hint(k, 99))).slice(0, 5); } catch (err) { rp.hint[k] = []; }
     rp.busy = false; if (RP === rp && RP.k === k) rpCtrl(V);
   }
 });
@@ -3912,7 +3950,7 @@ document.addEventListener("input", e => { if (RP && e.target.id === "rpRange") {
 async function exitReplay() {
   if (!RP) return;
   rpStop();
-  const K = RP.keep; RP = null;
+  const K = RP.keep, wasPz = !!RP.pzmode; RP = null;
   const bar = $("rpbar"); if (bar) bar.remove();
   document.body.classList.remove("replay");
   let r = { prev: false };
@@ -3920,8 +3958,302 @@ async function exitReplay() {
   LOG = K.LOG; LOGSTACK = K.LOGSTACK; META = K.META; PN = K.PN; MEP = K.MEP; lastAI = K.lastAI; CARDS = K.CARDS; seenLog = K.seenLog;
   $("gmeta").textContent = K.gmeta; $("gres").hidden = K.gres;
   mode = null; sel = null;
-  if (K.V && r.prev) { V = K.V; show(K.V); addLog([]); }
-  else { V = null; $("board").innerHTML = `<div class="loading">Choisis une partie à revoir, ou commence une nouvelle partie.</div>`; $("stack").innerHTML = ""; showMenu("games"); }
+  if (K.V && r.prev) { V = K.V; show(K.V); addLog([]); if (wasPz) showMenu("puz"); }
+  else { V = null; $("board").innerHTML = `<div class="loading">Choisis une partie à revoir, ou commence une nouvelle partie.</div>`; $("stack").innerHTML = ""; showMenu(wasPz ? "puz" : "games"); }
+}
+
+// ------------------------------------------------------------ bilan par matchup (menu « Bilan », 2026-11-24)
+// Parties finies contre l'IA (chaque manche d'un BO3 compte pour une partie ; pas les duels). Pour chaque groupe :
+// victoires, défaites, taux et intervalle de Wilson à 95 % (environ 2 écarts-types). Si l'intervalle contient 50 %,
+// on ne sait pas : c'est écrit tel quel, sans pourcentage mis en avant.
+let BILALL = false;
+function wilson(w, n) {
+  if (!n) return null;
+  const z = 1.96, p = w / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d;
+  return [Math.max(0, c - h), Math.min(1, c + h)];
+}
+function bilanGroups(gs, key) {
+  const m = new Map();
+  for (const g of gs) { const k = key(g); if (k === null || k === undefined || k === "") continue;
+    const r = m.get(k) || { k, w: 0, l: 0, d: 0, dp: 0, np: 0 };
+    if (g.result.winner === 0) r.w++; else if (g.result.winner === 1) r.l++; else r.d++;
+    const p = g.result.pts; if (Array.isArray(p) && p.length === 2) { r.dp += p[0] - p[1]; r.np++; }
+    m.set(k, r); }
+  return [...m.values()];
+}
+function bilanRow(r, label) {
+  const n = r.w + r.l, ci = wilson(r.w, n), pc = x => Math.round(x * 100);
+  const v = !ci ? ["", "–"] : ci[0] > .5 ? ["fav", "favorable"] : ci[1] < .5 ? ["def", "défavorable"] : ["", "on ne sait pas"];
+  const avg = r.np ? r.dp / r.np : null;
+  return `<div class="bilrow" data-k="${esc(r.k)}" data-w="${r.w}" data-l="${r.l}" data-lo="${ci ? pc(ci[0]) : ""}" data-hi="${ci ? pc(ci[1]) : ""}"><span class="bn" title="${esc(label)}">${esc(label)}</span><span class="bs">${r.w} V · ${r.l} D${r.d ? ` · ${r.d} N` : ""}</span>
+    <span class="bilbar" aria-hidden="true">${ci ? `<i style="left:${pc(ci[0])}%;right:${100 - pc(ci[1])}%"></i><b style="left:${pc(r.w / n)}%"></b>` : ""}</span><span class="bilv ${v[0]}">${v[1]}</span>
+    <span class="bilsub">${ci ? `<span>${pc(r.w / n)} % de victoires, entre ${pc(ci[0])} % et ${pc(ci[1])} %</span>` : `<span>pas de partie décidée</span>`}${avg !== null ? `<span> · écart de points moyen ${(avg > 0 ? "+" : "") + avg.toFixed(1)}</span>` : ""}</span></div>`;
+}
+async function bilanLoad() {
+  const box = $("bilBox"); if (!box) return;
+  const gs0 = await fetchGames();
+  if (MENUV !== "bilan" || !$("bilBox")) return;
+  if (!gs0) { box.innerHTML = `<div class="mcard warn">Lecture des parties impossible pour l'instant.</div>`; return; }
+  const k = trainKey(), fin = gs0.filter(g => g.result && !g.duel && g.kind !== "duel");
+  const mine = k ? fin.filter(g => gameWith(g, k)) : [];
+  const useAll = BILALL || !k, gs = useAll ? fin : mine;
+  const sw = k ? `<div class="htrow" role="group" aria-label="Parties comptées"><button data-bil="deck" aria-pressed="${!useAll}">Mon deck d'entraînement (${mine.length})</button><button data-bil="all" aria-pressed="${useAll}">Tous les decks (${fin.length})</button></div>` : "";
+  if (!gs.length) { box.innerHTML = sw + `<div class="mcard" id="bilNone">${useAll ? "Pas encore de partie finie." : "Pas encore de partie finie avec ce deck."} Le bilan se remplit dès ta première partie terminée contre l'IA.</div>`; return; }
+  const sec = (t, id, rows) => `<div class="mcard" id="${id}"><div class="t">${t}</div>${rows.join("")}</div>`;
+  const by = r => r.w + r.l + r.d;
+  const tot = bilanGroups(gs, () => "tot")[0];
+  const opp = bilanGroups(gs, g => (g.names || [])[1]).sort((a, b) => by(b) - by(a) || String(a.k).localeCompare(String(b.k)));
+  const lvl = bilanGroups(gs, g => lvlOf(g)).sort((a, b) => a.k - b.k);
+  const fst = bilanGroups(gs, g => g.whoFirst === 0 || g.whoFirst === 1 ? g.whoFirst : null).sort((a, b) => a.k - b.k);
+  box.innerHTML = sw + sec("Ensemble", "bilTot", [bilanRow(tot, useAll ? "Toutes les parties" : trainName(k))])
+    + sec("Par légende adverse", "bilOpp", opp.map(r => bilanRow(r, r.k)))
+    + sec("Par niveau de l'IA", "bilLvl", lvl.map(r => bilanRow(r, "IA " + lvlName(r.k))))
+    + (fst.length ? sec("Selon qui commence", "bilFst", fst.map(r => bilanRow(r, r.k === 0 ? "Tu commences" : "L'IA commence"))) : "")
+    + `<div class="mcard small">Parties finies contre l'IA ; chaque manche d'un BO3 compte pour une partie, les duels ne comptent pas. La barre montre l'intervalle à 95 % du taux de victoire (trait doré : taux observé, trait fin : 50 %). Tant que l'intervalle contient 50 %, on ne sait pas si le matchup est favorable : il faut plus de parties.</div>`;
+}
+
+// ------------------------------------------------------------ testeur de main (éditeur de deck → « Tester la main », 2026-11-24)
+// Affichage seulement, sans le moteur. Main de 4 (règle 116) ; mulligan : jusqu'à 2 cartes mises de côté, autant de
+// cartes piochées, puis les cartes mises de côté recyclées sous le deck (117.1 à 117.3, 416.1). À chaque tour : 2 runes
+// (430.4.a), 3 au premier tour du joueur qui joue en second (485.7), puis 1 carte (315.4.b) ; le premier joueur pioche
+// aussi à son premier tour (485.7 ne retire cette pioche qu'aux modes à plus de deux joueurs). Le Chosen Champion ne se
+// pioche pas : le deck est DK.main. Probabilités : tirage sans remise (loi hypergéométrique), calcul exact.
+let HT = null;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function htDeal(first) {
+  const deck = [], runes = [];
+  for (const [n, q] of Object.entries(DK.main)) for (let i = 0; i < q; i++) deck.push(n);
+  for (const [d, q] of Object.entries(DK.runes || {})) for (let i = 0; i < q; i++) runes.push(d);
+  shuffle(deck);
+  HT = { first, deck, hand: deck.splice(0, 4).map(n => ({ n })), out: new Set(), phase: "mull", mull: 0, turn: 0, rdeck: shuffle(runes), runes: [], played: 0, sel: HT ? HT.sel : new Set() };
+}
+function htMull() {
+  const aside = [...HT.out].sort((a, b) => b - a).map(i => HT.hand.splice(i, 1)[0]);
+  for (let i = 0; i < aside.length && HT.deck.length; i++) HT.hand.push({ n: HT.deck.shift(), nw: 1 });
+  HT.deck.push(...aside.map(c => c.n));
+  HT.mull = aside.length; HT.out = new Set(); HT.phase = "play";
+}
+function htNext() {
+  HT.turn++; HT.hand.forEach(c => delete c.nw);
+  HT.runes.push(...HT.rdeck.splice(0, HT.turn === 1 && !HT.first ? 3 : 2));
+  if (HT.deck.length) HT.hand.push({ n: HT.deck.shift(), nw: 1 });
+}
+// au moins un exemplaire parmi k, en voyant s cartes d'un deck de N
+function htProb(k, s, N) { if (k <= 0 || N <= 0) return 0; s = Math.min(s, N); let q = 1; for (let i = 0; i < s; i++) q *= Math.max(0, N - k - i) / (N - i); return 1 - q; }
+const HT_SEEN = [4, 6, 8, 10];   // main de départ ; mulligan de 2 ; ton tour 2 et ton tour 4 (mulligan de 2 compris)
+function htOpen() { HT = null; htDeal(true); htRender(); }
+function htRender() {
+  const N = cnt(DK.main), C = n => CAT.by[n] || {};
+  if (N < 4) { openModal(`<h3>Tester la main</h3><div class="small" id="htNone">Il faut au moins 4 cartes dans le deck principal pour tirer une main.</div>`); return; }
+  const h = HT, mb = $("mbox"), st = mb.querySelector("#htBox") ? mb.scrollTop : 0;
+  const card = (c, i) => { const o = h.out.has(i); return `<button class="htc${o ? " out" : ""}${c.nw ? " new" : ""}" data-ht="card" data-i="${i}" data-n="${esc(c.n)}" title="${esc(c.n)}" aria-label="${esc(c.n)}"${h.phase === "mull" ? ` aria-pressed="${o}"` : ""}><span class="dkimg" style="${art(c.n)}"></span>${o ? `<em>renvoyée</em>` : c.nw ? `<em>piochée</em>` : ""}</button>`; };
+  const rc = {}; for (const d of h.runes) rc[d] = (rc[d] || 0) + 1;
+  const runes = Object.entries(rc).map(([d, q]) => `<i class="rune" style="background:var(--${DOMC[d] || "ink-2"})">${GLYPH[d] || "★"}</i>${q}`).join("  ");
+  const head = h.phase === "mull"
+    ? `<div class="small" id="htMsg">Ta main de départ. Touche jusqu'à 2 cartes à renvoyer, puis valide ; elles reviennent sous le deck.</div>
+       <div class="htrow"><button class="go" data-ht="keep" id="htKeep">${h.out.size ? `Renvoyer ${h.out.size} carte${h.out.size > 1 ? "s" : ""}` : "Garder la main"}</button><button data-ht="deal" id="htDeal">Nouvelle main</button></div>`
+    : `<div class="small" id="htMsg">${h.turn ? `<span>Ton tour ${h.turn}</span>` : `<span>Avant ton premier tour</span>`}<span> · ${h.hand.length} carte${h.hand.length > 1 ? "s" : ""} en main</span>${h.mull ? `<span> · mulligan de ${h.mull}</span>` : ""}${h.played ? `<span> · ${h.played} jouée${h.played > 1 ? "s" : ""}</span>` : ""}${h.turn ? `<span class="htrunes" id="htRunes" data-n="${h.runes.length}"> · ${h.runes.length} runes : ${runes}</span>` : ""}</div>
+       <div class="htrow"><button class="go" data-ht="next" id="htNext"${h.deck.length || h.rdeck.length ? "" : " disabled"}>${h.turn ? "Tour suivant" : "Jouer le tour 1"}</button><button data-ht="deal" id="htDeal">Nouvelle main</button></div>
+       <div class="small">Chaque tour : 2 runes puis 1 carte (3 runes à ton premier tour si tu joues en second). Touche une carte pour la sortir de la main comme si tu la jouais ; les coûts ne sont pas vérifiés.</div>`;
+  const names = Object.keys(DK.main).sort((a, b) => ((+C(a).e || 0) - (+C(b).e || 0)) || a.localeCompare(b));
+  const pct = x => (x * 100).toFixed(x > .9995 ? 0 : 1).replace(".", ",") + "\u00a0%";
+  const cells = k => HT_SEEN.map(s => `<td>${pct(htProb(k, s, N))}</td>`).join("");
+  const ksel = names.filter(n => h.sel.has(n)).reduce((a, n) => a + DK.main[n], 0);
+  const table = `<div class="dkh">Chance d'avoir la carte</div>
+    <table class="sttab httab" id="htTab"><thead><tr><th></th><th>Ex.</th><th>Main de départ</th><th>Avec mulligan de 2</th><th>À ton tour 2</th><th>À ton tour 4</th></tr></thead><tbody>
+    ${ksel ? `<tr class="grp" id="htGrp" data-k="${ksel}"><td>Au moins une des cartes cochées</td><td>${ksel}</td>${cells(ksel)}</tr>` : ""}
+    ${names.map(n => `<tr data-ht="sel" data-n="${esc(n)}" data-k="${DK.main[n]}" class="${h.sel.has(n) ? "on" : ""}" aria-selected="${h.sel.has(n)}"><td>${h.sel.has(n) ? "☑" : "☐"} ${esc(n)}</td><td>${DK.main[n]}</td>${cells(DK.main[n])}</tr>`).join("")}</tbody></table>
+    <div class="small">Calcul exact sur les ${N} cartes du deck (le champion choisi n'est pas dans le deck : il commence dans sa zone). « Avec mulligan de 2 » : tu renvoies 2 cartes quand tu n'as pas la carte cherchée, soit 6 cartes vues. « À ton tour 2 » et « À ton tour 4 » comptent ce mulligan et une carte piochée par tour (8 et 10 cartes vues), sans les effets de pioche. Touche une ligne pour la cocher : la première ligne donne la chance d'avoir au moins une des cartes cochées.</div>`;
+  openModal(`<h3>Tester la main</h3><div id="htBox" style="display:flex;flex-direction:column;gap:10px">
+    <div class="htrow" role="group" aria-label="Ordre de jeu"><button data-ht="first" aria-pressed="${h.first}">Je commence</button><button data-ht="second" aria-pressed="${!h.first}">Je joue en second</button></div>
+    ${head}<div class="hthand" id="htHand">${h.hand.map(card).join("")}</div>${table}</div>`);
+  mb.classList.add("wide"); mb.scrollTop = st;
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("#mbox [data-ht]"); if (!t || !HT || t.disabled) return;
+  const a = t.dataset.ht;
+  if (a === "first" || a === "second") htDeal(a === "first");
+  else if (a === "deal") htDeal(HT.first);
+  else if (a === "keep") htMull();
+  else if (a === "next") htNext();
+  else if (a === "sel") { const n = t.dataset.n; if (HT.sel.has(n)) HT.sel.delete(n); else HT.sel.add(n); }
+  else if (a === "card") { const i = +t.dataset.i;
+    if (HT.phase === "mull") { if (HT.out.has(i)) HT.out.delete(i); else if (HT.out.size < 2) HT.out.add(i); else return toast("Deux cartes au plus au mulligan."); }
+    else { HT.hand.splice(i, 1); HT.played++; } }
+  SFX.play("click");
+  htRender();
+});
+
+// ------------------------------------------------------------ exercices tirés de tes parties (menu « Exercices », 2026-11-24)
+// « Chercher des exercices » rejoue une partie enregistrée (train.replay_load) et demande le conseil de l'IA à chacune de
+// tes décisions (train.replay_hint, simulation sur 2 tours). Les décisions où ton coup était à PZ_MIN ou plus du coup
+// préféré de l'IA deviennent des exercices (clé rbt-puz du navigateur). Jouer un exercice : même plateau, à l'étape de
+// la décision ; ton coup n'est pas envoyé au moteur, il est comparé au conseil (réussi : meilleur coup, ou à moins de
+// PZ_OK). L'avis de l'IA n'est pas une vérité : c'est dit sur la page.
+// Le conseil est une simulation tirée au hasard : d'un calcul à l'autre le même coup bouge de plusieurs points (vu par
+// verif_entrain.mjs : le « meilleur » coup d'un calcul à -4,7 au calcul suivant). Chaque décision est donc évaluée
+// PZ_REP fois (pzEval) : écart moyen de chaque coup au coup préféré en moyenne, apparié calcul par calcul, ± erreur
+// type. Un coup n'est dit moins bon que si l'écart dépasse PZ_OK et 2 erreurs types ; sinon on ne sait pas les départager.
+const PZ_KEY = "rbt-puz", PZ_MIN = 3, PZ_OK = 2, PZ_REP = 8, PZ_CAP = 100;   // PZ_CAP : valeur donnée à « perd la partie »
+function pzStore() { try { return JSON.parse(store.get(PZ_KEY) || "{}") || {}; } catch (e) { return {}; } }
+function pzSave(all) { store.set(PZ_KEY, JSON.stringify(all)); }
+const pzLive = () => !!(RP && RP.pz && RP.pz.ans === null && RP.k === RP.pz.k);
+const gapNum = x => x.lose || typeof x.gap !== "number" ? -1000 : x.gap;
+// « -12,4 ± 1,8 » (moyenne ± erreur type), ou « perd la partie » quand la majorité des calculs le disent
+const gapTxt = x => x.lose ? "perd la partie" : `${x.gap.toFixed(1)}${typeof x.se === "number" ? " ± " + x.se.toFixed(1) : ""}`;
+const pzWorse = o => !!o && o.gap < 0 && -o.gap > PZ_OK && (typeof o.se !== "number" || -o.gap >= 2 * o.se);
+const pzEval = (k, rep = PZ_REP) => hintEval(() => T.replay_hint(k, 99), rep).catch(() => []);
+// Conseil moyenné : call() lance un calcul (train.hint ou train.replay_hint) ; sert aussi au bouton « Conseil » et à
+// « Analyser ce coup » du replay (2026-11-24). Si tous les calculs échouent, l'erreur du moteur remonte.
+async function hintEval(call, rep = PZ_REP) {
+  const runs = []; let bad = null;
+  for (let j = 0; j < rep; j++) { let hs = []; try { hs = await J(call()); } catch (e) { bad = e; hs = []; } if (hs.length) runs.push(hs); }
+  if (!runs.length) { if (bad) throw bad; return []; }
+  const by = new Map();
+  runs.forEach((hs, j) => hs.forEach(x => { const key = x.i === null || x.i === undefined ? "l:" + x.label : x.i;
+    const o = by.get(key) || { i: x.i, label: x.label, v: [], nl: 0 };
+    o.v[j] = typeof x.gap === "number" ? Math.max(x.gap, -PZ_CAP) : -PZ_CAP; if (typeof x.gap !== "number") o.nl++;
+    by.set(key, o); }));
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const opts = [...by.values()].map(o => ({ ...o, n: o.v.filter(x => x !== undefined).length })).filter(o => o.n * 2 >= runs.length);   // coups évalués dans au moins la moitié des calculs
+  for (const o of opts) o.m = mean(o.v.filter(x => x !== undefined));
+  opts.sort((a, b) => b.m - a.m || String(a.i).localeCompare(String(b.i)));
+  const best = opts[0];
+  for (const o of opts) {
+    const d = []; for (let j = 0; j < runs.length; j++) if (o.v[j] !== undefined && best.v[j] !== undefined) d.push(o.v[j] - best.v[j]);
+    const m = d.length ? mean(d) : o.m - best.m;
+    o.gap = o === best ? 0 : Math.min(0, m); o.lose = o.nl * 2 > o.n;
+    o.se = o === best ? 0 : d.length > 1 ? Math.sqrt(d.reduce((a, x) => a + (x - m) * (x - m), 0) / (d.length - 1) / d.length) : null;
+  }
+  return opts.map(({ i, label, gap, se, lose, n }) => ({ i, label, gap, se, lose, n }));
+}
+const pzLab = s => String(s || "").replace(/^(Tu joues : |You play: )/, "");
+function pzList() {
+  const ex = []; for (const [gid, s] of Object.entries(pzStore())) for (const it of s.items || []) ex.push({ gid, s, it, done: (s.done || {})[it.k] });
+  return ex.sort((a, b) => gapNum(a.it) - gapNum(b.it) || String(a.gid).localeCompare(String(b.gid)) || a.it.k - b.it.k);
+}
+async function pzScan(g) {
+  if (RP || working || !T) return;
+  let stop = false;
+  const prog = (i, n, found) => { openModal(`<h3>Chercher des exercices</h3><div class="think"><i></i><span id="pzTxt">${n ? `Analyse de ta décision ${i} sur ${n}…` : "Le moteur rejoue la partie…"}</span></div>
+    <div class="pzprog"><i style="width:${n ? Math.round(i / n * 100) : 0}%"></i></div><div class="small">Exercices trouvés : ${found}. Chaque décision est simulée ${PZ_REP} fois sur 2 tours.</div>
+    <div class="prow"><button id="pzStop">Arrêter</button></div>`, false); $("pzStop").onclick = () => { stop = true; $("pzStop").disabled = true; }; };
+  working = true; prog(0, 0, 0);
+  const items = []; let n = 0, seen = 0, err = null, desync = null;
+  try {
+    const r = await J(T.replay_load(JSON.stringify(g)));
+    desync = r.desync;
+    const mv = (g.moves || []).filter(m => m[0] === "act" || m[0] === "ans");
+    const decs = r.mine.map((x, j) => ({ k: x[0], lab: x[1], mv: mv[j] })).filter(x => /^(Tu joues|You play)/.test(x.lab));
+    n = decs.length;
+    for (const d of decs) {
+      if (stop) break;
+      prog(seen + 1, n, items.length);
+      const hs = await pzEval(d.k);
+      seen++;
+      if (hs.length < 2) continue;
+      const lab = pzLab(d.lab);
+      const me = hs.find(x => d.mv && d.mv[0] === "act" && x.i === d.mv[1]) || hs.find(x => normLab(x.label) === normLab(lab));
+      if (!me || me === hs[0] || !pzWorse(me) || me.gap > -PZ_MIN) continue;
+      items.push({ k: d.k, t: d.mv && d.mv[3] ? d.mv[3] : null, mi: me.i, mine: lab, best: hs[0].label, gap: +me.gap.toFixed(1), se: typeof me.se === "number" ? +me.se.toFixed(1) : null, lose: me.lose });
+    }
+  } catch (e) { err = errTxt(e); }
+  try { await J(T.replay_exit()); } catch (e) {}
+  working = false; closeModal();
+  if (V) decorate();
+  if (err && !seen) { toast("Analyse impossible : " + err, "flash"); return; }
+  const all = pzStore(), old = all[g.id] || {};
+  all[g.id] = { at: new Date().toISOString(), n: seen, total: n, part: stop || !!err || (desync !== null && desync !== undefined), names: g.names || null, date: g.updated || g.started || "", items, done: old.done || {} };
+  pzSave(all);
+  toast(items.length ? `Exercices trouvés : ${items.length}.` : "Aucun écart net d'au moins 3 dans cette partie.");
+  if (MENUV === "puz" && !$("menu").hidden) pzLoad();
+}
+async function pzLoad() {
+  const box = $("pzBox"); if (!box) return;
+  const gs = await fetchGames();
+  if (MENUV !== "puz" || !$("pzBox")) return;
+  const all = pzStore(), have = new Set((gs || []).map(g => g.id)), ex = pzList(), dis = READY ? "" : " disabled";
+  const nm = s => { const n = s.names || ["Toi", "IA"]; return `${esc(n[0])} contre ${esc(n[1])}`; };
+  const todo = ex.filter(x => x.done !== 1).length;
+  let h = `<div class="mcard small">Un exercice est une position d'une de tes parties où ton coup s'écartait d'au moins ${PZ_MIN} du coup préféré de l'IA (7 vaut environ un point). Le conseil est une simulation sur 2 tours, tirée au hasard : chaque position est simulée ${PZ_REP} fois et l'écart est une moyenne, donnée avec son erreur type (±). Tu rejoues la position : réussi si tu trouves le coup préféré ou un coup que la simulation ne sait pas en départager. L'IA peut se tromper : c'est son avis, pas une vérité.</div>`;
+  h += `<div class="mcard" id="pzEx"><div class="t">${ex.length ? `Exercices : ${ex.length}, dont ${todo} à faire` : "Aucun exercice pour l'instant"}</div>${ex.length ? "" : `<div class="small">Lance « Chercher des exercices » sur une partie ci-dessous.</div>`}
+    ${ex.map(x => `<div class="bilrow pzrow" data-gid="${esc(x.gid)}" data-k="${x.it.k}"><span class="bn">${nm(x.s)}${x.it.t ? `<span> · tour ${esc(x.it.t)}</span>` : ""}</span><span class="bs">écart ${esc(gapTxt(x.it))}</span><span class="bilv ${x.done === 1 ? "fav" : x.done === 0 ? "def" : ""}">${x.done === 1 ? "réussi ✓" : x.done === 0 ? "à refaire" : "à faire"}</span><button class="go" data-pzgo="${esc(x.gid)}|${x.it.k}"${have.has(x.gid) ? dis : " disabled"}>Jouer</button><span class="bilsub">${esc(fmtDate(x.s.date))}${have.has(x.gid) ? "" : `<span> · partie introuvable dans ce navigateur</span>`}</span></div>`).join("")}</div>`;
+  const cand = (gs || []).filter(g => !g.duel && g.kind !== "duel" && Array.isArray(g.moves) && g.moves.some(m => m[0] === "act"))
+    .sort((a, b) => String(b.updated || b.started || "").localeCompare(String(a.updated || a.started || "")));
+  const rows = cand.slice(0, 20).map(g => { const s = all[g.id], r = g.result, n = g.names || ["Toi", "IA"];
+    const res = r ? (r.winner === 0 ? "Victoire" : r.winner === 1 ? "Défaite" : "Nulle") + " " + (r.pts || []).join("-") : "en cours";
+    return `<div class="mcard row" data-pzg="${esc(g.id)}"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))}${s ? `<span> · ${s.n} décision${s.n > 1 ? "s" : ""} analysée${s.n > 1 ? "s" : ""}, exercices : ${s.items.length}</span>${s.part ? `<span> · analyse incomplète</span>` : ""}` : ""}</div></div>
+      <div class="acts"><button${s ? "" : ` class="go"`} data-pzscan="${esc(g.id)}"${dis}>${s ? "Refaire l'analyse" : "Chercher des exercices"}</button>${s ? `<button data-pzdel="${esc(g.id)}">Oublier</button>` : ""}</div></div>`; }).join("");
+  h += `<h3 style="margin:6px 0 0;font-family:var(--f-display);font-weight:400">Tes parties</h3>` + (rows || `<div class="mcard" id="pzNoGame">${gs ? "Aucune partie enregistrée contre l'IA pour l'instant : joue une partie, elle apparaîtra ici." : "Lecture des parties impossible pour l'instant."}</div>`);
+  box.innerHTML = h;
+}
+async function pzStart(gid, k) {
+  const g = (window.__GAMES || []).find(x => x.id === gid), s = pzStore()[gid]; if (!g || !s || working) return;
+  const it = (s.items || []).find(x => x.k === k); if (!it) return;
+  if (RP) await exitReplay();
+  await startReplay(g, { gid, k, it });
+  if (RP && RP.pz && !RP.r.mine.some(x => x[0] === k)) { toast("Cet exercice ne correspond plus à la partie rejouée (moteur changé depuis) : refais l'analyse.", "flash"); await exitReplay(); }
+}
+// Barre de l'exercice, à la place de la barre de lecture du replay.
+function pzBar(v) {
+  const pz = RP.pz, M = $("bMain"), I = $("turnInfo"), it = pz.it, live = pzLive();
+  let bar = $("rpbar");
+  if (!bar) { bar = document.createElement("div"); bar.id = "rpbar"; bar.className = "rpbar"; $("stack").before(bar); }
+  bar.classList.add("pzbar"); bar.classList.remove("fold");
+  const warn = RP.warn.length ? `<div class="small rpwarn">${esc(RP.warn.join(" · "))}</div>` : "";
+  if (live) {
+    bar.innerHTML = `<div class="rplab moi" id="pzAsk"><b>Exercice.</b> Joue le coup que tu ferais ici : il est noté, pas joué.</div>
+      <div class="small">Dans la partie, ton coup était à ${esc(gapTxt(it))} du coup préféré de l'IA.</div>${warn}
+      <div class="pzacts"><button data-pz="show">Voir la réponse</button><button data-pz="quit" id="rpQuitPz">Quitter</button></div>`;
+    return rpPlace();
+  }
+  I.innerHTML = `<b class="rpt">Exercice</b><span class="tn">tour ${v.st.t}</span>`;
+  M.className = "endbtn"; M.disabled = !!RP.busy; M.textContent = "Exercice suivant"; M.onclick = () => pzClick("next");
+  const res = pz.res;
+  if (!res) { bar.innerHTML = `<div class="think" id="pzWait"><i></i>Analyse de ton coup…</div>`; return rpPlace(); }
+  const hs = res.hs, me = res.me, best = hs[0], inGame = hs.find(x => it.mi !== null && it.mi !== undefined && x.i === it.mi) || hs.find(x => normLab(x.label) === normLab(it.mine));
+  const good = !!me && !pzWorse(me);
+  const verdict = pz.ans < 0 ? `<div class="pzv" id="pzV" data-ok="">La réponse de l'IA :</div>`
+    : !me ? `<div class="pzv ko" id="pzV" data-ok="0">Ton coup (${esc(pz.lab)}) n'a pas été évalué par l'IA : trop de coups possibles ici.</div>`
+    : me === best ? `<div class="pzv ok" id="pzV" data-ok="1">Réussi : c'est le coup préféré de l'IA.</div>`
+    : good ? `<div class="pzv ok" id="pzV" data-ok="1">Réussi : la simulation ne départage pas ton coup du meilleur (écart ${esc(gapTxt(me))}).</div>`
+    : `<div class="pzv ko" id="pzV" data-ok="0">L'IA préfère un autre coup. Le tien est à ${esc(gapTxt(me))}.</div>`;
+  const shown = hs.slice(0, 5); for (const x of [me, inGame]) if (x && !shown.includes(x)) shown.push(x);
+  const rows = shown.map(x => `<div class="hintrow ${x === best ? "best" : ""} ${x === me ? "mine" : ""}"><span>${esc(cap(x.label))}${x === me ? " <b>(ton choix)</b>" : ""}${x === inGame ? " <b>(joué dans la partie)</b>" : ""}</span><span class="v">${x === best ? "meilleur" : esc(gapTxt(x))}</span></div>`).join("");
+  bar.innerHTML = `${verdict}<div class="pzacts"><button data-pz="retry">Réessayer</button><button data-pz="replay">Voir la suite de la partie</button><button data-pz="quit" id="rpQuitPz">Quitter</button></div><div class="rpmine">${rows || `<div class="small">Rien à conseiller ici (un seul coup possible).</div>`}
+      <div class="small" style="color:var(--ink-3)">Moyenne de ${PZ_REP} simulations sur 2 tours, ± erreur type. Écart avec le coup préféré ; 7 vaut environ un point.</div><div class="small" style="color:var(--ink-3)">L'IA peut se tromper : c'est son avis, pas une vérité.</div></div>${warn}`;
+  rpPlace();
+}
+async function pzAnswer(i) {
+  const rp = RP, pz = rp.pz, k = pz.k;
+  const o = i >= 0 && V && V.dec ? V.dec.options.find(x => x.i === i) : null;
+  pz.ans = i; pz.lab = o ? o.label : ""; pz.res = null; rp.busy = true;
+  sel = null; mode = null; toast(""); $("pop").hidden = true; setHandOpen(false); setBaseOpen(null);
+  await rpGo(k);
+  rp.pzh = rp.pzh || {};
+  let hs = rp.pzh[k];
+  if (!hs) { hs = await pzEval(k); rp.pzh[k] = hs; }
+  rp.busy = false;
+  if (RP !== rp || rp.pz !== pz || pz.ans !== i) return;
+  const me = i >= 0 ? hs.find(x => x.i === i) || hs.find(x => normLab(x.label) === normLab(pz.lab)) || null : null;
+  pz.res = { hs, me };
+  if (i >= 0) { const all = pzStore(), s = all[pz.gid];
+    if (s) { s.done = s.done || {}; const good = !!me && !pzWorse(me); s.done[k] = good || s.done[k] === 1 ? 1 : 0; pzSave(all); } }
+  if (RP.k === k) rpCtrl(V);
+}
+async function pzClick(a) {
+  if (!RP || !RP.pz || RP.busy) return;
+  const pz = RP.pz;
+  if (a === "show") return pzAnswer(-1);
+  if (a === "retry") { pz.ans = null; pz.res = null; return rpGo(pz.k); }
+  if (a === "replay") { RP.pz = null; const bar = $("rpbar"); if (bar) bar.classList.remove("pzbar"); return rpCtrl(V); }
+  if (a === "quit") return exitReplay();
+  if (a === "next") {
+    const L = pzList().filter(x => x.done !== 1 && !(x.gid === pz.gid && x.it.k === pz.k)), nx = L.find(x => x.gid === pz.gid) || L.find(x => (window.__GAMES || []).some(g => g.id === x.gid));
+    if (!nx) { await exitReplay(); toast("Plus d'exercice à faire : lance une analyse sur une autre partie."); return; }
+    if (nx.gid === pz.gid) { RP.pz = { gid: nx.gid, k: nx.it.k, it: nx.it, ans: null }; return rpGo(nx.it.k); }
+    await exitReplay(); return pzStart(nx.gid, nx.it.k);
+  }
 }
 
 // ------------------------------------------------------------ lexique : mots du jeu et mots-clés des cartes
@@ -4318,6 +4650,8 @@ function menuRender(view) {
       ${item("deck", "✎", "Éditeur de deck", "Cartes, runes, battlefields, import et export.")}
       ${item("mydecks", "▤", "Mes decks", "Modifier ou jouer directement.")}
       ${item("games", "◷", "Mes parties", "Revois-les coup par coup.")}
+      ${item("bilan", "▥", "Bilan", "Tes résultats par adversaire, par niveau, selon qui commence.")}
+      ${item("puz", "◎", "Exercices", "Rejoue les positions de tes parties où ton coup s'écartait du conseil.")}
       ${item("help", "?", "Aide", "Règles de la table.")}
       </div></div>`;
   } else if (MENUV === "pick") {
@@ -4329,7 +4663,7 @@ function menuRender(view) {
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace, qui répond aussi « Oui » aux questions oui / non (« Utiliser cet effet ? »).</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
-      <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
+      <li><b>Conseil.</b> Le bouton « Conseil » fait la moyenne de 8 simulations de deux tours : l'écart est en points (7 vaut environ un point), le ± est son erreur type ; sous 2 erreurs types, deux coups ne sont pas départagés.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Dix niveaux : de 1 à 5 elle se trompe exprès, de moins en moins ; 6 est son jeu normal ; de 7 à 10 elle calcule de plus en plus, et répond plus lentement. Flèches corail : ses derniers coups.</li>
       <li><b>Raccourcis et recherche.</b> Touche « ? » : la liste des raccourcis (J journal, C conseil, Entrée valider, chiffres 1 à 9 pour choisir une réponse). Ctrl+K ou le bouton ⌕ : chercher n'importe quelle carte et la lire. Clic droit sur une carte : sa fiche en grand.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
@@ -4345,12 +4679,18 @@ function menuRender(view) {
     h = friendHTML(back);
   } else if (MENUV === "games") {
     h = `<div class="menuin msub">${back}<h2>Mes parties</h2><div class="mcard" id="gamesBox">Chargement…</div></div>`;
+  } else if (MENUV === "bilan") {
+    h = `<div class="menuin msub">${back}<h2>Bilan</h2><div id="bilBox"><div class="mcard">Chargement…</div></div></div>`;
+  } else if (MENUV === "puz") {
+    h = `<div class="menuin msub">${back}<h2>Exercices</h2><div id="pzBox"><div class="mcard">Chargement…</div></div></div>`;
   }
   M.innerHTML = h;
   M.scrollTop = 0;
   if ((MENUV === "main" || MENUV === "pick") && READY && !CAT) loadCatalog().then(() => { if (CAT && (MENUV === "main" || MENUV === "pick") && !$("menu").hidden) menuRender(MENUV); });
   if (MENUV === "main" && READY) dashGames();
   if (MENUV === "games") loadGames();
+  if (MENUV === "bilan") bilanLoad();
+  if (MENUV === "puz") pzLoad();
   if (MENUV === "friend") friendWire();
 }
 // Parties enregistrées (base claude.ai si elle existe, sinon ce navigateur) ; null si la lecture échoue.
@@ -4382,7 +4722,11 @@ async function loadGames() {
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
 }
 $("menu").addEventListener("click", async e => {
-  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick]"); if (!t || t.disabled) return;
+  const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick],[data-bil],[data-pzscan],[data-pzgo],[data-pzdel]"); if (!t || t.disabled) return;
+  if (t.dataset.bil) { BILALL = t.dataset.bil === "all"; bilanLoad(); return; }
+  if (t.dataset.pzscan) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.pzscan); if (g) pzScan(g); return; }
+  if (t.dataset.pzgo) { const [gid, k] = t.dataset.pzgo.split("|"); pzStart(gid, +k); return; }
+  if (t.dataset.pzdel) { const all = pzStore(); delete all[t.dataset.pzdel]; pzSave(all); pzLoad(); return; }
   if (t.dataset.dl) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.dl);
     if (g) downloadGames([g], `partie-riftbound-${String(g.updated || g.started || "").slice(0, 16).replace(/[:T]/g, "-")}-donne-${g.seed}`.replace(/[^\w.-]+/g, "_")); return; }
   if (t.dataset.pleg) { if (t.classList.contains("off")) return; PICKLG = t.dataset.pleg; menuRender("pick"); const l = $("menu").querySelector(".pick h3"); if (l) l.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
