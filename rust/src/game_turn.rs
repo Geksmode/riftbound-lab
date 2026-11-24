@@ -898,6 +898,7 @@ impl Game {
         let mut g = self.clone();
         g.lines.clear();
         g.logging = false;
+        g.rec = None;
         g.tg = None; // la copie n'écrit rien dans le journal de la table (TGame.clone)
         g
     }

@@ -23,6 +23,7 @@ pub mod plans_legendes;
 pub mod pyrandom;
 pub mod regex;
 pub mod replay;
+pub mod replay_rec;
 pub mod spec;
 pub mod trace;
 pub mod train;

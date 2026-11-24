@@ -11,6 +11,7 @@ pub mod exp_temps;
 pub mod fuzz;
 pub mod md5;
 pub mod pool;
+pub mod replays;
 pub mod run_session;
 pub mod py;
 pub mod sprt;
