@@ -76,8 +76,10 @@ les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table
 - `game.combat_step` (étape « end ») itère `sd.members`, un `set` d'uids : ordre de CPython, pas l'ordre d'arrivée.
   À corriger côté Python avec `sorted(sd.members)` (règle `CLAUDE.md` : jamais d'ordre de `set` qui compte), et côté
   Rust trier par uid.
-- `Game.ask` : la mémoire du point de reprise (`checkpoint`, `_asklog`, `ai.ask_sim`) n'est pas encore portée.
-- `Game._memo` (mémoire de génération des coups) : pas portée (optimisation sans effet sur le jeu, `empreinte.py`).
+- Point de reprise (`checkpoint`, `_ckpt`, `_asklog`, `ai.ask_sim`) : porté le 2026-11-24 (`Game.ck`, jamais copié ;
+  `apply` et `ask`). `ask_sim` est désactivé par défaut (règle 9) : ce chemin n'est pas couvert par le différentiel.
+- `Game._memo` (mémoire de génération des coups) : pas portée, volontairement (optimisation sans effet sur le jeu,
+  garantie par `empreinte.py` ; le différentiel IA le confirme).
 - Contexte `plans=` de `pay_gold` / `pay_rune` non passé aux agents (à faire avec `train.py`).
 
 - Python dont l'ordre dépend d'un `set` (à corriger côté Python avec `sorted()` avant le différentiel) :
@@ -90,6 +92,15 @@ les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table
   `as_played` -> liste de dict.
 
 ## Avancement
+- 2026-11-24 : **IA portée** (`rust/src/ai.rs`, `plans.rs`, `plans_general.rs`, `plans_legendes.rs` ; variables
+  d'environnement `RB_*` mêmes noms et défauts, lues par `ai::env_var`, absentes en WebAssembly). Différentiel IA
+  (`rust/diff/serie_ia.sh`, `trace.py --ia` : IA par défaut de la table des deux côtés, PlanAgent, plans de
+  `train._plan_for`, `search="turn"`, `table_cfg(1)` ; paquets variés de `decks.json`, une graine sur 5 Akali Gorica
+  contre LeBlanc IQ#5) : **200/200 parties identiques au Python, 0 erreur** (graines 1 à 200). Rust ≈ 7 × plus rapide que Python sur
+  une partie IA (9,6 s contre 64 s). `play_game` laisse une copie de l'agent à sa place pendant sa décision (Python
+  garde l'agent dans `g.agents`, que `PolicyAgent.react_margin` recopie). Non couvert par le différentiel : chemins
+  désactivés par défaut (`ask_sim`, `spell_pre`, recherche "old", `react_n`, plans par légende et plan général),
+  `plans_legendes.fiches()` (outil de doc, non porté).
 - 2026-11-23 (fin) : **règles et cartes portées** : 1037 cartes des 10 lots enregistrées (pool 84, battlefields 55,
   body 128, calm 114, chaos 122, fury 121, legends 47, mind 120, order 101, radiance 165), plus runes et cartes
   « mots-clés seulement ». Test différentiel (`rust/diff/serie.sh`, deux RandomAgent, paires de paquets de
