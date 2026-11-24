@@ -368,6 +368,28 @@ fn kind_of(a: &Value) -> &str {
     a.list()[0].str()
 }
 
+/// `sum(xs)` de Python sur des flottants : depuis Python 3.12, `sum` compense les erreurs d'arrondi (Neumaier) ; une
+/// somme naïve diffère parfois d'un ulp, ce qui change les égalités exactes entre options et les arrondis des notes.
+pub fn fsum(xs: impl IntoIterator<Item = f64>) -> f64 {
+    let mut it = xs.into_iter();
+    let Some(first) = it.next() else { return 0.0 };
+    let mut f = 0.0 + first;
+    let mut c = 0.0f64;
+    for x in it {
+        let t = f + x;
+        if f.abs() >= x.abs() {
+            c += (f - t) + x;
+        } else {
+            c += (x - t) + f;
+        }
+        f = t;
+    }
+    if c != 0.0 && c.is_finite() {
+        f += c;
+    }
+    f
+}
+
 /// `(Obj._n, Item._n)`
 pub fn counters(g: &Game) -> (u32, u32) {
     (g.counters.obj.load(Ordering::Relaxed), g.counters.item.load(Ordering::Relaxed))
@@ -564,10 +586,8 @@ fn evaluate_res(g: &mut Game, me: usize, w: Option<&Ev>) -> Res<f64> {
                 v += gear_v(g.cname(o)).unwrap_or(1.0);
             }
         }
-        let mut hs = 0.0;
-        for &c in &g.p[pid].hand {
-            hs += card_value(g, c, w);
-        }
+        // sum(card_value(c, w) for c in pl.hand) : `sum` de Python (3.12+) compense les erreurs d'arrondi
+        let hs = fsum(g.p[pid].hand.iter().map(|&c| card_value(g, c, w)));
         v += hs;
         if w.trick != 0.0 && g.board.iter().any(|&o| g.o(o).ctrl == pid && is_unit_spec(g, o)) {
             let nr = g.p[pid].runes.len() as i64;
@@ -1558,11 +1578,11 @@ impl SearchAgent {
                 }
                 for a in acts {
                     let pri = nd.pri + self.prior_of(&mut nd.states[0], me, &a)?;
-                    let mut sm = 0.0;
+                    let mut vals = Vec::with_capacity(nd.states.len());
                     for st in &nd.states {
-                        sm += value(self, st, &a)?;
+                        vals.push(value(self, st, &a)?);
                     }
-                    let v = sm / nd.states.len() as f64 + pri;
+                    let v = fsum(vals.iter().copied()) / nd.states.len() as f64 + pri;
                     let mut seq = nd.seq.clone();
                     seq.push(a.clone());
                     done.push((v, seq, a == end || lvl == depth - 1));
