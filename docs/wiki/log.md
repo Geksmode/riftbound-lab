@@ -390,3 +390,6 @@ Tout tourne en Rust (`rust/` : moteur, 1037 cartes, IA, outils, table en WebAsse
 
 ## [2026-11-24] ingest | Interface inspirée de RiftAtlas
 Éditeur de deck : miniatures dans la liste et vue « Stats » (courbe d'énergie par type, puissance et runes, Might) ; sideboard en deux colonnes avec aperçu. Robot `train/verif_stats.mjs` dans la porte. Détail : `pages/etat.md`.
+
+## [2026-11-24] decision | Cartes plus grandes sur la table (ordinateur)
+Unités +27 % à l'écran (86×120 à 1893×909), main entière visible, chevauchement quand une rangée est pleine ; `verif_charge.mjs` contrôle la taille. Détail : `pages/etat.md`.

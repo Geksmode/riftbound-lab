@@ -48,8 +48,11 @@ for (const [w, h] of [[393, 851], [360, 740], [412, 915], [1875, 902], [1400, 90
     return JSON.stringify({ hors: out.slice(0, 60), nHors: out.length, page: document.documentElement.scrollHeight > innerHeight + 1 || document.documentElement.scrollWidth > innerWidth + 1,
       unite: unit ? Math.round(unit.getBoundingClientRect().width) + 'x' + Math.round(unit.getBoundingClientRect().height) : null,
       main: hc ? Math.round(hc.getBoundingClientRect().width) + 'x' + Math.round(hc.getBoundingClientRect().height) : null, defile: sc }) })()`));
-  if (!mob) {   // ordinateur : seulement le battlefield (17 cartes en main y débordent : sujet à part, hors de ce robot)
-    m.hors = m.hors.filter(x => x.startsWith('.bf')); m.nHors = m.hors.length; m.page = false; m.defile = m.defile.filter(x => x.startsWith('side'));
+  if (!mob) {   // ordinateur : battlefields et main (17 cartes : elles se chevauchent depuis le 2026-11-24, cartes agrandies)
+    m.hors = m.hors.filter(x => x.startsWith('.bf') || x.startsWith('.half.p0 .hand')); m.nHors = m.hors.length; m.page = false; m.defile = m.defile.filter(x => x.startsWith('side'));
+    const d = await ev("(()=>{const u=document.querySelector('.bf .side > .slot:not(.x) .card').getBoundingClientRect();return {uh:Math.round(u.height),bot:Math.round(Math.max(...[...document.querySelectorAll('.half.p0 .hand > .card')].map(c=>c.getBoundingClientRect().bottom))),vh:innerHeight}})()");
+    // demande du 2026-11-24 (« les cartes sont trop petites ») : unités ≥ 110 px de haut à 1875×902 (95 avant), ≥ 100 à 1400×900
+    m.taille = d; if (d.uh < (w > 1800 ? 110 : 100) || d.bot > d.vh) { m.nHors++; m.hors.push(`taille : unité ${d.uh} px de haut, bas de la main ${d.bot} / ${d.vh}`); }
   }
   const bad = m.nHors > 0 || m.page || m.defile.length > 0 || errs.length;
   if (bad) fails++;
