@@ -10,6 +10,10 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 
+# Pas de LTO (2026-11-24) : avec `lto = true`, chacun des 28 outils et chaque cible de test refaisait l'optimisation de
+# tout le moteur à l'édition de liens (≈ 70 s l'un) : plus de 15 min de compilation à froid pour la porte, contre ≈ 1 min 30
+# sans. Vitesse des parties mesurée (t_rand 30 et exp_search 6 paires, un fil, 3 passes) : 3 à 4 % plus lent sans LTO ;
+# WebAssembly inchangé (même durée, même taille). Détail : docs/wiki/pages/porte.md.
 [profile.release]
 opt-level = 3
-lto = true
+lto = false
