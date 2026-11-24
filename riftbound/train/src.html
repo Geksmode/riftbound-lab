@@ -376,6 +376,26 @@ body.dkopen { overflow: hidden; }
 /* Battlefield d'une planche : la carte y est imprimée de côté, haut à gauche ; +90° la remet à l'endroit (planche
    vérifiée sur les 69 battlefields des planches le 2026-11-07 ; -90° les mettait la tête en bas). */
 .bfrot { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(90deg); background-size: cover; }
+/* Confort (2026-11-24) : recherche rapide, fiche de carte, raccourcis, tri et groupes de l'éditeur */
+.fdq { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; color: var(--ink); font: inherit; width: 100%; }
+.fdres { display: flex; flex-direction: column; gap: 2px; }
+.fdres button { display: flex; align-items: center; gap: 8px; text-align: left; padding: 4px 8px; min-height: 36px; }
+.fdres button.on { outline: 2px solid var(--brass); }
+.fdres button .nm { flex: 1 1 auto; } .fdres button .ty { color: var(--ink-3); font-size: 12px; white-space: nowrap; }
+.csheet { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 14px; align-items: start; }
+.csheet img { width: 100%; border-radius: 10px; display: block; }
+.csheet h3 { margin: 0 0 4px; } .csheet .zt { white-space: pre-wrap; margin-top: 8px; line-height: 1.45; }
+.csheet .zkw { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+@media (max-width: 560px) { .csheet { grid-template-columns: 1fr; } .csheet .csimg { max-width: 220px; margin: 0 auto; width: 100%; } }
+.keys { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline; margin: 0; }
+.keys dt { white-space: nowrap; } .keys dd { margin: 0; color: var(--ink-2); }
+kbd { font: inherit; font-size: 12px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; background: var(--chrome); }
+@media (hover: hover) and (min-width: 1000px) {
+  #pop button[data-kb]::after, #fbar button[data-kb]::after { content: attr(data-kb); margin-left: 8px; font-size: 10px; line-height: 1; opacity: .6; border: 1px solid currentColor; border-radius: 4px; padding: 1px 4px; vertical-align: 1px; }
+}
+.log div.turn { position: sticky; top: 0; z-index: 1; background: var(--deep, var(--chrome-2)); }
+.dkunsaved { color: var(--brass); font-size: 12px; align-self: center; }
+.dkvw select { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; color: var(--ink); font: inherit; margin-left: auto; }
 .zspr { width: 100%; aspect-ratio: 200 / 279; border-radius: 10px; background-color: #151a26; }
 @media (max-width: 760px) {
   .dkbody { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 38vh); }
@@ -882,7 +902,7 @@ body.dkopen { overflow: hidden; }
       <button class="res tchip" id="gtuto" hidden aria-label="Afficher le défi du tutoriel"></button>
       <span class="savechip" id="saveChip" hidden></span>
       <button class="savechip netchip" id="netChip" hidden></button>
-      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bSon" class="son" aria-haspopup="true" aria-expanded="false" title="Sons de la table">♪</button></div>
+      <div class="tbtns"><button id="bMenu">☰ Menu</button><button id="bDecks">Decks</button><button id="bNew">Nouvelle partie</button><button id="bJournal" aria-expanded="false">Journal</button><button id="bFind" class="son" title="Chercher une carte (Ctrl+K)" aria-label="Chercher une carte">⌕</button><button id="bSon" class="son" aria-haspopup="true" aria-expanded="false" title="Sons de la table">♪</button></div>
     </div>
     <div class="boardwrap"><div class="boardgrid">
       <div class="track" id="track" aria-label="Points"></div>
@@ -2417,8 +2437,8 @@ function decorate() {
     mode.units.forEach(u => { const x = unitEl(u); if (x) x.classList.add("staged"); });
     moveDests(mode.units).forEach(z => { const x = zoneEl(z); if (x) x.classList.add("drop-ok"); });
   }
-  if (sel !== null && !mode && active) { $("pop").innerHTML = popHTML(); placePop(); } else $("pop").hidden = true;
-  const fb = fbarHTML(); $("fbar").innerHTML = fb; $("fbar").hidden = !fb;
+  if (sel !== null && !mode && active) { $("pop").innerHTML = popHTML(); kbTag(); placePop(); } else $("pop").hidden = true;
+  const fb = fbarHTML(); $("fbar").innerHTML = fb; $("fbar").hidden = !fb; kbTag();
   placeFloat();
   drawArrows();
 }
@@ -2709,6 +2729,110 @@ document.addEventListener("keydown", e => {
   M.click();
 });
 
+// ------------------------------------------------------------ confort (2026-11-24, d'après Rift Atlas et TCG Arena)
+// Recherche rapide d'une carte (Ctrl+K ou bouton ⌕, comme Rift Atlas), fiche d'une carte en grand (clic droit, comme les
+// menus de TCG Arena), raccourcis clavier (J, C, Entrée, 1 à 9, ?). Affichage seulement : le moteur n'est pas touché.
+// Les chiffres se lisent par position de touche (e.code) : sur un clavier AZERTY, la rangée du haut donne « & é " » sans Maj.
+const typing = t => !!(t && t.closest && t.closest("input, textarea, select, [contenteditable]"));
+// Boutons qu'un chiffre active : le menu d'une carte s'il est ouvert, sinon les réponses en texte de la bulle.
+function numBtns() {
+  const P = $("pop"), F = $("fbar");
+  if (!P.hidden) return [...P.querySelectorAll("button")];
+  return F.hidden ? [] : [...F.querySelectorAll(".prow button[data-a], .prow button[data-i]")];
+}
+function kbTag() { numBtns().slice(0, 9).forEach((b, i) => { b.dataset.kb = i + 1; }); }
+// Fiche d'une carte : catalogue de l'éditeur s'il est chargé (toutes les cartes), sinon les cartes de la partie.
+function cardInfo(n) {
+  const a = CAT && CAT.by[n], b = CARDS[n];
+  if (a) return { s: a.s, t: a.t, d: a.d || [], e: a.e, p: a.p, mi: a.mi, tx: a.tx, todo: !a.m, ban: a.ban };
+  if (b) return { s: b.s, t: b.t, d: b.d || [], e: b.e === undefined ? "" : b.e, p: b.p, mi: b.m == null ? "" : b.m, tx: b.tx };
+  return null;
+}
+function sheetHTML(n) {
+  const c = cardInfo(n) || { d: [] };
+  const has = v => v !== "" && v !== undefined && v !== null;
+  const typ = [c.s, c.t].filter(Boolean).join(" ") + (c.d.length ? " · " + c.d.join("/") : "");
+  const cost = c.t === "Battlefield" || c.t === "Legend" || !has(c.e) ? "" : ` · coût ${c.e}${+c.p ? " + " + c.p + " power" : ""}${has(c.mi) ? " · might " + c.mi : ""}`;
+  const ks = glossFor(c.tx);
+  return `<div class="csheet" data-sheet="${esc(n)}"><div class="csimg">${IMG[n] ? `<img src="${IMG[n]}" alt="">` : ATL[n] ? `<div class="zspr" style="${art(n)}"></div>` : ""}</div>
+    <div><h3>${esc(n)}</h3><div class="small">${esc(typ)}${esc(cost)}</div>${c.todo ? `<div class="small">Pas encore modélisée : bloquée dans l'éditeur de deck.</div>` : ""}${c.ban ? `<div class="small">Bannie en Standard.</div>` : ""}
+    <div class="zt">${esc((c.tx || "").replace(/:rb_(\w+):/g, "[$1]"))}</div>${ks.length ? `<div class="zkw">${ks.map(glossRow).join("")}</div>` : ""}</div></div>`;
+}
+function openCard(n) { if (!n || !$("modal").hidden) return false; Z.hidden = true; openModal(sheetHTML(n)); return true; }
+let FD = { res: [], i: 0 };
+function findCards(q) {
+  q = q.trim().toLowerCase(); if (!q || !CAT) return [];
+  const rank = c => { const n = c.n.toLowerCase(); return n.startsWith(q) ? 0 : n.includes(q) ? 1 : (c.k || "").toLowerCase().includes(q) || c.tg.join(" ").toLowerCase().includes(q) ? 2 : (c.tx || "").toLowerCase().includes(q) ? 3 : 9; };
+  return CAT.cards.map(c => [rank(c), c]).filter(x => x[0] < 9).sort((a, b) => (a[0] - b[0]) || a[1].n.localeCompare(b[1].n)).slice(0, 8).map(x => x[1]);
+}
+function findRender() {
+  const R = $("fdRes"); if (!R) return;
+  const q = $("fdQ").value;
+  R.innerHTML = FD.res.length ? FD.res.map((c, i) => `<button class="${i === FD.i ? "on" : ""}" data-fd="${i}">${thumb(c.n)}<span class="nm">${esc(c.n)}</span><span class="ty">${esc([c.s, c.t].filter(Boolean).join(" "))}</span></button>`).join("")
+    : `<div class="small">${q.trim() ? "Aucune carte ne correspond." : "Tape le début d'un nom, un mot-clé ou un mot du texte. Flèches haut / bas puis Entrée pour choisir."}</div>`;
+}
+function findShow(i) { const c = FD.res[i]; if (!c) return; FD.i = i; findRender(); $("fdCard").innerHTML = sheetHTML(c.n); }
+async function openFind() {
+  if (!$("modal").hidden || !T) return;
+  openModal(`<h3>Chercher une carte</h3><input id="fdQ" class="fdq" type="search" placeholder="Nom, mot-clé ou texte de la carte" autocomplete="off" aria-label="Chercher une carte"><div class="fdres" id="fdRes"><div class="small">Chargement des cartes…</div></div><div id="fdCard"></div>`);
+  $("mbox").classList.add("wide");
+  FD = { res: [], i: 0 };
+  const q = $("fdQ"); q.focus();
+  q.oninput = () => { FD.res = findCards(q.value); FD.i = 0; findRender(); $("fdCard").innerHTML = FD.res.length === 1 ? sheetHTML(FD.res[0].n) : ""; };
+  q.onkeydown = e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (FD.res.length) { FD.i = (FD.i + (e.key === "ArrowDown" ? 1 : FD.res.length - 1)) % FD.res.length; findRender(); } }
+    else if (e.key === "Enter") { e.preventDefault(); findShow(FD.i); }
+  };
+  $("fdRes").onclick = e => { const b = e.target.closest("[data-fd]"); if (b) findShow(+b.dataset.fd); };
+  try { await loadCatalog(); } catch (e) {}
+  if ($("fdQ") === q) { FD.res = findCards(q.value); findRender(); }
+}
+function openKeys() {
+  if (!$("modal").hidden) return;
+  const k = (a, b) => `<dt>${a}</dt><dd>${b}</dd>`;
+  openModal(`<h3>Raccourcis clavier</h3><dl class="keys">
+    ${k("<kbd>Espace</kbd>", "Terminer le tour ou passer ; répond « Oui » à une question oui / non.")}
+    ${k("<kbd>Entrée</kbd>", "Valider la cible, le déplacement ou le combat préparé.")}
+    ${k("<kbd>1</kbd> à <kbd>9</kbd>", "Choisir l'action ou la réponse qui porte ce numéro (menu d'une carte, bulle de question).")}
+    ${k("<kbd>Retour arrière</kbd>", "Reprendre ton dernier coup.")}
+    ${k("<kbd>Échap</kbd>", "Lâcher la carte choisie, fermer une fenêtre.")}
+    ${k("<kbd>C</kbd>", "Demander un conseil.")}
+    ${k("<kbd>J</kbd>", "Ouvrir ou fermer le journal.")}
+    ${k("<kbd>Ctrl</kbd> + <kbd>K</kbd>", "Chercher une carte, depuis n'importe où.")}
+    ${k("Clic droit", "Lire une carte en grand.")}
+    ${k("<kbd>?</kbd>", "Afficher cette liste.")}</dl>`);
+}
+$("bFind").onclick = () => openFind();
+let lastPT = "mouse";
+document.addEventListener("pointerdown", e => { lastPT = e.pointerType || "mouse"; }, true);
+// Clic droit sur une carte : sa fiche en grand. Pas au doigt (un appui long sert déjà à glisser la carte).
+document.addEventListener("contextmenu", e => {
+  if ((e.pointerType || lastPT) !== "mouse" || (drag && drag.on)) return;
+  const el = e.target.closest && e.target.closest("[data-card]"); if (!el || !el.dataset.card) return;
+  e.preventDefault();
+  if (!openCard(el.dataset.card)) showZoom(el);   // une fenêtre est déjà ouverte : l'agrandi habituel
+});
+document.addEventListener("keydown", e => {
+  if (e.repeat || e.altKey) return;
+  const t = e.target;
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "k") { e.preventDefault(); openFind(); return; }
+  if (e.ctrlKey || e.metaKey || typing(t) || !$("modal").hidden) return;
+  if (e.key === "?") { e.preventDefault(); return openKeys(); }
+  if (!$("menu").hidden || !$("deckView").hidden) return;
+  const k = e.key.toLowerCase();
+  if (k === "j") return journal(!$("drawer").classList.contains("open"));
+  if (RP || !V || working) return;
+  if (k === "c") { const b = $("bHint"); if (!b.hidden && !b.disabled) b.click(); return; }
+  if (tabNav && t && t !== document.body) return;   // élément atteint par Tab : Entrée l'active déjà
+  let b = null;
+  if (e.key === "Enter") b = $("fbar").hidden ? null : document.getElementById("fOk");
+  else { const d = /^(?:Digit|Numpad)([1-9])$/.exec(e.code); if (d && !e.shiftKey) b = numBtns()[+d[1] - 1] || null; }
+  if (!b || b.disabled) return;
+  e.preventDefault();
+  if (t && t.blur && t !== document.body) t.blur();   // sinon le bouton cliqué avant s'active aussi
+  b.click();
+});
+
 if (store.get("rbt-journal")) journal(true); else badge();
 document.addEventListener("keydown", e => { if (e.key === "Escape" && $("drawer").classList.contains("open") && $("modal").hidden) journal(false); });
 boot().catch(err => { ENGERR = err.message || String(err); menuRender(MENUV); $("board").innerHTML = `<div class="loading">Le moteur n'a pas pu se charger : ${esc(err.message || err)}. Recharge la page ; si l'erreur revient, dis-le dans le fil.</div>`; });
@@ -2731,7 +2855,14 @@ const thumb = n => `<span class="th${(CAT.by[n] || {}).t === "Battlefield" ? " b
 // Le sideboard (règles de tournoi 601.1.c) : 10 cartes au plus, valides pour le Main Deck, 3 exemplaires deck + sideboard.
 // Stocké dans la table (collection « decks ») et en copie locale ; seules les cartes modélisées sont jouables.
 let DKV = ["img", "stats"].includes(store.get("rbt-dkview")) ? store.get("rbt-dkview") : "list", DKCAT = store.get("rbt-dkcat") !== "0", DKPOP = null;   // vue du deck, catalogue visible, menu ouvert
-let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", only: false, mine: true, lim: 120, to: "main" }, DKERR = [];
+let MYDECKS = {}, DK = null, DKF = { q: "", dom: [], type: "", set: "", cost: "", sort: "", only: false, mine: true, lim: 120, to: "main" }, DKERR = [];
+// Regroupement de la liste du deck (type, énergie, domaine), gardé dans le navigateur ; et état du deck au dernier
+// enregistrement / chargement (DKSNAP), pour prévenir avant d'écraser un deck modifié (Nouveau, Ouvrir, Importer).
+let DKG = ["e", "dom"].includes(store.get("rbt-dkgroup")) ? store.get("rbt-dkgroup") : "type", DKSNAP = "";
+const dkSig = d => d ? JSON.stringify([d.name || "", d.legend, d.champion, d.main, d.sideboard || {}, d.runes, d.battlefields]) : "";
+const dkMark = () => { DKSNAP = dkSig(DK); };
+const dkDirty = () => !!DK && dkSig(DK) !== DKSNAP;
+const dkLose = () => !dkDirty() || confirm("Ce deck a des modifications non enregistrées. Les abandonner ?");
 const RUNES = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"];
 // Une seule fois (les appels simultanés attendent le même chargement) : catalogue, decks, puis vérification de tous les
 // decks connus, pour que les rendus (menus, listes) trouvent leur verdict dans le cache CHK.
@@ -2791,7 +2922,7 @@ async function saveDeck() {
   const d = DK; d.name = ($("dkName").value || "").trim() || "Mon deck";
   const old = d.id; d.id = slug(d.name); d.updated = new Date().toISOString();
   if (old && old !== d.id && MYDECKS[old] && MYDECKS[old] === d) delete MYDECKS[old];
-  MYDECKS[d.id] = JSON.parse(JSON.stringify(d)); persist();
+  MYDECKS[d.id] = JSON.parse(JSON.stringify(d)); persist(); dkMark();
   await checkAsync(toEngine(MYDECKS[d.id]));
   const db = await dbh();
   if (!db) { toast("Deck gardé sur cet appareil (table indisponible)."); return dkRender(); }
@@ -2804,14 +2935,14 @@ async function deleteDeck() {
   if (!confirm(`Supprimer le deck « ${d.name} » ?`)) return;
   delete MYDECKS[d.id]; persist();
   const db = await dbh(); if (db) { try { await db.collection("decks").doc(d.id).delete(); } catch (e) {} }
-  DK = blankDeck(); dkRender(); toast("Deck supprimé.");
+  DK = blankDeck(); dkMark(); dkRender(); toast("Deck supprimé.");
 }
 const blankDeck = () => ({ id: "", name: "", legend: "", champion: "", main: {}, sideboard: {}, runes: {}, battlefields: [] });
 const MAINT = c => c && !["Legend", "Battlefield", "Rune"].includes(c.t);   // cartes valides pour le Main Deck (et le sideboard)
 
 async function openDecks() {
   await loadCatalog();
-  if (!DK) { const k = store.get("rbt-dk"); DK = k && MYDECKS[k] ? JSON.parse(JSON.stringify(MYDECKS[k])) : blankDeck(); }
+  if (!DK) { const k = store.get("rbt-dk"); DK = k && MYDECKS[k] ? JSON.parse(JSON.stringify(MYDECKS[k])) : blankDeck(); dkMark(); }
   if (!DK.sideboard) DK.sideboard = {};   // decks enregistrés avant le sideboard
   $("deckView").hidden = false; document.body.classList.add("dkopen");
   dkRender();
@@ -2886,13 +3017,20 @@ function dkFiltered() {
     if (DKF.only && !c.m) return false;
     if (DKF.type === "Champion" ? !(c.t === "Unit" && c.s === "Champion") : DKF.type && c.t !== DKF.type) return false;
     if (DKF.set && c.set !== DKF.set) return false;
+    if (DKF.cost !== "" && (c.e === "" || c.e === undefined || ["Legend", "Battlefield", "Rune"].includes(c.t) || (DKF.cost === "7" ? +c.e < 7 : +c.e !== +DKF.cost))) return false;
     if (DKF.dom.length && !c.d.some(d => DKF.dom.includes(d))) return false;
     if (DKF.mine && DK.legend && !["Legend", "Battlefield"].includes(c.t) && c.d.length && !c.d.every(d => id.includes(d))) return false;
     if (DKF.mine && DK.legend && c.s === "Signature" && !c.tg.some(t => ltags().includes(t))) return false;
     if (q && !(c.n.toLowerCase().includes(q) || c.tx.toLowerCase().includes(q) || c.tg.join(" ").toLowerCase().includes(q) || c.k.toLowerCase().includes(q))) return false;
     return true;
-  }).sort((a, b) => (TRANK(a) - TRANK(b)) || ((+a.e || 0) - (+b.e || 0)) || a.n.localeCompare(b.n));
+  }).sort(DKSORT[DKF.sort] || DKSORT[""]);
 }
+// Tris du catalogue (comme Rift Atlas : nom, coût, Might, domaine) ; par défaut : type, puis coût, puis nom.
+const DKSORT = (() => {
+  const e = c => +c.e || 0, mi = c => c.mi === "" || c.mi === undefined || c.mi === null ? -1 : +c.mi, nm = (a, b) => a.n.localeCompare(b.n);
+  return { "": (a, b) => (TRANK(a) - TRANK(b)) || (e(a) - e(b)) || nm(a, b), n: nm, e: (a, b) => (e(a) - e(b)) || nm(a, b),
+    mi: (a, b) => (mi(b) - mi(a)) || nm(a, b), d: (a, b) => (a.d.join("/") || "~").localeCompare(b.d.join("/") || "~") || (e(a) - e(b)) || nm(a, b) };
+})();
 function dkCard(c) {
   const n = copies(c.n) + (DK.legend === c.n ? 1 : 0) + (DK.battlefields.includes(c.n) ? 1 : 0) + (c.t === "Rune" ? DK.runes[c.d[0]] || 0 : 0);
   return `<button class="dkc ${c.m ? "" : "todo"} ${c.ban ? "ban" : ""}" data-add="${esc(c.n)}" data-card="${esc(c.n)}" title="${esc(c.n)}${c.m ? "" : " (pas encore modélisée)"}">
@@ -2902,15 +3040,18 @@ function dkList() {
   const row = (n, q, extra = "") => { const c = CAT.by[n] || {}; return `<div class="dkr ${c.m ? "" : "todo"}" data-card="${esc(n)}">${thumb(n)}<span class="q">${q}</span><span class="nm">${esc(n)}${c.m ? "" : " <i>à modéliser</i>"}</span><span class="e">${c.e || ""}${+c.p ? "+" + c.p : ""}</span>${extra}</div>`; };
   const pm = n => `<button data-tside="${esc(n)}" aria-label="Passer ${esc(n)} au sideboard" title="Passer un exemplaire au sideboard">⇄</button><button data-sub="${esc(n)}" aria-label="Retirer ${esc(n)}">−</button><button data-add="${esc(n)}" aria-label="Ajouter ${esc(n)}">+</button>`;
   const sb = DK.sideboard || {}, nsb = cnt(sb);
-  const groups = { Unit: [], Spell: [], Gear: [] };
-  for (const [n, q] of Object.entries(DK.main)) (groups[(CAT.by[n] || {}).t] || (groups.Other = groups.Other || [])).push([n, q]);
-  const gl = { Unit: "Unités", Spell: "Sorts", Gear: "Équipements", Other: "Autres" };
+  // Groupes du deck principal : par type (défaut), par coût en énergie ou par domaine (comme Rift Atlas).
+  const groups = {}, gl = { Unit: "Unités", Spell: "Sorts", Gear: "Équipements", Other: "Autres" };
+  const gkey = c => DKG === "e" ? (c.e === "" || c.e === undefined ? "?" : +c.e >= 7 ? "7" : String(+c.e)) : DKG === "dom" ? ((c.d || []).join(" / ") || "-") : (gl[c.t] && c.t !== "Other" ? c.t : "Other");
+  for (const [n, q] of Object.entries(DK.main)) { const k = gkey(CAT.by[n] || {}); (groups[k] = groups[k] || []).push([n, q]); }
+  const gorder = DKG === "e" ? ["0", "1", "2", "3", "4", "5", "6", "7", "?"] : DKG === "dom" ? Object.keys(groups).sort((a, b) => (a === "-") - (b === "-") || (a.includes("/") - b.includes("/")) || a.localeCompare(b)) : ["Unit", "Spell", "Gear", "Other"];
+  const gname = k => DKG === "e" ? (k === "?" ? "Sans coût" : "Énergie " + (k === "7" ? "7+" : k)) : DKG === "dom" ? (k === "-" ? "Sans domaine" : k) : gl[k];
   let h = `<div class="dkh">Légende</div>${DK.legend ? row(DK.legend, "", `<button data-unleg="1" aria-label="Retirer la légende">−</button>`) : `<div class="small">Touche une légende dans la liste.</div>`}`;
   h += `<div class="dkh">Champion choisi</div>${DK.champion ? row(DK.champion, 1, `<button data-sub="${esc(DK.champion)}" aria-label="Retirer">−</button>`) : `<div class="small">${DK.legend ? "Touche une unité Champion de ta légende." : "Choisis d'abord la légende."}</div>`}`;
   h += `<div class="dkh">Deck principal <b>${cnt(DK.main) + (DK.champion ? 1 : 0)}</b>/40</div>`;
-  for (const k of ["Unit", "Spell", "Gear", "Other"]) {
+  for (const k of gorder) {
     const g = (groups[k] || []).sort((a, b) => ((+CAT.by[a[0]].e || 0) - (+CAT.by[b[0]].e || 0)) || a[0].localeCompare(b[0]));
-    if (g.length) h += `<div class="dkg">${gl[k]} (${g.reduce((a, x) => a + x[1], 0)})</div>` + g.map(([n, q]) => row(n, q, (canChamp(CAT.by[n]) ? `<button data-champ="${esc(n)}" title="En faire le champion choisi">★</button>` : "") + pm(n))).join("");
+    if (g.length) h += `<div class="dkg">${gname(k)} (${g.reduce((a, x) => a + x[1], 0)})</div>` + g.map(([n, q]) => row(n, q, (canChamp(CAT.by[n]) ? `<button data-champ="${esc(n)}" title="En faire le champion choisi">★</button>` : "") + pm(n))).join("");
   }
   const sg = Object.entries(sb).sort((a, b) => ((+(CAT.by[a[0]] || {}).e || 0) - (+(CAT.by[b[0]] || {}).e || 0)) || a[0].localeCompare(b[0]));
   h += `<div class="dkh" id="dkSideH">Sideboard <b>${nsb}</b>/10</div>` + (sg.length ? sg.map(([n, q]) => row(n, q, `<button data-tmain="${esc(n)}" aria-label="Passer ${esc(n)} au deck principal" title="Passer un exemplaire au deck principal">⇄</button><button data-ssub="${esc(n)}" aria-label="Retirer ${esc(n)} du sideboard">−</button><button data-sadd="${esc(n)}" aria-label="Ajouter ${esc(n)} au sideboard">+</button>`)).join("")
@@ -3037,6 +3178,8 @@ function dkRender() {
           <input id="dkQ" type="search" placeholder="Chercher (nom, texte, tag, mot-clé)" value="${esc(DKF.q)}">
           <select id="dkType"><option value="">Tous les types</option>${[["Legend", "Légendes"], ["Champion", "Champions"], ["Unit", "Unités"], ["Spell", "Sorts"], ["Gear", "Équipements"], ["Battlefield", "Battlefields"], ["Rune", "Runes"]].map(([v, l]) => `<option value="${v}"${DKF.type === v ? " selected" : ""}>${l}</option>`).join("")}</select>
           <select id="dkSet"><option value="">Toutes les extensions</option>${sets.map(x => `<option${DKF.set === x ? " selected" : ""}>${x}</option>`).join("")}</select>
+          <select id="dkCost" aria-label="Coût en énergie"><option value="">Tous les coûts</option>${["0", "1", "2", "3", "4", "5", "6", "7"].map(v => `<option value="${v}"${DKF.cost === v ? " selected" : ""}>Coût ${v === "7" ? "7+" : v}</option>`).join("")}</select>
+          <select id="dkSort" aria-label="Trier les cartes">${[["", "Tri : type"], ["n", "Tri : nom"], ["e", "Tri : coût"], ["mi", "Tri : Might"], ["d", "Tri : domaine"]].map(([v, l]) => `<option value="${v}"${DKF.sort === v ? " selected" : ""}>${l}</option>`).join("")}</select>
           <div class="dkdom">${RUNES.map(d => `<button class="dd ${DKF.dom.includes(d) ? "on" : ""}" data-dom="${d}" aria-pressed="${DKF.dom.includes(d)}" style="--c:var(--${DOMC[d]})">${d}</button>`).join("")}</div>
           <label class="ck"><input type="checkbox" id="dkMine"${DKF.mine ? " checked" : ""}> Domaines de ma légende</label>
           <label class="ck"><input type="checkbox" id="dkOnly"${DKF.only ? " checked" : ""}> Jouables seulement</label>
@@ -3050,8 +3193,8 @@ function dkRender() {
         <input id="dkName" placeholder="Nom du deck" value="${esc(DK.name)}">
         <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
         <ul class="dkerr"${DKERR.length ? "" : " hidden"}>${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
-        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}</div>
-        <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV === "list"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button><button id="dkVStat" aria-pressed="${DKV === "stats"}">Stats</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}</div>
+        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}<span class="dkunsaved" id="dkUns"${dkDirty() ? "" : " hidden"}>● non enregistré</span></div>
+        <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV === "list"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button><button id="dkVStat" aria-pressed="${DKV === "stats"}">Stats</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}${DKV === "list" ? `<select id="dkGrp" aria-label="Grouper le deck">${[["type", "Groupes : type"], ["e", "Groupes : énergie"], ["dom", "Groupes : domaine"]].map(([v, l]) => `<option value="${v}"${DKG === v ? " selected" : ""}>${l}</option>`).join("")}</select>` : ""}</div>
         <div class="dklist">${DKV === "img" ? dkVisual() : DKV === "stats" ? dkStats() : dkList()}</div>
       </aside>
     </div><div class="dkpop" id="dkPop" hidden role="menu"></div>`;
@@ -3068,22 +3211,26 @@ function dkRender() {
   const q = $("dkQ"); q.oninput = () => { DKF.q = q.value; DKF.lim = 120; const pos = q.selectionStart; dkRender(); const q2 = $("dkQ"); q2.focus(); q2.setSelectionRange(pos, pos); };
   $("dkType").onchange = e => { DKF.type = e.target.value; DKF.lim = 120; dkRender(); };
   $("dkSet").onchange = e => { DKF.set = e.target.value; DKF.lim = 120; dkRender(); };
+  $("dkCost").onchange = e => { DKF.cost = e.target.value; DKF.lim = 120; dkRender(); };
+  $("dkSort").onchange = e => { DKF.sort = e.target.value; DKF.lim = 120; dkRender(); };
+  if ($("dkGrp")) $("dkGrp").onchange = e => { DKG = e.target.value; store.set("rbt-dkgroup", DKG); dkRender(); };
   $("dkMine").onchange = e => { DKF.mine = e.target.checked; dkRender(); };
   $("dkOnly").onchange = e => { DKF.only = e.target.checked; dkRender(); };
-  $("dkName").oninput = e => { DK.name = e.target.value; };
+  $("dkName").oninput = e => { DK.name = e.target.value; const u = $("dkUns"); if (u) u.hidden = !dkDirty(); };
   $("dkToMain").onclick = () => { DKF.to = "main"; dkRender(); };
   $("dkToSide").onclick = () => { DKF.to = "side"; dkRender(); };
   if ($("dkMore")) $("dkMore").onclick = () => { DKF.lim += 120; dkRender(); };
   $("dkClose").onclick = () => closeDecks(true); $("dkMenu").onclick = () => closeDecks(true);
-  $("dkNew").onclick = () => { DK = blankDeck(); dkRender(); };
+  $("dkNew").onclick = () => { if (!dkLose()) return; DK = blankDeck(); dkMark(); dkRender(); };
   $("dkSave").onclick = saveDeck;
   if ($("dkDel")) $("dkDel").onclick = deleteDeck;
   $("dkPlay").onclick = async () => { await saveDeck(); store.set("rbt-mine", "my:" + DK.id); closeDecks(); setupForm(); };
   $("dkLoad").onchange = e => {
     const v = e.target.value; if (!v) return;
+    if (!dkLose()) { e.target.value = ""; return; }
     if (v.startsWith("my:")) { DK = JSON.parse(JSON.stringify(MYDECKS[v.slice(3)])); if (!DK.sideboard) DK.sideboard = {}; }
     else { const p = CAT.presets.find(x => x.key === v); DK = fromEngine(p.deck, p.name + " (copie)"); DK.id = ""; }
-    dkRender();
+    dkMark(); dkRender();
   };
   $("dkExp").onclick = () => {
     const txt = exportText(DK);
@@ -3091,6 +3238,7 @@ function dkRender() {
     $("dkCopy").onclick = () => { const t = $("dkTxt"); t.select(); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => toast("Copié."), () => { document.execCommand && document.execCommand("copy"); toast("Copié."); }); };
   };
   $("dkImp").onclick = () => {
+    if (!dkLose()) return;
     openModal(`<h3>Importer un deck</h3><div class="small">Colle une liste, une ligne par carte : « 3 Nom de la carte ». Les runes s'écrivent « 6 Fury Rune ». La légende, les battlefields et le champion sont reconnus tout seuls.</div><textarea id="dkTxt" class="dktxt" placeholder="1 Akali, Rogue Assassin&#10;1 Akali, Deadly Weapon&#10;3 Falling Star&#10;…"></textarea><div class="big"><button class="main" id="dkGo">Importer</button></div>`);
     $("dkGo").onclick = () => { const r = importText($("dkTxt").value); closeModal(); if (r.miss.length) toast("Cartes inconnues : " + r.miss.slice(0, 4).join(", ") + (r.miss.length > 4 ? "…" : "")); else toast("Deck importé."); DK = r.deck; dkRender(); };
   };
@@ -4183,6 +4331,7 @@ function menuRender(view) {
       <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
       <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Dix niveaux : de 1 à 5 elle se trompe exprès, de moins en moins ; 6 est son jeu normal ; de 7 à 10 elle calcule de plus en plus, et répond plus lentement. Flèches corail : ses derniers coups.</li>
+      <li><b>Raccourcis et recherche.</b> Touche « ? » : la liste des raccourcis (J journal, C conseil, Entrée valider, chiffres 1 à 9 pour choisir une réponse). Ctrl+K ou le bouton ⌕ : chercher n'importe quelle carte et la lire. Clic droit sur une carte : sa fiche en grand.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>
       <li><b>Decks.</b> Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).</li>
       <li><b>Jouer avec un ami.</b> L'un crée une room (BO1 ou BO3) et donne le code ou le lien ; l'autre le tape dans « Rejoindre ». Pas de conseil en duel ; « Reprendre » tant que tu gardes la main. Si l'invité recharge sa page, la partie reprend où elle en était ; si l'hôte ferme la sienne, la room est perdue.</li>
@@ -4239,7 +4388,7 @@ $("menu").addEventListener("click", async e => {
   if (t.dataset.pleg) { if (t.classList.contains("off")) return; PICKLG = t.dataset.pleg; menuRender("pick"); const l = $("menu").querySelector(".pick h3"); if (l) l.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
   if (t.dataset.pick) { store.set("rbt-train", t.dataset.pick); menuRender("main"); return; }
   if (t.dataset.rp) { const g = (window.__GAMES || []).find(x => x.id === t.dataset.rp); if (g) startReplay(g); return; }
-  if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); if (!DK.sideboard) DK.sideboard = {}; hideMenu(); await openDecks(); return; }
+  if (t.dataset.edit) { DK = JSON.parse(JSON.stringify(MYDECKS[t.dataset.edit])); if (!DK.sideboard) DK.sideboard = {}; dkMark(); hideMenu(); await openDecks(); return; }
   if (t.dataset.play) { store.set("rbt-mine", "my:" + t.dataset.play); hideMenu(); setupForm(); return; }
   const m = t.dataset.m;
   if (m === "new") { if (RP) await exitReplay(); hideMenu(); setupForm(); }

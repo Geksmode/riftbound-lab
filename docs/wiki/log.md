@@ -408,3 +408,6 @@ Comme RiftAtlas et les Core Rules (113, 486.5 avant 115). Détail : `pages/match
 
 ## [2026-11-24] decision | Porte d'intégration accélérée (≈ 32 min → 8 min 55 à froid)
 Mesure d'abord : la compilation coûtait ≈ 16 min (LTO refait pour chacun des 28 outils), les contrôles du moteur ≈ 40 s, les robots en série 15 min 19. `lto = false` (parties 3 à 4 % plus lentes), WebAssembly compilé une fois, robots en parallèle (`RB_ROBOTS`). Mêmes contrôles, mêmes empreintes. Voir `pages/porte.md`.
+
+## [2026-11-24] decision | Confort de la table d'après Rift Atlas et TCG Arena
+Choisi par l'utilisateur parmi quatre propositions (les quatre) : raccourcis clavier et « ? », recherche de carte Ctrl+K / ⌕, clic droit = fiche, éditeur (filtre de coût, tris, groupes, deck non enregistré). Robot `verif_qol.mjs`. Environnement cloud « riftbound-lab » créé pour autoriser tcg-arena.fr et riftatlas.com. Détail : `pages/etat.md`.
