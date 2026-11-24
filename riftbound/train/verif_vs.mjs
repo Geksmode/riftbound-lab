@@ -51,9 +51,9 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   ok(`${w} px : le niveau « Très fort » se choisit (${await ev("$('sLvl').value")})`, await ev("$('sLvl').value") === "6" && await ev("document.querySelector('[data-lvl=\"6\"]').getAttribute('aria-checked')") === "true" && await ev("document.querySelector('[data-lvl=\"6\"]').textContent") === "Très fort");
   await ev("$('sSeed').value='7'"); await tap("#bStart");
   await waitFor("!!(V && !working)");
-  const lg = await ev("pyExec(\"LG=[W['g'].p[i].legend_name for i in (0,1)]\", 'LG')");
+  const lg = await ev("pyExec(JSON.stringify([{ as: 'LG', op: ['legends'] }]), 'LG')");
   ok(`${w} px : la partie démarre, toi LeBlanc, l'IA une légende jouable tirée au hasard (${lg})`, lg[0] === "LeBlanc, Deceiver" && Object.keys(dflt).includes(lg[1]));
-  const lv = await ev("pyExec(\"LV=[W['ag'][1].samples, W['ag'][1].cfg.get('turn_w'), W['ag'][1].cfg.get('react_n')]\", 'LV')");
+  const lv = await ev("pyExec(JSON.stringify([{ as: 'LV', op: ['ai_cfg'] }]), 'LV')");
   ok(`${w} px : l'IA « Très fort » a 6 mondes, un faisceau de 6, 3 mondes hors préparation du tour (${lv}), bandeau « IA très forte »`, JSON.stringify(lv) === "[6,6,3]" && (await ev("$('gmeta').textContent")).includes("IA très forte"));
   ok(`${w} px : aucune erreur JS (${errs.join(" | ")})`, !errs.length);
 }

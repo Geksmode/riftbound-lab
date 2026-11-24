@@ -44,8 +44,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Pyodide 0.26.4 (paquet npm)
-        run: bash riftbound/train/fetch_pyodide.sh
+      - name: Rust et la cible WebAssembly (moteur de la table), PeerJS (paquet npm)
+        run: |
+          rustup target add wasm32-unknown-unknown
+          bash riftbound/train/fetch_vendor.sh
       # Chromium de Playwright gardé d'une CI à l'autre (son téléchargement prenait parfois plusieurs minutes) ; ses
       # bibliothèques système sont installées par --with-deps (nouvelle image Ubuntu 26.04 : on ne suppose plus rien).
       - uses: actions/cache@v4

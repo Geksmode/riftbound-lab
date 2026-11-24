@@ -1,48 +1,36 @@
 #!/usr/bin/env bash
 # Construit la table d'entraînement dans riftbound/train/build/ (page train.html + fichiers servis à côté).
-# Prérequis une fois : bash fetch_pyodide.sh (télécharge Pyodide 0.26.4 depuis npm dans pyodide-cache/).
+# Le moteur est le crate Rust rust/ compilé en WebAssembly (riftbound.wasm), chargé par engine.worker.js.
+# Prérequis : cargo et la cible wasm32-unknown-unknown (rustup target add wasm32-unknown-unknown) ; une fois,
+# bash fetch_vendor.sh (PeerJS pour les duels entre amis).
 set -e
 cd "$(dirname "$0")"
 E=$(cd .. && { pwd -W 2>/dev/null || pwd; })   # dossier riftbound/ (pwd -W : chemin C:/… lisible par Python sous Git Bash)
+R=$(cd ../../rust && pwd)
 B=build
-[ -f pyodide-cache/package/pyodide.js ] || { echo "Lance d'abord : bash fetch_pyodide.sh"; exit 1; }
-rm -rf $B && mkdir -p $B/py/cardsets $B/data $B/pyodide $B/img $B/atlas
-for f in game.py actions.py cards.py ai.py plans.py decks.py replay.py train.py match.py version.py lang.py pool.txt; do cp $E/engine/$f $B/py/; done
-# modules de cartes : la liste explicite de cardsets/__init__.py (la page charge les fichiers par nom)
-CS=$(python3 -c "
-import re, os
-s = open('$E/engine/cardsets/__init__.py').read()
-names = re.findall(r'[\"\']([a-z0-9_]+)[\"\']', s[s.index('MODULES'):])
-print(' '.join(n for n in names if os.path.exists('$E/engine/cardsets/' + n + '.py')))")
-cp $E/engine/cardsets/__init__.py $B/py/cardsets/
-for n in $CS; do cp $E/engine/cardsets/$n.py $B/py/cardsets/; done
-python3 - "$CS" <<'P'
-import sys, json
-mods = [m for m in sys.argv[1].split() if m]
-files = ["cardsets/__init__.py"] + [f"cardsets/{m}.py" for m in mods]
+[ -f vendor-cache/peerjs/package/dist/peerjs.min.js ] || { echo "Lance d'abord : bash fetch_vendor.sh"; exit 1; }
+# version du moteur : empreinte des sources du crate (chemin relatif + contenu), comme version.engine_md5 en Python
+ENGINE=$(cd "$R" && find src Cargo.toml -type f \( -name '*.rs' -o -name Cargo.toml \) | LC_ALL=C sort \
+  | while read -r f; do printf '%s' "$f"; cat "$f"; done | md5sum | cut -c1-10)
+(cd "$R" && RB_ENGINE="$ENGINE" cargo build --release --lib --target wasm32-unknown-unknown --quiet)
+rm -rf $B && mkdir -p $B/img $B/atlas
+cp "$R/target/wasm32-unknown-unknown/release/riftbound.wasm" $B/
+ENGINE="$ENGINE" python3 - <<'P'
+import os, json, subprocess
 s = open('src.html').read().replace('/*BASE_CSS*/', open('base.css').read()).replace('/*DA_CSS*/', open('da.css').read())
 s = s.replace('/*I18N_JS*/', open('i18n.js').read())   # version anglaise (i18n.js), dans la page même
-s = s.replace('/*CARDSETS*/', "".join(", " + json.dumps(f) for f in files))
-import subprocess, sys as _s
 commit = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], capture_output=True, text=True).stdout.strip() or None
-_s.path.insert(0, "../engine"); import version
-s = s.replace("/*BUILD*/{ commit: null, engine: null }", json.dumps(dict(commit=commit, engine=version.engine_md5())))
+s = s.replace("/*BUILD*/{ commit: null, engine: null }", json.dumps(dict(commit=commit, engine=os.environ["ENGINE"])))
 open('build/train.html', 'w').write(s)
-print("modules de cartes :", len(mods))
 P
-cp $E/cards/cards_unique.csv $E/decks/decks.json $B/data/
 cp engine.worker.js $B/
-cp pyodide-cache/package/{pyodide.js,pyodide.asm.js,pyodide.asm.wasm,pyodide-lock.json} $B/pyodide/
-base64 -w0 pyodide-cache/package/python_stdlib.zip > $B/pyodide/python_stdlib.b64.txt
-# bytecode précompilé (stdlib chargée + moteur) : la page ne recompile plus le Python à chaque chargement (precompile.mjs)
-if command -v node >/dev/null; then node precompile.mjs $B; else echo "ATTENTION : node absent, Python non précompilé (chargement plus lent)"; fi
 cp $E/replays/img/* $B/img/
 cp atlas/* $B/atlas/
 # sons de la table (banque uisfx, audio CC0 : sfx/LICENSE-AUDIO)
 cp -r sfx $B/sfx
-# PeerJS pour les duels entre amis (téléchargé par fetch_pyodide.sh)
-mkdir -p $B/vendor && cp pyodide-cache/peerjs/package/dist/peerjs.min.js $B/vendor/
+# PeerJS pour les duels entre amis (téléchargé par fetch_vendor.sh)
+mkdir -p $B/vendor && cp vendor-cache/peerjs/package/dist/peerjs.min.js $B/vendor/
 # lecteur de replays servi à côté de la table (il lit img/index.json, déjà copié ci-dessus, et games/)
 cp $E/replays/viewer.html $B/replays.html
 mkdir -p $B/games && cp $E/replays/games/* $B/games/
-echo "OK : $B/train.html ($(ls $B/py/cardsets | wc -l) fichiers de cartes, $(ls $B/atlas | wc -l) planches d'images)"
+echo "OK : $B/train.html (moteur WebAssembly $ENGINE, $(( $(stat -c %s $B/riftbound.wasm) / 1024 )) Ko, $(ls $B/atlas | wc -l) planches d'images)"

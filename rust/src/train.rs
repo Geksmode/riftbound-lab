@@ -567,9 +567,25 @@ fn leblanc() -> TDeck {
 fn presets() -> Vec<(&'static str, &'static str, TDeck)> {
     vec![("akali-g2", "Akali G2 (Gorica)", g2()), ("leblanc-iq5", "LeBlanc IQ#5 (Gyatarina)", leblanc())]
 }
+/// Harnais différentiel seulement (natif, `RB_TABLE_AI=random`) : l IA de la table est un RandomAgent et aucun plan
+/// n est utilisé, des deux côtés (rust/diff/table.py fait de même en Python), tant que l IA n est pas portée.
+fn stub_ai() -> bool {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        std::env::var("RB_TABLE_AI").is_ok_and(|v| v == "random")
+    }
+    #[cfg(target_arch = "wasm32")]
+    {
+        false
+    }
+}
+
 
 /// `_plan_for(deck)` : plan de jeu connu pour la légende du deck, sinon l'IA générique (aucun plan).
 fn plan_for(legend: &str) -> Arc<dyn Plan> {
+    if stub_ai() {
+        return Arc::new(NoPlan);
+    }
     if legend.starts_with("Akali") {
         return plans::plans("Gorica").unwrap();
     }
@@ -678,6 +694,8 @@ struct St {
     rp: Option<Rp>,
     /// niveau de l IA de la partie (samples ; réglages : table_cfg)
     level: Option<i64>,
+    /// [samples, cfg turn_w, cfg react_n] de l IA, lus sur l agent construit (robot verif_vs)
+    ai_meta: Option<Json>,
     /// valeurs posées par les robots de vérification (`W["T_YES"]`...)
     extra: BTreeMap<String, Json>,
 }
@@ -732,6 +750,13 @@ fn tgame(decks: [&TDeck; 2], agents: Vec<Box<dyn Agent>>, seed: i64, first: usiz
     g
 }
 
+#[cfg(target_arch = "wasm32")]
+fn system_seed() -> i64 {
+    // `random.randrange(10 ** 6)` : le hasard du navigateur
+    (crate::wasm::random() * 1_000_000.0) as i64
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 fn system_seed() -> i64 {
     // `random.randrange(10 ** 6)` du générateur du système
     thread_local! {
@@ -790,7 +815,10 @@ fn new(seed: &Json, bf: &Json, first: &Json, level: &Json, mine: &Json, opp: &Js
     let hu: Box<dyn Agent> = Box::new(Human::default());
     // level 0 : IA débutante du tutoriel (Gentle) ; sinon level = mondes tirés par décision (1 Normal, 3 Fort, 6 Très
     // fort), réglages en plus dans LEVEL_CFG. L'IA de la table cherche le tour entier (search="turn").
-    let ai: Box<dyn Agent> = if level == 0 {
+    let mut ai_meta: Option<Json> = None;
+    let ai: Box<dyn Agent> = if stub_ai() {
+        Box::new(crate::agents::RandomAgent::new((seed + 500000) as i128))
+    } else if level == 0 {
         let inner = plans::plan_agent(
             (seed + 500000) as i128,
             Some(pl.clone()),
@@ -799,28 +827,31 @@ fn new(seed: &Json, bf: &Json, first: &Json, level: &Json, mine: &Json, opp: &Js
         );
         Box::new(Gentle { inner, wild: PyRandom::new((seed + 500000) as i128 * 31 + 7) })
     } else {
-        Box::new(plans::plan_agent(
+        let sa = plans::plan_agent(
             (seed + 500000) as i128,
             Some(pl.clone()),
             Some(pa.clone()),
             SearchOpts { samples: level as usize, search: Some("turn".into()), cfg: table_cfg(level), ..SearchOpts::default() },
-        ))
+        );
+        ai_meta = Some(agent_meta(&sa));
+        Box::new(sa)
     };
-    let coach = plans::plan_agent(
+    let coach = if stub_ai() { None } else { Some(plans::plan_agent(
         (seed + 900000) as i128,
         Some(plan_for(&md.legend)),
         Some(plan_for(&od.legend)),
         SearchOpts::default(),
-    );
+    )) };
     let g = tgame([&a, &b], vec![hu, ai], seed, f);
     W.with(|w| {
         let mut w = w.borrow_mut();
         *w = St::default();
         AILOG.with(|l| l.borrow_mut().clear());
         w.g = Some(g);
-        w.coach = Some(coach);
+        w.coach = coach;
         w.seed = Some(seed);
         w.level = Some(level);
+        w.ai_meta = ai_meta;
         w.decks = vec![a.clone(), b.clone()];
         w.set_main();
     });
@@ -914,12 +945,12 @@ fn duel_new(seed: &Json, bf0: &Json, bf1: &Json, first: &Json, deck0: &Json, dec
     }
     rp::set_names([nm[0].clone(), nm[1].clone()]);
     let ab = [&a, &b];
-    let coach = plans::plan_agent(
+    let coach = if stub_ai() { None } else { Some(plans::plan_agent(
         (seed + 900000) as i128,
         Some(plan_for(&ab[me].legend)),
         Some(plan_for(&ab[1 - me].legend)),
         SearchOpts::default(),
-    );
+    )) };
     let first = jint(first)? as usize;
     let g = tgame([&a, &b], vec![Box::new(Human::default()), Box::new(Human::default())], seed, first);
     W.with(|w| {
@@ -927,7 +958,7 @@ fn duel_new(seed: &Json, bf0: &Json, bf1: &Json, first: &Json, deck0: &Json, dec
         *w = St::default();
         AILOG.with(|l| l.borrow_mut().clear());
         w.g = Some(g);
-        w.coach = Some(coach);
+        w.coach = coach;
         w.seed = Some(seed);
         w.decks = vec![a.clone(), b.clone()];
         w.set_main();
@@ -2973,12 +3004,12 @@ pub fn call(f: &str, a: &[Json]) -> Result<String, String> {
 }
 
 // ------------------------------------------------------------------ accès pour les robots (train_dbg.rs)
-pub(crate) fn dbg_with<T>(f: impl FnOnce(&mut Game, &mut Option<Decision>, &mut BTreeMap<String, Json>, Option<i64>) -> T) -> Result<T, String> {
+pub(crate) fn dbg_with<T>(f: impl FnOnce(&mut Game, &mut Option<Decision>, &mut BTreeMap<String, Json>, Option<Json>) -> T) -> Result<T, String> {
     W.with(|w| {
         let mut w = w.borrow_mut();
-        let St { g, d, extra, level, .. } = &mut *w;
+        let St { g, d, extra, ai_meta, .. } = &mut *w;
         let g = g.as_mut().ok_or("KeyError: 'g'")?;
-        Ok(f(g, d, extra, *level))
+        Ok(f(g, d, extra, ai_meta.clone()))
     })
 }
 
@@ -2991,4 +3022,15 @@ pub(crate) fn dbg_me() -> usize {
 /// False])`, verif_espace) ; la réponse va dans `extra[key]`.
 pub(crate) fn dbg_ask_may(key: &str) -> Result<String, String> {
     with_w(|w| run(w, Op::AskMay(key.to_string())))
+}
+
+/// `[samples, cfg.get("turn_w"), cfg.get("react_n")]` d'un agent de recherche (robot verif_vs)
+fn agent_meta(sa: &SearchAgent) -> Json {
+    let c = |k: &str| match sa.cfg.get(k) {
+        Some(CfgV::Num(n)) if n.fract() == 0.0 => Json::Int(*n as i64),
+        Some(CfgV::Num(n)) => Json::Float(*n),
+        Some(CfgV::Str(s)) => Json::Str(s.clone()),
+        _ => Json::Null,
+    };
+    Json::Arr(vec![sa.samples.into(), c("turn_w"), c("react_n")])
 }

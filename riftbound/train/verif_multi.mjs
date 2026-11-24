@@ -26,7 +26,7 @@ const settle = async () => {   // répond 0 aux questions et passe jusqu'au reto
     await waitFor("!!(V && !working)");
   }
 };
-const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (Pyodide)
+const fresh = async code => {   // nouvelle partie (graine 4), situation posée dans le moteur (WebAssembly, rust/src/train_dbg.rs)
   await ev("showMenu('main')").catch(() => {});
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
@@ -37,15 +37,9 @@ const fresh = async code => {   // nouvelle partie (graine 4), situation posée 
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj, Rune, DOMAINS
-g = W["g"]; me = ME; op = 1 - ME
-g.p[me].runes = [Rune(d, me) for d in DOMAINS for _ in range(3)]
-def H(n):
-    c = Obj(n, me); c.zone = "hand"; g.p[me].hand.append(c); return c.uid
-${code}
-W["d"] = None
-`);
+  // opérations de rust/src/train_dbg.rs : 3 runes de chaque domaine, puis la situation (code : liste d'opérations)
+  const D3 = ["Fury", "Calm", "Mind", "Body", "Chaos", "Order"].flatMap(d => [d, d, d]);
+  await py(JSON.stringify([["runes", "me", D3], ...code, ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
 };
 await pg.goto(`http://localhost:${PORT}/train.html`);
@@ -53,13 +47,10 @@ await waitFor("(()=>{const b=document.querySelector('#menu .mitem[data-m=new]');
 
 
 
-const SETUP = `
-TR = H("Bilgewater Tracker")
-us = []
-for n in ("Soaring Scout", "Soaring Scout", "Noxus Hopeful"):
-    u = Obj(n, op); g.enter_board(u, op, "base", ready=True); us.append(u.uid)
-A, B, C = us
-m = Obj("Soaring Scout", me); g.enter_board(m, me, "base", ready=True); M = m.uid`;
+const SETUP = [   // Bilgewater Tracker en main ; trois unités adverses et un Scout à toi dans les bases
+  { as: "TR", op: ["card", "me", "Bilgewater Tracker", "hand"] }, { as: "A", op: ["board", "op", "Soaring Scout", "base", true] },
+  { as: "B", op: ["board", "op", "Soaring Scout", "base", true] }, { as: "C", op: ["board", "op", "Noxus Hopeful", "base", true] },
+  { as: "M", op: ["board", "me", "Soaring Scout", "base", true] }];
 for (const phone of [true, false]) {
   if (!phone) await pg.setViewportSize({ width: 1440, height: 900 });
   await fresh(SETUP);
@@ -85,7 +76,8 @@ for (const phone of [true, false]) {
   ok(`${tag} : deux unités touchées, « Valider la cible » actif (${JSON.stringify(st)})`, st.ok && st.P.length === 2);
   await tapSel("#fOk");
   await settle();
-  await py(`g = W["g"]; R = [(g.obj(u).damage if g.obj(u) is not None else "mort") for u in (${A}, ${B}, ${C})]`);
+  await py(JSON.stringify([{ as: "R", op: ["list", ["damage", +A], ["damage", +B], ["damage", +C]] }]));
+  { const rr = JSON.parse(await ev("pyGet('R').then(JSON.stringify)")).map(x => x === null ? "mort" : x); await py(JSON.stringify([["set", "R", rr]])); }
   const r = JSON.parse(await ev("pyGet('R').then(JSON.stringify)"));
   ok(`${tag} : 1 dégât sur les deux unités touchées, rien sur l'autre (${JSON.stringify(r)})`, r[0] !== 0 && r[2] !== 0 && r[1] === 0);
 }

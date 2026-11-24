@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 // celle de l'adversaire. Le premier toucher ouvre la base en grand (grandes cartes, bandeau « Ta base » + Fermer), elle
 // défile, toucher une unité montre ses actions, « Déplacer… » puis un champ de bataille la laisse ouverte, « Fermer » la
 // referme, la base adverse s'ouvre aussi (lecture d'une carte), toucher ailleurs referme, une base peu remplie ne s'ouvre
-// pas (le toucher agit directement sur la carte). Situation posée dans le moteur (Pyodide).
+// pas (le toucher agit directement sur la carte). Situation posée dans le moteur (WebAssembly : opérations de rust/src/train_dbg.rs).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_base.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -36,16 +36,14 @@ for (const [w, h] of [[393, 851], [360, 740]]) {
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj
-g = W["g"]; me = ME; op = 1 - ME
-names = ["Stellacorn Herder", "Mournful Witness", "Noxus Hopeful", "Blitzcrank, Impassive", "Kai'Sa, Survivor", "Astral Heron"]
-for k in range(9):
-    g.enter_board(Obj(names[k % 6], me), me, "base", ready=(k % 3 != 0))
-for k in range(7):
-    g.enter_board(Obj("Watchful Sentry", op), op, "base", ready=(k % 2 == 0))
-W["d"] = None
-`);
+  {   // 9 unités dans ta base (une sur trois épuisée), 7 dans la base adverse (opérations de rust/src/train_dbg.rs)
+    const names = ["Stellacorn Herder", "Mournful Witness", "Noxus Hopeful", "Blitzcrank, Impassive", "Kai'Sa, Survivor", "Astral Heron"];
+    const ops = [];
+    for (let k = 0; k < 9; k++) ops.push(["board", "me", names[k % 6], "base", k % 3 !== 0]);
+    for (let k = 0; k < 7; k++) ops.push(["board", "op", "Watchful Sentry", "base", k % 2 === 0]);
+    ops.push(["d_none"]);
+    await py(JSON.stringify(ops));
+  }
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(500);
   ok("situation posée : 9 cartes ou plus dans ta base, 7 dans la base adverse", await ev("V.st.p[MEP].base.length >= 9 && V.st.p[OPP()].base.length >= 7"));
   ok("ta base est serrée (baseDense)", await ev("baseDense(document.querySelector('#board .half.p0 .zbase'))"));
@@ -105,14 +103,7 @@ W["d"] = None
     ok(`déplacement lancé : l'unité a quitté la base (${n0} → ${after.n}), base refermée`, after.n < n0 && after.open === null);
   } else ok("seconde ouverture : une unité qu'on peut jouer", false);
   // 7. base peu remplie : pas d'ouverture, le toucher sélectionne
-  await py(`
-g = W["g"]; me = ME
-mine = [o for o in g.board if o.ctrl == me and o.loc == "base"]
-keep = [o for o in mine if not o.__dict__.get("_exh")][:2]
-for o in mine:
-    if o not in keep: g.board.remove(o)
-W["d"] = None
-`);
+  await py(JSON.stringify([["keep_base", "me", 2], ["d_none"]]));   // garde 2 unités prêtes dans ta base
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(400);
   // (après le déplacement on est en showdown : le toucher agrandit la carte au lieu de montrer ses actions)
   ok("base peu remplie : pas serrée", !(await ev("baseDense(document.querySelector('#board .half.p0 .zbase'))")));

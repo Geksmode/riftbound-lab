@@ -28,3 +28,5 @@ pub mod trace;
 pub mod train;
 pub mod train_dbg;
 pub mod value;
+#[cfg(target_arch = "wasm32")]
+pub mod wasm;

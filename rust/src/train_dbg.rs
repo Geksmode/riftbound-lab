@@ -59,9 +59,17 @@ fn uid(j: &Json) -> u32 {
 }
 
 /// Une opération ; le résultat d'une lecture.
-fn one(g: &mut Game, d: &mut Option<crate::game::Decision>, ex: &mut BTreeMap<String, Json>, level: Option<i64>, op: &[Json]) -> Result<Json, String> {
+fn one(g: &mut Game, d: &mut Option<crate::game::Decision>, ex: &mut BTreeMap<String, Json>, meta: Option<Json>, op: &[Json]) -> Result<Json, String> {
     let name = op.first().and_then(|x| x.str()).ok_or("opération sans nom")?;
-    let a = |i: usize| op.get(i).cloned().unwrap_or(Json::Null);
+    // argument {"v": nom} : la valeur rangée plus tôt sous ce nom (uid d'une carte posée)
+    let resolved: Vec<Json> = op
+        .iter()
+        .map(|x| match x.get("v").and_then(|n| n.str()) {
+            Some(n) if name != "list" => ex.get(n).cloned().unwrap_or(Json::Null),
+            _ => x.clone(),
+        })
+        .collect();
+    let a = |i: usize| resolved.get(i).cloned().unwrap_or(Json::Null);
     Ok(match name {
         // ---- préparation
         "runes" => {
@@ -75,6 +83,28 @@ fn one(g: &mut Game, d: &mut Option<crate::game::Decision>, ex: &mut BTreeMap<St
                 }
             }
             g.p[pid].runes = rs;
+            Json::Null
+        }
+        "runes_fill" => {
+            // while len(g.p[pid].runes) < n: g.p[pid].runes.append(Rune(d, pid))
+            let pid = who(&a(1));
+            while (g.p[pid].runes.len() as i64) < a(3).int().unwrap_or(0) {
+                let r = new_rune(g, a(2).str().unwrap_or(""), pid);
+                g.p[pid].runes.push(r);
+            }
+            Json::Null
+        }
+        "runes_add" => {
+            // g.p[pid].runes += [Rune(d, pid) for _ in range(n)]
+            let pid = who(&a(1));
+            for _ in 0..a(3).int().unwrap_or(0) {
+                let r = new_rune(g, a(2).str().unwrap_or(""), pid);
+                g.p[pid].runes.push(r);
+            }
+            Json::Null
+        }
+        "hand_clear" => {
+            g.p[who(&a(1))].hand.clear();
             Json::Null
         }
         "runes_exh" => {
@@ -191,6 +221,13 @@ fn one(g: &mut Game, d: &mut Option<crate::game::Decision>, ex: &mut BTreeMap<St
             g.flush_triggers().map_err(|_| "GameOver")?;
             Json::Null
         }
+        "mod" => {
+            // g.mod(o, n) (durée par défaut : "turn")
+            if let Some(o) = g.obj(uid(&a(1))) {
+                g.mod_(o, a(2).int().unwrap_or(0), Value::from("turn"), None).map_err(|_| "GameOver")?;
+            }
+            Json::Null
+        }
         "d_none" => {
             *d = None;
             Json::Null
@@ -228,12 +265,24 @@ fn one(g: &mut Game, d: &mut Option<crate::game::Decision>, ex: &mut BTreeMap<St
         "deck_has" => g.p[who(&a(1))].deck.iter().any(|&c| Some(g.cname(c)) == a(2).str()).into(),
         "unit_names" => Json::Arr(g.units(Some(who(&a(1))), None).iter().map(|&u| g.cname(u).into()).collect()),
         "unit_uids" => Json::Arr(g.units(Some(who(&a(1))), None).iter().map(|&u| g.o(u).uid.into()).collect()),
-        "facedowns" => Json::Arr(g.bfs.iter().map(|b| Json::Arr(b.facedowns.iter().map(|&c| g.o(c).uid.into()).collect())).collect()),
+        "unit_has" => g.units(Some(who(&a(1))), None).iter().any(|&u| g.o(u).uid == uid(&a(2))).into(),
+        "facedowns" =>Json::Arr(g.bfs.iter().map(|b| Json::Arr(b.facedowns.iter().map(|&c| g.o(c).uid.into()).collect())).collect()),
         "legends" => Json::Arr(g.p.iter().map(|p| p.legend_name.clone().into()).collect()),
         "ai_cfg" => {
-            // [W["ag"][1].samples, W["ag"][1].cfg.get("turn_w")] : niveau et réglages donnés à l'IA par new()
-            let lv = level.unwrap_or(1);
-            Json::Arr(vec![lv.into(), if lv == 6 { Json::Int(6) } else { Json::Null }])
+            // [samples, cfg.get("turn_w"), cfg.get("react_n")] de l'IA, lus sur l'agent construit par new()
+            meta.clone().unwrap_or(Json::Null)
+        }
+        "list" => {
+            // ["list", op1, op2...] : la liste des résultats
+            let mut v = vec![];
+            for o in &op[1..] {
+                v.push(one(g, d, ex, meta.clone(), o.arr())?);
+            }
+            Json::Arr(v)
+        }
+        "var" => {
+            // ["var", nom] : uid ou valeur rangée plus tôt (les arguments des lectures peuvent l'utiliser)
+            ex.get(a(1).str().unwrap_or("")).cloned().unwrap_or(Json::Null)
         }
         "get" => ex.get(a(1).str().unwrap_or("")).cloned().unwrap_or(Json::Null),
         "set" => {
@@ -258,14 +307,14 @@ pub fn dbg(x: &Json) -> Result<String, String> {
     }) {
         return crate::train::dbg_ask_may(&k);
     }
-    crate::train::dbg_with(|g, d, ex, level| {
+    crate::train::dbg_with(|g, d, ex, meta| {
         let mut out = Json::Obj(vec![]);
         for o in ops.arr() {
             let (key, op) = match o {
                 Json::Obj(_) => (o.g("as").str().map(|s| s.to_string()), o.g("op").arr().to_vec()),
                 _ => (None, o.arr().to_vec()),
             };
-            let r = one(g, d, ex, level, &op)?;
+            let r = one(g, d, ex, meta.clone(), &op)?;
             if let Some(k) = key {
                 ex.insert(k.clone(), r.clone());
                 out.set(&k, r);
