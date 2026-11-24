@@ -38,6 +38,10 @@ L'utilisateur ne veut plus de moteur Python. Il reste **gelé** (aucune évoluti
 différentiel, puis **tout le Python du moteur est supprimé dans le même commit que la bascule** (moteur Rust qui joue
 les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table et les simulations casseraient.
 
+Décision de l'utilisateur (2026-11-24) : la table passe en **WebAssembly** (moteur Rust, plus de Pyodide). Les petits
+scripts Python qui ne jouent pas de parties (`scripts/wiki_lint.py`, `riftbound/decks/*.py`, `riftbound/cards/*.py`,
+`riftbound/tools/`) **restent en Python** : ils ne sont pas supprimés à la bascule.
+
 ## Architecture (fixée le 2026-11-23, à suivre pour que le différentiel tienne)
 - **Traduction au plus près** de la structure Python : mêmes fonctions, même ordre d'opérations, mêmes tris (le tri
   Rust `sort_by` est stable comme `sorted`), mêmes listes ordonnées (jamais de `HashMap` dont l'ordre compte :
