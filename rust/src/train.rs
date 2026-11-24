@@ -238,7 +238,13 @@ impl Human {
             ag: Box::new(g.clone()),
             seen: None,
         };
-        PENDING.with(|p| *p.borrow_mut() = Some(Interrupt::Need(Box::new(need))));
+        // la première question gagne : en Python NeedChoice interrompt tout, même levée dans une simulation de l'IA
+        PENDING.with(|p| {
+            let mut p = p.borrow_mut();
+            if p.is_none() {
+                *p = Some(Interrupt::Need(Box::new(need)));
+            }
+        });
         Err(GameOver)
     }
 }
@@ -1362,6 +1368,9 @@ fn run(w: &mut St, op: Op) -> Result<String, String> {
     match pend {
         Some(Interrupt::Err(e)) => Err(e),
         Some(Interrupt::Need(mut e)) => {
+            if std::env::var("RB_TRACE_TICK").is_ok() {
+                eprintln!("NEED {} pid={}", e.kind, e.pid);
+            }
             let shown = shown_now(w.g()); // main révélée pendant la résolution interrompue (Sabotage…)
             w.ask_shown = shown;
             e.seen = if e.pid == ME() { w.g().tg.as_ref().unwrap().ask_seen.clone() } else { None };
@@ -1436,7 +1445,10 @@ fn tick(w: &mut St) {
     }
     if d.player == ai && !duel {
         let g = w.g();
-        let mut agent = std::mem::replace(&mut g.agents.0[ai], Box::new(crate::game_events::FirstChoice));
+        // Python garde l agent dans g.agents pendant sa décision (PolicyAgent.react_margin recopie g.agents) : une copie
+        // tient sa place, comme agents::play_game
+        let ph = g.agents.0[ai].clone_box();
+        let mut agent = std::mem::replace(&mut g.agents.0[ai], ph);
         let r = agent.decide(g, &d);
         g.agents.0[ai] = agent;
         let a = match r {
@@ -1448,10 +1460,18 @@ fn tick(w: &mut St) {
                 return;
             }
         };
+        if PENDING.with(|p| p.borrow().is_some()) {
+            // l'humain a été interrogé pendant la réflexion de l'IA (copie de la partie avec ses agents, par exemple
+            // PolicyAgent.react_margin) : en Python NeedChoice traverse decide, rien n'est noté ni joué
+            return;
+        }
         let idx = opts.iter().position(|o| *o == a).unwrap();
         let n = AILOG.with(|l| {
             let mut l = l.borrow_mut();
             l.push(Json::Arr(vec!["d".into(), idx.into(), d.kind.into(), opts.len().into()]));
+            if std::env::var("RB_TRACE_TICK").is_ok() {
+                eprintln!("TICK d {idx} {} n={} len={}", d.kind, opts.len(), l.len());
+            }
             l.len()
         });
         let k = a.list()[0].str().to_string();
@@ -1616,8 +1636,16 @@ fn hint_w(w: &mut St, n: usize) -> Result<String, String> {
         o.extend(c.rng.sample(&opts[1..], c.max_cands - 1));
         opts = o;
     }
+    PENDING.with(|p| *p.borrow_mut() = None);
     let r = c.pick(&mut g2, &d2, &opts);
     set_counters(n0, i0);
+    if let Some(i) = PENDING.with(|p| p.borrow_mut().take()) {
+        // la copie garde l'agent humain : une question pendant le calcul lève NeedChoice en Python (hint échoue)
+        return Err(match i {
+            Interrupt::Need(_) => "NeedChoice: ".into(),
+            Interrupt::Err(e) => e,
+        });
+    }
     let (_best, best_v, mut scored) = r.map_err(|_| "GameOver".to_string())?;
     scored.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
     let g = w.g();
