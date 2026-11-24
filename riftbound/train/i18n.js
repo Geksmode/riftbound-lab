@@ -151,6 +151,18 @@
     ["Garder", "Keep"], ["Ne pas faire entrer", "Don't bring in"], ["Chosen Champion (règle 601.1.c.4)", "Chosen Champion (rule 601.1.c.4)"],
     ["Sortent", "Out"], ["· entrent", "· in"], [": il en faut autant de chaque côté (403.4)", ": there must be as many on each side (403.4)"],
     ["Sideboard avant la manche ${}", "Sideboard before game ${}"],
+    ["Manche ${} · Match : ${}", "Game ${} · Match: ${}"], ["Champion :", "Champion:"],
+    ["Sortir vers le sideboard", "Take out to the sideboard"], ["Faire entrer dans le deck", "Bring into the deck"],
+    ["Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) : → fait sortir une carte, ← en fait entrer une. Runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).",
+     "1-for-1 swaps between your Main Deck and your sideboard (rule 403.4): → takes a card out, ← brings one in. Runes, legend and battlefields don't change (403.4.b). Only this match is affected: your saved deck doesn't change (403.8)."],
+    ["coût ${}", "cost ${}"],
+    // vue « Stats » de l'éditeur de deck
+    ["Stats", "Stats"], ["cartes", "cards"], ["énergie moyenne", "average energy"], ["Might moyenne", "average Might"],
+    ["cartes à puissance", "cards with a power cost"], ["Courbe d'énergie", "Energy curve"], ["Unités ${}", "Units ${}"],
+    ["Sorts ${}", "Spells ${}"], ["Équipements ${}", "Gear ${}"], ["${} carte${} à ${} énergie", "${} card${} at ${} energy"],
+    ["Puissance et runes", "Power and runes"], ["aucune", "none"], ["Might des unités", "Unit Might"],
+    ["Ajoute des cartes au deck principal pour voir ses statistiques.", "Add cards to the main deck to see its stats."],
+    ["Coût en puissance : aucune carte.", "Power cost: no card."],
     ["Échanges 1 pour 1 entre ton Main Deck et ton sideboard (règle 403.4) ; runes, légende et battlefields ne changent pas (403.4.b). Seul ce match est concerné : ton deck enregistré ne change pas (403.8).",
      "1-for-1 swaps between your Main Deck and your sideboard (rule 403.4); runes, legend and battlefields don't change (403.4.b). Only this match is affected: your saved deck doesn't change (403.8)."],
     ["Main Deck : touche + pour sortir", "Main Deck: tap + to take out"], ["Sideboard : touche + pour faire entrer", "Sideboard: tap + to bring in"],
@@ -569,6 +581,7 @@
     [/^(.+) · Avec Repeat( ×\d+)?(?: \(coût total (.*?)\))?(.*)$/, (m, t) => t(m[1]) + " · With Repeat" + (m[2] || "") + (m[3] ? ` (total cost ${m[3]})` : "") + m[4]],
     [/^Avec Repeat( ×\d+)?(?: \(coût total (.*?)\))?(.*)$/, (m) => "With Repeat" + (m[1] || "") + (m[2] ? ` (total cost ${m[2]})` : "") + m[3]],
     [/^(.*) · coût (.*)$/, "$1 · cost $2"],   // en-tête de l'agrandi d'une carte
+    [/^Coût en puissance : (.+)\.$/, m => "Power cost: " + m[1].replace(/(\d+) carte(s?) à (\d+)/g, "$1 card$2 at $3") + "."],   // vue Stats de l'éditeur
     [/^(.*) Touche une carte ou une zone en surbrillance\.$/, (m, t) => t(m[1]) + " Tap a highlighted card or zone."],
     [/^(.*)\((\d+)e\)(.*)$/, (m, t) => t(m[1]) + "(" + ORD(+m[2]) + ")" + t(m[3])],
     [/^Défausse de l'IA \((.+)\) \((\d+)\)$/, "AI's trash ($1) ($2)"],
