@@ -360,6 +360,13 @@ impl Game {
 
     /// `apply(action)` : applique l'action choisie (GameOver est absorbé : `winner` est posé).
     pub fn apply(&mut self, action: &Value) {
+        if self.ck.on {
+            // point de reprise (ai.ask_sim) : l'état d'avant le coup, les compteurs d'uid et le coup ; ask note ensuite
+            // chaque réponse donnée (asklog)
+            let (n, i) = crate::ai::counters(self);
+            self.ck.ckpt = Some(Box::new((self.clone_game(), n, i, action.clone())));
+            self.ck.asklog = vec![];
+        }
         let _ = self.apply_inner(action);
     }
 

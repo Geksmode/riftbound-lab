@@ -141,15 +141,59 @@ impl Agent for Trace {
     }
 }
 
+/// `train._plan_for(deck)` : plan de jeu connu pour la légende du deck, sinon l'IA générique (aucun plan).
+pub fn table_plan_for(deck: &crate::game::DeckList) -> Arc<dyn crate::plans::Plan> {
+    let lg = &deck.legend;
+    if lg.starts_with("Akali") {
+        return crate::plans::plans("Gorica").unwrap();
+    }
+    if lg.starts_with("LeBlanc") {
+        return crate::plans::plans("Hook tempo").unwrap();
+    }
+    Arc::new(crate::plans::NoPlan)
+}
+
+/// `train.table_cfg(level)` : réglages de l'IA de la table au niveau level ≥ 1 (TABLE_CFG puis LEVEL_CFG).
+pub fn table_cfg(level: i64) -> crate::ai::Cfg {
+    use crate::ai::{Cfg, CfgV};
+    let mut c = Cfg::new();
+    c.set("ambush", CfgV::Num(0.5));
+    c.set("tie_react", CfgV::Num(1.0));
+    if level == 6 {
+        c.set("turn_w", CfgV::Num(6.0));
+        c.set("react_n", CfgV::Num(3.0));
+    }
+    c
+}
+
+/// IA par défaut de la table (`train.new`, niveau 1) pour les deux joueurs (`rust/diff/trace.py agents_ia`).
+pub fn agents_ia(decks: &[crate::game::DeckList; 2], seeds: [i128; 2]) -> Vec<Box<dyn Agent>> {
+    (0..2)
+        .map(|i| {
+            let o = crate::ai::SearchOpts { samples: 1, search: Some("turn".into()), cfg: table_cfg(1), ..Default::default() };
+            Box::new(crate::plans::plan_agent(seeds[i], Some(table_plan_for(&decks[i])), Some(table_plan_for(&decks[1 - i])), o))
+                as Box<dyn Agent>
+        })
+        .collect()
+}
+
 /// Une partie tracée : même protocole que `rust/diff/trace.py run`.
 pub fn run(seed: i128, k0: &str, k1: &str, a0: i128, a1: i128, max_decisions: usize) -> Vec<String> {
+    run_with(seed, k0, k1, a0, a1, max_decisions, false)
+}
+
+/// Une partie tracée ; `ia` : l'IA par défaut de la table au lieu de RandomAgent (`trace.py --ia`).
+pub fn run_with(seed: i128, k0: &str, k1: &str, a0: i128, a1: i128, max_decisions: usize, ia: bool) -> Vec<String> {
     let out = Arc::new(Mutex::new(vec![]));
     let d0 = crate::decks::load(k0, None).deck;
     let d1 = crate::decks::load(k1, None).deck;
-    let agents: Vec<Box<dyn Agent>> = vec![
-        Box::new(Trace { inner: Box::new(crate::agents::RandomAgent::new(a0)), out: out.clone() }),
-        Box::new(Trace { inner: Box::new(crate::agents::RandomAgent::new(a1)), out: out.clone() }),
-    ];
+    let inner: Vec<Box<dyn Agent>> = if ia {
+        agents_ia(&[d0.clone(), d1.clone()], [a0, a1])
+    } else {
+        vec![Box::new(crate::agents::RandomAgent::new(a0)), Box::new(crate::agents::RandomAgent::new(a1))]
+    };
+    let agents: Vec<Box<dyn Agent>> =
+        inner.into_iter().map(|a| Box::new(Trace { inner: a, out: out.clone() }) as Box<dyn Agent>).collect();
     let g = crate::agents::play_game(&[d0, d1], agents, seed, None, false, max_decisions);
     let w = match g.winner {
         Some(w) => w.to_string(),

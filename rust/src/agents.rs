@@ -72,7 +72,10 @@ pub fn play_game(
     let mut n = 0;
     loop {
         let Some(d) = g.advance(false) else { break };
-        let mut a = std::mem::replace(&mut g.agents[d.player], Box::new(crate::game_events::FirstChoice));
+        // Pendant sa décision, l'agent est sorti de la partie ; une copie tient sa place : en Python, `g.agents` reste
+        // l'agent lui-même, et l'IA copie la partie réelle avec ses agents (ai.PolicyAgent.react_margin).
+        let ph = g.agents[d.player].clone_box();
+        let mut a = std::mem::replace(&mut g.agents[d.player], ph);
         let r = a.decide(&mut g, &d);
         g.agents[d.player] = a;
         match r {
