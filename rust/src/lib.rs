@@ -15,6 +15,7 @@ pub mod game_events;
 pub mod game_turn;
 pub mod json;
 pub mod lang;
+pub mod outils;
 pub mod pyrandom;
 pub mod spec;
 pub mod trace;
