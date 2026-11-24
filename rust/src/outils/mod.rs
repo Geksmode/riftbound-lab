@@ -9,4 +9,5 @@ pub mod fuzz;
 pub mod md5;
 pub mod pool;
 pub mod py;
+pub mod sprt;
 pub mod version;
