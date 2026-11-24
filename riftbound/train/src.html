@@ -167,7 +167,7 @@ body.replay #boardHelp { display: none; }
 .bilbar b { position: absolute; top: -3px; bottom: -3px; width: 3px; margin-left: -1px; border-radius: 2px; background: var(--brass); }
 .bilbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--ink-2); }
 .bilv { font-size: 11.5px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; min-width: 92px; text-align: center; }
-.pzbar .hintrow .v { white-space: nowrap; }
+.pzbar .hintrow .v, .hpop .hintrow .v, .rpmine .hintrow .v { white-space: nowrap; }
 .bilv.fav { color: var(--akali); border-color: var(--akali); } .bilv.def { color: var(--leblanc); border-color: var(--leblanc); }
 .bilsub { grid-column: 1 / -1; font-size: 11.5px; color: var(--ink-3); }
 .htrow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -1798,10 +1798,10 @@ $("bHint").onclick = async e => {
   recMove(["hint", 5]);
   const v0 = V;
   let hs;
-  try { hs = await J(T.hint(5)); } catch (err) { console.error(err); P.hidden = true; toast("Conseil impossible : " + errTxt(err), "flash"); return; }
+  try { hs = (await hintEval(() => T.hint(99))).slice(0, 5); } catch (err) { console.error(err); P.hidden = true; toast("Conseil impossible : " + errTxt(err), "flash"); return; }
   if (V !== v0 || P.hidden) { P.hidden = true; return; }   // un coup joué pendant le calcul : le conseil ne vaut plus
-  P.innerHTML = `<div class="pt">Conseil de l'IA</div>` + (hs.length ? hs.map((x, j) => `<button class="hintrow ${j ? "" : "best"}" data-i="${x.i}"><span>${esc(cap(x.label))}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></button>`).join("") : `<div class="small">Rien à conseiller ici.</div>`) +
-    `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit. Touche une ligne pour la jouer.</div>`;
+  P.innerHTML = `<div class="pt">Conseil de l'IA</div>` + (hs.length ? hs.map((x, j) => `<button class="hintrow ${j ? "" : "best"}" data-i="${x.i}"><span>${esc(cap(x.label))}</span><span class="v">${j ? esc(gapTxt(x)) : "meilleur"}</span></button>`).join("") : `<div class="small">Rien à conseiller ici.</div>`) +
+    `<div class="small" style="color:var(--ink-3)">Moyenne de ${PZ_REP} simulations sur 2 tours, ± erreur type : sous 2 erreurs types, deux coups ne sont pas départagés. 7 vaut environ un point. Touche une ligne pour la jouer.</div>`;
   placeHint();
 };
 function placeHint(P = $("hpop"), btn = $("bHint")) {
@@ -3909,9 +3909,9 @@ function rpCtrl(v) {
   const nx = RP.r.mine.find(x => x[0] > k), pv = [...RP.r.mine].reverse().find(x => x[0] < k);
   const hs = RP.hint[k];
   const rows = hs ? (hs.length ? hs.map((x, j) => { const me = normLab(x.label) === normLab(mine[1]);
-      return `<div class="hintrow ${j ? "" : "best"} ${me ? "mine" : ""}"><span>${esc(cap(x.label))}${me ? " <b>(ton coup)</b>" : ""}</span><span class="v">${j ? (typeof x.gap === "number" ? x.gap.toFixed(1) : x.gap) : "meilleur"}</span></div>`; }).join("")
+      return `<div class="hintrow ${j ? "" : "best"} ${me ? "mine" : ""}"><span>${esc(cap(x.label))}${me ? " <b>(ton coup)</b>" : ""}</span><span class="v">${j ? esc(gapTxt(x)) : "meilleur"}</span></div>`; }).join("")
       + (hs.some(x => normLab(x.label) === normLab(mine[1])) ? "" : `<div class="small">Ton coup n'est pas parmi les ${hs.length} meilleurs de l'IA.</div>`)
-      + `<div class="small" style="color:var(--ink-3)">Simulation sur 2 tours. Écart avec le meilleur coup ; 7 vaut environ un point, sous 2 c'est du bruit.</div>`
+      + `<div class="small" style="color:var(--ink-3)">Moyenne de ${PZ_REP} simulations sur 2 tours, ± erreur type : sous 2 erreurs types, deux coups ne sont pas départagés. 7 vaut environ un point.</div>`
     : `<div class="small">Rien à conseiller ici (un seul coup possible).</div>`) : "";
   const end = v.winner !== null && v.winner !== undefined ? `<div class="rpend ${v.winner === 0 ? "w" : "l"}">${v.winner === 0 ? "Victoire" : v.winner === 1 ? "Défaite" : "Partie nulle"} ${v.st.pts[0]}-${v.st.pts[1]}</div>` : "";
   bar.classList.toggle("fold", !!RP.fold);
@@ -3942,7 +3942,7 @@ document.addEventListener("click", async e => {
   if (e.target.closest("#rpFold")) { RP.fold = !RP.fold; rpCtrl(V); return; }
   if (e.target.closest("#rpAn") && !RP.busy) {
     const k = RP.k, rp = RP; RP.busy = true; rpCtrl(V);
-    try { rp.hint[k] = await J(T.replay_hint(k, 5)); } catch (err) { rp.hint[k] = []; }
+    try { rp.hint[k] = (await hintEval(() => T.replay_hint(k, 99))).slice(0, 5); } catch (err) { rp.hint[k] = []; }
     rp.busy = false; if (RP === rp && RP.k === k) rpCtrl(V);
   }
 });
@@ -4102,9 +4102,13 @@ const gapNum = x => x.lose || typeof x.gap !== "number" ? -1000 : x.gap;
 // « -12,4 ± 1,8 » (moyenne ± erreur type), ou « perd la partie » quand la majorité des calculs le disent
 const gapTxt = x => x.lose ? "perd la partie" : `${x.gap.toFixed(1)}${typeof x.se === "number" ? " ± " + x.se.toFixed(1) : ""}`;
 const pzWorse = o => !!o && o.gap < 0 && -o.gap > PZ_OK && (typeof o.se !== "number" || -o.gap >= 2 * o.se);
-async function pzEval(k, rep = PZ_REP) {
-  const runs = [];
-  for (let j = 0; j < rep; j++) { let hs = []; try { hs = await J(T.replay_hint(k, 99)); } catch (e) { hs = []; } if (hs.length) runs.push(hs); }
+const pzEval = (k, rep = PZ_REP) => hintEval(() => T.replay_hint(k, 99), rep).catch(() => []);
+// Conseil moyenné : call() lance un calcul (train.hint ou train.replay_hint) ; sert aussi au bouton « Conseil » et à
+// « Analyser ce coup » du replay (2026-11-24). Si tous les calculs échouent, l'erreur du moteur remonte.
+async function hintEval(call, rep = PZ_REP) {
+  const runs = []; let bad = null;
+  for (let j = 0; j < rep; j++) { let hs = []; try { hs = await J(call()); } catch (e) { bad = e; hs = []; } if (hs.length) runs.push(hs); }
+  if (!runs.length) { if (bad) throw bad; return []; }
   const by = new Map();
   runs.forEach((hs, j) => hs.forEach(x => { const key = x.i === null || x.i === undefined ? "l:" + x.label : x.i;
     const o = by.get(key) || { i: x.i, label: x.label, v: [], nl: 0 };
@@ -4659,7 +4663,7 @@ function menuRender(view) {
       <li><b>Jouer.</b> Touche une carte à cadre vert pour voir ses actions, ou glisse-la vers sa zone ou sa cible. Les questions (cibles, effets optionnels, mulligan) s'affichent sur le plateau.</li>
       <li><b>Fin de tour.</b> Le gros bouton vert termine ton tour ; en réaction ou en showdown il devient « Passer ». Raccourci : barre d'espace, qui répond aussi « Oui » aux questions oui / non (« Utiliser cet effet ? »).</li>
       <li><b>Reprendre.</b> « ↶ Reprendre » (touche Retour arrière) annule ton dernier coup, autant de fois que tu veux. En duel, seulement tant que tu n'as pas passé le focus : ni après « Passer » ou « Terminer le tour », ni une fois que ton ami a joué.</li>
-      <li><b>Conseil.</b> Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.</li>
+      <li><b>Conseil.</b> Le bouton « Conseil » fait la moyenne de 8 simulations de deux tours : l'écart est en points (7 vaut environ un point), le ± est son erreur type ; sous 2 erreurs types, deux coups ne sont pas départagés.</li>
       <li><b>L'IA.</b> Elle ne voit pas ta main. Dix niveaux : de 1 à 5 elle se trompe exprès, de moins en moins ; 6 est son jeu normal ; de 7 à 10 elle calcule de plus en plus, et répond plus lentement. Flèches corail : ses derniers coups.</li>
       <li><b>Raccourcis et recherche.</b> Touche « ? » : la liste des raccourcis (J journal, C conseil, Entrée valider, chiffres 1 à 9 pour choisir une réponse). Ctrl+K ou le bouton ⌕ : chercher n'importe quelle carte et la lire. Clic droit sur une carte : sa fiche en grand.</li>
       <li><b>Journal et défausse.</b> Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.</li>

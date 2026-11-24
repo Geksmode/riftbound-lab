@@ -414,3 +414,6 @@ Choisi par l'utilisateur parmi quatre propositions (les quatre) : raccourcis cla
 
 ## [2026-11-24] decision | Table : bilan par matchup, testeur de main, exercices tirés des parties
 Choisis par l'utilisateur (propositions 1 et 2, puis « des puzzles »). Menu « Bilan » (intervalle de Wilson, « on ne sait pas »), éditeur « Tester la main » (règles 116, 117, 485.7 ; chances exactes), menu « Exercices » (décisions à 3 ou plus du conseil, rejouées sur le plateau). Constat : un conseil isolé de l'IA varie de plusieurs points d'un calcul à l'autre ; les exercices moyennent 8 calculs. Robot `verif_entrain.mjs`. Détail : `pages/etat.md`, `docs/memoire/riftbound-training-table.md`.
+
+## [2026-11-24] fix | Conseil de l'IA moyenné sur 8 calculs
+Demande de l'utilisateur après le constat du bruit : « Conseil » (en partie) et « Analyser ce coup » (replay) donnent la moyenne de 8 simulations ± erreur type (`hintEval`) ; « sous 2 c'est du bruit » retiré des textes.

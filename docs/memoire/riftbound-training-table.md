@@ -161,8 +161,9 @@ Demande de l'utilisateur après une liste de propositions : « 1 et 2 c'est ok, 
   type**. *Pourquoi :* `hint` tire ses mondes au hasard (le hasard du coach n'est pas dans l'état sauvegardé) ; le robot a
   montré le « meilleur » coup d'un calcul à -4,7 au calcul suivant, et un écart-type d'environ 5 à 12 sur l'écart d'un
   coup (7 positions, une partie, niveau du conseil de la table). `pzEval` moyenne 8 calculs, écarts appariés ; un coup
-  n'est dit moins bon qu'au-delà de 2 points et de 2 erreurs types. Le texte « sous 2 c'est du bruit » de « Conseil » et
-  d'« Analyser ce coup » date d'avant ce constat et n'est pas corrigé.
+  n'est dit moins bon qu'au-delà de 2 points et de 2 erreurs types. Même jour, demande de l'utilisateur (« oui pour le conseil
+  bruité ») : « Conseil » et « Analyser ce coup » passent par `hintEval` (8 calculs, ± erreur type par ligne) ; le texte
+  « sous 2 c'est du bruit » est remplacé partout (bulle, replay, aide). Contrôlé par `verif_entrain` et `verif_replay`.
 - Robot `train/verif_entrain.mjs` (porte, partie 4) : comptes et intervalles du bilan recalculés à part, chances
   recalculées par dénombrement, exercice joué par le gros bouton puis par les coups conseillé et joué ; vérifié par
   robot (toucher simulé), pas sur un vrai téléphone.

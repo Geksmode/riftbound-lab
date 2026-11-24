@@ -131,6 +131,23 @@ async function run(W, H, mobile) {
   await game(21, 22);
   const target = await ev("REC.id");
   await game(22, 5);
+  // bouton « Conseil » en partie : moyenne de 8 calculs, ± erreur type sur chaque ligne sauf la meilleure
+  for (let i = 0; i < 60; i++) {   // avancer jusqu'à une décision à plusieurs coups
+    await waitFor("!!(V && !working)");
+    if (await ev("V.winner !== null && V.winner !== undefined")) break;
+    if (await ev("!!V.ask")) { await ev("(async()=>{ await answer(V.ask.kind === 'mulligan' ? [] : 0) })()"); continue; }
+    if (await ev("!!V.dec && V.dec.options.length >= 3")) break;
+    if (await ev("!!V.dec")) { await ev("(async()=>{ await choose(V.dec.options[0].i) })()"); continue; }
+    await ev("(async()=>{ await pump(J(T.step())) })()");
+  }
+  await waitFor("!!(V && !working)"); await ev("recSave(true)"); await pg.waitForTimeout(300);
+  if (await ev("!!V.dec && V.dec.options.length >= 2 && !$('bHint').hidden && !$('bHint').disabled")) {
+    await ev("$('bHint').click()"); await waitFor("!$('hpop').hidden && (document.querySelectorAll('#hpop .hintrow').length > 0 || /Rien/.test($('hpop').textContent))", 240000);
+    const hp = await ev("({rows:[...document.querySelectorAll('#hpop .hintrow')].map(r=>r.querySelector('.v').textContent),txt:$('hpop').textContent,in:(()=>{const r=$('hpop').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1&&r.top>=0&&r.bottom<=innerHeight+1})()})");
+    ok(`« Conseil » : ${hp.rows.length} coups, le premier « ${hp.rows[0]} », les autres avec ± (${hp.rows.slice(1).join(" ; ")}), fenêtre à l'écran`, hp.rows.length >= 2 && /meilleur/.test(hp.rows[0]) && hp.rows.slice(1).every(x => /±|perd la partie/.test(x)) && /Moyenne de 8 simulations/.test(hp.txt) && !/sous 2 c'est du bruit/.test(hp.txt) && hp.in);
+    await pg.screenshot({ path: `${OUT}/entrain-conseil-${W}.png` });
+    await ev("$('hpop').hidden = true");
+  } else ok("« Conseil » : une décision à plusieurs coups pour le contrôler", false);
   const live = await ev("JSON.stringify([V.st.t, V.st.pts, V.st.p[0].hand])"), liveRec = await ev("REC.id + ':' + REC.moves.length");
   await ev("showMenu('puz')"); await waitFor(`!!document.querySelector('[data-pzscan="${target}"]')`);
   ok("« Exercices » : aucune liste avant analyse, les parties jouées sont proposées", await ev("document.querySelectorAll('.pzrow').length === 0 && document.querySelectorAll('[data-pzscan]').length >= 2"));
