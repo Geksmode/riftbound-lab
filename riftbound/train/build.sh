@@ -9,9 +9,8 @@ E=$(cd .. && { pwd -W 2>/dev/null || pwd; })   # dossier riftbound/ (pwd -W : ch
 R=$(cd ../../rust && pwd)
 B=build
 [ -f vendor-cache/peerjs/package/dist/peerjs.min.js ] || { echo "Lance d'abord : bash fetch_vendor.sh"; exit 1; }
-# version du moteur : empreinte des sources du crate (chemin relatif + contenu), comme version.engine_md5 en Python
-ENGINE=$(cd "$R" && find src Cargo.toml -type f \( -name '*.rs' -o -name Cargo.toml \) | LC_ALL=C sort \
-  | while read -r f; do printf '%s' "$f"; cat "$f"; done | md5sum | cut -c1-10)
+# version du moteur : empreinte des sources du crate (engine_id.sh)
+ENGINE=$(bash engine_id.sh)
 (cd "$R" && RB_ENGINE="$ENGINE" cargo build --release --lib --target wasm32-unknown-unknown --quiet)
 rm -rf $B && mkdir -p $B/img $B/atlas
 cp "$R/target/wasm32-unknown-unknown/release/riftbound.wasm" $B/
