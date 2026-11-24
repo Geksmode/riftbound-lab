@@ -48,10 +48,14 @@ wiki()   { python3 "$ROOT/scripts/wiki_lint.py"; }
 RS="$ROOT/rust"; BIN="$RS/target/release"
 # Moteur Rust (bascule du 2026-11-24 : plus de moteur Python). Les tests comprennent la non-régression contre le
 # moteur Python de référence (rust/tests/golden.rs : 300 parties aux journaux identiques, MD5 figés avant sa suppression).
-tests()  { cd "$RS" && cargo build --release -q 2>&1 && cargo build --release -q --lib --target wasm32-unknown-unknown 2>&1 \
-             && cargo test --release -q 2>&1 | tee /dev/stderr | grep -E "^test result" > "$LOG/cargo_res.txt"; local rc=${PIPESTATUS[0]}
-           local ok; ok=$(awk '{s+=$4} END {print s+0}' "$LOG/cargo_res.txt"); local ko; ko=$(awk '{s+=$6} END {print s+0}' "$LOG/cargo_res.txt")
-           echo "cargo test : $ok tests passés, $ko échec(s) (dont 300 parties identiques à la référence Python)"; [ "$rc" = 0 ] && [ "$ko" = 0 ]; }
+tests()  { cd "$RS" || return 1
+           cargo build --release -q && cargo build --release -q --lib --target wasm32-unknown-unknown || return 1
+           RB_GOLDEN_IA=1 cargo test --release -q > "$LOG/cargo.txt" 2>&1; local rc=$?
+           grep -E "FAILED|panicked" "$LOG/cargo.txt" | head -20
+           local ok ko; ok=$(grep -E "^test result" "$LOG/cargo.txt" | awk '{s+=$4} END {print s+0}')
+           ko=$(grep -E "^test result" "$LOG/cargo.txt" | awk '{s+=$6} END {print s+0}')
+           echo "cargo test : $ok tests passés, $ko échec(s) (dont 312 parties identiques à la référence Python)"
+           [ "$rc" = 0 ] && [ "$ko" = 0 ]; }
 empreinte() { cd "$E" && "$BIN/empreinte"; }   # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
 MODULES="battlefields body calm chaos fury legends mind order radiance"   # rust/src/cardsets (ordre de register_all)
 fuzz()   {   # un processus par paquet, JOBS à la fois ; bilan dans l'ordre des paquets
