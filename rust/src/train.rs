@@ -15,7 +15,7 @@ use std::cell::{Cell, RefCell};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-use crate::ai::{Cfg, CfgV, SearchAgent, SearchOpts};
+use crate::ai::{CfgV, SearchAgent, SearchOpts};
 use crate::cards::{impl_of, registry};
 use crate::decks::{decks, load};
 use crate::game::{Agent, Counters, Decision, DeckList, Game, GameOver, Res, O};
@@ -698,18 +698,6 @@ pub fn deck_arg(x: &Json, default: fn() -> TDeck) -> Result<TDeck, String> {
 }
 
 // ------------------------------------------------------------------ réglages de l'IA de la table
-/// `TABLE_CFG` puis `LEVEL_CFG` (« Très fort » : faisceau de 6 suites, react_n tirages pour les petites décisions).
-fn table_cfg(level: i64) -> Cfg {
-    let mut c = Cfg::new();
-    c.set("ambush", CfgV::Num(0.5));
-    c.set("tie_react", CfgV::Num(1.0));
-    if level == 6 {
-        c.set("turn_w", CfgV::Num(6.0));
-        c.set("react_n", CfgV::Num(3.0));
-    }
-    c
-}
-
 // ------------------------------------------------------------------ état de la table
 #[derive(Clone)]
 struct Save {
@@ -843,7 +831,7 @@ fn new(seed: &Json, bf: &Json, first: &Json, level: &Json, mine: &Json, opp: &Js
     set_counters(0, 0);
     let mut r = PyRandom::new(seed as i128 * 7919);
     let f = if first.is_null() { r.randrange(2) as usize } else { jint(first)? as usize };
-    let level = if level.is_null() { 1 } else { jint(level)? };
+    let level = if level.is_null() { 6 } else { jint(level)?.clamp(0, crate::ai::LEVELS) };
     let md = deck_arg(mine, g2)?;
     let od = deck_arg(opp, leblanc)?;
     let (pa, pl) = (plan_for(&md.legend), plan_for(&od.legend));
@@ -868,8 +856,8 @@ fn new(seed: &Json, bf: &Json, first: &Json, level: &Json, mine: &Json, opp: &Js
     }
     rp::set_names(names.clone());
     let hu: Box<dyn Agent> = Box::new(Human::default());
-    // level 0 : IA débutante du tutoriel (Gentle) ; sinon level = mondes tirés par décision (1 Normal, 3 Fort, 6 Très
-    // fort), réglages en plus dans LEVEL_CFG. L'IA de la table cherche le tour entier (search="turn").
+    // level 0 : IA débutante du tutoriel (Gentle) ; sinon niveau 1 à 10 (`ai::level_opts` ; 6, 7, 8 = anciens Normal,
+    // Fort, Très fort). L'IA de la table cherche le tour entier (search="turn").
     let mut ai_meta: Option<Json> = None;
     let ai: Box<dyn Agent> = if stub_ai() {
         Box::new(crate::agents::RandomAgent::new((seed + 500000) as i128))
@@ -886,7 +874,7 @@ fn new(seed: &Json, bf: &Json, first: &Json, level: &Json, mine: &Json, opp: &Js
             (seed + 500000) as i128,
             Some(pl.clone()),
             Some(pa.clone()),
-            SearchOpts { samples: level as usize, search: Some("turn".into()), cfg: table_cfg(level), ..SearchOpts::default() },
+            crate::ai::level_opts(level),
         );
         ai_meta = Some(agent_meta(&sa));
         Box::new(sa)
@@ -1760,10 +1748,7 @@ fn replay_load(game_json: &Json) -> Result<String, String> {
             None
         }
     });
-    let level = match game.get("level") {
-        Some(l) => l.clone(),
-        None => Json::Int(1),
-    };
+    let level = saved_level(&game);
     let meta = parse(&new(game.g("seed"), game.g("bf"), game.g("first"), &level, game.g("mine"), game.g("opp"), game.g("obf"))?)
         .unwrap();
     if game.g("ai").truthy() {
@@ -3105,6 +3090,12 @@ pub(crate) fn dbg_ask_may(key: &str) -> Result<String, String> {
 }
 
 /// `[samples, cfg.get("turn_w"), cfg.get("react_n")]` d'un agent de recherche (robot verif_vs)
+/// Niveau d'une partie enregistrée sur l'échelle 1 à 10 (`ai::level_from_saved` ; `lvs` = 10 : déjà sur cette échelle).
+pub fn saved_level(game: &Json) -> Json {
+    let l = game.get("level").and_then(|l| l.int()).unwrap_or(1);
+    Json::Int(crate::ai::level_from_saved(l, game.get("lvs").and_then(|x| x.int()) == Some(10)))
+}
+
 fn agent_meta(sa: &SearchAgent) -> Json {
     let c = |k: &str| match sa.cfg.get(k) {
         Some(CfgV::Num(n)) if n.fract() == 0.0 => Json::Int(*n as i64),

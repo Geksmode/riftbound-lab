@@ -92,4 +92,6 @@ script, machine chargée par 24 processus) : 12 tours, IA gagnante 8-3, attente 
 4 attentes > 10 s, médiane 0,2 s ; aucune erreur JS. Non essayé sur un vrai téléphone ; temps Pyodide par décision non mesuré
 sur machine libre. Robot `train/verif_vs.mjs` : bouton, réglages reçus par le moteur, bandeau « IA très forte ».
 
+**10 niveaux (2026-11-24)** : Normal, Fort et Très fort sont devenus les niveaux 6, 7, 8 d'une échelle de 1 à 10 ; réglages, mesures et temps en Rust : [[ia-niveaux]].
+
 Related: [[riftbound-tempo-ai]], [[riftbound-gameplans]], [[ia-texel]].

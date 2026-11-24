@@ -523,8 +523,8 @@
      "\"↶ Undo\" (Backspace key) takes back your last move, as many times as you like. In a duel, only as long as you haven't passed the focus: not after \"Pass\" or \"End turn\", nor once your friend has played."],
     ["Conseil.", "Hint."], ["Le bouton « Conseil » simule deux tours : l'écart est en points, 7 vaut environ un point, sous 2 c'est du bruit.",
      "The \"Hint\" button simulates two turns: the gap is in points, 7 is worth about one point, under 2 it's noise."],
-    ["L'IA.", "The AI."], ["Elle ne voit pas ta main. Niveau « Normal » : celle des simulations ; « Fort » : 3 simulations par coup, plus lente ; « Très fort » : 6 simulations par coup, encore plus lente. Flèches corail : ses derniers coups.",
-     "It doesn't see your hand. \"Normal\" level: the one used in simulations; \"Strong\": 3 simulations per move, slower; \"Very strong\": 6 simulations per move, slower still. Coral arrows: its last moves."],
+    ["L'IA.", "The AI."], ["Elle ne voit pas ta main. Dix niveaux : de 1 à 5 elle se trompe exprès, de moins en moins ; 6 est son jeu normal ; de 7 à 10 elle calcule de plus en plus, et répond plus lentement. Flèches corail : ses derniers coups.",
+     "It doesn't see your hand. Ten levels: from 1 to 5 it makes mistakes on purpose, fewer and fewer; 6 is its normal play; from 7 to 10 it computes more and more, and answers more slowly. Coral arrows: its last moves."],
     ["Journal et défausse.", "Log and trash."], ["Le bouton Journal ouvre l'historique ; touche une défausse pour voir son contenu.", "The Log button opens the history; tap a trash pile to see its contents."],
     ["Decks.", "Decks."], ["Seules les cartes modélisées par le moteur sont jouables ; les autres sont grisées (« à modéliser »).",
      "Only cards modelled by the engine are playable; the others are greyed out (\"to be modelled\")."],
@@ -544,6 +544,7 @@
     ["Tout télécharger", "Download all"], ["Toi", "You"], ["IA ${}", "${} AI"],
     // ---------------------------------------------------------------- relevés du robot verif_anglais.mjs
     ["Sons : ${}", "Sounds: ${}"], ["Choisir", "Choose"], ["2 manches gagnantes", "best of 3"], ["normale", "normal"], ["forte", "strong"], ["très forte", "very strong"],
+    ["niveau ${}", "level ${}"], ["Niveau plus faible", "Lower level"], ["Niveau plus fort", "Higher level"], ["Niveau ${}", "Level ${}"], ["Débutant", "Beginner"], ["Novice", "Novice"], ["Facile", "Easy"], ["Apprenti", "Apprentice"], ["Moyen", "Average"], ["Expert", "Expert"], ["Maître", "Master"],
     ["${} commence", "${} goes first"], ["ex. ${}", "e.g. ${}"], ["Jouables seulement", "Playable only"], ["bannie", "banned"],
     ["Retirer", "Remove"], ["Autres", "Other"], ["Champions", "Champions"],
     ["Unités (${})", "Units (${})"], ["Sorts (${})", "Spells (${})"], ["Équipements (${})", "Gear (${})"], ["Autres (${})", "Other (${})"],

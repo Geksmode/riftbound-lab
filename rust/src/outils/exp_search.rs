@@ -69,6 +69,12 @@ pub type Ver = (String, usize, f64, i64, Cfg);
 /// entrée de cfg.
 pub fn version(v: &str) -> Ver {
     let (nm, opts) = v.split_once('@').unwrap_or((v, ""));
+    if let Some(l) = nm.strip_prefix("niv").and_then(|x| x.parse::<i64>().ok()) {
+        // « niv7 » : l'IA de la table au niveau 7 (`ai::level_opts`), sans plan de légende
+        assert!(opts.is_empty(), "nivN ne prend pas de réglages");
+        let o = crate::ai::level_opts(l);
+        return (o.search.unwrap(), o.samples, 1.0, o.horizon, o.cfg);
+    }
     let &(_, sm, n, ex) =
         VERSIONS.iter().find(|x| x.0 == nm).unwrap_or_else(|| panic!("KeyError: {}", PyVal::from(nm).py_repr()));
     let (mut sm, mut n, mut ex, mut h) = (sm.to_string(), n, ex, 2i64);

@@ -115,7 +115,7 @@ fn drain(log: &mut Vec<String>, mut v: Json) -> Result<Json, String> {
 
 /// `replay(game, coach, capture)` : (journal, coups du joueur avec leur état, vue finale).
 pub fn replay(game: &Json, coach: bool, capture: &[usize]) -> Result<(Vec<String>, Vec<Json>, Json), String> {
-    let level = game.get("level").cloned().unwrap_or(Json::Int(1));
+    let level = train::saved_level(game);
     let base = vec![game.g("seed").clone(), game.g("bf").clone(), game.g("first").clone(), level];
     let mut args = base.clone();
     if game.g("obf").truthy() {
