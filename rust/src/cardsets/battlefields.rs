@@ -749,7 +749,7 @@ fn veiled() -> Value {
             });
             let pred = Value::func("pred", |g_, a_| {
                 let (it, o) = (a_[0].item(), a_[1].obj());
-                Ok((g_.o(o).ctrl == g_.it(it).ctrl && is_type(g_, o, "Gear")).into())
+                Ok((g_.o(o).ctrl == g_.it(it).ctrl && g_.is_gear(o)).into())
             });
             g.queue_trigger(
                 info.g("pid").int() as usize,
@@ -867,8 +867,7 @@ fn ornn_forge() -> Value {
         let card = what.g("card").opt_obj();
         Ok(
             if ctrl_is(g, b, pid)
-                && what.g("kind").opt_str() == Some("gear")
-                && card.is_some_and(|c| !g.o(c).token)
+                && card.is_some_and(|c| g.is_gear(c) && !g.o(c).token)
                 && g.hist.gear_played[pid] == 0
             {
                 maps(vec![map! { e = -1 }])
@@ -888,7 +887,7 @@ fn piltovan() -> Value {
         Ok(
             if ctrl_is(g, b, pid)
                 && what.g("kind").opt_str() == Some("ability")
-                && obj.is_some_and(|o| is_type(g, o, "Gear"))
+                && obj.is_some_and(|o| g.is_gear(o))
                 && g.hist.gear_abs[pid] == 0
             {
                 maps(vec![map! { e = -1 }])

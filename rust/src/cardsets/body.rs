@@ -1317,7 +1317,7 @@ fn demolitionist() -> Impl {
         let (o, ev, info) = (a[0].obj(), a[1].str(), a[2].map());
         if ev == "conquer" && in_units(info, o) {
             let ok = pred(|g_, it, x| {
-                if g_.spec(x).type_ != "Gear" {
+                if !g_.is_gear(x) {
                     return Ok(false);
                 }
                 let Some(me) = src(g_, it) else { return Ok(false) };

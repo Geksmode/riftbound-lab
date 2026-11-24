@@ -951,14 +951,14 @@ impl Game {
             .copied()
             .filter(|&o| {
                 let ob = self.o(o);
-                pid.is_none_or(|p| ob.ctrl == p) && (ob.ugear || spec(self.cname(o)).type_ == "Gear")
+                pid.is_none_or(|p| ob.ctrl == p) && (ob.ugear || spec(self.cname(o)).is_gear())
             })
             .collect()
     }
 
     /// `is_gear` : un équipement, unit gear comprise.
     pub fn is_gear(&self, o: O) -> bool {
-        self.spec(o).type_ == "Gear" || self.o(o).ugear
+        self.spec(o).is_gear()
     }
 
     pub fn at_bf(&self, o: O) -> bool {
