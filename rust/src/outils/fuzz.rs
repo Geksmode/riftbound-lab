@@ -141,6 +141,10 @@ fn one(seed: i64, names: &[String]) -> Result<(String, Vec<String>), String> {
     pool::attempt(|| {
         let g = play(seed, names);
         let h1 = digest(&g);
+        // RB_FUZZ_LOG=<graine> : journal de cette partie sur la sortie d'erreur (diagnostic)
+        if std::env::var("RB_FUZZ_LOG").ok().and_then(|s| s.parse::<i64>().ok()) == Some(seed) {
+            eprintln!("{}", g.lines.join("\n"));
+        }
         if seed < 5 {
             let h2 = digest(&play(seed, names));
             assert!(h1 == h2, "seed {seed}: two runs differ");
@@ -176,9 +180,16 @@ pub fn main(argv: &[String]) -> Result<usize, String> {
     let out = pool::map(pool::cpu_count(), &seeds, |&s| one(s, &names));
     let mut errors = 0;
     let mut played_all: BTreeSet<String> = BTreeSet::new();
+    // RB_FUZZ_DIGESTS=1 : empreinte du journal de chaque graine sur la sortie d'erreur (comparaison avec Python)
+    let show = std::env::var("RB_FUZZ_DIGESTS").is_ok();
     for (seed, r) in seeds.iter().zip(out) {
         match r {
-            Ok((_, p)) => played_all.extend(p),
+            Ok((h, p)) => {
+                if show {
+                    eprintln!("{seed} {h}");
+                }
+                played_all.extend(p)
+            }
             Err(e) => {
                 errors += 1;
                 println!("seed {seed}: EXCEPTION");
