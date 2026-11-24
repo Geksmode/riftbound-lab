@@ -549,6 +549,9 @@ pub struct Game {
     /// partie de la table d'entraînement (`train.TGame`) : journal dans la langue de la table, pioches notées, cartes
     /// vues, combats gagnés. None hors de la table et dans les copies (`clone_game`).
     pub tg: Option<Box<crate::train::TableExt>>,
+    /// partie enregistrée pour les replays (`replay.RecGame` : une image de l'état à chaque ligne du journal). None
+    /// hors de l'enregistreur et dans les copies (`clone_game`).
+    pub rec: Option<Box<crate::replay_rec::RecExt>>,
 }
 
 /// Point de reprise (2026-10-28, ai.ask_sim) : quand `on` est vrai (posé par l'IA sur la partie réelle), `apply` garde
@@ -640,6 +643,7 @@ impl Game {
             every_choice: false,
             ck: Checkpoint::default(),
             tg: None,
+            rec: None,
         };
         for (i, d) in decks.iter().enumerate() {
             let pl = g.new_player(i, d);
@@ -873,6 +877,10 @@ impl Game {
                 return;
             }
             self.lines.push(format!("[T{} P{}] {}", self.turn_no, self.tp, m));
+            if self.rec.is_some() {
+                // RecGame.log : une image de l'état
+                crate::replay_rec::rec_log(self, &m);
+            }
         }
     }
 
@@ -1676,10 +1684,10 @@ impl Game {
 
     /// `draw(pid, n)`
     pub fn draw(&mut self, pid: usize, n: i64) -> Res<()> {
-        if self.tg.is_none() {
+        if self.tg.is_none() && self.rec.is_none() {
             return self.draw_base(pid, n);
         }
-        // TGame.draw : une carte à la fois, chaque pioche notée dans le journal de la table
+        // TGame.draw / RecGame.draw : une carte à la fois, chaque pioche notée dans le journal
         for _ in 0..n {
             let before = self.p[pid].hand.clone();
             self.draw_base(pid, 1)?;
@@ -1688,7 +1696,12 @@ impl Game {
             }
             let new: Vec<O> = self.p[pid].hand.iter().copied().filter(|c| !before.contains(c)).collect();
             if !new.is_empty() && self.logging && self.stage != "setup" {
-                crate::train::tg_draw(self, pid, new[0]);
+                if self.tg.is_some() {
+                    crate::train::tg_draw(self, pid, new[0]);
+                } else {
+                    let (n, u) = (self.cname(new[0]).to_string(), self.o(new[0]).uid);
+                    self.log(|| format!("  P{pid} draws {n}#{u}"));
+                }
             }
         }
         Ok(())

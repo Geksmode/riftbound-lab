@@ -16,6 +16,32 @@ pub enum PyVal {
 }
 
 impl PyVal {
+    /// Valeur du module `json` du moteur (`crate::json::Json`) vue comme valeur Python.
+    pub fn from_json(j: &crate::json::Json) -> PyVal {
+        use crate::json::Json;
+        match j {
+            Json::Null => PyVal::None,
+            Json::Bool(b) => PyVal::Bool(*b),
+            Json::Int(i) => PyVal::Int(*i),
+            Json::Float(f) => PyVal::Float(*f),
+            Json::Str(s) => PyVal::Str(s.clone()),
+            Json::Arr(v) => PyVal::List(v.iter().map(PyVal::from_json).collect()),
+            Json::Obj(v) => PyVal::Dict(v.iter().map(|(k, x)| (k.clone(), PyVal::from_json(x))).collect()),
+        }
+    }
+    /// L'inverse de `from_json`.
+    pub fn to_json(&self) -> crate::json::Json {
+        use crate::json::Json;
+        match self {
+            PyVal::None => Json::Null,
+            PyVal::Bool(b) => Json::Bool(*b),
+            PyVal::Int(i) => Json::Int(*i),
+            PyVal::Float(f) => Json::Float(*f),
+            PyVal::Str(s) => Json::Str(s.clone()),
+            PyVal::List(v) => Json::Arr(v.iter().map(PyVal::to_json).collect()),
+            PyVal::Dict(v) => Json::Obj(v.iter().map(|(k, x)| (k.clone(), x.to_json())).collect()),
+        }
+    }
     pub fn get(&self, k: &str) -> Option<&PyVal> {
         match self {
             PyVal::Dict(v) => v.iter().find(|(x, _)| x == k).map(|(_, j)| j),

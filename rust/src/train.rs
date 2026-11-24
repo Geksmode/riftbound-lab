@@ -346,6 +346,44 @@ impl Agent for Gentle {
 pub struct ScriptAI {
     pub ag: Box<dyn Agent>,
     pub script: Vec<Json>,
+    /// indices des décisions à copier au passage (banc des erreurs marquées, `banc/humain.py`) : rangées dans `CAUGHT`
+    pub capture: Vec<usize>,
+}
+
+/// Position copiée par `ScriptAI` : (partie, (Obj._n, Item._n), décision) ; `W["caught"]` de Python.
+pub type Caught = (Game, (u32, u32), Decision);
+
+thread_local! {
+    static CAUGHT: RefCell<BTreeMap<usize, Caught>> = const { RefCell::new(BTreeMap::new()) };
+}
+
+/// `ai_replay(script, capture)` : après `new()`, l'IA suit les coups enregistrés (le script est un tableau JSON) ;
+/// les décisions d'indice `capture` sont copiées au passage (`caught`).
+pub fn ai_replay_capture(script: &Json, capture: &[usize]) -> Result<(), String> {
+    with_w(|w| {
+        ai_replay(w, script)?;
+        let ai = AI();
+        let g = w.g();
+        if let Some(s) = g.agents.0[ai].as_any().and_then(|a| a.downcast_mut::<ScriptAI>()) {
+            s.capture = capture.to_vec();
+        }
+        Ok(())
+    })
+}
+
+/// `W["caught"]` : positions copiées par `ai_replay_capture`, par indice de décision de l'IA.
+pub fn caught() -> BTreeMap<usize, Caught> {
+    CAUGHT.with(|c| c.borrow().clone())
+}
+
+/// `W["decks"]` : (deck de la table, deck de l'IA) de la partie en cours.
+pub fn current_decks() -> Vec<TDeck> {
+    W.with(|w| w.borrow().decks.clone())
+}
+
+/// `_plan_for(deck)` : plan de jeu de la table pour la légende de ce deck.
+pub fn table_plan_for(d: &TDeck) -> Arc<dyn Plan> {
+    plan_for(&d.legend)
 }
 
 impl ScriptAI {
@@ -375,10 +413,18 @@ impl Agent for ScriptAI {
         let opts = d.options.as_ref().unwrap();
         match self.e("d", d.kind, opts.len())? {
             None => self.ag.decide(g, d),
-            Some(e) => match py_index(&e.arr()[1], opts.len()) {
-                Ok(i) => Ok(opts[i].clone()),
-                Err(x) => raise(x),
-            },
+            Some(e) => {
+                let i = AILOG.with(|l| l.borrow().len());
+                if self.capture.contains(&i) && !CAUGHT.with(|c| c.borrow().contains_key(&i)) {
+                    let n = (g.counters.obj.load(std::sync::atomic::Ordering::Relaxed), g.counters.item.load(std::sync::atomic::Ordering::Relaxed));
+                    let c = g.clone_game();
+                    CAUGHT.with(|m| m.borrow_mut().insert(i, (c, n, d.clone())));
+                }
+                match py_index(&e.arr()[1], opts.len()) {
+                    Ok(i) => Ok(opts[i].clone()),
+                    Err(x) => raise(x),
+                }
+            }
         }
     }
     fn choose(&mut self, g: &mut Game, pid: usize, kind: &str, options: &[Value], ctx: &Map) -> Res<usize> {
@@ -400,6 +446,9 @@ impl Agent for ScriptAI {
     }
     fn clone_box(&self) -> Box<dyn Agent> {
         Box::new(self.clone())
+    }
+    fn as_any(&mut self) -> Option<&mut dyn std::any::Any> {
+        Some(self)
     }
 }
 
@@ -1594,7 +1643,8 @@ fn ai_replay(w: &mut St, script: &Json) -> Result<(), String> {
     let ai = AI();
     let g = w.g();
     let inner = std::mem::replace(&mut g.agents.0[ai], Box::new(crate::game_events::FirstChoice));
-    g.agents.0[ai] = Box::new(ScriptAI { ag: inner, script: sc.arr().to_vec() });
+    g.agents.0[ai] = Box::new(ScriptAI { ag: inner, script: sc.arr().to_vec(), capture: vec![] });
+    CAUGHT.with(|c| c.borrow_mut().clear());
     Ok(())
 }
 
