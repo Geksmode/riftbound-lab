@@ -1406,7 +1406,7 @@ fn c_fading_memories() -> Impl {
     Impl {
         preds: Value::List(vec![f("_fading_pred", |g, a| {
             let o = a[1].obj();
-            Ok(((stype(g, o) == "Unit" && is_bf(g.o(o).loc)) || stype(g, o) == "Gear").into())
+            Ok(((stype(g, o) == "Unit" && is_bf(g.o(o).loc)) || g.is_gear(o)).into())
         })]),
         resolve: f("_fading", |g, a| {
             let it = a[0].item();
@@ -2616,7 +2616,7 @@ fn c_ravenbloom_prefect() -> Impl {
     Impl {
         on_event: f("_ravenbloom", |g, a| {
             let (o, ev, info) = ev_args(a);
-            if ev == "played" && pid_of(&info.g("pid")) != g.o(o).ctrl && stype(g, info.g("card").obj()) == "Gear" {
+            if ev == "played" && pid_of(&info.g("pid")) != g.o(o).ctrl && g.is_gear(info.g("card").obj()) {
                 let gear = info.g("card").obj();
                 let cost = f("_ravenbloom_cost", |g_, a_| {
                     let Some(m) = me(g_, a_[0].item()) else { return Ok(false.into()) };

@@ -272,7 +272,7 @@ fn is_unit_card(g: &Game, c: O) -> bool {
 }
 
 fn is_gear_card(g: &Game, c: O) -> bool {
-    g.spec(c).type_ == "Gear"
+    g.is_gear(c)
 }
 
 /// `_units_first(g, pid, hb)` : toutes les unités, alliées d'abord (ordre de l'IA pour les effets positifs).

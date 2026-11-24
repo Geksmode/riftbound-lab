@@ -1617,8 +1617,8 @@ pub fn play_card(g: &mut Game, pid: usize, card: O, src: &str, ch: Map, limited:
     g.o_mut(card).zone = Some(Zone::Chain);
     if typ == "Spell" {
         g.hist.spell_e[pid].push(paid_e);
-    } else if typ == "Gear" && !g.o(card).token {
-        g.hist.gear_played[pid] += 1;
+    } else if sp.is_gear() && !g.o(card).token {
+        g.hist.gear_played[pid] += 1; // unit gear comprise (178.3)
     }
     g.o_mut(card).paid_e = paid_e;
     g.o_mut(card).limited_play = limited;
@@ -1981,7 +1981,7 @@ pub fn activate(g: &mut Game, src: &Value, i: usize, ch: Map) -> Res<()> {
         panic!("cannot pay ability");
     }
     g.effects.retain(|ef| !used.contains(&ef.eid));
-    if g.spec(obj).type_ == "Gear" {
+    if g.is_gear(obj) {
         g.hist.gear_abs[pid] += 1;
     }
     if ab.g("exhaust").truthy() {
