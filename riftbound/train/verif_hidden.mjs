@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 // Robot du mot-clé Hidden (règles 421, 811) dans la vraie table : une carte Hidden en main se cache au doigt
 // (menu « Cacher → … ») ET en la glissant sur un battlefield contrôlé, puis se joue depuis la face cachée.
-// La situation est posée dans le moteur (Pyodide) au début d'un tour à moi ; tout le reste passe par les gestes.
+// La situation est posée dans le moteur (WebAssembly : opérations de rust/src/train_dbg.rs) au début d'un tour à moi ; tout le reste passe par les gestes.
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_hidden.mjs <dossier des captures> [port] [carte]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -29,21 +29,12 @@ async function start(seed) {
   }
   throw new Error("pas de décision principale");
 }
-const facedowns = () => py("FD = [[c.uid for c in b.facedowns] for b in W['g'].bfs]").then(() => ev("pyGet('FD').then(JSON.stringify)"));
+const facedowns = () => py(JSON.stringify([{ as: "FD", op: ["facedowns"] }])).then(() => ev("pyGet('FD').then(JSON.stringify)"));
 // Situation : la carte en main, 5 runes prêtes (elle peut AUSSI être jouée tout de suite), une unité à moi au battlefield 0 (que je contrôle), une unité adverse en base.
-const SETUP = `
-from game import Obj, Rune
-g = W["g"]; me = ME
-while len(g.p[me].runes) < 5: g.p[me].runes.append(Rune("Calm", me))
-def _mk(name, pid, zone):
-    o = Obj(name, pid); o.zone = zone; return o
-for r in g.p[me].runes: r.exhausted = False
-c = _mk(${JSON.stringify(CARD)}, me, "hand"); g.p[me].hand.append(c); HID_UID = c.uid
-for b in g.bfs: b.facedowns.clear()
-u = Obj("Brazen Buccaneer", me); g.enter_board(u, me, 0, ready=True); g.bfs[0].ctrl = me
-e = Obj("Brazen Buccaneer", 1 - me); g.enter_board(e, 1 - me, "base", ready=True)
-W["d"] = None
-`;
+const SETUP = JSON.stringify([   // 5 runes prêtes, la carte en main, un Buccaneer à toi au battlefield 0 (contrôlé), un adverse en base
+  ["runes_fill", "me", "Calm", 5], ["runes_exh", "me", false], { as: "HID_UID", op: ["card", "me", CARD, "hand"] },
+  ["clear_facedowns"], ["board", "me", "Brazen Buccaneer", 0, true], ["bf_ctrl", 0, "me"],
+  ["board", "op", "Brazen Buccaneer", "base", true], ["d_none"]]);
 await start(process.env.RB_SEED || "4");
 await py(SETUP); await refresh(); await idle();
 const uid = String(await ev("pyGet('HID_UID')")), ouid = String(await ev(`ALIAS["${uid}"] ?? "${uid}"`));   // exemplaire qui porte les options
@@ -93,7 +84,7 @@ if (JSON.parse(await facedowns())[0].includes(+ouid)) {
   }
   ok("tour suivant : la carte cachée peut être jouée", mine);
   if (mine) {
-    await py("for _r in W['g'].p[ME].runes: _r.exhausted = True\nW['d'] = None"); await refresh(); await idle();   // 0 énergie disponible
+    await py(JSON.stringify([["runes_exh", "me", true], ["d_none"]])); await refresh(); await idle();   // 0 énergie disponible
     const el = pg.locator(`#board [data-uid="${ouid}"]`).first();
     ok("la carte cachée est affichée et touchable sur le battlefield", await el.count() > 0);
     await el.click(); await pg.waitForTimeout(300);
@@ -113,7 +104,8 @@ if (JSON.parse(await facedowns())[0].includes(+ouid)) {
         break;
       }
       console.log("  après : mode", await ev("mode ? mode.type : null"), "· bulle", JSON.stringify(await ev("$('fbar').hidden ? '' : $('fbar').innerText.slice(0,120)")));
-      await py("FDZ = [c.zone for c in W['g'].p[ME].trash if c.uid == " + ouid + "]");
+      await py(JSON.stringify([{ as: "FDZ", op: ["in_trash", "me", +ouid] }]));
+      { const t = JSON.parse(await ev("pyGet('FDZ').then(JSON.stringify)")); await py(JSON.stringify([["set", "FDZ", t ? ["trash"] : []]])); }
       const z = await ev("pyGet('FDZ').then(JSON.stringify)");
       await pg.screenshot({ path: OUT + "/hidden-jouee.png" });
       ok(`la carte cachée est jouée et résolue (cible ${t}, défausse : ${z})`, z.includes("trash"));
@@ -122,18 +114,10 @@ if (JSON.parse(await facedowns())[0].includes(+ouid)) {
 }
 // 4. Bandle Tree (« You may hide an additional card here ») : deux cartes cachées au même endroit, chacune affichée
 //    à part et touchable ; celles de l'adversaire en dos de carte. La 2e n'était pas transmise à la table.
-await py(`
-from game import Obj
-g = W["g"]
-for b in g.bfs: b.facedowns.clear()
-BT = []
-for bf, pid, n in ((0, ME, ${JSON.stringify(CARD)}), (0, ME, ${JSON.stringify(CARD)}), (1, 1 - ME, "Back Off"), (1, 1 - ME, "Gust")):
-    c = Obj(n, pid); c.zone, c.hidden_turn, c.hidden_bf = "facedown", g.turn_no - 1, bf
-    g.bfs[bf].facedowns.append(c)
-    if pid == ME: BT.append(c.uid)
-for r in g.p[ME].runes: r.exhausted = False
-W["d"] = None
-`); await refresh(); await idle();
+await py(JSON.stringify([   // deux cartes cachées à toi au battlefield 0, deux adverses au battlefield 1, runes prêtes
+  ["clear_facedowns"], { as: "BT0", op: ["facedown", 0, "me", CARD] }, { as: "BT1", op: ["facedown", 0, "me", CARD] },
+  ["facedown", 1, "op", "Back Off"], ["facedown", 1, "op", "Gust"], ["runes_exh", "me", false], ["d_none"]]));
+{ const b0 = await ev("pyGet('BT0')"), b1 = await ev("pyGet('BT1')"); await py(JSON.stringify([["set", "BT", [b0, b1]]])); } await refresh(); await idle();
 const bt = JSON.parse(await ev("pyGet('BT').then(JSON.stringify)")).map(String);
 const shown = await ev(`[...document.querySelectorAll('#board [data-drop="0"] .fd [data-uid]')].map(x => x.dataset.uid)`);
 const opp = await ev(`(()=>{ const f = document.querySelector('#board [data-drop="1"] .fd'); return f ? [f.children.length, f.innerText.trim()] : [0, ""] })()`);

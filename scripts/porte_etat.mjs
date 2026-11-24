@@ -14,8 +14,10 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Fichiers dont un changement exige la porte. Données, résultats, journaux et docs n'en font pas partie.
-export const CODE = /^(riftbound\/.*\.(py|mjs|js|html|css|sh)|scripts\/.*)$/;
+export const CODE = /^(riftbound\/.*\.(py|mjs|js|html|css|sh)|scripts\/.*|rust\/(src|tests|diff)\/.*|rust\/Cargo\.toml)$/;
 export const TABLE = /^riftbound\/(train|puzzles|replays)\//;
+// Le moteur Rust sert aussi à la table (WebAssembly) : un changement de rust/ exige les deux parties de la porte (« tout »).
+export const LES_DEUX = /^rust\//;
 
 export function git(cwd, ...args) {
   try {
@@ -39,7 +41,7 @@ function gitZ(cwd, args, input) {
 
 // Fichiers de code modifiés, nouveaux ou supprimés dans l'arbre de travail (pas encore committés).
 export function codeNonCommitte(root) {
-  const champs = gitZ(root, ["status", "--porcelain", "-z", "-uall", "--", "riftbound", "scripts"]).split("\0");
+  const champs = gitZ(root, ["status", "--porcelain", "-z", "-uall", "--", "riftbound", "scripts", "rust"]).split("\0");
   const out = [];
   for (let i = 0; i < champs.length; i++) {
     const l = champs[i];
@@ -55,7 +57,7 @@ export function codeNonCommitte(root) {
 // Les fichiers de travail sont hachés par git lui-même (filtres de fin de ligne compris, Windows CRLF).
 export function carte(root, arbre) {
   const m = new Map();
-  for (const l of gitZ(root, ["ls-tree", "-r", "-z", "HEAD", "--", "riftbound", "scripts"]).split("\0")) {
+  for (const l of gitZ(root, ["ls-tree", "-r", "-z", "HEAD", "--", "riftbound", "scripts", "rust"]).split("\0")) {
     const t = l.indexOf("\t");
     if (t < 0) continue;
     const f = l.slice(t + 1);
@@ -95,7 +97,7 @@ export function couvre(etat, fichiers) {
   // Une porte allégée (RB_FUZZ, RB_RAND sous les valeurs par défaut, RB_NAV=0, une seule partie RB_PART) ne compte pas.
   if (Number(etat.fuzz ?? 200) < 200 || Number(etat.rand ?? 30) < 30) return false;
   const moteur = fichiers.some((f) => !TABLE.test(f));
-  const table = fichiers.some((f) => TABLE.test(f));
+  const table = fichiers.some((f) => TABLE.test(f) || LES_DEUX.test(f));
   const q = etat.quoi;
   if (moteur && !(q === "moteur" || q === "tout")) return false;
   if (table && !((q === "table" || q === "tout") && !etat.part && etat.nav !== "0")) return false;

@@ -21,12 +21,7 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.querySelector('.vopt').open = true; document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
   for (let i = 0; i < 200; i++) { await waitFor("!!(V && !working)"); if (await ev("!!document.getElementById('bKeep')")) { await pg.click("#bKeep"); continue; } if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue; } if (await ev("!!(V.dec && V.dec.kind === 'main')")) break; await ev("(async()=>{ await pump(J(T.act(0))) })()"); }
-  await py(`
-g = W["g"]; me = ME
-TOP = [c.cname for c in g.p[me].deck[:2]]
-g.queue_trigger(me, "Dramatic Visionary", lambda g_, it: g_.predict(it.ctrl, 2))
-g.flush_triggers()
-W["d"] = None`);
+  await py(JSON.stringify([{ as: "TOP", op: ["deck_top", "me", 2] }, ["predict", "me", 2], ["d_none"]]));   // déclenchement « Predict 2 » (Dramatic Visionary)
   const top = await ev("pyGet('TOP')");
   await ev("(async()=>{ await pump(J(T.step())) })()");
   for (let i = 0; i < 10; i++) {   // le déclenchement est sur la chaîne : passer la priorité jusqu'à sa résolution

@@ -45,15 +45,25 @@ etape() {   # etape <nom> <commande...> : lance, garde la sortie, note OK / ÉCH
 }
 
 wiki()   { python3 "$ROOT/scripts/wiki_lint.py"; }
-tests()  { cd "$E" && RB_JOBS="$JOBS" python3 test_all.py; }
-empreinte() { cd "$E" && python3 empreinte.py; }   # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
+RS="$ROOT/rust"; BIN="$RS/target/release"
+# Moteur Rust (bascule du 2026-11-24 : plus de moteur Python). Les tests comprennent la non-régression contre le
+# moteur Python de référence (rust/tests/golden.rs : 300 parties aux journaux identiques, MD5 figés avant sa suppression).
+tests()  { cd "$RS" || return 1
+           cargo build --release -q && cargo build --release -q --lib --target wasm32-unknown-unknown || return 1
+           RB_GOLDEN_IA=1 cargo test --release -q > "$LOG/cargo.txt" 2>&1; local rc=$?
+           grep -E "FAILED|panicked" "$LOG/cargo.txt" | head -20
+           local ok ko; ok=$(grep -E "^test result" "$LOG/cargo.txt" | awk '{s+=$4} END {print s+0}')
+           ko=$(grep -E "^test result" "$LOG/cargo.txt" | awk '{s+=$6} END {print s+0}')
+           echo "cargo test : $ok tests passés, $ko échec(s) (dont 312 parties identiques à la référence Python)"
+           [ "$rc" = 0 ] && [ "$ko" = 0 ]; }
+empreinte() { cd "$E" && "$BIN/empreinte"; }   # décisions de l'IA à graines fixes = empreinte.json (--maj si le jeu change exprès)
+MODULES="battlefields body calm chaos fury legends mind order radiance"   # rust/src/cardsets (ordre de register_all)
 fuzz()   {   # un processus par paquet, JOBS à la fois ; bilan dans l'ordre des paquets
   cd "$E" || return 1
-  local mods out bad=0
-  mods=$(python3 -c "import re; s=open('cardsets/__init__.py').read(); print(' '.join(re.findall(r'[\"\x27]([a-z0-9_]+)[\"\x27]', s[s.index('MODULES'):])))")
-  printf '%s\n' cards.py $mods | xargs -P "$JOBS" -I{} sh -c \
-    'if [ "$1" = cards.py ]; then python3 fuzz_cards.py "$2"; else python3 fuzz_cards.py "$2" --module "$1"; fi > "$3/fuzz_$1.txt" 2>&1' _ {} "$FUZZ" "$LOG"
-  for m in cards.py $mods; do
+  local out bad=0
+  printf '%s\n' cards $MODULES | xargs -P "$JOBS" -I{} sh -c \
+    'if [ "$1" = cards ]; then "$4/fuzz_cards" "$2"; else "$4/fuzz_cards" "$2" --module "$1"; fi > "$3/fuzz_$1.txt" 2>&1' _ {} "$FUZZ" "$LOG" "$BIN"
+  for m in cards $MODULES; do
     out=$(grep -E "^[0-9]+ games, [0-9]+ exceptions" "$LOG/fuzz_$m.txt" | tail -1)
     echo "$m : ${out:-pas de bilan}"
     case "$out" in *" 0 exceptions"*) ;; *) bad=1; tail -20 "$LOG/fuzz_$m.txt";; esac
@@ -63,13 +73,13 @@ fuzz()   {   # un processus par paquet, JOBS à la fois ; bilan dans l'ordre des
 }
 hasard() {
   cd "$E" || return 1
-  local out; out=$(RB_JOBS="$JOBS" python3 ../train/t_rand.py "$RAND" 2>&1); local rc=$?
+  local out; out=$(RB_JOBS="$JOBS" "$BIN/t_rand" "$RAND" 2>&1); local rc=$?
   out=$(grep -E "^[0-9]+ parties" <<<"$out" | head -1); echo "${out:-pas de bilan}"
   [ $rc = 0 ] && grep -q "erreurs 0" <<<"$out"
 }
 table()  {
   cd "$TR" || return 1
-  [ -f pyodide-cache/package/pyodide.js ] || bash fetch_pyodide.sh >/dev/null || return 1
+  [ -f vendor-cache/peerjs/package/dist/peerjs.min.js ] || bash fetch_vendor.sh >/dev/null || return 1
   bash build.sh | tail -1
 }
 navigateur() {

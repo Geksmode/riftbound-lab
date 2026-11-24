@@ -41,17 +41,9 @@ for (const [w, h, mob, sc] of [[1400, 900, false, 1], [1400, 900, false, 2], [39
       if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
       await ev("(async()=>{ await pump(J(T.act(0))) })()");
     }
-    await py(`
-from game import Obj, Rune
-g = W["g"]; me = ME
-for u in list(g.units(me)): g.kill([u], me)
-g.p[me].runes = [Rune("Order", me), Rune("Order", me)]
-def P(n):
-    o = Obj(n, me); g.enter_board(o, me, "base", ready=True); return o.uid
-SK = P("Shipyard Skulker"); HK = P("Baited Hook")
-for n in reversed(${JSON.stringify(top)}):
-    c = Obj(n, me); c.zone = "deck"; g.p[me].deck.insert(0, c)
-W["d"] = None`);
+    await py(JSON.stringify([["kill_units", "me"], ["runes", "me", ["Order", "Order"]],
+      { as: "SK", op: ["board", "me", "Shipyard Skulker", "base", true] }, { as: "HK", op: ["board", "me", "Baited Hook", "base", true] },
+      ...[...top].reverse().map(n => ["card", "me", n, "deck"]), ["d_none"]]));
     await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
     // activer Hook depuis la table : toucher la carte, choisir la capacité, toucher la cible, valider
     const hk = String(await ev("pyGet('HK')")), sk = String(await ev("pyGet('SK')"));
@@ -83,7 +75,7 @@ W["d"] = None`);
   await pg.screenshot({ path: `${OUT}/regard-hook-${w}.png` });
   await tap('#fbar button.seenc:has(.card[data-card="Vanguard Sergeant"])');
   await settle();
-  await py(`R = [u.cname for u in W["g"].units(ME)]`);
+  await py(JSON.stringify([{ as: "R", op: ["unit_names", "me"] }]));
   const units = await ev("pyGet('R')");
   ok(`${w} px : Vanguard Sergeant touché → en jeu (${units}), plus de bulle de cartes vues`, String(units).includes("Vanguard Sergeant") && !(await ev("!!document.querySelector('#fbar .mull.seen')")));
 

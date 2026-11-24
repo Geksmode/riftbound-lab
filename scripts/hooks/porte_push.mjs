@@ -1,7 +1,7 @@
 // Hook PreToolUse (Bash) : un `git push` qui envoie du code ne part que si scripts/verifier.sh est vert sur ce code.
 // Règle de CLAUDE.md (« avant d'intégrer ou de publier, verifier.sh doit être vert ») doublée d'un contrôle mécanique.
 // Seul l'agent est arrêté : l'utilisateur pousse ce qu'il veut depuis son propre terminal.
-import { CODE, TABLE, couvre, empreinte, git, lire, resume } from "../porte_etat.mjs";
+import { CODE, LES_DEUX, TABLE, couvre, empreinte, git, lire, resume } from "../porte_etat.mjs";
 import { base, depot, entree } from "./commun.mjs";
 
 const inp = await entree();
@@ -19,7 +19,7 @@ if (!fichiers.length) process.exit(0); // docs, données, résultats : pas besoi
 const etat = lire(root);
 if (couvre(etat, fichiers) && etat.empreinte === empreinte(root, false)) process.exit(0);
 
-const table = fichiers.some((f) => TABLE.test(f));
+const table = fichiers.some((f) => TABLE.test(f) || LES_DEUX.test(f));
 const moteur = fichiers.some((f) => !TABLE.test(f));
 const quoi = table && moteur ? "tout" : table ? "table" : "moteur";
 console.error(

@@ -381,3 +381,9 @@ Captures de l'utilisateur : Bilgewater Tracker proposait toutes les paires d'uni
 
 ## [2026-11-12] ingest | Éditeur de deck : vue « Images »
 Demande de l'utilisateur (capture d'une decklist en images) : bouton « Liste / Images », un exemplaire = une image, menu par carte, catalogue masquable (`dkVisual`, `dkPop` dans `train/src.html`). Robot `verif_deckimg.mjs` (porte, partie 3).
+
+## [2026-11-24] decision | Table sur le moteur Rust (WebAssembly)
+Pyodide remplacé par `riftbound.wasm` dans le worker de la table ; robots sans Python (`rust/src/train_dbg.rs`) ; différentiel `rust/diff/table.py`. Voir `pages/etat.md`.
+
+## [2026-11-24] restructure | Bascule du moteur en Rust, moteur Python supprimé
+Tout tourne en Rust (`rust/` : moteur, 1037 cartes, IA, outils, table en WebAssembly) ; dernier état Python = étiquette `moteur-python-final`. Test différentiel : 2000/2000 parties aléatoires et 200/200 parties IA identiques au Python, référence figée dans `rust/tests/golden.rs`. Documentation mise à jour (`depot`, `porte`, `resultats`, `engine/README.md`...) ; version du moteur suffixée `-rust`.

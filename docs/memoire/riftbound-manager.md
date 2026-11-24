@@ -4,6 +4,8 @@ description: Agent manager loop: routine every 6h runs matchup sim sessions from
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 2026-10-03: the user asked for a "manager agent" that writes a retex at the end of each session and, once tokens renew, runs a new matchup session building on what it learned. Claude can't see token renewal, so a routine (trig_01PWy4DH7kxfmh32NvyUbZrU, cron every 6h, fires into the thread "Agent manager de sessions matchups") stands in for it.
 
 Files in /mnt/project-files/riftbound/manager/: PROTOCOLE.md (steps each session follows), learnings.md (current knowledge: acquis/pistes/réfuté/questions + session history, rewritten each session), agenda.json (next jobs), run_session.py (JSON jobs, PlanAgent from engine/plans.py, one shared fresh seed block per session for paired comparisons, "fresh": true for confirmations), state.json (next_seed, starts 200000; never reuse lower seeds), sessions/ retex, results/. Vault note: vault/Agent manager.md.

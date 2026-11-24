@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-// Robot de la version anglaise (i18n.js, engine/lang.py) : la table ouverte avec ?lang=en ne montre aucun texte
+// Robot de la version anglaise (i18n.js, rust/src/lang.rs) : la table ouverte avec ?lang=en ne montre aucun texte
 // français. Il parcourt le menu (tableau de bord, choix du deck, aide, mes decks, mes parties, ami), l'éditeur de deck
 // (import, export), les sons, la nouvelle partie (BO1 et BO3), une partie BO3 jouée jusqu'au bout (mulligan, questions,
 // conseil, journal, défausse, fin de manche, sideboard, préparation de la manche 2), le replay et le tutoriel.

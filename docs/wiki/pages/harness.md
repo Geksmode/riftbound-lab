@@ -1,12 +1,12 @@
 ---
 titre: Garde-fous automatiques (harness)
 resume: ce que les hooks de .claude/ font respecter mécaniquement, contrat de tâche, escalade, worktrees
-maj: 2026-10-30
+maj: 2026-11-24
 sources: .claude/settings.json, scripts/hooks/, scripts/porte_etat.mjs, .worktreeinclude, https://github.com/walkinglabs/learn-harness-engineering, https://code.claude.com/docs/en/worktrees
 ---
 Principe (« double encodage ») : une règle importante est écrite dans `CLAUDE.md` **et** tenue par un contrôle
-mécanique, parce qu'un agent chargé oublie une règle écrite. Ce qui existait déjà : `compare.py` (refuse d'agréger deux
-versions du moteur), l'éditeur qui bloque les cartes non modélisées, `empreinte.py`, la porte `scripts/verifier.sh`, la CI.
+mécanique, parce qu'un agent chargé oublie une règle écrite. Ce qui existait déjà : `compare` (Rust ; refuse d'agréger deux
+versions du moteur, dont Rust contre Python), l'éditeur qui bloque les cartes non modélisées, `empreinte`, la porte `scripts/verifier.sh`, la CI.
 
 ## Hooks de `.claude/settings.json` (Node, donc aussi sous Windows)
 | Hook | Fichier | Effet |
@@ -40,7 +40,7 @@ correctif, attendre l'utilisateur (ou le chef). Pas de troisième essai à l'ave
 - Équipe tmux : `scripts/equipe.sh` crée `../rb-<agent>` sur `agent/<nom>` (inchangé).
 - Session isolée ponctuelle : `claude -w <nom>` → `.claude/worktrees/<nom>/`, branche `worktree-<nom>`, nettoyée en sortie
   si rien n'a changé ; `claude -w <nom> --resume` pour reprendre. Préférer ça aux copies faites à la main.
-- `.worktreeinclude` recopie `riftbound/train/pyodide-cache/` dans chaque nouveau worktree (pas de re-téléchargement).
+- `.worktreeinclude` recopie `riftbound/train/vendor-cache/` dans chaque nouveau worktree (pas de re-téléchargement).
 - `.claude/worktrees/` est ignoré par git. Lister / ranger : `git worktree list`, `git worktree remove <dossier>`, `git worktree prune`.
 - Sous-agent isolé : `isolation: worktree` dans l'en-tête d'un rôle de `.claude/agents/` (pas mis par défaut : les rôles
   servent aussi à `claude --agent` dans les fenêtres tmux, déjà isolées).

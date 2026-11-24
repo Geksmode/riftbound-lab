@@ -1,10 +1,12 @@
 ---
 name: riftbound-training-table
-description: table d'entraînement (moteur réel dans Pyodide), publiée sur GitHub Pages ; leçons d'interface et de vérification (retex 2026-10-09)
+description: table d'entraînement (moteur Rust en WebAssembly depuis le 2026-11-24 ; avant : Pyodide), publiée sur GitHub Pages ; leçons d'interface et de vérification (retex 2026-10-09)
 metadata:
   type: project
   modified: 2026-10-05T16:56:40.551Z
 ---
+**2026-11-24 : la table tourne sur le moteur Rust compilé en WebAssembly** (`rust/src/train.rs`, `wasm.rs` ; `riftbound.wasm` dans `train/engine.worker.js`, même protocole `{id, fn, args}`). Pyodide, `precompile.mjs` et `fetch_pyodide.sh` sont retirés ; `engine/train.py`, `engine/lang.py` et `engine/cardsets/test_*.py` n'existent plus (équivalents `train.rs`, `lang.rs`, `cargo test`). Les sections ci-dessous datées d'avant sont l'historique du moteur Pyodide ; détail de la bascule : [portage-rust](portage-rust.md).
+
 2026-10-05: user asked "un outil d'entraînement où je joue contre toi". Built artifact https://claude.ai/artifact/HTmfbgtzcPP7jN7UsCfcHC "Riftbound Entraînement" (separate from replay viewer [[riftbound-replays]]).
 
 - User plays Akali G2 vs LeBlanc IQ#5 AI (PlanAgent, plan Hook tempo, tempo AI [[riftbound-tempo-ai]]); level Normal samples=1 / Fort samples=3 / Très fort samples=6 + turn_w=6, react_n=3 (2026-10-27, [[riftbound-search-ai]]).
@@ -77,7 +79,7 @@ l'agrandi, le même bouton le referme, toucher une carte le ferme), et survol à
 les autres bulles de cartes gardent leur comportement). Robot `train/verif_mulligan.mjs` (vérifié par robot, toucher
 simulé ; pas essayé sur un vrai téléphone).
 
-## Chargement du moteur (2026-10-17)
+## Chargement du moteur avec Pyodide (2026-10-17, périmé : remplacé par le wasm le 2026-11-24)
 Demande de l'utilisateur : « le chargement de l'engine est long ». Cause principale : Pyodide 0.26.4 livre sa stdlib en `.py`,
 donc à chaque ouverture il recompilait ~120 modules (asyncio, typing, inspect…) puis tout le moteur (~1 Mo de `.py`).
 Correctif : `train/precompile.mjs` (lancé par `build.sh`) précompile avec le Python de Pyodide (node) la stdlib chargée et

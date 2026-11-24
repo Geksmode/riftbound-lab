@@ -21,9 +21,9 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
 2. **Simulations** : toujours rejouer une option retenue sur des graines **neuves** avant de l'annoncer ; ne jamais
    regrouper des configurations jouées sur les mêmes graines comme si elles étaient indépendantes ; donner l'intervalle
    (± écart-type) et dire « on ne sait pas » sous 2 écarts-types. Ne jamais agréger des chiffres de deux versions du moteur :
-   comparer et regrouper avec `riftbound/engine/compare.py`, qui refuse ces cas (`docs/wiki/pages/resultats.md`).
-3. *(supprimée le 2026-10-10 : plus de replays systématiques après chaque simulation ; `add_replays.py` reste disponible sur demande.)*
-4. **Cartes non modélisées** : une carte absente de `cards.IMPL` est bloquée dans l'éditeur de deck. Ne jamais
+   comparer et regrouper avec `rust/target/release/compare`, qui refuse ces cas (le moteur Rust, suffixe de version `-rust`, n'est jamais agrégé avec le moteur Python) (`docs/wiki/pages/resultats.md`).
+3. *(supprimée le 2026-10-10 : plus de replays systématiques après chaque simulation ; `add_replays` reste disponible sur demande.)*
+4. **Cartes non modélisées** : une carte absente du registre (`rust/src/cards.rs`, `registry().impls`) est bloquée dans l'éditeur de deck. Ne jamais
    enregistrer une carte avec un effet partiel ou approximé ; une carte bloquée vaut mieux qu'une carte fausse.
 5. **Vault** : le vault du projet est `docs/vault/` (notes Obsidian en français, liens `[[...]]`). Le vrai vault de
    l'utilisateur est sur son PC (Obsidian « Cerveau », dossier `20 Projets\Riftbound\`) : n'y écrire que s'il le
@@ -32,21 +32,27 @@ durable : mets à jour la page concernée, l'index et `docs/wiki/log.md`, puis `
    (`riftbound/rules/source/core_rules_2026-07-16.txt`) et la citer. Ex. Deathgrip : deux cibles obligatoires (355.8).
 7. **Ne dis « testé »** que pour un chemin joué de bout en bout dans une vraie partie (navigateur compris pour la table).
    Pour la table, distingue « vérifié par robot (toucher simulé) » et « essayé sur un vrai téléphone » (retex 2026-10-09).
-8. **Tests de l'IA sur des decks variés** (2026-10-10) : `exp_search.py ... defaut`, environ 80 paires ; plus d'Akali contre
+8. **Tests de l'IA sur des decks variés** (2026-10-10) : `exp_search ... defaut`, environ 80 paires ; plus d'Akali contre
    LeBlanc par défaut, seulement sur demande ou pour un plan propre à ces decks (`docs/memoire/ia-tests-decks-varies.md`).
 9. **Garder un réglage de l'IA** (2026-10-20) : seulement s'il apporte **+2 points ou plus, démontré** par le test séquentiel
-   `riftbound/engine/mesure/sprt.py` (H0 50 %, H1 52 %, 5 % / 5 %), puis confirmé par un second test sur des graines neuves.
-   80 paires d'`exp_search.py` = simple coup d'œil. Durées et détails : `docs/memoire/ia-sprt.md`.
+   `rust/target/release/sprt` (H0 50 %, H1 52 %, 5 % / 5 %), puis confirmé par un second test sur des graines neuves.
+   80 paires d'`exp_search` = simple coup d'œil. Durées et détails : `docs/memoire/ia-sprt.md`.
 10. **Réalisme de l'IA** (2026-10-29) : un réglage qui corrige des erreurs **marquées par l'utilisateur** sur la table
-   (bouton « Erreur de l'IA », vérifié sur ces positions avec `riftbound/engine/banc/humain.py`) est gardé, même sans
+   (bouton « Erreur de l'IA », vérifié sur ces positions avec `rust/target/release/banc_humain`) est gardé, même sans
    gain de victoires, s'il **ne fait pas perdre** : test séquentiel de non-infériorité (`RB_SPRT_H0=0.485 RB_SPRT_H1=0.50
-   mesure/sprt.py`, « garde ») puis confirmé sur des graines neuves. Les erreurs jugées par la note automatique du banc
+   sprt`, « garde ») puis confirmé sur des graines neuves. Les erreurs jugées par la note automatique du banc
    ne comptent pas (elle se trompe sur ce qui fait gagner). Détails : `docs/memoire/ia-realisme.md`.
+11. **Sous-agents** (2026-11-24) : choisir le modèle selon la tâche pour économiser les tokens : un modèle léger
+   (Sonnet, Haiku) pour le travail mécanique ou de recherche, le plus fort seulement pour ce qui exige un jugement fin
+   (architecture, débogage difficile, fidélité aux règles).
 
 ## Conventions
-- Moteur : Python 3 standard, aucune dépendance (il tourne aussi dans Pyodide 0.26.4, 32 bits) ; jamais d'ordre
-  d'itération d'un `set` qui compte (`sorted()`) : même graine = même partie. Une carte = une entrée `card(nom, ...)`
-  avec au moins un test ; les numéros de règle sont cités en commentaire.
+- Moteur : **Rust** (`rust/`, depuis le 2026-11-24 ; le moteur Python est supprimé, dernier état : étiquette git
+  `moteur-python-final`), aucune dépendance, compilé en natif (outils, simulations) et en WebAssembly (table). Même
+  graine = même partie : jamais d'ordre de `HashMap` ou de `HashSet` qui compte. Une carte = une entrée
+  `r.card(Impl { ... })` dans `rust/src/cardsets/` ; les numéros de règle sont cités en commentaire. Non-régression :
+  `rust/tests/golden.rs` (journaux identiques au moteur Python de référence). Les petits scripts qui ne jouent pas de
+  parties (wiki, listes de paquets, base de cartes) restent en Python. Contrat et conventions : `docs/memoire/portage-rust.md`.
 - Avant d'intégrer ou de publier : `scripts/verifier.sh` doit être vert (tests, fuzz de chaque paquet, parties aléatoires,
   build et partie jouée dans un navigateur ; `docs/wiki/pages/porte.md`). Commandes et carte du dépôt : `docs/wiki/pages/depot.md`.
 - Les résultats de simulation d'avant le 2026-10-06 sont périmés (énergie flottante) : les remesurer avant de les citer.

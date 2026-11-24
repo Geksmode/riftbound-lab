@@ -1,8 +1,9 @@
 name: Apprentissage (parties de l'utilisateur)
 
 # Quand un fichier de parties est déposé dans riftbound/train/games/games/ (téléchargé depuis « Mes parties » de la
-# table), chaque partie est rejouée avec le moteur exact qui l'a jouée (commit noté par la page, sinon copies figées
-# train/engine_versions/), comparée au coach, et un bilan est publié dans le résumé du run et en artefact.
+# table), chaque partie est rejouée avec le moteur Rust actuel (les copies figées du moteur Python ont été supprimées à la
+# bascule du 2026-11-24 : les rejeux non fidèles sont signalés), comparée au coach, et un bilan est publié dans le résumé
+# du run et en artefact.
 on:
   push:
     paths:
@@ -19,14 +20,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0          # git archive du commit noté par la page
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Rejouer toutes les parties (moteur de leur époque) avec le coach
-        run: cd riftbound/engine && python3 train_games.py ../train/games/games/*.json --frozen --coach
+      - name: Moteur Rust (outils de rejeu)
+        run: cd rust && cargo build --release --bin train_games --bin bilan_parties
+      - name: Rejouer toutes les parties avec le coach
+        run: cd riftbound/engine && ../../rust/target/release/train_games ../train/games/games/*.json --frozen --coach
       - name: Bilan
         run: |
-          cd riftbound/engine && python3 bilan_parties.py > /dev/null
+          cd riftbound/engine && ../../rust/target/release/bilan_parties > /dev/null
           cat ../train/analyses/BILAN.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:

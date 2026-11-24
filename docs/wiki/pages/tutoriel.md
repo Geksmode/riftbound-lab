@@ -2,7 +2,7 @@
 titre: Tutoriel « Apprendre à jouer »
 resume: le mode tutoriel de la table (débutants complets) : intro, leçons et défis pas à pas, lexique, IA débutante, code et vérification
 maj: 2026-10-17
-sources: riftbound/train/src.html (GLOSS, TSTEPS, TTIPS, TINTRO, tutoCheck, tutoDraw), riftbound/engine/train.py (Gentle, tuto), riftbound/train/verif_tuto.mjs
+sources: riftbound/train/src.html (GLOSS, TSTEPS, TTIPS, TINTRO, tutoCheck, tutoDraw), rust/src/train.rs (Gentle, tuto), riftbound/train/verif_tuto.mjs
 ---
 Demandes de l'utilisateur : un mode tutoriel pour un néophyte, pas trop long et ludique (2026-10-10) ; puis « plus
 progressif, qui explique vraiment pour les débutants qui ne connaissent pas du tout le jeu, des tooltips pour les

@@ -1,7 +1,7 @@
 // Version anglaise de la table (Riftbound Observatory). src.html reste écrit en français ; en anglais, ce fichier traduit
 // le texte au moment où il entre dans la page : nœuds texte et attributs (title, aria-label, placeholder, label),
 // dès qu'un innerHTML / textContent / insertAdjacentHTML est posé (avant toute mesure de mise en page), et un
-// MutationObserver rattrape le reste. Le moteur parle anglais de lui-même (train.set_lang, engine/lang.py).
+// MutationObserver rattrape le reste. Le moteur parle anglais de lui-même (train.set_lang, rust/src/lang.rs).
 //
 // Langue : ?lang=en ou ?lang=fr dans l'adresse, sinon le choix gardé (clé rbt-lang), sinon le français.
 // I18N.set("en") garde le choix et recharge la page (le moteur repart dans la bonne langue, la partie en cours est

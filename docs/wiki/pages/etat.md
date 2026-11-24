@@ -1,10 +1,26 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-11-12
+maj: 2026-11-24
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
+- **Bascule du moteur en Rust (2026-11-24)** : le moteur Python (`riftbound/engine/*.py`) est supprimé ; moteur, 1037 cartes,
+  IA, outils et table (WebAssembly) tournent en Rust (`rust/`, binaires `rust/target/release/<nom>`). Dernier état avec Python :
+  étiquette git `moteur-python-final`. Test différentiel : 2000/2000 parties aléatoires et 200/200 parties IA identiques au
+  Python ; référence figée dans `rust/tests/golden.rs` (300 parties). La version du moteur porte le suffixe `-rust` : `compare`
+  refuse d'agréger ses chiffres avec ceux du Python ([chiffres versionnés](resultats.md)) ; les chiffres d'avant la bascule
+  sont à remesurer avant de les mêler à de nouveaux. Commandes : [depot.md](depot.md), porte : [porte.md](porte.md).
+  Restent en Python : `scripts/wiki_lint.py`, `riftbound/decks/*.py`, `riftbound/cards/*.py`, `riftbound/tools/`, `riftbound/sim/`
+  et les scripts Playwright de `riftbound/train/`. Les entrées plus bas qui citent des fichiers `.py` du moteur sont datées
+  d'avant la bascule (historique).
+- **Table sur le moteur Rust en WebAssembly (2026-11-24)** : Pyodide retiré de la
+  table ; `riftbound.wasm` (crate `rust/`, `train.rs`, `wasm.rs`) dans le même Web Worker, même protocole, même JSON.
+  Différentiel `rust/diff/table.py` (mêmes appels aux deux moteurs, réponses comparées octet pour octet) : vraie IA,
+  30 scénarios (graines 1-15 et 20-34 : parties complètes, conseil, tutoriel, Reprendre, questions, replay, match,
+  sideboard) identiques ; IA remplacée par un RandomAgent des deux côtés, 116 scénarios identiques (graines 5-120).
+  `scripts/verifier.sh table` vert (28 robots, match, anglais : vérifié par robot, toucher simulé). Pas essayé sur un
+  vrai téléphone. Détail : `docs/memoire/portage-rust.md`.
 - **Éditeur de deck : vue « Images » (2026-11-12)** : demande de l'utilisateur (capture d'une decklist étalée). Bouton « Liste / Images » dans le panneau du deck : en Images, chaque exemplaire est une image (légende, deck principal avec le champion choisi en premier puis par coût, sideboard, battlefields ; runes avec leurs boutons). Toucher une image ouvre un menu (− / + / ⇄ sideboard / ★ champion / Voir la carte / Fermer) ; « Masquer le catalogue » donne toute la largeur au deck. Choix gardé dans le navigateur (`rbt-dkview`, `rbt-dkcat`) ; la liste reste la vue par défaut. Affichage seulement, moteur inchangé. Robot `train/verif_deckimg.mjs` (porte, partie 3 ; 1400×900 souris et 393×851 toucher simulé) : vérifié par robot, pas sur un vrai téléphone.
 - **Cibles « jusqu'à N unités » et battlefields à l'endroit (2026-11-07)** : deux bugs signalés sur téléphone. (1) Bilgewater Tracker (« deal 1 to each of up to 2 units », toute question de `radiance._choose_up_to`) listait toutes les paires en texte ; `train._ask_multi` envoie les unités de chaque option (`ask.tg`), la page passe en ciblage normal (cartes en surbrillance, liste en images dans la bulle, « Valider la cible », « Aucune cible », « Effacer »). (2) Les 69 battlefields sans image propre (case de planche, carte imprimée de côté) étaient tournés de -90°, donc **la tête en bas sur le plateau**, et pas tournés du tout dans le choix de la manche suivante ; maintenant +90° partout (`.bfrot`, `bfThumb`), planche des 76 battlefields regardée à l'œil. Les 7 avec image propre étaient déjà bons. L'agrandi d'un battlefield de planche reste de côté (pas touché). Test `cardsets/test_cibles_multiples.py`, robot `train/verif_multi.mjs` (porte, partie 2) : vérifié par robot (toucher simulé), pas sur un vrai téléphone.
 - **Payer avec un Gold ou une rune (2026-11-06)** : bug signalé sur PC, le choix se faisait en cliquant le battlefield de gauche ou de droite (les options 0 et 1, nombre de Gold, étaient prises pour des battlefields). On clique maintenant le Gold de la base ou n'importe quelle rune qui peut payer (toutes en surbrillance), puis Valider : c'est la rune cliquée qui est recyclée. **Même sans Gold**, le joueur humain choisit chaque rune recyclée (question `pay_rune` « quelle rune recycler ? », une par puissance, posée seulement s'il y a plusieurs runes possibles) : `game.pay_choices`, options `("r", uid)` et nombre de Gold, `_plan_payment(prefer=)`. L'IA n'est pas interrogée (`every_choice` faux) : son paiement ne change pas (empreinte identique). Même filtre pour X de Bullet Time, le choix d'un joueur et Ava Achiever (`train.NOT_LOC`). Le halo des runes en image était aussi écrasé par `.rune.img` (aussi pour « Recycler quelle rune ? »). Test `answer_by_touching_the_gold_or_the_rune`, robot `train/verif_gold.mjs` (1400×900, souris) : vérifié par robot, pas sur le PC de l'utilisateur.

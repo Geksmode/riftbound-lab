@@ -1,15 +1,15 @@
 ---
 tags: [riftbound, simulation, outil]
-dossier: riftbound/engine/
-maj: 2026-10-02
+dossier: rust/
+maj: 2026-11-24
 ---
 # Moteur de règles fidèle
 
 Simulateur 1v1 écrit d'après les **Core Rules du 2026-07-16**, sans simplification de carte. Créé parce que le
 premier simulateur simplifié a été rejeté (« il faut savoir modéliser toutes les cartes »). Dossier :
-`riftbound/engine/` (README complet sur place).
+`rust/` (moteur Rust depuis le 2026-11-24 ; le moteur Python, étiquette git `moteur-python-final`, est supprimé ; README : `riftbound/engine/README.md`). Les fichiers ci-dessous sont ceux du moteur Python d'origine, leurs équivalents Rust sont dans `rust/src/`.
 
-## Contenu
+## Contenu (version Python d'origine ; correspondance Rust dans `riftbound/engine/README.md`)
 - `game.py` : état, runes et coûts, chaîne (priorité/focus), cleanups, showdowns, combat, score, couches de might.
 - `actions.py` : actions légales et processus de jeu.
 - `cards.py` : **85 cartes du pool Akali/LeBlanc** + tokens (Mech, Reflection, Gold), une entrée par nom,

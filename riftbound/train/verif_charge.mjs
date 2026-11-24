@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 // Robot de charge au format téléphone : 17 cartes en main, 6 unités de chaque côté sur chaque champ de bataille,
 // 7 unités en base, 12 runes dont une partie épuisée (téléphone, puis ordinateur 1875x902 et 1400x900). Aucune carte ne doit sortir de sa zone, aucune zone ne doit
-// déborder et la page ne doit pas défiler (393x851, 360x740, 412x915). Situation posée dans le moteur (Pyodide).
+// déborder et la page ne doit pas défiler (393x851, 360x740, 412x915). Situation posée dans le moteur (WebAssembly : opérations de rust/src/train_dbg.rs).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_charge.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -26,22 +26,18 @@ for (const [w, h] of [[393, 851], [360, 740], [412, 915], [1875, 902], [1400, 90
     if (await ev("!!(V.dec && V.dec.kind === 'main')")) break;
     await ev("(async()=>{ await pump(J(T.act(0))) })()");
   }
-  await py(`
-from game import Obj, Rune
-g = W["g"]; me = ME; op = 1 - ME
-names = ["Stellacorn Herder", "Mournful Witness", "Noxus Hopeful", "Blitzcrank, Impassive", "Kai'Sa, Survivor", "Astral Heron"]
-for k in range(12):
-    c = Obj(["Falling Star", "Discipline", "Block", "Stellacorn Herder", "Not So Fast", "Mournful Witness"][k % 6], me); c.zone = "hand"; g.p[me].hand.append(c)
-for loc in (0, 1):
-    for k in range(6):
-        g.enter_board(Obj(names[k % 6], me), me, loc, ready=True); g.enter_board(Obj("Watchful Sentry", op), op, loc, ready=(k % 2 == 0))
-for k in range(7):
-    g.enter_board(Obj(names[k % 6], me), me, "base", ready=(k % 3 != 0))
-    g.enter_board(Obj("Watchful Sentry", op), op, "base", ready=True)
-g.p[me].runes = [Rune(["Calm", "Fury"][k % 2], me) for k in range(12)]
-for k, r in enumerate(g.p[me].runes): r.exhausted = (k % 4 == 0)
-W["d"] = None
-`);
+  {   // main de 12 cartes, 6 unités de chaque côté sur chaque battlefield, 7 dans chaque base, 12 runes (opérations de rust/src/train_dbg.rs)
+    const names = ["Stellacorn Herder", "Mournful Witness", "Noxus Hopeful", "Blitzcrank, Impassive", "Kai'Sa, Survivor", "Astral Heron"];
+    const hand = ["Falling Star", "Discipline", "Block", "Stellacorn Herder", "Not So Fast", "Mournful Witness"];
+    const ops = [];
+    for (let k = 0; k < 12; k++) ops.push(["card", "me", hand[k % 6], "hand"]);
+    for (const loc of [0, 1]) for (let k = 0; k < 6; k++) { ops.push(["board", "me", names[k % 6], loc, true]); ops.push(["board", "op", "Watchful Sentry", loc, k % 2 === 0]); }
+    for (let k = 0; k < 7; k++) { ops.push(["board", "me", names[k % 6], "base", k % 3 !== 0]); ops.push(["board", "op", "Watchful Sentry", "base", true]); }
+    const doms = [], exh = [];
+    for (let k = 0; k < 12; k++) { doms.push(["Calm", "Fury"][k % 2]); exh.push(k % 4 === 0); }
+    ops.push(["runes", "me", doms, exh], ["d_none"]);
+    await py(JSON.stringify(ops));
+  }
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(500);
   const m = JSON.parse(await ev(`(()=>{
     const out = [];

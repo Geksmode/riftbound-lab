@@ -1,0 +1,138 @@
+---
+resume: portage complet du moteur (règles, cartes, IA, table) de Python vers Rust, décidé par l'utilisateur le 2026-11-23
+maj: 2026-11-24
+sources: demande de l'utilisateur (2026-11-23, « pas de mesure, tout en Rust »), riftbound/engine/, rust/
+---
+# Portage du moteur en Rust
+
+**Terminé le 2026-11-24** : le moteur Python est supprimé (étiquette git `moteur-python-final`), tout tourne en Rust. Test différentiel final : 2000/2000 parties aléatoires et 200/200 parties IA identiques au Python, référence figée dans `rust/tests/golden.rs`. Ce qui suit est le contrat et l'historique du portage.
+
+**Décision de l'utilisateur (2026-11-23)** : réécrire tout le « back » en Rust, sans mesure préalable. Ne pas re-discuter.
+
+## Contrat
+- **Livrable** : crate `rust/` (`riftbound`), même moteur que `riftbound/engine` (règles, 1084 cartes modélisées, IA de
+  recherche, plans, match), compilé en natif (simulations) et en WebAssembly (table, à la place de Pyodide dans
+  `riftbound/train/engine.worker.js`, même protocole de messages `{id, fn, args}`).
+- **Contraintes** (`CLAUDE.md`) : aucune carte approximée (une carte non portée reste bloquée) ; même graine = même
+  partie ; numéros de règle en commentaire ; une carte = au moins un test ; nouveau moteur = nouvelle version
+  (`version.py`), aucun chiffre agrégé avec ceux de Python (`compare.py`).
+- **Référence** : le moteur Python reste la référence tant que le portage n'est pas fini. Le Rust doit jouer
+  **exactement** la même partie que Python sur les mêmes graines (test différentiel : journal des décisions et
+  état à chaque décision identiques). Une divergence est un bug du portage, sauf bug prouvé du Python (corrigé
+  des deux côtés).
+- **Hors périmètre (pour l'instant)** : scripts d'analyse ponctuels (`exp_*.py`, `banc/`, `texel/`), qui peuvent
+  appeler le moteur Rust plus tard par une liaison.
+- **Critère de fin** : (1) tous les tests de scénario portés et verts (`cargo test`) ; (2) test différentiel vert sur
+  N graines × decks variés (N à fixer, au moins 2 000 parties IA contre IA) ; (3) `scripts/verifier.sh` vert avec
+  la table sur le moteur WebAssembly.
+
+## Étapes
+1. Hasard identique à Python (`random.Random` : MT19937, `randrange`, `shuffle`, `choice`, `sample`, `random`,
+   `getrandbits`, `uniform`, `randint`), vérifié contre CPython.
+2. État de partie, zones, runes et coûts, chaîne, combat, score (`game.py`, `actions.py`).
+3. Registre des cartes et mots-clés génériques (`cards.py`), puis les paquets (`cardsets/`) un par un, chacun avec
+   ses tests portés.
+4. IA (`ai.py`, `plans*.py`), puis `train.py` / `match.py` (interface de la table) et la liaison WebAssembly.
+5. Bascule de la table, nouvelle version du moteur, remesure des chiffres.
+
+## Suppression du moteur Python (décision de l'utilisateur, 2026-11-23)
+L'utilisateur ne veut plus de moteur Python. Il reste **gelé** (aucune évolution) tant qu'il sert de référence au test
+différentiel, puis **tout le Python du moteur est supprimé dans le même commit que la bascule** (moteur Rust qui joue
+les mêmes parties + table en WebAssembly). Ne pas le supprimer avant : la table et les simulations casseraient.
+
+Décision de l'utilisateur (2026-11-24) : la table passe en **WebAssembly** (moteur Rust, plus de Pyodide). Les petits
+scripts Python qui ne jouent pas de parties (`scripts/wiki_lint.py`, `riftbound/decks/*.py`, `riftbound/cards/*.py`,
+`riftbound/tools/`) **restent en Python** : ils ne sont pas supprimés à la bascule.
+
+## Architecture (fixée le 2026-11-23, à suivre pour que le différentiel tienne)
+- **Traduction au plus près** de la structure Python : mêmes fonctions, même ordre d'opérations, mêmes tris (le tri
+  Rust `sort_by` est stable comme `sorted`), mêmes listes ordonnées (jamais de `HashMap` dont l'ordre compte :
+  `Vec` ou `BTreeMap`). Le nom de la fonction Python est cité au-dessus de chaque fonction Rust.
+- **Objets** : arène `Vec<Obj>` dans `Game`, poignée `O` (indice) ; les zones sont des `Vec<O>`. L'`uid` reste un
+  champ (ordre de tri, cibles, libellés) et suit **le même compteur que Python** : `Obj._n` est global au processus
+  et les copies de l'IA le font avancer, donc en Rust le compteur est partagé entre une partie et ses copies
+  (`Arc<AtomicU32>`). Le harnais différentiel Python remet `Obj._n` et `Item._n` à 0 avant chaque partie.
+- **Valeurs dynamiques** (`data` des items, `info` des évènements, options de `g.ask`, entrées de `g.effects`) :
+  enum `Value` (None, Bool, Int, Float, Str, Obj, Rune, Loc, List, Map ordonnée, Opt, Fn), pour traduire les cartes
+  sans les réécrire.
+- **Comportements** : les champs de `Impl` qui sont des fonctions deviennent `Option<Arc<dyn Fn ... + Send + Sync>>`
+  (fermetures immuables, partagées entre les copies). `Item.fn`, les `effects[*].fn`, prédicats de cible idem.
+- **Choix** : `g.ask(pid, kind, options, ctx)` reste synchrone ; les agents sont des `Box<dyn Agent>` sortis de la
+  partie le temps de l'appel.
+- **Hasard** : `pyrandom::PyRandom` (identique à CPython).
+- **Différentiel** : le Python écrit pour chaque `ask` et chaque décision (type, libellés des options, indice choisi)
+  et un résumé d'état à chaque décision ; le Rust doit produire le même fichier, octet pour octet.
+
+## Conventions de traduction (pour porter un module de cartes)
+- Une fonction Python `f(g, a, b, ...)` rangée dans une carte devient `Value::func("nom", |g, a| ...)` : `a` contient
+  les arguments **après** `g`, dans l'ordre Python (`a[0]`, `a[1]`...), et la fonction renvoie `Res<Value>`
+  (`Err(GameOver)` remonte une fin de partie : toujours propager avec `?`).
+- Objets : `Value::Obj(O)` ; battlefield passé à un crochet (`bf_event`, `providers` d'un battlefield) :
+  `Value::Int(idx)` ; item : `Value::Item(ItemId)` ; effet de `g.effects` passé à son `fn` : `Value::Int(eid)`
+  (`g.eff(eid)`, `g.eff_mut(eid)`, `g.remove_effect(eid)`) ; emplacement : `Value::Loc(Loc::Base | Loc::Bf(i))`.
+- `info` d'un évènement : `Value::Map` (copie : un écouteur qui modifie `info` ne le fait pas pour les suivants).
+  `info["sd"]` est un instantané (`bf, combat, attacker, defender, focus`). `lookback(o)["spec"]` est le **nom** de
+  la carte (lire la spec avec `spec(nom)`).
+- Clés entières de dict Python (`_oids`, `need` de `damage_pick`) : texte de l'entier dans une `Map`.
+- `sd.assigned` : tuple de deux listes de `(objet, dégâts)`, dans l'ordre d'assignation.
+- `sd.members` : ordre d'arrivée (Python : ensemble d'entiers itéré dans l'ordre de CPython) → point à aligner
+  (voir « Divergences connues »).
+
+## Divergences connues à aligner (le différentiel les montrera)
+- `game.combat_step` (étape « end ») itère `sd.members`, un `set` d'uids : ordre de CPython, pas l'ordre d'arrivée.
+  À corriger côté Python avec `sorted(sd.members)` (règle `CLAUDE.md` : jamais d'ordre de `set` qui compte), et côté
+  Rust trier par uid.
+- Point de reprise (`checkpoint`, `_ckpt`, `_asklog`, `ai.ask_sim`) : porté le 2026-11-24 (`Game.ck`, jamais copié ;
+  `apply` et `ask`). `ask_sim` est désactivé par défaut (règle 9) : ce chemin n'est pas couvert par le différentiel.
+- `Game._memo` (mémoire de génération des coups) : pas portée, volontairement (optimisation sans effet sur le jeu,
+  garantie par `empreinte.py` ; le différentiel IA le confirme).
+- Contexte `plans=` de `pay_gold` / `pay_rune` non passé aux agents (à faire avec `train.py`).
+
+- Python dont l'ordre dépend d'un `set` (à corriger côté Python avec `sorted()` avant le différentiel) :
+  Bellows Breath (`max(set(u.loc ...))`, mélange de `'base'` et d'entiers, ordre dépendant de PYTHONHASHSEED).
+- Écarts de fidélité du Python lui-même (portés tels quels, à décider avec l'utilisateur) : Decree of Insight
+  n'ignore pas [Deflect] (texte : « Ignore [Deflect] while paying this spell's cost ») ; code mort dans Shuriken Flip
+  (`or True`) et Kennen (`[:0]`).
+- Formats fixés par les cartes : coût de capacité en dict brut = `Tuple([e, reqs])`, `Impl.flow` =
+  `Tuple([e, p, Tuple(domaines)])`, `Impl.repeat` = `Tuple([e, Tuple(domaines), p])`, `cost_mod` -> `Tuple([de, dp])`,
+  `as_played` -> liste de dict.
+
+## Avancement
+- 2026-11-24 : **outils de mesure restants portés** (`rust/src/outils/`, binaires `rust/src/bin/`) : `empreinte` (MD5 des
+  5 parties identiques à `empreinte.json`), `exp_temps`, `t_rand`, `run_session` (manager), `add_replays` / `batch_replays` /
+  `curate_replays` (enregistreur de replays `replay_rec.rs` : fichiers identiques au Python, hors ordre des clés de
+  `cards`), `train_games` / `bilan_parties`, `banc` / `banc_cout` / `banc_humain`, `combats_parties` (sonde `probe.rs`),
+  `texel_gen` / `texel_fit` / `texel_test`. Comparés au Python sur les mêmes graines ou fichiers : sorties identiques.
+  Non portés : `exp_temps.mjs` (Pyodide), `riftbound/sim/*.py` (simulateur à part, n'importe pas le moteur), moteurs
+  Python figés de `train_games --frozen` et de `combats_parties` (copies de Python). Écart de fidélité corrigé dans
+  `ai.rs` : `sum()` de Python 3.12+ compense les erreurs d'arrondi (Neumaier), pas l'addition naïve de Rust (`evaluate`,
+  moyenne de la recherche du tour) : `fsum`. Bug connu, hérité de Python : graine 4200002 du mode `miroir` d'`exp_search`
+  (récursion infinie ; Python lève `RecursionError`, Rust fait déborder la pile du fil et arrête le processus).
+- 2026-11-24 : **table en WebAssembly** : `lang.rs`, `match_.rs`, `replay.rs` (textes et `snap` ; l'enregistreur
+  RecGame/RecAgent/record n'est pas porté : outils Python seulement), `train.rs` (toutes les fonctions appelées par la
+  page), `wasm.rs` (`rb_alloc`, `rb_call`, sans dépendance), `engine.worker.js` (même protocole `{id, fn, args}`),
+  `build.sh` sans Pyodide (`fetch_vendor.sh` : PeerJS seul). Crochets de `TGame` dans `Game` (`tg`), contexte `plans=`
+  de `pay_gold`/`pay_rune` passé. Robots : `exec(code Python)` remplacé par des opérations JSON (`train_dbg.rs`).
+  Différentiel `rust/diff/table.py` (mêmes appels, JSON comparé octet pour octet) : voir `docs/wiki/pages/etat.md`.
+  Écart connu : l'ordre des domaines d'un frozenset de plusieurs domaines dans le journal (`pay_cost=`, `alt_reqs=`)
+  dépend de PYTHONHASHSEED en Python ; Rust écrit l'ordre alphabétique.
+- 2026-11-24 : **IA portée** (`rust/src/ai.rs`, `plans.rs`, `plans_general.rs`, `plans_legendes.rs` ; variables
+  d'environnement `RB_*` mêmes noms et défauts, lues par `ai::env_var`, absentes en WebAssembly). Différentiel IA
+  (`rust/diff/serie_ia.sh`, `trace.py --ia` : IA par défaut de la table des deux côtés, PlanAgent, plans de
+  `train._plan_for`, `search="turn"`, `table_cfg(1)` ; paquets variés de `decks.json`, une graine sur 5 Akali Gorica
+  contre LeBlanc IQ#5) : **200/200 parties identiques au Python, 0 erreur** (graines 1 à 200). Rust ≈ 7 × plus rapide que Python sur
+  une partie IA (9,6 s contre 64 s). `play_game` laisse une copie de l'agent à sa place pendant sa décision (Python
+  garde l'agent dans `g.agents`, que `PolicyAgent.react_margin` recopie). Non couvert par le différentiel : chemins
+  désactivés par défaut (`ask_sim`, `spell_pre`, recherche "old", `react_n`, plans par légende et plan général),
+  `plans_legendes.fiches()` (outil de doc, non porté).
+- 2026-11-23 (fin) : **règles et cartes portées** : 1037 cartes des 10 lots enregistrées (pool 84, battlefields 55,
+  body 128, calm 114, chaos 122, fury 121, legends 47, mind 120, order 101, radiance 165), plus runes et cartes
+  « mots-clés seulement ». Test différentiel (`rust/diff/serie.sh`, deux RandomAgent, paires de paquets de
+  `decks.json` tirées par la graine) : **2000/2000 parties identiques au Python** (graines 101 à 2100), 0 erreur.
+  Non couvert : cartes absentes de tous les paquets (Sivir, Ambitious ; Udyr, Wildman ; Reaver's Row ; Trapping
+  Grounds ; Hallowed Tomb ; The Zero Drive ; The List et Cursed Sarcophagus peu ou pas jouées) ; IA (simulations sur
+  copies) pas encore portée. Reste : IA (`ai.py`, plans), `train.py`/`match.py`, WebAssembly, bascule.
+- 2026-11-23 : cartes du pool de cards.py portées (84/84, `cardsets/pool.rs`, compile ; pas encore jouées).
+- 2026-11-23 : contrat, crate créée ; hasard identique à CPython (442 tirages) ; base de cartes identique (1111
+  entrées) ; `game.py` entier porté (`rust/src/game*.rs`, compile sans avertissement, pas encore jouable :
+  `actions.py`, aides de `cards.py`, modules de cartes, IA restent à porter).

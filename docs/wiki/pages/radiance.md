@@ -2,7 +2,7 @@
 titre: Extension Radiance (RAD)
 resume: les 167 cartes de Radiance dans la base et le moteur, les nouveaux mots-clés, les corrections de la source, ce qui manque
 maj: 2026-10-30
-sources: riftbound/engine/cardsets/radiance.py, riftbound/engine/cardsets/test_radiance.py, riftbound/cards/corrections_rad.py, riftbound/rules/source/core_rules_2026-10-09.txt, riftbound/engine/cardsets/NEEDS_radiance.md
+sources: rust/src/cardsets/radiance.rs, riftbound/cards/corrections_rad.py, riftbound/rules/source/core_rules_2026-10-09.txt, riftbound/engine/cardsets/NEEDS_radiance.md
 ---
 **Ajoutée le 2026-10-19** (demande de l'utilisateur : « toutes les cartes de Radiance et leur effet »). Sortie de
 l'extension : 2026-10-23.
@@ -44,7 +44,7 @@ d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance 
 - Les autres changements des règles 2026-10-09 (cleanup, Contested, « once each turn »…) ne sont **pas** audités
   dans le moteur.
 
-**Modélisation** : 166 cartes sur 167 dans `cards.IMPL` (`cardsets/radiance.py`). Choix de lecture :
+**Modélisation** : 166 cartes sur 167 dans `cards::IMPL` (`rust/src/cardsets/radiance.rs`). Choix de lecture :
 - Forbidden Technique : « Banish this » est une instruction du sort, il est banni à chaque résolution.
 - « The next unit you play » (Ekko, Boy Who Shattered Time ; Last Caress ; Firelights' Hideout) : les jetons ne
   comptent pas (ce ne sont pas des cartes jouées de la main).
@@ -58,7 +58,7 @@ d'après celles du 2026-07-16 ; seules les règles nouvelles utiles à Radiance 
 **Bloquée** : Neeko, Blending In (plusieurs légendes en jeu et choix à la construction du deck ; le moteur n'a
 qu'une légende par joueur) : `cardsets/NEEDS_radiance.md`.
 
-**Vérifié** (2026-10-19) : `cardsets/test_radiance.py` 181/181 (au moins un test par carte, plus les mots-clés) ;
-`fuzz_cards.py 300 --module radiance` : 0 exception (144 cartes jouées au moins une fois). Robot `train/verif_deploy.mjs` (vérifié par robot, glisser à la souris et toucher simulé ;
+**Vérifié** (2026-10-19) : `cardsets/test_radiance.py` 181/181 sur le moteur Python (tests de scénario supprimés à la bascule du 2026-11-24, **non portés en Rust** ; le moteur Rust est vérifié par le différentiel et `rust/tests/golden.rs`) (au moins un test par carte, plus les mots-clés) ;
+`fuzz_cards 300 --module radiance` : 0 exception (144 cartes jouées au moins une fois). Robot `train/verif_deploy.mjs` (vérifié par robot, glisser à la souris et toucher simulé ;
 pas essayé sur un vrai téléphone) : Pillaged Armory glissé sur un battlefield, affiché là, partie jouée jusqu'au bout.
 Pas de partie jouée à la main avec les autres cartes ; l'IA n'a pas de plan pour les nouvelles légendes.

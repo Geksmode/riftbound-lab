@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 // Robot de Runeblade Anvil dans la vraie table : jouer l'enclume bannit le dessus du deck ; la pile « Bann. » apparaît
 // à côté de la défausse (zone publique, 108.6.e) et s'ouvre au toucher ; la carte bannie s'affiche au bout de ta main
 // (marquée BANNIE), se joue au toucher ou au clic (« Jouer … (bannie) ») en payant son coût. Ordinateur et téléphone.
-// Situation posée dans le moteur (Pyodide).
+// Situation posée dans le moteur (WebAssembly : opérations de rust/src/train_dbg.rs).
 // Usage : (cd build && python3 -m http.server 8771 &) ; node verif_banish.mjs <dossier des captures> [port]
 const LOCAL_PW = "/opt/node22/lib/node_modules/playwright/index.mjs", LOCAL_CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const { chromium } = await import(process.env.PW_MODULE || (existsSync(LOCAL_PW) ? LOCAL_PW : "playwright"));
@@ -20,14 +20,10 @@ for (const [w, h, mob] of [[1400, 900, false], [393, 851, true]]) {
   await pg.click("[data-m=new]"); await waitFor("!!document.getElementById('bStart')");
   await ev("document.getElementById('sSeed').value='4'; document.getElementById('sFirst').value='0'"); await pg.click("#bStart");
   for (let i = 0; i < 200; i++) { await waitFor("!!(V && !working)"); if (await ev("!!document.getElementById('bKeep')")) { await pg.click("#bKeep"); continue; } if (await ev("!!V.ask")) { await ev("(async()=>{ await pump(J(T.answer(JSON.stringify(0)))) })()"); continue; } if (await ev("!!(V.dec && V.dec.kind === 'main')")) break; await ev("(async()=>{ await pump(J(T.act(0))) })()"); }
-  await py(`
-from game import Obj, Rune
-g = W["g"]; me = ME
-g.p[me].runes = [Rune("Fury", me) for _ in range(5)] + [Rune("Chaos", me) for _ in range(3)]
-a = Obj("Runeblade Anvil", me); a.zone = "hand"; g.p[me].hand.append(a)
-t = Obj("Shipyard Skulker", me); t.zone = "deck"; g.p[me].deck.insert(0, t)
-AN, TOP = a.uid, t.uid
-W["d"] = None`);
+  // opérations du moteur (rust/src/train_dbg.rs) : 5 runes Fury + 3 Chaos, enclume en main, Skulker sur le deck
+  await py(JSON.stringify([["runes", "me", ["Fury", "Fury", "Fury", "Fury", "Fury", "Chaos", "Chaos", "Chaos"]],
+    { as: "AN", op: ["card", "me", "Runeblade Anvil", "hand"] }, { as: "TOP", op: ["card", "me", "Shipyard Skulker", "deck"] },
+    ["d_none"]]));
   await ev("(async()=>{ await pump(J(T.step())) })()"); await waitFor("!!(V && !working)"); await pg.waitForTimeout(300);
   const an = String(await ev("pyGet('AN')")), top = String(await ev("pyGet('TOP')"));
   const tap = async sel => { const el = pg.locator(sel).first();
@@ -55,7 +51,7 @@ W["d"] = None`);
   const pop = await ev("$('pop').hidden ? '' : $('pop').innerText");
   ok(`${w} px : le menu propose de la jouer depuis les bannies (${JSON.stringify(pop.replace(/\n/g, " | "))})`, /bannie/.test(pop));
   await playVia("/bannie/");
-  await py(`Z = [o.zone for o in [W["g"].obj(TOP)] if o is not None] + [sum(1 for r in W["g"].p[ME].runes if not r.exhausted)]`);
+  await py(JSON.stringify([{ as: "Z", op: ["list", ["zone", { v: "TOP" }], ["ready_runes", "me"]] }]));   // zone du Skulker (plateau), runes prêtes
   const z = JSON.parse(await ev("pyGet('Z').then(JSON.stringify)"));
   ok(`${w} px : Shipyard Skulker jouée depuis les bannies, coût payé (enclume 1 + unité 3 : ${z[z.length - 1]} runes prêtes sur 8)`, z[0] === "board" && z[z.length - 1] === 4);
   ok(`${w} px : plus de carte BANNIE dans la main`, await ev("!document.querySelector('#board .half.p0 .hand .card.ban')"));

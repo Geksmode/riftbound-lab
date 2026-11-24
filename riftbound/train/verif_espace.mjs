@@ -45,18 +45,14 @@ await pg.locator("#board .half.p0 .hand .card.can").first().click(); await pg.wa
 const selOn = await ev("sel !== null || !!mode"), sB = await ev(snap), uB = await ev("V.undo");
 await pg.keyboard.press("Escape"); await pg.waitForTimeout(200);
 ok(`Échap avec une carte jouable choisie : la carte est lâchée, rien n'est repris`, selOn && await ev("sel === null && !mode") && await ev(snap) === sB && await ev("V.undo") === uB);
-// Espace sur une question oui / non (« Utiliser cet effet ? ») : répond « Oui ». Question posée dans le moteur (Pyodide).
+// Espace sur une question oui / non (« Utiliser cet effet ? ») : répond « Oui ». Question posée dans le moteur (WebAssembly, rust/src/train_dbg.rs).
 const py = code => ev(`pyExec(${JSON.stringify(code)})`);
-await py(`
-W["T_YES"] = []
-def _posee():
-    def op():
-        W["T_YES"].append(W["g"].ask(ME, "may", [True, False]))
-    return _run(op)`);
-await ev("(async()=>{ await pump(J(T._posee())) })()"); await waitFor("!!(V && !working && V.ask)");
+// question « may » posée à l'humain pendant une opération du moteur (opération ask_may de rust/src/train_dbg.rs) ;
+// sa réponse est rangée dans T_YES
+await ev("(async()=>{ await pump(J(T.dbg(JSON.stringify([['ask_may', 'T_YES']])))) })()"); await waitFor("!!(V && !working && V.ask)");
 const shown = await ev("V.ask.kind === 'may' && /Utiliser cet effet/.test(document.body.innerText)");
 await pg.keyboard.press("Space"); await waitFor("!!(V && !working && !V.ask)");
-ok(`Espace sur « Utiliser cet effet ? » : répond Oui (question affichée : ${shown})`, shown && JSON.stringify(await ev("pyExec(\"TYES = W.get('T_YES')\", 'TYES')")) === "[true]");
+ok(`Espace sur « Utiliser cet effet ? » : répond Oui (question affichée : ${shown})`, shown && JSON.stringify(await ev("pyGet('T_YES')")) === "[true]");
 const t0 = await ev("V.st.t");
 // clic souris sur une carte de la main : elle prend le focus ; Espace doit quand même terminer le tour
 await pg.locator("#board .half.p0 .hand .card").first().click(); await pg.waitForTimeout(200);

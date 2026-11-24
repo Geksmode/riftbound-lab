@@ -4,6 +4,8 @@ description: "Win at all costs" AI change (2026-10-03): ai.TEMPO flag, RB_TEMPO=
 metadata:
   type: project
 ---
+> Note 2026-11-24 : le moteur Python est supprimé (étiquette git `moteur-python-final`) ; les fichiers `.py` cités ci-dessous sont le moteur d'alors. Équivalents Rust : `rust/src/` (`ai.rs`, `plans*.rs`, `train.rs`, `replay.rs`...) et binaires `rust/target/release/<nom>` (`exp_search`, `sprt`, `banc`, `texel_gen`, `train_games`...), à lancer depuis `riftbound/engine`. Les chiffres datés restent ceux de la version Python.
+
 2026-10-03 the user asked that the AIs "veulent gagner à tout prix" (LeBlanc took Sigil instead of attacking Akali's Mech holding Windswept at 7, seed 200433 turn 13) and to learn tempo principles (guides: riftbound.gg scoring guide via WP API; riftbound.zone/learnriftbound/ultimateguard blocked, WebSearch summaries only; YouTube needs the user's PC).
 
 Change in engine/ai.py (flag `TEMPO`, env RB_TEMPO=0 restores old AI):
