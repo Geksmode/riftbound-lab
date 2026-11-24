@@ -30,4 +30,5 @@ metadata:
   - Then batches run in parallel workers.
   - build.sh copies the cardsets modules listed in __init__.py into the page.
 - 2026-11-12: deck panel has a « Liste / Images » toggle (dkVisual: one image per copy, champion first then by cost; dkPop menu per image reusing data-sub/data-add/data-tside…; « Masquer le catalogue » = full width). Stored in localStorage rbt-dkview / rbt-dkcat; list stays the default (robots use it). Robot train/verif_deckimg.mjs.
+- 2026-11-24 (captures RiftAtlas): list rows show a 46×26 art thumbnail (`thumb(n)`, also used by the sideboard); third deck view « Stats » (`dkStats`, rbt-dkview = "stats", class dkstatmode widens the deck panel): tiles, stacked energy curve (#stCurve, champion dashed), power vs runes by domain (#stPow, .sttab), unit Might (#stMight). Sideboard modal (`sbRender`, .sbbox) = two columns with thumbs, → out / ← in / − undo, preview #sbPrev (hidden ≤900 px). Robot train/verif_stats.mjs.
 Related: [[riftbound-training-table]], [[riftbound-engine]], [[riftbound-train-games]].
