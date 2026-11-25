@@ -47,7 +47,7 @@ propres graines ; 80 paires = coup d'œil, règle 8).
 Un test séquentiel s'arrête quand il franchit sa borne : sa moyenne surestime un peu le vrai gain. Les marches ne
 s'additionnent pas (aucun niveau n'a été mesuré contre un niveau éloigné). Le test séquentiel 1 du niveau 9 a été lancé avec
 les réglages écrits en toutes lettres (`turn@n=12,turn_w=8,react_n=6,ambush=0.5,tie_react=1` contre
-`turn@n=6,turn_w=6,react_n=3,ambush=0.5,tie_react=1`), identiques à `niv9` et `niv8`. 8 contre 7 et 10 contre 9 : pas de test séquentiel fini
+`turn@n=6,turn_w=6,react_n=3,ambush=0.5,tie_react=1`), identiques à `niv9` et `niv8`. 10 contre 9 : pas de test séquentiel
 (10 contre 9 : 80 paires = 1 h sur 4 cœurs).
 
 **Confirmations sur graines neuves, moteur `151f55e0f4-rust`** (après la correction de Patched Porobot : lignes séparées,
@@ -58,11 +58,16 @@ jamais regroupées avec celles du moteur `07aa82b4bd-rust`, règle 2 ; tests sé
 |---|---|---|---|---|---|---|
 | 9 contre 8 (confirmation) | **GARDE** | 520 | 14000000-14000519 | **53,3 % ± 1,2** | +3,00 | `151f55e0f4-rust` |
 | 8 contre 7 (test séquentiel 1) | **GARDE** | 568 | 15000000-15000567 | **52,8 % ± 1,1** | +3,04 | `151f55e0f4-rust` |
-| 8 contre 7 (test séquentiel 2, confirmation) | en cours | | 16000000+ | | | `151f55e0f4-rust` |
+| 8 contre 7 (test séquentiel 2, confirmation) | **GARDE** | 736 | 16000000-16000735 | **52,4 % ± 1,0** | +3,06 | `151f55e0f4-rust` |
 
 **Marche 9 contre 8 : démontrée selon la règle 9** (deux tests séquentiels « garde », sur des graines différentes, un par
 version du moteur). Le gain est plus petit que ce que disait le premier test : 53,3 % ± 1,2 ici contre 55,6 % ± 1,8 (un test
 séquentiel qui s'arrête sur sa borne surestime ; le vrai gain est sans doute de l'ordre de +2 à +5 points).
+
+**Marche 8 contre 7 : démontrée selon la règle 9** (2026-11-25 : deux tests séquentiels « garde » sur des graines différentes,
+même moteur `151f55e0f4-rust`). C'est une petite marche : 52,8 % ± 1,1 puis 52,4 % ± 1,0, soit environ +2 à +3 points, et ces
+moyennes surestiment un peu (arrêt sur la borne). Les 80 paires du premier coup d'œil (51,9 % ± 2,7) étaient compatibles.
+`LEVEL_TABLE` n'a pas été modifié.
 
 **Temps par décision** (`exp_temps 777003,777011 niv6 niv8 niv9 niv10`, moteur natif, un cœur d'une machine cloud à
 4 cœurs, 137 positions ; « main » = préparation du tour, les coups suivants de la suite choisie sont immédiats) :

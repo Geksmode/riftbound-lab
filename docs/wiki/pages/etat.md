@@ -1,11 +1,11 @@
 ---
 titre: État du travail
 resume: où en est le projet aujourd'hui, ce qui est fait, en cours, à faire
-maj: 2026-11-24
+maj: 2026-11-25
 sources: docs/REPRISE.md, git log, CI
 ---
 **Fait et vérifié**
-- **Table : 10 niveaux de l'IA (2026-11-24)** : échelle de 1 (débutant, 70 % de coups au hasard) à 10 (maître, 24 mondes et faisceau de 12) ; les anciens Normal, Fort, Très fort sont les niveaux 6, 7, 8. Marches 1 à 7 visibles sur 80 paires chacune (56,9 % à 64,4 %, ± 2,7 à 3,7) ; 9 contre 8 **démontrée** (règle 9) : deux tests séquentiels « garde » (55,6 % ± 1,8 sur 224 paires, moteur `07aa82b4bd-rust` ; puis 53,3 % ± 1,2 sur 520 paires, graines neuves 14000000+, moteur `151f55e0f4-rust`) ; 8 contre 7 : test séquentiel en cours (15000000+) ; 10 contre 9 : on ne sait pas. Temps natif par préparation de tour : niveau 10 = 4,2 s en moyenne, p95 20 s ; navigateur non mesuré. Vérifié par robot (`verif_vs.mjs`, toucher simulé), pas sur un vrai téléphone. Détail : [mémoire](../../memoire/ia-niveaux.md).
+- **Table : 10 niveaux de l'IA (2026-11-24)** : échelle de 1 (débutant, 70 % de coups au hasard) à 10 (maître, 24 mondes et faisceau de 12) ; les anciens Normal, Fort, Très fort sont les niveaux 6, 7, 8. Marches 1 à 7 visibles sur 80 paires chacune (56,9 % à 64,4 %, ± 2,7 à 3,7) ; 9 contre 8 **démontrée** (règle 9) : deux tests séquentiels « garde » (55,6 % ± 1,8 sur 224 paires, moteur `07aa82b4bd-rust` ; puis 53,3 % ± 1,2 sur 520 paires, graines neuves 14000000+, moteur `151f55e0f4-rust`) ; 8 contre 7 **démontrée** aussi, petite marche : deux tests séquentiels « garde » (52,8 % ± 1,1 sur 568 paires, graines 15000000+ ; 52,4 % ± 1,0 sur 736 paires, graines 16000000+ ; moteur `151f55e0f4-rust`) ; 10 contre 9 : on ne sait pas. Temps natif par préparation de tour : niveau 10 = 4,2 s en moyenne, p95 20 s ; navigateur non mesuré. Vérifié par robot (`verif_vs.mjs`, toucher simulé), pas sur un vrai téléphone. Détail : [mémoire](../../memoire/ia-niveaux.md).
 - **Patched Porobot en « Gear Unit » (2026-11-24)** : unité et équipement à la fois (178.2, 178.3), entre épuisé, Pit Crew se
   redresse quand on le joue ; `spec::UNIT_GEAR`, test `rust/tests/unit_gear.rs`, 11 parties de référence refigées
   ([porte](porte.md)). Ligne de type non relue sur l'image de la carte (réseau bloqué). Chiffres Ornn et Renata à remesurer.

@@ -396,3 +396,6 @@ Demande de l'utilisateur (« 10 niveaux comme sur Smash, 1 le plus faible, 10 vr
 
 ## [2026-11-24] ingest | Niveaux de l'IA : marche 9 contre 8 confirmée
 Second test séquentiel sur graines neuves (14000000-14000519, moteur `151f55e0f4-rust`, non regroupé avec `07aa82b4bd-rust`) : GARDE après 520 paires, 53,3 % ± 1,2, LLR +3,00. Avec le premier (55,6 % ± 1,8, 224 paires), la marche est démontrée selon la règle 9. Le test coupé à 120 paires (12000000+) ne compte pas. Détail : `docs/memoire/ia-niveaux.md`.
+
+## [2026-11-25] ingest | Niveaux de l'IA : marche 8 contre 7 démontrée
+Deux tests séquentiels « garde » sur graines différentes, moteur `151f55e0f4-rust` : 52,8 % ± 1,1 après 568 paires (15000000-15000567, LLR +3,04), puis 52,4 % ± 1,0 après 736 paires (16000000-16000735, LLR +3,06). Petite marche (environ +2 à +3 points). `LEVEL_TABLE` inchangé. Reste non démontrée : 10 contre 9. Détail : `docs/memoire/ia-niveaux.md`.
