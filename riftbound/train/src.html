@@ -144,6 +144,8 @@ details.diag pre { white-space: pre-wrap; word-break: break-word; max-height: 22
 .rpbar { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .rpnav { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
 .rpnav button { min-height: 36px; padding: 0; font-size: 15px; }
+.gbox { display: contents; }
+.rpnav.rpjump { grid-template-columns: repeat(4, minmax(0, 1fr)); } .rpnav.rpjump button { font-size: 12px; white-space: nowrap; }
 .rpbar input[type=range] { width: 100%; accent-color: var(--brass); min-height: 24px; }
 .rplab { font-size: 12.5px; line-height: 1.35; padding: 6px 8px; border-radius: 10px; background: rgba(255,255,255,.05); border-left: 3px solid var(--ink-3); }
 .rplab.moi { border-left-color: var(--akali); } .rplab.ia { border-left-color: var(--leblanc); }
@@ -195,7 +197,7 @@ body.replay #boardHelp { display: none; }
     background: var(--deep); border: 1px solid var(--trait-2); border-radius: 16px; box-shadow: 0 -8px 30px rgba(5,7,20,.6); }
   .rpnav button { min-height: 40px; }
   .rpfold { display: block; min-height: 30px; padding: 2px 8px; font-size: 12px; background: transparent; border-color: transparent; color: var(--ink-2); }
-  .rpbar.fold .rplab, .rpbar.fold .rpmine, .rpbar.fold .rpwarn, .rpbar.fold #rpQuit { display: none; }
+  .rpbar.fold .rplab, .rpbar.fold .rpmine, .rpbar.fold .rpwarn, .rpbar.fold #rpQuit, .rpbar.fold .rpjump { display: none; }
   .rpmine .hintrow { padding: 2px 0; }
 }
 .pl.deck.known { background-size: cover; background-position: center 15%; outline: 2px solid var(--brass); outline-offset: 1px; cursor: pointer; position: relative; }
@@ -383,6 +385,16 @@ body.dkopen { overflow: hidden; }
 .stleg i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: -6px; }
 .stcurve { display: flex; align-items: stretch; gap: 4px; height: 150px; padding-top: 4px; }
 .stcurve.mi { height: 110px; }
+.stcol.pick { cursor: pointer; border-radius: 6px; } .stcol.pick:hover, .stcol.pick:focus-visible { background: rgba(255,255,255,.07); outline: none; }
+.stcol.on { background: rgba(243,213,138,.16); box-shadow: 0 0 0 1px var(--brass); }
+.stsel { grid-column: 1 / -1; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.stsel .dkh { display: flex; align-items: center; justify-content: space-between; } .stsel .dkh button { min-width: 32px; min-height: 28px; padding: 0 8px; }
+.stsell { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 4px 10px; }
+.stsell .dkrow { display: flex; align-items: center; gap: 8px; cursor: zoom-in; } .stsell .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dkver { display: flex; flex-direction: column; gap: 8px; }
+.dkver .vrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; }
+.dkver .vrow .grow { flex: 1 1 240px; min-width: 0; } .dkver .vd { font-size: 12.5px; overflow-wrap: anywhere; }
+.dkver .vd .a { color: #7fd6a4; } .dkver .vd .r { color: #f08a8a; }
 .stcol { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 3px; }
 .stn { text-align: center; font: 600 11.5px var(--f-mono); color: var(--ink); min-height: 14px; }
 .stbar { display: flex; flex-direction: column; border-radius: 3px 3px 0 0; overflow: hidden; min-height: 0; }
@@ -426,6 +438,23 @@ kbd { font: inherit; font-size: 12px; border: 1px solid var(--line); border-bott
   #pop button[data-kb]::after, #fbar button[data-kb]::after { content: attr(data-kb); margin-left: 8px; font-size: 10px; line-height: 1; opacity: .6; border: 1px solid currentColor; border-radius: 4px; padding: 1px 4px; vertical-align: 1px; }
 }
 .log div.turn { position: sticky; top: 0; z-index: 1; background: var(--deep, var(--chrome-2)); }
+/* journal condensé (comme Rift Atlas) : lignes identiques à la suite = une ligne et un compteur ; points et combats surlignés */
+.log div .lx { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 9px; background: rgba(255,255,255,.14); font: 600 11px/16px var(--f-mono, monospace); vertical-align: 1px; }
+.log div.pt { font-weight: 600; background: rgba(243,213,138,.13); box-shadow: inset 3px 0 0 var(--brass); padding-left: 6px; border-radius: 3px; }
+.log div.cb { box-shadow: inset 3px 0 0 var(--active); padding-left: 6px; background: rgba(224,80,95,.09); border-radius: 3px; }
+/* total de Might d'un camp sur un battlefield */
+.bf { position: relative; }
+.bfsum { position: absolute; left: 4px; z-index: 3; pointer-events: none; display: inline-flex; align-items: baseline; gap: 4px; padding: 1px 7px; border-radius: 10px;
+  background: rgba(6,10,22,.86); border: 1px solid rgba(255,255,255,.22); font: 700 13px/18px var(--f-mono, monospace); color: var(--ink); }
+.bfsum i { font: 500 9px/1 var(--f-ui, inherit); font-style: normal; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+.bfsum.z { opacity: .55; }
+.bfsum.top { top: 4px; } .bfsum.bot { bottom: 4px; }
+.bfsum.c0 { border-color: var(--akali); } .bfsum.c1 { border-color: var(--leblanc); }
+@media (max-width: 999px) { .bfsum { font-size: 11px; line-height: 15px; padding: 0 5px; left: 2px; } .bfsum i { display: none; } .bfsum.top { top: 2px; } .bfsum.bot { bottom: 2px; } }
+.sonpop .setrow { display: flex; align-items: center; gap: 8px; min-height: 32px; font-size: 13px; cursor: pointer; }
+.sonpop .setrow input { width: 18px; height: 18px; accent-color: var(--brass); flex: none; }
+.sonpop hr { border: 0; border-top: 1px solid var(--line); margin: 2px 0; width: 100%; }
+@media (max-width: 999px) { .sonpop .csrow { display: none; } }
 .dkunsaved { color: var(--brass); font-size: 12px; align-self: center; }
 .dkvw select { background: var(--chrome); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; color: var(--ink); font: inherit; margin-left: auto; }
 .zspr { width: 100%; aspect-ratio: 200 / 279; border-radius: 10px; background-color: #151a26; }
@@ -724,35 +753,35 @@ kbd { font: inherit; font-size: 12px; border: 1px solid var(--line); border-bott
 @media (min-width: 1000px) {
   #boardHelp { display: none; }
   .boardgrid { grid-template-columns: 46px minmax(0, 1fr) 232px; }
-  .board, .zone, .bf { --cw: 96px; --chh: 134px; }   /* cartes agrandies le 2026-11-24 (demande : « les cartes sont trop petites ») */
+  .board, .zone, .bf { --cw: calc(96px * var(--cs, 1)); --chh: calc(134px * var(--cs, 1)); }   /* --cs : réglage « Taille des cartes en jeu » ; cartes agrandies le 2026-11-24 (demande : « les cartes sont trop petites ») */
   .hand.top { height: auto; min-height: 0; padding: 0; overflow: hidden; align-items: center; }
   .hand.top .card { --cw: 34px; --chh: 48px; width: 34px; height: 48px; margin-inline: -5px; }
   /* moitié d'un joueur en grille : runes à gauche sur toute la hauteur, base au centre (main dessous pour toi, dessus
      pour l'adversaire), légende + champion choisi à droite en grand, nom / score / deck / défausse sous la légende. */
   .half { display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 262px; }
   .half .zrow { display: contents; }
-  .half.p0 { grid-template-rows: 150px 100px 60px; grid-template-areas: "runes base leg" "hand hand leg" "hand hand pile"; }
-  .half.p1 { grid-template-rows: 52px 150px; grid-template-areas: "ohand ohand pile" "base runes leg"; }
+  .half.p0 { grid-template-rows: calc(150px * var(--cs, 1)) 100px 60px; grid-template-areas: "runes base leg" "hand hand leg" "hand hand pile"; }
+  .half.p1 { grid-template-rows: 52px calc(150px * var(--cs, 1)); grid-template-areas: "ohand ohand pile" "base runes leg"; }
   .half.p0 .hand { grid-area: hand; } .half.p1 .hand { grid-area: ohand; }
   .zrow > .zone { min-height: 0; }
   /* runes en rangée de vraies cartes, à côté de la base (comme RiftAtlas, demande du 2026-11-24) ; épuisées = couchées ;
      beaucoup de runes : elles se chevauchent */
   .zrow > .zone:nth-child(2) { grid-area: runes; flex-wrap: nowrap; align-items: center; align-content: center; justify-content: safe center; gap: 0;
-    padding: 18px 8px 4px; overflow: hidden; container-type: inline-size; --rw: 88px; --rh: 123px; }
+    padding: 18px 8px 4px; overflow: hidden; container-type: inline-size; --rw: calc(88px * var(--cs, 1)); --rh: calc(123px * var(--cs, 1)); }
   .zrow > .zone:nth-child(2) > .runeslot ~ .runeslot { margin-left: min(6px, calc((100cqw - (var(--n) - var(--nx, 0)) * var(--rw) - var(--nx, 0) * var(--rh)) / max(1, var(--n) - 1))); }
   .zrow > .zone:nth-child(2) > .res-line { position: absolute; left: 10px; top: 2px; width: auto; font-size: 11px; white-space: nowrap; }
   .zrow > .zone:nth-child(2) > .floatpool { position: absolute; right: 8px; top: 1px; z-index: 2; width: auto; margin: 0; }
   .zrow > .zone:nth-child(2) > .label { display: none; }
   .zrow > .zone:nth-child(3) { grid-area: base; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
   .zone.legend { grid-area: leg; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 10px; padding-bottom: 18px; --cw: 116px; --chh: 162px; }
-  .half.p1 .zone.legend { --cw: 92px; --chh: 128px; }   /* légende adverse : une seule rangée (150 px) */
+  .half.p1 .zone.legend { --cw: calc(92px * min(1, var(--cs, 1))); --chh: calc(128px * min(1, var(--cs, 1))); }   /* légende adverse : une seule rangée (150 px) */
   .zone.pile { grid-area: pile; flex-direction: row; align-items: center; gap: 10px; padding: 6px 10px; }
   .zone.pile .who { flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .zone.pile .score { order: 2; font-size: 22px; padding: 2px 10px; flex: none; }
   .zone.pile .piles { order: 3; padding: 0; gap: 12px; }
   .zone.pile .counts { order: 4; }
   .zone.pile .pl { width: 34px; height: 48px; }
-  .bf { grid-template-rows: 144px auto 144px; }
+  .bf { grid-template-rows: calc(144px * var(--cs, 1)) auto calc(144px * var(--cs, 1)); }
   .bf .side { padding: 3px 6px; }
   .bf .side { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; justify-content: safe center; scrollbar-width: thin; }
   .bf .side.top { align-items: flex-end; }
@@ -981,6 +1010,13 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+// Réglages d'affichage (menu ♪, section « Affichage »), gardés dans le navigateur : taille des cartes en jeu sur ordinateur
+// (70 à 130 %, clé rbt-cs), totaux de Might par battlefield (rbt-might), « préviens-moi quand c'est à moi » (titre de
+// l'onglet et vibration, rbt-alert), écran maintenu allumé pendant une partie (rbt-wake). Tout est activé par défaut.
+const SET = { cs: Math.max(70, Math.min(130, +(store.get("rbt-cs") || 100) || 100)), might: store.get("rbt-might") !== "0",
+  alert: store.get("rbt-alert") !== "0", wake: store.get("rbt-wake") !== "0" };
+function setApply() { document.documentElement.style.setProperty("--cs", SET.cs / 100); }
+setApply();
 // ------------------------------------------------------------ sons
 // Vrais petits sons enregistrés pour que la table réponde au toucher : carte touchée, soulevée, posée, cible choisie,
 // déplacement, combat, unité qui meurt, point, fin de tour, coup refusé, victoire. Ambiance par défaut « Cartes » : vrais
@@ -1574,18 +1610,28 @@ function sonPop(open) {
   if (!open) return;
   P.innerHTML = `<div class="pt">Sons de la table</div><button class="sonon ${SFX.on ? "on" : ""}" data-son="toggle" aria-pressed="${SFX.on}">${SFX.on ? "Son activé" : "Son coupé"}</button>` +
     `<label class="sonvol"><span class="small">Volume</span><input type="range" id="sonVol" min="0" max="100" step="1" value="${SFX.vol}" aria-label="Volume des sons"><b id="sonVolN">${SFX.vol}</b></label>` +
-    `<div class="small">Ambiance</div><div class="sonpk">${Object.entries(SFX.PACKS).map(([k, n]) => `<button data-pk="${k}" class="${SFX.on && SFX.pack === k ? "on" : ""}" aria-pressed="${SFX.on && SFX.pack === k}">${n}</button>`).join("")}</div>`;
+    `<div class="small">Ambiance</div><div class="sonpk">${Object.entries(SFX.PACKS).map(([k, n]) => `<button data-pk="${k}" class="${SFX.on && SFX.pack === k ? "on" : ""}" aria-pressed="${SFX.on && SFX.pack === k}">${n}</button>`).join("")}</div>` +
+    `<hr><div class="pt">Affichage</div>` +
+    `<label class="sonvol csrow"><span class="small">Taille des cartes en jeu</span><input type="range" id="setCs" min="70" max="130" step="5" value="${SET.cs}" aria-label="Taille des cartes en jeu"><b id="setCsN">${SET.cs} %</b></label>` +
+    `<label class="setrow"><input type="checkbox" id="setMight"${SET.might ? " checked" : ""}>Total de Might par battlefield</label>` +
+    `<label class="setrow"><input type="checkbox" id="setAlert"${SET.alert ? " checked" : ""}>Me prévenir quand c'est à moi</label>` +
+    `<label class="setrow"><input type="checkbox" id="setWake"${SET.wake ? " checked" : ""}>Garder l'écran allumé en partie</label>`;
   const r = $("bSon").getBoundingClientRect();
   P.style.left = Math.max(8, Math.min(innerWidth - P.offsetWidth - 8, r.right - P.offsetWidth)) + "px"; P.style.top = (r.bottom + 6) + "px";
 }
 $("bSon").onclick = e => { e.stopPropagation(); sonPop($("sonPop").hidden); };
 // barre de volume : réglée en direct, un son d'essai quand on la lâche
-$("sonPop").addEventListener("input", e => { if (e.target.id === "sonVol") { SFX.setVol(e.target.value); $("sonVolN").textContent = SFX.vol; } });
-$("sonPop").addEventListener("change", e => { if (e.target.id === "sonVol") SFX.play("play"); });
+$("sonPop").addEventListener("input", e => { if (e.target.id === "sonVol") { SFX.setVol(e.target.value); $("sonVolN").textContent = SFX.vol; }
+  if (e.target.id === "setCs") { SET.cs = +e.target.value; store.set("rbt-cs", SET.cs); $("setCsN").textContent = SET.cs + " %"; setApply(); fitBoard(); } });
+$("sonPop").addEventListener("change", e => { if (e.target.id === "sonVol") SFX.play("play");
+  const k = { setMight: "might", setAlert: "alert", setWake: "wake" }[e.target.id]; if (!k) return;
+  SET[k] = e.target.checked; store.set("rbt-" + k, SET[k] ? "1" : "0");
+  if (k === "might" && V) show(V);
+  if (k === "alert" || k === "wake") nudge(V); });
 $("sonPop").addEventListener("click", e => {
   e.stopPropagation();
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.son) SFX.setOn(!SFX.on); else if (b.dataset.pk) SFX.setPack(b.dataset.pk);
+  if (b.dataset.son) SFX.setOn(!SFX.on); else if (b.dataset.pk) SFX.setPack(b.dataset.pk); else return;
   sonBtn(); sonPop(true);
 });
 document.addEventListener("click", e => { if (!$("sonPop").hidden && !e.target.closest("#sonPop, #bSon")) sonPop(false); }, true);
@@ -1593,14 +1639,30 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") sonPop(false
 sonBtn();
 // Le journal n'ajoute que les lignes neuves : le reconstruire en entier à chaque coup coûtait de plus en plus cher au fil
 // de la partie (des milliers de lignes). Il est reconstruit quand LOG a été remplacé (nouvelle partie, Reprendre, replay).
-let logDom = null, logN = 0;
-const logLine = ([ind, t]) => `<div class="${/^(Tour|Turn) /.test(t) ? "turn" : ind ? "sub" : ""} ${/^(Tu|You) /.test(t) || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}">${esc(t)}</div>`;
+// Journal condensé (comme Rift Atlas) : des lignes identiques à la suite (« X pioche une carte » ×3) font une seule ligne avec
+// un compteur ; les points marqués (classe pt) et les combats / showdowns (classe cb) sont surlignés. LOG garde toutes
+// les lignes : seul l'affichage est regroupé (logG = nombre de lignes affichées, logLast = dernière ligne affichée).
+let logDom = null, logN = 0, logG = 0, logLast = null;
+const LOG_PT = /\+\d+ points? \(/, LOG_CB = /^(Combat|Showdown) /, LOG_TURN = /^(Tour|Turn) /;
+const logLine = ([ind, t], n = 1) => `<div class="${LOG_TURN.test(t) ? "turn" : ind ? "sub" : ""} ${/^(Tu|You) /.test(t) || t.startsWith(PN[MEP] + " ") ? "me" : t.startsWith(PN[OPP()] + " ") ? "opp" : ""}${LOG_PT.test(t) ? " pt" : LOG_CB.test(t) ? " cb" : ""}"${n > 1 ? ` data-x="${n}"` : ""}>${esc(t)}${n > 1 ? `<b class="lx">×${n}</b>` : ""}</div>`;
+function logPut(el, lines) {
+  let html = "";
+  const flush = () => { if (logLast && logLast.pend) { html += logLine(logLast.l, logLast.n); logLast.pend = false; logG++; } };
+  for (const l of lines) {
+    if (logLast && logLast.l[0] === l[0] && logLast.l[1] === l[1] && !LOG_TURN.test(l[1])) {
+      logLast.n++;
+      if (!logLast.pend) { const d = el.lastElementChild; if (d) d.outerHTML = logLine(logLast.l, logLast.n); }   // déjà à l'écran : son compteur monte
+    } else { flush(); logLast = { l, n: 1, pend: true }; }
+  }
+  flush();
+  if (html) el.insertAdjacentHTML("beforeend", html);
+}
 function addLog(lines) {
   if (LOG.length < seenLog) seenLog = LOG.length;
   for (const [ind, t] of lines) LOG.push([ind, t]);
   const el = $("log");
-  if (logDom !== LOG || logN > LOG.length || el.childElementCount !== logN) { el.innerHTML = LOG.map(logLine).join(""); logDom = LOG; }
-  else if (LOG.length > logN) el.insertAdjacentHTML("beforeend", LOG.slice(logN).map(logLine).join(""));
+  if (logDom !== LOG || logN > LOG.length || el.childElementCount !== logG) { el.innerHTML = ""; logG = 0; logLast = null; logPut(el, LOG); logDom = LOG; }
+  else if (LOG.length > logN) logPut(el, LOG.slice(logN));
   logN = LOG.length;
   el.scrollTop = el.scrollHeight;
   if ($("drawer").classList.contains("open")) seenLog = LOG.length;
@@ -1639,7 +1701,35 @@ function show(v) {
   renderCtrl(v);
   decorate();
   tutoCheck(v);
+  nudge(v);
 }
+// Pendant que l'IA (ou l'adversaire d'un duel) réfléchit, comme Rift Atlas : dès que c'est à toi, le titre de l'onglet
+// commence par « ● À toi » ; si l'attente a duré (2 s ou plus) ou si la page n'est pas à l'écran, le téléphone vibre
+// (navigator.vibrate, Android ; rien sur iPhone, qui ne l'a pas). Et l'écran reste allumé tant qu'une partie est en
+// cours (Wake Lock, relâché à la fin, au menu, ou quand la page est cachée : le navigateur le reprend au retour).
+const TITLE0 = document.title;
+let nudgeWait = 0, wakeL = null, wakeP = false;
+function nudge(v) {
+  const live = !!v && !RP && $("menu").hidden && (v.winner === null || v.winner === undefined);
+  const mine = live && !v.busy && !v.wait && !!(v.dec || v.ask);
+  if (live && (v.busy || v.wait)) { if (!nudgeWait) nudgeWait = Date.now(); }
+  else {
+    if (mine && nudgeWait && SET.alert && (document.hidden || Date.now() - nudgeWait >= 2000)) { nudge.buzz = (nudge.buzz || 0) + 1; try { if (navigator.vibrate) navigator.vibrate(70); } catch (e) {} }
+    nudgeWait = 0;
+  }
+  const t = SET.alert && mine ? "● " + (window.I18N && I18N.lang === "en" ? I18N.t("À toi") : "À toi") + " · " + TITLE0 : TITLE0;
+  if (document.title !== t) document.title = t;
+  wakeSync(SET.wake && live);
+}
+function wakeSync(on) {
+  if (!("wakeLock" in navigator)) return;
+  if (on && !wakeL && !wakeP && !document.hidden) {
+    wakeP = true;
+    navigator.wakeLock.request("screen").then(l => { wakeL = l; l.addEventListener("release", () => { if (wakeL === l) wakeL = null; }); }, () => {})
+      .then(() => { wakeP = false; if (!(SET.wake && V && !RP && $("menu").hidden && (V.winner === null || V.winner === undefined))) wakeSync(false); });
+  } else if (!on && wakeL) { const l = wakeL; wakeL = null; try { l.release().catch(() => {}); } catch (e) {} }
+}
+document.addEventListener("visibilitychange", () => nudge(V));
 
 // ------------------------------------------------------------ enregistrement des parties
 // Chaque partie est gardée dans la base de la page (collection "games") : réglages, suite exacte de tes choix (le moteur
@@ -1962,6 +2052,12 @@ function bfHTML(st, i, srcs) {
   const top = b.u.filter(u => u.c !== MEP).map(u => unitCard(u, srcs)).join("") + gearC(false);
   const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("") + gearC(true);
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
+  // Total de Might de chaque camp (comme Rift Atlas) : somme des Might affichées sur les cartes (calculées par le moteur,
+  // bonus compris ; Assault et Shield dès que l'unité est désignée attaquante ou défenseuse, Game::might). Toujours montré,
+  // des deux côtés : 0 sur un côté vide, puis il monte à chaque unité posée (demande de l'utilisateur, 2026-11-25).
+  const uT = b.u.filter(u => u.c !== MEP), uB = b.u.filter(u => u.c === MEP), sumM = us => us.reduce((a, u) => a + (+u.m || 0), 0);
+  const sums = SET.might
+    ? [[uT, "top", OPP()], [uB, "bot", MEP]].map(([us, cl, pid]) => `<span class="bfsum ${cl} c${vp(pid)}${us.length ? "" : " z"}" data-sum="${sumM(us)}" title="Might totale : ${esc(PN[pid])}" aria-label="Might totale : ${esc(PN[pid])}"><i>Might</i>${sumM(us)}</span>`).join("") : "";
   let fd = "";
   const fds = b.fds || (b.fd ? [b.fd] : []), fdus = b.fdus || [b.fdu];   // Bandle Tree : deux cartes cachées, chacune visible
   if (fds.length) {
@@ -1971,7 +2067,7 @@ function bfHTML(st, i, srcs) {
     <div class="side top" style="--n:${nT};--nx:${xT}">${top}</div>
     <div class="mid"><div class="bfcard" data-card="${esc(b.n)}" tabindex="0" style="${IMG[b.n] ? art(b.n) : ""}">${!IMG[b.n] && ATL[b.n] ? `<span class="bfrot" style="${art(b.n)}"></span>` : ""}</div>
       <span class="bname">${esc(b.n)}</span>${sd ? `<span class="sdtag">${st.sd.combat ? "Combat" : "Showdown"}</span>` : ""}${fd}${ctrl}</div>
-    <div class="side" style="--n:${nB};--nx:${xB}">${bot}</div>
+    <div class="side" style="--n:${nB};--nx:${xB}">${bot}</div>${sums}
   </div>`;
 }
 const TRIG_PREFIX = /^(Deathknell|Temporary|Quick-Draw|Reflet de|Legion|Hunt|Vision|Ambush) /;
@@ -2952,11 +3048,53 @@ const check = d => checkCached(toEngine(d));
 const deckOK = d => { try { return !blocking(check(d)); } catch (e) { return false; } };
 const presetOK = p => !blocking(checkCached(p.deck));
 function persist() { store.set("rbt-decks", JSON.stringify(MYDECKS)); }
+// Versions d'un deck (comme Rift Atlas : « saved decks keep their last 30 saved card lists, show added / removed,
+// restore ») : chaque « Enregistrer » qui change la liste garde la liste enregistrée, la plus récente d'abord, 30 au plus,
+// dans ce navigateur seulement (clé rbt-dkhist : { id du deck: [{ t: date, d: liste }] }).
+const DKH_MAX = 30, dkhAll = () => { try { return JSON.parse(store.get("rbt-dkhist") || "{}") || {}; } catch (e) { return {}; } };
+const dkhBody = d => ({ legend: d.legend || "", champion: d.champion || "", main: { ...d.main }, sideboard: { ...(d.sideboard || {}) }, runes: { ...d.runes }, battlefields: [...(d.battlefields || [])] });
+const dkhSig = b => JSON.stringify([b.legend, b.champion, ...[b.main, b.sideboard, b.runes].map(o => Object.keys(o).filter(k => o[k] > 0).sort().map(k => [k, o[k]])), [...b.battlefields].sort()]);
+function dkhPush(id, d, oldId) {
+  const all = dkhAll();
+  if (oldId && oldId !== id && all[oldId]) { all[id] = [...all[oldId], ...(all[id] || [])].slice(0, DKH_MAX); delete all[oldId]; }   // deck renommé : son historique le suit
+  const h = all[id] || [], b = dkhBody(d);
+  if (h.length && dkhSig(h[0].d) === dkhSig(b)) { store.set("rbt-dkhist", JSON.stringify(all)); return; }
+  all[id] = [{ t: new Date().toISOString(), d: b }, ...h].slice(0, DKH_MAX);
+  store.set("rbt-dkhist", JSON.stringify(all));
+}
+// cartes ajoutées et retirées entre la version a (ancienne, ou null) et b : [[nom, +n ou -n]], deck principal, sideboard,
+// runes et battlefields confondus par zone ; légende et champion à part
+function dkhDiff(a, b) {
+  const out = [];
+  if (!a) return out;
+  if (a.legend !== b.legend) out.push(["Légende : " + (b.legend || "aucune"), 0]);
+  if (a.champion !== b.champion) out.push(["Champion : " + (b.champion || "aucun"), 0]);
+  const bfc = l => { const o = {}; for (const n of l) o[n] = (o[n] || 0) + 1; return o; };
+  for (const [za, zb, tag] of [[a.main, b.main, ""], [a.sideboard, b.sideboard, " (sideboard)"], [a.runes, b.runes, " Rune"], [bfc(a.battlefields), bfc(b.battlefields), ""]])
+    for (const n of [...new Set([...Object.keys(za), ...Object.keys(zb)])].sort()) { const dlt = (zb[n] || 0) - (za[n] || 0); if (dlt) out.push([n + tag, dlt]); }
+  return out;
+}
+function dkhOpen() {
+  const h = (dkhAll()[DK.id] || []);
+  const rows = h.map((v, i) => { const df = dkhDiff(h[i + 1] ? h[i + 1].d : null, v.d), n = cnt(v.d.main) + (v.d.champion ? 1 : 0);
+    return `<div class="vrow" data-ver="${i}"><div class="grow"><div class="t">${esc(fmtDate(v.t))}${i ? "" : " · version enregistrée actuelle"}</div>
+      <div class="vd">${h[i + 1] ? (df.length ? df.map(([nm, dl]) => `<span class="${dl > 0 ? "a" : dl < 0 ? "r" : ""}">${dl > 0 ? "+" + dl + " " : dl < 0 ? "−" + (-dl) + " " : ""}${esc(nm)}</span>`).join(" · ") : "mêmes cartes") : `première version gardée : ${n} cartes, ${cnt(v.d.runes)} runes`}</div></div>
+      ${i ? `<button data-vres="${i}">Restaurer</button>` : ""}</div>`; }).join("");
+  openModal(`<h3>Versions de « ${esc(DK.name || "Mon deck")} »</h3><div class="dkver" id="dkVer">${rows || `<div class="small">Aucune version gardée pour l'instant : elles s'ajoutent à chaque « Enregistrer » qui change la liste.</div>`}
+    <div class="small">Les ${DKH_MAX} dernières listes enregistrées, gardées dans ce navigateur. En vert les cartes ajoutées par rapport à la version d'avant, en rouge les cartes retirées. « Restaurer » remet la liste dans l'éditeur : rien n'est écrasé tant que tu n'as pas enregistré.</div></div>`);
+  $("mbox").classList.add("wide");
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("#dkVer [data-vres]"); if (!b) return;
+  const v = (dkhAll()[DK.id] || [])[+b.dataset.vres]; if (!v) return;
+  Object.assign(DK, JSON.parse(JSON.stringify(dkhBody(v.d))));
+  closeModal(); dkRender(); toast("Version du " + fmtDate(v.t) + " remise dans l'éditeur. Enregistre pour la garder.");
+});
 async function saveDeck() {
   const d = DK; d.name = ($("dkName").value || "").trim() || "Mon deck";
   const old = d.id; d.id = slug(d.name); d.updated = new Date().toISOString();
   if (old && old !== d.id && MYDECKS[old] && MYDECKS[old] === d) delete MYDECKS[old];
-  MYDECKS[d.id] = JSON.parse(JSON.stringify(d)); persist(); dkMark();
+  MYDECKS[d.id] = JSON.parse(JSON.stringify(d)); persist(); dkMark(); dkhPush(d.id, d, old);
   await checkAsync(toEngine(MYDECKS[d.id]));
   const db = await dbh();
   if (!db) { toast("Deck gardé sur cet appareil (table indisponible)."); return dkRender(); }
@@ -2968,6 +3106,7 @@ async function deleteDeck() {
   const d = DK; if (!d.id || !MYDECKS[d.id]) return;
   if (!confirm(`Supprimer le deck « ${d.name} » ?`)) return;
   delete MYDECKS[d.id]; persist();
+  { const all = dkhAll(); if (all[d.id]) { delete all[d.id]; store.set("rbt-dkhist", JSON.stringify(all)); } }
   const db = await dbh(); if (db) { try { await db.collection("decks").doc(d.id).delete(); } catch (e) {} }
   DK = blankDeck(); dkMark(); dkRender(); toast("Deck supprimé.");
 }
@@ -3138,7 +3277,7 @@ function dkStats() {
   }
   const top = Math.max(1, ...cols.map(c => c.n));
   h += `<div class="stgrid"><section><div class="dkh">Courbe d'énergie</div><div class="stleg"><i class="u"></i>Unités ${L.filter(([n, c]) => !c && kind(C(n)) === "u").length}<i class="s"></i>Sorts ${L.filter(([n]) => kind(C(n)) === "s").length}<i class="g"></i>Équipements ${L.filter(([n]) => kind(C(n)) === "g").length}<i class="ch"></i>Champion</div>
-    <div class="stcurve" id="stCurve">${cols.map(c => `<div class="stcol" data-e="${c.e}" data-n="${c.n}" title="${c.n} carte${c.n > 1 ? "s" : ""} à ${c.e} énergie"><span class="stn">${c.n || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${c.n / top})">${c.ch ? `<i class="ch" style="flex:${c.ch}"></i>` : ""}${["g", "s", "u", "o"].filter(k => c.seg[k]).map(k => `<i class="${k}" style="flex:${c.seg[k]}"></i>`).join("")}</div><span class="ste">${c.e}</span></div>`).join("")}</div></section>`;
+    <div class="stcurve" id="stCurve">${cols.map(c => `<div class="stcol${c.n ? " pick" : ""}${STSEL && STSEL.w === "e" && STSEL.v === c.e ? " on" : ""}" data-e="${c.e}" data-n="${c.n}"${c.n ? ` role="button" tabindex="0" aria-pressed="${!!(STSEL && STSEL.w === "e" && STSEL.v === c.e)}"` : ""} title="${c.n} carte${c.n > 1 ? "s" : ""} à ${c.e} énergie"><span class="stn">${c.n || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${c.n / top})">${c.ch ? `<i class="ch" style="flex:${c.ch}"></i>` : ""}${["g", "s", "u", "o"].filter(k => c.seg[k]).map(k => `<i class="${k}" style="flex:${c.seg[k]}"></i>`).join("")}</div><span class="ste">${c.e}</span></div>`).join("")}</div></section>`;
   // puissance demandée par domaine (symboles de coût en puissance) face aux runes du deck
   const doms = ident().length ? ident() : [...new Set(L.flatMap(([n]) => C(n).d || []))].filter(d => RUNES.includes(d));
   const byD = {}, row = k => byD[k] || (byD[k] = { cards: 0, pow: 0 });
@@ -3155,10 +3294,32 @@ function dkStats() {
   if (mi.length) {
     const lo = Math.min(...mi), hi = Math.max(...mi), mc = []; for (let m = lo; m <= hi; m++) mc.push([m, mi.filter(v => v === m).length]);
     const t2 = Math.max(...mc.map(x => x[1]));
-    h += `<section><div class="dkh">Might des unités</div><div class="stcurve mi" id="stMight">${mc.map(([m, k]) => `<div class="stcol" data-m="${m}" data-n="${k}"><span class="stn">${k || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${k / t2})"><i class="u" style="flex:1"></i></div><span class="ste">${m}</span></div>`).join("")}</div></section>`;
+    h += `<section><div class="dkh">Might des unités</div><div class="stcurve mi" id="stMight">${mc.map(([m, k]) => `<div class="stcol${k ? " pick" : ""}${STSEL && STSEL.w === "m" && STSEL.v === m ? " on" : ""}" data-m="${m}" data-n="${k}"${k ? ` role="button" tabindex="0" aria-pressed="${!!(STSEL && STSEL.w === "m" && STSEL.v === m)}"` : ""}><span class="stn">${k || ""}</span><div class="stbar" style="height:calc((100% - 34px) * ${k / t2})"><i class="u" style="flex:1"></i></div><span class="ste">${m}</span></div>`).join("")}</div></section>`;
   }
-  return h + `</div>`;
+  h += `</div>`;
+  // Colonne touchée (comme Rift Atlas : « select a column to list its cards and the chance to draw one in your opening
+  // hand ») : ses cartes, et la chance exacte d'en avoir au moins une (mêmes colonnes que « Tester la main » : htProb).
+  if (STSEL) {
+    const inSel = n => STSEL.w === "e" ? (num(C(n).e) ?? 0) === STSEL.v : C(n).t === "Unit" && num(C(n).mi) === STSEL.v;
+    const names = Object.keys(DK.main).filter(n => DK.main[n] > 0 && inSel(n)).sort((a, b) => a.localeCompare(b));
+    const k = names.reduce((a, n) => a + DK.main[n], 0), N = cnt(DK.main), champ = !!DK.champion && inSel(DK.champion);
+    const pct = x => (x * 100).toFixed(x > .9995 ? 0 : 1).replace(".", ",") + "\u00a0%";
+    h += `<section class="stsel" id="stSel" data-k="${k}" data-n="${N}"><div class="dkh">${STSEL.w === "e" ? `Cartes à ${STSEL.v} énergie` : `Unités de Might ${STSEL.v}`} <button id="stSelX" aria-label="Fermer le détail de la colonne">✕</button></div>
+      <div class="stsell">${names.map(n => `<div class="dkrow" data-card="${esc(n)}" tabindex="0">${thumb(n)}<span class="nm">${esc(n)}</span><b>×${DK.main[n]}</b></div>`).join("")}${champ ? `<div class="dkrow" data-card="${esc(DK.champion)}" tabindex="0">${thumb(DK.champion)}<span class="nm">${esc(DK.champion)}</span><b>champion</b></div>` : ""}</div>
+      ${k && N >= 4 ? `<table class="sttab httab" id="stSelTab"><thead><tr><th></th><th>Ex.</th><th>Main de départ</th><th>Avec mulligan de 2</th><th>À ton tour 2</th><th>À ton tour 4</th></tr></thead><tbody><tr class="grp"><td>Au moins une de ces cartes</td><td>${k}</td>${HT_SEEN.map(x => `<td>${pct(htProb(k, x, N))}</td>`).join("")}</tr></tbody></table>
+      <div class="small">Calcul exact sur les ${N} cartes du deck${champ ? " ; le champion choisi commence dans sa zone, il n'est pas compté" : ""}. Mêmes colonnes que « Tester la main » (4, 6, 8 et 10 cartes vues).</div>` : ""}</section>`;
+  }
+  return h;
 }
+let STSEL = null;   // colonne choisie dans la vue Stats : { w: "e" (énergie) ou "m" (Might), v: valeur }
+document.addEventListener("click", e => {
+  if (e.target.closest("#stSelX")) { STSEL = null; dkRender(); return; }
+  const c = e.target.closest("#stCurve .stcol.pick, #stMight .stcol.pick"); if (!c) return;
+  const w = c.dataset.e !== undefined ? "e" : "m", v = +(w === "e" ? c.dataset.e : c.dataset.m);
+  STSEL = STSEL && STSEL.w === w && STSEL.v === v ? null : { w, v }; dkRender();
+  const s = $("stSel"); if (s) s.scrollIntoView({ block: "nearest" });
+});
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches(".stcol.pick")) { e.preventDefault(); e.target.click(); } });
 function dkTiles(p) { return [...$("deckView").querySelectorAll(".dkv")].filter(x => x.dataset.vz === p.z && x.dataset.vn === p.n); }
 function closeDkPop() { DKPOP = null; const P = $("dkPop"); if (P) P.hidden = true; document.querySelectorAll("#deckView .dkv.on").forEach(x => x.classList.remove("on")); }
 function dkPop() {
@@ -3227,7 +3388,7 @@ function dkRender() {
         <input id="dkName" placeholder="Nom du deck" value="${esc(DK.name)}">
         <div class="dkst ${ok ? "ok" : "ko"}">${ok ? "Deck jouable ✓" : "Pas encore jouable"}</div>
         <ul class="dkerr"${DKERR.length ? "" : " hidden"}>${DKERR.map(e => `<li>${esc(e)}</li>`).join("")}</ul>
-        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button><button id="dkHand">Tester la main</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}<span class="dkunsaved" id="dkUns"${dkDirty() ? "" : " hidden"}>● non enregistré</span></div>
+        <div class="dkact"><button class="main" id="dkSave">Enregistrer</button><button id="dkPlay"${ok ? "" : " disabled"}>Jouer ce deck</button><button id="dkHand">Tester la main</button>${DK.id && MYDECKS[DK.id] ? `<button id="dkVers">Versions</button>` : ""}${DK.id && MYDECKS[DK.id] ? `<button id="dkDel">Supprimer</button>` : ""}<span class="dkunsaved" id="dkUns"${dkDirty() ? "" : " hidden"}>● non enregistré</span></div>
         <div class="dkvw" role="group" aria-label="Affichage du deck"><button id="dkVList" aria-pressed="${DKV === "list"}">Liste</button><button id="dkVImg" aria-pressed="${DKV === "img"}">Images</button><button id="dkVStat" aria-pressed="${DKV === "stats"}">Stats</button>${DKV === "img" ? `<button id="dkCatT" aria-pressed="${!DKCAT}">${DKCAT ? "Masquer le catalogue" : "Afficher le catalogue"}</button>` : ""}${DKV === "list" ? `<select id="dkGrp" aria-label="Grouper le deck">${[["type", "Groupes : type"], ["e", "Groupes : énergie"], ["dom", "Groupes : domaine"]].map(([v, l]) => `<option value="${v}"${DKG === v ? " selected" : ""}>${l}</option>`).join("")}</select>` : ""}</div>
         <div class="dklist">${DKV === "img" ? dkVisual() : DKV === "stats" ? dkStats() : dkList()}</div>
       </aside>
@@ -3239,6 +3400,7 @@ function dkRender() {
   for (const ty of ["wheel", "touchmove"]) V_.querySelector(".dkdeck").addEventListener(ty, () => { if (DKPOP) { Z.hidden = true; closeDkPop(); } }, { passive: true });
   if (DKPOP) dkPop();
   $("dkHand").onclick = () => htOpen();
+  if ($("dkVers")) $("dkVers").onclick = () => dkhOpen();
   $("dkVList").onclick = () => { DKV = "list"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
   $("dkVImg").onclick = () => { DKV = "img"; store.set("rbt-dkview", DKV); dkRender(); };
   $("dkVStat").onclick = () => { DKV = "stats"; store.set("rbt-dkview", DKV); DKPOP = null; dkRender(); };
@@ -3864,6 +4026,9 @@ async function startReplay(g, pz) {
     keep: { V, LOG, LOGSTACK, META, PN, MEP, lastAI, CARDS, seenLog, gmeta: $("gmeta").textContent, gres: $("gres").hidden } };
   MEP = 0; META = r.meta; PN = r.meta.names; CARDS = cards; LOGSTACK = [];
   RP.warn = []; RP.pz = pz ? { ...pz, ans: null } : null; RP.pzmode = !!pz;
+  // sauts du replay (comme Rift Atlas) : étapes où un tour commence et étapes où un point est marqué, lues dans le journal
+  const stepsOf = re => [...new Set(r.log.filter(l => re.test(l[1])).map(l => l[2]))].sort((a, b) => a - b);
+  RP.turns = stepsOf(LOG_TURN); RP.pts = stepsOf(LOG_PT);
   if (g.engine && BUILD.engine && g.engine !== BUILD.engine) RP.warn.push("moteur différent de celui de la partie : le rejeu peut s'écarter");
   if (r.desync !== null && r.desync !== undefined) RP.warn.push(`le rejeu s'arrête à ta décision n° ${r.desync + 1} (moteur changé depuis)`);
   else if (!r.same) RP.warn.push("fin différente de la partie enregistrée (moteur changé depuis)");
@@ -3917,6 +4082,9 @@ function rpCtrl(v) {
   bar.classList.toggle("fold", !!RP.fold);
   bar.innerHTML = `<button class="rpfold" id="rpFold" aria-expanded="${!RP.fold}">${RP.fold ? "▴ Afficher le détail" : "▾ Réduire pour voir le plateau"}</button><div class="rpnav" role="group" aria-label="Navigation du replay">
       <button data-rpg="0" title="Début" aria-label="Début">⏮</button><button data-rpg="${pv ? pv[0] : 0}" title="Ta décision précédente" aria-label="Ta décision précédente">⇤</button><button data-rpg="${k - 1}" title="Étape précédente" aria-label="Étape précédente">◀</button><button data-rpg="${k + 1}" title="Étape suivante" aria-label="Étape suivante">▶</button><button data-rpg="${nx ? nx[0] : n - 1}" title="Ta décision suivante" aria-label="Ta décision suivante">⇥</button><button data-rpg="${n - 1}" title="Fin" aria-label="Fin">⏭</button></div>
+    <div class="rpnav rpjump" role="group" aria-label="Sauts du replay">${[["turns", -1, "◀ Tour", "Tour précédent"], ["turns", 1, "Tour ▶", "Tour suivant"], ["pts", -1, "◀ Point", "Point marqué précédent"], ["pts", 1, "Point ▶", "Point marqué suivant"]].map(([w, d, lab, tt]) => {
+      const to = d < 0 ? [...RP[w]].reverse().find(x => x < k) : RP[w].find(x => x > k);
+      return `<button data-rpg="${to === undefined ? k : to}" data-rpj="${w}${d < 0 ? "-" : "+"}" title="${tt}" aria-label="${tt}"${to === undefined ? " disabled" : ""}>${lab}</button>`; }).join("")}</div>
     <input type="range" id="rpRange" min="0" max="${n - 1}" value="${k}" aria-label="Étape du replay">
     ${RP.warn.length ? `<div class="small rpwarn">${esc(RP.warn.join(" · "))}</div>` : ""}
     ${end}
@@ -3994,7 +4162,7 @@ async function bilanLoad() {
   const gs0 = await fetchGames();
   if (MENUV !== "bilan" || !$("bilBox")) return;
   if (!gs0) { box.innerHTML = `<div class="mcard warn">Lecture des parties impossible pour l'instant.</div>`; return; }
-  const k = trainKey(), fin = gs0.filter(g => g.result && !g.duel && g.kind !== "duel");
+  const k = trainKey(), fin = gs0.filter(g => g.result && !g.duel && g.kind !== "duel" && !g.imp);
   const mine = k ? fin.filter(g => gameWith(g, k)) : [];
   const useAll = BILALL || !k, gs = useAll ? fin : mine;
   const sw = k ? `<div class="htrow" role="group" aria-label="Parties comptées"><button data-bil="deck" aria-pressed="${!useAll}">Mon deck d'entraînement (${mine.length})</button><button data-bil="all" aria-pressed="${useAll}">Tous les decks (${fin.length})</button></div>` : "";
@@ -4550,9 +4718,9 @@ const fmtDate = iso => { try { return new Date(iso).toLocaleString("fr-FR", { da
 function showMenu(view) {
   $("hpop").hidden = true; $("fpop").hidden = true; $("pop").hidden = true; toast("");
   $("deckView").hidden = true;
-  $("menu").hidden = false; document.body.classList.add("dkopen"); menuRender(view || "main");
+  $("menu").hidden = false; document.body.classList.add("dkopen"); menuRender(view || "main"); nudge(V);
 }
-function hideMenu() { $("menu").hidden = true; if ($("deckView").hidden) document.body.classList.remove("dkopen"); }
+function hideMenu() { $("menu").hidden = true; if ($("deckView").hidden) document.body.classList.remove("dkopen"); nudge(V); }
 // ---------- tableau de bord : deck d'entraînement (clé « rbt-train ») et dernière partie
 // Aucun deck par défaut : un nouveau joueur choisit sa légende et sa liste (« Choisir mon deck »). La clé suit la forme
 // des decks de la table : « my:<id> » pour un deck de l'éditeur, sinon la clé d'une liste de tournoi.
@@ -4606,7 +4774,7 @@ async function dashGames() {
   $("dLast").innerHTML = dashLastHTML(inGame, READY ? "" : " disabled", gs || []);
   const k = trainKey(), bil = $("dBil");
   if (!k || !bil || !gs) return;
-  const mine = gs.filter(g => g.result && gameWith(g, k)), w = mine.filter(g => g.result.winner === 0).length, l = mine.filter(g => g.result.winner === 1).length;
+  const mine = gs.filter(g => g.result && !g.imp && gameWith(g, k)), w = mine.filter(g => g.result.winner === 0).length, l = mine.filter(g => g.result.winner === 1).length;
   bil.textContent = mine.length ? `Bilan avec ce deck : ${w} victoire${w > 1 ? "s" : ""}, ${l} défaite${l > 1 ? "s" : ""} (${mine.length} partie${mine.length > 1 ? "s" : ""} finie${mine.length > 1 ? "s" : ""})` : "Pas encore de partie finie avec ce deck.";
 }
 // Choix du deck d'entraînement : la grille des légendes, puis les listes de la légende touchée (tes decks, puis les
@@ -4713,14 +4881,44 @@ async function loadGames() {
     const me = g.duel ? g.duel.me : 0, pts = r && r.pts ? [r.pts[me], r.pts[1 - me]] : [];
     const res = r ? (r.winner === me ? "Victoire" : r.winner === 1 - me ? "Défaite" : "Nulle") + " " + pts.join("-") : "en cours";
     const canRp = !g.duel && g.kind !== "duel" && Array.isArray(g.moves);
-    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + lvlName(lvlOf(g))}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
+    return `<div class="mcard row"><div class="grow"><div class="t">${esc(n[0])} contre ${esc(n[1])} · ${esc(res)}</div><div class="small">${esc(fmtDate(g.updated || g.started))} · donne ${esc(g.seed)}${g.match && g.match.mode === "bo3" ? " · BO3 manche " + esc(g.match.game) : ""} · tour ${esc(r ? r.turn : g.turn || "?")} · ${g.duel ? "duel, room " + esc(g.duel.room) : "IA " + lvlName(lvlOf(g))}${g.imp ? `<span class="imp"> · importée</span>` : ""}</div></div><div class="acts">${canRp ? `<button class="go" data-rp="${esc(g.id)}">Revoir</button>` : ""}<button data-dl="${esc(g.id)}" style="min-width:44px" title="Télécharger cette partie" aria-label="Télécharger cette partie">⤓</button></div></div>`; }).join("")
     : `<div class="mcard">Aucune partie enregistrée pour l'instant. Elles apparaissent ici dès que tu joues.</div>`;
-  const head = gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
+  const head = (gs.length ? `<div class="mcard row"><div class="grow"><div class="t">${gs.length} partie${gs.length > 1 ? "s" : ""}${local ? " gardée" + (gs.length > 1 ? "s" : "") + " dans ce navigateur" : ""}</div>
     <div class="small">Télécharge-les (toutes, ou une seule avec ⤓) puis dépose le fichier dans le dépôt (riftbound/train/games/games/) : le workflow « Apprentissage » les rejoue et les analyse.</div></div>
-    <button class="go" id="bDlGames">Tout télécharger</button></div>` : "";
-  $("gamesBox").outerHTML = head + html;
+    <button class="go" id="bDlGames">Tout télécharger</button></div>` : "") +
+    `<div class="mcard row" id="gamesDrop"><div class="grow"><div class="t">Rouvrir une partie téléchargée</div>
+    <div class="small">Choisis un fichier de partie (.json, bouton ⤓), ou dépose-le ici : la partie s'ajoute à la liste avec la mention « importée » et se revoit comme les autres. Elle ne compte pas dans ton bilan.</div></div>
+    <button id="bImpGames">Ouvrir un fichier</button><input type="file" id="fImpGames" accept=".json,application/json" hidden></div>`;
+  $("gamesBox").outerHTML = `<div id="gamesBox" class="gbox">${head + html}</div>`;
   const dl = $("bDlGames"); if (dl) dl.addEventListener("click", () => downloadGames(window.__GAMES || []));
+  $("bImpGames").addEventListener("click", () => $("fImpGames").click());
+  $("fImpGames").addEventListener("change", e => { if (e.target.files[0]) importGames(e.target.files[0]); });
 }
+// Rouvrir une partie téléchargée (comme Rift Atlas : « drop a downloaded replay file on History ») : le fichier est celui
+// de downloadGames (une partie ou une liste). Une partie importée porte imp: 1 : listée, revue, jamais comptée dans le
+// bilan. Une partie déjà présente (même id) n'est pas remplacée.
+async function importGames(file) {
+  let gs;
+  try { gs = JSON.parse(await file.text()); } catch (e) { toast("Fichier illisible : ce n'est pas un fichier de partie.", "flash"); return; }
+  if (!Array.isArray(gs)) gs = [gs];
+  const ok = gs.filter(g => g && typeof g === "object" && /^[\w.-]{1,80}$/.test(String(g.id || "")) && Array.isArray(g.moves) && g.seed !== undefined && g.seed !== null && !g.duel && g.kind !== "duel");
+  if (!ok.length) { toast("Aucune partie rejouable dans ce fichier.", "flash"); return; }
+  const have = new Set(((await fetchGames()) || []).map(g => g.id)), add = ok.filter(g => !have.has(g.id)).slice(0, 60), db = await dbh();
+  let n = 0;
+  for (const g0 of add) {
+    const g = { ...g0, id: String(g0.id), imp: 1 };
+    if (db) { try { await db.collection("games").doc(g.id).set(g); n++; } catch (e) {} }
+    else if (localSave(g)) n++;
+  }
+  importGames.last = { added: n, known: ok.length - add.length };
+  toast(n ? `${n} partie${n > 1 ? "s" : ""} importée${n > 1 ? "s" : ""}.` : ok.length > add.length ? "Ces parties sont déjà dans la liste." : "Import impossible (stockage plein ?).", n ? "" : "flash");
+  if (MENUV === "games") loadGames();
+}
+for (const ev of ["dragover", "drop"]) $("menu").addEventListener(ev, e => {
+  if (MENUV !== "games" || !e.dataTransfer || ![...e.dataTransfer.types].includes("Files")) return;
+  e.preventDefault();
+  if (ev === "drop" && e.dataTransfer.files[0]) importGames(e.dataTransfer.files[0]);
+});
 $("menu").addEventListener("click", async e => {
   const t = e.target.closest("[data-m],[data-edit],[data-play],[data-rp],[data-dl],[data-pleg],[data-pick],[data-bil],[data-pzscan],[data-pzgo],[data-pzdel]"); if (!t || t.disabled) return;
   if (t.dataset.bil) { BILALL = t.dataset.bil === "all"; bilanLoad(); return; }

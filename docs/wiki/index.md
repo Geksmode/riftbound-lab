@@ -20,7 +20,7 @@ Point d'entrée de toute session. Conventions : [WIKI.md](WIKI.md). Journal : [l
 | reprendre le compte, la routine, les artefacts | `docs/REPRISE.md` (§2 artefacts, §3 publication, §4 routine) |
 
 ## Pages du wiki
-- [État du travail](pages/etat.md) : fait, en cours, à faire (2026-11-24)
+- [État du travail](pages/etat.md) : fait, en cours, à faire (2026-11-25)
 - [Carte du dépôt et commandes](pages/depot.md) : dossiers, tests, build
 - [Équipe d'agents](pages/equipe.md) : chef, agents tmux, intégration
 - [Garde-fous automatiques](pages/harness.md) : hooks (push, fin de session, démarrage), contrat de tâche, escalade, worktrees
