@@ -176,7 +176,8 @@ aucune partie ouverte chez eux. Tout est dans `train/src.html`, moteur inchangé
 - **Réglages** `SET` (`rbt-cs`, `rbt-might`, `rbt-alert`, `rbt-wake`), section « Affichage » du menu ♪ (`sonPop`). `--cs`
   multiplie `--cw/--chh`, les rangées de battlefield, la base et les runes dans `@media (min-width: 1000px)` ; `fitBoard`
   remet ensuite le plateau à l'échelle, donc 130 % ne donne pas +30 % à l'écran. Téléphone : réglage masqué.
-- **Total de Might** : `bfHTML`, `.bfsum.top/.bot` en absolu dans `.bf` (`pointer-events: none`). Somme des `u.m` de la vue
+- **Total de Might** : `bfHTML`, `.bfsum.top/.bot` en absolu dans `.bf` (`pointer-events: none`), toujours
+  les deux, 0 estompé (`.z`) sur un côté vide (demande : « de chaque côté un 0 et 0, et ça incrémente »). Somme des `u.m` de la vue
   (`Game::might` : buffs, équipements, Assault / Shield une fois l'unité désignée).
 - **Journal** : `logPut` regroupe les lignes identiques à la suite (`data-x`, `.lx`), jamais les titres de tour ; `LOG`
   garde toutes les lignes. Classes `pt` (`+1 point (`) et `cb` (`Combat ` / `Showdown `). Un robot qui compte les lignes

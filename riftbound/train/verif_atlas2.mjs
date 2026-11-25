@@ -58,7 +58,7 @@ async function game(seed, n, stop = "false") {
 // total de Might recalculé à part, depuis l'état envoyé par le moteur
 const SUMS = `(() => { const out = []; V.st.bfs.forEach((bf, i) => { const el = document.querySelectorAll('#board .bf')[i];
   const t = bf.u.filter(u => u.c !== MEP), m = bf.u.filter(u => u.c === MEP), sum = us => us.reduce((a, u) => a + (+u.m || 0), 0);
-  const want = (t.length > 1 || m.length > 1 || (t.length && m.length)) ? [t.length ? sum(t) : null, m.length ? sum(m) : null] : [null, null];
+  const want = [sum(t), sum(m)];
   const g = c => { const s = el.querySelector('.bfsum.' + c); return s ? +s.dataset.sum : null; };
   out.push({ want, got: [g('top'), g('bot')], n: t.length + m.length }); }); return out; })()`;
 const sameSums = a => a.every(x => x.want[0] === x.got[0] && x.want[1] === x.got[1]);
@@ -69,15 +69,17 @@ const sonClose = async () => { await ev("sonPop(false)"); };
 // ============================================================ ordinateur
 await open({ viewport: { width: 1400, height: 900 } });
 ok("au menu : titre de l'onglet normal, pas d'écran gardé allumé", await ev("document.title === TITLE0 && __wk.req === 0"));
-await game(4, 120, "document.querySelectorAll('#board .bfsum').length >= 1 && V.dec.kind === 'main'");
+await game(4, 50, "true");   // première décision de la partie : rien sur les battlefields
+ok("début de partie : 0 et 0 sur chaque battlefield", await ev("(() => { const b = [...document.querySelectorAll('#board .bfsum')]; return b.length === 2 * V.st.bfs.length && b.every(s => s.dataset.sum === '0' && s.textContent.endsWith('0')) && V.st.bfs.every(x => !x.u.length); })()"));
+await game(4, 120, "[...document.querySelectorAll('#board .bfsum')].filter(s => +s.dataset.sum > 0).length >= 2 && V.dec.kind === 'main'");
 let sums = await ev(SUMS);
-ok(`plateau : ${await nSum()} total(aux) de Might affiché(s), égaux à la somme des Might des unités (${JSON.stringify(sums.map(x => x.got))})`, (await nSum()) >= 1 && sameSums(sums));
-ok("un battlefield à une seule unité (ou vide) n'affiche pas de total", sums.every(x => x.n >= 2 || (x.got[0] === null && x.got[1] === null)));
+ok(`plateau : ${await nSum()} total(aux) de Might affiché(s), égaux à la somme des Might des unités (${JSON.stringify(sums.map(x => x.got))})`, (await nSum()) >= 4 && sameSums(sums));
+ok("chaque battlefield a ses deux totaux, 0 sur un côté vide (estompé)", sums.every(x => x.got[0] !== null && x.got[1] !== null) && await ev("[...document.querySelectorAll('#board .bfsum')].every(s => s.classList.contains('z') === !s.closest('.bf').querySelector(s.classList.contains('top') ? '.side.top .card' : '.side:not(.top) .card') || +s.dataset.sum === 0)"));
 ok("le total tient dans son battlefield et ne capte pas les clics", await ev(`[...document.querySelectorAll('#board .bfsum')].every(s => { const r = s.getBoundingClientRect(), p = s.closest('.bf').getBoundingClientRect(); return r.width > 0 && r.left >= p.left - 1 && r.right <= p.right + 1 && r.top >= p.top - 1 && r.bottom <= p.bottom + 1 && getComputedStyle(s).pointerEvents === 'none'; })`));
 
 // ---- « À toi » : titre, vibration, écran allumé
 ok("c'est à toi : le titre de l'onglet commence par « ● À toi »", await ev("document.title.startsWith('● À toi · ') && document.title.endsWith(TITLE0)"));
-ok("partie en cours : l'écran est demandé allumé une fois", await ev("__wk.req === 1 && __wk.rel === 0"));
+ok("partie en cours : l'écran est gardé allumé (une demande en cours)", await ev("__wk.req - __wk.rel === 1 && wakeL !== null"));
 await ev("__vib.length = 0; nudgeWait = Date.now() - 3000; nudge(V)");
 ok("après une attente de 3 s, le téléphone vibre une fois", await ev("__vib.length === 1 && __vib[0] > 0"));
 await ev("__vib.length = 0; nudgeWait = Date.now() - 200; nudge(V)");
@@ -89,14 +91,14 @@ ok("menu ♪ : section Affichage avec la taille des cartes et trois cases coché
 await pg.click("#setMight"); await pg.waitForTimeout(200);
 ok("case « Total de Might » décochée : plus aucun total, choix gardé (rbt-might = 0)", (await nSum()) === 0 && await ev("localStorage.getItem('rbt-might') === '0'"));
 await pg.click("#setMight"); await pg.waitForTimeout(200);
-ok("case recochée : les totaux reviennent", (await nSum()) >= 1 && sameSums(await ev(SUMS)));
+ok("case recochée : les totaux reviennent", (await nSum()) >= 4 && sameSums(await ev(SUMS)));
 await pg.click("#setAlert"); await pg.waitForTimeout(100);
 ok("case « Me prévenir » décochée : titre normal, pas de vibration", await ev("(() => { __vib.length = 0; nudgeWait = Date.now() - 3000; nudge(V); return document.title === TITLE0 && __vib.length === 0; })()"));
 await pg.click("#setAlert");
 await pg.click("#setWake"); await pg.waitForTimeout(200);
-ok("case « Garder l'écran allumé » décochée : l'écran est relâché", await ev("__wk.rel === 1 && wakeL === null"));
+ok("case « Garder l'écran allumé » décochée : l'écran est relâché", await ev("__wk.req === __wk.rel && wakeL === null"));
 await pg.click("#setWake"); await pg.waitForTimeout(300);
-ok("case recochée : l'écran est redemandé", await ev("__wk.req === 2"));
+ok("case recochée : l'écran est redemandé", await ev("__wk.req - __wk.rel === 1 && wakeL !== null"));
 const hOf = () => ev("(() => { const c = document.querySelector('#board .bf .side .card'); return c ? Math.round(c.getBoundingClientRect().height * 10) / 10 : 0; })()");
 const setCs = async v => { await ev(`(() => { const r = $('setCs'); r.value = '${v}'; r.dispatchEvent(new Event('input', { bubbles: true })); })()`); await pg.waitForTimeout(250); };
 const h100 = await hOf(); await setCs(130); const h130 = await hOf(); await setCs(70); const h70 = await hOf();
@@ -220,7 +222,7 @@ ok("deck supprimé : son historique de versions aussi", await ev("!dkhAll()['rob
 
 // ============================================================ anglais
 await open({ viewport: { width: 1400, height: 900 } }, "train.html?lang=en");
-await game(4, 120, "document.querySelectorAll('#board .bfsum').length >= 1 && V.dec.kind === 'main'");
+await game(4, 120, "[...document.querySelectorAll('#board .bfsum')].filter(s => +s.dataset.sum > 0).length >= 2 && V.dec.kind === 'main'");
 const FR = /[éèêàçù]|Affichage|Taille|Garder|prévenir|Tour |cartes|Fermer|importée|Rouvrir|Ouvrir/;
 ok("anglais : titre de l'onglet « ● Your move »", await ev("document.title.startsWith('● Your move · ')"));
 ok("anglais : info-bulle du total de Might traduite", await ev("/^Total Might: /.test(document.querySelector('#board .bfsum').title)"));
@@ -252,9 +254,9 @@ await ev("deleteDeck()"); await pg.waitForTimeout(300);
 
 // ============================================================ téléphone (toucher simulé)
 await open({ viewport: { width: 393, height: 851 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
-await game(4, 120, "document.querySelectorAll('#board .bfsum').length >= 1 && V.dec.kind === 'main'");
+await game(4, 120, "[...document.querySelectorAll('#board .bfsum')].filter(s => +s.dataset.sum > 0).length >= 2 && V.dec.kind === 'main'");
 sums = await ev(SUMS);
-ok(`téléphone : ${await nSum()} totaux de Might, justes, dans leur battlefield`, (await nSum()) >= 1 && sameSums(sums) && await ev(`[...document.querySelectorAll('#board .bfsum')].every(s => { const r = s.getBoundingClientRect(), p = s.closest('.bf').getBoundingClientRect(); return r.width > 0 && r.left >= p.left - 1 && r.right <= p.right + 1 && r.top >= p.top - 1 && r.bottom <= p.bottom + 1; })`));
+ok(`téléphone : ${await nSum()} totaux de Might, justes, dans leur battlefield`, (await nSum()) >= 4 && sameSums(sums) && await ev(`[...document.querySelectorAll('#board .bfsum')].every(s => { const r = s.getBoundingClientRect(), p = s.closest('.bf').getBoundingClientRect(); return r.width > 0 && r.left >= p.left - 1 && r.right <= p.right + 1 && r.top >= p.top - 1 && r.bottom <= p.bottom + 1; })`));
 ok("téléphone : pas de défilement horizontal", await ev("document.documentElement.scrollWidth <= innerWidth + 1"));
 ok("téléphone : titre « ● À toi », écran demandé allumé", await ev("document.title.startsWith('● À toi · ') && __wk.req === 1"));
 await sonOpen();

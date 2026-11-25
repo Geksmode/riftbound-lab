@@ -447,6 +447,7 @@ kbd { font: inherit; font-size: 12px; border: 1px solid var(--line); border-bott
 .bfsum { position: absolute; left: 4px; z-index: 3; pointer-events: none; display: inline-flex; align-items: baseline; gap: 4px; padding: 1px 7px; border-radius: 10px;
   background: rgba(6,10,22,.86); border: 1px solid rgba(255,255,255,.22); font: 700 13px/18px var(--f-mono, monospace); color: var(--ink); }
 .bfsum i { font: 500 9px/1 var(--f-ui, inherit); font-style: normal; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+.bfsum.z { opacity: .55; }
 .bfsum.top { top: 4px; } .bfsum.bot { bottom: 4px; }
 .bfsum.c0 { border-color: var(--akali); } .bfsum.c1 { border-color: var(--leblanc); }
 @media (max-width: 999px) { .bfsum { font-size: 11px; line-height: 15px; padding: 0 5px; left: 2px; } .bfsum i { display: none; } .bfsum.top { top: 2px; } .bfsum.bot { bottom: 2px; } }
@@ -2052,11 +2053,11 @@ function bfHTML(st, i, srcs) {
   const bot = b.u.filter(u => u.c === MEP).map(u => unitCard(u, srcs)).join("") + gearC(true);
   const ctrl = b.c === null || b.c === undefined ? `<span class="ctrl n">libre</span>` : `<span class="ctrl c${vp(b.c)}">${esc(PN[b.c])}</span>`;
   // Total de Might de chaque camp (comme Rift Atlas) : somme des Might affichées sur les cartes (calculées par le moteur,
-  // bonus compris ; Assault et Shield dès que l'unité est désignée attaquante ou défenseuse, Game::might). Montré dès qu'il y a
-  // quelque chose à additionner ou à comparer : un camp à 2 unités ou plus, ou les deux camps présents.
+  // bonus compris ; Assault et Shield dès que l'unité est désignée attaquante ou défenseuse, Game::might). Toujours montré,
+  // des deux côtés : 0 sur un côté vide, puis il monte à chaque unité posée (demande de l'utilisateur, 2026-11-25).
   const uT = b.u.filter(u => u.c !== MEP), uB = b.u.filter(u => u.c === MEP), sumM = us => us.reduce((a, u) => a + (+u.m || 0), 0);
-  const sums = SET.might && (uT.length > 1 || uB.length > 1 || (uT.length && uB.length))
-    ? [[uT, "top", OPP()], [uB, "bot", MEP]].filter(x => x[0].length).map(([us, cl, pid]) => `<span class="bfsum ${cl} c${vp(pid)}" data-sum="${sumM(us)}" title="Might totale : ${esc(PN[pid])}" aria-label="Might totale : ${esc(PN[pid])}"><i>Might</i>${sumM(us)}</span>`).join("") : "";
+  const sums = SET.might
+    ? [[uT, "top", OPP()], [uB, "bot", MEP]].map(([us, cl, pid]) => `<span class="bfsum ${cl} c${vp(pid)}${us.length ? "" : " z"}" data-sum="${sumM(us)}" title="Might totale : ${esc(PN[pid])}" aria-label="Might totale : ${esc(PN[pid])}"><i>Might</i>${sumM(us)}</span>`).join("") : "";
   let fd = "";
   const fds = b.fds || (b.fd ? [b.fd] : []), fdus = b.fdus || [b.fdu];   // Bandle Tree : deux cartes cachées, chacune visible
   if (fds.length) {
