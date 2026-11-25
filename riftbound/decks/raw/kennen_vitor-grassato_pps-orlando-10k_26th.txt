@@ -1,0 +1,51 @@
+# legend: Kennen, Heart of the Tempest
+# player: Vitor Grassato
+# event: Riftbound $10,000 Cash Tournament @ Pro-Play Summit: Orlando
+# date: 2026-09-26
+# placement: 26
+# players: 77
+# record: 4-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAUYAQAAIBAAANMAIAAMBQAAFNAG2QDOIBAICAA6NUAEAQKAE4AECAIAAAVEA3UAOMAHQACAIBAAFAEAYARQAZKAICAQAIAAMTAECACAAAYYAQGAYASYA2QAORAEBAIAGSAHKACAQFABYZWAIAAEAQKADFAQBAAAGJAHOQCAQDACJQDFQBAECABAABAMCQAZUDAGCQCAIFABYQ&name=Vitor+Grassato+%C2%B7+Riftbound+%2410%2C000+Cash+Tournament+%40+Pro-Play+Summit%3A+Orlando&event=riftbound-10000-cash-tournament-pro-play-summit-orlando&rank=26
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Kennen, Heart of the Tempest
+[champion]
+1 Kennen, Storm of Shuriken
+[main]
+3 Ride The Wind
+3 Pack of Wonders
+3 Traveling Merchant
+3 Bewitching Spirit
+3 The Ruination
+3 Lightning Rush
+2 Gust
+2 Treasure Trove
+2 Seal of Discord
+2 Salvage
+2 Annie, Stubborn
+2 Fizz, Trickster
+2 Ezreal, Prodigy
+2 Star-Crossed
+2 Baron Nashor
+1 The Harrowing
+1 Last Rites
+1 Vanguard Armory
+[runes]
+7 Chaos Rune
+5 Order Rune
+[battlefields]
+1 Forgotten Monument
+1 Forbidding Waste
+1 Frozen Fortress
+[sideboard]
+2 Gust Monk
+1 Invert Timelines
+1 Imperial Decree
+1 Downwell
+1 Last Rites
+1 Star-Crossed
+1 Ravenbloom Prefect
+1 Decree of Unity
+1 Glowstone

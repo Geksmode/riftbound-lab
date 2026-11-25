@@ -15,3 +15,5 @@ riftbound/train/node_modules/
 .claude/state/
 .claude/settings.local.json
 riftbound/engine/*.log
+riftbound/decks/riftatlas/ra/
+riftbound/decks/riftatlas/*.json

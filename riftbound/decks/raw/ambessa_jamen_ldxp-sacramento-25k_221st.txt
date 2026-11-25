@@ -1,0 +1,46 @@
+# legend: Ambessa, Matriarch of War
+# player: Jamen
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 221
+# players: 745
+# record: 4-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAB7NMAIAAABQEAYAMGNQCAIEACYACBQFABFFG7UAAGDADMYBAQAQAAE4AEBAIAFNAGXQCAIFABIQCBQAKUCAEAAA4AA2SAQBAMANUAIBAQAGUAYFABKJSANDAEAAGAIAADQACAIDABUQCBAAM4BQCAAATQAQCBAANIBAKACVRAAQCBIAKQ&name=Jamen+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=221
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Ambessa, Matriarch of War
+[champion]
+1 Ambessa, The Wolf
+[main]
+3 Punch First
+3 Honest Broker
+3 Vi, Peacekeeper
+3 Legion Marauder
+3 Rampage
+3 Ki Barrier
+3 Noxian Emissary
+3 Kayle, Justified
+3 Rengar, Trophy Hunter
+2 Sabotage
+2 Sacrifice
+2 Tactical Retreat
+2 Onslaught
+2 Graves, Blasting Through
+1 Salvage
+1 Repulse
+[runes]
+6 Body Rune
+6 Order Rune
+[battlefields]
+1 Windswept Hillock
+1 Sunken Temple
+1 Risen Altar
+[sideboard]
+2 Salvage
+2 Ruin Runner
+2 Disposal Order
+1 Sabotage
+1 Repulse
+1 Decree of Strength
+1 Ambessa, Respected and Feared

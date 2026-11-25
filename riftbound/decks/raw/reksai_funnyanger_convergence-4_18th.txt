@@ -1,0 +1,45 @@
+# legend: Rek'sai, Void Burrower
+# player: funnyanger
+# event: Convergence IV
+# date: 2026-10-31
+# placement: 18
+# players: 227
+# record: 5-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAAHAAAAAAIBAAANMAIEAMAAADA52EAQEAYADGXQCAQEAABJSAIEAYAAGDTUQEAQCAIAADJQCBABAAAKGAQDAMAB3JABXMAQCBIAP4CAMAACO6RQDJQBAABQCAAA3UAQCAYAXQAQEBIAB6BQCAQBAUAAGAIGACEQCAIDAAOQ&name=funnyanger+%C2%B7+Convergence+IV&event=convergence-4&rank=18
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Rek'sai, Void Burrower
+[champion]
+1 Rek'Sai, Breacher
+[main]
+3 Noxus Hopeful
+3 Falling Star
+3 Cull the Weak
+3 Rengar, Pouncing
+3 Undertitan
+3 Inferna
+3 Carrion Dredger
+3 Bilgewater Tracker
+3 Shimmering Swimmer
+3 Concert Poster
+3 Trifarian Captain
+2 Faithful Manufactor
+1 Drag Under
+1 Lacerate
+1 Banner of Conquest
+1 Hunting Dog
+[runes]
+8 Fury Rune
+4 Order Rune
+[battlefields]
+1 The Candlelit Sanctum
+1 Hunters' Circle
+1 Ruined Monastery
+[sideboard]
+2 Imperial Decree
+2 Void Rush
+2 Decree of Rage
+2 Decree of Unity
+1 Brittle Steel
+1 Mordekaiser, Dominating

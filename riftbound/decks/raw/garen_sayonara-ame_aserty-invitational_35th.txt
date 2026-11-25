@@ -1,0 +1,47 @@
+# legend: Garen, Might of Demacia
+# player: Sayonara Ame
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 35
+# players: 58
+# record: 1-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAGWAEAAAAABAEAAA7QEAMAABUYB3IA7AAICAMAG7JQBAECABGIBAEDAA5ADAMAABGIB3YA56AIBAMAKQAIBAUAIAAIFAQAABFYBSMBKKAVGAIBQCAANC4MACAYAVUAQCBIAREAQIBQAK52YGAMEAEAAEAIFACEQCAIGACCACAIBAMALCAIBAEAA2&name=Sayonara+Ame+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=35
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Garen, Might of Demacia
+[champion]
+1 Garen, Commander
+[main]
+3 Faithful Manufactor
+3 Vanguard Captain
+3 Sett, Kingpin
+3 Here to Help
+3 Rally the Troops
+3 Carrion Dredger
+3 Concert Poster
+2 Overt Operation
+2 Noxian Drummer
+2 Peak Guardian
+2 Vanguard Armory
+2 Noxian Emissary
+1 Lee Sin, Centered
+1 Decisive Strike
+1 Soraka, Wanderer
+1 Shady Spectacles
+1 Portable Portal
+1 For Demacia!
+1 Demacian Illuminators
+1 Heimerdinger, Academy Instructor
+[runes]
+8 Order Rune
+4 Body Rune
+[battlefields]
+1 Altar to Unity
+1 The Grand Plaza
+1 Trifarian War Camp
+[sideboard]
+2 Shady Spectacles
+2 Heimerdinger, Academy Instructor
+1 Azir, Sovereign

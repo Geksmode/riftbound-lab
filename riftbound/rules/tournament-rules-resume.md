@@ -87,5 +87,15 @@ Source : annonces officielles playriftbound.com + https://riftbound.zone/en/rift
 | Aspirant's Climb | Battlefield | 2026-07-24 |
 | Ekko, Recurrent | Unit | 2026-09-18 |
 | Stacked Deck | Spell | 2026-09-18 |
+| Riven, Broken Blade | Unit | 2026-11-23 |
+| Zhonya's Hourglass | Gear | 2026-11-23 |
+| Stellacorn Herder | Unit | 2026-11-23 |
+| Nocturne, Horrifying | Unit | 2026-11-23 |
+| Rhasa the Sunderer | Unit | 2026-11-23 |
+| Brynhir Thundersong | Unit | 2026-11-23 |
+| Dazzling Aurora | Gear | 2026-11-23 |
+| Baited Hook | Gear | 2026-11-23 |
+| Emperor's Dais | Battlefield | 2026-11-23 |
+| Star Spring | Battlefield | 2026-11-23 |
 
 2v2 : liste Standard + **Master Yi, Wuju Bladesman** (2026-07-24).

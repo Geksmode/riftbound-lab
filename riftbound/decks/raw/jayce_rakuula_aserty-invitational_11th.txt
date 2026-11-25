@@ -1,0 +1,49 @@
+# legend: Jayce, Defender of Tomorrow
+# player: Rakuula
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 11
+# players: 58
+# record: 2-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAABMX4AAAAQBAAAC7NMAQGACFAMCQAOSCKYBAMACKKEBQCAAALIBAKACBKMAQMACXAQAQAADMAMBQAWWYAHOQCBYFAA4EITKXSUAZMANBAEAQMACAAABAGAYAIZFG2AIFABEQEAIDABXQCBIAKMAQKACE&name=Rakuula+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=11
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Jayce, Defender of Tomorrow
+[champion]
+1 Jayce, Brilliant Inventor
+[main]
+3 Stupefy
+3 Ava Achiever
+3 Plundering Poro
+3 Patched Porobot
+3 Temporal Breach
+3 Gangplank, Naval
+3 Raving Witness
+3 Elnuk Herd
+2 Orb of Regret
+2 Swain, Visionary
+2 Rampage
+2 Portable Portal
+1 Convergent Mutation
+1 The Zero Drive
+1 Clairvoyance
+1 Tools of Empire
+1 Hextech Disc
+1 Acceleration Gate
+1 Scrutinizing Scope
+[runes]
+6 Mind Rune
+6 Body Rune
+[battlefields]
+1 Rockfall Path
+1 Veiled Temple
+1 Piltovan Forge
+[sideboard]
+2 Wages of Pain
+2 Pickpocket
+2 Akshan, Mischievous
+2 Jagged Cutlass
+1 Here to Help
+1 Rampage

@@ -1,0 +1,48 @@
+# legend: Lillia, Bashful Bloom
+# player: Michael Fladung
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 46
+# players: 745
+# record: 8-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVFSAAAAMCQAABNFY5DYZYBAMACIAQEABCU4AYDAAACWX3UAEBQAKQBAQAFGBACAAAGU6YCAMACBWIBAUCAAUSSXUA5AAORAEAQMABAAEAQKAB5AEAQGABAAMBAAABLPMAQIAF6AEBAKABGFAAQIACS&name=Michael+Fladung+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=46
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Lillia, Bashful Bloom
+[champion]
+1 Lillia, Fae Fawn
+[main]
+3 Defy
+3 En Garde
+3 Discipline
+3 Mask of Foresight
+3 Ravenbloom Student
+3 Lonely Poro
+3 Sprite Burst
+3 Sprite Fountain
+2 Charm
+2 Stupefy
+2 Thousand-Tailed Watcher
+2 Brutalizer
+2 Smoke and Mirrors
+1 Sprite Mother
+1 Unchecked Power
+1 Disarming Rake
+1 Lillia, Fae Fawn
+1 Battle Preparations
+[runes]
+6 Calm Rune
+6 Mind Rune
+[battlefields]
+1 Seat of Power
+1 Black Flame Altar
+1 Dusk Rose Lab
+[sideboard]
+3 Decree of Insight
+2 Disarming Rake
+1 Charm
+1 Unchecked Power
+1 Lilting Lullaby
+1 Akali, Silent
+1 Decree of Focus

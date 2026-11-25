@@ -514,7 +514,7 @@
   "tags": "Freljord",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "When you play me, opponents can't play cards this turn.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/44e805aa0f2928acf1156eef692403df319b333a-744x1039.png"
@@ -1534,7 +1534,7 @@
   "tags": "",
   "keywords": "Hidden",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "[Hidden] (Hide now for 1 rune of any type to react with later for 0 energy.) The next time a friendly unit would die, kill this instead. Recall that unit exhausted. (Send it to base. This isn't a move.)",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/dc38172c56f838b407fc9f170ba973da32d7cd4d-744x1039.png"
@@ -3214,7 +3214,7 @@
   "tags": "",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit. Play it, ignoring its cost, and recycle the rest.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/c023856a50c75058465f283d181277ce265ba108-744x1039.png"
@@ -3894,7 +3894,7 @@
   "tags": "Nocturne",
   "keywords": "Ganking",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "Champion",
   "text": "[Ganking] (I can move from battlefield to battlefield.) When you look at cards from the top of your deck (and don't draw them) and see me, you may play me for 1 rune of any type.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/19a751364bc6eb5297596e8733d0d30a1111ac78-744x1039.png"
@@ -3914,7 +3914,7 @@
   "tags": "Spirit|Shadow Isles",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "I cost 1 energy less for each card in your trash.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/e34fe8a9ee533dee99f96b4e6677d1edbd6a262d-744x1039.png"
@@ -4854,7 +4854,7 @@
   "tags": "",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "1 energy and 1 order rune, exhaust: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may banish a unit from among them that has Might up to 1 more than the killed unit and play it, ignoring its cost. Then recycle the rest.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/7b4e6a1e32878a7d5fe4e40869c83e47ea08de7c-744x1039.png"
@@ -7994,7 +7994,7 @@
   "tags": "Mount Targon",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "When I move, draw 1.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/1e7960a35d45dd55e934260ea23307853aa5afd4-744x1039.png"
@@ -11174,7 +11174,7 @@
   "tags": "",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "When you conquer here, you may pay 1 energy and return a unit you control here to its owner's hand to play a 2 might Sand Soldier unit token here.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/c1ea4f6f58a62fc2b62647aa3459109e3d10297a-1039x744.png"
@@ -17454,7 +17454,7 @@
   "tags": "",
   "keywords": "",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "",
   "text": "The first time a player plays a non-token unit here each turn, they may move another unit they control here to its base.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/0c4fe88ffb5c1b02b58b2c6b4f02de441ac451d6-1039x744.png"
@@ -24994,7 +24994,7 @@
   "tags": "Riven|Noxus",
   "keywords": "Buff|Stun",
   "is_variant": false,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "Champion",
   "text": "When I become exhausted, choose one that hasn't been chosen this turn —[Buff] me. (Give me a +1 might buff if I don't have one.)Spend my buff to [Stun] an enemy unit. (It doesn't deal combat damage this turn.)Spend my buff to ready me.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/0c9ac0da1c144f46a1e0c5423f51f9b8f6ba295b-744x1039.png"
@@ -27914,7 +27914,7 @@
   "tags": "Riven",
   "keywords": "Buff|Stun",
   "is_variant": true,
-  "banned_standard": "",
+  "banned_standard": "2026-11-23",
   "supertype": "Champion",
   "text": "When I become exhausted, choose one that hasn't been chosen this turn —[Buff] me.Spend my buff to [Stun] an enemy unit.Spend my buff to ready me.",
   "image_url": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/9870e0f591e2ca04bea2274209e8df3d4435213b-744x1039.png"

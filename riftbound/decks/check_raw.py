@@ -3,13 +3,14 @@
 [legend] [champion] [main] [runes] [battlefields] [sideboard], lignes « <qté> <nom> »).
 
 Contrôles : noms connus de la base de cartes (suggestion du nom le plus proche sinon), règles de construction (103) et
-du sideboard (601.1.c) via train.validate, cartes non modélisées (cards.IMPL), 12 runes, 3 battlefields.
+du sideboard (601.1.c), cartes non modélisées et cartes bannies via `train::validate` du moteur Rust (outil
+`rust/target/release/check_decks`, à compiler : `cd rust && cargo build --release`), 12 runes, 3 battlefields.
 Usage : python3 decks/check_raw.py decks/raw/jinx_*.txt     (code de sortie 1 si un deck a un problème)
         --ban-ok : une carte bannie en Standard depuis la liste (ex. liste Best-Of d'Unleashed) n'est qu'un avertissement."""
-import csv, difflib, os, re, sys
+import csv, difflib, json, os, re, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(ROOT, "engine"))
+CHECK = os.path.join(os.path.dirname(ROOT), "rust", "target", "release", "check_decks")
 NAMES = {r["name"] for r in csv.DictReader(open(os.path.join(ROOT, "cards", "cards_unique.csv"), encoding="utf-8"))}
 
 
@@ -35,8 +36,18 @@ def parse(path):
     return head, secs
 
 
+def validate(deck):
+    """Problèmes du deck d'après le moteur Rust (`train::validate`), liste vide si le deck est valide."""
+    with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as f:
+        json.dump([dict(deck, key="deck")], f, ensure_ascii=False)
+    try:
+        out = subprocess.run([CHECK, f.name], capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    finally:
+        os.unlink(f.name)
+    return [e for e in out.rstrip("\n").partition("\t")[2].split(" | ") if e]
+
+
 def check(path, ban_ok=False):
-    import train
     head, secs = parse(path)
     probs = []
     for sec, items in secs.items():
@@ -53,7 +64,7 @@ def check(path, ban_ok=False):
     if len(deck["battlefields"]) != 3:
         probs.append(f"battlefields : {len(deck['battlefields'])}/3")
     if not probs:
-        probs += [e for e in train.validate(deck) if not (ban_ok and e.startswith("⚠"))]
+        probs += [e for e in validate(deck) if not (ban_ok and e.startswith("⚠"))]
     return head, deck, probs
 
 

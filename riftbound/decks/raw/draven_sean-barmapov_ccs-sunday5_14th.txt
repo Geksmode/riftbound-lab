@@ -1,0 +1,51 @@
+# legend: Draven, Glorious Executioner
+# player: Sean Barmapov
+# event: CCS Sunday $5,000 Riftbound Event #5
+# date: 2026-09-20
+# placement: 14
+# players: 88
+# record: 5-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAD2MAIAAABQGAAAE64QDRYBAEBQBOQBAECAAHADAMAAAG5JAGWQCAYDAAKYEAMRAEBQIAATQAAZMAIEAQAAADI4DWWACAIBAAFQIAYARQA3SAOQAHOACAQEACBQDUQBAAAQGBIAAMHWIAQBAAAB2AYDAAARLEYBAEAAAHA&name=Sean+Barmapov+%C2%B7+CCS+Sunday+%245%2C000+Riftbound+Event+%235&event=ccs-sunday-5000-riftbound-event-5&rank=14
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Draven, Glorious Executioner
+[champion]
+1 Draven, Showboat
+[main]
+3 Kai'Sa, Survivor
+3 Traveling Merchant
+3 Tideturner
+3 Spinning Axe
+3 Pyke, Dockside Butcher
+2 Darius, Trifarian
+2 Gust
+2 Ride The Wind
+2 Ferrous Forerunner
+2 Treasure Hunter
+2 Switcheroo
+2 Blighted Battleaxe
+2 Star-Crossed
+2 Vex, Apathetic
+1 Pouty Poro
+1 Falling Star
+1 Rebuke
+1 Flash
+1 Fizz, Trickster
+1 Abandon
+[runes]
+6 Fury Rune
+6 Chaos Rune
+[battlefields]
+1 Forge of the Fluft
+1 Treasure Hoard
+1 Forbidding Waste
+[sideboard]
+2 Brittle Steel
+2 Decree of Rage
+2 Up from the Deep
+1 Falling Star
+1 Against the Odds
+1 Ferrous Forerunner
+1 Downwell

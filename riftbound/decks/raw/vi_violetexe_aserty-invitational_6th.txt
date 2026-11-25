@@ -1,0 +1,46 @@
+# legend: Vi, Piltover Enforcer
+# player: Violetexe
+# event: Aserty's Creator Invitational
+# date: 2026-10-10
+# placement: 6
+# players: 58
+# record: 3-0
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAA4AACAIAADLACAAFAMAAAJ6YAHOACAYDAAEZSANUAEBAIAAWUUAQCBIACQAQMAEBAEAQEAYATMA2MAIFAQAAAJGVAGTAFKQCAIBQABFDAEAQIAF3AEBAKAAMQ4AQCBQAUQAQCAIAADQACAQCAAAB3VABAECQBAYBAEAQAAGVAEAQAABE&name=Violetexe+%C2%B7+Aserty%27s+Creator+Invitational&event=asertys-creator-invitational&rank=6
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Vi, Piltover Enforcer
+[champion]
+1 Vi, Destructive
+[main]
+3 Kai'Sa, Survivor
+3 Soaring Scout
+3 Facebreaker
+3 Serrated Dirk
+3 Eye of the Herald
+3 Fiora, Worthy
+3 Jhin, Murderous Artist
+3 Shadow's Call
+3 Twilight Reveler
+3 Trifarian Captain
+2 Honest Broker
+2 Rally the Troops
+1 Hidden Blade
+1 Bushwhack
+1 Deathgrip
+1 Perfect Execution
+1 Kennen, Keeper of Balance
+[runes]
+7 Fury Rune
+5 Order Rune
+[battlefields]
+1 Trifarian War Camp
+1 Zaun Warrens
+1 Packed Amphitheater
+[sideboard]
+3 Salvage
+2 Falling Star
+2 Forge of the Future
+2 Decree of Unity
+1 Hidden Blade

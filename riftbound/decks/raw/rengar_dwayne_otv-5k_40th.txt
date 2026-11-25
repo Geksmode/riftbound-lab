@@ -1,0 +1,48 @@
+# legend: Rengar, Pridestalker
+# player: Dwayne
+# event: Open the Vault - Riftbound $5k
+# date: 2026-11-21
+# placement: 40
+# players: 42
+# record: 0-5
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADX4AAAAIBQAABGQYAYYAICAQAGROABAQCQAAABE6FADEIBTQAQGAYALZVG6AIEAB3AEBQAANOAIAYAAAUKGAM7AIAQGAGRAEBAIAFXAHKACAIFACZQCAACAIAAAJEFAEAQIADKAMBAAAAWUMAQCBIALMAQMAADAECQBMYB&name=Dwayne+%C2%B7+Open+the+Vault+-+Riftbound+%245k&event=open-the-vault-riftbound-5k&rank=40
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Rengar, Pridestalker
+[champion]
+1 Rengar, Trophy Hunter
+[main]
+3 Kadregrin the Infernal
+3 Mobilize
+3 Herald of Scales
+3 Gentle Gemdragon
+3 Thrill of the Hunt
+2 Blazing Scorcher
+2 Kai'Sa, Survivor
+2 Catalyst of Aeons
+2 Unyielding Spirit
+2 Sabotage
+2 Direwing
+2 Show of Strength
+2 Here to Help
+2 Elder Dragon
+2 Bilgewater Tracker
+2 Seraphic Wyvern
+1 Seal of Rage
+1 Seal of Strength
+[runes]
+6 Fury Rune
+6 Body Rune
+[battlefields]
+1 Sigil of the Storm
+1 Forgotten Monument
+1 Frozen Fortress
+[sideboard]
+2 Vi, Destructive
+2 Flurry of Blades
+2 Repulse
+1 Thermo Beam
+1 Seal of Strength
+1 Corrupted Dragon
+1 Bilgewater Tracker

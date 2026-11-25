@@ -1,0 +1,50 @@
+# legend: Diana, Scorn of the Moon
+# player: David Penaloza
+# event: LDXP Sacramento - Riftbound Challenge
+# date: 2026-10-25
+# placement: 3
+# players: 38
+# record: 4-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAUYAQAAIBAAAFSAACAUAAAX3HVUA3SAOHAEBQIACQSYA4MAIEAEAABKIBAEAQACYBAMAIQAIBAQAIAAIEAMAAAXNTAGQQEAYDACGADEIBSIAQKBAAH5HYGAOFAHGQCAIGACSACAACAECQAPIBAYAGKAQCAAAKSANTAECAIAEAAGBQDBABSMAQCBAAJ4&name=David+Penaloza+%C2%B7+LDXP+Sacramento+-+Riftbound+Challenge&event=ldxp-sacramento-riftbound-challenge&rank=3
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Diana, Scorn of the Moon
+[champion]
+1 Diana, Lunari
+[main]
+3 Stupefy
+3 Ravenbloom Student
+3 Ride The Wind
+3 Traveling Merchant
+3 Tideturner
+3 Hwei, Brooding Painter
+3 Vex, Apathetic
+3 Moonfall
+2 Gust
+2 Flash
+2 Hard Bargain
+2 Star-Crossed
+1 Smoke Screen
+1 Acceptable Losses
+1 Fizz, Trickster
+1 Switcheroo
+1 Vex, Cheerless
+1 Eclipse
+1 Abandon
+[runes]
+7 Chaos Rune
+5 Mind Rune
+[battlefields]
+1 Targon's Peak
+1 Abandoned Hall
+1 Packed Amphitheater
+[sideboard]
+2 Decree of Insight
+2 An Offer You Can't Refuse
+1 Gust
+1 Acceptable Losses
+1 Star-Crossed
+1 Abandon
+1 Angler Beast
+1 Baron Nashor

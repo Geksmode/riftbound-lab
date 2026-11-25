@@ -1,0 +1,48 @@
+# legend: Ivern, Green Father
+# player: GTPL Skonoms
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 217
+# players: 745
+# record: 4-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAAVNMAIAAACAIAAAFU2DVVIBAEBQBHYBAICAAJFAAEBAMABCQYAQGAIDAAVQCBAAEEBAMAA3O4BQEAAAZ4A2OAQCAMALCAOYAECQIABKGPBQDRAB2IAQCAIDAAQAABIBAAAEGAQDAAWTKAIEAA6ACBIAQQAQEBQAFEWACBAAGM&name=GTPL+Skonoms+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=217
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Ivern, Green Father
+[champion]
+1 Ivern, Nurturer
+[main]
+3 Defy
+3 Stalwart Poro
+3 Discipline
+3 Hidden Blade
+3 Trusty Ramhound
+3 Mutated Mouser
+3 Ultrasoft Poro
+3 Hunker Down
+3 Raucous Anthem
+2 Emperor's Divide
+2 Frisky Hunter
+2 Iridescent Avian
+2 Hunting Dog
+1 Call to Glory
+1 Azir, Sovereign
+1 Back Off
+1 Daisy!
+[runes]
+6 Calm Rune
+6 Order Rune
+[battlefields]
+1 Vilemaw's Lair
+1 Rockfall Path
+1 Forbidding Waste
+[sideboard]
+3 Disarming Rake
+1 Blitzcrank, Impassive
+1 Not So Fast
+1 Janna, Savior
+1 Vilemaw
+1 Fallen Feline
+1 Hush
+1 Hunting Blind

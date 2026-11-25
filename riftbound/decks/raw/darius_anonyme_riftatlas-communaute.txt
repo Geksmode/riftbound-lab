@@ -1,0 +1,44 @@
+# legend: Darius, Hand of Noxus
+# player: anonyme
+# event: Deck communautaire riftatlas « Darius warcamp » (sans résultat de tournoi)
+# date: 2026-11-21
+# url: https://riftatlas.com/decks/community/jh7ehn87648ehgccjcw8zfhnpn8fartp
+# source: riftatlas.com, code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: aucune liste de tournoi de cette légende n'est légale avec la ban list du 2026-11-23 (tournois du 2026-09-19 au 2026-11-22). Deck communautaire modifié après l'annonce des bans, 18 copies, 0 j'aime : jamais classé en tournoi.
+[legend]
+1 Darius, Hand of Noxus
+[champion]
+1 Darius, Executioner
+[main]
+3 Noxus Hopeful
+3 Vanguard Captain
+3 Noxian Drummer
+3 Rally the Troops
+3 Unsung Hero
+3 Inferna
+3 Rage Amplifier
+3 Rally for War
+2 Hidden Blade
+2 Long Sword
+2 Shadow's Call
+2 Sacrifice
+2 Raucous Anthem
+1 Darius, Executioner
+1 Seal of Unity
+1 Eye of the Herald
+1 Banner of Conquest
+1 For Demacia!
+[runes]
+7 Fury Rune
+5 Order Rune
+[battlefields]
+1 Trifarian War Camp
+1 The Papertree
+1 Protective Sands
+[sideboard]
+3 Hextech Ray
+3 Salvage
+2 Decree of Rage
+1 Hidden Blade
+1 Mournful Spirit

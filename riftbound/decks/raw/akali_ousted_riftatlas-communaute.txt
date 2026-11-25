@@ -1,0 +1,46 @@
+# legend: Akali, Rogue Assassin
+# player: ousted
+# event: Deck communautaire riftatlas « Turn 3 Heron into Falling Star(Post Ban) » (sans résultat de tournoi)
+# date: 2026-11-16
+# url: https://riftatlas.com/decks/community/01a1bbc8338776d89b0b71371e0f58fc
+# source: riftatlas.com, code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: aucune liste de tournoi de cette légende n'est légale avec la ban list du 2026-11-23 (tournois du 2026-09-19 au 2026-11-22). Deck communautaire modifié après l'annonce des bans, 205 copies, 7 j'aime : jamais classé en tournoi.
+[legend]
+1 Akali, Rogue Assassin
+[champion]
+1 Akali, Deadly Weapon
+[main]
+3 Falling Star
+3 Kai'Sa, Survivor
+3 Defy
+3 Discipline
+3 Long Sword
+3 Guardian Angel
+3 Jhin, Murderous Artist
+3 Scuttle Crab
+3 Astral Heron
+3 Shuriken Flip
+2 Mischievous Marai
+2 Battle Preparations
+1 Blitzcrank, Impassive
+1 Not So Fast
+1 Janna, Savior
+1 Sterak's Gage
+1 Lost to the Sands
+[runes]
+6 Fury Rune
+6 Calm Rune
+[battlefields]
+1 Sigil of the Storm
+1 The Candlelit Sanctum
+1 Black Market
+[sideboard]
+2 Disarming Rake
+2 Decree of Rage
+1 Thermo Beam
+1 Against the Odds
+1 Not So Fast
+1 Akali, Silent
+1 Decree of Focus
+1 Helm of Suppression

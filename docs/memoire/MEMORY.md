@@ -1,6 +1,6 @@
 - [riftbound-sources](riftbound-sources.md) — rules/cards files, official URLs, card APIs, network gaps
 - [riftbound-lab-goal](riftbound-lab-goal.md) — project goal, French-speaking user
-- [riftbound-decklists](riftbound-decklists.md) — parsed tournament decklists in riftbound/decks, deck sites blocked, WebSearch workaround
+- [riftbound-decklists](riftbound-decklists.md) — parsed tournament decklists in riftbound/decks, deck sites blocked, WebSearch workaround ; 2026-11-24 : riftatlas.com lisible directement (scripts riftbound/decks/riftatlas/), decks par défaut refaits pour la ban list du 2026-11-23
 - [akali-vs-leblanc](akali-vs-leblanc.md) — user plays Akali; matchup vs LeBlanc ~35%, plan file
 - [riftbound-engine](riftbound-engine.md) — faithful rules engine in riftbound/engine, calibration, leçons (mots-clés, effets sans cible, tests via train)
 - [akali-gorica-heron](akali-gorica-heron.md) — user plays Gorica's Akali Heron; best build G2 52.9% vs LeBlanc

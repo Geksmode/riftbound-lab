@@ -1,0 +1,47 @@
+# legend: Orianna, Lady of Clockwork
+# player: Brandon Wolfgang
+# event: Convergence IV
+# date: 2026-10-31
+# placement: 56
+# players: 227
+# record: 4-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAFIAACAIAABMQAAQGAAAC2OR4L5TXIAIGAAQAKAIAAAVQCAYAIABAIABVJYAQKABMAIDAALUSAECACAAAFYBQGABN3EA52AIDAQACUP6NAEBAMABKSEAQAAQDAUACKKB5AEDAALACAEBQALIBAYACSAIGAAVA&name=Brandon+Wolfgang+%C2%B7+Convergence+IV&event=convergence-4&rank=56
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Orianna, Lady of Clockwork
+[champion]
+1 Orianna, Exquisite
+[main]
+3 Defy
+3 Discipline
+3 Mask of Foresight
+3 Stupefy
+3 Ravenbloom Student
+3 Thousand-Tailed Watcher
+3 Battle Preparations
+2 Charm
+2 Cloth Armor
+2 Scuttle Crab
+2 Sprite Fountain
+2 Astral Heron
+2 Resplendent Rostrum
+2 The Ball
+1 En Garde
+1 Not So Fast
+1 Back Off
+1 Eclipse
+[runes]
+7 Calm Rune
+5 Mind Rune
+[battlefields]
+1 Seat of Power
+1 Veiled Temple
+1 Abandoned Hall
+[sideboard]
+2 Tomb-Raider Barbara
+2 Decree of Focus
+2 Decree of Insight
+2 Hunting Blind
+1 Not So Fast
+1 Hush

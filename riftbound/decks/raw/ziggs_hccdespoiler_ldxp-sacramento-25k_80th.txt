@@ -1,0 +1,47 @@
+# legend: Ziggs, Hexplosives Expert
+# player: HccDespoiler
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 80
+# players: 745
+# record: 7-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAAHAAAAAAIBAAAKMAICAQAAAHNTAG2QDOQBAMDAAAIDBYCACAAAFABQGAAFRQAZKAICAQAHTCQBAEDAAFIFAEAABKACAEBQAFYCAQAJMAOSAEAQKAARAQDAAFTQRUA2KAIAAMBAGAAOSMAQCBAAQAAQCBIAB4BACBAASYAQCBQAMUAQMADQ&name=HccDespoiler+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=80
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Ziggs, Hexplosives Expert
+[champion]
+1 Ziggs, Explosive
+[main]
+3 Falling Star
+3 Acceptable Losses
+3 Pack of Wonders
+3 Treasure Trove
+3 Amateur Demolitionist
+3 Bilgewater Tracker
+3 Shimmering Swimmer
+2 Seal of Rage
+2 Detonate
+2 Fizz, Trickster
+2 Ezreal, Prodigy
+2 Bewitching Spirit
+2 The List
+2 Ekko, Revolutionary
+1 Piercing Light
+1 Vex, Apathetic
+1 Morgana, Vindictive
+1 Whirling Twirligig
+[runes]
+8 Fury Rune
+4 Chaos Rune
+[battlefields]
+1 Void Gate
+1 Forbidding Waste
+1 Rakelstake
+[sideboard]
+2 Minotaur Reckoner
+2 Downwell
+2 Star-Crossed
+2 Decree of Rage
+1 Vex, Apathetic
+1 An Offer You Can't Refuse

@@ -1,0 +1,48 @@
+# legend: Lux, Lady of Luminosity
+# player: Tingfeng Wan
+# event: LDXP Sacramento - Riftbound Challenge
+# date: 2026-10-25
+# placement: 12
+# players: 38
+# record: 3-2
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAALEAACAIAADLACAAEAQAAAX3YPLKQCAQDABDJWAIBAQAEKAQGAA6ICAIDAEAAA2IBAMAEKAQEABHLIAIEAMAAA4U7AKTQEAQBAAHBKAYDABFKAAOYAEAQKACCAABACAAA2EAQCAYAJICAEAAAPPQACAQDACQADJABAECAASIBAUAEEAIBAAHA&name=Tingfeng+Wan+%C2%B7+LDXP+Sacramento+-+Riftbound+Challenge&event=ldxp-sacramento-riftbound-challenge&rank=12
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Lux, Lady of Luminosity
+[champion]
+1 Lux, Crownguard
+[main]
+3 Stupefy
+3 Seal of Insight
+3 Time Warp
+3 Hidden Blade
+3 Wages of Pain
+3 Honest Broker
+3 Sprite Burst
+3 The Empyrean
+3 Trifarian Captain
+2 Singularity
+2 Plundering Poro
+2 Sprite Fountain
+2 The Ruination
+1 Progress Day
+1 Pickpocket
+1 Zaun Punk
+1 Temporal Breach
+[runes]
+7 Mind Rune
+5 Order Rune
+[battlefields]
+1 Sigil of the Storm
+1 Vilemaw's Lair
+1 Rockfall Path
+[sideboard]
+2 Cull the Weak
+2 Pickpocket
+1 Unchecked Power
+1 Salvage
+1 Zaun Punk
+1 Drag Under
+1 Deadly Flourish
+1 Temporal Breach

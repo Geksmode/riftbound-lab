@@ -1,0 +1,45 @@
+# legend: Lee Sin, Blind Monk
+# player: Honesty
+# event: Deck communautaire riftatlas « Tempo Lee Sin » (sans résultat de tournoi)
+# date: 2026-11-17
+# url: https://riftatlas.com/decks/community/01a1bbcb5d4c7c899369c6c1ba32cf33
+# source: riftatlas.com, code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: aucune liste de tournoi de cette légende n'est légale avec la ban list du 2026-11-23 (tournois du 2026-09-19 au 2026-11-22). Deck communautaire modifié après l'annonce des bans, 21 copies, 0 j'aime : jamais classé en tournoi.
+[legend]
+1 Lee Sin, Blind Monk
+[champion]
+1 Lee Sin, Ascetic
+[main]
+3 Defy
+3 Discipline
+3 First Mate
+3 Mistfall
+3 Scuttle Crab
+3 Portable Portal
+2 En Garde
+2 Pit Rookie
+2 Wallop
+2 Sett, Brawler
+2 Lonely Poro
+2 Irelia, Fervent
+2 Punch First
+2 Battle Preparations
+2 Heartening Soul
+1 Not So Fast
+1 Iridescent Avian
+1 Hush
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Monastery of Hirana
+1 The Candlelit Sanctum
+1 Hunters' Circle
+[sideboard]
+3 Disarming Rake
+2 Unyielding Spirit
+2 Decree of Focus
+1 Challenge
+1 Lee Sin, Centered
+1 Dragon's Rage

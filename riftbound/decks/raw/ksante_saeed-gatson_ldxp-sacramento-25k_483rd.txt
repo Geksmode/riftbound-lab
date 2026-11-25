@@ -1,0 +1,47 @@
+# legend: K'Sante, Pride of Nazumah
+# player: Saeed Gatson
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 483
+# players: 745
+# record: 2-4-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAPYAACAIAAAVAABADAAAC2OUEAEAQGADBAICAAJBVAECQBMYBAMBQAABLGRBQCBAANICAMAA7I5HJIAIEAIAAAOMYAIAQGAGZAEAQIAGPAEBQMABNLCJQCAADAEBQA2IBAUACKAIGABKQCBAGAAUSYVSXAEDAALI&name=Saeed+Gatson+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=483
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 K'Sante, Pride of Nazumah
+[champion]
+1 K'Sante, Dauntless
+[main]
+3 Defy
+3 Discipline
+3 First Mate
+3 Punch First
+3 Mutated Mouser
+3 Scuttle Crab
+3 Rengar, Trophy Hunter
+2 Charm
+2 Stalwart Poro
+2 Blitzcrank, Impassive
+2 Repulse
+2 Stoic Ferryman
+2 Nazuman Ntofo
+2 Armored Tusker
+2 Ntofo Strikes
+1 Block
+1 Staunch Survivor
+[runes]
+7 Body Rune
+5 Calm Rune
+[battlefields]
+1 Grove of the God-Willow
+1 Seat of Power
+1 Amateur Recital
+[sideboard]
+2 Ruin Runner
+2 Tomb-Raider Barbara
+2 Graves, Blasting Through
+1 Hush
+1 Hunting Blind
+1 K'Sante, Courageous
+1 Portable Portal

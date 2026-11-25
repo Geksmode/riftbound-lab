@@ -1,0 +1,46 @@
+# legend: Jarvan IV, Exemplar of Demacia
+# player: Braden Van't Hof
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 77
+# players: 745
+# record: 6-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAEAQAAD6AAAAAAIBAAANMAIFAIAABCABZ4AQCAYAOEBAIADQOIAQKAFTAEBQMACJQEAZYAIEAIAABBAB6AAQCAYAMEAQKACTAEDAASYEAEAABGQCAEBQBWIBAECAA2QEAYAFW5E3AGSACAADAEAABYABAEBQA2IBAUAIGAIEAEAABHABAEBQAYIBAQAGUAIGACEACAIGABNQ&name=Braden+Van%27t+Hof+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=77
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Jarvan IV, Exemplar of Demacia
+[champion]
+1 Jarvan IV, Martial Paragon
+[main]
+3 Pit Rookie
+3 Call to Glory
+3 Lucian, Merciless
+3 Irresistible Faefolk
+3 Nidalee, Cat Form
+3 Rengar, Trophy Hunter
+3 Pillaged Armory
+3 Trifarian Captain
+3 Demacian Standard
+2 First Mate
+2 Sett, Kingpin
+2 Punch First
+2 Rampage
+2 Skystrike Squadron
+1 Repulse
+1 Concert Poster
+[runes]
+8 Body Rune
+4 Order Rune
+[battlefields]
+1 Monastery of Hirana
+1 Seat of Power
+1 Packed Amphitheater
+[sideboard]
+2 Salvage
+2 Ruin Runner
+2 Decree of Unity
+1 Sabotage
+1 Punch First
+1 Repulse
+1 Dockside Lock-Up

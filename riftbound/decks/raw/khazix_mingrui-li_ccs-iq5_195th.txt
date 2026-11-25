@@ -1,0 +1,48 @@
+# legend: Kha'Zix, Voidreaver
+# player: Mingrui Li
+# event: CCS $25,000 Showdown Series Event - Riftbound Invitational Qualifie
+# date: 2026-09-19
+# placement: 195
+# players: 563
+# record: 5-4
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAB7KMAIAAABQCAAAXEAQEAYAMGGACAYEABYIAAOKAEBQEAAATQA22AIDAQAGDCABSYAQKBIAKNPWI4FTAEBQCAAAVIBAGBAAR4A4SAOSAEBAKACRUQAQAAYBAAAKSAIBAMAIQAIBAQAIIAIDAIAABHABWMAQCAYASEAQCBIAMYAQIAEPAE&name=Mingrui+Li+%C2%B7+CCS+%2425%2C000+Showdown+Series+Event+-+Riftbound+Invitational+Qualifie&event=25000-houston-invitational-qualifier-5&rank=195
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Kha'Zix, Voidreaver
+[champion]
+1 Kha'Zix, Mutating Horror
+[main]
+3 Traveling Merchant
+3 Punch First
+3 Fizz, Trickster
+3 Irresistible Faefolk
+3 Star-Crossed
+3 Void Assault
+2 Sabotage
+2 Ride The Wind
+2 Kinkou Initiate
+2 Scryer's Bloom
+2 Vex, Apathetic
+2 Rampage
+2 Shadow Order Disciple
+2 Up from the Deep
+2 Zed, Without a Sound
+2 Rengar, Trophy Hunter
+1 Onslaught
+[runes]
+6 Body Rune
+6 Chaos Rune
+[battlefields]
+1 Zaun Warrens
+1 Forbidding Waste
+1 Sandswept Tomb
+[sideboard]
+2 Gust
+2 Hard Bargain
+2 Angler Beast
+1 Sabotage
+1 Acceptable Losses
+1 Switcheroo
+1 Ravenbloom Prefect

@@ -1,0 +1,50 @@
+# legend: Renata Glasc, Chem-Baroness
+# player: Frank Gibbons
+# event: CCS $25,000 Showdown Series Event - Riftbound Invitational Quali
+# date: 2026-09-19
+# placement: 201
+# players: 563
+# record: 5-5
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAALEAACAIAADLACAAEAIAAAW6VAEAQGACFAICAARKOAECQAOQDAQAAAX3UPLYQCAYDABDJWAOKAEAQKAEHAECAEAAANGTQEBIDABAFRSIB3EA5YAIBAQALAAICAUAHY7QAAMAQAAHAAEAQGACQAECQAPICAMAAA2L32EAQCBIAQMAQCAYALA&name=Frank+Gibbons+%C2%B7+CCS+%2425%2C000+Showdown+Series+Event+-+Riftbound+Invitational+Quali&event=25000-houston-invitational-qualifier-5&rank=201
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+# note: format Vendetta (avant Radiance) : aucune liste de cette légende dans la première moitié d'un tournoi Radiance n'est légale avec la ban list du 2026-11-23.
+[legend]
+1 Renata Glasc, Chem-Baroness
+[champion]
+1 Renata Glasc, Mastermind
+[main]
+3 Pit Crew
+3 Hidden Blade
+3 Plundering Poro
+3 Sprite Burst
+3 Sprite Fountain
+3 Patched Porobot
+2 Stupefy
+2 Thousand-Tailed Watcher
+2 Time Warp
+2 Shen, Kinkou
+2 Wages of Pain
+2 Honest Broker
+2 Hostile Takeover
+2 Kennen, Keeper of Balance
+1 Singularity
+1 Cloth Armor
+1 Vi, Peacekeeper
+1 Escaped Grayback
+1 Ki Barrier
+[runes]
+7 Mind Rune
+5 Order Rune
+[battlefields]
+1 Vilemaw's Lair
+1 Seat of Power
+1 Treasure Hoard
+[sideboard]
+2 Salvage
+2 Bellows Breath
+2 Decree of Insight
+1 Singularity
+1 Unchecked Power
+1 Cull the Weak
+1 Decree of Unity

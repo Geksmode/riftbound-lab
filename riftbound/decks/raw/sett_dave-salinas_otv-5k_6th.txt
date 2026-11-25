@@ -1,0 +1,44 @@
+# legend: Sett, The Boss
+# player: Dave Salinas
+# event: Open the Vault - Riftbound $5k
+# date: 2026-11-21
+# placement: 6
+# players: 42
+# record: 5-3
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAQCAAAPYAACAIAADLACAAFAUAABBABRAA46APIAGHAEAIDABQQCBAAOAAQKACTAIDAASMBAEBQCBAAOIBAKAEGAGZQCAIGABKQGAYAADYADDICTIBAEBAAWAA5UAIBAYAKIAIAAMBAAAE4AHQACAIDABUQCBIAQMAQEAIEABVACBIAKUAQAAHQAE&name=Dave+Salinas+%C2%B7+Open+the+Vault+-+Riftbound+%245k&event=open-the-vault-riftbound-5k&rank=6
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Sett, The Boss
+[champion]
+1 Sett, Kingpin
+[main]
+3 First Mate
+3 Pit Rookie
+3 Call to Glory
+3 Fiora, Victorious
+3 Showstopper
+3 Punch First
+3 Irresistible Faefolk
+3 Rampage
+3 Pillaged Armory
+3 Trifarian Captain
+2 Nidalee, Cat Form
+2 Kayle, Justified
+2 Rengar, Trophy Hunter
+2 Graves, Blasting Through
+1 Vi, Peacekeeper
+[runes]
+7 Body Rune
+5 Order Rune
+[battlefields]
+1 Monastery of Hirana
+1 Valley of Idols
+1 Packed Amphitheater
+[sideboard]
+2 Sabotage
+2 Salvage
+2 Ruin Runner
+2 Decree of Unity
+1 Repulse
+1 Decree of Strength

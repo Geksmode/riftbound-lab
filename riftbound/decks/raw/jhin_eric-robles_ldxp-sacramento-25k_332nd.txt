@@ -1,0 +1,50 @@
+# legend: Jhin, Virtuoso
+# player: Eric Robles
+# event: LDXP Sacramento - Riftbound Showdown 25k
+# date: 2026-10-24
+# placement: 332
+# players: 745
+# record: 3-3-1
+# url: https://riftatlas.com/decks/view?code=CMAAAAAAAAAACAQAAADVSAAAAIBAGACCIUBQIAB5IW3ACBAEAAAAYJJHOQAQIACJAECQABYCAYAAMFIFAUAAAKDANF52QAQDAMAFHVYB3AAQGBAACELLKAIBAUAAGAIGAAKACAQFAAHT2AADAIAAAFT2AECAADIBAUAAGAIEAALA&name=Eric+Robles+%C2%B7+LDXP+Sacramento+-+Riftbound+Showdown+25k&event=ldxp-sacramento-riftbound-showdown-25k&rank=332
+# source: riftatlas.com (données TopDeck.gg), code de deck décodé puis comparé à la page du deck, lue directement
+# defaut: 2026-11-24
+[legend]
+1 Jhin, Virtuoso
+[champion]
+1 Jhin, Murderous Artist
+[main]
+3 Frigid Touch
+3 Plundering Poro
+3 Downstage Dramatics
+3 Sprite Burst
+3 Curtain Call
+2 Noxus Hopeful
+2 Immortal Phoenix
+2 Kai'Sa, Survivor
+2 Thousand-Tailed Watcher
+2 Deadly Flourish
+2 Punching Poro
+2 Scorched Earth
+2 Ekko, Revolutionary
+1 Seal of Rage
+1 Watchful Sentry
+1 Singularity
+1 Unchecked Power
+1 Hextech Anomaly
+1 Square Up
+1 Brittle Steel
+1 Mordekaiser, Twice Slain
+[runes]
+6 Fury Rune
+6 Mind Rune
+[battlefields]
+1 Void Gate
+1 Ravenbloom Conservatory
+1 Rockfall Path
+[sideboard]
+3 Decree of Rage
+3 Decree of Insight
+1 Thermo Beam
+1 Time Warp
+1 Lotus Trap
+1 Brittle Steel
