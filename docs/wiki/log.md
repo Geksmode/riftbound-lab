@@ -420,3 +420,6 @@ Demande de l'utilisateur après le constat du bruit : « Conseil » (en partie) 
 
 ## [2026-11-24] ingest | Ban list du 2026-11-23, decks par défaut refaits à partir de riftatlas.com
 10 cartes bannies de plus dans la base ; 58 decks par défaut légaux (37 tournois Radiance, 16 Vendetta, 5 communautaires), en-tête `# defaut:` lu par `train::default_decks`. riftatlas.com est lisible directement : scripts dans `riftbound/decks/riftatlas/`. Aucun tournoi d'après le ban publié ; Akali Heron illégal ; plans par légende à refaire. Détail : `riftbound/decks/README.md`.
+
+## [2026-11-25] decision | Table : quatre lots d'après le simulateur Rift Atlas
+Choisis par l'utilisateur (les quatre proposés) : total de Might par battlefield, journal condensé, taille des cartes ; sauts du replay par tour et par point, partie rouverte depuis un fichier ; versions d'un deck, colonne des stats cliquable ; « À toi » dans l'onglet, vibration, écran allumé. Robot `verif_atlas2.mjs`. Hôtes `play.riftatlas.com` et `assets.riftatlas-workers.com` ajoutés à l'environnement cloud ; une partie du simulateur demande un compte (non ouvert). Détail : `pages/etat.md`.

@@ -608,6 +608,23 @@
     ["${} % de victoires, entre ${} % et ${} %", "${}% wins, between ${}% and ${}%"], ["· écart de points moyen ${}", "· average point margin ${}"],
     ["Parties finies contre l'IA ; chaque manche d'un BO3 compte pour une partie, les duels ne comptent pas. La barre montre l'intervalle à 95 % du taux de victoire (trait doré : taux observé, trait fin : 50 %). Tant que l'intervalle contient 50 %, on ne sait pas si le matchup est favorable : il faut plus de parties.",
       "Finished games against the AI; each game of a BO3 counts as one game, duels do not count. The bar shows the 95% interval of the win rate (gold mark: observed rate, thin mark: 50%). As long as the interval contains 50%, we don't know whether the matchup is favourable: more games are needed."],
+    // ---------------------------------------------------------------- ajouts du 2026-11-25 (d'après le simulateur Rift Atlas)
+    ["Might totale : ${}", "Total Might: ${}"], ["Affichage", "Display"], ["Taille des cartes en jeu", "In-play card size"],
+    ["Total de Might par battlefield", "Total Might per battlefield"], ["Me prévenir quand c'est à moi", "Alert me when it's my move"],
+    ["Garder l'écran allumé en partie", "Keep the screen on during a game"],
+    ["◀ Tour", "◀ Turn"], ["Tour ▶", "Turn ▶"], ["◀ Point", "◀ Score"], ["Point ▶", "Score ▶"], ["Sauts du replay", "Replay jumps"],
+    ["Tour précédent", "Previous turn"], ["Point marqué précédent", "Previous point scored"], ["Point marqué suivant", "Next point scored"],
+    ["Rouvrir une partie téléchargée", "Reopen a downloaded game"], ["Ouvrir un fichier", "Open a file"], ["· importée", "· imported"],
+    ["Choisis un fichier de partie (.json, bouton ⤓), ou dépose-le ici : la partie s'ajoute à la liste avec la mention « importée » et se revoit comme les autres. Elle ne compte pas dans ton bilan.",
+     "Choose a game file (.json, ⤓ button), or drop it here: the game is added to the list, marked “imported”, and can be reviewed like the others. It does not count in your record."],
+    ["Fichier illisible : ce n'est pas un fichier de partie.", "Unreadable file: this is not a game file."], ["Aucune partie rejouable dans ce fichier.", "No replayable game in this file."],
+    ["Ces parties sont déjà dans la liste.", "These games are already in the list."], ["Import impossible (stockage plein ?).", "Import failed (storage full?)."],
+    ["Cartes à ${} énergie", "Cards at ${} energy"], ["Unités de Might ${}", "Might ${} units"], ["Fermer le détail de la colonne", "Close the column details"],
+    ["champion", "champion"], ["aucun", "none"], ["Au moins une de ces cartes", "At least one of these cards"],
+    ["Versions", "Versions"], ["Versions de « ${} »", "Versions of “${}”"], ["Restaurer", "Restore"], ["mêmes cartes", "same cards"],
+    ["Aucune version gardée pour l'instant : elles s'ajoutent à chaque « Enregistrer » qui change la liste.", "No version kept yet: one is added each time “Save” changes the list."],
+    ["Les ${} dernières listes enregistrées, gardées dans ce navigateur. En vert les cartes ajoutées par rapport à la version d'avant, en rouge les cartes retirées. « Restaurer » remet la liste dans l'éditeur : rien n'est écrasé tant que tu n'as pas enregistré.",
+     "The last ${} saved lists, kept in this browser. In green the cards added since the version before, in red the cards removed. “Restore” puts the list back in the editor: nothing is overwritten until you save."],
     ["Tester la main", "Test the hand"], ["Il faut au moins 4 cartes dans le deck principal pour tirer une main.", "The main deck needs at least 4 cards to draw a hand."],
     ["Ordre de jeu", "Turn order"], ["Je commence", "I go first"], ["Je joue en second", "I go second"],
     ["Ta main de départ. Touche jusqu'à 2 cartes à renvoyer, puis valide ; elles reviennent sous le deck.", "Your opening hand. Tap up to 2 cards to send back, then confirm; they go to the bottom of the deck."],
@@ -647,6 +664,14 @@
   // Motifs écrits à la main : textes assemblés en plusieurs morceaux dans src.html.
   const ORD = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
   const P = [
+    // ajouts du 2026-11-25 : import de parties, versions d'un deck, détail d'une colonne des stats
+    [/^(\d+) parties? importées?\.$/, m => `${m[1]} game${+m[1] > 1 ? "s" : ""} imported.`],
+    [/^(.+) · version enregistrée actuelle$/, "$1 · current saved version"],
+    [/^première version gardée : (\d+) cartes, (\d+) runes$/, "first version kept: $1 cards, $2 runes"],
+    [/^Version du (.+) remise dans l'éditeur\. Enregistre pour la garder\.$/, "Version of $1 put back in the editor. Save to keep it."],
+    [/^(\+\d+ |−\d+ )?Légende : (.+)$/, (m, t) => (m[1] || "") + "Legend: " + t(m[2])], [/^(\+\d+ |−\d+ )?Champion : (.+)$/, (m, t) => (m[1] || "") + "Champion: " + t(m[2])],
+    [/^Calcul exact sur les (\d+) cartes du deck( ; le champion choisi commence dans sa zone, il n'est pas compté)?\. Mêmes colonnes que « Tester la main » \(4, 6, 8 et 10 cartes vues\)\.$/,
+      m => `Exact computation over the ${m[1]} cards of the deck${m[2] ? "; the chosen champion starts in its zone, it is not counted" : ""}. Same columns as “Test the hand” (4, 6, 8 and 10 cards seen).`],
     // [Repeat] : « Avec Repeat ×2 (coût total 4 énergie) → Scuttle Crab #2 adverse » ; coût et cibles viennent du moteur,
     // déjà en anglais
     [/^(.+) · Avec Repeat( ×\d+)?(?: \(coût total (.*?)\))?(.*)$/, (m, t) => t(m[1]) + " · With Repeat" + (m[2] || "") + (m[3] ? ` (total cost ${m[3]})` : "") + m[4]],

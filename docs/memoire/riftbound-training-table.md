@@ -168,3 +168,27 @@ Demande de l'utilisateur après une liste de propositions : « 1 et 2 c'est ok, 
   recalculées par dénombrement, exercice joué par le gros bouton puis par les coups conseillé et joué ; vérifié par
   robot (toucher simulé), pas sur un vrai téléphone.
 
+## D'après le simulateur Rift Atlas (2026-11-25)
+Demande : « en te basant sur tcg arena et riftatlas les simulateurs de riftbound, améliore l'outil encore ». Lu : notes de
+version de riftatlas.com (`/changelog/2026/week/N`, entrées `data-changelog-entry`), accueil de tcg-arena.fr. Le simulateur
+`play.riftatlas.com` s'ouvre (hôtes ajoutés à l'environnement « riftbound-lab ») mais « Solo Room » demande un compte :
+aucune partie ouverte chez eux. Tout est dans `train/src.html`, moteur inchangé ; traductions dans `i18n.js`.
+- **Réglages** `SET` (`rbt-cs`, `rbt-might`, `rbt-alert`, `rbt-wake`), section « Affichage » du menu ♪ (`sonPop`). `--cs`
+  multiplie `--cw/--chh`, les rangées de battlefield, la base et les runes dans `@media (min-width: 1000px)` ; `fitBoard`
+  remet ensuite le plateau à l'échelle, donc 130 % ne donne pas +30 % à l'écran. Téléphone : réglage masqué.
+- **Total de Might** : `bfHTML`, `.bfsum.top/.bot` en absolu dans `.bf` (`pointer-events: none`). Somme des `u.m` de la vue
+  (`Game::might` : buffs, équipements, Assault / Shield une fois l'unité désignée).
+- **Journal** : `logPut` regroupe les lignes identiques à la suite (`data-x`, `.lx`), jamais les titres de tour ; `LOG`
+  garde toutes les lignes. Classes `pt` (`+1 point (`) et `cb` (`Combat ` / `Showdown `). Un robot qui compte les lignes
+  doit additionner les `data-x`.
+- **Replay** : `RP.turns` / `RP.pts` = étapes des lignes « Tour N » et « +1 point » de `r.log` ; boutons `data-rpj`.
+- **Import** : `importGames` (bouton `bImpGames`, fichier déposé sur le menu « Mes parties ») ; partie marquée `imp: 1`,
+  exclue de `bilanLoad` et de `dashGames` ; même id = pas remplacée.
+- **Versions** : `dkhPush` dans `saveDeck` (clé `rbt-dkhist`, 30 par deck, suit le renommage, supprimée avec le deck),
+  `dkhDiff`, `dkhOpen`. Navigateur seulement (pas dans la base claude.ai).
+- **Stats** : `STSEL`, section `#stSel` (`htProb`, `HT_SEEN`).
+- **À toi** : `nudge(v)` à la fin de `show`, dans `showMenu` / `hideMenu` et sur `visibilitychange` ; `wakeSync`.
+- **Leçon** : **quand** je me sers de `I18N.t` hors du texte de la page (titre de l'onglet), **je teste `I18N.lang`**.
+  *Pourquoi :* `I18N.t` traduit même en français ; le robot a vu « ● Your move » sur la page française.
+- Pas repris : goldfish sur le plateau, suggestions de cartes, export vidéo, arrêts de phase (le moteur demande déjà
+  chaque décision). Robot `train/verif_atlas2.mjs` (porte, partie 3).
